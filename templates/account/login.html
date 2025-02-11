@@ -30,5 +30,15 @@
             </form>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-8 mt-3 offset-md-2">
+            <hr>
+            <h5 class="text-center">Or sign in with:</h5>
+            {% load socialaccount %}
+            <a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-block">
+                <i class="fab fa-google"></i> Sign in with Google
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}
