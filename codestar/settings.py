@@ -148,6 +148,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# sso activation
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',  
+]
+
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # Internationalization
