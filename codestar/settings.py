@@ -38,8 +38,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '.herokuapp.com',     
 ]
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
