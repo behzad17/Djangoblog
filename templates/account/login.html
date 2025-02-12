@@ -1,4 +1,4 @@
-<!--{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
 {% load account socialaccount %}
@@ -31,51 +31,6 @@
         </div>
     </div>
     
-    </div>
-</div>
-{% endblock %}-->
-{% extends "base.html" %}
-
-{% load i18n %}
-{% load account socialaccount %}  <!-- لود کردن socialaccount -->
-
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
-
-{% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <h3>{% trans "Sign In" %}</h3>
-
-            <p>{% blocktrans %}Welcome back to the code|star blog. To leave a comment or like a post, please log in. If
-                you have not created an account yet, then <a class="link" href="{{ signup_url }}">sign up</a>
-                first.{% endblocktrans %}</p>
-        </div>
-    </div>
-
-    <!-- فرم ورود -->
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <form class="login" method="POST" action="{% url 'account_login' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <button class="btn btn-primary w-100" type="submit">{% trans "Sign In" %}</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- دکمه ورود با گوگل -->
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <hr>
-            <h5 class="text-center">Or sign in with:</h5>
-            <a href="{% provider_login_url 'google' method='oauth2' %}" class="btn btn-danger w-100">
-                <i class="fab fa-google"></i> Sign in with Google
-            </a>
-        </div>
     </div>
 </div>
 {% endblock %}
