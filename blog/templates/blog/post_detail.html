@@ -16,11 +16,12 @@
                  <form action="{% url 'add_to_favorites' post.id %}" method="POST" class="mt-2">
                   {% csrf_token %}
                   {% if user.is_authenticated %}
-                      {% if post in user.favorite_set.all %}
+                  {% if is_favorite %}
                           <button type="submit" class="btn btn-danger">delete from favorite</button>
                       {% else %}
                           <button type="submit" class="btn btn-success">add to favorite</button>
                       {% endif %}
+                      
                   {% else %}
                       <p><a href="{% url 'account_login' %}" class="btn btn-primary">login to add favorite</a></p>
                   {% endif %}

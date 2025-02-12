@@ -9,6 +9,12 @@
             {% for favorite in favorites %}
                 <li class="list-group-item">
                     <a href="{% url 'post_detail' favorite.post.slug %}">{{ favorite.post.title }}</a>
+
+                    <form action="{% url 'remove_from_favorites' favorite.post.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                    
                 </li>
             {% endfor %}
         </ul>

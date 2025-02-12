@@ -30,6 +30,8 @@ def post_detail(request, slug):
     post = get_object_or_404(queryset, slug=slug)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.filter(approved=True).count()
+    is_favorite = Favorite.objects.filter(user=request.user, post=post).exists() if request.user.is_authenticated else False
+
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -51,6 +53,7 @@ def post_detail(request, slug):
             "comments": comments,
             "comment_count": comment_count,
             "comment_form": comment_form,
+            "is_favorite": is_favorite,
         },
     )    
 
@@ -111,5 +114,18 @@ def favorite_posts(request):
     show pots list
     """
     favorites = Favorite.objects.filter(user=request.user)
-    return render(request, 'favorites.html', {'favorites': favorites})      
+    return render(request, 'blog/favorites.html', {'favorites': favorites})
+
+@login_required
+def remove_from_favorites(request, post_id):
+    """ 
+    remove a favorite
+    """
+    post = get_object_or_404(Post, id=post_id)
+    favorite = Favorite.objects.filter(user=request.user, post=post)
+
+    if favorite.exists():
+        favorite.delete()
+
+    return redirect(request.META.get('HTTP_REFERER', 'favorites'))         
      
