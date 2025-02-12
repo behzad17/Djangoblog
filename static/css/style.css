@@ -4,13 +4,17 @@ body {
 
 .brand {
     font-family: Lato, sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #4A4A4F;
 }
 
-.red-o {
-    color: #E84610;
+.blue-o {
+    color: #006aa7;
+}
+
+.yellow-o{
+    color: #fecc00;
 }
 
 .thin {
