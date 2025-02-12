@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Your favorite posts</h2>
+    
+    {% if favorites %}
+        <ul class="list-group mt-3">
+            {% for favorite in favorites %}
+                <li class="list-group-item">
+                    <a href="{% url 'post_detail' favorite.post.slug %}">{{ favorite.post.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="mt-3">You didnt save any post</p>
+    {% endif %}
+</div>
+
+{% endblock %}
