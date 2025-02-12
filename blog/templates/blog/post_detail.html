@@ -11,6 +11,20 @@
                 <h1 class="post-title">{{ post.title }}</h1>
                 <!-- Post author goes before the | the post's created date goes after -->
                 <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
+
+                 <!-- favorite button -->
+                 <form action="{% url 'add_to_favorites' post.id %}" method="POST" class="mt-2">
+                  {% csrf_token %}
+                  {% if user.is_authenticated %}
+                      {% if post in user.favorite_set.all %}
+                          <button type="submit" class="btn btn-danger">delete from favorite</button>
+                      {% else %}
+                          <button type="submit" class="btn btn-success">add to favorite</button>
+                      {% endif %}
+                  {% else %}
+                      <p><a href="{% url 'account_login' %}" class="btn btn-primary">login to add favorite</a></p>
+                  {% endif %}
+              </form>
             </div>
             <div class="d-none d-md-block col-md-6 masthead-image">
               {% if "placeholder" in post.featured_image.url %}

@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect 
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from .models import Post, Comment
+from django.contrib.auth.decorators import login_required
+from .models import Post, Comment, Favorite
 from .forms import CommentForm
 
 # Create your views here.
@@ -89,5 +90,26 @@ def comment_delete(request, slug, comment_id):
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
 
-    return HttpResponseRedirect(reverse('post_detail', args=[slug]))   
+    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+@login_required
+def add_to_favorites(request, post_id):
+    """
+    add or delete a post from Favorites
+    """
+    post = get_object_or_404(Post, id=post_id)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, post=post)
+
+    if not created:
+        favorite.delete()  # delete if a post is saved before
+
+    return redirect(request.META.get('HTTP_REFERER', 'favorites'))
+
+@login_required
+def favorite_posts(request):
+    """
+    show pots list
+    """
+    favorites = Favorite.objects.filter(user=request.user)
+    return render(request, 'favorites.html', {'favorites': favorites})      
      
