@@ -1,9 +1,10 @@
+from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect 
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+
 from .models import Post, Comment, Favorite
 from .forms import CommentForm
 
@@ -11,19 +12,15 @@ class PostList(generic.ListView):
     template_name = "blog/index.html"
     paginate_by = 8
 
-def get_queryset(self):
-    return Post.objects.filter(status=1).annotate(comment_count=Count('comments'))
+    def get_queryset(self):
+        return Post.objects.filter(status=1).annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
 
-# ✅ اصلاح post_detail
+#  اصلاح شده: ارسال تعداد کامنت‌های تایید‌شده به `post_detail`
 def post_detail(request, slug):
-    """
-        نمایش جزئیات هر پست
-    """
-
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
-    comments = post.comments.all().order_by("-created_on")
-    comment_count = post.comments.filter(approved=True).count()
+    comments = post.comments.filter(approved=True).order_by("-created_on")
+    comment_count = comments.count()
     is_favorite = Favorite.objects.filter(user=request.user, post=post).exists() if request.user.is_authenticated else False
 
     if request.method == "POST":
@@ -33,10 +30,7 @@ def post_detail(request, slug):
             comment.author = request.user
             comment.post = post
             comment.save()
-            messages.add_message(
-                request, messages.SUCCESS,
-                'Comment submitted and awaiting approval'
-            )
+            messages.add_message(request, messages.SUCCESS, 'Comment submitted and awaiting approval')
     else:
         comment_form = CommentForm()
 
@@ -50,65 +44,8 @@ def post_detail(request, slug):
             "comment_form": comment_form,
             "is_favorite": is_favorite,
         },
-    )
-
-"""
-# Create your views here.
-class PostList(generic.ListView):
-    queryset = Post.objects.filter(status=1)
-    template_name = "blog/index.html"
-    paginate_by = 8
-
-def get_queryset(self):
-    return Post.objects.filter(status=1).annotate(comment_count=Count('comments'))
-
-def post_detail(request, slug):
-    """
-
-    
-    #Display an individual :model:`blog.Post`.
-
-    #**Context**
-
-    #``post``
-        #An instance of :model:`blog.Post`.
-
-    #**Template:**
-
-    #:template:`blog/post_detail.html`
-    
-"""
-    queryset = Post.objects.filter(status=1)
-    post = get_object_or_404(queryset, slug=slug)
-    comments = post.comments.all().order_by("-created_on")
-    comment_count = post.comments.filter(approved=True).count()
-    is_favorite = Favorite.objects.filter(user=request.user, post=post).exists() if request.user.is_authenticated else False
-
-    if request.method == "POST":
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.post = post
-            comment.save()
-            messages.add_message(
-                request, messages.SUCCESS,
-                'Comment submitted and awaiting approval'
-    )
-    comment_form = CommentForm()
-
-    return render(
-        request,
-        "blog/post_detail.html",
-        {
-            "post": post,
-            "comments": comments,
-            "comment_count": comment_count,
-            "comment_form": comment_form,
-            "is_favorite": is_favorite,
-        },
     )    
-"""
+
 def comment_edit(request, slug, comment_id):
     """
     view to edit comments
