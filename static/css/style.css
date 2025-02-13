@@ -21,6 +21,11 @@ body {
     font-weight: 300;
 }
 
+.card-img-top {
+    border-radius: 5px; 
+    overflow: hidden; 
+}
+
 .light-bg {
     background-color: #fff;
 }
