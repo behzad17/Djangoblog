@@ -4,17 +4,32 @@ body {
 
 .brand {
     font-family: Lato, sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #4A4A4F;
 }
 
-.red-o {
-    color: #E84610;
+.blue-o {
+    color: #006aa7;
+}
+
+.yellow-o{
+    color: #fecc00;
 }
 
 .thin {
     font-weight: 300;
+}
+
+.card-img-top {
+    border-radius: 5px; 
+    overflow: hidden; 
+}
+
+.card-title {
+    font-size: 1.2rem; 
+    font-weight: bold; 
+    line-height: 1.4; 
 }
 
 .light-bg {
@@ -41,9 +56,11 @@ body {
 .image-flash {
     position: absolute;
     bottom: 5%;
-    min-width: 30%;
+    min-width:30%;
     left: -2px;
     background-color: #188181;
+    border-radius: 5%;
+    font-size: 12px;
 }
 
 .scale {
@@ -89,6 +106,10 @@ body {
     -moz-transform: skew(15deg);
     transform: skew(15deg);
     z-index: 100;
+}
+
+.profile-image{
+    width: 75%;
 }
 
 .post-link {
