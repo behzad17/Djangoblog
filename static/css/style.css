@@ -53,6 +53,13 @@ body {
     position: relative;
 }
 
+.image-container img {
+    width: 100%;  
+    height: 170px;  
+    object-fit: cover;  
+    border-radius: 10px;  
+}
+
 .image-flash {
     position: absolute;
     bottom: 5%;
