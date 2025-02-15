@@ -108,6 +108,7 @@ body {
     background-color: #445261;
     color: white;
     position: relative;
+    padding-bottom: 30px;
 }
 
 .masthead-image {
@@ -277,15 +278,15 @@ body {
 
 
 .favorite-link {
-    text-decoration: none; /* حذف underline */
-    color: #007bff; /* رنگ لینک */
+    text-decoration: none; 
+    color: #007bff; 
     font-size: 18px;
     font-weight: bold;
 }
 
 .favorite-link:hover {
     color: #0056b3;
-    text-decoration: underline; /* هنگام هاور شدن underline نمایش داده شود */
+    text-decoration: underline; 
 }
 
 /*   Remove */

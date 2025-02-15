@@ -15,7 +15,7 @@ class PostList(generic.ListView):
     def get_queryset(self):
         return Post.objects.filter(status=1).annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
 
-#  اصلاح شده: ارسال تعداد کامنت‌های تایید‌شده به `post_detail`
+#  `post_detail`
 def post_detail(request, slug):
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
