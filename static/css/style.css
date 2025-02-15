@@ -108,7 +108,8 @@ body {
     background-color: #445261;
     color: white;
     position: relative;
-    overflow: visible;
+    justify-content: space-between;
+   
 }
 
 .masthead-image {
@@ -145,8 +146,11 @@ body {
 }
 
 .post-title {
-    margin-top: 10%;
-    margin-left: 5%;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-top: 5%;
+    margin-left: 5%;   
 }
 
 .post-subtitle {
