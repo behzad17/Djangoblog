@@ -187,3 +187,73 @@ body {
 .approval {
     color: rgb(222, 146, 168);
 }
+
+/* Favorites */
+.favorites-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/*  main favorites page */
+.favorites-title {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/*  favorites list */
+.favorite-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* items in list */
+.favorite-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+
+.favorite-link {
+    text-decoration: none; /* حذف underline */
+    color: #007bff; /* رنگ لینک */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.favorite-link:hover {
+    color: #0056b3;
+    text-decoration: underline; /* هنگام هاور شدن underline نمایش داده شود */
+}
+
+/*   Remove */
+.remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.remove-btn:hover {
+    background-color: #bb2d3b;
+}
+
+/*   "You haven't saved any posts yet" */
+.no-favorites {
+    text-align: center;
+    font-size: 16px;
+    color: #6c757d;
+}
