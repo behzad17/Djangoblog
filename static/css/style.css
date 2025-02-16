@@ -204,7 +204,9 @@ body {
 }
 
 .approval {
-    color: rgb(222, 146, 168);
+    opacity: 0.5; 
+    background-color: #f8f9fa !important;
+    
 }
 
 /*.comment-box {
