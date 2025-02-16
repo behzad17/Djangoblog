@@ -200,7 +200,9 @@ body {
 }
 
 .faded {
-    color: rgb(172, 175, 175);
+   
+    opacity: 0.5;
+    pointer-events: none; 
 }
 
 .approval {
