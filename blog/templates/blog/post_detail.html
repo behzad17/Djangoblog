@@ -63,7 +63,7 @@
 
 
     <div class="row">
-    <div class="col-md-8 card mb-4 mt-3">
+    <div class="col-md-7 card mb-4 mt-3">
         <h3>Comments:</h3>
         <div class="card-body">
             {% for comment in comments %}
@@ -101,7 +101,7 @@
 </div>
 
 
-        <div class="col-md-4 card mb-4 mt-3 ">
+        <div class="col-md-5 card mb-4 mt-3 ">
             <div class="card-body">
                 {% if user.is_authenticated %}
                 <h3>Leave a comment:</h3>
@@ -116,7 +116,7 @@
                 {% endif %}
             </div>
         </div>
-    </div>
+   
 </div>
 <!-- Delete confirmation modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
