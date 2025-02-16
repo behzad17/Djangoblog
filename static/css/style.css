@@ -207,7 +207,7 @@ body {
     color: rgb(222, 146, 168);
 }
 
-.comment-box {
+/*.comment-box {
     background: #f8f9fa;
     border-radius: 8px;
     padding: 12px 16px;
@@ -215,7 +215,7 @@ body {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* comment author */
+/* comment author 
 .comment-header {
     display: flex;
     justify-content: space-between;
@@ -223,26 +223,26 @@ body {
     margin-bottom: 8px;
 }
 
-/*  name  */
+/*  name  
 .comment-author {
     font-weight: bold;
     color: #343a40;
 }
 
-/*  date */
+/*  date 
 .comment-date {
     font-size: 12px;
     color: #6c757d;
 }
 
-/*  text style  */
+/*  text style  
 .comment-body {
     font-size: 16px;
     line-height: 1.5;
     color: #212529;
 }
 
-/*   edit and delete button  */
+/*   edit and delete button  
 .comment-actions .btn {
     margin-right: 8px;
 }
