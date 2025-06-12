@@ -1,13 +1,39 @@
+"""
+Models for the 'About' section and collaboration requests.
+"""
+
 from django.db import models
-from cloudinary.models import CloudinaryField
+from django.template import Origin, TemplateDoesNotExist
+from django.template.loaders.base import Loader as BaseLoader
 
 
-# Create your models here.
+class Loader(BaseLoader):
+    """
+    Custom loader to load templates from a plain Python dictionary.
+    """
+    def __init__(self, engine, templates_dict):
+        self.templates_dict = templates_dict
+        super().__init__(engine)
+
+    def get_contents(self, origin):
+        try:
+            return self.templates_dict[origin.name]
+        except KeyError:
+            raise TemplateDoesNotExist(origin)
+
+    def get_template_sources(self, template_name):
+        yield Origin(
+            name=template_name,
+            template_name=template_name,
+            loader=self,
+        )
+
 
 class About(models.Model):
-    title = models.CharField(max_length=200, unique=True)
-    profile_image = CloudinaryField('image', default='placeholder')
-    updated_on = models.DateTimeField(auto_now=True)
+    """
+    Model representing the 'About' section content.
+    """
+    title = models.CharField(max_length=200)
     content = models.TextField()
 
     def __str__(self):
@@ -15,11 +41,11 @@ class About(models.Model):
 
 
 class CollaborateRequest(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
     email = models.EmailField()
     message = models.TextField()
     read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Collaboration request from {self.name}"
-        
+        return f"{self.name} - {self.email}"
+
