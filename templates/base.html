@@ -1,18 +1,15 @@
-{% load static %}
-{% url 'home' as home_url %}
-{% url 'about' as about_url %}
-{% url 'account_login' as login_url %}
-{% url 'account_signup' as signup_url %}
-{% url 'account_logout' as logout_url %}
-{% url 'favorites' as favorites_url %}
+{% load static %} {% url 'home' as home_url %} {% url 'about' as about_url %} {%
+url 'account_login' as login_url %} {% url 'account_signup' as signup_url %} {%
+url 'account_logout' as logout_url %} {% url 'favorites' as favorites_url %}
 
 <!DOCTYPE html>
 <html class="h-100" lang="en">
   <head>
+    <!-- Page Title and Meta Tags -->
     <title>CodeStar Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Google Fonts CSS -->
+    <!-- Google Fonts CSS - Loading custom fonts for the site -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
@@ -23,13 +20,13 @@
       rel="stylesheet"
     />
 
-    <!-- Font Awesome CSS -->
+    <!-- Font Awesome CSS - For social media and other icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS - Main framework for responsive design -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -37,20 +34,22 @@
       crossorigin="anonymous"
     />
 
-    <!-- Custom CSS -->
+    <!-- Custom CSS - Site-specific styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
 
   <body class="d-flex flex-column h-100 main-bg">
-    <!-- Navigation -->
+    <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div class="container-fluid">
+        <!-- Brand Logo -->
         <a class="navbar-brand" href="{{ home_url }}">
           <span class="brand">
             <span class="blue-o">Swe</span><span class="yellow-o">den</span
             ><span class="thin">|today</span>
           </span>
         </a>
+        <!-- Mobile Navigation Toggle Button -->
         <button
           class="navbar-toggler"
           type="button"
@@ -62,68 +61,100 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- Navigation Menu -->
         <div class="collapse navbar-collapse" id="navbarText">
+          <!-- Left Side Navigation Links -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}">Home</a>
+              <a
+                class="nav-link {% if request.path == home_url %}active{% endif %}"
+                href="{{ home_url }}"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if request.path == about_url %}active{% endif %}" href="{{ about_url }}">About</a>
+              <a
+                class="nav-link {% if request.path == about_url %}active{% endif %}"
+                href="{{ about_url }}"
+                >About</a
+              >
             </li>
           </ul>
+          <!-- Right Side Navigation Links - Authentication -->
           <ul class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
-              <li class="nav-item me-2">
-                <a class="btn btn-outline-light" href="{{ logout_url }}">Logout</a>
-              </li>
-              <li class="nav-item me-2">
-                <a class="btn btn-warning" href="{{ favorites_url }}">Favorites</a>
-              </li>
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-light" href="{{ logout_url }}"
+                >Logout</a
+              >
+            </li>
+            <li class="nav-item me-2">
+              <a class="btn btn-warning" href="{{ favorites_url }}"
+                >Favorites</a
+              >
+            </li>
             {% else %}
-              <li class="nav-item me-2">
-                <a class="btn btn-outline-light" href="{{ login_url }}">Login</a>
-              </li>
-              <li class="nav-item me-2">
-                <a class="btn btn-outline-light" href="{{ signup_url }}">Register</a>
-              </li>
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-light" href="{{ login_url }}">Login</a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-light" href="{{ signup_url }}"
+                >Register</a
+              >
+            </li>
             {% endif %}
           </ul>
+          <!-- Site Tagline -->
           <span class="navbar-text text-muted"> Who is Who in Sweden </span>
         </div>
       </div>
     </nav>
 
-    <!-- displaying Django messages -->
+    <!-- Flash Messages Container -->
     <div class="container">
       <div class="row">
         <div class="col-md-8 offset-md-2">
           {% for message in messages %}
-          <div class="alert {{ message.tags }} alert-dismissible fade show" id="msg" role="alert">
+          <div
+            class="alert {{ message.tags }} alert-dismissible fade show"
+            id="msg"
+            role="alert"
+          >
             {{ message | safe }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
           </div>
           {% endfor %}
         </div>
       </div>
     </div>
 
+    <!-- Main Content Area -->
     <main class="flex-shrink-0 main-bg">
+      <!-- User Authentication Status -->
       {% if user.is_authenticated %}
-        <p class="text-end m-3">You are logged in as {{ user }}</p>
+      <p class="text-end m-3">You are logged in as {{ user }}</p>
       {% else %}
-        <p class="text-end m-3">You are not logged in</p>
+      <p class="text-end m-3">You are not logged in</p>
       {% endif %}
 
+      <!-- Content Block - To be overridden by child templates -->
       {% block content %}
       <!-- Content Goes here -->
       {% endblock content %}
     </main>
 
-    <!-- Footer -->
+    <!-- Footer Section -->
     <footer class="footer mt-auto py-3 dark-bg">
+      <!-- Copyright Information -->
       <p class="m-0 text-center text-white">
         {% block copyright %} Copyright 2025 BJ {% endblock copyright %}
       </p>
+      <!-- Social Media Links -->
       <p class="m-0 text-center text-white">
         Follow us: <i class="fab fa-facebook-square ms-3"></i>
         <i class="fab fa-twitter-square ms-3"></i>
@@ -132,13 +163,16 @@
       </p>
     </footer>
 
+    <!-- JavaScript Dependencies -->
+    <!-- Bootstrap Bundle with Popper -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
       crossorigin="anonymous"
     ></script>
+    <!-- Custom JavaScript -->
     <script src="{% static 'js/script.js' %}"></script>
+    <!-- Additional JavaScript Block - For child templates -->
     {% block extras %} {% endblock %}
   </body>
 </html>
-
