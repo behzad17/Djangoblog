@@ -80,3 +80,40 @@ Comment System: Users can interact with posts by leaving comments, improving eng
 
 ## Media
 - The photos used on the home page are from This site and only for test [Font Awesome](https://swedenherald.com/)
+
+
+
+## Milestones
+
+###  Milestone 1: Initial Setup & Core Features
+- Set up Django project and basic app structure  
+- Configure environment variables and PostgreSQL on Heroku  
+- Add user registration/login using `django-allauth`  
+- Implement core blog post creation and comment system  
+- Setup Cloudinary for media handling  
+**Status:** Completed  
+**Completed on:** 2025-02-28  
+
+---
+
+### Milestone 2: UI & UX Enhancement
+- Add responsive card design for blog post previews  
+- Style navbar links: Login, Register, Logout, Favorites using Bootstrap classes  
+- Add working social links to the footer  
+- Highlight active navigation tabs  
+- Design custom 404 error page with return button  
+- Improve comment edit user experience and layout  
+**Status:** In Progress  
+**Estimated Completion:** 2025-06-20  
+
+---
+
+### Milestone 3: Documentation, Testing & Deployment
+- Add full testing instructions to `README.md`  
+- Add deployment steps (Heroku, env vars, Cloudinary)  
+- Include Wireframes, Mockups, and DB Diagram  
+- Set `DEBUG = False` in production  
+- Improve error handling and redirections  
+**Status:** Planned  
+**Start Date:** 2025-06-15  
+**Due Date:** 2025-06-17 
