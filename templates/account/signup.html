@@ -1,35 +1,44 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load account %}
+{% extends "base.html" %} {% load i18n %} {% load crispy_forms_tags %} {% load
+account %} {% block head_title %}{% trans "Signup" %}{% endblock %} {% block
+content %}
+<!-- Signup Container -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 mt-3 offset-md-2">
+      <!-- Signup Header -->
+      <h3>{% trans "Sign Up" %}</h3>
 
-{% block head_title %}{% trans "Sign Up" %}{% endblock %}
-
-{% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-lg-4 col-md-6 col-sm-8 col-10" style="max-width: 450px;">
-        <div class="card shadow-lg p-4">
-            <h3 class="text-center">{% trans "Sign Up" %}</h3>
-            <p class="text-center">
-                {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
-            </p>
-            <form method="post" action="{% url 'account_signup' %}" class="mt-3">
-                {% csrf_token %}
-                <div class="mb-3">
-                    {{ form.username|as_crispy_field }}
-                </div>
-                <div class="mb-3">
-                    {{ form.email|as_crispy_field }}
-                </div>
-                <div class="mb-3">
-                    {{ form.password1|as_crispy_field }}
-                </div>
-                <div class="mb-3">
-                    {{ form.password2|as_crispy_field }}
-                </div>
-                <button type="submit" class="btn btn-primary w-100">{% trans "Sign Up" %}</button>
-            </form>
-        </div>
+      <!-- Signup Form -->
+      <p>
+        {% blocktrans %}Welcome back to the Sweden Today blog. Do you already
+        have an account? Then please
+        <a class="link" href="{{ login_url }}">sign in</a> instead.{%
+        endblocktrans %}
+      </p>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 mt-3 offset-md-2">
+      <!-- Registration Form -->
+      <form
+        class="signup"
+        id="signup_form"
+        method="post"
+        action="{% url 'account_signup' %}"
+      >
+        {% csrf_token %} {{ form.as_p }} {% if redirect_field_value %}
+        <input
+          type="hidden"
+          name="{{ redirect_field_name }}"
+          value="{{ redirect_field_value }}"
+        />
+        {% endif %}
+        <!-- Signup Button -->
+        <button class="btn btn-signup right" type="submit">
+          {% trans "Sign Up" %} &raquo;
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
