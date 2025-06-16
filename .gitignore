@@ -1,5 +1,5 @@
 env.py
-blog/fixtures/ 
-.venv__pycache__/
+blog/fixtures/
+__pycache__/
 .venv/
 .DS_Store
