@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="favorites-container container mt-4">
+    <h2 class="favorites-title">Your favorite posts</h2>
+    
+    {% if favorites %}
+        <ul class="favorite-list mt-3">
+            {% for favorite in favorites %}
+                <li class="favorite-item">
+                    <a href="{% url 'post_detail' favorite.post.slug %}" class="favorite-link">
+                        {{ favorite.post.title }} </a>
+
+                        <form action="{% url 'remove_from_favorites' favorite.post.id %}" method="POST" class="favorite-form">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </form>
+                    
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <p class="no-favorites">You haven't saved any posts yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
