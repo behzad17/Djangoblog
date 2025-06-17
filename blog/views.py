@@ -2,7 +2,7 @@ from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from .models import Post, Comment, Favorite
@@ -50,6 +50,17 @@ def post_detail(request, slug):
             comment.author = request.user
             comment.post = post
             comment.save()
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'id': comment.id,
+                    'author': comment.author.username,
+                    'created_on': comment.created_on.strftime('%B %d, %Y %H:%M'),
+                    'body': comment.body,
+                    'post_slug': post.slug
+                })
+            
             messages.add_message(
                 request, messages.SUCCESS,
                 'Comment submitted successfully!'
