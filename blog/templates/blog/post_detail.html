@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} 
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block content %}
 <div class="masthead">
   <div class="container">
     <div class="row g-0">
@@ -98,9 +98,12 @@
             >
             <a
               href="{% url 'comment_edit' post.slug comment.id %}"
-              class="btn btn-sm btn-outline-secondary"
-              >Edit</a
+              class="btn btn-sm btn-outline-secondary edit-comment"
+              data-comment-id="{{ comment.id }}"
+              data-post-slug="{{ post.slug }}"
             >
+              Edit
+            </a>
           </div>
           {% endif %}
         </div>
@@ -160,8 +163,6 @@
     </div>
   </div>
 </div>
-{% endblock content %} 
-
-{% block extras %}
+{% endblock content %} {% block extras %}
 <script src="{% static 'js/comments.js' %}"></script>
 {% endblock extras %}
