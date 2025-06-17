@@ -1,5 +1,5 @@
 from django.db.models import Count, Q
-from django.shortcuts import render, get_object_or_404, reverse, redirect 
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -20,7 +20,9 @@ class PostList(generic.ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        """Returns a queryset of published posts with comment counts."""
+        """
+        Returns a queryset of published posts with comment counts.
+        """
         return Post.objects.filter(status=1).annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
         )
@@ -83,10 +85,11 @@ def comment_edit(request, slug, comment_id):
     will need to be re-approved by an admin. Only the original author
     can edit their comments.
     """
+    queryset = Post.objects.filter(status=1)
+    post = get_object_or_404(queryset, slug=slug)
+    comment = get_object_or_404(Comment, pk=comment_id)
+
     if request.method == "POST":
-        queryset = Post.objects.filter(status=1)
-        post = get_object_or_404(queryset, slug=slug)
-        comment = get_object_or_404(Comment, pk=comment_id)
         comment_form = CommentForm(data=request.POST, instance=comment)
 
         if comment_form.is_valid() and comment.author == request.user:
@@ -96,9 +99,30 @@ def comment_edit(request, slug, comment_id):
             comment.save()
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
-            messages.add_message(request, messages.ERROR, 'Error updating comment!')
+            messages.add_message(
+                request, messages.ERROR,
+                'Error updating comment!'
+            )
 
-    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+        return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+    else:  # Handle GET request for displaying the edit form
+        comment_form = CommentForm(instance=comment)
+
+    return render(
+        request,
+        "blog/post_detail.html",
+        {
+            "post": post,
+            "comment_form": comment_form,  # Pass the form to the template
+            "comments": post.comments.filter(approved=True).order_by(
+                "-created_on"
+            ),  # Ensure comments are still displayed
+            "comment_count": post.comments.filter(approved=True).count(),
+            "is_editing": True,  # A flag to indicate that we are in edit mode
+            "comment_to_edit": comment,  # The specific comment being edited
+        },
+    )
 
 def comment_delete(request, slug, comment_id):
     """
@@ -107,8 +131,6 @@ def comment_delete(request, slug, comment_id):
     This view allows users to delete their own comments. Only the original
     author can delete their comments.
     """
-    queryset = Post.objects.filter(status=1)
-    post = get_object_or_404(queryset, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if comment.author == request.user:
