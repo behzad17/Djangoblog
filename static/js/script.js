@@ -153,9 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
         ).value;
 
         fetch(
-          `/comment/edit/${
+          `/${
             window.location.pathname.split("/")[1]
-          }/${commentId}/`,
+          }/edit_comment/${commentId}/`,
           {
             method: "POST",
             headers: {
