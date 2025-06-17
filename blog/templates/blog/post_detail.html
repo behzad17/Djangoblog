@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} 
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block content %}
 <div class="masthead">
   <div class="container">
     <div class="row g-0">
@@ -89,9 +89,7 @@
           <div id="comment{{ comment.id }}">
             {{ comment.body | linebreaks }}
           </div>
-          {% if not comment.approved and comment.author == user %}
-          <p class="text-warning small">This comment is awaiting approval</p>
-          {% endif %} {% if user.is_authenticated and comment.author == user %}
+          {% if user.is_authenticated and comment.author == user %}
           <div class="mt-2">
             <a
               href="{% url 'comment_delete' post.slug comment.id %}"
@@ -162,7 +160,6 @@
     </div>
   </div>
 </div>
-{% endblock content %} 
-{% block extras %}
+{% endblock content %} {% block extras %}
 <script src="{% static 'js/comments.js' %}"></script>
 {% endblock extras %}
