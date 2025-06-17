@@ -98,13 +98,18 @@ block content %}
               <a
                 href="{% url 'comment_delete' post.slug comment.id %}"
                 class="btn btn-sm btn-outline-danger"
-                >Delete</a
+                data-comment_id="{{ comment.id }}"
               >
+                Delete
+              </a>
               <a
                 href="{% url 'comment_edit' post.slug comment.id %}"
                 class="btn btn-sm btn-outline-secondary"
-                >Edit</a
+                data-comment_id="{{ comment.id }}"
+                data-post_slug="{{ post.slug }}"
               >
+                Edit
+              </a>
             </div>
             {% endif %}
           </div>
