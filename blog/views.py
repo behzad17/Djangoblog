@@ -95,16 +95,8 @@ def comment_edit(request, slug, comment_id):
         if comment_form.is_valid() and comment.author == request.user:
             comment = comment_form.save(commit=False)
             comment.post = post
+            comment.approved = False
             comment.save()
-            
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'status': 'success',
-                    'id': comment.id,
-                    'body': comment.body,
-                    'post_slug': post.slug
-                })
-            
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
             messages.add_message(
@@ -115,13 +107,6 @@ def comment_edit(request, slug, comment_id):
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
     else:  # Handle GET request for displaying the edit form
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'status': 'success',
-                'body': comment.body,
-                'post_slug': post.slug
-            })
-            
         comment_form = CommentForm(instance=comment)
 
     return render(
@@ -129,11 +114,13 @@ def comment_edit(request, slug, comment_id):
         "blog/post_detail.html",
         {
             "post": post,
-            "comment_form": comment_form,
-            "comments": post.comments.all().order_by("-created_on"),
-            "comment_count": post.comments.count(),
-            "is_editing": True,
-            "comment_to_edit": comment,
+            "comment_form": comment_form,  # Pass the form to the template
+            "comments": post.comments.filter(approved=True).order_by(
+                "-created_on"
+            ),  # Ensure comments are still displayed
+            "comment_count": post.comments.filter(approved=True).count(),
+            "is_editing": True,  # A flag to indicate that we are in edit mode
+            "comment_to_edit": comment,  # The specific comment being edited
         },
     )
 
