@@ -1,143 +1,184 @@
-{% extends 'base.html' %} 
-{% load static %}
-{% load crispy_forms_tags %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block content %}
 <div class="masthead">
-    <div class="container">
-        <div class="row g-0">
-            <div class="col-md-6 masthead-text">
-                <!-- Post title goes in these h1 tags -->
-                <h1 class="post-title">{{ post.title }}</h1>
-                <!-- Post author goes before the | the post's created date goes after -->
-                <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
-                <!-- favorite button -->
-                <form action="{% url 'add_to_favorites' post.id %}" method="POST" class="mt-2">
-                  {% csrf_token %}
-                  {% if user.is_authenticated %}
-                  {% if is_favorite %}
-                          <button type="submit" class="btn btn-danger">delete from favorite</button>
-                      {% else %}
-                          <button type="submit" class="btn btn-success">add to favorite</button>
-                      {% endif %}
-                      
-                  {% else %}
-                      <p><a href="{% url 'account_login' %}" class="btn btn-primary">login to add favorite</a></p>
-                  {% endif %}
-              </form>
-          
-            </div>
-            <div class="d-none d-md-block col-md-6 masthead-image">
-                {% if "placeholder" in post.featured_image.url %}
-                <img src="{% static 'images/default.jpg' %}" class="scale" alt="placeholder">
-                {% else %}
-                <img src="{{ post.featured_image.url }}" class="scale" alt="{{ post.title }}">
-                {% endif %}
-            </div>
-        </div>
+  <div class="container">
+    <div class="row g-0">
+      <div class="col-md-6 masthead-text">
+        <!-- Post title goes in these h1 tags -->
+        <h1 class="post-title">{{ post.title }}</h1>
+        <!-- Post author goes before the | the post's created date goes after -->
+        <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
+        <!-- favorite button -->
+        <form
+          action="{% url 'add_to_favorites' post.id %}"
+          method="POST"
+          class="mt-2"
+        >
+          {% csrf_token %} {% if user.is_authenticated %} {% if is_favorite %}
+          <button type="submit" class="btn btn-danger">
+            delete from favorite
+          </button>
+          {% else %}
+          <button type="submit" class="btn btn-success">add to favorite</button>
+          {% endif %} {% else %}
+          <p>
+            <a href="{% url 'account_login' %}" class="btn btn-primary"
+              >login to add favorite</a
+            >
+          </p>
+          {% endif %}
+        </form>
+      </div>
+      <div class="d-none d-md-block col-md-6 masthead-image">
+        {% if "placeholder" in post.featured_image.url %}
+        <img
+          src="{% static 'images/default.jpg' %}"
+          class="scale"
+          alt="placeholder"
+        />
+        {% else %}
+        <img
+          src="{{ post.featured_image.url }}"
+          class="scale"
+          alt="{{ post.title }}"
+        />
+        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="container">
-    <div class="row">
-        <div class="col card mb-4  mt-3 left  top">
-            <div class="card-body">
-                <!-- The post content goes inside the card-text. -->
-                <!-- Use the | safe filter inside the template tags -->
-                <article class="card-text">
-                    {{ post.content | safe }}
-                </article>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col card mb-4 mt-3 left top">
+      <div class="card-body">
+        <!-- The post content goes inside the card-text. -->
+        <!-- Use the | safe filter inside the template tags -->
+        <article class="card-text">{{ post.content | safe }}</article>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <strong class="text-secondary">
-                <i class="far fa-comments"></i> {{ comment_count }}
-            </strong>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <strong class="text-secondary">
+        <i class="far fa-comments"></i> {{ comment_count }}
+      </strong>
+    </div>
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 card mb-4 mt-3">
+      <h3>Comments:</h3>
+      <div class="card-body">
+        {% for comment in comments %}
+        <div
+          class="card shadow-sm mb-3 {% if not comment.approved and comment.author == user %} faded {% elif not comment.approved %} d-none {% endif %}"
+        >
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6
+                class="fw-bold {% if comment.author == post.author %} text-success {% endif %}"
+              >
+                <i class="fas fa-user text-primary"></i> {{ comment.author }}
+              </h6>
+              <small class="text-muted">{{ comment.created_on }}</small>
+            </div>
+
+            <p class="mt-2">{{ comment.body | linebreaks }}</p>
+
+            {% if not comment.approved and comment.author == user %}
+
+            <p class="text-warning small">This comment is awaiting approval</p>
+            {% endif %} {% if user.is_authenticated and comment.author == user
+            %}
+            <div class="mt-2">
+              <a
+                href="{% url 'comment_delete' post.slug comment.id %}"
+                class="btn btn-sm btn-outline-danger"
+                >Delete</a
+              >
+              <a
+                href="{% url 'comment_edit' post.slug comment.id %}"
+                class="btn btn-sm btn-outline-secondary"
+                >Edit</a
+              >
+            </div>
+            {% endif %}
+          </div>
         </div>
-        <div class="col-12">
-            <hr>
-        </div>
+        {% empty %}
+        <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+      </div>
     </div>
 
-
-    <div class="row">
-        <div class="col-md-8 card mb-4 mt-3">
-            <h3>Comments:</h3>
-            <div class="card-body">
-                {% for comment in comments %}
-                <div class="card shadow-sm mb-3 
-                    {% if not comment.approved and comment.author == user %} faded 
-                    {% elif not comment.approved %} d-none {% endif %}">
-                    
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="fw-bold {% if comment.author == post.author %} text-success {% endif %}">
-                                <i class="fas fa-user text-primary"></i> {{ comment.author }}
-                            </h6>
-                            <small class="text-muted">{{ comment.created_on }}</small>
-                        </div>
-                        
-                        <p class="mt-2">{{ comment.body | linebreaks }}</p>
-    
-                        {% if not comment.approved and comment.author == user %}
-
-                        <p class="text-warning small">This comment is awaiting approval</p>
-                        {% endif %}
-    
-                        {% if user.is_authenticated and comment.author == user %}
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-outline-danger btn-delete" data-comment_id="{{ comment.id }}">Delete</button>
-                            <button class="btn btn-sm btn-outline-secondary btn-edit" data-comment_id="{{ comment.id }}">Edit</button>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                {% empty %}
-                <p>No comments yet. Be the first to comment!</p>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="col-md-4 card mb-4 mt-3 ">
-            <div class="card-body">
-                {% if user.is_authenticated %}
-                <h3>Leave a comment:</h3>
-                <p>Posting as: {{ user.username }}</p>
-                <form id="commentForm" method="post" style="margin-top: 1.3em;">
-                    {{ comment_form | crispy }}
-                    {% csrf_token %}
-                    <button id="submitButton" type="submit" class="btn btn-signup btn-lg">Submit</button>
-                </form>
-                {% else %}
-                <p>Log in to leave a comment</p>
-                {% endif %}
-            </div>
-        </div>
+    <div class="col-md-4 card mb-4 mt-3">
+      <div class="card-body">
+        {% if user.is_authenticated %} {% if is_editing %}
+        <h3>Edit your comment:</h3>
+        <form
+          id="commentForm"
+          method="post"
+          action="{% url 'comment_edit' post.slug comment_to_edit.id %}"
+          style="margin-top: 1.3em"
+        >
+          {{ comment_form | crispy }} {% csrf_token %}
+          <button id="submitButton" type="submit" class="btn btn-signup btn-lg">
+            Update Comment
+          </button>
+        </form>
+        {% else %}
+        <h3>Leave a comment:</h3>
+        <p>Posting as: {{ user.username }}</p>
+        <form id="commentForm" method="post" style="margin-top: 1.3em">
+          {{ comment_form | crispy }} {% csrf_token %}
+          <button id="submitButton" type="submit" class="btn btn-signup btn-lg">
+            Submit
+          </button>
+        </form>
+        {% endif %} {% else %}
+        <p>Log in to leave a comment</p>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
 <!-- Delete confirmation modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete your comment? This action cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your comment? This action cannot be
+        undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
+      </div>
     </div>
+  </div>
 </div>
 
-{% endblock content %}
-
-{% block extras %}
+{% endblock content %} {% block extras %}
 <script src="{% static 'js/comments.js' %}"></script>
 {% endblock %}
