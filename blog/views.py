@@ -4,6 +4,7 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
+import json
 
 from .models import Post, Comment, Favorite
 from .forms import CommentForm
@@ -77,52 +78,40 @@ def post_detail(request, slug):
         },
     )    
 
+@login_required
 def comment_edit(request, slug, comment_id):
     """
-    View function for editing an existing comment.
+    View function for editing a comment.
     
-    This view allows users to edit their own comments. The edited comment
-    will need to be re-approved by an admin. Only the original author
-    can edit their comments.
+    This view handles both GET and POST requests for editing comments.
+    It ensures that only the comment author can edit their comments.
     """
-    queryset = Post.objects.filter(status=1)
-    post = get_object_or_404(queryset, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
-
-    if request.method == "POST":
-        comment_form = CommentForm(data=request.POST, instance=comment)
-
-        if comment_form.is_valid() and comment.author == request.user:
-            comment = comment_form.save(commit=False)
-            comment.post = post
-            comment.approved = False
-            comment.save()
-            messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
+    if request.user == comment.author:
+        if request.method == "POST":
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                try:
+                    data = json.loads(request.body)
+                    comment.body = data.get('body')
+                    comment.save()
+                    return JsonResponse({
+                        'status': 'success',
+                        'body': comment.body
+                    })
+                except json.JSONDecodeError:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Invalid request data'
+                    }, status=400)
+            else:
+                form = CommentForm(request.POST, instance=comment)
+                if form.is_valid():
+                    form.save()
+                    return redirect('post_detail', slug=slug)
         else:
-            messages.add_message(
-                request, messages.ERROR,
-                'Error updating comment!'
-            )
-
-        return HttpResponseRedirect(reverse('post_detail', args=[slug]))
-
-    else:  # Handle GET request for displaying the edit form
-        comment_form = CommentForm(instance=comment)
-
-    return render(
-        request,
-        "blog/post_detail.html",
-        {
-            "post": post,
-            "comment_form": comment_form,  # Pass the form to the template
-            "comments": post.comments.filter(approved=True).order_by(
-                "-created_on"
-            ),  # Ensure comments are still displayed
-            "comment_count": post.comments.filter(approved=True).count(),
-            "is_editing": True,  # A flag to indicate that we are in edit mode
-            "comment_to_edit": comment,  # The specific comment being edited
-        },
-    )
+            form = CommentForm(instance=comment)
+        return render(request, 'blog/comment_edit.html', {'form': form})
+    return redirect('post_detail', slug=slug)
 
 def comment_delete(request, slug, comment_id):
     """

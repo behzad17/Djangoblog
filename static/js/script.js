@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="mt-2">
               <a href="/comment/delete/${data.post_slug}/${data.id}/" class="btn btn-sm btn-outline-danger">Delete</a>
-              <a href="/comment/edit/${data.post_slug}/${data.id}/" class="btn btn-sm btn-outline-secondary">Edit</a>
+              <button class="btn btn-sm btn-outline-secondary edit-comment" data-comment-id="${data.id}">Edit</button>
             </div>
           `;
 
@@ -119,4 +119,73 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   }
+
+  // Inline comment editing
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("edit-comment")) {
+      const commentId = e.target.dataset.commentId;
+      const commentDiv = document.getElementById(`comment${commentId}`);
+      const currentText = commentDiv.textContent.trim();
+
+      // Create edit form
+      const editForm = document.createElement("form");
+      editForm.className = "edit-comment-form";
+      editForm.innerHTML = `
+        <div class="form-group">
+          <textarea class="form-control" name="body" rows="3">${currentText}</textarea>
+        </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          <button type="button" class="btn btn-sm btn-secondary cancel-edit">Cancel</button>
+        </div>
+      `;
+
+      // Replace comment text with edit form
+      commentDiv.innerHTML = "";
+      commentDiv.appendChild(editForm);
+
+      // Handle form submission
+      editForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const newText = this.querySelector("textarea").value;
+        const csrfToken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        fetch(
+          `/comment/edit/${
+            window.location.pathname.split("/")[1]
+          }/${commentId}/`,
+          {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": csrfToken,
+              "Content-Type": "application/json",
+              "X-Requested-With": "XMLHttpRequest",
+            },
+            body: JSON.stringify({ body: newText }),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              commentDiv.textContent = data.body;
+            } else {
+              alert("Error updating comment. Please try again.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Error updating comment. Please try again.");
+          });
+      });
+
+      // Handle cancel button
+      editForm
+        .querySelector(".cancel-edit")
+        .addEventListener("click", function () {
+          commentDiv.textContent = currentText;
+        });
+    }
+  });
 });
