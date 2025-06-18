@@ -54,7 +54,11 @@ body {
   margin-bottom: 40px;
   overflow: hidden;
   padding: 15px;
+}
+
+.post-card {
   max-height: 500px;
+  overflow: hidden;
 }
 
 .card:hover {
