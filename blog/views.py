@@ -9,10 +9,11 @@ import json
 from .models import Post, Comment, Favorite
 from .forms import CommentForm
 
+
 class PostList(generic.ListView):
     """
     A view that displays a list of published blog posts.
-    
+
     This view inherits from Django's generic ListView and displays posts
     that have been published (status=1). It includes a count of approved
     comments for each post.
@@ -28,11 +29,12 @@ class PostList(generic.ListView):
             comment_count=Count('comments', filter=Q(comments__approved=True))
         )
 
+
 #  `post_detail`
 def post_detail(request, slug):
     """
     View function for displaying a single blog post and its comments.
-    
+
     This view handles both displaying the post and processing new comments.
     It shows approved comments to all users and unapproved comments to
     the comment author. It also tracks whether the post is in the user's
@@ -51,7 +53,7 @@ def post_detail(request, slug):
             comment.author = request.user
             comment.post = post
             comment.save()
-            
+
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({
                     'status': 'success',
@@ -61,7 +63,7 @@ def post_detail(request, slug):
                     'body': comment.body,
                     'post_slug': post.slug
                 })
-            
+
             messages.add_message(
                 request, messages.SUCCESS,
                 'Comment submitted successfully!'
@@ -76,13 +78,14 @@ def post_detail(request, slug):
             "comment_count": comment_count,
             "comment_form": comment_form,
         },
-    )    
+    )
+
 
 @login_required
 def comment_edit(request, slug, comment_id):
     """
     View function for editing a comment.
-    
+
     This view handles both GET and POST requests for editing comments.
     It ensures that only the comment author can edit their comments.
     """
@@ -113,10 +116,11 @@ def comment_edit(request, slug, comment_id):
         return render(request, 'blog/comment_edit.html', {'form': form})
     return redirect('post_detail', slug=slug)
 
+
 def comment_delete(request, slug, comment_id):
     """
     View function for deleting a comment.
-    
+
     This view allows users to delete their own comments. Only the original
     author can delete their comments.
     """
@@ -133,11 +137,12 @@ def comment_delete(request, slug, comment_id):
 
     return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
+
 @login_required
 def add_to_favorites(request, post_id):
     """
     View function for adding or removing a post from favorites.
-    
+
     This view toggles the favorite status of a post for the current user.
     If the post is already favorited, it will be removed from favorites.
     If not, it will be added to favorites.
@@ -152,22 +157,24 @@ def add_to_favorites(request, post_id):
 
     return redirect(request.META.get('HTTP_REFERER', 'favorites'))
 
+
 @login_required
 def favorite_posts(request):
     """
     View function for displaying a user's favorite posts.
-    
+
     This view shows all posts that the current user has marked as favorites.
     The view requires user authentication.
     """
     favorites = Favorite.objects.filter(user=request.user)
     return render(request, 'blog/favorites.html', {'favorites': favorites})
 
+
 @login_required
 def remove_from_favorites(request, post_id):
     """
     View function for removing a post from favorites.
-    
+
     This view removes a specific post from the current user's favorites.
     The view requires user authentication.
     """
@@ -177,5 +184,4 @@ def remove_from_favorites(request, post_id):
     if favorite.exists():
         favorite.delete()
 
-    return redirect(request.META.get('HTTP_REFERER', 'favorites'))         
-     
+    return redirect(request.META.get('HTTP_REFERER', 'favorites'))
