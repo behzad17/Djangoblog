@@ -54,6 +54,7 @@ body {
   margin-bottom: 40px;
   overflow: hidden;
   padding: 15px;
+  max-height: 500px;
 }
 
 .card:hover {
