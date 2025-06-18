@@ -53,6 +53,7 @@ body {
   transition: all 0.3s ease-in-out;
   margin-bottom: 25px;
   overflow: hidden;
+  min-height: 400px;
 }
 
 .card:hover {
