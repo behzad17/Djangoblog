@@ -13,13 +13,18 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import sys
+from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 import dj_database_url
 if os.path.isfile('env.py'):
-    import env
+    import env  # noqa: F401
+
+# Load environment variables from .env at project root (BASE_DIR)
+# This happens before reading any env-dependent settings
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 
@@ -27,17 +32,18 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+# Provide a clearly insecure default for local development only
+SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-dev-key-change-me")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-DEBUG = True
+# Read from environment, default to True for local development
+DEBUG = os.environ.get("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
 ALLOWED_HOSTS = [
     '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net',
-    '127.0.0.1',  
+    '127.0.0.1',
     'localhost',
-    '.herokuapp.com',     
+    '.herokuapp.com',
 ]
 
 # Application definition
@@ -112,8 +118,10 @@ WSGI_APPLICATION = 'codestar.wsgi.application'
 #    }
 # }
 
+_default_sqlite_url = f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
+_database_url = os.environ.get("DATABASE_URL", _default_sqlite_url)
 DATABASES = {
-    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    'default': dj_database_url.parse(_database_url)
 }
 
 if 'test' in sys.argv:
@@ -136,23 +144,35 @@ CSRF_TRUSTED_ORIGINS = [
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
 
 # sso activation
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',  
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
