@@ -183,19 +183,22 @@ The board included **four main stages**:
 
 ---
 
-## Sprint & Milestones
+## Milestones (Sprints)
+The project was divided into 5 sprints:
+Sprint 1 – Initial Setup: Django setup, User model, Registration form.
+Sprint 2 – Authentication: Login, Logout, Dashboard.
+Sprint 3 – Blog CRUD: Create, Edit, Delete posts.
+Sprint 4 – Comments + Styling: Comment system, Bootstrap/CSS styling.
 
-- **Sprint 1:** Setup Django project, user registration & login.
-- **Sprint 2:** Post creation and editing/deletion.
-- **Sprint 3:** Commenting system.
-- **Sprint 4:** UI improvements & final testing.
-
+#### Milestones
+![Milestones](docs/agile/milestones.png)
 ---
 
 ## Conclusion
 
 By using Agile methodology with a **Kanban board** on GitHub Projects,  
 I was able to track progress visually through each stage of development — from planning to completion.
+
 
 ## Deployment
 
