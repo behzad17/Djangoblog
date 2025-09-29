@@ -133,59 +133,62 @@ The front-end follows best practices in UI/UX design:
 
 ![Screens](/static/images/htmlvalidation.png)
 
-
-##  Agile Methodology & Project Board
+## Agile Methodology & Project Board
 
 This project was managed using **GitHub Projects** with a Kanban workflow.  
 The board included **four main stages**:
 
-1. **Backlog** → All planned user stories before development.  
-2. **Ready** → Items prepared and ready to be picked up.  
-3. **In Progress** → Items actively being developed.  
-4. **Done** → Completed items, fully implemented and tested.  
+1. **Backlog** → All planned user stories before development.
+2. **Ready** → Items prepared and ready to be picked up.
+3. **In Progress** → Items actively being developed.
+4. **Done** → Completed items, fully implemented and tested.
 
 ---
 
 ### 📸 Project Board Progress
 
 #### 🔹 Backlog (initial planning)
+
 ![Backlog Screenshot](docs/agile/board-backlog.png)
 
 #### 🔹 Ready (items prepared for development)
+
 ![Ready Screenshot](docs/agile/board-ready.png)
 
 #### 🔹 In Progress (features under active development)
+
 ![In Progress Screenshot](docs/agile/board-inprogress.png)
 
 #### 🔹 Done (completed features)
+
 ![Done Screenshot](docs/agile/board-done.png)
 
 ---
 
 ### User Stories & Status
 
--  **Done**  
-  - *As a user I want to register an account so that I can log in.*  
-  - *As a registered user I want to log in securely so that I can access my profile.*  
+- **Done**
+- _As a user I want to register an account so that I can log in._
+- _As a registered user I want to log in securely so that I can access my profile._
 
--  **In Progress**  
-  - *As a logged-in user I want to create a new blog post.*  
-  - *As a post author I want to edit or delete my posts.*  
+- **In Progress**
+- _As a logged-in user I want to create a new blog post._
+- _As a post author I want to edit or delete my posts._
 
--  **Ready**  
-  - *As a reader I want to comment on posts.*  
+- **Ready**
+- _As a reader I want to comment on posts._
 
--  **Backlog**  
-  - Currently empty (all items moved forward).  
+- **Backlog**
+- Currently empty (all items moved forward).
 
 ---
 
-##  Sprint & Milestones
+## Sprint & Milestones
 
-- **Sprint 1:** Setup Django project, user registration & login.  
-- **Sprint 2:** Post creation and editing/deletion.  
-- **Sprint 3:** Commenting system.  
-- **Sprint 4:** UI improvements & final testing.  
+- **Sprint 1:** Setup Django project, user registration & login.
+- **Sprint 2:** Post creation and editing/deletion.
+- **Sprint 3:** Commenting system.
+- **Sprint 4:** UI improvements & final testing.
 
 ---
 
@@ -193,8 +196,6 @@ The board included **four main stages**:
 
 By using Agile methodology with a **Kanban board** on GitHub Projects,  
 I was able to track progress visually through each stage of development — from planning to completion.
-
-
 
 ## Deployment
 
