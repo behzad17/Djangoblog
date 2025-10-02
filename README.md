@@ -345,6 +345,11 @@ The following table shows the **results of executing the manual tests**:
 ![Responsive - Mobile](docs/testing/responsive-mobile.png)
 
 
+### Automated Tests
+Unit tests exist for core views/models. Run:
+
+python manage.py test
+
 ## Deployment
 
 Heroku Deployment [The live link is here](https://djangoblog17-173e7e5e5186.herokuapp.com/)
