@@ -199,6 +199,102 @@ Sprint 4 – Comments + Styling: Comment system, Bootstrap/CSS styling.
 By using Agile methodology with a **Kanban board** on GitHub Projects,  
 I was able to track progress visually through each stage of development — from planning to completion.
 
+ 
+
+###  Wireframes  
+
+As part of the design process, created  I wireframes for the main pages of the application.  
+The wireframes helped visualizing the layout, content structure, and user flow before implementing the actual UI.  
+
+#### 🔹 Main Page (Landing Page)  
+- Logo and navigation menu at the top (Home, About, Login, Register).  
+- A central heading: *“Read it on our website”* i completed the text now.  
+- Grid of blog/article cards with:  
+  - Image placeholder  
+  - Title (bold text)  
+  - Short description/preview text  
+- Designed for quick content scanning and responsive layout. 
+
+####  Login Page  
+- **Fields**: Email, Password  
+- **Action**: Login button  
+- **Notes**:  to allow registered users to access their profiles.  
+
+####  Register Page  
+- **Fields**: Username, Email, Password, Confirm Password  
+- **Action**: Sign Up button  
+- **Validation**: Password requirements listed (minimum length, not common, not numeric only, etc.)  
+- **Notes**: Focused on user-friendly and secure registration.  
+
+####  Blog Post + Comment Page  
+- **Sections**:  
+  - Blog title and content area  
+  - Author info and timestamp  
+  - Comment section with input box and "Add Comment" button  
+- **Notes**: Designed to encourage user interaction with clear placement of content and comments.  
+
+ **Wireframe Examples:** 
+![Main Page Wireframe](docs/agile/mainpage.jpg)
+![Details-Comment Wireframe](docs/agile/detail-comment.jpg) 
+![Login Wireframe](docs/agile/login.jpg)  
+![Register Wireframe](docs/agile/register.jpg)  
+  
+
+---
+
+###  Color Scheme & Typography  
+
+####  Color Scheme  
+The application uses a **clean and modern color palette** to ensure readability and accessibility:  
+
+- **Primary Color:** `#0077b6` → Used for buttons, highlights, and navigation links  
+- **Secondary Color:** `#00b4d8` → Supporting accents and hover states  
+- **Background Color:** `#ffffff` → Clean white background for maximum readability  
+- **Text Color:** `#000000` → Standard black for strong contrast  
+- **Border/Muted Elements:** `#e0e0e0` → Used for card borders and subtle separation  
+
+
+####  Typography  
+For typography, a **modern sans-serif font** was selected for simplicity and readability across devices:  
+
+- **Headings (H1, H2, H3):** `Poppins` (Bold, clean, easy to read)  
+- **Body Text:** `Roboto` (Regular, highly readable on screens)  
+- **Fallback Fonts:** `Arial, sans-serif`  
+
+ This combination ensures that titles stand out while body text remains clear and user-friendly.  
+
+####  Example  
+- **Heading Example (H1):** `Sweden Today – Latest News`  
+- **Paragraph Example (Body):** `Sweden’s immigrants on edge after mass shooting. The motive behind Sweden’s deadliest mass shooting may never be known but the fact that almost all of the victims …`  
+
+---
+
+ **Summary**  
+- Wireframes provided a clear **blueprint** for feature development.  
+- The **color scheme & typography** ensure a consistent and accessible UI.  
+
+
+
+# Entity Relationship Diagram (ERD)
+
+## User
+Represents registered users of the system.
+Each user can create multiple posts and comments.
+## Post
+Represents blog posts created by users.
+Each post belongs to exactly one author (User).
+Each post can have multiple comments.
+## Comment
+Represents comments added to a post.
+Each comment is linked to both:
+the post it belongs to
+the author (User) who wrote it
+## Relationship summary:
+A User can write many Posts.
+A User can write many Comments.
+A Post can have many Comments. 
+
+
 
 ## Deployment
 
