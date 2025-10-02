@@ -295,6 +295,55 @@ A User can write many Comments.
 A Post can have many Comments. 
 
 
+##  Testing
+
+###  Manual Testing – Test Plan
+The following table outlines the **planned manual test cases** for core features of the application:
+
+| Feature    | Test Case              | Steps                                      |
+|------------|------------------------|--------------------------------------------|
+| Register   | Valid inputs           | /register → fill valid data → submit        |
+| Register   | Weak password          | /register → password `1234` → submit        |
+| Login      | Valid credentials      | /login → enter correct creds → submit       |
+| Create Post| Valid post             | /posts/new → title+content → submit         |
+| Comment    | Logged-out add comment | /posts/:id → submit comment while logged out|
+| Responsive | Mobile layout (375px)  | Chrome DevTools → Toggle Device Toolbar     |
+
+---
+
+###  Manual Testing – Test Report
+The following table shows the **results of executing the manual tests**:
+
+| Result | Expected Result                          | Steps                                    | Test Case              | Feature    |
+|--------|------------------------------------------|------------------------------------------|------------------------|------------|
+| ✅     | Account created → redirect to Login      | /register → fill valid data → submit     | Valid inputs           | Register   |
+| ✅     | Validation error shown                   | /register → password `1234` → submit     | Weak password          | Register   |
+| ✅     | Redirect to Posts list                   | /login → enter correct creds → submit    | Valid credentials      | Login      |
+| ✅     | Post visible in list & detail            | /posts/new → title+content → submit      | Valid post             | Create Post|
+| ✅     | Login to leave a comment                       | /posts/:id → submit comment while logged out | Logged-out add comment | Comment    |
+| ✅     | No horizontal scroll; layout readable    | Chrome DevTools → Toggle Device Toolbar | Mobile layout (375px)  | Responsive |
+
+---
+
+###  Notes
+- All manual test cases passed successfully ✅  
+- Responsive design tested on Chrome DevTools at **375px (mobile view)**  
+- Edge cases (weak passwords, unauthorized comments) behave as expected  
+- Future improvements: expand tests for multiple browsers (Google chroom, Safari) and performance under heavy load.
+
+### Screenshots
+![Register Success](docs/testing/register-success.png)
+
+![Register Weak Password](docs/testing/register-weak.png)
+
+![Login Success](docs/testing/login-success.png)
+
+![Create Post Success](docs/testing/post-create-success.png)
+
+![Comment Redirect to Login](docs/testing/login-to-comment.png)
+
+![Responsive - Mobile](docs/testing/responsive-mobile.png)
+
 
 ## Deployment
 
