@@ -4,10 +4,11 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.utils.text import slugify
 import json
 
 from .models import Post, Comment, Favorite
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 
 class PostList(generic.ListView):
@@ -185,3 +186,30 @@ def remove_from_favorites(request, post_id):
         favorite.delete()
 
     return redirect(request.META.get('HTTP_REFERER', 'favorites'))
+
+
+@login_required
+def create_post(request):
+    """
+    View function for creating a new blog post.
+    
+    This view handles both GET and POST requests for creating new posts.
+    It automatically sets the author to the current user and generates
+    a slug from the title. The view requires user authentication.
+    """
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.slug = slugify(post.title)
+            post.save()
+            messages.add_message(
+                request, messages.SUCCESS,
+                'Post created successfully!'
+            )
+            return redirect('post_detail', slug=post.slug)
+    else:
+        form = PostForm()
+    
+    return render(request, 'blog/create_post.html', {'form': form})

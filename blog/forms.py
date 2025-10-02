@@ -1,5 +1,24 @@
-from .models import Comment
+from .models import Comment, Post
 from django import forms
+
+
+class PostForm(forms.ModelForm):
+    """
+    A form for creating and editing blog posts.
+    
+    This form allows users to create new blog posts with title, content,
+    excerpt, and featured image. It uses Summernote for rich text editing.
+    """
+    class Meta:
+        """Meta options for PostForm."""
+        model = Post
+        fields = ('title', 'excerpt', 'content', 'featured_image', 'status')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 
 class CommentForm(forms.ModelForm):
