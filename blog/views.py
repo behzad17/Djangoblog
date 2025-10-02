@@ -25,10 +25,11 @@ class PostList(generic.ListView):
     def get_queryset(self):
         """
         Returns a queryset of published posts with comment counts.
+        Posts are ordered by creation date (newest first).
         """
         return Post.objects.filter(status=1).annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
-        )
+        ).order_by('-created_on')
 
 
 #  `post_detail`
