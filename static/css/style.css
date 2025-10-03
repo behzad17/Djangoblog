@@ -326,3 +326,10 @@ body {
 .blog-post-row > div .card .card-text:last-of-type {
   margin-top: auto; /* Pushes the date/comment info to the bottom */
 }
+
+/* Hero image sizing */
+.hero-image {
+  max-width: 750px;
+  width: 100%;
+  height: auto;
+}
