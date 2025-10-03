@@ -1,32 +1,37 @@
 // Newsletter Subscription Functionality
-document.addEventListener('DOMContentLoaded', function() {
-  const newsletterBtn = document.getElementById('newsletter-btn');
+document.addEventListener("DOMContentLoaded", function () {
+  const newsletterBtn = document.getElementById("newsletter-btn");
   const newsletterInput = document.querySelector('input[type="email"]');
-  
+
   if (newsletterBtn && newsletterInput) {
-    newsletterBtn.addEventListener('click', function() {
+    newsletterBtn.addEventListener("click", function () {
       const email = newsletterInput.value.trim();
-      
+
       if (email && isValidEmail(email)) {
         // Show loading state
-        newsletterBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Subscribing...';
+        newsletterBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Subscribing...';
         newsletterBtn.disabled = true;
-        
+
         // Simulate API call (replace with actual implementation)
         setTimeout(() => {
-          showNewsletterMessage('Thank you for subscribing to our newsletter!', 'success');
-          newsletterInput.value = '';
-          newsletterBtn.innerHTML = '<i class="fas fa-paper-plane me-1"></i>Subscribe';
+          showNewsletterMessage(
+            "Thank you for subscribing to our newsletter!",
+            "success"
+          );
+          newsletterInput.value = "";
+          newsletterBtn.innerHTML =
+            '<i class="fas fa-paper-plane me-1"></i>Subscribe';
           newsletterBtn.disabled = false;
         }, 1500);
       } else {
-        showNewsletterMessage('Please enter a valid email address.', 'warning');
+        showNewsletterMessage("Please enter a valid email address.", "warning");
       }
     });
-    
+
     // Handle Enter key press
-    newsletterInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
+    newsletterInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
         newsletterBtn.click();
       }
     });
@@ -51,10 +56,10 @@ function showNewsletterMessage(message, type) {
   `;
 
   // Insert at the top of the newsletter section
-  const newsletterSection = document.querySelector('.footer .row.mt-5');
+  const newsletterSection = document.querySelector(".footer .row.mt-5");
   if (newsletterSection) {
     newsletterSection.insertBefore(alertDiv, newsletterSection.firstChild);
-    
+
     // Auto-dismiss after 5 seconds
     setTimeout(() => {
       if (alertDiv.parentNode) {
