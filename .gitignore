@@ -3,3 +3,4 @@ blog/fixtures/
 __pycache__/
 .venv/
 .DS_Store
+staticfiles/
