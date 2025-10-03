@@ -1,7 +1,7 @@
 // Newsletter Subscription Functionality
 document.addEventListener("DOMContentLoaded", function () {
   const newsletterBtn = document.getElementById("newsletter-btn");
-  const newsletterInput = document.querySelector('input[type="email"]');
+  const newsletterInput = document.getElementById("newsletter-email");
 
   if (newsletterBtn && newsletterInput) {
     newsletterBtn.addEventListener("click", function () {
@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (email && isValidEmail(email)) {
         // Show loading state
-        newsletterBtn.innerHTML =
-          '<i class="fas fa-spinner fa-spin me-1"></i>Subscribing...';
+        newsletterBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         newsletterBtn.disabled = true;
 
         // Simulate API call (replace with actual implementation)
@@ -20,8 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "success"
           );
           newsletterInput.value = "";
-          newsletterBtn.innerHTML =
-            '<i class="fas fa-paper-plane me-1"></i>Subscribe';
+          newsletterBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
           newsletterBtn.disabled = false;
         }, 1500);
       } else {
@@ -56,7 +54,7 @@ function showNewsletterMessage(message, type) {
   `;
 
   // Insert at the top of the newsletter section
-  const newsletterSection = document.querySelector(".footer .row.mt-5");
+  const newsletterSection = document.querySelector(".footer .col-lg-3.col-md-6:last-child");
   if (newsletterSection) {
     newsletterSection.insertBefore(alertDiv, newsletterSection.firstChild);
 
