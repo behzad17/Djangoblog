@@ -329,7 +329,7 @@ body {
 
 /* Hero image sizing */
 .hero-image {
-  max-width: 750px;
+  max-width: 375px;
   width: 100%;
   height: auto;
 }
