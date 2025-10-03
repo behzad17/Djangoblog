@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import sys
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 from django.contrib.messages import constants as messages
 import dj_database_url
 if os.path.isfile('env.py'):
@@ -32,19 +33,26 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# Provide a clearly insecure default for local development only
-SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-dev-key-change-me")
+# Do NOT provide defaults for SECRET_KEY in production
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Read from environment, default to True for local development
-DEBUG = os.environ.get("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
+# Parse DEBUG from environment, default to False
+DEBUG = os.environ.get("DEBUG", "False").lower() in {"1", "true", "yes", "on"}
 
-ALLOWED_HOSTS = [
-    '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net',
-    '127.0.0.1',
-    'localhost',
-    '.herokuapp.com',
-]
+# Fail fast if critical settings are missing in production
+if not DEBUG and not SECRET_KEY:
+    raise ImproperlyConfigured(
+        "SECRET_KEY must be set in environment when DEBUG is False."
+    )
+
+_default_allowed_hosts = (
+    '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net,'
+    '127.0.0.1,localhost,.herokuapp.com'
+)
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS", _default_allowed_hosts
+).split(",")
 
 # Application definition
 INSTALLED_APPS = [
@@ -121,8 +129,17 @@ WSGI_APPLICATION = 'codestar.wsgi.application'
 _default_sqlite_url = f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
 _database_url = os.environ.get("DATABASE_URL", _default_sqlite_url)
 DATABASES = {
-    'default': dj_database_url.parse(_database_url)
+    'default': dj_database_url.parse(
+        _database_url,
+        conn_max_age=600,
+        ssl_require=not DEBUG
+    )
 }
+
+if not DEBUG and os.environ.get("DATABASE_URL") is None:
+    raise ImproperlyConfigured(
+        "DATABASE_URL must be set in environment when DEBUG is False."
+    )
 
 if 'test' in sys.argv:
     DATABASES['default'] = {
@@ -138,6 +155,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.codeinstitute-ide.net/",
     "https://*.herokuapp.com"
 ]
+_extra_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+if _extra_csrf:
+    CSRF_TRUSTED_ORIGINS += [o for o in _extra_csrf.split(",") if o]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -210,6 +230,17 @@ MESSAGE_TAGS = {
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Production security settings
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

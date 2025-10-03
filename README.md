@@ -354,6 +354,47 @@ python manage.py test
 
 Heroku Deployment [The live link is here](https://djangoblog17-173e7e5e5186.herokuapp.com/)
 
+
+This project was deployed to Heroku using GitHub integration.
+
+### 1. Prerequisites
+- Python 3.12
+- Django 4.2.x
+- Gunicorn (WSGI server)
+- PostgreSQL (database)
+- Cloudinary (media storage)
+- Procfile (process types for Heroku)
+- requirements.txt (all dependencies)
+
+### 2. Create a Heroku App
+1. Log in to Heroku.
+2. Create a new app (choose closest region).
+3. Connect the app to your GitHub repo under Deploy → Deployment method.
+
+### 3. Set Environment Variables (Settings → Config Vars)
+- `SECRET_KEY=your_django_secret_key`
+- `DEBUG=False`
+- `DATABASE_URL=your_postgres_database_url`
+- `CLOUDINARY_URL=your_cloudinary_url`
+- (Optional) `GOOGLE_CLIENT_ID=...`
+- (Optional) `GOOGLE_CLIENT_SECRET=...`
+- (Only if needed temporarily) `DISABLE_COLLECTSTATIC=1`
+
+Note: Do not set `PORT` on Heroku. It’s provided automatically.
+
+### 4. Deploy
+1. Push to `main` on GitHub.
+2. Heroku detects Python, installs from `requirements.txt`, and runs `Procfile`.
+3. Click Open App.
+
+### 5. Final Checks
+- Ensure `DEBUG=False`.
+- Static files served (WhiteNoise) and media via Cloudinary.
+- Database connected via PostgreSQL.
+- Check responsiveness and links.
+
+
+
 ## Media
 
 - The photos used on the home page are from [Sweden Herald](https://swedenherald.com/)
