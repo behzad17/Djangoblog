@@ -54,7 +54,9 @@ function showNewsletterMessage(message, type) {
   `;
 
   // Insert at the top of the newsletter section
-  const newsletterSection = document.querySelector(".footer .col-lg-3.col-md-6:last-child");
+  const newsletterSection = document.querySelector(
+    ".footer .col-lg-3.col-md-6:last-child"
+  );
   if (newsletterSection) {
     newsletterSection.insertBefore(alertDiv, newsletterSection.firstChild);
 

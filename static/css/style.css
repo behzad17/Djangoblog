@@ -693,7 +693,14 @@ body {
 }
 
 .social-link.instagram {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background: linear-gradient(
+    45deg,
+    #f09433 0%,
+    #e6683c 25%,
+    #dc2743 50%,
+    #cc2366 75%,
+    #bc1888 100%
+  );
   color: white;
 }
 
@@ -774,11 +781,11 @@ body {
   .footer .container {
     padding: 2rem 1rem;
   }
-  
+
   .footer h5 {
     font-size: 1.3rem;
   }
-  
+
   .social-link {
     width: 30px;
     height: 30px;
