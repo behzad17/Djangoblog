@@ -70,6 +70,7 @@ def post_detail(request, slug):
                 request, messages.SUCCESS,
                 'Comment submitted successfully!'
             )
+            return redirect('post_detail', slug=post.slug)
 
     return render(
         request,

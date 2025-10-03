@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Comment form submission
   const commentForm = document.getElementById("commentForm");
   if (commentForm) {
+    // Ensure form is clean on page load
+    commentForm.reset();
     commentForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const submitButton = document.getElementById("submitButton");
@@ -106,6 +108,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Reset form
             commentForm.reset();
+            
+            // Redirect to clear POST data from browser history
+            window.history.replaceState({}, document.title, window.location.pathname);
           } else {
             alert("Error submitting comment. Please try again.");
           }
