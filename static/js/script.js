@@ -64,8 +64,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((response) => response.json())
         .then((data) => {
           if (data.status === "success") {
-            // Create new comment element
-            const commentsContainer = document.querySelector(".card-body");
+            // Create new comment element - target the comments section specifically
+            const commentsHeading = Array.from(document.querySelectorAll("h3")).find(h3 => h3.textContent.includes("Comments:"));
+            const commentsContainer = commentsHeading ? commentsHeading.nextElementSibling : document.querySelector(".col-md-8 .card-body");
+            
+            // Debug logging
+            console.log("Comments heading found:", commentsHeading);
+            console.log("Comments container:", commentsContainer);
             const newComment = document.createElement("div");
             newComment.className = "comments";
             newComment.style.padding = "10px";
