@@ -26,13 +26,6 @@
         <a href="{% url 'favorites' %}" class="btn btn-outline-light btn-lg">
           <i class="fas fa-star"></i> Favorites
         </a>
-        {% else %}
-        <a href="{% url 'account_signup' %}" class="btn btn-light btn-lg me-2"
-          >Sign Up</a
-        >
-        <a href="{% url 'account_login' %}" class="btn btn-outline-light btn-lg"
-          >Log In</a
-        >
         {% endif %}
       </div>
       <div class="col-12 col-lg-5 text-center d-none d-lg-block">
