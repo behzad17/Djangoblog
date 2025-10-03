@@ -646,11 +646,15 @@ body {
 
 /* Clean Footer Styles - Fixed for all devices */
 .footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border-top: 3px solid #006aa7;
-  min-height: auto;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  border-top: 3px solid #006aa7 !important;
+  min-height: auto !important;
   display: block !important;
   visibility: visible !important;
+  position: relative !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  clear: both !important;
 }
 
 .footer h5 {
