@@ -216,6 +216,13 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((data) => {
             if (data.status === "success") {
               commentDiv.textContent = data.body;
+              
+              // Clear any existing messages
+              const existingAlerts = document.querySelectorAll('.alert');
+              existingAlerts.forEach(alert => alert.remove());
+              
+              // Show success message
+              showSuccessMessage("Your comment was updated successfully!");
             } else {
               alert("Error updating comment. Please try again.");
             }
