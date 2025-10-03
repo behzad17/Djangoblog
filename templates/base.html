@@ -1,11 +1,7 @@
-{% load static %}
-{% url 'home' as home_url %} 
-{% url 'about' as about_url %} 
-{% url 'account_login' as login_url %}
-{% url 'account_signup' as signup_url %}
-{% url 'account_logout' as logout_url %}
-{% url 'favorites' as favorites_url %}
-{% url 'create_post' as create_post_url %}
+{% load static %} {% url 'home' as home_url %} {% url 'about' as about_url %} {%
+url 'account_login' as login_url %} {% url 'account_signup' as signup_url %} {%
+url 'account_logout' as logout_url %} {% url 'favorites' as favorites_url %} {%
+url 'create_post' as create_post_url %}
 
 <!DOCTYPE html>
 <html class="h-100" lang="en">
@@ -158,44 +154,241 @@
       {% endblock content %}
     </main>
 
-    <!-- Footer Section -->
-    <footer class="footer mt-auto py-3 dark-bg">
-      <!-- Copyright Information -->
-      <p class="m-0 text-center text-white">
-        {% block copyright %} Copyright 2025 BJ {% endblock copyright %}
-      </p>
-      <!-- Social Media Links -->
-      <p class="m-0 text-center text-white">
-        Follow us:
-        <a
-          href="https://www.facebook.com/swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-facebook-square ms-3"></i>
-        </a>
-        <a
-          href="https://twitter.com/swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-twitter-square ms-3"></i>
-        </a>
-        <a
-          href="https://www.instagram.com/swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-instagram-square ms-3"></i>
-        </a>
-        <a
-          href="https://www.youtube.com/@swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-youtube-square ms-3"></i>
-        </a>
-      </p>
+    <!-- Enhanced Footer Section -->
+    <footer class="footer mt-auto bg-dark text-light">
+      <div class="container py-5">
+        <div class="row g-4">
+          <!-- Brand Section -->
+          <div class="col-lg-4 col-md-6">
+            <div class="footer-brand">
+              <h5 class="text-white mb-3">
+                <span class="brand">
+                  <span class="blue-o">Swe</span
+                  ><span class="yellow-o">den</span
+                  ><span class="thin">|today</span>
+                </span>
+              </h5>
+              <p class="text-muted mb-4">
+                A dedicated platform for the Iranian community in Sweden to
+                share stories, experiences, and build connections. Your voice
+                matters here.
+              </p>
+              <div class="social-links">
+                <h6 class="text-white mb-3">Follow Us</h6>
+                <div class="d-flex gap-3">
+                  <a
+                    href="https://www.facebook.com/swedentoday"
+                    target="_blank"
+                    class="social-link facebook"
+                    aria-label="Facebook"
+                  >
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a
+                    href="https://twitter.com/swedentoday"
+                    target="_blank"
+                    class="social-link twitter"
+                    aria-label="Twitter"
+                  >
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/swedentoday"
+                    target="_blank"
+                    class="social-link instagram"
+                    aria-label="Instagram"
+                  >
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                  <a
+                    href="https://www.youtube.com/@swedentoday"
+                    target="_blank"
+                    class="social-link youtube"
+                    aria-label="YouTube"
+                  >
+                    <i class="fab fa-youtube"></i>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/swedentoday"
+                    target="_blank"
+                    class="social-link linkedin"
+                    aria-label="LinkedIn"
+                  >
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Links Section -->
+          <div class="col-lg-2 col-md-6">
+            <h6 class="text-white mb-3">Quick Links</h6>
+            <ul class="list-unstyled footer-links">
+              <li class="mb-2">
+                <a
+                  href="{{ home_url }}"
+                  class="text-muted text-decoration-none"
+                >
+                  <i class="fas fa-home me-2"></i>Home
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ about_url }}"
+                  class="text-muted text-decoration-none"
+                >
+                  <i class="fas fa-info-circle me-2"></i>About
+                </a>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="mb-2">
+                <a
+                  href="{{ create_post_url }}"
+                  class="text-muted text-decoration-none"
+                >
+                  <i class="fas fa-plus me-2"></i>Create Post
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ favorites_url }}"
+                  class="text-muted text-decoration-none"
+                >
+                  <i class="fas fa-star me-2"></i>Favorites
+                </a>
+              </li>
+              {% else %}
+              <li class="mb-2">
+                <a
+                  href="{{ login_url }}"
+                  class="text-muted text-decoration-none"
+                >
+                  <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ signup_url }}"
+                  class="text-muted text-decoration-none"
+                >
+                  <i class="fas fa-user-plus me-2"></i>Register
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <!-- Community Section -->
+          <div class="col-lg-3 col-md-6">
+            <h6 class="text-white mb-3">Community</h6>
+            <ul class="list-unstyled footer-links">
+              <li class="mb-2">
+                <a href="#" class="text-muted text-decoration-none">
+                  <i class="fas fa-users me-2"></i>Community Guidelines
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-muted text-decoration-none">
+                  <i class="fas fa-shield-alt me-2"></i>Privacy Policy
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-muted text-decoration-none">
+                  <i class="fas fa-file-contract me-2"></i>Terms of Service
+                </a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-muted text-decoration-none">
+                  <i class="fas fa-question-circle me-2"></i>Help Center
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact Section -->
+          <div class="col-lg-3 col-md-6">
+            <h6 class="text-white mb-3">Get In Touch</h6>
+            <div class="contact-info">
+              <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-envelope text-primary me-3"></i>
+                <div>
+                  <small class="text-muted d-block">Email</small>
+                  <a
+                    href="mailto:contact@swedentoday.se"
+                    class="text-white text-decoration-none"
+                  >
+                    contact@swedentoday.se
+                  </a>
+                </div>
+              </div>
+              <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-map-marker-alt text-primary me-3"></i>
+                <div>
+                  <small class="text-muted d-block">Location</small>
+                  <span class="text-white">Stockholm, Sweden</span>
+                </div>
+              </div>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-clock text-primary me-3"></i>
+                <div>
+                  <small class="text-muted d-block">Response Time</small>
+                  <span class="text-white">Within 2 working days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Subscription -->
+        <div class="row mt-5 pt-4 border-top border-secondary">
+          <div class="col-lg-6">
+            <h6 class="text-white mb-3">Stay Updated</h6>
+            <p class="text-muted mb-3">
+              Subscribe to our newsletter for the latest stories and community
+              updates.
+            </p>
+            <div class="input-group">
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Enter your email"
+                aria-label="Email address"
+                aria-describedby="newsletter-btn"
+              />
+              <button class="btn btn-primary" type="button" id="newsletter-btn">
+                <i class="fas fa-paper-plane me-1"></i>Subscribe
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 d-flex align-items-end justify-content-lg-end">
+            <div class="text-muted">
+              <small>
+                <i class="fas fa-heart text-danger me-1"></i>
+                Made with love for the Iranian community in Sweden
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="row mt-4 pt-3 border-top border-secondary">
+          <div class="col-md-6">
+            <p class="text-muted mb-0">
+              {% block copyright %}© 2025 Sweden|today. All rights reserved.{%
+              endblock copyright %}
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="text-muted mb-0">
+              <small>
+                <i class="fas fa-code me-1"></i>
+                Built with Django & Bootstrap
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
     </footer>
 
     <!-- JavaScript Dependencies -->

@@ -361,3 +361,285 @@ body {
   margin-top: 80px;
   margin-bottom: 60px;
 }
+
+/* ========================================
+   ENHANCED FOOTER STYLES
+   ======================================== */
+
+/* Footer base styling */
+.footer {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  border-top: 3px solid #0d6efd;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #0d6efd, transparent);
+}
+
+/* Brand section styling */
+.footer-brand h5 {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.footer-brand p {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Social links styling */
+.social-links .d-flex {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.social-link.facebook {
+  background: linear-gradient(135deg, #1877f2, #42a5f5);
+  color: white;
+}
+
+.social-link.facebook:hover {
+  background: linear-gradient(135deg, #42a5f5, #1877f2);
+  border-color: #1877f2;
+}
+
+.social-link.twitter {
+  background: linear-gradient(135deg, #1da1f2, #42a5f5);
+  color: white;
+}
+
+.social-link.twitter:hover {
+  background: linear-gradient(135deg, #42a5f5, #1da1f2);
+  border-color: #1da1f2;
+}
+
+.social-link.instagram {
+  background: linear-gradient(135deg, #e4405f, #fd1d1d, #fcb045);
+  color: white;
+}
+
+.social-link.instagram:hover {
+  background: linear-gradient(135deg, #fcb045, #fd1d1d, #e4405f);
+  border-color: #e4405f;
+}
+
+.social-link.youtube {
+  background: linear-gradient(135deg, #ff0000, #ff4444);
+  color: white;
+}
+
+.social-link.youtube:hover {
+  background: linear-gradient(135deg, #ff4444, #ff0000);
+  border-color: #ff0000;
+}
+
+.social-link.linkedin {
+  background: linear-gradient(135deg, #0077b5, #00a0dc);
+  color: white;
+}
+
+.social-link.linkedin:hover {
+  background: linear-gradient(135deg, #00a0dc, #0077b5);
+  border-color: #0077b5;
+}
+
+/* Footer links styling */
+.footer-links li a {
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.25rem 0;
+}
+
+.footer-links li a:hover {
+  color: #0d6efd !important;
+  transform: translateX(5px);
+}
+
+.footer-links li a::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #0d6efd, #42a5f5);
+  transition: width 0.3s ease;
+}
+
+.footer-links li a:hover::before {
+  width: 10px;
+}
+
+/* Contact info styling */
+.contact-info .d-flex {
+  transition: all 0.3s ease;
+}
+
+.contact-info .d-flex:hover {
+  transform: translateX(5px);
+}
+
+.contact-info i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.contact-info a {
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: #0d6efd !important;
+}
+
+/* Newsletter subscription styling */
+.input-group .form-control {
+  border: 2px solid #495057;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 25px 0 0 25px;
+  transition: all 0.3s ease;
+}
+
+.input-group .form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.input-group .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.input-group .btn {
+  border-radius: 0 25px 25px 0;
+  border: 2px solid #0d6efd;
+  background: linear-gradient(135deg, #0d6efd, #42a5f5);
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.input-group .btn:hover {
+  background: linear-gradient(135deg, #42a5f5, #0d6efd);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+/* Section headers */
+.footer h6 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.footer h6::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(90deg, #0d6efd, #42a5f5);
+  border-radius: 2px;
+}
+
+/* Border styling */
+.border-secondary {
+  border-color: #495057 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer {
+    text-align: center;
+  }
+
+  .footer .row > div {
+    margin-bottom: 2rem;
+  }
+
+  .social-links .d-flex {
+    justify-content: center;
+  }
+
+  .contact-info .d-flex {
+    justify-content: center;
+  }
+
+  .input-group {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer {
+    padding: 2rem 0 !important;
+  }
+
+  .social-link {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+
+  .footer h6 {
+    font-size: 1rem;
+  }
+}
+
+/* Animation for footer elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer .row > div {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.footer .row > div:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.footer .row > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.footer .row > div:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.footer .row > div:nth-child(4) {
+  animation-delay: 0.4s;
+}

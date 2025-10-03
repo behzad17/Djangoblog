@@ -1,29 +1,31 @@
 // Function to show success messages
 function showSuccessMessage(message) {
   // Create alert element
-  const alertDiv = document.createElement('div');
-  alertDiv.className = 'alert alert-success alert-dismissible fade show';
-  alertDiv.setAttribute('role', 'alert');
+  const alertDiv = document.createElement("div");
+  alertDiv.className = "alert alert-success alert-dismissible fade show";
+  alertDiv.setAttribute("role", "alert");
   alertDiv.innerHTML = `
     ${message}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   `;
-  
+
   // Insert at the top of the messages container
-  const messagesContainer = document.querySelector('.container .row .col-md-8.offset-md-2');
+  const messagesContainer = document.querySelector(
+    ".container .row .col-md-8.offset-md-2"
+  );
   if (messagesContainer) {
     messagesContainer.insertBefore(alertDiv, messagesContainer.firstChild);
-    console.log('Success message displayed:', message);
-    
+    console.log("Success message displayed:", message);
+
     // Auto-dismiss after 10 seconds
     setTimeout(() => {
       if (alertDiv.parentNode) {
-        console.log('Auto-dismissing message after 10 seconds');
+        console.log("Auto-dismissing message after 10 seconds");
         alertDiv.remove();
       }
     }, 10000);
   } else {
-    console.log('Messages container not found');
+    console.log("Messages container not found");
   }
 }
 
@@ -94,9 +96,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           if (data.status === "success") {
             // Create new comment element - target the comments section specifically
-            const commentsHeading = Array.from(document.querySelectorAll("h3")).find(h3 => h3.textContent.includes("Comments:"));
-            const commentsContainer = commentsHeading ? commentsHeading.nextElementSibling : document.querySelector(".col-md-8 .card-body");
-            
+            const commentsHeading = Array.from(
+              document.querySelectorAll("h3")
+            ).find((h3) => h3.textContent.includes("Comments:"));
+            const commentsContainer = commentsHeading
+              ? commentsHeading.nextElementSibling
+              : document.querySelector(".col-md-8 .card-body");
+
             // Debug logging
             console.log("Comments heading found:", commentsHeading);
             console.log("Comments container:", commentsContainer);
@@ -142,16 +148,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Reset form
             commentForm.reset();
-            
+
             // Clear any existing messages
-            const existingAlerts = document.querySelectorAll('.alert');
-            existingAlerts.forEach(alert => alert.remove());
-            
+            const existingAlerts = document.querySelectorAll(".alert");
+            existingAlerts.forEach((alert) => alert.remove());
+
             // Show success message
             showSuccessMessage("Your comment was added successfully!");
-            
+
             // Redirect to clear POST data from browser history
-            window.history.replaceState({}, document.title, window.location.pathname);
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname
+            );
           } else {
             alert("Error submitting comment. Please try again.");
           }
@@ -216,11 +226,11 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((data) => {
             if (data.status === "success") {
               commentDiv.textContent = data.body;
-              
+
               // Clear any existing messages
-              const existingAlerts = document.querySelectorAll('.alert');
-              existingAlerts.forEach(alert => alert.remove());
-              
+              const existingAlerts = document.querySelectorAll(".alert");
+              existingAlerts.forEach((alert) => alert.remove());
+
               // Show success message
               showSuccessMessage("Your comment was updated successfully!");
             } else {
@@ -241,4 +251,87 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+
+  // Newsletter subscription functionality
+  const newsletterBtn = document.getElementById("newsletter-btn");
+  const newsletterInput = document.querySelector('input[type="email"]');
+
+  if (newsletterBtn && newsletterInput) {
+    newsletterBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const email = newsletterInput.value.trim();
+
+      if (!email) {
+        showNewsletterMessage("Please enter your email address.", "warning");
+        newsletterInput.focus();
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showNewsletterMessage("Please enter a valid email address.", "warning");
+        newsletterInput.focus();
+        return;
+      }
+
+      // Simulate newsletter subscription
+      newsletterBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin me-1"></i>Subscribing...';
+      newsletterBtn.disabled = true;
+
+      setTimeout(() => {
+        showNewsletterMessage(
+          "Thank you for subscribing! You'll receive our latest updates soon.",
+          "success"
+        );
+        newsletterInput.value = "";
+        newsletterBtn.innerHTML =
+          '<i class="fas fa-paper-plane me-1"></i>Subscribe';
+        newsletterBtn.disabled = false;
+      }, 1500);
+    });
+
+    // Allow Enter key to submit
+    newsletterInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        newsletterBtn.click();
+      }
+    });
+  }
 });
+
+// Email validation function
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Show newsletter-specific messages
+function showNewsletterMessage(message, type) {
+  // Create alert element
+  const alertDiv = document.createElement("div");
+  alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+  alertDiv.setAttribute("role", "alert");
+  alertDiv.innerHTML = `
+    <i class="fas fa-${
+      type === "success" ? "check-circle" : "exclamation-triangle"
+    } me-2"></i>
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+
+  // Insert at the top of the messages container
+  const messagesContainer = document.querySelector(
+    ".container .row .col-md-8.offset-md-2"
+  );
+  if (messagesContainer) {
+    messagesContainer.insertBefore(alertDiv, messagesContainer.firstChild);
+
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+      if (alertDiv.parentNode) {
+        alertDiv.remove();
+      }
+    }, 5000);
+  }
+}
