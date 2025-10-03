@@ -1,3 +1,28 @@
+// Function to show success messages
+function showSuccessMessage(message) {
+  // Create alert element
+  const alertDiv = document.createElement('div');
+  alertDiv.className = 'alert alert-success alert-dismissible fade show';
+  alertDiv.setAttribute('role', 'alert');
+  alertDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  
+  // Insert at the top of the messages container
+  const messagesContainer = document.querySelector('.container .row .col-md-8.offset-md-2');
+  if (messagesContainer) {
+    messagesContainer.insertBefore(alertDiv, messagesContainer.firstChild);
+    
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+      if (alertDiv.parentNode) {
+        alertDiv.remove();
+      }
+    }, 5000);
+  }
+}
+
 // Favorite button functionality
 document.addEventListener("DOMContentLoaded", function () {
   const favoriteButtons = document.querySelectorAll(".favorite-btn");
@@ -113,6 +138,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Reset form
             commentForm.reset();
+            
+            // Clear any existing messages
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            // Show success message
+            showSuccessMessage("Your comment was added successfully!");
             
             // Redirect to clear POST data from browser history
             window.history.replaceState({}, document.title, window.location.pathname);
