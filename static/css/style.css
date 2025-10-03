@@ -1,5 +1,18 @@
 body {
   background-color: #f9fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure main content takes available space */
+main {
+  flex: 1;
+}
+
+/* Ensure footer is always visible */
+.footer {
+  margin-top: auto;
 }
 
 .brand {
@@ -655,8 +668,9 @@ body {
   z-index: 1000 !important;
   width: 100% !important;
   clear: both !important;
-  margin-top: 50px !important;
+  margin-top: auto !important;
   padding: 20px 0 !important;
+  flex-shrink: 0 !important;
 }
 
 /* Debug: Make footer more visible */
