@@ -13,13 +13,17 @@ function showSuccessMessage(message) {
   const messagesContainer = document.querySelector('.container .row .col-md-8.offset-md-2');
   if (messagesContainer) {
     messagesContainer.insertBefore(alertDiv, messagesContainer.firstChild);
+    console.log('Success message displayed:', message);
     
-    // Auto-dismiss after 5 seconds
+    // Auto-dismiss after 10 seconds
     setTimeout(() => {
       if (alertDiv.parentNode) {
+        console.log('Auto-dismissing message after 10 seconds');
         alertDiv.remove();
       }
-    }, 5000);
+    }, 10000);
+  } else {
+    console.log('Messages container not found');
   }
 }
 
