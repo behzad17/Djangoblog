@@ -648,13 +648,35 @@ body {
 .footer {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
   border-top: 3px solid #006aa7 !important;
-  min-height: auto !important;
+  min-height: 200px !important;
   display: block !important;
   visibility: visible !important;
   position: relative !important;
   z-index: 1000 !important;
   width: 100% !important;
   clear: both !important;
+  margin-top: 50px !important;
+  padding: 20px 0 !important;
+}
+
+/* Debug: Make footer more visible */
+.footer * {
+  color: white !important;
+}
+
+.footer h5, .footer h6 {
+  color: white !important;
+  display: block !important;
+}
+
+.footer .container {
+  display: block !important;
+  visibility: visible !important;
+}
+
+.footer .row {
+  display: flex !important;
+  visibility: visible !important;
 }
 
 .footer h5 {
