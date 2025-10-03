@@ -1,40 +1,3 @@
-// Newsletter Subscription Functionality
-document.addEventListener("DOMContentLoaded", function () {
-  const newsletterBtn = document.getElementById("newsletter-btn");
-  const newsletterInput = document.getElementById("newsletter-email");
-
-  if (newsletterBtn && newsletterInput) {
-    newsletterBtn.addEventListener("click", function () {
-      const email = newsletterInput.value.trim();
-
-      if (email && isValidEmail(email)) {
-        // Show loading state
-        newsletterBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        newsletterBtn.disabled = true;
-
-        // Simulate API call (replace with actual implementation)
-        setTimeout(() => {
-          showNewsletterMessage(
-            "Thank you for subscribing to our newsletter!",
-            "success"
-          );
-          newsletterInput.value = "";
-          newsletterBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
-          newsletterBtn.disabled = false;
-        }, 1500);
-      } else {
-        showNewsletterMessage("Please enter a valid email address.", "warning");
-      }
-    });
-
-    // Handle Enter key press
-    newsletterInput.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        newsletterBtn.click();
-      }
-    });
-  }
-});
 
 // Email validation function
 function isValidEmail(email) {
@@ -42,32 +5,6 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
-// Show newsletter messages
-function showNewsletterMessage(message, type) {
-  // Create alert element
-  const alertDiv = document.createElement("div");
-  alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-  alertDiv.setAttribute("role", "alert");
-  alertDiv.innerHTML = `
-    ${message}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  `;
-
-  // Insert at the top of the newsletter section
-  const newsletterSection = document.querySelector(
-    ".footer .col-lg-3.col-md-6:last-child"
-  );
-  if (newsletterSection) {
-    newsletterSection.insertBefore(alertDiv, newsletterSection.firstChild);
-
-    // Auto-dismiss after 5 seconds
-    setTimeout(() => {
-      if (alertDiv.parentNode) {
-        alertDiv.remove();
-      }
-    }, 5000);
-  }
-}
 
 // Function to show success messages
 function showSuccessMessage(message) {
