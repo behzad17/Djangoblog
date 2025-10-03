@@ -350,6 +350,13 @@ Unit tests exist for core views/models. Run:
 
 python manage.py test
 
+
+### Code Validation
+PEP8 validation was carried out using flake8.  
+Minor issues of “line too long” in `settings.py` and `blog/urls.py` were fixed.  
+No other significant validation errors were found.
+
+
 ## Deployment
 
 Heroku Deployment [The live link is here](https://djangoblog17-173e7e5e5186.herokuapp.com/)
