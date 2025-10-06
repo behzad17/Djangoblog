@@ -1,5 +1,10 @@
 from django.db.models import Count, Q
-from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.shortcuts import (
+    render,
+    get_object_or_404,
+    reverse,
+    redirect,
+)
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
@@ -50,7 +55,10 @@ def post_detail(request, slug):
     # Determine if current user has already favorited this post
     is_favorited = False
     if request.user.is_authenticated:
-        is_favorited = Favorite.objects.filter(user=request.user, post=post).exists()
+        is_favorited = Favorite.objects.filter(
+            user=request.user,
+            post=post,
+        ).exists()
 
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
@@ -65,9 +73,11 @@ def post_detail(request, slug):
                     'status': 'success',
                     'id': comment.id,
                     'author': comment.author.username,
-                    'created_on': comment.created_on.strftime('%B %d, %Y %H:%M'),
+                    'created_on': comment.created_on.strftime(
+                        '%B %d, %Y %H:%M'
+                    ),
                     'body': comment.body,
-                    'post_slug': post.slug
+                    'post_slug': post.slug,
                 })
 
             messages.add_message(
@@ -136,7 +146,11 @@ def comment_delete(request, slug, comment_id):
 
     if comment.author == request.user:
         comment.delete()
-        messages.add_message(request, messages.SUCCESS, 'Your comment was deleted successfully!')
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            'Your comment was deleted successfully!'
+        )
     else:
         messages.add_message(
             request, messages.ERROR,
@@ -163,7 +177,9 @@ def add_to_favorites(request, post_id):
     if not created:
         favorite.delete()  # delete if a post is saved before
 
-    return redirect(request.META.get('HTTP_REFERER', 'favorites'))
+    return redirect(
+        request.META.get('HTTP_REFERER', 'favorites')
+    )
 
 
 @login_required
@@ -175,7 +191,11 @@ def favorite_posts(request):
     The view requires user authentication.
     """
     favorites = Favorite.objects.filter(user=request.user)
-    return render(request, 'blog/favorites.html', {'favorites': favorites})
+    return render(
+        request,
+        'blog/favorites.html',
+        {'favorites': favorites},
+    )
 
 
 @login_required
@@ -192,14 +212,16 @@ def remove_from_favorites(request, post_id):
     if favorite.exists():
         favorite.delete()
 
-    return redirect(request.META.get('HTTP_REFERER', 'favorites'))
+    return redirect(
+        request.META.get('HTTP_REFERER', 'favorites')
+    )
 
 
 @login_required
 def create_post(request):
     """
     View function for creating a new blog post.
-    
+
     This view handles both GET and POST requests for creating new posts.
     It automatically sets the author to the current user and generates
     a slug from the title. The view requires user authentication.
@@ -218,5 +240,9 @@ def create_post(request):
             return redirect('post_detail', slug=post.slug)
     else:
         form = PostForm()
-    
-    return render(request, 'blog/create_post.html', {'form': form})
+
+    return render(
+        request,
+        'blog/create_post.html',
+        {'form': form},
+    )
