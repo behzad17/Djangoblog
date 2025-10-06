@@ -47,6 +47,10 @@ def post_detail(request, slug):
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
     comment_form = CommentForm()
+    # Determine if current user has already favorited this post
+    is_favorited = False
+    if request.user.is_authenticated:
+        is_favorited = Favorite.objects.filter(user=request.user, post=post).exists()
 
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST)
@@ -80,6 +84,7 @@ def post_detail(request, slug):
             "comments": comments,
             "comment_count": comment_count,
             "comment_form": comment_form,
+            "is_favorited": is_favorited,
         },
     )
 
