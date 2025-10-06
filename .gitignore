@@ -3,3 +3,6 @@ blog/fixtures/
 __pycache__/
 .venv/
 .DS_Store
+# Ignore collected static files
+/staticfiles/
+
