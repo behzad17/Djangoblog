@@ -4,6 +4,11 @@
 
 ![Screens](/static/images/devices.jpg)
 
+[![Live on Heroku](https://img.shields.io/badge/Live%20Demo-Heroku-blueviolet?style=for-the-badge&logo=heroku)](https://djangoblog17-173e7e5e5186.herokuapp.com)
+[![GitHub Repo](https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github)](https://github.com/behzad17/Djangoblog)
+
+
+
 ## Project Revisions & Resubmission Based on Feedback
 
 This section outlines all improvements made after initial feedback, documenting the actions taken to address each issue before resubmitting the project for reassessment.
@@ -184,6 +189,7 @@ The board included **four main stages**:
 ---
 
 ## Milestones (Sprints)
+
 The project was divided into 5 sprints:
 Sprint 1 – Initial Setup: Django setup, User model, Registration form.
 Sprint 2 – Authentication: Login, Logout, Dashboard.
@@ -191,147 +197,160 @@ Sprint 3 – Blog CRUD: Create, Edit, Delete posts.
 Sprint 4 – Comments + Styling: Comment system, Bootstrap/CSS styling.
 
 #### Milestones
-![Milestones](docs/agile/milestones.png)
----
+
+## ![Milestones](docs/agile/milestones.png)
 
 ## Conclusion
 
 By using Agile methodology with a **Kanban board** on GitHub Projects,  
 I was able to track progress visually through each stage of development — from planning to completion.
 
- 
+### Wireframes
 
-###  Wireframes  
+As part of the design process, created I wireframes for the main pages of the application.  
+The wireframes helped visualizing the layout, content structure, and user flow before implementing the actual UI.
 
-As part of the design process, created  I wireframes for the main pages of the application.  
-The wireframes helped visualizing the layout, content structure, and user flow before implementing the actual UI.  
+#### 🔹 Main Page (Landing Page)
 
-#### 🔹 Main Page (Landing Page)  
-- Logo and navigation menu at the top (Home, About, Login, Register).  
-- A central heading: *“Read it on our website”* i completed the text now.  
-- Grid of blog/article cards with:  
-  - Image placeholder  
-  - Title (bold text)  
-  - Short description/preview text  
-- Designed for quick content scanning and responsive layout. 
+- Logo and navigation menu at the top (Home, About, Login, Register).
+- A central heading: _“Read it on our website”_ i completed the text now.
+- Grid of blog/article cards with:
+  - Image placeholder
+  - Title (bold text)
+  - Short description/preview text
+- Designed for quick content scanning and responsive layout.
 
-####  Login Page  
-- **Fields**: Email, Password  
-- **Action**: Login button  
-- **Notes**:  to allow registered users to access their profiles.  
+#### Login Page
 
-####  Register Page  
-- **Fields**: Username, Email, Password, Confirm Password  
-- **Action**: Sign Up button  
-- **Validation**: Password requirements listed (minimum length, not common, not numeric only, etc.)  
-- **Notes**: Focused on user-friendly and secure registration.  
+- **Fields**: Email, Password
+- **Action**: Login button
+- **Notes**: to allow registered users to access their profiles.
 
-####  Blog Post + Comment Page  
-- **Sections**:  
-  - Blog title and content area  
-  - Author info and timestamp  
-  - Comment section with input box and "Add Comment" button  
-- **Notes**: Designed to encourage user interaction with clear placement of content and comments.  
+#### Register Page
 
- **Wireframe Examples:** 
-![Main Page Wireframe](docs/agile/mainpage.jpg)
-![Details-Comment Wireframe](docs/agile/detail-comment.jpg) 
-![Login Wireframe](docs/agile/login.jpg)  
-![Register Wireframe](docs/agile/register.jpg)  
-  
+- **Fields**: Username, Email, Password, Confirm Password
+- **Action**: Sign Up button
+- **Validation**: Password requirements listed (minimum length, not common, not numeric only, etc.)
+- **Notes**: Focused on user-friendly and secure registration.
+
+#### Blog Post + Comment Page
+
+- **Sections**:
+  - Blog title and content area
+  - Author info and timestamp
+  - Comment section with input box and "Add Comment" button
+- **Notes**: Designed to encourage user interaction with clear placement of content and comments.
+
+  **Wireframe Examples:**
+  ![Main Page Wireframe](docs/agile/mainpage.jpg)
+  ![Details-Comment Wireframe](docs/agile/detail-comment.jpg)
+  ![Login Wireframe](docs/agile/login.jpg)  
+  ![Register Wireframe](docs/agile/register.jpg)  
+
 
 ---
 
-###  Color Scheme & Typography  
+### Color Scheme & Typography
 
-####  Color Scheme  
-The application uses a **clean and modern color palette** to ensure readability and accessibility:  
+#### Color Scheme
 
-- **Primary Color:** `#0077b6` → Used for buttons, highlights, and navigation links  
-- **Secondary Color:** `#00b4d8` → Supporting accents and hover states  
-- **Background Color:** `#ffffff` → Clean white background for maximum readability  
-- **Text Color:** `#000000` → Standard black for strong contrast  
-- **Border/Muted Elements:** `#e0e0e0` → Used for card borders and subtle separation  
+The application uses a **clean and modern color palette** to ensure readability and accessibility:
 
+- **Primary Color:** `#0077b6` → Used for buttons, highlights, and navigation links
+- **Secondary Color:** `#00b4d8` → Supporting accents and hover states
+- **Background Color:** `#ffffff` → Clean white background for maximum readability
+- **Text Color:** `#000000` → Standard black for strong contrast
+- **Border/Muted Elements:** `#e0e0e0` → Used for card borders and subtle separation
 
-####  Typography  
-For typography, a **modern sans-serif font** was selected for simplicity and readability across devices:  
+#### Typography
 
-- **Headings (H1, H2, H3):** `Poppins` (Bold, clean, easy to read)  
-- **Body Text:** `Roboto` (Regular, highly readable on screens)  
-- **Fallback Fonts:** `Arial, sans-serif`  
+For typography, a **modern sans-serif font** was selected for simplicity and readability across devices:
 
- This combination ensures that titles stand out while body text remains clear and user-friendly.  
+- **Headings (H1, H2, H3):** `Poppins` (Bold, clean, easy to read)
+- **Body Text:** `Roboto` (Regular, highly readable on screens)
+- **Fallback Fonts:** `Arial, sans-serif`
 
-####  Example  
-- **Heading Example (H1):** `Sweden Today – Latest News`  
-- **Paragraph Example (Body):** `Sweden’s immigrants on edge after mass shooting. The motive behind Sweden’s deadliest mass shooting may never be known but the fact that almost all of the victims …`  
+This combination ensures that titles stand out while body text remains clear and user-friendly.
+
+#### Example
+
+- **Heading Example (H1):** `Sweden Today – Latest News`
+- **Paragraph Example (Body):** `Sweden’s immigrants on edge after mass shooting. The motive behind Sweden’s deadliest mass shooting may never be known but the fact that almost all of the victims …`
 
 ---
 
- **Summary**  
-- Wireframes provided a clear **blueprint** for feature development.  
-- The **color scheme & typography** ensure a consistent and accessible UI.  
+**Summary**
 
-
+- Wireframes provided a clear **blueprint** for feature development.
+- The **color scheme & typography** ensure a consistent and accessible UI.
 
 # Entity Relationship Diagram (ERD)
 
 ## User
+
 Represents registered users of the system.
 Each user can create multiple posts and comments.
+
 ## Post
+
 Represents blog posts created by users.
 Each post belongs to exactly one author (User).
 Each post can have multiple comments.
+
 ## Comment
+
 Represents comments added to a post.
 Each comment is linked to both:
 the post it belongs to
 the author (User) who wrote it
+
 ## Relationship summary:
+
 A User can write many Posts.
 A User can write many Comments.
-A Post can have many Comments. 
+A Post can have many Comments.
 
+## Testing
 
-##  Testing
+### Manual Testing – Test Plan
 
-###  Manual Testing – Test Plan
 The following table outlines the **planned manual test cases** for core features of the application:
 
-| Feature    | Test Case              | Steps                                      |
-|------------|------------------------|--------------------------------------------|
-| Register   | Valid inputs           | /register → fill valid data → submit        |
-| Register   | Weak password          | /register → password `1234` → submit        |
-| Login      | Valid credentials      | /login → enter correct creds → submit       |
-| Create Post| Valid post             | /posts/new → title+content → submit         |
-| Comment    | Logged-out add comment | /posts/:id → submit comment while logged out|
-| Responsive | Mobile layout (375px)  | Chrome DevTools → Toggle Device Toolbar     |
+| Feature     | Test Case              | Steps                                        |
+| ----------- | ---------------------- | -------------------------------------------- |
+| Register    | Valid inputs           | /register → fill valid data → submit         |
+| Register    | Weak password          | /register → password `1234` → submit         |
+| Login       | Valid credentials      | /login → enter correct creds → submit        |
+| Create Post | Valid post             | /posts/new → title+content → submit          |
+| Comment     | Logged-out add comment | /posts/:id → submit comment while logged out |
+| Responsive  | Mobile layout (375px)  | Chrome DevTools → Toggle Device Toolbar      |
 
 ---
 
-###  Manual Testing – Test Report
+### Manual Testing – Test Report
+
 The following table shows the **results of executing the manual tests**:
 
-| Result | Expected Result                          | Steps                                    | Test Case              | Feature    |
-|--------|------------------------------------------|------------------------------------------|------------------------|------------|
-| ✅     | Account created → redirect to Login      | /register → fill valid data → submit     | Valid inputs           | Register   |
-| ✅     | Validation error shown                   | /register → password `1234` → submit     | Weak password          | Register   |
-| ✅     | Redirect to Posts list                   | /login → enter correct creds → submit    | Valid credentials      | Login      |
-| ✅     | Post visible in list & detail            | /posts/new → title+content → submit      | Valid post             | Create Post|
-| ✅     | Login to leave a comment                       | /posts/:id → submit comment while logged out | Logged-out add comment | Comment    |
-| ✅     | No horizontal scroll; layout readable    | Chrome DevTools → Toggle Device Toolbar | Mobile layout (375px)  | Responsive |
+| Result | Expected Result                       | Steps                                        | Test Case              | Feature     |
+| ------ | ------------------------------------- | -------------------------------------------- | ---------------------- | ----------- |
+| ✅     | Account created → redirect to Login   | /register → fill valid data → submit         | Valid inputs           | Register    |
+| ✅     | Validation error shown                | /register → password `1234` → submit         | Weak password          | Register    |
+| ✅     | Redirect to Posts list                | /login → enter correct creds → submit        | Valid credentials      | Login       |
+| ✅     | Post visible in list & detail         | /posts/new → title+content → submit          | Valid post             | Create Post |
+| ✅     | Login to leave a comment              | /posts/:id → submit comment while logged out | Logged-out add comment | Comment     |
+| ✅     | No horizontal scroll; layout readable | Chrome DevTools → Toggle Device Toolbar      | Mobile layout (375px)  | Responsive  |
 
 ---
 
-###  Notes
-- All manual test cases passed successfully ✅  
-- Responsive design tested on Chrome DevTools at **375px (mobile view)**  
-- Edge cases (weak passwords, unauthorized comments) behave as expected  
+### Notes
+
+- All manual test cases passed successfully ✅
+- Responsive design tested on Chrome DevTools at **375px (mobile view)**
+- Edge cases (weak passwords, unauthorized comments) behave as expected
 - Future improvements: expand tests for multiple browsers (Google chroom, Safari) and performance under heavy load.
 
 ### Screenshots
+
 ![Register Success](docs/testing/register-success.png)
 
 ![Register Weak Password](docs/testing/register-weak.png)
@@ -344,27 +363,26 @@ The following table shows the **results of executing the manual tests**:
 
 ![Responsive - Mobile](docs/testing/responsive-mobile.png)
 
-
 ### Automated Tests
+
 Unit tests exist for core views/models. Run:
 
 python manage.py test
 
-
 ### Code Validation
+
 PEP8 validation was carried out using flake8.  
 Minor issues of “line too long” in `settings.py` and `blog/urls.py` were fixed.  
 No other significant validation errors were found.
-
 
 ## Deployment
 
 Heroku Deployment [The live link is here](https://djangoblog17-173e7e5e5186.herokuapp.com/)
 
-
 This project was deployed to Heroku using GitHub integration.
 
 ### 1. Prerequisites
+
 - Python 3.12
 - Django 4.2.x
 - Gunicorn (WSGI server)
@@ -374,11 +392,13 @@ This project was deployed to Heroku using GitHub integration.
 - requirements.txt (all dependencies)
 
 ### 2. Create a Heroku App
+
 1. Log in to Heroku.
 2. Create a new app (choose closest region).
 3. Connect the app to your GitHub repo under Deploy → Deployment method.
 
 ### 3. Set Environment Variables (Settings → Config Vars)
+
 - `SECRET_KEY=your_django_secret_key`
 - `DEBUG=False`
 - `DATABASE_URL=your_postgres_database_url`
@@ -390,15 +410,20 @@ This project was deployed to Heroku using GitHub integration.
 Note: Do not set `PORT` on Heroku. It’s provided automatically.
 
 ### 4. Deploy
+
 1. Push to `main` on GitHub.
 2. Heroku detects Python, installs from `requirements.txt`, and runs `Procfile`.
 3. Click Open App.
 
 ### 5. Final Checks
+
 - Ensure `DEBUG=False`.
 - Static files served (WhiteNoise) and media via Cloudinary.
 - Database connected via PostgreSQL.
 - Check responsiveness and links.
+
+[![Live on Heroku](https://img.shields.io/badge/Live%20Demo-Heroku-blueviolet?style=for-the-badge&logo=heroku)](https://djangoblog17-173e7e5e5186.herokuapp.com)
+[![GitHub Repo](https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github)](https://github.com/behzad17/Djangoblog)
 
 
 
@@ -406,37 +431,3 @@ Note: Do not set `PORT` on Heroku. It’s provided automatically.
 
 - The photos used on the home page are from [Sweden Herald](https://swedenherald.com/)
 - Icons from [Font Awesome](https://fontawesome.com/)
-
-## Milestones
-
-### Milestone 1: Initial Setup & Core Features
-
-- Set up Django project and basic app structure
-- Configure environment variables and PostgreSQL on Heroku
-- Add user registration/login using `django-allauth`
-- Implement core blog post creation and comment system
-- Setup Cloudinary for media handling  
-  **Status:** Completed  
-  **Completed on:** 2025-02-28
-
-### Milestone 2: UI & UX Enhancement
-
-- Add responsive card design for blog post previews
-- Style navbar links: Login, Register, Logout, Favorites using Bootstrap classes
-- Add working social links to the footer
-- Highlight active navigation tabs
-- Design custom 404 error page with return button
-- Improve comment edit user experience and layout  
-  **Status:** Completed  
-  **Completed on:** 2025-03-15
-
-### Milestone 3: Documentation, Testing & Deployment
-
-- Add full testing instructions to `README.md`
-- Add deployment steps (Heroku, env vars, Cloudinary)
-- Include Wireframes, Mockups, and DB Diagram
-- Set `DEBUG = False` in production
-- Improve error handling and redirections  
-  **Status:** In Progress  
-  **Start Date:** 2025-03-15  
-  **Due Date:** 2025-03-20
