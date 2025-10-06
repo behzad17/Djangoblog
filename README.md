@@ -363,6 +363,12 @@ The following table shows the **results of executing the manual tests**:
 
 ![Responsive - Mobile](docs/testing/responsive-mobile.png)
 
+![Comment Added Success](docs/testing/added-successfully.jpg)
+
+![Comment Updated Success](docs/testing/updated-successfully.jpg)
+
+![Comment Deleted Success](docs/testing/deleted-successfully.jpg)
+
 ### Automated Tests
 
 Unit tests exist for core views/models. Run:
