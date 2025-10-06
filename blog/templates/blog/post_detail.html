@@ -13,9 +13,14 @@
             method="POST"
             class="d-inline"
           >
-            {% csrf_token %} {% if post not in user.favorite_posts.all %}
+            {% csrf_token %}
+            {% if post not in user.favorite_posts.all %}
             <button type="submit" class="btn btn-success">
-              Add to favorite
+              Add to Favorite
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-secondary" disabled>
+              Added to Favorites
             </button>
             {% endif %}
           </form>
