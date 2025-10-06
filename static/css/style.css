@@ -363,6 +363,10 @@ body {
 }
 
 /* Footer sizing tweaks */
+.footer {
+  background-color: #445261; /* dark blue-grey */
+}
+
 .footer p {
   font-size: 1.1rem; /* slightly larger footer text */
 }
