@@ -7,8 +7,6 @@
 [![Live on Heroku](https://img.shields.io/badge/Live%20Demo-Heroku-blueviolet?style=for-the-badge&logo=heroku)](https://djangoblog17-173e7e5e5186.herokuapp.com)
 [![GitHub Repo](https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github)](https://github.com/behzad17/Djangoblog)
 
-
-
 ## Project Revisions & Resubmission Based on Feedback
 
 This section outlines all improvements made after initial feedback, documenting the actions taken to address each issue before resubmitting the project for reassessment.
@@ -245,8 +243,7 @@ The wireframes helped visualizing the layout, content structure, and user flow b
   ![Main Page Wireframe](docs/agile/mainpage.jpg)
   ![Details-Comment Wireframe](docs/agile/detail-comment.jpg)
   ![Login Wireframe](docs/agile/login.jpg)  
-  ![Register Wireframe](docs/agile/register.jpg)  
-
+  ![Register Wireframe](docs/agile/register.jpg)
 
 ---
 
@@ -430,8 +427,6 @@ Note: Do not set `PORT` on Heroku. It’s provided automatically.
 
 [![Live on Heroku](https://img.shields.io/badge/Live%20Demo-Heroku-blueviolet?style=for-the-badge&logo=heroku)](https://djangoblog17-173e7e5e5186.herokuapp.com)
 [![GitHub Repo](https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github)](https://github.com/behzad17/Djangoblog)
-
-
 
 ## Media
 
