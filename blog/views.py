@@ -260,11 +260,21 @@ def create_post(request):
                 counter += 1
             post.slug = slug
             post.save()
-            messages.add_message(
-                request, messages.SUCCESS,
-                'Post created successfully!'
-            )
-            return redirect('post_detail', slug=post.slug)
+            
+            # Check if post is published or pending
+            if post.status == 1:  # Published
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Post created and published successfully!'
+                )
+                return redirect('post_detail', slug=post.slug)
+            else:  # Draft/Pending
+                messages.add_message(
+                    request, messages.INFO,
+                    'Your post has been created and is pending for publication. '
+                    'It will be reviewed and published soon.'
+                )
+                return redirect('home')
     else:
         form = PostForm()
 
