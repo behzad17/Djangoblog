@@ -451,6 +451,9 @@ body {
 .login-card input[type="text"],
 .login-card input[type="email"],
 .login-card input[type="password"],
+.login-card input[type="url"],
+.login-card select,
+.login-card textarea,
 .login-card .form-control {
   border: 1px solid #dadce0;
   border-radius: 4px;
@@ -458,15 +461,24 @@ body {
   font-size: 14px;
   width: 100%;
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  font-family: inherit;
 }
 
 .login-card input[type="text"]:focus,
 .login-card input[type="email"]:focus,
 .login-card input[type="password"]:focus,
+.login-card input[type="url"]:focus,
+.login-card select:focus,
+.login-card textarea:focus,
 .login-card .form-control:focus {
   border-color: #188181;
   box-shadow: 0 0 0 3px rgba(24, 129, 129, 0.1);
   outline: none;
+}
+
+.login-card textarea {
+  min-height: 100px;
+  resize: vertical;
 }
 
 .login-card .form-label {
@@ -491,6 +503,51 @@ body {
   margin-left: 8px;
 }
 
+/* Signup Page - Additional Styles */
+.login-card .form-text {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.login-card .text-danger {
+  color: #dc3545 !important;
+}
+
+/* CAPTCHA Styling */
+.login-card #id_captcha_1 {
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+}
+
+.login-card .captcha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.login-card .captcha img {
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+}
+
+.login-card .captcha input {
+  flex: 1;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.login-card .captcha input:focus {
+  border-color: #188181;
+  box-shadow: 0 0 0 3px rgba(24, 129, 129, 0.1);
+  outline: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .login-card {
@@ -500,5 +557,10 @@ body {
   
   .login-card .card-body {
     padding: 1.5rem !important;
+  }
+  
+  .login-card .captcha {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
