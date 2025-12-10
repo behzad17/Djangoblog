@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'captcha',
     'cloudinary_storage',
     'django.contrib.sites',
     'allauth',
@@ -194,6 +195,9 @@ AUTHENTICATION_BACKENDS = [
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_FORMS = {
+    "signup": "accounts.forms.CaptchaSignupForm",
+}
 
 # Google SSO settings in django-allauth
 SOCIALACCOUNT_PROVIDERS = {

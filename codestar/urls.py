@@ -16,11 +16,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from ratelimit.decorators import ratelimit
+from allauth.account import views as allauth_views
 
 
 urlpatterns = [
     path("about/", include("about.urls"), name="about-urls"),
+    # Rate-limit login and signup endpoints (5 requests per minute per IP)
+    path(
+        "accounts/login/",
+        ratelimit(key="ip", rate="5/m", block=True)(allauth_views.login),
+        name="account_login",
+    ),
+    path(
+        "accounts/signup/",
+        ratelimit(key="ip", rate="5/m", block=True)(allauth_views.signup),
+        name="account_signup",
+    ),
     path("accounts/", include("allauth.urls")),
+    path("captcha/", include("captcha.urls")),
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
     path("", include("blog.urls"), name="blog-urls"),
