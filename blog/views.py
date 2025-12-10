@@ -61,6 +61,19 @@ def post_detail(request, slug):
         ).exists()
 
     if request.method == "POST":
+        # Require authentication before accepting comments
+        if not request.user.is_authenticated:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse(
+                    {
+                        'status': 'error',
+                        'message': 'Authentication required to comment.'
+                    },
+                    status=401
+                )
+            messages.error(request, 'Please log in to comment.')
+            return redirect('account_login')
+
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
