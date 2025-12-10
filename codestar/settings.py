@@ -33,13 +33,16 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Do NOT provide defaults for SECRET_KEY in production
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
 # SECURITY WARNING: don't run with debug turned on in production!
-# Parse DEBUG from environment, default to True
-DEBUG = os.environ.get("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
+# Read DEBUG from environment; default to False for safety
+DEBUG = os.environ.get("DEBUG", "False").lower() in {"1", "true", "yes", "on"}
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# Use env SECRET_KEY; fall back to a local-only default when DEBUG is True
+SECRET_KEY = os.environ.get("SECRET_KEY")
+# Provide a dev fallback only if DEBUG is enabled
+if SECRET_KEY is None and DEBUG:
+    SECRET_KEY = "dev-secret-key-not-for-production"
 
 # Fail fast if critical settings are missing in production
 if not DEBUG and not SECRET_KEY:
