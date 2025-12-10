@@ -62,6 +62,16 @@ class Post(models.Model):
         on_delete=models.PROTECT,
         related_name='posts'
     )
+    external_url = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text="Optional external URL for this post. Must be approved by admin to be displayed."
+    )
+    url_approved = models.BooleanField(
+        default=False,
+        help_text="Whether the external URL has been approved by admin to be displayed."
+    )
 
     class Meta:
         """Meta options for Post model."""

@@ -21,10 +21,20 @@ class PostForm(forms.ModelForm):
         help_text='Please select a category for your post (required)'
     )
     
+    external_url = forms.URLField(
+        required=False,
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'https://example.com (optional - requires admin approval)'
+        }),
+        label='External URL',
+        help_text='Optional: Add an external URL. It will be reviewed and approved by admin before being displayed.'
+    )
+    
     class Meta:
         """Meta options for PostForm."""
         model = Post
-        fields = ('title', 'excerpt', 'content', 'featured_image', 'category')
+        fields = ('title', 'excerpt', 'content', 'featured_image', 'category', 'external_url')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),

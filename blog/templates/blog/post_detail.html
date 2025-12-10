@@ -15,6 +15,13 @@
           </a>
         </div>
         {% endif %}
+        {% if post.external_url and post.url_approved %}
+        <div class="mb-3">
+          <a href="{{ post.external_url }}" target="_blank" rel="noopener noreferrer" class="external-url-badge">
+            <i class="fas fa-external-link-alt me-2"></i>Visit External Link
+          </a>
+        </div>
+        {% endif %}
         {% if user.is_authenticated and user == post.author %}
         <div class="mb-3">
           <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary">

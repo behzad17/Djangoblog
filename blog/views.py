@@ -269,9 +269,16 @@ def create_post(request):
             post.slug = slug
             # Always set status to Draft (0) - only admins can publish
             post.status = 0
+            # URL approval defaults to False - admin must approve
+            if post.external_url:
+                post.url_approved = False
             post.save()
             
             # Show pending message with better styling
+            url_message = ''
+            if post.external_url:
+                url_message = ' If you added an external URL, it will also be reviewed and approved by an administrator before being displayed.'
+            
             messages.add_message(
                 request, messages.WARNING,
                 '<div class="pending-post-alert">'
@@ -279,6 +286,7 @@ def create_post(request):
                 '<strong>Post Created Successfully!</strong><br>'
                 'Your post has been saved as a draft and is pending for review. '
                 'An administrator will review and publish it soon. You will be notified once it\'s published.'
+                + url_message +
                 '</div>'
             )
             return redirect('home')
