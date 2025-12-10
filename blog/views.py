@@ -9,6 +9,7 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
+from ratelimit.decorators import ratelimit
 from django.utils.text import slugify
 import json
 
@@ -37,7 +38,7 @@ class PostList(generic.ListView):
         ).order_by('-created_on')
 
 
-#  `post_detail`
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
 def post_detail(request, slug):
     """
     View function for displaying a single blog post and its comments.
@@ -149,6 +150,7 @@ def comment_edit(request, slug, comment_id):
             'slug': slug,
             'comment': comment
         })
+    messages.error(request, 'You can only edit your own comments!')
     return redirect('post_detail', slug=slug)
 
 
