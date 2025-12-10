@@ -33,6 +33,11 @@ urlpatterns = [
         ratelimit(key="ip", rate="5/m", block=True)(allauth_views.signup),
         name="account_signup",
     ),
+    path(
+        "accounts/password/reset/",
+        ratelimit(key="ip", rate="5/m", block=True)(allauth_views.password_reset),
+        name="account_reset_password",
+    ),
     path("accounts/", include("allauth.urls")),
     path("captcha/", include("captcha.urls")),
     path('admin/', admin.site.urls),
