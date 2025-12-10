@@ -426,6 +426,11 @@ body {
   flex-shrink: 0;
 }
 
+.google-icon-large {
+  display: block;
+  margin: 0 auto;
+}
+
 /* Divider Styles */
 .divider-wrapper {
   display: flex;

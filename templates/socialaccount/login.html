@@ -1,21 +1,76 @@
-{% extends "socialaccount/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock head_title %}
+{% block head_title %}
+  {% if process == "connect" %}
+    {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+  {% else %}
+    {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+  {% endif %}
+{% endblock head_title %}
 
 {% block content %}
-{% if process == "connect" %}
-<h1>{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+<!-- Social Login Container -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7 col-sm-9">
+      <!-- Social Login Card -->
+      <div class="card login-card mt-5 mb-5">
+        <div class="card-body p-4">
+          <!-- Provider Icon/Logo -->
+          <div class="text-center mb-4">
+            {% if provider.id == "google" %}
+            <div class="mb-3">
+              <svg class="google-icon-large" width="48" height="48" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#000" fill-rule="evenodd">
+                  <path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="#EA4335"/>
+                  <path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.21 1.18-.84 2.47-2.04 3.46l2.84 2.2c2.01-1.85 3.17-4.57 3.17-7.16z" fill="#4285F4"/>
+                  <path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="#FBBC05"/>
+                  <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.96 13.04C2.45 15.98 5.48 18 9 18z" fill="#34A853"/>
+                </g>
+              </svg>
+            </div>
+            {% endif %}
+            
+            <h2 class="card-title mb-2">
+              {% if process == "connect" %}
+                {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+              {% else %}
+                {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+              {% endif %}
+            </h2>
+            
+            <p class="text-muted mb-0">
+              {% if process == "connect" %}
+                {% blocktrans with provider.name as provider %}
+                You are about to connect a new third party account from {{ provider }}.
+                {% endblocktrans %}
+              {% else %}
+                {% blocktrans with provider.name as provider %}
+                You are about to sign in using a third party account from {{ provider }}.
+                {% endblocktrans %}
+              {% endif %}
+            </p>
+          </div>
 
-<p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
-{% else %}
-<h1>{% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}</h1>
+          <!-- Continue Form -->
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-signup w-100 mb-3">
+              {% trans "Continue" %}
+            </button>
+          </form>
 
-<p>{% blocktrans with provider.name as provider %}You are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}</p>
-{% endif %}
-
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">{% trans "Continue" %}</button>
-</form>
+          <!-- Back Link -->
+          <div class="text-center">
+            <a href="{% url 'account_login' %}" class="link">
+              <i class="fas fa-arrow-left me-1"></i>
+              {% trans "Back to Sign In" %}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
