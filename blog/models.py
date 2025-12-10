@@ -7,6 +7,37 @@ from cloudinary.models import CloudinaryField
 STATUS = ((0, "Draft"), (1, "Published"))
 
 
+class Category(models.Model):
+    """
+    A model representing a blog post category.
+    
+    Categories help organize posts and allow users to filter content
+    by topic or theme.
+    """
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        """Meta options for Category model."""
+        verbose_name_plural = "Categories"
+        ordering = ['name']
+    
+    def __str__(self):
+        """Returns a string representation of the category."""
+        return self.name
+    
+    def get_absolute_url(self):
+        """Returns the URL for filtering posts by this category."""
+        from django.urls import reverse
+        return reverse('category_posts', kwargs={'category_slug': self.slug})
+    
+    def post_count(self):
+        """Returns the number of published posts in this category."""
+        return self.posts.filter(status=1).count()
+
+
 class Post(models.Model):
     """
     A model representing a blog post.
@@ -26,6 +57,13 @@ class Post(models.Model):
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS, default=0)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='posts'
+    )
 
     class Meta:
         """Meta options for Post model."""

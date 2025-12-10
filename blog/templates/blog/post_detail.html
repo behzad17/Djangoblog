@@ -8,6 +8,13 @@
       <div class="col-md-6 masthead-text">
         <h1 class="post-title">{{ post.title }}</h1>
         <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
+        {% if post.category %}
+        <div class="mb-3">
+          <a href="{% url 'category_posts' post.category.slug %}" class="category-badge-large">
+            <i class="fas fa-tag me-2"></i>{{ post.category.name }}
+          </a>
+        </div>
+        {% endif %}
         {% if user.is_authenticated and user == post.author %}
         <div class="mb-3">
           <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary">

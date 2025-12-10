@@ -1,4 +1,4 @@
-from .models import Comment, Post
+from .models import Comment, Post, Category
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -14,11 +14,12 @@ class PostForm(forms.ModelForm):
     class Meta:
         """Meta options for PostForm."""
         model = Post
-        fields = ('title', 'excerpt', 'content', 'featured_image')
+        fields = ('title', 'excerpt', 'content', 'featured_image', 'category')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
 

@@ -13,7 +13,7 @@ from ratelimit.decorators import ratelimit
 from django.utils.text import slugify
 import json
 
-from .models import Post, Comment, Favorite
+from .models import Post, Comment, Favorite, Category
 from .forms import CommentForm, PostForm
 
 
@@ -33,9 +33,17 @@ class PostList(generic.ListView):
         Returns a queryset of published posts with comment counts.
         Posts are ordered by creation date (newest first).
         """
-        return Post.objects.filter(status=1).annotate(
+        return Post.objects.filter(status=1).select_related('category').annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
         ).order_by('-created_on')
+    
+    def get_context_data(self, **kwargs):
+        """
+        Add categories to the context for display in template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all().order_by('name')
+        return context
 
 
 @ratelimit(key='ip', rate='5/m', method='POST', block=True)
@@ -48,7 +56,7 @@ def post_detail(request, slug):
     the comment author. It also tracks whether the post is in the user's
     favorites.
     """
-    queryset = Post.objects.filter(status=1)
+    queryset = Post.objects.filter(status=1).select_related('category', 'author')
     post = get_object_or_404(queryset, slug=slug)
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
@@ -370,4 +378,32 @@ def delete_post(request, slug):
         request,
         'blog/delete_post.html',
         {'post': post},
+    )
+
+
+def category_posts(request, category_slug):
+    """
+    View function for displaying posts filtered by category.
+    
+    This view shows all published posts in a specific category.
+    """
+    category = get_object_or_404(Category, slug=category_slug)
+    posts = Post.objects.filter(
+        category=category,
+        status=1
+    ).select_related('category', 'author').annotate(
+        comment_count=Count('comments', filter=Q(comments__approved=True))
+    ).order_by('-created_on')
+    
+    # Get all categories for navigation
+    categories = Category.objects.all().order_by('name')
+    
+    return render(
+        request,
+        'blog/category_posts.html',
+        {
+            'category': category,
+            'post_list': posts,
+            'categories': categories,
+        }
     )
