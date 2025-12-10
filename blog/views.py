@@ -259,22 +259,21 @@ def create_post(request):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             post.slug = slug
+            # Always set status to Draft (0) - only admins can publish
+            post.status = 0
             post.save()
             
-            # Check if post is published or pending
-            if post.status == 1:  # Published
-                messages.add_message(
-                    request, messages.SUCCESS,
-                    'Post created and published successfully!'
-                )
-                return redirect('post_detail', slug=post.slug)
-            else:  # Draft/Pending
-                messages.add_message(
-                    request, messages.INFO,
-                    'Your post has been created and is pending for publication. '
-                    'It will be reviewed and published soon.'
-                )
-                return redirect('home')
+            # Show pending message with better styling
+            messages.add_message(
+                request, messages.WARNING,
+                '<div class="pending-post-alert">'
+                '<i class="fas fa-clock me-2"></i>'
+                '<strong>Post Created Successfully!</strong><br>'
+                'Your post has been saved as a draft and is pending for review. '
+                'An administrator will review and publish it soon. You will be notified once it\'s published.'
+                '</div>'
+            )
+            return redirect('home')
     else:
         form = PostForm()
 
@@ -307,6 +306,9 @@ def edit_post(request, slug):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
+            # Preserve original status - users cannot change publication status
+            original_status = Post.objects.get(pk=post.pk).status
+            post.status = original_status
             # Update slug if title changed
             new_slug = slugify(post.title)
             if new_slug != post.slug:
@@ -323,7 +325,11 @@ def edit_post(request, slug):
                 request, messages.SUCCESS,
                 'Post updated successfully!'
             )
-            return redirect('post_detail', slug=post.slug)
+            # Redirect based on status
+            if post.status == 1:
+                return redirect('post_detail', slug=post.slug)
+            else:
+                return redirect('home')
     else:
         form = PostForm(instance=post)
 

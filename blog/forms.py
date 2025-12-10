@@ -9,16 +9,16 @@ class PostForm(forms.ModelForm):
     
     This form allows users to create new blog posts with title, content,
     excerpt, and featured image. It uses Summernote for rich text editing.
+    Note: Status field is excluded - only admins can publish posts.
     """
     class Meta:
         """Meta options for PostForm."""
         model = Post
-        fields = ('title', 'excerpt', 'content', 'featured_image', 'status')
+        fields = ('title', 'excerpt', 'content', 'featured_image')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
-            'status': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
