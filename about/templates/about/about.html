@@ -1,42 +1,110 @@
-{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} 
+{% extends 'base.html' %} 
+{% load static %} 
+{% load crispy_forms_tags %} 
+
 {% block content %}
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-12 col-md-4 text-center">
-      <img
-        src="{% static 'images/default.jpg' %}"
-        class="profile-image"
-        alt="About page image"
-      />
-    </div>
-    <div class="col-12 col-md-8">
-      <h2>{{ about.title }}</h2>
-      {{ about.content | safe }}
+<!-- About Section -->
+<div class="container mt-4 mb-5">
+  <!-- About Content Card -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <div class="card about-card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <div class="row align-items-center">
+            <!-- Profile Image -->
+            <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+              <div class="about-image-wrapper">
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  class="about-profile-image"
+                  alt="About page image"
+                />
+              </div>
+            </div>
+            
+            <!-- About Content -->
+            <div class="col-12 col-md-8">
+              <h1 class="about-title mb-3">{{ about.title }}</h1>
+              <div class="about-content">
+                {{ about.content | safe }}
+              </div>
+              <div class="mt-3">
+                <small class="text-muted">
+                  <i class="fas fa-clock me-1"></i>
+                  Last updated: {{ about.updated_on|date:"F d, Y" }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col text-right">
-      <!-- Updated on field goes in here -->
 
-      <p class="text-end"><em>Updated on: {{ about.updated_on }}</em></p>
-    </div>
-  </div>
+  <!-- Collaboration Section -->
   <div class="row justify-content-center">
-    <div class="col-12 col-md-6 my-5">
-      <h2>Let's collaborate!</h2>
-      <p>
-        We believe in the power of shared knowledge and collective effort.
-        Whether you have a project in mind, wish to co-author an article, or
-        simply want to brainstorm some ideas, I'm excited to hear from you. Fill
-        out the form and we can get the ball rolling!
-      </p>
+    <div class="col-lg-8 col-md-10">
+      <div class="card collaboration-card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-4">
+            <div class="collaboration-icon mb-3">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h2 class="collaboration-title mb-3">Let's Collaborate!</h2>
+            <p class="collaboration-description">
+              We believe in the power of shared knowledge and collective effort.
+              Whether you have a project in mind, wish to co-author an article, or
+              simply want to brainstorm some ideas, I'm excited to hear from you. Fill
+              out the form and we can get the ball rolling!
+            </p>
+          </div>
 
-      <!-- add your form here. Your submit button should 
-            have the classes of btn, btn-secondary -->
-      <form method="post">
-        {{ collaborate_form | crispy }} {% csrf_token %}
-        <button class="btn btn-secondary" type="submit">Submit</button>
-      </form>
+          <!-- Collaboration Form -->
+          <form method="post" class="collaboration-form">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+              <label for="{{ collaborate_form.name.id_for_label }}" class="form-label">
+                {{ collaborate_form.name.label }}
+                <span class="text-danger">*</span>
+              </label>
+              {{ collaborate_form.name }}
+              {% if collaborate_form.name.errors %}
+                <div class="text-danger small mt-1">{{ collaborate_form.name.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ collaborate_form.email.id_for_label }}" class="form-label">
+                {{ collaborate_form.email.label }}
+                <span class="text-danger">*</span>
+              </label>
+              {{ collaborate_form.email }}
+              {% if collaborate_form.email.errors %}
+                <div class="text-danger small mt-1">{{ collaborate_form.email.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-4">
+              <label for="{{ collaborate_form.message.id_for_label }}" class="form-label">
+                {{ collaborate_form.message.label }}
+                <span class="text-danger">*</span>
+              </label>
+              {{ collaborate_form.message }}
+              {% if collaborate_form.message.errors %}
+                <div class="text-danger small mt-1">{{ collaborate_form.message.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="text-center">
+              <button class="btn btn-signup btn-lg px-5" type="submit">
+                <i class="fas fa-paper-plane me-2"></i>
+                Submit Request
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

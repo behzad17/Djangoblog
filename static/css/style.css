@@ -553,7 +553,184 @@ body {
   outline: none;
 }
 
+/* About Page Styles */
+.about-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.about-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.about-image-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  padding: 8px;
+  background: linear-gradient(135deg, #188181 0%, #23bbbb 100%);
+  box-shadow: 0 4px 12px rgba(24, 129, 129, 0.3);
+}
+
+.about-profile-image {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  display: block;
+}
+
+.about-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.about-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  text-align: justify;
+}
+
+.about-content p {
+  margin-bottom: 1rem;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Collaboration Section */
+.collaboration-card {
+  border: 2px solid #188181;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  transition: all 0.3s ease;
+}
+
+.collaboration-card:hover {
+  box-shadow: 0 8px 20px rgba(24, 129, 129, 0.2);
+  transform: translateY(-2px);
+}
+
+.collaboration-icon {
+  font-size: 3.5rem;
+  color: #188181;
+  display: inline-block;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(24, 129, 129, 0.1) 0%, rgba(35, 187, 187, 0.1) 100%);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.collaboration-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.collaboration-description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.collaboration-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.collaboration-form .form-label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.collaboration-form input[type="text"],
+.collaboration-form input[type="email"],
+.collaboration-form textarea,
+.collaboration-form input.form-control,
+.collaboration-form textarea.form-control {
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 14px;
+  width: 100%;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  font-family: inherit;
+  background-color: #fff;
+}
+
+.collaboration-form input[type="text"]:focus,
+.collaboration-form input[type="email"]:focus,
+.collaboration-form textarea:focus,
+.collaboration-form input.form-control:focus,
+.collaboration-form textarea.form-control:focus {
+  border-color: #188181;
+  box-shadow: 0 0 0 3px rgba(24, 129, 129, 0.1);
+  outline: none;
+  background-color: #fff;
+}
+
+.collaboration-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.collaboration-form .btn-signup {
+  padding: 12px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.collaboration-form .btn-signup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(24, 129, 129, 0.3);
+}
+
 /* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2rem;
+  }
+  
+  .about-content {
+    font-size: 1rem;
+    text-align: left;
+  }
+  
+  .about-profile-image {
+    max-width: 200px;
+  }
+  
+  .collaboration-title {
+    font-size: 1.75rem;
+  }
+  
+  .collaboration-icon {
+    font-size: 2.5rem;
+    width: 80px;
+    height: 80px;
+    padding: 15px;
+  }
+}
+
 @media (max-width: 576px) {
   .login-card {
     margin-top: 20px !important;
@@ -567,5 +744,18 @@ body {
   .login-card .captcha {
     flex-direction: column;
     align-items: stretch;
+  }
+  
+  .about-card .card-body,
+  .collaboration-card .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .about-title {
+    font-size: 1.75rem;
+  }
+  
+  .collaboration-title {
+    font-size: 1.5rem;
   }
 }
