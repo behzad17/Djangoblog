@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4 mt-3">
+      <div class="card-body">
+        <h3>Edit Comment:</h3>
+        <form method="post" style="margin-top: 1.3em">
+          {{ form | crispy }} 
+          {% csrf_token %}
+          <button type="submit" class="btn btn-signup btn-lg">Update Comment</button>
+          <a href="{% url 'post_detail' comment.post.slug %}" class="btn btn-secondary btn-lg">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

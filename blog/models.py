@@ -26,9 +26,6 @@ class Post(models.Model):
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS, default=0)
-    favorite_posts = models.ManyToManyField(
-        User, related_name='favorite_posts', blank=True
-    )
 
     class Meta:
         """Meta options for Post model."""
@@ -39,7 +36,8 @@ class Post(models.Model):
         return self.title
 
     def favorite_count(self):
-        return self.favorite_posts.count()
+        """Returns the number of users who have favorited this post."""
+        return Favorite.objects.filter(post=self).count()
 
 class Comment(models.Model):
     """

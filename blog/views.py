@@ -131,10 +131,15 @@ def comment_edit(request, slug, comment_id):
                     return redirect('post_detail', slug=slug)
         else:
             form = CommentForm(instance=comment)
-        return render(request, 'blog/comment_edit.html', {'form': form})
+        return render(request, 'blog/comment_edit.html', {
+            'form': form,
+            'slug': slug,
+            'comment': comment
+        })
     return redirect('post_detail', slug=slug)
 
 
+@login_required
 def comment_delete(request, slug, comment_id):
     """
     View function for deleting a comment.
@@ -231,7 +236,14 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.slug = slugify(post.title)
+            # Generate unique slug
+            base_slug = slugify(post.title)
+            slug = base_slug
+            counter = 1
+            while Post.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            post.slug = slug
             post.save()
             messages.add_message(
                 request, messages.SUCCESS,
@@ -245,4 +257,86 @@ def create_post(request):
         request,
         'blog/create_post.html',
         {'form': form},
+    )
+
+
+@login_required
+def edit_post(request, slug):
+    """
+    View function for editing a blog post.
+
+    This view allows post authors to edit their own posts.
+    It requires user authentication and ensures only the author can edit.
+    """
+    post = get_object_or_404(Post, slug=slug)
+    
+    # Check if user is the author
+    if request.user != post.author:
+        messages.add_message(
+            request, messages.ERROR,
+            'You can only edit your own posts!'
+        )
+        return redirect('post_detail', slug=slug)
+    
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            # Update slug if title changed
+            new_slug = slugify(post.title)
+            if new_slug != post.slug:
+                # Check for slug uniqueness
+                base_slug = new_slug
+                slug = base_slug
+                counter = 1
+                while Post.objects.filter(slug=slug).exclude(pk=post.pk).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                post.slug = slug
+            post.save()
+            messages.add_message(
+                request, messages.SUCCESS,
+                'Post updated successfully!'
+            )
+            return redirect('post_detail', slug=post.slug)
+    else:
+        form = PostForm(instance=post)
+
+    return render(
+        request,
+        'blog/edit_post.html',
+        {'form': form, 'post': post},
+    )
+
+
+@login_required
+def delete_post(request, slug):
+    """
+    View function for deleting a blog post.
+
+    This view allows post authors to delete their own posts.
+    It requires user authentication and ensures only the author can delete.
+    """
+    post = get_object_or_404(Post, slug=slug)
+    
+    # Check if user is the author
+    if request.user != post.author:
+        messages.add_message(
+            request, messages.ERROR,
+            'You can only delete your own posts!'
+        )
+        return redirect('post_detail', slug=slug)
+    
+    if request.method == "POST":
+        post.delete()
+        messages.add_message(
+            request, messages.SUCCESS,
+            'Post deleted successfully!'
+        )
+        return redirect('home')
+    
+    return render(
+        request,
+        'blog/delete_post.html',
+        {'post': post},
     )

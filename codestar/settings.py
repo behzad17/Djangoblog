@@ -38,8 +38,8 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Parse DEBUG from environment, default to False
-DEBUG = os.environ.get("DEBUG", "False").lower() in {"1", "true", "yes", "on"}
+# Parse DEBUG from environment, default to True
+DEBUG = os.environ.get("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
 # Fail fast if critical settings are missing in production
 if not DEBUG and not SECRET_KEY:
@@ -228,6 +228,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files (for local development, Cloudinary is used in production)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Production security settings
 if not DEBUG:
