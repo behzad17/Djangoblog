@@ -59,9 +59,7 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     category = models.ForeignKey(
         Category,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        on_delete=models.PROTECT,
         related_name='posts'
     )
 

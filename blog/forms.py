@@ -10,7 +10,17 @@ class PostForm(forms.ModelForm):
     This form allows users to create new blog posts with title, content,
     excerpt, and featured image. It uses Summernote for rich text editing.
     Note: Status field is excluded - only admins can publish posts.
+    Category is mandatory for all posts.
     """
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all().order_by('name'),
+        required=True,
+        empty_label="-- Select a Category --",
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Category',
+        help_text='Please select a category for your post (required)'
+    )
+    
     class Meta:
         """Meta options for PostForm."""
         model = Post
@@ -19,7 +29,6 @@ class PostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
