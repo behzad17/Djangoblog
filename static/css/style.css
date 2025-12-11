@@ -805,8 +805,8 @@ body {
 }
 
 .popular-post-item {
-  margin-bottom: 14px;
-  padding-bottom: 14px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #e9ecef;
   counter-increment: popular-counter;
   position: relative;
@@ -827,7 +827,7 @@ body {
   color: #333;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   display: block;
   margin-bottom: 6px;
   transition: color 0.2s ease;
@@ -847,7 +847,7 @@ body {
 }
 
 .popular-post-favorites {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #6c757d;
   display: flex;
   align-items: center;
@@ -857,7 +857,7 @@ body {
 
 .popular-post-favorites i {
   color: #ffc107;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .popular-post-category {
