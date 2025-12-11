@@ -2216,7 +2216,7 @@ body {
 /* Ad Banner Styles */
 .ad-banner {
   width: 100%;
-  height: 50px;
+  height: 100px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
   color: white;
   display: flex;
@@ -2292,7 +2292,7 @@ body {
 /* Responsive adjustments for ad banner */
 @media (max-width: 768px) {
   .ad-banner {
-    height: 45px;
+    height: 80px;
   }
   
   .ad-banner-message {
