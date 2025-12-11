@@ -195,6 +195,13 @@ def post_detail(request, slug):
             )
             return redirect('post_detail', slug=post.slug)
 
+    popular_posts = (
+        Post.objects.filter(status=1)
+        .annotate(like_count=Count('likes'))
+        .select_related('category', 'author')
+        .order_by('-like_count', '-created_on')[:10]
+    )
+
     return render(
         request,
         "blog/post_detail.html",
@@ -205,6 +212,7 @@ def post_detail(request, slug):
             "comment_form": comment_form,
             "is_favorited": is_favorited,
             "is_liked": is_liked,
+            "popular_posts": popular_posts,
         },
     )
 
