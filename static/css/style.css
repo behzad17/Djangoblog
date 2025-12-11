@@ -700,6 +700,134 @@ body {
   }
 }
 
+/* Popular Posts Sidebar Styles */
+.popular-posts-sidebar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #188181;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-title i {
+  color: #ff6b35;
+}
+
+.popular-posts-list {
+  list-style: decimal;
+  padding-left: 20px;
+  margin: 0;
+  counter-reset: popular-counter;
+}
+
+.popular-post-item {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e9ecef;
+  counter-increment: popular-counter;
+  position: relative;
+}
+
+.popular-post-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.popular-post-item::marker {
+  font-weight: 600;
+  color: #188181;
+}
+
+.popular-post-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 6px;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+}
+
+.popular-post-link:hover {
+  color: #188181;
+  text-decoration: underline;
+}
+
+.popular-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.popular-post-favorites {
+  font-size: 0.8rem;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.popular-post-favorites i {
+  color: #ffc107;
+  font-size: 0.75rem;
+}
+
+.popular-post-category {
+  color: #188181;
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.popular-post-category:hover {
+  color: #23bbbb;
+  transform: scale(1.2);
+}
+
+/* Responsive Popular Posts Sidebar */
+@media (max-width: 991px) {
+  .popular-posts-sidebar {
+    position: static;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .popular-posts-sidebar {
+    padding: 15px;
+  }
+  
+  .popular-post-link {
+    font-size: 0.9rem;
+  }
+  
+  .popular-post-favorites {
+    font-size: 0.75rem;
+  }
+}
+
 /* Login Page Styles */
 .login-card {
   border: 2px solid #e0e0e0;

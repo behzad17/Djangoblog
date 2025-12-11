@@ -39,10 +39,23 @@ class PostList(generic.ListView):
     
     def get_context_data(self, **kwargs):
         """
-        Add categories to the context for display in template.
+        Add categories and popular posts to the context for display in template.
         """
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all().order_by('name')
+        
+        # Popular posts based on favorite count
+        context['popular_posts'] = Post.objects.filter(
+            status=1
+        ).annotate(
+            favorite_count=Count('favorite')
+        ).select_related(
+            'category', 'author'
+        ).order_by(
+            '-favorite_count',
+            '-created_on'
+        )[:10]
+        
         return context
 
 

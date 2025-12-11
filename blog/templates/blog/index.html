@@ -109,10 +109,10 @@
 
   <div class="row">
     <!-- Blog Entries Column -->
-    <div class="col-12 mt-3 left">
+    <div class="col-lg-9 col-md-12 mt-3 left">
       <div class="row blog-post-row">
         {% for post in post_list %}
-        <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="col-lg-4 col-md-6 col-sm-12">
           <div class="card post-card mb-4">
             <div class="card-body">
               <div class="image-container">
@@ -155,9 +155,41 @@
         </div>
 
         <!--   divisibleby:3 to divisibleby:4 -->
-        {% if forloop.counter|divisibleby:4 %}
+        {% if forloop.counter|divisibleby:3 %}
       </div>
       <div class="row blog-post-row">{% endif %} {% endfor %}</div>
+    </div>
+    
+    <!-- Popular Posts Sidebar -->
+    <div class="col-lg-3 col-md-12 mt-3">
+      <div class="popular-posts-sidebar">
+        <h4 class="sidebar-title">
+          <i class="fas fa-fire me-2"></i>Popular Posts
+        </h4>
+        {% if popular_posts %}
+        <ol class="popular-posts-list">
+          {% for post in popular_posts %}
+          <li class="popular-post-item">
+            <a href="{% url 'post_detail' post.slug %}" class="popular-post-link" title="{{ post.title }}">
+              {{ post.title|truncatewords:8 }}
+            </a>
+            <div class="popular-post-meta">
+              <span class="popular-post-favorites">
+                <i class="fas fa-star"></i> {{ post.favorite_count }}
+              </span>
+              {% if post.category %}
+              <a href="{% url 'category_posts' post.category.slug %}" class="popular-post-category">
+                <i class="fas fa-tag"></i>
+              </a>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ol>
+        {% else %}
+        <p class="text-muted small">No popular posts yet. Be the first to favorite a post!</p>
+        {% endif %}
+      </div>
     </div>
   </div>
 
