@@ -995,6 +995,31 @@ body {
   color: #e63946;
 }
 
+/* Post detail refinements */
+.post-detail-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+}
+
+.post-content-body {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.comment-form-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+}
+
+.comment-form-card .btn {
+  padding: 6px 14px;
+}
+
+.comments-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+}
+
 @media (max-width: 991px) {
   .popular-posts-sidebar {
     position: static;
