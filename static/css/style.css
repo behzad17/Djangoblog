@@ -120,6 +120,13 @@ body {
   text-transform: uppercase;
 }
 
+.post-author-inline {
+  font-weight: 600;
+  color: #188181;
+  margin: 4px 0 6px 0;
+  font-size: 0.9rem;
+}
+
 .masthead {
   margin-top: 10px;
   overflow: hidden;
