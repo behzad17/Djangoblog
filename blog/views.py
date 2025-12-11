@@ -27,7 +27,7 @@ class PostList(generic.ListView):
     comments for each post.
     """
     template_name = "blog/index.html"
-    paginate_by = 20
+    paginate_by = 24
 
     def get_queryset(self):
         """
@@ -447,8 +447,8 @@ def category_posts(request, category_slug):
         comment_count=Count('comments', filter=Q(comments__approved=True))
     ).order_by('-created_on')
     
-    # Pagination: 20 posts per page
-    paginator = Paginator(posts, 20)
+    # Pagination: 24 posts per page
+    paginator = Paginator(posts, 24)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
