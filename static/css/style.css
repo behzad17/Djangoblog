@@ -1061,6 +1061,16 @@ body {
   flex: 0 0 auto;
 }
 
+.footer-logo-img {
+  width: 90px;
+  height: 60px;
+  object-fit: contain;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
 @media (max-width: 991px) {
   .popular-posts-sidebar {
     position: static;
