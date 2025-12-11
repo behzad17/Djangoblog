@@ -5,4 +5,8 @@ __pycache__/
 .DS_Store
 # Ignore collected static files
 /staticfiles/
+# Database
+db.sqlite3
+*.sqlite3
+*.db
 
