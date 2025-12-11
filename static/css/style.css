@@ -1055,8 +1055,8 @@ body {
 .footer-logo {
   width: 90px;
   height: 60px;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background: transparent;
+  border: none;
   border-radius: 6px;
   flex: 0 0 auto;
 }
@@ -1065,8 +1065,8 @@ body {
   width: 90px;
   height: 60px;
   object-fit: contain;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background: transparent;
+  border: none;
   border-radius: 6px;
   flex: 0 0 auto;
 }
