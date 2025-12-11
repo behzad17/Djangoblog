@@ -1044,6 +1044,19 @@ body {
   color: #ffc107;
 }
 
+.footer-logos {
+  padding-top: 10px;
+}
+
+.footer-logo {
+  width: 60px;
+  height: 40px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
 @media (max-width: 991px) {
   .popular-posts-sidebar {
     position: static;
