@@ -1576,3 +1576,163 @@ body {
     font-size: 1.5rem;
   }
 }
+
+/* Ask Me Feature Styles */
+.moderator-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.moderator-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.moderator-image-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #007bff;
+  background: #f0f0f0;
+}
+
+.moderator-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moderator-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.moderator-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #007bff;
+}
+
+.moderator-bio {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #666;
+  min-height: 3rem;
+}
+
+.moderator-stats {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.ask-question-btn {
+  transition: all 0.3s ease;
+}
+
+.ask-question-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Question/Answer Cards */
+.question-text,
+.answer-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.answer-section {
+  border-left: 4px solid #007bff;
+  background: #f8f9fa !important;
+}
+
+.answer-section h6 {
+  font-weight: 600;
+  color: #007bff;
+}
+
+/* Modal Styles */
+#questionModal .modal-content {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+#questionModal .modal-header {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+}
+
+#questionModal .modal-header .btn-close {
+  filter: invert(1);
+}
+
+#questionModal .modal-body {
+  padding: 1.5rem;
+}
+
+#questionModal #moderatorInfo {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-left: 4px solid #007bff;
+}
+
+/* Statistics Cards */
+.card.bg-primary,
+.card.bg-success,
+.card.bg-warning {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card.bg-primary:hover,
+.card.bg-success:hover,
+.card.bg-warning:hover {
+  transform: translateY(-3px);
+}
+
+.card.bg-primary h3,
+.card.bg-success h3,
+.card.bg-warning h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Styles for Ask Me */
+@media (max-width: 768px) {
+  .moderator-image-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .moderator-name {
+    font-size: 1rem;
+  }
+
+  .moderator-title {
+    font-size: 0.85rem;
+  }
+
+  .moderator-bio {
+    font-size: 0.8rem;
+  }
+
+  .card.bg-primary h3,
+  .card.bg-success h3,
+  .card.bg-warning h3 {
+    font-size: 2rem;
+  }
+}

@@ -241,4 +241,94 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+
+  // Ask Me - Question Modal Functionality
+  const questionModal = document.getElementById('questionModal');
+  if (questionModal) {
+    const askQuestionButtons = document.querySelectorAll('.ask-question-btn');
+    const moderatorNameEl = document.getElementById('moderatorName');
+    const moderatorTitleEl = document.getElementById('moderatorTitle');
+    const moderatorIdEl = document.getElementById('moderatorId');
+    const questionForm = document.getElementById('questionForm');
+
+    // Handle modal open - populate moderator info
+    askQuestionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const moderatorId = this.dataset.moderatorId;
+        const moderatorName = this.dataset.moderatorName;
+        const moderatorTitle = this.dataset.moderatorTitle;
+
+        if (moderatorNameEl) moderatorNameEl.textContent = moderatorName;
+        if (moderatorTitleEl) moderatorTitleEl.textContent = moderatorTitle;
+        if (moderatorIdEl) moderatorIdEl.value = moderatorId;
+        
+        // Reset form
+        if (questionForm) {
+          questionForm.reset();
+        }
+      });
+    });
+
+    // Handle form submission via AJAX
+    if (questionForm) {
+      questionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+
+        const formData = new FormData(this);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const moderatorId = moderatorIdEl.value;
+
+        fetch(`/ask-me/moderator/${moderatorId}/ask/`, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            // Close modal
+            const modalInstance = bootstrap.Modal.getInstance(questionModal);
+            if (modalInstance) {
+              modalInstance.hide();
+            }
+
+            // Show success message
+            showSuccessMessage(data.message || 'Your question has been submitted successfully!');
+
+            // Reset form
+            questionForm.reset();
+
+            // Optionally redirect or refresh
+            setTimeout(() => {
+              window.location.href = '/ask-me/my-questions/';
+            }, 1500);
+          } else {
+            // Show errors
+            let errorMsg = 'Error submitting question. ';
+            if (data.errors) {
+              const errorList = Object.values(data.errors).flat();
+              errorMsg += errorList.join(' ');
+            }
+            alert(errorMsg);
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalText;
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred. Please try again.');
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalText;
+        });
+      });
+    }
+  }
 });

@@ -1,6 +1,7 @@
 {% load static %}
 {% url 'home' as home_url %} 
 {% url 'about' as about_url %} 
+{% url 'ask_me' as ask_me_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
@@ -82,6 +83,13 @@
                 class="nav-link {% if request.path == about_url %}active{% endif %}"
                 href="{{ about_url }}"
                 >About</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == ask_me_url %}active{% endif %}"
+                href="{{ ask_me_url }}"
+                ><i class="fas fa-question-circle me-1"></i>Ask Me</a
               >
             </li>
           </ul>
