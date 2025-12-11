@@ -30,10 +30,6 @@ class ModeratorAdmin(admin.ModelAdmin):
         ('Moderator Information', {
             'fields': ('user', 'expert_title', 'profile_image', 'bio', 'is_active')
         }),
-        ('Statistics', {
-            'fields': ('question_count', 'answered_count', 'pending_count'),
-            'classes': ('collapse',)
-        }),
         ('Timestamps', {
             'fields': ('created_on', 'updated_on'),
             'classes': ('collapse',)
@@ -122,23 +118,31 @@ class QuestionAdmin(admin.ModelAdmin):
     
     def content_stats(self, obj):
         """Display content statistics without showing content."""
+        if obj is None:
+            return '-'
         return format_html(
             'Q: {} chars | A: {} chars',
-            len(obj.question_text),
+            len(obj.question_text) if obj.question_text else 0,
             len(obj.answer_text) if obj.answer_text else 0
         )
     content_stats.short_description = 'Content Stats'
     
     def content_metadata(self, obj):
         """Display detailed content metadata without showing content."""
+        if obj is None:
+            return format_html(
+                '<div style="padding: 10px; background: #f9f9f9; border-left: 3px solid #007bff; border-radius: 3px;">'
+                '<em style="color: #666; font-size: 0.9em;">Content statistics will be available after the question is created.</em>'
+                '</div>'
+            )
         return format_html(
             '<div style="padding: 10px; background: #f9f9f9; border-left: 3px solid #007bff; border-radius: 3px;">'
             '<strong>Question:</strong> {} characters, {} words<br>'
             '<strong>Answer:</strong> {} characters, {} words<br>'
             '<em style="color: #666; font-size: 0.9em;">Content is private and accessible only to the user and assigned moderator.</em>'
             '</div>',
-            len(obj.question_text),
-            len(obj.question_text.split()),
+            len(obj.question_text) if obj.question_text else 0,
+            len(obj.question_text.split()) if obj.question_text else 0,
             len(obj.answer_text) if obj.answer_text else 0,
             len(obj.answer_text.split()) if obj.answer_text else 0,
         )
