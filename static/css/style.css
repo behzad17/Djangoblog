@@ -891,6 +891,21 @@ body {
   background: #f0f7f7;
 }
 
+.ad-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.ad-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
 .ad-content {
   text-align: center;
   padding: 20px;
