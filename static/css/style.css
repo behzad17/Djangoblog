@@ -1069,6 +1069,23 @@ body {
   border: none;
   border-radius: 6px;
   flex: 0 0 auto;
+  aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 991px) {
+  .footer-logo-img {
+    flex: 0 0 calc(33.333% - 10px);
+    max-width: calc(33.333% - 10px);
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-logo-img {
+    flex: 0 0 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+    height: auto;
+  }
 }
 
 @media (max-width: 991px) {
