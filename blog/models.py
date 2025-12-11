@@ -84,6 +84,10 @@ class Post(models.Model):
     def favorite_count(self):
         """Returns the number of users who have favorited this post."""
         return Favorite.objects.filter(post=self).count()
+    
+    def like_count(self):
+        """Returns the number of users who have liked this post."""
+        return Like.objects.filter(post=self).count()
 
 class Comment(models.Model):
     """
@@ -128,3 +132,32 @@ class Favorite(models.Model):
     def __str__(self):
         """Returns a string representation of the favorite."""
         return f"{self.user.username} saved {self.post.title}"
+
+
+class Like(models.Model):
+    """
+    A model representing a user's like on a blog post.
+    
+    This model creates a many-to-many relationship between users and posts,
+    allowing users to show appreciation for posts with a quick like.
+    """
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name='likes'
+    )
+    post = models.ForeignKey(
+        Post, 
+        on_delete=models.CASCADE,
+        related_name='likes'
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        """Meta options for Like model."""
+        unique_together = ('user', 'post')
+        ordering = ['-created_on']
+    
+    def __str__(self):
+        """Returns a string representation of the like."""
+        return f"{self.user.username} liked {self.post.title}"

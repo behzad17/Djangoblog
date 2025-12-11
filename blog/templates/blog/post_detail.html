@@ -32,7 +32,8 @@
           </a>
         </div>
         {% endif %}
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <!-- Favorite Button -->
           {% if user.is_authenticated %}
           <form
             action="{% url 'add_to_favorites' post.id %}"
@@ -55,6 +56,32 @@
           >
           {% endif %}
           <span class="ms-2">{{ post.favorite_count }}</span>
+          
+          <!-- Like Button -->
+          <div class="like-section">
+            {% if user.is_authenticated %}
+            <form
+              action="{% url 'like_post' post.id %}"
+              method="POST"
+              class="d-inline"
+            >
+              {% csrf_token %}
+              <button 
+                type="submit" 
+                class="btn-like {% if is_liked %}liked{% endif %}"
+                title="{% if is_liked %}Unlike{% else %}Like{% endif %} this post"
+              >
+                <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+                <span class="like-count">{{ post.like_count }}</span>
+              </button>
+            </form>
+            {% else %}
+            <a href="{% url 'account_login' %}" class="btn-like" title="Login to like">
+              <i class="far fa-heart"></i>
+              <span class="like-count">{{ post.like_count }}</span>
+            </a>
+            {% endif %}
+          </div>
         </div>
       </div>
       <div class="d-none d-md-block col-md-6 masthead-image">

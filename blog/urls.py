@@ -8,6 +8,7 @@ urlpatterns = [
     path('favorites/', views.favorite_posts, name='favorites'),
     path('add-to-favorites/<int:post_id>/', views.add_to_favorites, name='add_to_favorites'),
     path('remove-from-favorites/<int:post_id>/', views.remove_from_favorites, name='remove_from_favorites'),
+    path('like-post/<int:post_id>/', views.like_post, name='like_post'),
     path('<slug:slug>/', views.post_detail, name='post_detail'),
     path('<slug:slug>/edit/', views.edit_post, name='edit_post'),
     path('<slug:slug>/delete/', views.delete_post, name='delete_post'),

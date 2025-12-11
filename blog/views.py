@@ -14,7 +14,7 @@ from ratelimit.decorators import ratelimit
 from django.utils.text import slugify
 import json
 
-from .models import Post, Comment, Favorite, Category
+from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
 
 
@@ -77,8 +77,13 @@ def post_detail(request, slug):
     comment_form = CommentForm()
     # Determine if current user has already favorited this post
     is_favorited = False
+    is_liked = False
     if request.user.is_authenticated:
         is_favorited = Favorite.objects.filter(
+            user=request.user,
+            post=post,
+        ).exists()
+        is_liked = Like.objects.filter(
             user=request.user,
             post=post,
         ).exists()
@@ -131,6 +136,7 @@ def post_detail(request, slug):
             "comment_count": comment_count,
             "comment_form": comment_form,
             "is_favorited": is_favorited,
+            "is_liked": is_liked,
         },
     )
 
@@ -257,6 +263,30 @@ def remove_from_favorites(request, post_id):
     return redirect(
         request.META.get('HTTP_REFERER', 'favorites')
     )
+
+
+@login_required
+def like_post(request, post_id):
+    """
+    View function for liking or unliking a post.
+    
+    This view toggles the like status of a post for the current user.
+    If the post is already liked, it will be unliked.
+    If not, it will be liked.
+    """
+    post = get_object_or_404(Post, id=post_id)
+    like, created = Like.objects.get_or_create(
+        user=request.user, 
+        post=post
+    )
+    
+    if not created:
+        like.delete()
+        messages.success(request, 'Post unliked')
+    else:
+        messages.success(request, 'Post liked')
+    
+    return redirect('post_detail', slug=post.slug)
 
 
 @login_required
