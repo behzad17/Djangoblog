@@ -202,6 +202,9 @@ def post_detail(request, slug):
         .order_by('-like_count', '-created_on')[:10]
     )
 
+    # Flag to hide pending messages on published posts
+    hide_pending_messages = post.status == 1
+
     return render(
         request,
         "blog/post_detail.html",
@@ -213,6 +216,7 @@ def post_detail(request, slug):
             "is_favorited": is_favorited,
             "is_liked": is_liked,
             "popular_posts": popular_posts,
+            "hide_pending_messages": hide_pending_messages,
         },
     )
 

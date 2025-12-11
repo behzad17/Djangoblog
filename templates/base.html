@@ -132,19 +132,38 @@
       <div class="row">
         <div class="col-md-8 offset-md-2">
           {% for message in messages %}
-          <div
-            class="alert {{ message.tags }} alert-dismissible fade show"
-            id="msg"
-            role="alert"
-          >
-            {{ message | safe }}
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            ></button>
-          </div>
+            {# Don't show pending messages on published post detail pages #}
+            {% if hide_pending_messages|default:False %}
+              {% if 'pending' not in message|stringformat:"s"|lower and 'draft' not in message|stringformat:"s"|lower %}
+                <div
+                  class="alert {{ message.tags }} alert-dismissible fade show"
+                  id="msg"
+                  role="alert"
+                >
+                  {{ message | safe }}
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              {% endif %}
+            {% else %}
+              <div
+                class="alert {{ message.tags }} alert-dismissible fade show"
+                id="msg"
+                role="alert"
+              >
+                {{ message | safe }}
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
       </div>
