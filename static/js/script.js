@@ -332,3 +332,64 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
+// Ad Banner Dismissal Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const adBanner = document.getElementById('adBanner');
+  const closeButton = document.getElementById('closeBanner');
+  
+  // Check if banner was previously dismissed
+  try {
+    if (localStorage.getItem('adBannerDismissed') === 'true') {
+      // Banner already dismissed, don't show
+      if (adBanner) {
+        adBanner.style.display = 'none';
+      }
+      return;
+    }
+  } catch (e) {
+    // localStorage not available (e.g., private browsing), continue to show banner
+    console.log('localStorage not available, showing banner');
+  }
+  
+  // Show the banner if it exists and wasn't dismissed
+  if (adBanner) {
+    adBanner.style.display = 'flex';
+  }
+  
+  // Handle close button click
+  if (closeButton) {
+    closeButton.addEventListener('click', function() {
+      try {
+        // Save dismissal state
+        localStorage.setItem('adBannerDismissed', 'true');
+      } catch (e) {
+        // localStorage not available, but still hide banner for this session
+        console.log('localStorage not available, hiding banner for this session only');
+      }
+      
+      // Hide banner with smooth animation
+      if (adBanner) {
+        adBanner.style.transition = 'opacity 0.3s ease, height 0.3s ease';
+        adBanner.style.opacity = '0';
+        adBanner.style.height = '0';
+        adBanner.style.overflow = 'hidden';
+        
+        // Remove from DOM after animation
+        setTimeout(function() {
+          if (adBanner && adBanner.parentNode) {
+            adBanner.remove();
+          }
+        }, 300);
+      }
+    });
+    
+    // Handle keyboard navigation (Enter and Space keys)
+    closeButton.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        closeButton.click();
+      }
+    });
+  }
+});
