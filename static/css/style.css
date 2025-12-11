@@ -1083,6 +1083,14 @@ body {
   flex: 0 0 auto;
 }
 
+/* Welcome text */
+.welcome-text {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  color: #188181;
+  letter-spacing: 0.2px;
+}
+
 .footer-logo-img {
   width: 180px;
   height: 120px;

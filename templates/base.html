@@ -145,9 +145,9 @@
     <main class="flex-shrink-0 main-bg">
       <!-- User Authentication Status -->
       {% if user.is_authenticated %}
-      <p class="text-end m-3">You are logged in as {{ user }}</p>
+      <p class="text-end m-3 welcome-text">Welcome {{ user }}</p>
       {% else %}
-      <p class="text-end m-3">You are not logged in</p>
+      <p class="text-end m-3 welcome-text">You are not logged in</p>
       {% endif %}
 
       <!-- Content Block - To be overridden by child templates -->
