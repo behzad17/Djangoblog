@@ -197,7 +197,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Changed from 'mandatory' to allow regular login without email verification
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CaptchaSignupForm",
