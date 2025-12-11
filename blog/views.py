@@ -45,15 +45,15 @@ class PostList(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all().order_by('name')
         
-        # Popular posts based on favorite count
+        # Popular posts based on like count
         context['popular_posts'] = Post.objects.filter(
             status=1
         ).annotate(
-            favorite_count=Count('favorite')
+            like_count=Count('likes')
         ).select_related(
             'category', 'author'
         ).order_by(
-            '-favorite_count',
+            '-like_count',
             '-created_on'
         )[:10]
         

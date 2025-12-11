@@ -174,7 +174,7 @@
             </a>
             <div class="popular-post-meta">
               <span class="popular-post-favorites">
-                <i class="fas fa-star"></i> {{ post.favorite_count }}
+                <i class="fas fa-heart"></i> {{ post.like_count }}
               </span>
               {% if post.category %}
               <a href="{% url 'category_posts' post.category.slug %}" class="popular-post-category">
@@ -186,7 +186,7 @@
           {% endfor %}
         </ol>
         {% else %}
-        <p class="text-muted small">No popular posts yet. Be the first to favorite a post!</p>
+        <p class="text-muted small">No popular posts yet. Be the first to like a post!</p>
         {% endif %}
       </div>
     </div>
