@@ -1,27 +1,117 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white mb-4" style="background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%); padding: 2rem 0;">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="hero-title mb-3">
+          <i class="fas fa-star me-2"></i>Your Favorite Posts
+        </h1>
+        <p class="hero-subtitle">
+          All the posts you've saved for later reading.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="favorites-container container mt-4">
-    <h2 class="favorites-title">Your favorite posts</h2>
-    
-    {% if favorites %}
-        <ul class="favorite-list mt-3">
-            {% for favorite in favorites %}
-                <li class="favorite-item">
-                    <a href="{% url 'post_detail' favorite.post.slug %}" class="favorite-link">
-                        {{ favorite.post.title }} </a>
+<div class="container mb-5">
+  {% if favorite_posts %}
+  <div class="row mb-3">
+    <div class="col-12">
+      <p class="text-muted">
+        <i class="fas fa-info-circle me-2"></i>You have <strong>{{ favorite_posts|length }}</strong> favorite post{{ favorite_posts|length|pluralize }}.
+      </p>
+    </div>
+  </div>
 
-                        <form action="{% url 'remove_from_favorites' favorite.post.id %}" method="POST" class="favorite-form">
-                            {% csrf_token %}
-                            <button type="submit" class="remove-btn">Remove</button>
-                        </form>
-                    
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-    <p class="no-favorites">You haven't saved any posts yet.</p>
+  <div class="row blog-post-row">
+    {% for post in favorite_posts %}
+    <div class="col-lg-3 col-md-6 col-sm-12">
+      <div class="card post-card mb-4 position-relative">
+        <div class="card-body">
+          <!-- Remove Favorite Button -->
+          <form action="{% url 'remove_from_favorites' post.id %}" method="POST" class="favorite-remove-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger favorite-remove-btn" title="Remove from favorites">
+              <i class="fas fa-times"></i>
+            </button>
+          </form>
+
+          <div class="image-container">
+            {% if "placeholder" in post.featured_image.url %}
+            <img
+              class="card-img-top"
+              src="{% static 'images/default.jpg' %}"
+              alt="placeholder image"
+            />
+            {% else %}
+            <img
+              class="card-img-top"
+              src="{{ post.featured_image.url }}"
+              alt="{{ post.title }}"
+            />
+            {% endif %}
+          </div>
+          <a href="{% url 'post_detail' post.slug %}" class="post-link">
+            <h2 class="card-title">{{ post.title }}</h2>
+          </a>
+          
+          {% if post.pinned %}
+          <div class="pinned-badge" title="Pinned{% if post.pinned_row %} • Row {{ post.pinned_row }}{% endif %}">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          {% endif %}
+
+          {% if post.category %}
+          <div class="mb-2">
+            <a href="{% url 'category_posts' post.category.slug %}" class="category-badge">
+              <i class="fas fa-tag me-1"></i>{{ post.category.name }}
+            </a>
+          </div>
+          {% endif %}
+          
+          <p class="post-author-inline">Author: {{ post.author }}</p>
+          <hr />
+          <p class="card-text text-muted h6">
+            {{ post.created_on|date:"M d, Y" }} | 
+            <i class="far fa-comments me-1"></i>{{ post.comment_count }}
+            {% if post.like_count > 0 %}
+            | <i class="fas fa-heart me-1 text-danger"></i>{{ post.like_count }}
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- divisibleby:4 for 4 columns per row -->
+    {% if forloop.counter|divisibleby:4 %}
+  </div>
+  <div class="row blog-post-row">
     {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <!-- Empty State -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm text-center py-5">
+        <div class="card-body">
+          <i class="fas fa-star fa-4x text-muted mb-4" style="opacity: 0.3;"></i>
+          <h3 class="text-muted mb-3">No Favorite Posts Yet</h3>
+          <p class="text-muted mb-4">
+            Start saving posts you love! Click the <i class="fas fa-star text-warning"></i> icon on any post to add it to your favorites.
+          </p>
+          <a href="{% url 'home' %}" class="btn btn-primary">
+            <i class="fas fa-arrow-left me-2"></i>Browse Posts
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
-
 {% endblock %}

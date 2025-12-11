@@ -314,11 +314,25 @@ def favorite_posts(request):
     This view shows all posts that the current user has marked as favorites.
     The view requires user authentication.
     """
-    favorites = Favorite.objects.filter(user=request.user)
+    favorites = Favorite.objects.filter(user=request.user).select_related('post', 'post__category', 'post__author')
+    
+    # Get the posts from favorites (only published posts)
+    favorite_posts = [favorite.post for favorite in favorites if favorite.post.status == 1]
+    
+    # Annotate with comment count
+    posts_with_counts = []
+    for post in favorite_posts:
+        post.comment_count = post.comments.filter(approved=True).count()
+        post.like_count = post.like_count()
+        posts_with_counts.append(post)
+    
     return render(
         request,
         'blog/favorites.html',
-        {'favorites': favorites},
+        {
+            'favorites': favorites,
+            'favorite_posts': posts_with_counts,
+        },
     )
 
 
