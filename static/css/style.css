@@ -667,6 +667,29 @@ body {
   text-decoration: none;
 }
 
+/* External URL Badge - Related Link (Better Color) */
+.external-url-badge-related {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  border: none;
+}
+
+.external-url-badge-related:hover {
+  background: linear-gradient(135deg, #0056b3 0%, #007bff 100%);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.5);
+  text-decoration: none;
+}
+
 .category-badge-large {
   display: inline-block;
   padding: 8px 18px;
