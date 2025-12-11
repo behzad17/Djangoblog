@@ -9,6 +9,22 @@ body {
   color: #4a4a4f;
 }
 
+/* Navbar Links - Bold Styling */
+.navbar-nav .nav-link {
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  font-weight: 700;
+  transform: translateY(-1px);
+}
+
+.navbar-nav .nav-link.active {
+  font-weight: 700;
+}
+
 .blue-o {
   color: #006aa7;
 }
