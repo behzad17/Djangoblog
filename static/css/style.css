@@ -331,6 +331,8 @@ body {
     height: 380px;
     max-height: 380px;
     min-height: 380px;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -339,6 +341,8 @@ body {
     height: 340px;
     max-height: 340px;
     min-height: 340px;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
