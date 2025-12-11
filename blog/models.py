@@ -76,6 +76,11 @@ class Post(models.Model):
         default=False,
         help_text="Admins can pin a post to appear in the second slot of each row on the homepage."
     )
+    pinned_row = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Optional: Choose the target row (1-based) on the homepage where this post should appear in the second slot. Leave blank to auto-place."
+    )
 
     class Meta:
         """Meta options for Post model."""

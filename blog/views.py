@@ -47,15 +47,24 @@ class PostList(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         page_size = self.paginate_by
-        page_number = self.request.GET.get('page', 1)
+        page_number = int(self.request.GET.get('page', 1))
+        rows_per_page = page_size // 4  # 6 rows for 24 items
+        row_start = (page_number - 1) * rows_per_page + 1
+        row_end = row_start + rows_per_page - 1
 
-        # Fetch pinned and regular posts with required annotations and relations
-        pinned_posts = list(
-            Post.objects.filter(status=1, pinned=True)
-            .select_related('category', 'author')
-            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
-            .order_by('-created_on')
-        )
+        # Fetch pinned posts and map to target rows (if specified)
+        pinned_qs = Post.objects.filter(status=1, pinned=True).select_related('category', 'author').annotate(
+            comment_count=Count('comments', filter=Q(comments__approved=True))
+        ).order_by('-created_on')
+        pinned_by_row = {}
+        pinned_fallback = []
+        for p in pinned_qs:
+            if p.pinned_row and row_start <= p.pinned_row <= row_end and p.pinned_row not in pinned_by_row:
+                pinned_by_row[p.pinned_row] = p
+            else:
+                pinned_fallback.append(p)
+
+        # Regular posts (exclude pinned)
         regular_posts = list(
             Post.objects.filter(status=1, pinned=False)
             .select_related('category', 'author')
@@ -63,28 +72,41 @@ class PostList(generic.ListView):
             .order_by('-created_on')
         )
 
-        # Compose rows of 4, with pinned posts in column index 1 (second from left)
+        # Compose rows of 4, placing pinned (targeted row) into column 1; if missing, use fallback pinned, else regular
         merged = []
-        p_idx = r_idx = 0
-        total_posts = len(pinned_posts) + len(regular_posts)
-        while p_idx < len(pinned_posts) or r_idx < len(regular_posts):
+        fb_idx = 0
+        r_idx = 0
+        current_row_number = row_start
+        while len(merged) < page_size and (r_idx < len(regular_posts) or fb_idx < len(pinned_fallback) or current_row_number in pinned_by_row):
             row = []
             for col in range(4):
-                if col == 1 and p_idx < len(pinned_posts):
-                    row.append(pinned_posts[p_idx])
-                    p_idx += 1
+                if col == 1:
+                    if current_row_number in pinned_by_row:
+                        row.append(pinned_by_row[current_row_number])
+                    elif fb_idx < len(pinned_fallback):
+                        row.append(pinned_fallback[fb_idx])
+                        fb_idx += 1
+                    else:
+                        if r_idx < len(regular_posts):
+                            row.append(regular_posts[r_idx])
+                            r_idx += 1
+                        else:
+                            break
                 else:
                     if r_idx < len(regular_posts):
                         row.append(regular_posts[r_idx])
                         r_idx += 1
-                    elif p_idx < len(pinned_posts):
-                        row.append(pinned_posts[p_idx])
-                        p_idx += 1
+                    elif fb_idx < len(pinned_fallback):
+                        row.append(pinned_fallback[fb_idx])
+                        fb_idx += 1
                     else:
                         break
             merged.extend(row)
+            current_row_number += 1
+            if current_row_number > row_end:
+                break
 
-        # Paginate merged list
+        # Paginate merged list (already page-sized or smaller)
         paginator = Paginator(merged, page_size)
         page_obj = paginator.get_page(page_number)
 
