@@ -2,30 +2,32 @@
 
 <!-- Hero section -->
 <section
-  class="py-5 bg-dark text-white"
+  class="hero-section bg-dark text-white"
   style="background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%)"
 >
   <div class="container">
-    <div class="row align-items-center g-4">
+    <div class="row align-items-center g-3">
       <div class="col-12 col-lg-7">
-        <h1 class="display-5 fw-bold mb-3">
+        <h1 class="hero-title">
           Share your voice with Sweden|today
         </h1>
-        <p class="lead mb-3">
+        <p class="hero-subtitle">
           Sign up and log in to easily share your experiences, writings, and
           ideas.
         </p>
-        <p class="mb-4">
+        <p class="hero-description">
           Create posts, get comments, and use audience feedback to improve your
           content.
         </p>
         {% if user.is_authenticated %}
-        <a href="{% url 'create_post' %}" class="btn btn-light btn-lg me-2">
-          <i class="fas fa-plus"></i> Create Post
-        </a>
-        <a href="{% url 'favorites' %}" class="btn btn-outline-light btn-lg">
-          <i class="fas fa-star"></i> Favorites
-        </a>
+        <div class="hero-buttons">
+          <a href="{% url 'create_post' %}" class="btn btn-light btn-sm me-2">
+            <i class="fas fa-plus"></i> Create Post
+          </a>
+          <a href="{% url 'favorites' %}" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-star"></i> Favorites
+          </a>
+        </div>
         {% endif %}
       </div>
       <div class="col-12 col-lg-5 text-center d-none d-lg-block">
