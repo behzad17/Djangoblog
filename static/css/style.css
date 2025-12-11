@@ -1020,6 +1020,30 @@ body {
   border-radius: 12px;
 }
 
+/* Footer enhancements */
+.footer-enhanced {
+  border-top: 1px solid #2d3748;
+}
+
+.footer-links a {
+  color: #e9ecef;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: #ffc107;
+}
+
+.footer-social a {
+  color: #e9ecef;
+  font-size: 1.4rem;
+}
+
+.footer-social a:hover {
+  color: #ffc107;
+}
+
 @media (max-width: 991px) {
   .popular-posts-sidebar {
     position: static;

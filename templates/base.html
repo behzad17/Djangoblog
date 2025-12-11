@@ -157,43 +157,51 @@
     </main>
 
     <!-- Footer Section -->
-    <footer class="footer mt-auto py-3 dark-bg">
-      <!-- Copyright Information -->
-      <p class="m-0 text-center text-white">
-        {% block copyright %} Copyright 2025 BJ {% endblock copyright %}
-      </p>
-      <!-- Social Media Links -->
-      <p class="m-0 text-center text-white">
-        Follow us:
-        <a
-          href="https://www.facebook.com/swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-facebook-square ms-3"></i>
-        </a>
-        <a
-          href="https://twitter.com/swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-twitter-square ms-3"></i>
-        </a>
-        <a
-          href="https://www.instagram.com/swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-instagram-square ms-3"></i>
-        </a>
-        <a
-          href="https://www.youtube.com/@swedentoday"
-          target="_blank"
-          class="text-white text-decoration-none"
-        >
-          <i class="fab fa-youtube-square ms-3"></i>
-        </a>
-      </p>
+    <footer class="footer mt-auto py-4 dark-bg footer-enhanced">
+      <div class="container">
+        <div class="row gy-3 align-items-start">
+          <div class="col-md-4">
+            <div class="footer-brand">
+              <span class="brand">
+                <span class="blue-o">Swe</span><span class="yellow-o">den</span
+                ><span class="thin">|today</span>
+              </span>
+            </div>
+            <p class="text-white-50 small mb-0">
+              Community voices, stories, and discussions in one place.
+            </p>
+          </div>
+          <div class="col-md-4">
+            <h6 class="text-white text-uppercase small mb-2">Quick Links</h6>
+            <ul class="list-unstyled footer-links mb-0">
+              <li><a href="{{ home_url }}">Home</a></li>
+              <li><a href="{{ about_url }}">About</a></li>
+              <li><a href="{{ create_post_url }}">Create Post</a></li>
+              <li><a href="{{ favorites_url }}">Favorites</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h6 class="text-white text-uppercase small mb-2">Connect</h6>
+            <div class="d-flex align-items-center gap-3 footer-social">
+              <a href="https://www.facebook.com/swedentoday" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <i class="fab fa-facebook-square"></i>
+              </a>
+              <a href="https://twitter.com/swedentoday" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                <i class="fab fa-twitter-square"></i>
+              </a>
+              <a href="https://www.instagram.com/swedentoday" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <i class="fab fa-instagram-square"></i>
+              </a>
+              <a href="https://www.youtube.com/@swedentoday" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <i class="fab fa-youtube-square"></i>
+              </a>
+            </div>
+            <p class="text-white-50 small mb-0 mt-2">
+              {% block copyright %}© {% now "Y" %} Sweden|today{% endblock copyright %}
+            </p>
+          </div>
+        </div>
+      </div>
     </footer>
 
     <!-- JavaScript Dependencies -->
