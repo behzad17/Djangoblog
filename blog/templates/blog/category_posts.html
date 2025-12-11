@@ -120,7 +120,6 @@
               </div>
               <a href="{% url 'post_detail' post.slug %}" class="post-link">
                 <h2 class="card-title">{{ post.title }}</h2>
-                <p class="card-text">{{ post.excerpt|truncatewords:20 }}</p>
               </a>
 
               {% if post.category %}
@@ -153,6 +152,30 @@
             <a href="{% url 'create_post' %}" class="alert-link">Create the first post!</a>
           </div>
         </div>
+      </div>
+      {% endif %}
+      
+      {% if is_paginated %}
+      <div class="pagination-container">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a href="?page={{ page_obj.previous_page_number }}" class="page-link"
+                ><i class="fas fa-chevron-left"></i> Previous</a
+              >
+            </li>
+            {% endif %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a href="?page={{ page_obj.next_page_number }}" class="page-link"
+                >Next <i class="fas fa-chevron-right"></i></a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
       </div>
       {% endif %}
     </div>

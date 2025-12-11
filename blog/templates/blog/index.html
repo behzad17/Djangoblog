@@ -112,7 +112,7 @@
     <div class="col-lg-9 col-md-12 mt-3 left">
       <div class="row blog-post-row">
         {% for post in post_list %}
-        <div class="col-lg-4 col-md-6 col-sm-12">
+        <div class="col-lg-3 col-md-6 col-sm-12">
           <div class="card post-card mb-4">
             <div class="card-body">
               <div class="image-container">
@@ -135,7 +135,6 @@
               </div>
               <a href="{% url 'post_detail' post.slug %}" class="post-link">
                 <h2 class="card-title">{{ post.title }}</h2>
-                <p class="card-text">{{ post.excerpt|truncatewords:20 }}</p>
               </a>
 
               {% if post.category %}
@@ -154,8 +153,8 @@
           </div>
         </div>
 
-        <!--   divisibleby:3 to divisibleby:4 -->
-        {% if forloop.counter|divisibleby:3 %}
+        <!--   divisibleby:4 for 4 columns per row -->
+        {% if forloop.counter|divisibleby:4 %}
       </div>
       <div class="row blog-post-row">{% endif %} {% endfor %}</div>
     </div>

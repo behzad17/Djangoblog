@@ -9,6 +9,7 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from ratelimit.decorators import ratelimit
 from django.utils.text import slugify
 import json
@@ -26,7 +27,7 @@ class PostList(generic.ListView):
     comments for each post.
     """
     template_name = "blog/index.html"
-    paginate_by = 8
+    paginate_by = 20
 
     def get_queryset(self):
         """
@@ -406,7 +407,7 @@ def category_posts(request, category_slug):
     """
     View function for displaying posts filtered by category.
     
-    This view shows all published posts in a specific category.
+    This view shows all published posts in a specific category with pagination.
     """
     category = get_object_or_404(Category, slug=category_slug)
     posts = Post.objects.filter(
@@ -416,6 +417,11 @@ def category_posts(request, category_slug):
         comment_count=Count('comments', filter=Q(comments__approved=True))
     ).order_by('-created_on')
     
+    # Pagination: 20 posts per page
+    paginator = Paginator(posts, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     # Get all categories for navigation
     categories = Category.objects.all().order_by('name')
     
@@ -424,7 +430,9 @@ def category_posts(request, category_slug):
         'blog/category_posts.html',
         {
             'category': category,
-            'post_list': posts,
+            'post_list': page_obj,
+            'page_obj': page_obj,
             'categories': categories,
+            'is_paginated': page_obj.has_other_pages(),
         }
     )
