@@ -764,6 +764,13 @@ body {
 }
 
 /* Popular Posts Sidebar Styles */
+.sidebar-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: visible !important;
+  min-height: auto;
+}
+
 .popular-posts-sidebar {
   background: #fff;
   border-radius: 12px;
@@ -772,6 +779,7 @@ body {
   position: sticky;
   top: 20px;
   border: 1px solid #e9ecef;
+  margin-bottom: 20px;
 }
 
 .sidebar-title {
@@ -918,20 +926,31 @@ body {
 
 /* Ads Below Popular Posts - Height = Width * 50% */
 .ads-container-bottom {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: 15px;
   margin-top: 20px;
   margin-bottom: 20px;
   width: 100%;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 1;
 }
 
 .ad-placeholder-bottom {
-  width: 100%;
+  width: 100% !important;
   aspect-ratio: 2 / 1; /* width:height = 1:0.5 */
-  min-height: 120px;
+  min-height: 120px !important;
+  height: auto !important;
   margin-bottom: 0;
   flex-shrink: 0;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  background: #f8f9fa !important;
+  border: 2px dashed #dee2e6 !important;
 }
 
 .ad-placeholder-bottom .ad-content {
