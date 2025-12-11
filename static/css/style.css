@@ -593,6 +593,16 @@ body {
   height: auto;
 }
 
+/* Round hero image */
+.hero-image-round {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
 /* Responsive Hero Section */
 @media (max-width: 992px) {
   .hero-section {
@@ -614,8 +624,9 @@ body {
     margin-bottom: 0.75rem;
   }
   
-  .hero-image {
-    max-width: 150px;
+  .hero-image-round {
+    width: 150px;
+    height: 150px;
   }
 }
 
@@ -639,6 +650,11 @@ body {
   .hero-buttons .btn {
     font-size: 0.875rem;
     padding: 0.375rem 0.75rem;
+  }
+  
+  .hero-image-round {
+    width: 120px;
+    height: 120px;
   }
 }
 
