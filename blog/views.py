@@ -41,22 +41,68 @@ class PostList(generic.ListView):
     def get_context_data(self, **kwargs):
         """
         Add categories and popular posts to the context for display in template.
+        Also reorders posts so pinned posts appear in the second slot of each row.
         """
+        # Base context (includes pagination, but we'll recompute with pinned ordering)
         context = super().get_context_data(**kwargs)
+
+        page_size = self.paginate_by
+        page_number = self.request.GET.get('page', 1)
+
+        # Fetch pinned and regular posts with required annotations and relations
+        pinned_posts = list(
+            Post.objects.filter(status=1, pinned=True)
+            .select_related('category', 'author')
+            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
+            .order_by('-created_on')
+        )
+        regular_posts = list(
+            Post.objects.filter(status=1, pinned=False)
+            .select_related('category', 'author')
+            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
+            .order_by('-created_on')
+        )
+
+        # Compose rows of 4, with pinned posts in column index 1 (second from left)
+        merged = []
+        p_idx = r_idx = 0
+        total_posts = len(pinned_posts) + len(regular_posts)
+        while p_idx < len(pinned_posts) or r_idx < len(regular_posts):
+            row = []
+            for col in range(4):
+                if col == 1 and p_idx < len(pinned_posts):
+                    row.append(pinned_posts[p_idx])
+                    p_idx += 1
+                else:
+                    if r_idx < len(regular_posts):
+                        row.append(regular_posts[r_idx])
+                        r_idx += 1
+                    elif p_idx < len(pinned_posts):
+                        row.append(pinned_posts[p_idx])
+                        p_idx += 1
+                    else:
+                        break
+            merged.extend(row)
+
+        # Paginate merged list
+        paginator = Paginator(merged, page_size)
+        page_obj = paginator.get_page(page_number)
+
+        # Replace object_list and pagination context with reordered data
+        context['object_list'] = page_obj.object_list
+        context['post_list'] = page_obj.object_list
+        context['page_obj'] = page_obj
+        context['is_paginated'] = page_obj.has_other_pages()
+
+        # Categories and popular posts
         context['categories'] = Category.objects.all().order_by('name')
-        
-        # Popular posts based on like count
-        context['popular_posts'] = Post.objects.filter(
-            status=1
-        ).annotate(
-            like_count=Count('likes')
-        ).select_related(
-            'category', 'author'
-        ).order_by(
-            '-like_count',
-            '-created_on'
-        )[:10]
-        
+        context['popular_posts'] = (
+            Post.objects.filter(status=1)
+            .annotate(like_count=Count('likes'))
+            .select_related('category', 'author')
+            .order_by('-like_count', '-created_on')[:10]
+        )
+
         return context
 
 

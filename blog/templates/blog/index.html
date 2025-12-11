@@ -136,6 +136,9 @@
               <a href="{% url 'post_detail' post.slug %}" class="post-link">
                 <h2 class="card-title">{{ post.title }}</h2>
               </a>
+              {% if post.pinned %}
+              <div class="pinned-badge">Pinned</div>
+              {% endif %}
 
               {% if post.category %}
               <div class="mb-2">

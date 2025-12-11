@@ -72,6 +72,10 @@ class Post(models.Model):
         default=False,
         help_text="Whether the external URL has been approved by admin to be displayed."
     )
+    pinned = models.BooleanField(
+        default=False,
+        help_text="Admins can pin a post to appear in the second slot of each row on the homepage."
+    )
 
     class Meta:
         """Meta options for Post model."""

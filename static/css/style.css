@@ -981,6 +981,18 @@ body {
   font-size: 0.8rem;
 }
 
+.pinned-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+  color: #333;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 6px;
+}
+
 @media (max-width: 991px) {
   .popular-posts-sidebar {
     position: static;

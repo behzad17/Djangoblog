@@ -18,14 +18,14 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(SummernoteModelAdmin):
 
-    list_display = ('title', 'slug', 'category', 'status', 'url_status', 'created_on')
+    list_display = ('title', 'slug', 'category', 'status', 'pinned', 'url_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
-    list_filter = ('status', 'category', 'url_approved', 'created_on',)
+    list_filter = ('status', 'category', 'pinned', 'url_approved', 'created_on',)
     prepopulated_fields = {'slug': ('title',)}
     summernote_fields = ('content',)
     fieldsets = (
         ('Post Information', {
-            'fields': ('title', 'slug', 'author', 'category', 'status')
+            'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned')
         }),
         ('Content', {
             'fields': ('excerpt', 'content', 'featured_image')
