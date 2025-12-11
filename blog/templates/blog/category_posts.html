@@ -138,11 +138,10 @@
           </div>
         </div>
 
+        <!--   divisibleby:4 for 4 columns per row -->
         {% if forloop.counter|divisibleby:4 %}
       </div>
-      <div class="row blog-post-row">{% endif %} 
-        {% endfor %}
-      </div>
+      <div class="row blog-post-row">{% endif %} {% endfor %}</div>
       {% else %}
       <div class="row">
         <div class="col-12">
