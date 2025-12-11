@@ -922,12 +922,16 @@ body {
   flex-direction: column;
   gap: 15px;
   margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 
 .ad-placeholder-bottom {
   width: 100%;
   aspect-ratio: 2 / 1; /* width:height = 1:0.5 */
   min-height: 120px;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .ad-placeholder-bottom .ad-content {
