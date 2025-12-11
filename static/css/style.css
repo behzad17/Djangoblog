@@ -59,8 +59,9 @@ body {
 }
 
 .post-card {
-  max-height: 380px;
-  min-height: 360px;
+  height: 420px;
+  max-height: 420px;
+  min-height: 420px;
   overflow: hidden;
   height: 100%;
   display: flex;
@@ -327,14 +328,17 @@ body {
 
 @media (max-width: 991px) {
   .post-card {
-    min-height: 340px;
+    height: 380px;
+    max-height: 380px;
+    min-height: 380px;
   }
 }
 
 @media (max-width: 768px) {
   .post-card {
-    min-height: 320px;
-    max-height: none;
+    height: 340px;
+    max-height: 340px;
+    min-height: 340px;
   }
 }
 
