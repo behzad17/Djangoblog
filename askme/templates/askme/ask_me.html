@@ -86,8 +86,14 @@
   {% if user.is_authenticated %}
   <div class="row mt-4">
     <div class="col-12 text-center">
-      <a href="{% url 'my_questions' %}" class="btn btn-outline-secondary">
+      <a href="{% url 'my_questions' %}" class="btn btn-outline-secondary position-relative">
         <i class="fas fa-list me-2"></i>View My Questions
+        {% if answered_count > 0 %}
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+          {{ answered_count }}
+          <span class="visually-hidden">answered questions</span>
+        </span>
+        {% endif %}
       </a>
       {% if user.moderator_profile %}
       <a href="{% url 'moderator_dashboard' %}" class="btn btn-outline-info ms-2">

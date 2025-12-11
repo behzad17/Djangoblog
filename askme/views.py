@@ -19,10 +19,21 @@ def ask_me(request):
     """
     moderators = Moderator.objects.filter(is_active=True).select_related('user')
     
+    # Count answered questions for notification badge (only for authenticated users)
+    answered_count = 0
+    if request.user.is_authenticated:
+        answered_count = Question.objects.filter(
+            user=request.user,
+            answered=True
+        ).count()
+    
     return render(
         request,
         'askme/ask_me.html',
-        {'moderators': moderators}
+        {
+            'moderators': moderators,
+            'answered_count': answered_count
+        }
     )
 
 
