@@ -1046,11 +1046,15 @@ body {
 
 .footer-logos {
   padding-top: 10px;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .footer-logo {
-  width: 60px;
-  height: 40px;
+  width: 90px;
+  height: 60px;
   background: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 6px;
