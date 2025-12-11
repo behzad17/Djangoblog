@@ -49,18 +49,57 @@
           <i class="fas fa-tags me-2"></i>Browse by Category
         </h3>
         <div class="category-buttons-container">
-          {% for category in categories %}
-          <a 
-            href="{% url 'category_posts' category.slug %}" 
-            class="category-btn"
-            title="{{ category.name }}"
-          >
-            <span class="category-btn-text">{{ category.name }}</span>
-            <span class="category-btn-count">({{ category.post_count }})</span>
-          </a>
-          {% empty %}
+          <!-- First Row -->
+          <div class="category-row">
+            {% for category in categories %}
+              {% if category.name == "News & Politics" or category.name == "Economy" or category.name == "Job Market" or category.name == "Immigration & Integration" or category.name == "Education" or category.name == "Laws" %}
+            <a 
+              href="{% url 'category_posts' category.slug %}" 
+              class="category-btn"
+              title="{{ category.name }}"
+            >
+              <span class="category-btn-text">{{ category.name }}</span>
+              <span class="category-btn-count">({{ category.post_count }})</span>
+            </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+          
+          <!-- Second Row -->
+          <div class="category-row">
+            {% for category in categories %}
+              {% if category.name == "Events" or category.name == "Music" or category.name == "Film" or category.name == "Art" or category.name == "History" or category.name == "Sports" %}
+            <a 
+              href="{% url 'category_posts' category.slug %}" 
+              class="category-btn"
+              title="{{ category.name }}"
+            >
+              <span class="category-btn-text">{{ category.name }}</span>
+              <span class="category-btn-count">({{ category.post_count }})</span>
+            </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+          
+          <!-- Third Row -->
+          <div class="category-row">
+            {% for category in categories %}
+              {% if category.name == "Buying & Selling" or category.name == "Services" or category.name == "Health" or category.name == "Swedish Language" %}
+            <a 
+              href="{% url 'category_posts' category.slug %}" 
+              class="category-btn"
+              title="{{ category.name }}"
+            >
+              <span class="category-btn-text">{{ category.name }}</span>
+              <span class="category-btn-count">({{ category.post_count }})</span>
+            </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+          
+          {% if not categories %}
           <p class="text-muted">No categories available yet.</p>
-          {% endfor %}
+          {% endif %}
         </div>
       </div>
     </div>

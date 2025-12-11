@@ -399,25 +399,35 @@ body {
 
 .category-buttons-container {
   display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.category-row {
+  display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .category-btn {
   display: inline-flex;
   align-items: center;
-  padding: 10px 20px;
+  padding: 6px 16px;
   background: linear-gradient(135deg, #188181 0%, #23bbbb 100%);
   color: #fff;
   text-decoration: none;
-  border-radius: 25px;
+  border-radius: 20px;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(24, 129, 129, 0.3);
   border: 2px solid transparent;
+  height: auto;
+  line-height: 1.4;
 }
 
 .category-btn:hover {
@@ -540,12 +550,16 @@ body {
 /* Responsive Category Buttons */
 @media (max-width: 768px) {
   .category-buttons-container {
+    gap: 12px;
+  }
+  
+  .category-row {
     gap: 8px;
   }
   
   .category-btn {
-    padding: 8px 16px;
-    font-size: 13px;
+    padding: 5px 14px;
+    font-size: 12px;
   }
   
   .category-section-title {
@@ -562,14 +576,22 @@ body {
     padding: 15px;
   }
   
+  .category-buttons-container {
+    gap: 10px;
+  }
+  
+  .category-row {
+    gap: 6px;
+  }
+  
   .category-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 4px 12px;
+    font-size: 11px;
   }
   
   .category-btn-count {
-    font-size: 11px;
-    padding: 1px 6px;
+    font-size: 10px;
+    padding: 1px 5px;
   }
   
   .category-page-title {
