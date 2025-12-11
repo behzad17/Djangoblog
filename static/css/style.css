@@ -1859,3 +1859,123 @@ body {
     transform: translateY(-10px);
   }
 }
+
+/* Terms & Conditions Page Styles */
+.terms-card {
+  border-radius: 10px;
+  background: #fff;
+}
+
+.terms-section {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 2rem;
+}
+
+.terms-section:last-of-type {
+  border-bottom: none;
+}
+
+.terms-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid #007bff;
+  display: flex;
+  align-items: center;
+}
+
+.terms-section-title i {
+  font-size: 1.3rem;
+}
+
+.terms-content {
+  color: #555;
+  line-height: 1.8;
+}
+
+.terms-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.terms-list > li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px dotted #dee2e6;
+}
+
+.terms-list > li:last-child {
+  border-bottom: none;
+}
+
+.terms-list > li::before {
+  content: "•";
+  color: #007bff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+}
+
+.terms-sublist {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.terms-sublist li {
+  padding: 0.5rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.terms-sublist li::before {
+  content: "→";
+  color: #6c757d;
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.terms-intro {
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.terms-subtitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.terms-footer {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+/* Responsive Styles for Terms Page */
+@media (max-width: 768px) {
+  .terms-section-title {
+    font-size: 1.25rem;
+  }
+
+  .terms-content {
+    font-size: 0.95rem;
+  }
+
+  .terms-list > li {
+    padding-left: 1.25rem;
+  }
+}

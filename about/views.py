@@ -23,4 +23,9 @@ def about_me(request):
             "collaborate_form": collaborate_form
         },
     )
+
+
+def terms_and_conditions(request):
+    """View for Terms and Conditions page."""
+    return render(request, "about/terms.html")
     

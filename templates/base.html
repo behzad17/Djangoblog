@@ -2,6 +2,7 @@
 {% url 'home' as home_url %} 
 {% url 'about' as about_url %} 
 {% url 'ask_me' as ask_me_url %}
+{% url 'terms' as terms_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
@@ -186,6 +187,7 @@
               <li><a href="{{ about_url }}">About</a></li>
               <li><a href="{{ create_post_url }}">Create Post</a></li>
               <li><a href="{{ favorites_url }}">Favorites</a></li>
+              <li><a href="{{ terms_url }}">Terms & Conditions</a></li>
             </ul>
           </div>
           <div class="col-md-4">
