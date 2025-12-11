@@ -983,14 +983,19 @@ body {
 
 .pinned-badge {
   display: inline-block;
-  padding: 4px 8px;
-  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-  color: #333;
-  border-radius: 12px;
-  font-size: 0.7rem;
+  padding: 4px 6px;
+  background: #ffe6e9;
+  border: 1px solid #f15b6c;
+  color: #f15b6c;
+  border-radius: 10px;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   margin-top: 6px;
+}
+
+.pinned-badge i {
+  color: #e63946;
 }
 
 @media (max-width: 991px) {

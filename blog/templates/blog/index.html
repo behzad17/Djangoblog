@@ -137,11 +137,8 @@
                 <h2 class="card-title">{{ post.title }}</h2>
               </a>
               {% if post.pinned %}
-              <div class="pinned-badge">
-                Pinned
-                {% if post.pinned_row %}
-                  • Row {{ post.pinned_row }}
-                {% endif %}
+              <div class="pinned-badge" title="Pinned{% if post.pinned_row %} • Row {{ post.pinned_row }}{% endif %}">
+                <i class="fas fa-check-circle"></i>
               </div>
               {% endif %}
 
