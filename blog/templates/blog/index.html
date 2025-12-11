@@ -161,6 +161,14 @@
     
     <!-- Popular Posts Sidebar -->
     <div class="col-lg-3 col-md-12 mt-3">
+      <!-- Ad Above Popular Posts -->
+      <div class="ad-placeholder ad-placeholder-top">
+        <div class="ad-content">
+          <i class="fas fa-ad"></i>
+          <p class="ad-text">Your Ads Here!</p>
+        </div>
+      </div>
+      
       <div class="popular-posts-sidebar">
         <h4 class="sidebar-title">
           <i class="fas fa-fire me-2"></i>Popular Posts
@@ -188,6 +196,18 @@
         {% else %}
         <p class="text-muted small">No popular posts yet. Be the first to like a post!</p>
         {% endif %}
+      </div>
+      
+      <!-- Ads Below Popular Posts -->
+      <div class="ads-container-bottom">
+        {% for i in "12345" %}
+        <div class="ad-placeholder ad-placeholder-bottom">
+          <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p class="ad-text">Your Ads Here!</p>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </div>

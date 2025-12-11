@@ -865,6 +865,84 @@ body {
 }
 
 /* Responsive Popular Posts Sidebar */
+/* Ad Placeholder Styles */
+.ad-placeholder {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.ad-placeholder:hover {
+  border-color: #188181;
+  background: #f0f7f7;
+}
+
+.ad-content {
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-content i {
+  font-size: 2rem;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.ad-text {
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Ad Above Popular Posts - Height = Width * 1.5 */
+.ad-placeholder-top {
+  width: 100%;
+  aspect-ratio: 2 / 3; /* width:height = 1:1.5 */
+  min-height: 300px;
+}
+
+/* Ads Below Popular Posts - Height = Width * 50% */
+.ads-container-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.ad-placeholder-bottom {
+  width: 100%;
+  aspect-ratio: 2 / 1; /* width:height = 1:0.5 */
+  min-height: 120px;
+}
+
+.ad-placeholder-bottom .ad-content {
+  padding: 15px;
+}
+
+.ad-placeholder-bottom .ad-content i {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.ad-placeholder-bottom .ad-text {
+  font-size: 0.8rem;
+}
+
 @media (max-width: 991px) {
   .popular-posts-sidebar {
     position: static;
@@ -874,6 +952,14 @@ body {
   
   .sidebar-title {
     font-size: 1.1rem;
+  }
+  
+  .ad-placeholder-top {
+    margin-bottom: 20px;
+  }
+  
+  .ads-container-bottom {
+    margin-top: 20px;
   }
 }
 
