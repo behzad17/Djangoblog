@@ -822,7 +822,7 @@ body {
 
 .category-btn:hover {
   background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  color: #000;
   transform: translateY(-3px);
   /* Stronger shadow on hover */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), 
@@ -850,6 +850,7 @@ body {
 
 .category-row:nth-child(2) .category-btn:hover {
   background: rgba(139, 92, 246, 0.25);
+  color: #000;
   box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3), 
               0 4px 8px rgba(0, 0, 0, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -869,6 +870,7 @@ body {
 
 .category-row:nth-child(3) .category-btn:hover {
   background: rgba(232, 62, 140, 0.25);
+  color: #000;
   box-shadow: 0 8px 20px rgba(253, 126, 20, 0.3), 
               0 4px 8px rgba(0, 0, 0, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -889,7 +891,7 @@ body {
 
 .category-btn.active:hover {
   background: rgba(255, 152, 0, 0.35);
-  color: #fff;
+  color: #000;
   box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4), 
               0 4px 8px rgba(0, 0, 0, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.4);
