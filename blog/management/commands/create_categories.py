@@ -23,6 +23,7 @@ class Command(BaseCommand):
             "Art",
             "History",
             "Sports",
+            "Photo",
             "Buying & Selling",
             "Services",
             "Health",

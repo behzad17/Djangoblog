@@ -81,7 +81,7 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for category in categories %}
-              {% if category.name == "Events" or category.name == "Music" or category.name == "Film" or category.name == "Art" or category.name == "History" or category.name == "Sports" %}
+              {% if category.name == "Events" or category.name == "Music" or category.name == "Film" or category.name == "Art" or category.name == "History" or category.name == "Sports" or category.name == "Photo" %}
             <a 
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
@@ -97,6 +97,7 @@
                 {% elif category.name == "Film" %}<i class="bi bi-film"></i>
                 {% elif category.name == "History" %}<i class="bi bi-clock-history"></i>
                 {% elif category.name == "Music" %}<i class="bi bi-music-note-beamed"></i>
+                {% elif category.name == "Photo" %}<i class="bi bi-camera"></i>
                 {% elif category.name == "Sports" %}<i class="bi bi-trophy"></i>
                 {% endif %}
               </span>
