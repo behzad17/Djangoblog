@@ -50,6 +50,15 @@
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
+              <span class="cat-icon">
+                {% if cat.name == "Economy" %}<i class="bi bi-cash-coin"></i>
+                {% elif cat.name == "Education" %}<i class="bi bi-book"></i>
+                {% elif cat.name == "Immigration & Integration" %}<i class="bi bi-globe"></i>
+                {% elif cat.name == "Job Market" %}<i class="bi bi-briefcase"></i>
+                {% elif cat.name == "Laws" %}<i class="bi bi-bank"></i>
+                {% elif cat.name == "News & Politics" %}<i class="bi bi-newspaper"></i>
+                {% endif %}
+              </span>
             </a>
               {% endif %}
             {% endfor %}
@@ -68,6 +77,15 @@
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
+              <span class="cat-icon">
+                {% if cat.name == "Art" %}<i class="bi bi-palette"></i>
+                {% elif cat.name == "Events" %}<i class="bi bi-calendar-event"></i>
+                {% elif cat.name == "Film" %}<i class="bi bi-film"></i>
+                {% elif cat.name == "History" %}<i class="bi bi-clock-history"></i>
+                {% elif cat.name == "Music" %}<i class="bi bi-music-note-beamed"></i>
+                {% elif cat.name == "Sports" %}<i class="bi bi-trophy"></i>
+                {% endif %}
+              </span>
             </a>
               {% endif %}
             {% endfor %}
@@ -86,6 +104,13 @@
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
+              <span class="cat-icon">
+                {% if cat.name == "Buying & Selling" %}<i class="bi bi-cart"></i>
+                {% elif cat.name == "Health" %}<i class="bi bi-heart-pulse"></i>
+                {% elif cat.name == "Services" %}<i class="bi bi-tools"></i>
+                {% elif cat.name == "Swedish Language" %}<i class="bi bi-translate"></i>
+                {% endif %}
+              </span>
             </a>
               {% endif %}
             {% endfor %}

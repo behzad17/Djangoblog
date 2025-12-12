@@ -889,6 +889,7 @@ body {
 .category-btn {
   display: inline-flex;
   align-items: center;
+  gap: 8px; /* Space between text/count and icon */
   padding: 12px 20px;
   /* Glass-morphism effect - increased opacity for better visibility */
   background: rgba(255, 255, 255, 0.55);
@@ -1064,6 +1065,28 @@ body {
   border-color: rgba(255, 255, 255, 0.6);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1),
               0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* Category icon styling - positioned on the right side */
+.cat-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+  position: relative;
+  z-index: 1;
+  margin-left: 4px; /* Small additional spacing after count */
+}
+
+.cat-icon i {
+  font-size: 14px; /* Small icon size (14-16px range) */
+  opacity: 0.8; /* Subtle opacity (0.75-0.85 range) */
+  color: inherit; /* Inherit text color from parent */
+  transition: opacity 0.3s ease;
+}
+
+/* Slightly increase opacity on hover for better visibility */
+.category-btn:hover .cat-icon i {
+  opacity: 0.95;
 }
 
 /* Category Badge (on post cards) */
