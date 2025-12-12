@@ -349,8 +349,13 @@ function initAdBanner() {
   
   console.log('[Ad Banner] Element found:', adBanner);
   
+  // IMPORTANT: Start by ensuring banner is visible (defensive approach)
+  // Remove is-hidden class first to prevent any race conditions
+  adBanner.classList.remove('is-hidden');
+  
   // Check if banner was previously dismissed
   // Storage key: 'adBannerDismissed'
+  // Only add is-hidden if explicitly dismissed (strict check)
   try {
     const dismissedValue = localStorage.getItem('adBannerDismissed');
     
@@ -359,19 +364,22 @@ function initAdBanner() {
       key: 'adBannerDismissed',
       value: dismissedValue,
       type: typeof dismissedValue,
-      isTruthy: !!dismissedValue
+      isTruthy: !!dismissedValue,
+      isStrictlyTrue: dismissedValue === 'true'
     });
     
-    // Check for various truthy values (string 'true', boolean true, '1', etc.)
-    if (dismissedValue === 'true' || dismissedValue === true || dismissedValue === '1') {
-      // Banner already dismissed, hide it using is-hidden class
+    // STRICT CHECK: Only hide if value is exactly the string 'true'
+    // This prevents hiding on null, undefined, empty string, or any other value
+    if (dismissedValue === 'true') {
+      // Banner was explicitly dismissed, hide it using is-hidden class
       adBanner.classList.add('is-hidden');
       console.log('[Ad Banner] Previously dismissed, hiding banner');
-      return;
+      // Still set up close button handler in case user wants to re-show (for testing)
     } else {
-      // Banner not dismissed, ensure it's visible (remove is-hidden if present)
+      // Banner NOT dismissed - ensure it's visible
+      // (is-hidden already removed above, but be explicit)
       adBanner.classList.remove('is-hidden');
-      console.log('[Ad Banner] Banner not dismissed, showing banner');
+      console.log('[Ad Banner] Banner not dismissed, showing banner (value:', dismissedValue, ')');
     }
   } catch (e) {
     // localStorage not available (e.g., private browsing), show banner
