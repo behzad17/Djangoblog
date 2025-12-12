@@ -334,14 +334,19 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ad Banner Dismissal Functionality
-document.addEventListener('DOMContentLoaded', function() {
+// Function to initialize banner
+function initAdBanner() {
   const adBanner = document.getElementById('adBanner');
   const closeButton = document.getElementById('closeBanner');
   
   if (!adBanner) {
-    console.log('[Ad Banner] Element not found');
-    return; // Banner element not found
+    console.log('[Ad Banner] Element not found, retrying...');
+    // Retry after a short delay in case DOM isn't ready
+    setTimeout(initAdBanner, 100);
+    return;
   }
+  
+  console.log('[Ad Banner] Element found:', adBanner);
   
   // Check if banner was previously dismissed
   // More robust check for various localStorage value formats
@@ -368,16 +373,20 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Show the banner if it wasn't dismissed
-  // Use CSS class instead of inline styles for better control
-  adBanner.classList.add('show');
-  
-  // Also set inline style as fallback to ensure visibility
+  // Set inline style FIRST to ensure immediate visibility
   adBanner.style.display = 'flex';
+  adBanner.style.visibility = 'visible';
+  adBanner.style.opacity = '1';
+  
+  // Then add CSS class for styling
+  adBanner.classList.add('show');
   
   console.log('[Ad Banner] Showing banner (not dismissed)');
   console.log('[Ad Banner] Banner classes:', adBanner.className);
   console.log('[Ad Banner] Banner display style:', adBanner.style.display);
   console.log('[Ad Banner] Banner computed display:', window.getComputedStyle(adBanner).display);
+  console.log('[Ad Banner] Banner visibility:', window.getComputedStyle(adBanner).visibility);
+  console.log('[Ad Banner] Banner opacity:', window.getComputedStyle(adBanner).opacity);
   
   // Handle close button click
   if (closeButton) {
@@ -424,4 +433,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-});
+}
+
+// Run on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', initAdBanner);
+
+// Also try immediately in case DOM is already ready
+if (document.readyState === 'loading') {
+  // DOM is still loading, wait for DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', initAdBanner);
+} else {
+  // DOM is already ready, run immediately
+  initAdBanner();
+}

@@ -2225,6 +2225,8 @@ body {
   position: relative;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  visibility: visible; /* Ensure visibility when shown */
+  opacity: 1; /* Ensure opacity when shown */
 }
 
 .ad-banner.show {
