@@ -3250,7 +3250,7 @@ body {
 .photo-hero-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Changed from cover to preserve full image, no cropping */
   object-position: center;
   display: block;
 }
