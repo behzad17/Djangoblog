@@ -1372,8 +1372,8 @@ body {
 }
 
 .footer-logo-img {
-  width: 180px;
-  height: 120px;
+  width: 126px; /* 30% smaller than 180px (180 * 0.7 = 126) */
+  height: 84px; /* 30% smaller than 120px (120 * 0.7 = 84) */
   object-fit: contain;
   background: transparent;
   border: none;
