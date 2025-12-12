@@ -64,15 +64,31 @@ body {
 }
 
 .card {
-  border: 3px solid #188181;
+  /* Neutral border instead of teal - customize border color here */
+  border: 1px solid #E5E7EB;
   background-color: #fff;
   border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(24, 129, 129, 0.2);
+  /* Neutral shadow - customize shadow strength here */
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
   transition: all 0.4s ease-in-out;
   margin-top: 30px;
   margin-bottom: 50px;
   overflow: hidden;
   padding: 15px;
+  position: relative;
+}
+
+/* Optional accent bar at top of card - teal accent for brand identity */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #0F766E; /* teal-700 - customize accent teal color here */
+  border-radius: 15px 15px 0 0;
+  z-index: 1;
 }
 
 .post-card {
@@ -87,10 +103,13 @@ body {
 
 .card:hover {
   transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 15px 30px rgba(24, 129, 129, 0.3);
-  border-color: #23bbbb;
+  /* Neutral hover shadow - customize hover shadow strength here */
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  border-color: #D1D5DB; /* Slightly darker gray on hover */
   background-color: #f8f9fa;
 }
+
+/* Customize hover styling here - adjust transform, shadow, border-color */
 
 .post-content-box {
   max-width: 80%;
@@ -138,10 +157,17 @@ body {
 }
 
 .post-author-inline {
-  font-weight: 600;
-  color: #188181;
+  font-weight: 500;
+  /* Neutral slate/gray color - customize author text color here */
+  color: #475569; /* slate-600 */
   margin: 4px 0 6px 0;
   font-size: 0.9rem;
+}
+
+/* Emphasize author name only (optional enhancement) */
+.post-author-inline strong {
+  font-weight: 600;
+  color: #334155; /* slate-700 for slightly darker emphasis */
 }
 
 .masthead {
@@ -982,21 +1008,23 @@ body {
 .category-badge {
   display: inline-block;
   padding: 4px 12px;
-  background: linear-gradient(135deg, #188181 0%, #23bbbb 100%);
+  /* Deeper, more elegant teal - customize accent teal colors here */
+  background: #0F766E; /* teal-700 */
   color: #fff;
   text-decoration: none;
   border-radius: 15px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600; /* Increased for better readability */
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(24, 129, 129, 0.3);
+  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.25);
 }
 
 .category-badge:hover {
-  background: linear-gradient(135deg, #23bbbb 0%, #188181 100%);
+  /* Darker teal on hover - customize hover teal color here */
+  background: #115E59; /* teal-800 */
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(24, 129, 129, 0.4);
+  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.35);
   text-decoration: none;
 }
 
