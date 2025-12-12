@@ -92,11 +92,11 @@ body {
 }
 
 .post-card {
+  /* Fixed height to prevent size adjustments */
   height: 420px;
   max-height: 420px;
   min-height: 420px;
   overflow: hidden;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -552,33 +552,95 @@ body {
   display: flex;
   flex-direction: column;
   padding: 12px;
+  overflow: hidden; /* Prevent content overflow */
 }
 
 .post-card .card-body {
   padding: 12px;
+  overflow: hidden; /* Prevent content overflow */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure title doesn't overflow and date/time stays visible */
+.post-card .card-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  /* Limit title to 3 lines max */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .blog-post-row > div .card .card-text:last-of-type {
   margin-top: auto; /* Pushes the date/comment info to the bottom */
+  flex-shrink: 0; /* Prevent date/time from being cut off */
+  padding-top: 0.5rem;
 }
 
 @media (max-width: 991px) {
   .post-card {
-    height: 380px;
-    max-height: 380px;
-    min-height: 380px;
+    height: 400px;
+    max-height: 400px;
+    min-height: 400px;
     width: 100%;
     max-width: 100%;
   }
 }
 
 @media (max-width: 768px) {
+  /* Reduced card margins for better mobile spacing */
+  .card {
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+  
   .post-card {
-    height: 340px;
-    max-height: 340px;
-    min-height: 340px;
+    height: 380px; /* Increased from 340px to accommodate content */
+    max-height: 380px;
+    min-height: 380px;
     width: 100%;
     max-width: 100%;
+  }
+  
+  /* Ensure date/time is always visible on mobile */
+  .post-card .card-text:last-of-type {
+    font-size: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Further reduce spacing on small mobile devices */
+  .card {
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .post-card {
+    height: 360px; /* Slightly smaller for very small screens */
+    max-height: 360px;
+    min-height: 360px;
+  }
+  
+  .post-card .card-body {
+    padding: 10px;
+  }
+  
+  .post-card .card-title {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2; /* Limit to 2 lines on very small screens */
+  }
+  
+  .post-card .card-text:last-of-type {
+    font-size: 0.7rem;
   }
 }
 
