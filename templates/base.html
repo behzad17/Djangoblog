@@ -42,7 +42,7 @@
     />
 
     <!-- Custom CSS - Site-specific styles -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ 'now'|date:'U' }}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}" />
   </head>
 
   <body class="d-flex flex-column h-100 main-bg">
@@ -276,7 +276,7 @@
       crossorigin="anonymous"
     ></script>
     <!-- Custom JavaScript -->
-    <script src="{% static 'js/script.js' %}?v={{ 'now'|date:'U' }}"></script>
+    <script src="{% static 'js/script.js' %}?v={% now 'U' %}"></script>
     <!-- Additional JavaScript Block - For child templates -->
     {% block extras %} {% endblock %}
   </body>
