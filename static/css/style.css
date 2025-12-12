@@ -2228,7 +2228,7 @@ body {
 }
 
 .ad-banner.show {
-  display: flex; /* Show when .show class is added */
+  display: flex !important; /* Show when .show class is added */
 }
 
 .ad-banner-content {

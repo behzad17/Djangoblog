@@ -370,7 +370,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Show the banner if it wasn't dismissed
   // Use CSS class instead of inline styles for better control
   adBanner.classList.add('show');
+  
+  // Also set inline style as fallback to ensure visibility
+  adBanner.style.display = 'flex';
+  
   console.log('[Ad Banner] Showing banner (not dismissed)');
+  console.log('[Ad Banner] Banner classes:', adBanner.className);
+  console.log('[Ad Banner] Banner display style:', adBanner.style.display);
+  console.log('[Ad Banner] Banner computed display:', window.getComputedStyle(adBanner).display);
   
   // Handle close button click
   if (closeButton) {
