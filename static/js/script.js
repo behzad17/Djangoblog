@@ -334,6 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ad Banner Dismissal Functionality
+// Storage key: 'adBannerDismissed' (value: 'true' when dismissed)
 // Function to initialize banner
 function initAdBanner() {
   const adBanner = document.getElementById('adBanner');
@@ -349,7 +350,7 @@ function initAdBanner() {
   console.log('[Ad Banner] Element found:', adBanner);
   
   // Check if banner was previously dismissed
-  // More robust check for various localStorage value formats
+  // Storage key: 'adBannerDismissed'
   try {
     const dismissedValue = localStorage.getItem('adBannerDismissed');
     
@@ -363,30 +364,20 @@ function initAdBanner() {
     
     // Check for various truthy values (string 'true', boolean true, '1', etc.)
     if (dismissedValue === 'true' || dismissedValue === true || dismissedValue === '1') {
-      // Banner already dismissed, keep it hidden
-      console.log('[Ad Banner] Previously dismissed, keeping hidden');
+      // Banner already dismissed, hide it using is-hidden class
+      adBanner.classList.add('is-hidden');
+      console.log('[Ad Banner] Previously dismissed, hiding banner');
       return;
+    } else {
+      // Banner not dismissed, ensure it's visible (remove is-hidden if present)
+      adBanner.classList.remove('is-hidden');
+      console.log('[Ad Banner] Banner not dismissed, showing banner');
     }
   } catch (e) {
-    // localStorage not available (e.g., private browsing), continue to show banner
+    // localStorage not available (e.g., private browsing), show banner
+    adBanner.classList.remove('is-hidden');
     console.log('[Ad Banner] localStorage not available, showing banner:', e);
   }
-  
-  // Show the banner if it wasn't dismissed
-  // Set inline style FIRST to ensure immediate visibility
-  adBanner.style.display = 'flex';
-  adBanner.style.visibility = 'visible';
-  adBanner.style.opacity = '1';
-  
-  // Then add CSS class for styling
-  adBanner.classList.add('show');
-  
-  console.log('[Ad Banner] Showing banner (not dismissed)');
-  console.log('[Ad Banner] Banner classes:', adBanner.className);
-  console.log('[Ad Banner] Banner display style:', adBanner.style.display);
-  console.log('[Ad Banner] Banner computed display:', window.getComputedStyle(adBanner).display);
-  console.log('[Ad Banner] Banner visibility:', window.getComputedStyle(adBanner).visibility);
-  console.log('[Ad Banner] Banner opacity:', window.getComputedStyle(adBanner).opacity);
   
   // Handle close button click
   if (closeButton) {
@@ -394,9 +385,10 @@ function initAdBanner() {
       console.log('[Ad Banner] Close button clicked');
       
       try {
-        // Save dismissal state
+        // Save dismissal state to localStorage
+        // Storage key: 'adBannerDismissed', value: 'true'
         localStorage.setItem('adBannerDismissed', 'true');
-        console.log('[Ad Banner] Dismissal state saved to localStorage');
+        console.log('[Ad Banner] Dismissal state saved to localStorage (key: adBannerDismissed)');
       } catch (e) {
         // localStorage not available, but still hide banner for this session
         console.log('[Ad Banner] localStorage not available, hiding for session only:', e);
@@ -404,9 +396,6 @@ function initAdBanner() {
       
       // Hide banner with smooth animation
       if (adBanner) {
-        // Remove show class to trigger CSS hide
-        adBanner.classList.remove('show');
-        
         // Add smooth transition
         adBanner.style.transition = 'opacity 0.3s ease, height 0.3s ease';
         adBanner.style.opacity = '0';
@@ -415,11 +404,11 @@ function initAdBanner() {
         
         console.log('[Ad Banner] Hiding banner with animation');
         
-        // Remove from DOM after animation
+        // Add is-hidden class after animation completes
         setTimeout(function() {
-          if (adBanner && adBanner.parentNode) {
-            adBanner.remove();
-            console.log('[Ad Banner] Removed from DOM');
+          if (adBanner) {
+            adBanner.classList.add('is-hidden');
+            console.log('[Ad Banner] Added is-hidden class');
           }
         }, 300);
       }

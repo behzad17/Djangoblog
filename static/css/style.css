@@ -2554,18 +2554,20 @@ body {
   height: 100px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
   color: white;
-  display: none; /* Hidden by default, shown via JavaScript */
+  /* Visible by default - banner shows on first visit */
+  display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  visibility: visible; /* Ensure visibility when shown */
-  opacity: 1; /* Ensure opacity when shown */
+  visibility: visible;
+  opacity: 1;
 }
 
-.ad-banner.show {
-  display: flex !important; /* Show when .show class is added */
+/* Hidden modifier class - applied when banner is dismissed */
+.ad-banner.is-hidden {
+  display: none;
 }
 
 .ad-banner-content {
