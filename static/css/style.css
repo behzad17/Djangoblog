@@ -2219,12 +2219,16 @@ body {
   height: 100px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
   color: white;
-  display: flex;
+  display: none; /* Hidden by default, shown via JavaScript */
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ad-banner.show {
+  display: flex; /* Show when .show class is added */
 }
 
 .ad-banner-content {

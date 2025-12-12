@@ -339,53 +339,71 @@ document.addEventListener('DOMContentLoaded', function() {
   const closeButton = document.getElementById('closeBanner');
   
   if (!adBanner) {
-    console.log('Ad banner element not found');
+    console.log('[Ad Banner] Element not found');
     return; // Banner element not found
   }
   
   // Check if banner was previously dismissed
+  // More robust check for various localStorage value formats
   try {
-    const isDismissed = localStorage.getItem('adBannerDismissed');
-    if (isDismissed === 'true') {
-      // Banner already dismissed, hide it
-      adBanner.style.display = 'none';
-      console.log('Banner was previously dismissed, hiding it');
+    const dismissedValue = localStorage.getItem('adBannerDismissed');
+    
+    // Debug logging
+    console.log('[Ad Banner] localStorage check:', {
+      key: 'adBannerDismissed',
+      value: dismissedValue,
+      type: typeof dismissedValue,
+      isTruthy: !!dismissedValue
+    });
+    
+    // Check for various truthy values (string 'true', boolean true, '1', etc.)
+    if (dismissedValue === 'true' || dismissedValue === true || dismissedValue === '1') {
+      // Banner already dismissed, keep it hidden
+      console.log('[Ad Banner] Previously dismissed, keeping hidden');
       return;
     }
   } catch (e) {
     // localStorage not available (e.g., private browsing), continue to show banner
-    console.log('localStorage not available, showing banner');
+    console.log('[Ad Banner] localStorage not available, showing banner:', e);
   }
   
   // Show the banner if it wasn't dismissed
-  // Ensure it's visible with flex display
-  adBanner.style.display = 'flex';
-  adBanner.style.visibility = 'visible';
-  adBanner.style.opacity = '1';
-  console.log('Showing ad banner');
+  // Use CSS class instead of inline styles for better control
+  adBanner.classList.add('show');
+  console.log('[Ad Banner] Showing banner (not dismissed)');
   
   // Handle close button click
   if (closeButton) {
     closeButton.addEventListener('click', function() {
+      console.log('[Ad Banner] Close button clicked');
+      
       try {
         // Save dismissal state
         localStorage.setItem('adBannerDismissed', 'true');
+        console.log('[Ad Banner] Dismissal state saved to localStorage');
       } catch (e) {
         // localStorage not available, but still hide banner for this session
-        console.log('localStorage not available, hiding banner for this session only');
+        console.log('[Ad Banner] localStorage not available, hiding for session only:', e);
       }
       
       // Hide banner with smooth animation
       if (adBanner) {
+        // Remove show class to trigger CSS hide
+        adBanner.classList.remove('show');
+        
+        // Add smooth transition
         adBanner.style.transition = 'opacity 0.3s ease, height 0.3s ease';
         adBanner.style.opacity = '0';
         adBanner.style.height = '0';
         adBanner.style.overflow = 'hidden';
         
+        console.log('[Ad Banner] Hiding banner with animation');
+        
         // Remove from DOM after animation
         setTimeout(function() {
           if (adBanner && adBanner.parentNode) {
             adBanner.remove();
+            console.log('[Ad Banner] Removed from DOM');
           }
         }, 300);
       }
