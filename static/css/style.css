@@ -2569,10 +2569,12 @@ body {
    Splash Cursor Effect for Hero Section
    ============================================
    
-   Creates expanding ripple/splash particles when cursor moves over hero section.
+   Creates expanding ripple/splash particles with rainbow gradient when cursor moves over hero section.
    
    CUSTOMIZATION GUIDE:
-   - SPLASH_COLOR: Change --splash-color in JavaScript (default: rgba(255, 255, 255, 0.6))
+   - RAINBOW COLORS: Modify the radial-gradient color stops in .splash-particle (see below)
+   - ROTATION ANIMATION: Remove "rainbow-rotate 3s linear infinite" to disable rotation
+   - ROTATION SPEED: Change "3s" in animation (lower = faster, higher = slower)
    - SPLASH_SIZE: Change SPLASH_SIZE in JavaScript (default: 20px)
    - SPLASH_COUNT: Change SPLASH_COUNT in JavaScript (default: 8 particles)
    - SPLASH_DURATION: Change SPLASH_DURATION in JavaScript (default: 800ms)
@@ -2595,12 +2597,31 @@ body {
 .splash-particle {
   position: absolute;
   border-radius: 50%;
-  background: var(--splash-color, rgba(255, 255, 255, 0.6));
+  /* Rainbow gradient - radial gradient with full spectrum colors */
+  /* CUSTOMIZE COLORS: Change the color stops below to modify the rainbow */
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 0, 0, 0.8) 0%,      /* Red */
+    rgba(255, 127, 0, 0.7) 16.66%, /* Orange */
+    rgba(255, 255, 0, 0.7) 33.33%, /* Yellow */
+    rgba(0, 255, 0, 0.7) 50%,      /* Green */
+    rgba(0, 0, 255, 0.7) 66.66%,   /* Blue */
+    rgba(75, 0, 130, 0.7) 83.33%,  /* Indigo */
+    rgba(148, 0, 211, 0.8) 100%    /* Violet */
+  );
+  /* Alternative: Conic gradient for rotating rainbow effect */
+  /* Uncomment the line below and comment out the radial-gradient above to use conic gradient */
+  /* background: conic-gradient(from 0deg, red, orange, yellow, green, blue, indigo, violet, red); */
   pointer-events: none;
-  will-change: transform, opacity; /* Optimize for animation */
+  will-change: transform, opacity, background; /* Optimize for animation */
   transform: translate(-50%, -50%) scale(0);
   opacity: 0.8;
-  animation: splash-animate var(--splash-duration, 800ms) ease-out forwards;
+  /* Main splash animation - particle expands and moves */
+  /* Rainbow rotation animation - slowly rotates the gradient */
+  /* TO DISABLE ROTATION: Remove "rainbow-rotate 3s linear infinite" from the animation below */
+  /* TO CHANGE ROTATION SPEED: Modify "3s" (lower = faster, higher = slower) */
+  animation: splash-animate var(--splash-duration, 800ms) ease-out forwards,
+             rainbow-rotate 3s linear infinite;
 }
 
 /* Splash animation - particles expand and fade out */
@@ -2615,6 +2636,96 @@ body {
   100% {
     transform: translate(calc(-50% + var(--end-x, 0px)), calc(-50% + var(--end-y, 0px))) scale(1.5);
     opacity: 0;
+  }
+}
+
+/* Rainbow rotation animation - rotates the gradient for dynamic effect */
+/* CUSTOMIZE SPEED: Change 3s to adjust rotation speed (lower = faster, higher = slower) */
+/* TO DISABLE: Remove this @keyframes rule and the rainbow-rotate animation from .splash-particle */
+@keyframes rainbow-rotate {
+  0% {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 0, 0, 0.8) 0%,      /* Red */
+      rgba(255, 127, 0, 0.7) 16.66%, /* Orange */
+      rgba(255, 255, 0, 0.7) 33.33%, /* Yellow */
+      rgba(0, 255, 0, 0.7) 50%,      /* Green */
+      rgba(0, 0, 255, 0.7) 66.66%,   /* Blue */
+      rgba(75, 0, 130, 0.7) 83.33%,  /* Indigo */
+      rgba(148, 0, 211, 0.8) 100%    /* Violet */
+    );
+  }
+  16.66% {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 127, 0, 0.8) 0%,    /* Orange */
+      rgba(255, 255, 0, 0.7) 16.66%, /* Yellow */
+      rgba(0, 255, 0, 0.7) 33.33%,  /* Green */
+      rgba(0, 0, 255, 0.7) 50%,      /* Blue */
+      rgba(75, 0, 130, 0.7) 66.66%,  /* Indigo */
+      rgba(148, 0, 211, 0.7) 83.33%, /* Violet */
+      rgba(255, 0, 0, 0.8) 100%      /* Red */
+    );
+  }
+  33.33% {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 0, 0.8) 0%,     /* Yellow */
+      rgba(0, 255, 0, 0.7) 16.66%,   /* Green */
+      rgba(0, 0, 255, 0.7) 33.33%,   /* Blue */
+      rgba(75, 0, 130, 0.7) 50%,      /* Indigo */
+      rgba(148, 0, 211, 0.7) 66.66%,  /* Violet */
+      rgba(255, 0, 0, 0.7) 83.33%,    /* Red */
+      rgba(255, 127, 0, 0.8) 100%    /* Orange */
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 255, 0, 0.8) 0%,       /* Green */
+      rgba(0, 0, 255, 0.7) 16.66%,   /* Blue */
+      rgba(75, 0, 130, 0.7) 33.33%,  /* Indigo */
+      rgba(148, 0, 211, 0.7) 50%,     /* Violet */
+      rgba(255, 0, 0, 0.7) 66.66%,   /* Red */
+      rgba(255, 127, 0, 0.7) 83.33%, /* Orange */
+      rgba(255, 255, 0, 0.8) 100%    /* Yellow */
+    );
+  }
+  66.66% {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 255, 0.8) 0%,       /* Blue */
+      rgba(75, 0, 130, 0.7) 16.66%,   /* Indigo */
+      rgba(148, 0, 211, 0.7) 33.33%, /* Violet */
+      rgba(255, 0, 0, 0.7) 50%,       /* Red */
+      rgba(255, 127, 0, 0.7) 66.66%, /* Orange */
+      rgba(255, 255, 0, 0.7) 83.33%, /* Yellow */
+      rgba(0, 255, 0, 0.8) 100%     /* Green */
+    );
+  }
+  83.33% {
+    background: radial-gradient(
+      circle at center,
+      rgba(75, 0, 130, 0.8) 0%,      /* Indigo */
+      rgba(148, 0, 211, 0.7) 16.66%, /* Violet */
+      rgba(255, 0, 0, 0.7) 33.33%,   /* Red */
+      rgba(255, 127, 0, 0.7) 50%,     /* Orange */
+      rgba(255, 255, 0, 0.7) 66.66%, /* Yellow */
+      rgba(0, 255, 0, 0.7) 83.33%,   /* Green */
+      rgba(0, 0, 255, 0.8) 100%     /* Blue */
+    );
+  }
+  100% {
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 0, 0, 0.8) 0%,      /* Red */
+      rgba(255, 127, 0, 0.7) 16.66%, /* Orange */
+      rgba(255, 255, 0, 0.7) 33.33%, /* Yellow */
+      rgba(0, 255, 0, 0.7) 50%,      /* Green */
+      rgba(0, 0, 255, 0.7) 66.66%,   /* Blue */
+      rgba(75, 0, 130, 0.7) 83.33%,  /* Indigo */
+      rgba(148, 0, 211, 0.8) 100%    /* Violet */
+    );
   }
 }
 

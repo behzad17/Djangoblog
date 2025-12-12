@@ -1,11 +1,12 @@
 /**
  * Splash Cursor Effect for Hero Section
  * 
- * Creates expanding ripple/splash particles when the cursor moves over the hero section.
+ * Creates expanding ripple/splash particles with rainbow gradient when the cursor moves over the hero section.
  * Lightweight, performant, and mobile-friendly implementation.
  * 
  * CUSTOMIZATION:
- * - SPLASH_COLOR: Change the color of splash particles (default: rgba(255, 255, 255, 0.6))
+ * - RAINBOW COLORS: Modify the radial-gradient in style.css (.splash-particle)
+ * - ROTATION: Enable/disable in style.css (see .splash-particle animation property)
  * - SPLASH_SIZE: Base size of splash particles in pixels (default: 20)
  * - SPLASH_COUNT: Number of particles per splash (default: 8)
  * - SPLASH_DURATION: Animation duration in milliseconds (default: 800)
@@ -17,7 +18,8 @@
 
   // Configuration - Easy to customize
   const CONFIG = {
-    SPLASH_COLOR: 'rgba(255, 255, 255, 0.6)',  // White with transparency
+    // NOTE: SPLASH_COLOR is now handled by CSS rainbow gradient
+    // The gradient is defined in style.css - see .splash-particle for customization
     SPLASH_SIZE: 20,                             // Base size in pixels
     SPLASH_COUNT: 8,                              // Number of particles per splash
     SPLASH_DURATION: 800,                         // Animation duration in ms
@@ -138,10 +140,10 @@
       const endY = relativeY + Math.sin(angle) * distance;
       
       // Set CSS custom properties for animation
+      // Note: Color is now handled by CSS rainbow gradient, no need to set --splash-color
       particle.style.setProperty('--end-x', endX + 'px');
       particle.style.setProperty('--end-y', endY + 'px');
       particle.style.setProperty('--splash-duration', CONFIG.SPLASH_DURATION + 'ms');
-      particle.style.setProperty('--splash-color', CONFIG.SPLASH_COLOR);
       
       container.appendChild(particle);
       activeParticles++;
