@@ -214,9 +214,15 @@ def post_detail(request, slug):
     # Flag to hide pending messages on published posts
     hide_pending_messages = post.status == 1
 
+    # Select template based on category
+    if post.category and post.category.slug == 'photo':
+        template_name = 'blog/post_detail_photo.html'
+    else:
+        template_name = 'blog/post_detail.html'
+
     return render(
         request,
-        "blog/post_detail.html",
+        template_name,
         {
             "post": post,
             "comments": comments,

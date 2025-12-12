@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- Photo Hero Section - Full Width Image -->
+<div class="photo-detail-hero">
+  {% if "placeholder" in post.featured_image.url %}
+  <img
+    src="{% static 'images/default.jpg' %}"
+    class="photo-hero-image"
+    alt="{{ post.title }}"
+  />
+  {% else %}
+  <img
+    src="{{ post.featured_image.url }}"
+    class="photo-hero-image"
+    alt="{{ post.title }}"
+  />
+  {% endif %}
+  <div class="photo-hero-overlay">
+    <div class="container">
+      <div class="photo-hero-content">
+        <h1 class="photo-hero-title">{{ post.title }}</h1>
+        <div class="photo-hero-meta">
+          <span class="photo-meta-item">
+            <i class="fas fa-user me-1"></i>{{ post.author }}
+          </span>
+          <span class="photo-meta-item">
+            <i class="far fa-calendar me-1"></i>{{ post.created_on }}
+          </span>
+          {% if post.category %}
+          <a href="{% url 'category_posts' post.category.slug %}" class="photo-category-badge">
+            <i class="fas fa-tag me-1"></i>{{ post.category.name }}
+          </a>
+          {% endif %}
+        </div>
+        <div class="photo-hero-actions">
+          {% if user.is_authenticated and user == post.author %}
+          <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-light me-2">
+            <i class="fas fa-edit me-1"></i> Edit
+          </a>
+          <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-trash me-1"></i> Delete
+          </a>
+          {% endif %}
+          <!-- Favorite Button -->
+          {% if user.is_authenticated %}
+          <form
+            action="{% url 'add_to_favorites' post.id %}"
+            method="POST"
+            class="d-inline ms-2"
+          >
+            {% csrf_token %}
+            {% if not is_favorited %}
+            <button type="submit" class="btn btn-sm btn-light">
+              <i class="far fa-heart me-1"></i> Favorite
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-sm btn-secondary" disabled>
+              <i class="fas fa-heart me-1"></i> Favorited
+            </button>
+            {% endif %}
+          </form>
+          {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-sm btn-light ms-2">
+            <i class="far fa-heart me-1"></i> Login to Favorite
+          </a>
+          {% endif %}
+          <span class="photo-meta-item ms-2">
+            <i class="fas fa-heart me-1"></i>{{ post.favorite_count }}
+          </span>
+          
+          <!-- Like Button -->
+          <div class="like-section d-inline ms-2">
+            {% if user.is_authenticated %}
+            <form
+              action="{% url 'like_post' post.id %}"
+              method="POST"
+              class="d-inline"
+            >
+              {% csrf_token %}
+              <button 
+                type="submit" 
+                class="btn-like-photo {% if is_liked %}liked{% endif %}"
+                title="{% if is_liked %}Unlike{% else %}Like{% endif %} this post"
+              >
+                <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+                <span class="like-count">{{ post.like_count }}</span>
+              </button>
+            </form>
+            {% else %}
+            <a href="{% url 'account_login' %}" class="btn-like-photo" title="Login to like">
+              <i class="far fa-heart"></i>
+              <span class="like-count">{{ post.like_count }}</span>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content Section -->
+<div class="container-fluid mt-4 mb-5">
+  <div class="row g-4">
+    <div class="col-lg-10 col-md-12 mx-auto">
+      <!-- Post Content Card -->
+      <div class="card mb-4 shadow-sm border-0 post-detail-card">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+            <span class="badge bg-light text-dark border">
+              <i class="far fa-clock me-1"></i>{{ post.created_on }}
+            </span>
+            <span class="badge bg-light text-dark border">
+              <i class="far fa-comments me-1"></i>{{ comment_count }} Comments
+            </span>
+          </div>
+          <div class="card-text post-content-body">
+            {{ post.content | safe }}
+          </div>
+          {% if post.external_url and post.url_approved %}
+          <div class="text-center mt-4 mb-3">
+            <a href="{{ post.external_url }}" target="_blank" rel="noopener noreferrer" class="external-url-badge-related">
+              <i class="fas fa-external-link-alt me-2"></i>Visit Related Link
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Comment Form -->
+      <div class="card mb-3 shadow-sm border-0 comment-form-card">
+        <div class="card-body">
+          {% if user.is_authenticated %}
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="mb-0">Leave a comment</h5>
+            <span class="text-muted small">Posting as: {{ user.username }}</span>
+          </div>
+          <form id="commentForm" method="post" action="{% url 'post_detail' post.slug %}" class="mt-2">
+            {{ comment_form | crispy }} {% csrf_token %}
+            <button id="submitButton" type="submit" class="btn btn-primary btn-sm">
+              Submit
+            </button>
+          </form>
+          {% else %}
+          <p class="text-muted mb-0">Log in to leave a comment</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="card mb-4 shadow-sm border-0 comments-card">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="mb-0">Comments</h5>
+            <span class="badge bg-secondary">{{ comment_count }}</span>
+          </div>
+          {% for comment in comments %}
+          <div class="comments p-3 rounded mb-3 bg-light border">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <p class="mb-0 fw-semibold">{{ comment.author }}</p>
+              <span class="text-muted small">{{ comment.created_on }}</span>
+            </div>
+            <div id="comment{{ comment.id }}" class="mb-2">
+              {{ comment.body | linebreaks }}
+            </div>
+            {% if user.is_authenticated and comment.author == user %}
+            <div class="d-flex gap-2">
+              <a
+                href="{% url 'comment_delete' post.slug comment.id %}"
+                class="btn btn-sm btn-outline-danger"
+                >Delete</a
+              >
+              <button
+                class="btn btn-sm btn-outline-secondary edit-comment"
+                data-comment-id="{{ comment.id }}"
+              >
+                Edit
+              </button>
+            </div>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-muted">No comments yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Comment Modal -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your comment? This action cannot be
+        undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extras %}
+<script src="{% static 'js/comments.js' %}"></script>
+{% endblock extras %}
+
