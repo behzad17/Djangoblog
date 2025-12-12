@@ -124,6 +124,15 @@ class PostList(generic.ListView):
             .select_related('category', 'author')
             .order_by('-like_count', '-created_on')[:10]
         )
+        
+        # Featured post for hero section (most recent published post)
+        context['featured_post'] = (
+            Post.objects.filter(status=1)
+            .select_related('category', 'author')
+            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
+            .order_by('-created_on')
+            .first()
+        )
 
         return context
 

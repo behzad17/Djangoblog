@@ -159,10 +159,12 @@
   }
 
   // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSplashCursor);
-  } else {
-    initSplashCursor();
-  }
+  // DISABLED: Splash cursor effect disabled for better UX on news/blog site
+  // Subtle hover effects on buttons/cards provide better user experience
+  // if (document.readyState === 'loading') {
+  //   document.addEventListener('DOMContentLoaded', initSplashCursor);
+  // } else {
+  //   initSplashCursor();
+  // }
 })();
 

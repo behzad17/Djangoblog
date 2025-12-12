@@ -1,41 +1,95 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 
 <!-- Hero section -->
-<section
-  class="hero-section bg-dark text-white"
-  style="background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%)"
->
+<section class="hero-section bg-dark text-white">
   <div class="container">
-    <div class="row align-items-center g-3">
-      <div class="col-12 col-lg-7">
-        <h1 class="hero-title">
-          Share your voice with Sweden|today
-        </h1>
-        <p class="hero-subtitle">
-          Sign up and log in to easily share your experiences, writings, and
-          ideas.
-        </p>
-        <p class="hero-description">
-          Create posts, get comments, and use audience feedback to improve your
-          content.
-        </p>
-        {% if user.is_authenticated %}
-        <div class="hero-buttons">
-          <a href="{% url 'create_post' %}" class="btn btn-light btn-sm me-2">
-            <i class="fas fa-plus"></i> Create Post
-          </a>
-          <a href="{% url 'favorites' %}" class="btn btn-outline-light btn-sm">
-            <i class="fas fa-star"></i> Favorites
-          </a>
+    <div class="row align-items-center g-4">
+      <!-- Left Column: Content -->
+      <div class="col-12 col-lg-6">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Sweden news & community — in one place
+          </h1>
+          <p class="hero-subtitle">
+            Read, write, and discuss. Join Sweden|today to share your voice and connect with the community.
+          </p>
+          <div class="hero-buttons">
+            {% if user.is_authenticated %}
+              <a href="{% url 'create_post' %}" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-plus me-2"></i>Create Post
+              </a>
+              <a href="{% url 'favorites' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-star me-2"></i>Favorites
+              </a>
+            {% else %}
+              <a href="{% url 'home' %}#post_list" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-compass me-2"></i>Explore Latest
+              </a>
+              <a href="#category-filter-section" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-tags me-2"></i>Browse Categories
+              </a>
+            {% endif %}
+          </div>
+          <div class="hero-features mt-4">
+            <span class="badge bg-light text-dark me-2 mb-2">Fast publishing</span>
+            <span class="badge bg-light text-dark me-2 mb-2">Favorites</span>
+            <span class="badge bg-light text-dark mb-2">Categories</span>
+          </div>
         </div>
-        {% endif %}
       </div>
-      <div class="col-12 col-lg-5 text-center d-none d-lg-block">
-        <img
-          src="{% static 'images/network.png' %}"
-          class="img-fluid shadow hero-image hero-image-round"
-          alt="Create and share posts"
-        />
+      
+      <!-- Right Column: Featured Post Card -->
+      <div class="col-12 col-lg-6">
+        {% if featured_post %}
+          <a href="{% url 'post_detail' featured_post.slug %}" class="text-decoration-none featured-post-card-link">
+            <div class="card featured-post-card h-100">
+              {% if featured_post.featured_image %}
+                <div class="featured-post-image">
+                  {% if "placeholder" in featured_post.featured_image.url %}
+                    <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="{{ featured_post.title }}">
+                  {% else %}
+                    <img src="{{ featured_post.featured_image.url }}" class="card-img-top" alt="{{ featured_post.title }}">
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="featured-post-image-placeholder">
+                  <i class="fas fa-image"></i>
+                </div>
+              {% endif %}
+              <div class="card-body">
+                {% if featured_post.category %}
+                  <div class="mb-2">
+                    <span class="badge featured-category-badge">{{ featured_post.category.name }}</span>
+                  </div>
+                {% endif %}
+                <h3 class="card-title featured-post-title">{{ featured_post.title }}</h3>
+                {% if featured_post.excerpt %}
+                  <p class="card-text featured-post-excerpt">{{ featured_post.excerpt|truncatewords:20 }}</p>
+                {% endif %}
+                <div class="featured-post-meta">
+                  <small class="text-muted">
+                    <i class="fas fa-user me-1"></i>{{ featured_post.author }}
+                    <span class="ms-3"><i class="far fa-calendar me-1"></i>{{ featured_post.created_on|date:"M d, Y" }}</span>
+                  </small>
+                </div>
+              </div>
+            </div>
+          </a>
+        {% else %}
+          <div class="card featured-post-card h-100 featured-post-empty">
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height: 300px;">
+              <div class="text-center">
+                <i class="fas fa-newspaper fa-3x mb-3 opacity-50"></i>
+                <p class="mb-0 text-muted">No posts yet — create the first post</p>
+                {% if user.is_authenticated %}
+                  <a href="{% url 'create_post' %}" class="btn btn-light btn-sm mt-3">
+                    <i class="fas fa-plus me-1"></i>Create Post
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -44,7 +98,7 @@
 <!-- index.html content starts here -->
 <div class="container-fluid">
   <!-- Category Filter Section -->
-  <div class="row mt-2 mb-2">
+  <div class="row mt-2 mb-2" id="category-filter-section">
     <div class="col-12">
       <div class="category-filter-section">
         <h3 class="category-section-title mb-3">
