@@ -559,6 +559,8 @@ body {
 /* Hero Section Styles */
 .hero-section {
   padding: 1.5rem 0;
+  position: relative; /* Required for splash cursor positioning */
+  overflow: hidden; /* Hide particles that go outside */
 }
 
 .hero-title {
@@ -2560,5 +2562,85 @@ body {
   .ad-banner-close {
     right: 0.5rem;
     font-size: 1.1rem;
+  }
+}
+
+/* ============================================
+   Splash Cursor Effect for Hero Section
+   ============================================
+   
+   Creates expanding ripple/splash particles when cursor moves over hero section.
+   
+   CUSTOMIZATION GUIDE:
+   - SPLASH_COLOR: Change --splash-color in JavaScript (default: rgba(255, 255, 255, 0.6))
+   - SPLASH_SIZE: Change SPLASH_SIZE in JavaScript (default: 20px)
+   - SPLASH_COUNT: Change SPLASH_COUNT in JavaScript (default: 8 particles)
+   - SPLASH_DURATION: Change SPLASH_DURATION in JavaScript (default: 800ms)
+   - INTENSITY: Change INTENSITY in JavaScript (default: 50ms, lower = more frequent)
+   ============================================ */
+
+/* Container for splash particles */
+.splash-cursor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+  z-index: 1; /* Above background, below content */
+  overflow: hidden;
+}
+
+/* Individual splash particle */
+.splash-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--splash-color, rgba(255, 255, 255, 0.6));
+  pointer-events: none;
+  will-change: transform, opacity; /* Optimize for animation */
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.8;
+  animation: splash-animate var(--splash-duration, 800ms) ease-out forwards;
+}
+
+/* Splash animation - particles expand and fade out */
+@keyframes splash-animate {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--end-x, 0px)), calc(-50% + var(--end-y, 0px))) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Ensure hero section content stays above particles */
+.hero-section > .container {
+  position: relative;
+  z-index: 2; /* Above splash particles */
+}
+
+/* Mobile optimization - reduce particle count on small screens */
+@media (max-width: 768px) {
+  .splash-particle {
+    /* Slightly smaller particles on mobile */
+    animation-duration: calc(var(--splash-duration, 800ms) * 0.8);
+  }
+}
+
+/* Disable splash effect on very small screens or if user prefers reduced motion */
+@media (max-width: 480px) {
+  .splash-cursor-container {
+    display: none; /* Hide on very small screens for performance */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-cursor-container {
+    display: none; /* Respect user's motion preferences */
   }
 }
