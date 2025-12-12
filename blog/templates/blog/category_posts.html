@@ -44,6 +44,7 @@
             <a 
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
+              data-tone="mint"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
@@ -61,6 +62,7 @@
             <a 
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
+              data-tone="purple"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
@@ -78,6 +80,7 @@
             <a 
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
+              data-tone="peach"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
