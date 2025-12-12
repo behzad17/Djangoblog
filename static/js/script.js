@@ -339,14 +339,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const closeButton = document.getElementById('closeBanner');
   
   if (!adBanner) {
+    console.log('Ad banner element not found');
     return; // Banner element not found
   }
   
   // Check if banner was previously dismissed
   try {
-    if (localStorage.getItem('adBannerDismissed') === 'true') {
+    const isDismissed = localStorage.getItem('adBannerDismissed');
+    if (isDismissed === 'true') {
       // Banner already dismissed, hide it
       adBanner.style.display = 'none';
+      console.log('Banner was previously dismissed, hiding it');
       return;
     }
   } catch (e) {
@@ -355,7 +358,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Show the banner if it wasn't dismissed
+  // Ensure it's visible with flex display
   adBanner.style.display = 'flex';
+  adBanner.style.visibility = 'visible';
+  adBanner.style.opacity = '1';
+  console.log('Showing ad banner');
   
   // Handle close button click
   if (closeButton) {

@@ -169,8 +169,11 @@
           {% for message in messages %}
             {# Don't show pending messages on published post detail pages #}
             {# Pending messages are WARNING level, so we hide all WARNING messages on published posts #}
+            {# Don't show "Successfully signed in" messages #}
             {% if hide_pending_messages|default:False and message.tags == 'warning' %}
               {# Skip this message - it's a pending message on a published post #}
+            {% elif 'Successfully signed in' in message|stringformat:'s' %}
+              {# Skip login success messages #}
             {% else %}
               <div
                 class="alert {{ message.tags }} alert-dismissible fade show"
