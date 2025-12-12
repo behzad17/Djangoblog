@@ -1315,6 +1315,110 @@ body {
   color: #ffc107;
 }
 
+/* Footer Logo Infinite Loop Animation */
+.footer-logo-loop-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 20px 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+.footer-logo-loop {
+  display: flex;
+  width: fit-content;
+  animation: scroll-logos 30s linear infinite;
+  gap: 20px;
+  will-change: transform;
+}
+
+.footer-logo-slide {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+/* Smooth infinite scroll animation */
+@keyframes scroll-logos {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause animation on hover (optional - can be removed if you want continuous scroll) */
+.footer-logo-loop-wrapper:hover .footer-logo-loop {
+  animation-play-state: paused;
+}
+
+/* Original footer-logos class kept for backward compatibility */
+/* Footer Logo Infinite Loop Animation */
+.footer-logo-loop-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 20px 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+.footer-logo-loop {
+  display: flex;
+  width: fit-content;
+  animation: scroll-logos 30s linear infinite;
+  gap: 20px;
+  will-change: transform;
+}
+
+.footer-logo-slide {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+/* Smooth infinite scroll animation */
+@keyframes scroll-logos {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause animation on hover (optional - can be removed if you want continuous scroll) */
+.footer-logo-loop-wrapper:hover .footer-logo-loop {
+  animation-play-state: paused;
+}
+
+/* Original footer-logos class kept for backward compatibility */
 .footer-logos {
   padding-top: 10px;
   justify-content: center;
@@ -1380,10 +1484,50 @@ body {
   border-radius: 6px;
   flex: 0 0 auto;
   aspect-ratio: 3 / 2;
+  transition: opacity 0.3s ease;
 }
 
+/* Logo hover effect for better interactivity */
+.footer-logo-img:hover {
+  opacity: 0.8;
+}
+
+/* Responsive adjustments for logo loop */
 @media (max-width: 991px) {
-  .footer-logo-img {
+  .footer-logo-loop {
+    gap: 15px;
+    animation-duration: 28s;
+  }
+  
+  .footer-logo-slide {
+    gap: 15px;
+  }
+  
+  .footer-logo-loop-wrapper .footer-logo-img {
+    width: 100px;
+    height: 67px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-logo-loop {
+    gap: 12px;
+    animation-duration: 25s; /* Slightly faster on mobile */
+  }
+  
+  .footer-logo-slide {
+    gap: 12px;
+  }
+  
+  .footer-logo-loop-wrapper .footer-logo-img {
+    width: 90px;
+    height: 60px;
+  }
+}
+
+/* Keep original responsive styles for static logos (if still used elsewhere) */
+@media (max-width: 991px) {
+  .footer-logos .footer-logo-img {
     flex: 0 0 calc(33.333% - 10px);
     max-width: calc(33.333% - 10px);
     height: auto;
@@ -1391,7 +1535,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .footer-logo-img {
+  .footer-logos .footer-logo-img {
     flex: 0 0 calc(50% - 10px);
     max-width: calc(50% - 10px);
     height: auto;
