@@ -152,9 +152,14 @@
     <div id="adBanner" class="ad-banner" role="banner" aria-live="polite">
       <div class="ad-banner-content">
         <div class="ad-banner-message">
-          <i class="fas fa-bullhorn me-2"></i>
-          <span class="sr-only">Announcement: </span>
-          Promotional banner / important info
+          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-banner-link">
+            <img src="{% static 'images/ad-banner-top.jpg' %}" alt="Advertisement" class="ad-banner-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="ad-banner-fallback" style="display: none;">
+              <i class="fas fa-bullhorn me-2"></i>
+              <span class="sr-only">Announcement: </span>
+              Promotional banner / important info
+            </div>
+          </a>
         </div>
         <button 
           type="button" 
