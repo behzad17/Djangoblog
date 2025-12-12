@@ -646,7 +646,7 @@ body {
 
 /* Hero Section Styles */
 .hero-section {
-  padding: 3rem 0;
+  padding: 2rem 0; /* Reduced from 3rem (30% reduction) */
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
   /* Enhanced gradient background with depth */
@@ -665,7 +665,7 @@ body {
 .hero-title {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
   line-height: 1.2;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -673,7 +673,7 @@ body {
 
 .hero-subtitle {
   font-size: 1.15rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
   line-height: 1.6;
   opacity: 0.95;
   color: rgba(255, 255, 255, 0.95);
@@ -681,7 +681,7 @@ body {
 }
 
 .hero-buttons {
-  margin-top: 1.5rem;
+  margin-top: 1rem; /* Reduced from 1.5rem */
   margin-bottom: 0;
 }
 
@@ -717,7 +717,7 @@ body {
 }
 
 .hero-features {
-  margin-top: 1.5rem;
+  margin-top: 1rem; /* Reduced from 1.5rem */
 }
 
 .hero-features .badge {
@@ -850,17 +850,21 @@ body {
 /* Responsive Hero Section */
 @media (max-width: 992px) {
   .hero-section {
-    padding: 2rem 0;
+    padding: 1.4rem 0; /* Reduced from 2rem (30% reduction) */
   }
   
   .hero-title {
     font-size: 2rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem; /* Reduced spacing */
   }
   
   .hero-subtitle {
     font-size: 1rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.875rem; /* Reduced from 1.25rem */
+  }
+  
+  .hero-buttons {
+    margin-top: 0.875rem; /* Reduced spacing */
   }
   
   .hero-buttons .btn {
@@ -904,17 +908,17 @@ body {
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 1.5rem 0;
+    padding: 1rem 0; /* Reduced from 1.5rem (30% reduction) */
   }
   
   .hero-title {
     font-size: 1.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem; /* Reduced spacing */
   }
   
   .hero-subtitle {
     font-size: 0.95rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem; /* Reduced from 1rem */
     max-width: 100%;
   }
   
@@ -922,6 +926,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    margin-top: 0.75rem; /* Reduced spacing */
   }
   
   .hero-buttons .btn {
@@ -975,11 +980,20 @@ body {
 
 @media (max-width: 576px) {
   .hero-section {
-    padding: 1.25rem 0;
+    padding: 0.875rem 0; /* Reduced from 1.25rem (30% reduction) */
   }
   
   .hero-title {
     font-size: 1.5rem;
+    margin-bottom: 0.5rem; /* Reduced spacing */
+  }
+  
+  .hero-subtitle {
+    margin-bottom: 0.6rem; /* Reduced spacing */
+  }
+  
+  .hero-buttons {
+    margin-top: 0.6rem; /* Reduced spacing */
   }
   
   .hero-subtitle {
