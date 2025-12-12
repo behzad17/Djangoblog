@@ -749,80 +749,175 @@ body {
   width: 100%;
 }
 
+/* ============================================
+   Glass-morphism Category Cards
+   ============================================
+   
+   This section implements modern glass-morphism style cards for category display.
+   
+   HOW TO USE:
+   - Categories are automatically displayed using the .category-btn class
+   - Categories are organized in rows (.category-row) with different color tints
+   - Each category links to its category page via Django URL: {% url 'category_posts' category.slug %}
+   
+   HOW TO ADD/REMOVE CATEGORIES:
+   - Categories are managed in Django Admin (blog app > Category model)
+   - To add a category: Go to Django Admin > Categories > Add Category
+   - To remove: Delete from Django Admin (posts will need reassignment)
+   - Categories are automatically displayed in templates (index.html, category_posts.html)
+   
+   HOW TO REUSE IN OTHER TEMPLATES:
+   - Copy the category-row structure from index.html or category_posts.html
+   - Use: {% for category in categories %} loop
+   - Apply .category-btn class to the <a> tag
+   - Link to: {% url 'category_posts' category.slug %}
+   
+   FEATURES:
+   - Glass-morphism effect (transparency + backdrop blur)
+   - Soft shadows for depth
+   - Hover effects (lift + stronger shadow)
+   - Responsive design (mobile, tablet, desktop)
+   - Row-based color tints (teal, purple, orange)
+   - Active state for current category
+   ============================================ */
+
+/* Glass-morphism Category Cards */
 .category-btn {
   display: inline-flex;
   align-items: center;
-  padding: 6px 16px;
-  background: linear-gradient(135deg, #188181 0%, #23bbbb 100%);
+  padding: 12px 20px;
+  /* Glass-morphism effect */
+  background: rgba(24, 129, 129, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #fff;
   text-decoration: none;
-  border-radius: 20px;
+  border-radius: 16px;
   font-weight: 500;
   font-size: 13px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(24, 129, 129, 0.3);
-  border: 2px solid transparent;
+  /* Soft box-shadow for glass effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 
+              0 2px 4px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
   height: auto;
   line-height: 1.4;
 }
 
+/* Glass overlay gradient for depth */
+.category-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+  border-radius: 16px 16px 0 0;
+}
+
 .category-btn:hover {
-  background: linear-gradient(135deg, #23bbbb 0%, #188181 100%);
+  background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(24, 129, 129, 0.4);
+  transform: translateY(-3px);
+  /* Stronger shadow on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), 
+              0 4px 8px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
   text-decoration: none;
 }
 
-/* Second Row - Purple/Blue Gradient */
+.category-btn:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Second Row - Purple/Blue Glass with tint */
 .category-row:nth-child(2) .category-btn {
-  background: linear-gradient(135deg, #6f42c1 0%, #8b5cf6 100%);
-  box-shadow: 0 2px 6px rgba(111, 66, 193, 0.3);
+  background: rgba(111, 66, 193, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(111, 66, 193, 0.2), 
+              0 2px 4px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(139, 92, 246, 0.3);
 }
 
 .category-row:nth-child(2) .category-btn:hover {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6f42c1 100%);
-  box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+  background: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3), 
+              0 4px 8px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(139, 92, 246, 0.4);
 }
 
-/* Third Row - Orange/Red Gradient */
+/* Third Row - Orange/Pink Glass with tint */
 .category-row:nth-child(3) .category-btn {
-  background: linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);
-  box-shadow: 0 2px 6px rgba(253, 126, 20, 0.3);
+  background: rgba(253, 126, 20, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2), 
+              0 2px 4px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(232, 62, 140, 0.3);
 }
 
 .category-row:nth-child(3) .category-btn:hover {
-  background: linear-gradient(135deg, #e83e8c 0%, #fd7e14 100%);
-  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.4);
+  background: rgba(232, 62, 140, 0.25);
+  box-shadow: 0 8px 20px rgba(253, 126, 20, 0.3), 
+              0 4px 8px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(232, 62, 140, 0.4);
 }
 
 .category-btn.active {
-  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-  color: #333;
-  border-color: #ff9800;
+  background: rgba(255, 193, 7, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  border-color: rgba(255, 152, 0, 0.5);
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.3), 
+              0 2px 4px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .category-btn.active:hover {
-  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
-  color: #333;
+  background: rgba(255, 152, 0, 0.35);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4), 
+              0 4px 8px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .category-btn-text {
   margin-right: 6px;
+  position: relative;
+  z-index: 1;
 }
 
 .category-btn-count {
-  background: rgba(255, 255, 255, 0.3);
-  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 3px 10px;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .category-btn.active .category-btn-count {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Category Badge (on post cards) */
@@ -993,8 +1088,13 @@ body {
   }
   
   .category-btn {
-    padding: 5px 14px;
+    padding: 10px 16px;
     font-size: 12px;
+    border-radius: 14px;
+  }
+  
+  .category-btn::before {
+    border-radius: 14px 14px 0 0;
   }
   
   .category-section-title {
@@ -1020,8 +1120,13 @@ body {
   }
   
   .category-btn {
-    padding: 4px 12px;
+    padding: 8px 14px;
     font-size: 11px;
+    border-radius: 12px;
+  }
+  
+  .category-btn::before {
+    border-radius: 12px 12px 0 0;
   }
   
   .category-btn-count {

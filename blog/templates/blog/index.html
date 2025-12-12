@@ -59,6 +59,7 @@
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
               title="{{ category.name }}"
+              aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >
               <span class="category-btn-text">{{ category.name }}</span>
               <span class="category-btn-count">({{ category.post_count }})</span>
@@ -75,6 +76,7 @@
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
               title="{{ category.name }}"
+              aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >
               <span class="category-btn-text">{{ category.name }}</span>
               <span class="category-btn-count">({{ category.post_count }})</span>
@@ -91,6 +93,7 @@
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
               title="{{ category.name }}"
+              aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >
               <span class="category-btn-text">{{ category.name }}</span>
               <span class="category-btn-count">({{ category.post_count }})</span>

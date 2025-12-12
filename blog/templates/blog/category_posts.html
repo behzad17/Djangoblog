@@ -45,6 +45,7 @@
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
               title="{{ cat.name }}"
+              aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
@@ -61,6 +62,7 @@
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
               title="{{ cat.name }}"
+              aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
@@ -77,6 +79,7 @@
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
               title="{{ cat.name }}"
+              aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
