@@ -889,8 +889,8 @@ body {
 .category-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px; /* Space between text/count and icon */
-  padding: 12px 20px;
+  gap: 4px; /* Reduced gap for tighter spacing */
+  padding: 10px 14px; /* Reduced padding for smaller pills */
   /* Glass-morphism effect - increased opacity for better visibility */
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(10px);
@@ -1038,7 +1038,7 @@ body {
 }
 
 .category-btn-text {
-  margin-right: 6px;
+  margin-right: 4px; /* Reduced margin for tighter spacing */
   position: relative;
   z-index: 1;
 }
@@ -1074,19 +1074,20 @@ body {
   flex-shrink: 0; /* Prevent icon from shrinking */
   position: relative;
   z-index: 1;
-  margin-left: 4px; /* Small additional spacing after count */
+  /* No margin-left - gap property handles spacing */
 }
 
 .cat-icon i {
   font-size: 14px; /* Small icon size (14-16px range) */
-  opacity: 0.8; /* Subtle opacity (0.75-0.85 range) */
-  color: inherit; /* Inherit text color from parent */
-  transition: opacity 0.3s ease;
+  opacity: 0.85; /* Subtle opacity */
+  color: #0F766E; /* Match post card teal accent color (teal-700) */
+  transition: opacity 0.3s ease, color 0.3s ease;
 }
 
 /* Slightly increase opacity on hover for better visibility */
 .category-btn:hover .cat-icon i {
-  opacity: 0.95;
+  opacity: 1;
+  color: #115E59; /* Slightly darker teal on hover (teal-800) */
 }
 
 /* Category Badge (on post cards) */
@@ -1259,9 +1260,10 @@ body {
   }
   
   .category-btn {
-    padding: 10px 16px;
+    padding: 8px 12px; /* Reduced padding for tighter mobile spacing */
     font-size: 12px;
     border-radius: 14px;
+    gap: 3px; /* Even tighter gap on tablet */
   }
   
   .category-btn::before {
@@ -1291,9 +1293,10 @@ body {
   }
   
   .category-btn {
-    padding: 8px 14px;
+    padding: 7px 10px; /* Reduced padding for tighter small mobile spacing */
     font-size: 11px;
     border-radius: 12px;
+    gap: 3px; /* Even tighter gap on small mobile */
   }
   
   .category-btn::before {
