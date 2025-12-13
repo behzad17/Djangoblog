@@ -215,7 +215,7 @@ def post_detail(request, slug):
     hide_pending_messages = post.status == 1
 
     # Select template based on category
-    if post.category and post.category.slug == 'photo':
+    if post.category and post.category.slug == 'photo-gallery':
         template_name = 'blog/post_detail_photo.html'
     else:
         template_name = 'blog/post_detail.html'

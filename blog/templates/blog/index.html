@@ -103,7 +103,7 @@
           <!-- First Row -->
           <div class="category-row">
             {% for category in categories %}
-              {% if category.name == "News & Politics" or category.name == "Economy" or category.name == "Job Market" or category.name == "Immigration & Integration" or category.name == "Education" or category.name == "Laws" %}
+              {% if category.name == "Platform Updates" or category.name == "Careers & Economy" or category.name == "Life in Sweden" or category.name == "Law & Integration" or category.name == "Skills & Learning" %}
             <a 
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
@@ -114,12 +114,11 @@
               <span class="category-btn-text">{{ category.name }}</span>
               <span class="category-btn-count">({{ category.post_count }})</span>
               <span class="cat-icon">
-                {% if category.name == "Economy" %}<i class="bi bi-cash-coin"></i>
-                {% elif category.name == "Education" %}<i class="bi bi-book"></i>
-                {% elif category.name == "Immigration & Integration" %}<i class="bi bi-globe"></i>
-                {% elif category.name == "Job Market" %}<i class="bi bi-briefcase"></i>
-                {% elif category.name == "Laws" %}<i class="bi bi-bank"></i>
-                {% elif category.name == "News & Politics" %}<i class="bi bi-newspaper"></i>
+                {% if category.name == "Careers & Economy" %}<i class="bi bi-cash-coin"></i>
+                {% elif category.name == "Law & Integration" %}<i class="bi bi-globe"></i>
+                {% elif category.name == "Life in Sweden" %}<i class="bi bi-briefcase"></i>
+                {% elif category.name == "Skills & Learning" %}<i class="bi bi-bank"></i>
+                {% elif category.name == "Platform Updates" %}<i class="bi bi-newspaper"></i>
                 {% endif %}
               </span>
             </a>
@@ -130,7 +129,7 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for category in categories %}
-              {% if category.name == "Events" or category.name == "Music" or category.name == "Film" or category.name == "Art" or category.name == "History" or category.name == "Sports" or category.name == "Photo" %}
+              {% if category.name == "Events & Announcements" or category.name == "Photo Gallery" %}
             <a 
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
@@ -141,13 +140,8 @@
               <span class="category-btn-text">{{ category.name }}</span>
               <span class="category-btn-count">({{ category.post_count }})</span>
               <span class="cat-icon">
-                {% if category.name == "Art" %}<i class="bi bi-palette"></i>
-                {% elif category.name == "Events" %}<i class="bi bi-calendar-event"></i>
-                {% elif category.name == "Film" %}<i class="bi bi-film"></i>
-                {% elif category.name == "History" %}<i class="bi bi-clock-history"></i>
-                {% elif category.name == "Music" %}<i class="bi bi-music-note-beamed"></i>
-                {% elif category.name == "Photo" %}<i class="bi bi-camera"></i>
-                {% elif category.name == "Sports" %}<i class="bi bi-trophy"></i>
+                {% if category.name == "Events & Announcements" %}<i class="bi bi-calendar-event"></i>
+                {% elif category.name == "Photo Gallery" %}<i class="bi bi-camera"></i>
                 {% endif %}
               </span>
             </a>
@@ -158,7 +152,7 @@
           <!-- Third Row -->
           <div class="category-row">
             {% for category in categories %}
-              {% if category.name == "Buying & Selling" or category.name == "Services" or category.name == "Health" or category.name == "Swedish Language" %}
+              {% if category.name == "Public Services" or category.name == "Stories & Experiences" or category.name == "Community & Engagement" %}
             <a 
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
@@ -169,10 +163,9 @@
               <span class="category-btn-text">{{ category.name }}</span>
               <span class="category-btn-count">({{ category.post_count }})</span>
               <span class="cat-icon">
-                {% if category.name == "Buying & Selling" %}<i class="bi bi-cart"></i>
-                {% elif category.name == "Health" %}<i class="bi bi-heart-pulse"></i>
-                {% elif category.name == "Services" %}<i class="bi bi-tools"></i>
-                {% elif category.name == "Swedish Language" %}<i class="bi bi-translate"></i>
+                {% if category.name == "Public Services" %}<i class="bi bi-cart"></i>
+                {% elif category.name == "Stories & Experiences" %}<i class="bi bi-heart-pulse"></i>
+                {% elif category.name == "Community & Engagement" %}<i class="bi bi-translate"></i>
                 {% endif %}
               </span>
             </a>

@@ -71,7 +71,7 @@ class PostForm(forms.ModelForm):
         event_end_date = cleaned_data.get('event_end_date')
         
         # Validate dates are required for Events category
-        if category and category.slug == 'events':
+        if category and category.slug == 'events-announcements':
             if not event_start_date:
                 raise ValidationError({
                     'event_start_date': 'Start date is required for Events category.'
