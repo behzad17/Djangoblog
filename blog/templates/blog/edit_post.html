@@ -62,43 +62,82 @@
         ["view", ["fullscreen", "codeview", "help"]],
       ],
     });
+  });
+</script>
+
+<!-- Event date fields toggle (vanilla JavaScript for reliability) -->
+<script>
+  // Function to show/hide event date fields based on category selection
+  function toggleEventFields() {
+    const categorySelect = document.getElementById('id_category');
+    const eventFieldsContainer = document.getElementById('event-fields-container');
+    const startDateField = document.getElementById('id_event_start_date');
+    const endDateField = document.getElementById('id_event_end_date');
     
-    // Function to show/hide event date fields based on category selection
-    function toggleEventFields() {
-      const categorySelect = $('#id_category');
-      const eventFieldsContainer = $('#event-fields-container');
-      
-      if (categorySelect.val()) {
-        // Get selected category text
-        const categoryText = categorySelect.find('option:selected').text().trim();
-        
-        if (categoryText === 'Events') {
-          eventFieldsContainer.slideDown(300);
-          $('#id_event_start_date').prop('required', true);
-          $('#id_event_end_date').prop('required', true);
-        } else {
-          eventFieldsContainer.slideUp(300);
-          $('#id_event_start_date').prop('required', false);
-          $('#id_event_end_date').prop('required', false);
-          // Clear values when hidden (only if switching away from Events)
-          if (categoryText !== 'Events') {
-            $('#id_event_start_date').val('');
-            $('#id_event_end_date').val('');
-          }
-        }
-      } else {
-        eventFieldsContainer.slideUp(300);
-        $('#id_event_start_date').prop('required', false);
-        $('#id_event_end_date').prop('required', false);
-      }
+    if (!categorySelect || !eventFieldsContainer) {
+      return;
     }
     
+    const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+    if (selectedOption && selectedOption.value) {
+      const categoryText = selectedOption.text.trim();
+      
+      // Check if Events category is selected
+      if (categoryText === 'Events') {
+        // Show event fields with smooth transition
+        eventFieldsContainer.style.display = 'block';
+        eventFieldsContainer.style.opacity = '0';
+        setTimeout(function() {
+          eventFieldsContainer.style.transition = 'opacity 0.3s ease';
+          eventFieldsContainer.style.opacity = '1';
+        }, 10);
+        
+        if (startDateField) startDateField.setAttribute('required', 'required');
+        if (endDateField) endDateField.setAttribute('required', 'required');
+      } else {
+        // Hide event fields
+        eventFieldsContainer.style.transition = 'opacity 0.3s ease';
+        eventFieldsContainer.style.opacity = '0';
+        setTimeout(function() {
+          eventFieldsContainer.style.display = 'none';
+        }, 300);
+        
+        if (startDateField) {
+          startDateField.removeAttribute('required');
+          // Don't clear values when editing (preserve existing dates)
+        }
+        if (endDateField) {
+          endDateField.removeAttribute('required');
+          // Don't clear values when editing (preserve existing dates)
+        }
+      }
+    } else {
+      // No category selected
+      eventFieldsContainer.style.display = 'none';
+      if (startDateField) startDateField.removeAttribute('required');
+      if (endDateField) endDateField.removeAttribute('required');
+    }
+  }
+  
+  // Initialize when DOM is ready
+  function initEventFields() {
     // Check on page load (for edit mode - category may already be selected)
     toggleEventFields();
     
     // Check on category change
-    $('#id_category').on('change', toggleEventFields);
-  });
+    const categorySelect = document.getElementById('id_category');
+    if (categorySelect) {
+      categorySelect.addEventListener('change', toggleEventFields);
+    }
+  }
+  
+  // Wait for DOM to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEventFields);
+  } else {
+    // DOM already loaded
+    initEventFields();
+  }
 </script>
 {% endblock %}
 
