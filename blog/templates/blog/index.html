@@ -129,11 +129,11 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for category in categories %}
-              {% if category.name == "Events & Announcements" or category.name == "Photo Gallery" %}
+              {% if category.name == "Events & Announcements" or category.name == "Photo Gallery" or category.name == "Public Services" or category.name == "Stories & Experiences" or category.name == "Community & Engagement" %}
             <a 
               href="{% url 'category_posts' category.slug %}" 
               class="category-btn"
-              data-tone="purple"
+              data-tone="{% if category.name == 'Events & Announcements' or category.name == 'Photo Gallery' %}purple{% else %}peach{% endif %}"
               title="{{ category.name }}"
               aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >
@@ -142,28 +142,7 @@
               <span class="cat-icon">
                 {% if category.name == "Events & Announcements" %}<i class="bi bi-calendar-event"></i>
                 {% elif category.name == "Photo Gallery" %}<i class="bi bi-camera"></i>
-                {% endif %}
-              </span>
-            </a>
-              {% endif %}
-            {% endfor %}
-          </div>
-          
-          <!-- Third Row -->
-          <div class="category-row">
-            {% for category in categories %}
-              {% if category.name == "Public Services" or category.name == "Stories & Experiences" or category.name == "Community & Engagement" %}
-            <a 
-              href="{% url 'category_posts' category.slug %}" 
-              class="category-btn"
-              data-tone="peach"
-              title="{{ category.name }}"
-              aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
-            >
-              <span class="category-btn-text">{{ category.name }}</span>
-              <span class="category-btn-count">({{ category.post_count }})</span>
-              <span class="cat-icon">
-                {% if category.name == "Public Services" %}<i class="bi bi-cart"></i>
+                {% elif category.name == "Public Services" %}<i class="bi bi-cart"></i>
                 {% elif category.name == "Stories & Experiences" %}<i class="bi bi-heart-pulse"></i>
                 {% elif category.name == "Community & Engagement" %}<i class="bi bi-translate"></i>
                 {% endif %}

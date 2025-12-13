@@ -66,11 +66,11 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for cat in categories %}
-              {% if cat.name == "Events & Announcements" or cat.name == "Photo Gallery" %}
+              {% if cat.name == "Events & Announcements" or cat.name == "Photo Gallery" or cat.name == "Public Services" or cat.name == "Stories & Experiences" or cat.name == "Community & Engagement" %}
             <a 
               href="{% url 'category_posts' cat.slug %}" 
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
-              data-tone="purple"
+              data-tone="{% if cat.name == 'Events & Announcements' or cat.name == 'Photo Gallery' %}purple{% else %}peach{% endif %}"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
@@ -79,28 +79,7 @@
               <span class="cat-icon">
                 {% if cat.name == "Events & Announcements" %}<i class="bi bi-calendar-event"></i>
                 {% elif cat.name == "Photo Gallery" %}<i class="bi bi-camera"></i>
-                {% endif %}
-              </span>
-            </a>
-              {% endif %}
-            {% endfor %}
-          </div>
-          
-          <!-- Third Row -->
-          <div class="category-row">
-            {% for cat in categories %}
-              {% if cat.name == "Public Services" or cat.name == "Stories & Experiences" or cat.name == "Community & Engagement" %}
-            <a 
-              href="{% url 'category_posts' cat.slug %}" 
-              class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
-              data-tone="peach"
-              title="{{ cat.name }}"
-              aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
-            >
-              <span class="category-btn-text">{{ cat.name }}</span>
-              <span class="category-btn-count">({{ cat.post_count }})</span>
-              <span class="cat-icon">
-                {% if cat.name == "Public Services" %}<i class="bi bi-cart"></i>
+                {% elif cat.name == "Public Services" %}<i class="bi bi-cart"></i>
                 {% elif cat.name == "Stories & Experiences" %}<i class="bi bi-heart-pulse"></i>
                 {% elif cat.name == "Community & Engagement" %}<i class="bi bi-translate"></i>
                 {% endif %}
