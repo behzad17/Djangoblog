@@ -25,7 +25,7 @@
             </div>
             
             <!-- Event Content -->
-            <div class="col-md-8 event-card-content-wrapper">
+            <div class="{% if post.event_start_date %}col-md-5{% else %}col-md-8{% endif %} event-card-content-wrapper">
               <div class="event-card-content">
                 <a href="{% url 'post_detail' post.slug %}" class="event-card-title-link">
                   <h2 class="event-card-title">{{ post.title }}</h2>
@@ -38,20 +38,28 @@
                     {{ post.content|striptags|truncatewords:20 }}
                   {% endif %}
                 </p>
-                
-                {% if post.event_start_date %}
-                <div class="event-card-date">
-                  <i class="fas fa-calendar-alt me-2"></i>
-                  <span class="event-date-text">
-                    {{ post.event_start_date|date:"M d, Y" }}
-                    {% if post.event_end_date %}
-                      - {{ post.event_end_date|date:"M d, Y" }}
-                    {% endif %}
-                  </span>
-                </div>
+              </div>
+              {% if post.event_start_date %}
+              <div class="event-content-separator"></div>
+              {% endif %}
+            </div>
+            
+            <!-- Event Date Section (Separate, Right Side) -->
+            {% if post.event_start_date %}
+            <div class="col-md-3 event-card-date-wrapper">
+              <div class="event-card-date-section">
+                <div class="event-date-month">{{ post.event_start_date|date:"M" }}</div>
+                <div class="event-date-day">{{ post.event_start_date|date:"d" }}</div>
+                <div class="event-date-year">{{ post.event_start_date|date:"Y" }}</div>
+                {% if post.event_end_date and post.event_end_date != post.event_start_date %}
+                <div class="event-date-separator">-</div>
+                <div class="event-date-month">{{ post.event_end_date|date:"M" }}</div>
+                <div class="event-date-day">{{ post.event_end_date|date:"d" }}</div>
+                <div class="event-date-year">{{ post.event_end_date|date:"Y" }}</div>
                 {% endif %}
               </div>
             </div>
+            {% endif %}
           </div>
         </div>
         {% endfor %}
