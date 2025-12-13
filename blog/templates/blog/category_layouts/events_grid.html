@@ -25,7 +25,7 @@
             </div>
             
             <!-- Event Content -->
-            <div class="{% if post.event_start_date %}col-md-5{% else %}col-md-8{% endif %} event-card-content-wrapper">
+            <div class="{% if post.event_start_date %}col-md-6{% else %}col-md-8{% endif %} event-card-content-wrapper">
               <div class="event-card-content">
                 <a href="{% url 'post_detail' post.slug %}" class="event-card-title-link">
                   <h2 class="event-card-title">{{ post.title }}</h2>
@@ -46,7 +46,7 @@
             
             <!-- Event Date Section (Separate, Right Side) -->
             {% if post.event_start_date %}
-            <div class="col-md-3 event-card-date-wrapper">
+            <div class="col-md-2 event-card-date-wrapper">
               <div class="event-card-date-section">
                 <div class="event-date-month">{{ post.event_start_date|date:"M" }}</div>
                 <div class="event-date-day">{{ post.event_start_date|date:"d" }}</div>

@@ -3616,6 +3616,7 @@ body {
   padding: 1rem 1.25rem;
   border-radius: 8px;
   border-left: 4px solid #007bff;
+  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.25);
 }
 
 .event-card-title-link {
