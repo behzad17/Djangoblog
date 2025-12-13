@@ -3499,3 +3499,50 @@ body {
     justify-content: center;
   }
 }
+
+/* ========================================
+   Event Dates Display Styles
+   ======================================== */
+
+.event-dates-info {
+  margin-bottom: 1.5rem;
+}
+
+.event-dates-info .card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-dates-info .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.event-dates-info .card-body {
+  padding: 1rem 1.25rem;
+}
+
+.event-dates-info p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.event-dates-info strong {
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .event-dates-info .card-body {
+    padding: 0.875rem 1rem;
+  }
+  
+  .event-dates-info .card-title {
+    font-size: 1rem;
+  }
+  
+  .event-dates-info p {
+    font-size: 0.95rem;
+  }
+}

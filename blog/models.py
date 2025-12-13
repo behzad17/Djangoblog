@@ -81,6 +81,17 @@ class Post(models.Model):
         blank=True,
         help_text="Optional: Choose the target row (1-based) on the homepage where this post should appear in the second slot. Leave blank to auto-place."
     )
+    # Event-specific fields (optional, only for Events category)
+    event_start_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Start date for Events category posts only"
+    )
+    event_end_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="End date for Events category posts only"
+    )
 
     class Meta:
         """Meta options for Post model."""

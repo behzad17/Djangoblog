@@ -12,7 +12,22 @@
         </div>
         <div class="card-body">
           <form method="post" enctype="multipart/form-data">
-            {% csrf_token %} {{ form|crispy }}
+            {% csrf_token %}
+            
+            <!-- Regular fields -->
+            {{ form.title|as_crispy_field }}
+            {{ form.category|as_crispy_field }}
+            {{ form.excerpt|as_crispy_field }}
+            {{ form.featured_image|as_crispy_field }}
+            {{ form.content|as_crispy_field }}
+            {{ form.external_url|as_crispy_field }}
+            
+            <!-- Event date fields (initially hidden) -->
+            <div id="event-fields-container" style="display: none;">
+              {{ form.event_start_date|as_crispy_field }}
+              {{ form.event_end_date|as_crispy_field }}
+            </div>
+            
             <div class="text-center mt-4">
               <button type="submit" class="btn btn-primary btn-lg">
                 <i class="fas fa-save"></i> Update Post
@@ -47,6 +62,42 @@
         ["view", ["fullscreen", "codeview", "help"]],
       ],
     });
+    
+    // Function to show/hide event date fields based on category selection
+    function toggleEventFields() {
+      const categorySelect = $('#id_category');
+      const eventFieldsContainer = $('#event-fields-container');
+      
+      if (categorySelect.val()) {
+        // Get selected category text
+        const categoryText = categorySelect.find('option:selected').text().trim();
+        
+        if (categoryText === 'Events') {
+          eventFieldsContainer.slideDown(300);
+          $('#id_event_start_date').prop('required', true);
+          $('#id_event_end_date').prop('required', true);
+        } else {
+          eventFieldsContainer.slideUp(300);
+          $('#id_event_start_date').prop('required', false);
+          $('#id_event_end_date').prop('required', false);
+          // Clear values when hidden (only if switching away from Events)
+          if (categoryText !== 'Events') {
+            $('#id_event_start_date').val('');
+            $('#id_event_end_date').val('');
+          }
+        }
+      } else {
+        eventFieldsContainer.slideUp(300);
+        $('#id_event_start_date').prop('required', false);
+        $('#id_event_end_date').prop('required', false);
+      }
+    }
+    
+    // Check on page load (for edit mode - category may already be selected)
+    toggleEventFields();
+    
+    // Check on category change
+    $('#id_category').on('change', toggleEventFields);
   });
 </script>
 {% endblock %}
