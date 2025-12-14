@@ -3709,6 +3709,47 @@ body {
   margin-bottom: 0;
 }
 
+/* Bilingual Text Layout */
+.guide-bilingual-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.guide-text-persian {
+  direction: rtl;
+  text-align: right;
+  border-right: 3px solid #0d6efd;
+  padding-right: 1rem;
+}
+
+.guide-text-swedish {
+  direction: ltr;
+  text-align: left;
+  border-left: 3px solid #0d6efd;
+  padding-left: 1rem;
+}
+
+.guide-text-ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.guide-list-ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.guide-list-ltr li {
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  padding-right: 0;
+}
+
+.guide-list-ltr li::before {
+  right: auto;
+  left: 0;
+}
+
 /* Category Cards */
 .guide-category-card {
   background: #f8f9fa;
