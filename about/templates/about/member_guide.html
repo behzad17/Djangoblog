@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="member-guide-hero bg-gradient-primary text-white mb-5">
+  <div class="container">
+    <div class="row justify-content-center text-center py-5">
+      <div class="col-lg-10">
+        <div class="hero-icon mb-4">
+          <i class="fas fa-book-reader fa-3x"></i>
+        </div>
+        <h1 class="display-4 fw-bold mb-3">Member Guide</h1>
+        <p class="lead mb-0">راهنمای اعضا | Medlemsguide</p>
+        <p class="mt-3 mb-0 opacity-75">Bridge – جامعه آنلاین ایرانیان در سوئد</p>
+        <p class="mb-0 opacity-75">Bridge – den iranska onlinegemenskapen i Sverige</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      
+      <!-- Mission Section -->
+      <div class="guide-section mb-5">
+        <div class="guide-section-header">
+          <h2 class="guide-section-title">
+            <i class="fas fa-bullseye me-3 text-primary"></i>
+            <span class="d-inline-block">مأموریت سایت | Webbplatsens uppdrag</span>
+          </h2>
+        </div>
+        <div class="guide-content-card">
+          <div class="guide-content-body">
+            <p class="guide-text">
+              Bridge با یک هدف ساده اما مهم ساخته شده است: کمک به ایرانیانی که در سوئد زندگی می‌کنند تا کمتر سردرگم باشند و تصمیم‌های آگاهانه‌تری بگیرند. این پلتفرم نه یک رسانه خبری است، نه جایگزین اداره‌های رسمی و نه تریبون سیاسی. Bridge یک فضای مستقل و جامعه‌محور است که تلاش می‌کند تجربه‌های واقعی، اطلاعات کاربردی و مسیرهای قابل‌فهم زندگی در سوئد را در کنار هم قرار دهد.
+            </p>
+            <p class="guide-text">
+              ما باور داریم که بسیاری از مشکلات مهاجرت نه به‌دلیل نبود اطلاعات، بلکه به‌خاطر پراکندگی، پیچیدگی و دسترسی دشوار به آن‌ها به وجود می‌آیند. همچنین معتقدیم تجربه‌های انسانی، اگر درست و مسئولانه منتقل شوند، می‌توانند به اندازه منابع رسمی مفید و راهگشا باشند. در نهایت، Bridge بر این اصل استوار است که هیچ‌کس نباید در مسیر زندگی در یک کشور جدید احساس تنهایی کند.
+            </p>
+            <p class="guide-text mb-0">
+              <strong>شعارهای محوری Bridge:</strong> Bridge پلی است میان تجربه و تصمیم؛ جایی که زندگی در سوئد شفاف‌تر می‌شود، یادآوری می‌کند که «تنها نیستی» و روی آنچه واقعاً به کارت می‌آید تمرکز دارد.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Types Section -->
+      <div class="guide-section mb-5">
+        <div class="guide-section-header">
+          <h2 class="guide-section-title">
+            <i class="fas fa-folder-open me-3 text-primary"></i>
+            <span class="d-inline-block">Bridge چه نوع محتوایی دارد؟ | Vilken typ av innehåll finns på Bridge?</span>
+          </h2>
+        </div>
+        
+        <!-- Life in Sweden -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-home me-2"></i>
+              زندگی در سوئد (Life in Sweden) | Att leva i Sverige
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              این بخش قلب سایت به‌شمار می‌رود. در اینجا درباره موقعیت‌هایی می‌نویسیم که بسیاری از ایرانیان ساکن سوئد با آن‌ها روبه‌رو می‌شوند؛ از شروع زندگی در سوئد گرفته تا پیدا کردن یا از دست دادن کار، تمدید یا تغییر اقامت، تشکیل خانواده، بحران‌های روحی یا شغلی و تصمیم مهم. هر مطلب از یک وضعیت واقعی آغاز می‌شود و تلاش می‌کند مسیرها و انتخاب‌های پیشِ رو را روشن‌تر کند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Work & Economy -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-briefcase me-2"></i>
+              کار و اقتصاد (Careers & Economy) | Arbete och ekonomi
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              در این بخش به موضوعاتی پرداخته می‌شود که مستقیماً به تصمیم‌های شغلی و مالی مربوط هستند. از بازار کار و محیط کاری در سوئد گرفته تا حقوق، قراردادها، مالیات، A-kassa، بیکاری، فریلنسری و کسب‌وکار. این محتواها معمولاً بر پایه‌ی تجربه‌ی روزمره و نیاز واقعی نوشته می‌شوند و رویکردی عملی دارند، نه صرفاً تئوریک.
+            </p>
+          </div>
+        </div>
+
+        <!-- Law & Integration -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-balance-scale me-2"></i>
+              قوانین و ادغام (Law & Integration) | Lag, migration och integration
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text">
+              این بخش به قوانین، فرآیندها و حقوق مرتبط با زندگی در سوئد می‌پردازد؛ موضوعاتی مانند اقامت و ویزا، قوانین کار، حقوق شهروندی و نحوه ارتباط با اداره‌های سوئدی. هدف اصلی این بخش کمک به فهم ساده و کاربردی قانون است، نه ارائه تفسیر رسمی یا حقوقی و نه جایگزینی برای مشاوره تخصصی.
+            </p>
+            <p class="guide-text">
+              در کنار موضوعات قانونی، ادغام و یکپارچگی در جامعه سوئد (Integration) نیز بخش مهمی از این مسیر است. Integration فقط به معنای داشتن اقامت یا انجام مراحل اداری نیست؛ بلکه به معنای شناخت حقوق و مسئولیت‌ها، آشنایی با ساختارهای اجتماعی، فهم انتظارات نانوشته جامعه و توانایی مشارکت فعال در زندگی اجتماعی و کاری است.
+            </p>
+            <ul class="guide-list">
+              <li>حقوق و مسئولیت‌های فرد در جامعه سوئد</li>
+              <li>نقش زبان، کار و آموزش در فرآیند ادغام</li>
+              <li>ارتباط با نهادهای دولتی و اجتماعی</li>
+              <li>درک قوانین نانوشته‌ای که بر زندگی روزمره و محیط کار اثر می‌گذارند</li>
+            </ul>
+            <p class="guide-text mb-0">
+              رویکرد Bridge در پرداختن به Integration، رویکردی عملی و انسانی است؛ یعنی تمرکز بر اینکه افراد چگونه می‌توانند در عین حفظ هویت خود، جایگاه روشن‌تری در جامعه سوئد پیدا کنند و با آگاهی بیشتر، مسیر زندگی خود را بسازند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Skills & Learning -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-graduation-cap me-2"></i>
+              آموزش و مهارت (Skills & Learning) | Utbildning och färdigheter
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              در این بخش به چیزهایی پرداخته می‌شود که بدون آن‌ها ادامه‌ی زندگی در سوئد دشوار است. سلامت روان و جسم، آموزش و مهارت‌آموزی، یادگیری زبان سوئدی و آشنایی با سیستم آموزشی از محورهای اصلی این بخش هستند. لحن محتوا انسانی، حمایتی و همدلانه است و از فضای آموزشی خشک یا پزشکی فاصله دارد.
+            </p>
+          </div>
+        </div>
+
+        <!-- Events & Announcements -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-calendar-alt me-2"></i>
+              Events & Announcements | Evenemang och tillkännagivanden
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text">
+              بخش Events & Announcements در Bridge برای اطلاع‌رسانی ساده، شفاف و هدفمند طراحی شده است؛ نه برای رقابت با رسانه‌ها و نه برای انتشار انبوه اعلان‌ها. این بخش به رویدادها و اطلاعیه‌هایی می‌پردازد که به‌طور واقعی بر زندگی ایرانیان ساکن سوئد اثر می‌گذارند و هم‌زمان می‌توانند به تقویت پیوند با جامعه سوئد از یک سو و نیز با هویت ایرانی از سوی دیگر کمک کنند.
+            </p>
+            <p class="guide-text mb-0">
+              رویکرد Bridge در این بخش انتخاب‌گری مسئولانه است. هر رویداد یا اطلاعیه پیش از انتشار بررسی می‌شود تا از نظر اعتبار، ارتباط با مأموریت سایت، سودمندی اجتماعی و هم‌خوانی با ارزش‌های فرهنگی جامعه ایرانی، معیارهای لازم را داشته باشد.
+            </p>
+          </div>
+        </div>
+
+        <!-- Public Services -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-building me-2"></i>
+              Public Services | Offentliga tjänster
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              در این بخش تلاش می‌شود خدمات عمومی مهمی که به زندگی روزمره افراد مرتبط هستند، به زبانی قابل‌فهم‌تر معرفی شوند؛ خدماتی که معمولاً توسط نهادهای دولتی یا عمومی ارائه می‌شوند و دانستن نحوه کار آن‌ها می‌تواند از سردرگمی، اتلاف زمان و تصمیم‌های اشتباه جلوگیری کند. Public Services شامل موضوعاتی مانند خدمات درمانی، خدمات اجتماعی، آموزش عمومی، سیستم‌های حمایتی، شهرداری‌ها، مدارس، مراکز کاریابی، بیمه‌ها و سایر نهادهایی است که مهاجران در مسیر زندگی خود با آن‌ها مواجه می‌شوند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Platform Updates -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-bullhorn me-2"></i>
+              Platform Updates | Plattformuppdateringar
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              این بخش یک بخش خبری نیست. محتوا تنها زمانی منتشر می‌شود که تغییری واقعی رخ داده باشد و دانستن آن بتواند به تصمیم‌گیری کاربران کمک کند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Ask Me -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-question-circle me-2"></i>
+              Ask Me
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              Ask Me فضایی است برای پرسیدن سؤال‌های خصوصی از افراد آگاه یا متخصص؛ زمانی که کاربر نمی‌خواهد مسیر خود را با آزمون‌وخطا طی کند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Stories & Experiences -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-book me-2"></i>
+              Stories & Experiences | Berättelser och erfarenheter
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text mb-0">
+              Stories شامل تجربه‌های واقعی کاربران است؛ روایت‌هایی که نشان می‌دهند دیگران چه مسیری را رفته‌اند، با چه چالش‌هایی روبه‌رو شده‌اند و چه درس‌هایی گرفته‌اند.
+            </p>
+          </div>
+        </div>
+
+        <!-- Community & Engagement -->
+        <div class="guide-category-card mb-4">
+          <div class="guide-category-header">
+            <h3 class="guide-category-title">
+              <i class="fas fa-users me-2"></i>
+              Community & Engagement | Gemenskap och engagemang
+            </h3>
+          </div>
+          <div class="guide-category-body">
+            <p class="guide-text">
+              بخش Community & Engagement در Bridge با این درک شکل گرفته است که مشارکت اجتماعی در میان مهاجران، به‌ویژه در سال‌های ابتدایی زندگی در کشور جدید، معمولاً محدود است. این کمبود مشارکت اغلب نه از بی‌علاقگی، بلکه از ناآشنایی با ساختارها، حقوق، مسیرهای قانونی و نبود فضای امن برای حضور و بیان تجربه ناشی می‌شود.
+            </p>
+            <p class="guide-text">
+              Bridge تلاش می‌کند این فاصله را کاهش دهد. این بخش فضایی فراهم می‌کند تا مهاجران بتوانند به‌تدریج و با اطمینان بیشتری در جامعه میزبان مشارکت کنند، تجربه‌های خود را به اشتراک بگذارند و از ظرفیت‌های قانونی و اجتماعی موجود استفاده کنند.
+            </p>
+            <p class="guide-text mb-0">
+              در نهایت این بخش بازتاب این باور Bridge است که مشارکت، حتی در ساده‌ترین شکل آن، می‌تواند کیفیت زندگی مهاجران را بهبود ببخشد، احساس تعلق را تقویت کند و زندگی در جامعه جدید را قابل‌فهم‌تر و انسانی‌تر سازد.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Writing Section -->
+      <div class="guide-section mb-5">
+        <div class="guide-section-header">
+          <h2 class="guide-section-title">
+            <i class="fas fa-pen-fancy me-3 text-primary"></i>
+            <span class="d-inline-block">چه کسانی می‌توانند بنویسند و چگونه؟ | Vem kan skriva – och hur?</span>
+          </h2>
+        </div>
+        <div class="guide-content-card">
+          <div class="guide-content-body">
+            <p class="guide-text">
+              Bridge به مشارکت باز باور دارد. به همین دلیل، همه کاربران ثبت‌نام‌شده می‌توانند بنویسند. با این حال، همه محتواها یک سطح مسئولیت ندارند. در Bridge به‌روشنی گفته می‌شود که همه می‌توانند تجربه خود را بنویسند، اما انتشار برخی محتواها نیازمند بررسی است تا کیفیت و شفافیت حفظ شود.
+            </p>
+            <div class="guide-writing-types">
+              <div class="guide-type-card mb-3">
+                <h4 class="guide-type-title">
+                  <i class="fas fa-user-circle me-2 text-info"></i>
+                  Experience
+                </h4>
+                <p class="guide-text mb-0">
+                  روایت شخصی و تجربه‌ی زیسته است؛ میتواند شامل یک اطلاع رسانی ساده از مواردی باشد به درد کسانی بخورد یا شامل اشتباه‌ها، درس‌ها و مسیرهایی که فرد طی کرده است. این نوع محتوا ادعای تخصصی ندارد، تجربه فردی را منتقل می‌کند و برای بسیاری از کاربران الهام‌بخش است.
+                </p>
+              </div>
+              <div class="guide-type-card mb-0">
+                <h4 class="guide-type-title">
+                  <i class="fas fa-check-circle me-2 text-success"></i>
+                  Guide
+                </h4>
+                <p class="guide-text mb-0">
+                  محتوای ساختارمند و قابل اقدام است که به مراحل مشخص اشاره می‌کند، منابع رسمی دارد و با مسئولیت بیشتری منتشر می‌شود. از نظر فنی، تجربه‌ها معمولاً نیاز به بررسی دارند و راهنماها همیشه با دقت و نظارت بیشتری منتشر می‌شوند.
+                </p>
+              </div>
+            </div>
+            <p class="guide-text mt-3 mb-0">
+              Bridge تلاش نمی‌کند با عدد، لایک یا الگوریتم نوشته ها را ارزش گذاری کند. ارزش اصلی نوشتن در این سایت دیده‌شدن واقعی، اثرگذاری اجتماعی، کمک به دیگران و امکان تبدیل‌شدن به نویسنده مورد اعتماد است.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roles Section -->
+      <div class="guide-section mb-5">
+        <div class="guide-section-header">
+          <h2 class="guide-section-title">
+            <i class="fas fa-user-tag me-3 text-primary"></i>
+            <span class="d-inline-block">نقش‌ها در سایت | Roller på plattformen</span>
+          </h2>
+        </div>
+        <div class="guide-content-card">
+          <div class="guide-content-body">
+            <p class="guide-text">
+              در Bridge نقش‌ها به‌صورت شفاف تعریف شده‌اند. همه به مطالب سایت دسترسی دارند، همه می توانند به عنوان User بنویسند اما انتشار محتوای او نیاز به بررسی دارد. محتوای تخصصی توسط نویسندگانی منتشر می‌شود که مسئولیت بیشتری برای مطالب خود دارند و مطالب خود را مستقیماً و بدون تایید ادمین منتشر می‌کنند اما نیازمند طی مرحله خاص خود است.
+            </p>
+            <div class="guide-roles-grid">
+              <div class="guide-role-card">
+                <div class="guide-role-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                <h4 class="guide-role-title">User</h4>
+                <p class="guide-text small mb-0">همه می‌توانند بنویسند اما محتوا نیاز به بررسی دارد</p>
+              </div>
+              <div class="guide-role-card">
+                <div class="guide-role-icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <h4 class="guide-role-title">نویسنده مورد اعتماد</h4>
+                <p class="guide-text small mb-0">کسی است که مسئولانه نوشته، تجربه یا منبع معتبر داشته و اعتماد تحریری را به‌دست آورده باشد</p>
+              </div>
+              <div class="guide-role-card">
+                <div class="guide-role-icon">
+                  <i class="fas fa-edit"></i>
+                </div>
+                <h4 class="guide-role-title">Editor</h4>
+                <p class="guide-text small mb-0">مسئول بررسی و تایید محتواست</p>
+              </div>
+              <div class="guide-role-card">
+                <div class="guide-role-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4 class="guide-role-title">Admin</h4>
+                <p class="guide-text small mb-0">مدیریت کلی سایت را بر عهده دارد</p>
+              </div>
+            </div>
+            <p class="guide-text mt-4 mb-0">
+              Bridge از همه کسانی که تجربه‌ای واقعی از زندگی در سوئد دارند دعوت می‌کند تا بنویسند. لازمه نوشتن در این سایت متخصص بودن نیست، بلکه به‌معنای مسئولانه حرف زدن است. فرآیند انتشار ساده است: ارسال محتوا، بررسی، اصلاح در صورت نیاز و سپس انتشار.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advertising Policy -->
+      <div class="guide-section mb-5">
+        <div class="guide-section-header">
+          <h2 class="guide-section-title">
+            <i class="fas fa-ad me-3 text-primary"></i>
+            <span class="d-inline-block">سیاست تبلیغات | Annonspolicy</span>
+          </h2>
+        </div>
+        <div class="guide-content-card">
+          <div class="guide-content-body">
+            <p class="guide-text mb-0">
+              Bridge تبلیغ پنهان ندارد. هر نوع همکاری یا تبلیغ به‌صورت شفاف مشخص می‌شود، از محتوای تحریری جداست و نباید گمراه‌کننده باشد.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="guide-cta-section text-center py-4 mb-5">
+        <div class="guide-cta-content">
+          <h3 class="guide-cta-title mb-3">
+            <i class="fas fa-hand-holding-heart me-2"></i>
+            آماده‌ای برای شروع؟
+          </h3>
+          <p class="guide-cta-text mb-4">
+            اگر تجربه‌ای از زندگی در سوئد دارید، از شما دعوت می‌کنیم تا آن را با دیگران به اشتراک بگذارید.
+          </p>
+          <a href="{% url 'create_post' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-plus me-2"></i>ایجاد پست جدید
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

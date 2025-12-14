@@ -28,4 +28,9 @@ def about_me(request):
 def terms_and_conditions(request):
     """View for Terms and Conditions page."""
     return render(request, "about/terms.html")
+
+
+def member_guide(request):
+    """View for Member Guide page."""
+    return render(request, "about/member_guide.html")
     

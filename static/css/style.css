@@ -3603,6 +3603,340 @@ body {
 }
 
 /* ========================================
+   Member Guide Page Styles
+   ======================================== */
+
+/* Hero Section */
+.member-guide-hero {
+  background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.member-guide-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+  background-size: cover;
+  opacity: 0.3;
+}
+
+.member-guide-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-icon {
+  animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Guide Sections */
+.guide-section {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.guide-section-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #0d6efd;
+}
+
+.guide-section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.guide-section-title i {
+  font-size: 1.5rem;
+}
+
+/* Content Cards */
+.guide-content-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.guide-content-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.guide-content-body {
+  padding: 2rem;
+}
+
+.guide-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 1rem;
+  text-align: justify;
+  direction: rtl;
+}
+
+.guide-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Category Cards */
+.guide-category-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #0d6efd;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.guide-category-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.guide-category-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.guide-category-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.guide-category-title i {
+  color: #0d6efd;
+  font-size: 1.1rem;
+}
+
+.guide-category-body {
+  padding: 1.5rem;
+}
+
+/* Lists */
+.guide-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.guide-list li {
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  position: relative;
+  color: #555;
+  line-height: 1.6;
+  direction: rtl;
+  text-align: right;
+}
+
+.guide-list li::before {
+  content: '✓';
+  position: absolute;
+  right: 0;
+  color: #0d6efd;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Writing Types */
+.guide-writing-types {
+  margin: 1.5rem 0;
+}
+
+.guide-type-card {
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.guide-type-card:hover {
+  border-color: #0d6efd;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.1);
+}
+
+.guide-type-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Roles Grid */
+.guide-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.guide-role-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.guide-role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-color: #0d6efd;
+}
+
+.guide-role-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.guide-role-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* CTA Section */
+.guide-cta-section {
+  background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+  border-radius: 15px;
+  color: white;
+}
+
+.guide-cta-content {
+  padding: 2rem;
+}
+
+.guide-cta-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.guide-cta-text {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1.5rem;
+}
+
+.guide-cta-section .btn {
+  background: white;
+  color: #0d6efd;
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.guide-cta-section .btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .guide-section-title {
+    font-size: 1.5rem;
+  }
+  
+  .guide-content-body {
+    padding: 1.5rem;
+  }
+  
+  .guide-category-header {
+    padding: 1rem;
+  }
+  
+  .guide-category-body {
+    padding: 1.25rem;
+  }
+  
+  .guide-roles-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .guide-cta-content {
+    padding: 1.5rem;
+  }
+  
+  .guide-cta-title {
+    font-size: 1.5rem;
+  }
+  
+  .guide-text {
+    font-size: 0.95rem;
+    text-align: right;
+  }
+}
+
+@media (max-width: 576px) {
+  .member-guide-hero .display-4 {
+    font-size: 2rem;
+  }
+  
+  .guide-section-title {
+    font-size: 1.25rem;
+  }
+  
+  .guide-category-title {
+    font-size: 1.1rem;
+  }
+  
+  .guide-content-body {
+    padding: 1.25rem;
+  }
+}
+
+/* ========================================
    Events Category Grid Layout Styles
    ======================================== */
 
