@@ -236,15 +236,22 @@
         <ol class="popular-posts-list">
           {% for post in popular_posts %}
           <li class="popular-post-item">
-            <a href="{% url 'post_detail' post.slug %}" class="popular-post-link" title="{{ post.title }}">
-              {{ post.title|truncatewords:8 }}
-            </a>
-            <div class="popular-post-meta">
-              {% if post.category %}
-              <a href="{% url 'category_posts' post.category.slug %}" class="popular-post-category">
-                <i class="fas fa-tag"></i>
+            <div class="popular-post-content">
+              <a href="{% url 'post_detail' post.slug %}" class="popular-post-thumbnail" title="{{ post.title }}">
+                {% if "placeholder" in post.featured_image.url %}
+                <img src="{% static 'images/default.jpg' %}" alt="{{ post.title }}" class="popular-post-image">
+                {% else %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="popular-post-image">
+                {% endif %}
               </a>
-              {% endif %}
+              <div class="popular-post-text">
+                <a href="{% url 'post_detail' post.slug %}" class="popular-post-link" title="{{ post.title }}">
+                  {{ post.title|truncatewords:8 }}
+                </a>
+                <div class="popular-post-author">
+                  <i class="fas fa-user me-1"></i>{{ post.author.username }}
+                </div>
+              </div>
             </div>
           </li>
           {% endfor %}
