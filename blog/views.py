@@ -9,6 +9,7 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from ratelimit.decorators import ratelimit
 from django.utils.text import slugify
@@ -116,13 +117,18 @@ class PostList(generic.ListView):
         context['page_obj'] = page_obj
         context['is_paginated'] = page_obj.has_other_pages()
 
-        # Categories and popular posts
+        # Categories and expert posts (replaces Popular Posts)
         context['categories'] = Category.objects.all().order_by('name')
+        expert_users = User.objects.filter(
+            profile__can_publish_without_approval=True
+        )
         context['popular_posts'] = (
-            Post.objects.filter(status=1)
-            .annotate(like_count=Count('likes'))
-            .select_related('category', 'author')
-            .order_by('-like_count', '-created_on')[:10]
+            Post.objects.filter(
+                status=1,
+                author__in=expert_users
+            )
+            .select_related('category', 'author', 'author__profile')
+            .order_by('-created_on')[:10]
         )
         
         # Featured post for hero section (most recent published post)
@@ -204,11 +210,17 @@ def post_detail(request, slug):
             )
             return redirect('post_detail', slug=post.slug)
 
-    popular_posts = (
-        Post.objects.filter(status=1)
-        .annotate(like_count=Count('likes'))
-        .select_related('category', 'author')
-        .order_by('-like_count', '-created_on')[:10]
+    # Get expert posts for sidebar (replaces Popular Posts)
+    expert_users = User.objects.filter(
+        profile__can_publish_without_approval=True
+    )
+    expert_posts = (
+        Post.objects.filter(
+            status=1,
+            author__in=expert_users
+        )
+        .select_related('category', 'author', 'author__profile')
+        .order_by('-created_on')[:10]
     )
 
     # Flag to hide pending messages on published posts
@@ -230,7 +242,7 @@ def post_detail(request, slug):
             "comment_form": comment_form,
             "is_favorited": is_favorited,
             "is_liked": is_liked,
-            "popular_posts": popular_posts,
+            "popular_posts": expert_posts,
             "hide_pending_messages": hide_pending_messages,
         },
     )
@@ -420,28 +432,50 @@ def create_post(request):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             post.slug = slug
-            # Always set status to Draft (0) - only admins can publish
-            post.status = 0
+            
+            # Check if user has expert access (can publish without approval)
+            is_expert = (
+                hasattr(request.user, 'profile') and
+                request.user.profile.can_publish_without_approval
+            )
+            
+            # Set status based on expert access
+            if is_expert:
+                post.status = 1  # Published for experts
+            else:
+                post.status = 0  # Draft for regular users
+            
             # URL approval defaults to False - admin must approve
             if post.external_url:
                 post.url_approved = False
             post.save()
             
-            # Show pending message with better styling
+            # Show appropriate message based on expert status
             url_message = ''
             if post.external_url:
                 url_message = ' If you added an external URL, it will also be reviewed and approved by an administrator before being displayed.'
             
-            messages.add_message(
-                request, messages.WARNING,
-                '<div class="pending-post-alert">'
-                '<i class="fas fa-clock me-2"></i>'
-                '<strong>Post Created Successfully!</strong><br>'
-                'Your post has been saved as a draft and is pending for review. '
-                'An administrator will review and publish it soon. You will be notified once it\'s published.'
-                + url_message +
-                '</div>'
-            )
+            if is_expert:
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    '<div class="success-post-alert">'
+                    '<i class="fas fa-check-circle me-2"></i>'
+                    '<strong>Post Published Successfully!</strong><br>'
+                    'Your post has been published and is now visible to all users.'
+                    + url_message +
+                    '</div>'
+                )
+            else:
+                messages.add_message(
+                    request, messages.WARNING,
+                    '<div class="pending-post-alert">'
+                    '<i class="fas fa-clock me-2"></i>'
+                    '<strong>Post Created Successfully!</strong><br>'
+                    'Your post has been saved as a draft and is pending for review. '
+                    'An administrator will review and publish it soon. You will be notified once it\'s published.'
+                    + url_message +
+                    '</div>'
+                )
             return redirect('home')
     else:
         form = PostForm()
@@ -475,9 +509,19 @@ def edit_post(request, slug):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
-            # Preserve original status - users cannot change publication status
-            original_status = Post.objects.get(pk=post.pk).status
-            post.status = original_status
+            # Check if user has expert access
+            is_expert = (
+                hasattr(request.user, 'profile') and
+                request.user.profile.can_publish_without_approval
+            )
+            # Experts can change status, regular users cannot
+            if not is_expert:
+                # Preserve original status for regular users
+                original_status = Post.objects.get(pk=post.pk).status
+                post.status = original_status
+            # For experts, status can be changed via form (if form includes status field)
+            # Note: PostForm doesn't include status field, so experts keep current status
+            # If you want experts to be able to change status, you'd need to add status to PostForm
             # Update slug if title changed
             new_slug = slugify(post.title)
             if new_slug != post.slug:

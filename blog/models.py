@@ -1,10 +1,52 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
+from django.utils import timezone
 
 
 # Create your models here.
 STATUS = ((0, "Draft"), (1, "Published"))
+
+
+class UserProfile(models.Model):
+    """
+    Extended user profile with expert publishing permissions.
+    
+    This model extends the Django User model to add expert access control.
+    Expert users can publish posts without admin approval.
+    """
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        help_text="The user account associated with this profile"
+    )
+    can_publish_without_approval = models.BooleanField(
+        default=False,
+        help_text="If True, user's posts will be published automatically without admin approval."
+    )
+    expert_since = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When expert access was granted"
+    )
+    
+    class Meta:
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
+        ordering = ['-expert_since']
+    
+    def __str__(self):
+        expert_status = "Expert" if self.can_publish_without_approval else "Regular"
+        return f"{self.user.username} - {expert_status}"
+    
+    def save(self, *args, **kwargs):
+        """Set expert_since when access is granted for the first time."""
+        if self.can_publish_without_approval and not self.expert_since:
+            self.expert_since = timezone.now()
+        elif not self.can_publish_without_approval:
+            self.expert_since = None
+        super().save(*args, **kwargs)
 
 
 class Category(models.Model):

@@ -230,7 +230,7 @@
       
       <div class="popular-posts-sidebar">
         <h4 class="sidebar-title">
-          <i class="fas fa-fire me-2"></i>Popular Posts
+          <i class="fas fa-star me-2"></i>Expert Content
         </h4>
         {% if popular_posts %}
         <ol class="popular-posts-list">
@@ -240,9 +240,6 @@
               {{ post.title|truncatewords:8 }}
             </a>
             <div class="popular-post-meta">
-              <span class="popular-post-favorites">
-                <i class="fas fa-heart"></i> {{ post.like_count }}
-              </span>
               {% if post.category %}
               <a href="{% url 'category_posts' post.category.slug %}" class="popular-post-category">
                 <i class="fas fa-tag"></i>
@@ -253,7 +250,7 @@
           {% endfor %}
         </ol>
         {% else %}
-        <p class="text-muted small">No popular posts yet. Be the first to like a post!</p>
+        <p class="text-muted small">No expert content available yet.</p>
         {% endif %}
       </div>
       
