@@ -18,8 +18,13 @@
               <a href="{% url 'create_post' %}" class="btn btn-light btn-lg me-3">
                 <i class="fas fa-plus me-2"></i>Create Post
               </a>
-              <a href="{% url 'favorites' %}" class="btn btn-outline-light btn-lg">
-                <i class="fas fa-star me-2"></i>Favorites
+              <a href="{% url 'ask_me' %}" class="btn btn-ask-me-hero btn-lg">
+                <span class="btn-ask-me-main">
+                  <i class="fas fa-question-circle me-2"></i>Ask Me
+                </span>
+                <span class="btn-ask-me-subtext d-none d-sm-inline">
+                  Ask your question and get expert answers
+                </span>
               </a>
             {% else %}
               <a href="{% url 'home' %}#post_list" class="btn btn-light btn-lg me-3">
