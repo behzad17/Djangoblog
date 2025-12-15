@@ -1627,10 +1627,10 @@ body {
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 20px;
+  position: relative;
   border: 1px solid #e9ecef;
   margin-bottom: 20px;
+  z-index: 5;
 }
 
 .sidebar-title {
@@ -1782,7 +1782,7 @@ body {
 /* Ad Placeholder Styles */
 .ad-placeholder {
   background: #f8f9fa;
-  border: 2px dashed #dee2e6;
+  border: none;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -1793,7 +1793,6 @@ body {
 }
 
 .ad-placeholder:hover {
-  border-color: #188181;
   background: #f0f7f7;
 }
 
@@ -1856,7 +1855,8 @@ body {
   visibility: visible !important;
   opacity: 1 !important;
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  clear: both;
 }
 
 .ad-placeholder-bottom {
@@ -1871,7 +1871,8 @@ body {
   opacity: 1 !important;
   position: relative;
   background: #f8f9fa !important;
-  border: 2px dashed #dee2e6 !important;
+  border: none !important;
+  z-index: 10;
 }
 
 .ad-placeholder-bottom .ad-content {
