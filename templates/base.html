@@ -3,6 +3,7 @@
 {% url 'about' as about_url %} 
 {% url 'ask_me' as ask_me_url %}
 {% url 'terms' as terms_url %}
+{% url 'ads:ads_home' as ads_home_url %}
 {% url 'member_guide' as member_guide_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
@@ -98,6 +99,13 @@
                 class="nav-link {% if request.path == ask_me_url %}active{% endif %}"
                 href="{{ ask_me_url }}"
                 ><i class="fas fa-question-circle me-1"></i>Ask Me</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
+                href="{{ ads_home_url }}"
+                >Ads</a
               >
             </li>
           </ul>
@@ -236,6 +244,7 @@
               <li><a href="{{ about_url }}">About</a></li>
               <li><a href="{{ create_post_url }}">Create Post</a></li>
               <li><a href="{{ favorites_url }}">Favorites</a></li>
+              <li><a href="{{ ads_home_url }}">Advertisements</a></li>
               <li><a href="{{ terms_url }}">Terms & Conditions</a></li>
               <li><a href="{{ member_guide_url }}">Member Guide</a></li>
             </ul>

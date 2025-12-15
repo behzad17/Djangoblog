@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'blog',
     'about',
     'askme',
+    'ads',
 ]
 
 SITE_ID = 1

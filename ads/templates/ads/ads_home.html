@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load ads_extras %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-4 text-center">Advertisements</h1>
+  <p class="text-muted text-center mb-5">
+    Browse advertisement categories. Each category leads to its own listing of active, approved ads.
+  </p>
+
+  <div class="row justify-content-center">
+    {% for category in categories %}
+      <div class="col-md-4 col-lg-3 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ category.name }}</h5>
+            {% if category.description %}
+              <p class="card-text small text-muted">
+                {{ category.description|truncatewords:20 }}
+              </p>
+            {% endif %}
+            <p class="card-text">
+              <span class="badge bg-primary">
+                {{ ad_counts|get_item:category.id|default:0 }} ads
+              </span>
+            </p>
+            <a href="{% url 'ads:ads_by_category' category.slug %}" class="btn btn-outline-primary btn-sm">
+              View Ads
+            </a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center">
+        <p class="text-muted">No advertisement categories defined yet.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}
+
+

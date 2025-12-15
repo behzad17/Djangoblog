@@ -1,0 +1,123 @@
+from django.db import models
+from cloudinary.models import CloudinaryField
+from django.utils.text import slugify
+from django.utils import timezone
+
+
+class AdCategory(models.Model):
+    """
+    Category for grouping advertisements.
+
+    There will typically be around 10 categories, each with its own listing page.
+    """
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Advertisement Category"
+        verbose_name_plural = "Advertisement Categories"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def ad_count(self):
+        """Return number of approved, active ads in this category."""
+        return self.ads.filter(is_active=True, is_approved=True).count()
+
+
+class Ad(models.Model):
+    """
+    An advertisement with image and click-through URL.
+
+    - Each Ad belongs to a category.
+    - Each Ad has its own detail page (slug-based URL).
+    - Image is displayed at 250x500 via CSS on the site.
+    - The image links to a custom URL provided by the advertiser.
+    - Visibility is controlled via approval and active flags and optional date range.
+    """
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    category = models.ForeignKey(
+        AdCategory,
+        on_delete=models.PROTECT,
+        related_name="ads",
+    )
+
+    image = CloudinaryField(
+        "ad_image",
+        blank=False,
+        help_text="Upload the main ad image (will be displayed at 250x500).",
+    )
+
+    target_url = models.URLField(
+        max_length=500,
+        help_text="External URL to open when the ad is clicked.",
+    )
+    url_approved = models.BooleanField(
+        default=False,
+        help_text="Whether the target URL has been reviewed and approved by an admin.",
+    )
+
+    # Moderation and scheduling
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Uncheck to hide this ad without deleting it.",
+    )
+    is_approved = models.BooleanField(
+        default=False,
+        help_text="Only approved ads will be visible on the site.",
+    )
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Optional start date for showing this ad.",
+    )
+    end_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Optional end date for showing this ad.",
+    )
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_on"]
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        """
+        Automatically generate a unique slug from the title if not set.
+        """
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while Ad.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def is_currently_visible(self):
+        """
+        Check if the ad should be shown based on approval, active flag, and date range.
+        """
+        if not (self.is_active and self.is_approved and self.url_approved):
+            return False
+
+        today = timezone.now().date()
+        if self.start_date and today < self.start_date:
+            return False
+        if self.end_date and today > self.end_date:
+            return False
+        return True
+
+
+# Create your models here.

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <h1 class="h3 mb-3">{{ ad.title }}</h1>
+          <p class="text-muted small mb-4">
+            Category: {{ ad.category.name }}
+          </p>
+
+          {% if ad.target_url and ad.url_approved %}
+            <a href="{{ ad.target_url }}" target="_blank" rel="noopener noreferrer">
+              <img
+                src="{{ ad.image.url }}"
+                alt="{{ ad.title }}"
+                class="img-fluid ad-image-detail"
+              />
+            </a>
+          {% else %}
+            <img
+              src="{{ ad.image.url }}"
+              alt="{{ ad.title }}"
+              class="img-fluid ad-image-detail"
+            />
+          {% endif %}
+
+          {% if ad.target_url and ad.url_approved %}
+            <p class="mt-3">
+              <a href="{{ ad.target_url }}" target="_blank" rel="noopener noreferrer">
+                Click here to visit our sponsor
+              </a>
+            </p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="mt-3">
+        <a href="{% url 'ads:ads_by_category' ad.category.slug %}">&larr; Back to {{ ad.category.name }} ads</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
