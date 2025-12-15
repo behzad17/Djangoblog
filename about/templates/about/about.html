@@ -2,6 +2,15 @@
 {% load static %} 
 {% load crispy_forms_tags %} 
 
+{% comment %}
+  Example: Full-page LTR override
+  This page demonstrates how to force an entire page to LTR (English/Swedish)
+  by overriding the default RTL blocks from base.html
+{% endcomment %}
+{% block html_lang %}en{% endblock %}
+{% block html_dir %}ltr{% endblock %}
+{% block body_class %}ltr{% endblock %}
+
 {% block content %}
 <!-- About Section -->
 <div class="container mt-4 mb-5">

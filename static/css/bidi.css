@@ -1,0 +1,76 @@
+/**
+ * Bidi (Bidirectional) CSS Support
+ * 
+ * Provides RTL (Right-to-Left) and LTR (Left-to-Right) scoping classes
+ * for mixing directional content within the same page.
+ * 
+ * Default: Site is RTL (Persian-first) via body.rtl class
+ * Override: Use .ltr class on body or specific sections for LTR content
+ */
+
+/* ============================================
+   RTL Scope (Default - Persian)
+   ============================================ */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Input and textarea alignment in RTL */
+.rtl input,
+.rtl textarea,
+.rtl select {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Card text alignment in RTL */
+.rtl .card,
+.rtl .card-body {
+  text-align: right;
+}
+
+/* Dropdown menu alignment in RTL */
+.rtl .dropdown-menu {
+  text-align: right;
+}
+
+/* Summernote editor area in RTL */
+.rtl .note-editable {
+  direction: rtl;
+  text-align: right;
+}
+
+/* ============================================
+   LTR Scope (Override - English/Swedish)
+   ============================================ */
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Input and textarea alignment in LTR */
+.ltr input,
+.ltr textarea,
+.ltr select {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Card text alignment in LTR */
+.ltr .card,
+.ltr .card-body {
+  text-align: left;
+}
+
+/* Dropdown menu alignment in LTR */
+.ltr .dropdown-menu {
+  text-align: left;
+}
+
+/* Summernote editor area in LTR */
+.ltr .note-editable {
+  direction: ltr;
+  text-align: left;
+}
+

@@ -12,7 +12,7 @@
 {% url 'create_post' as create_post_url %}
 
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html class="h-100" lang="{% block html_lang %}fa{% endblock %}" dir="{% block html_dir %}rtl{% endblock %}">
   <head>
     <!-- Page Title and Meta Tags -->
     <title>swedentoday Blog</title>
@@ -51,9 +51,11 @@
 
     <!-- Custom CSS - Site-specific styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}" />
+    <!-- Bidi (RTL/LTR) CSS - Directional support -->
+    <link rel="stylesheet" href="{% static 'css/bidi.css' %}?v={% now 'U' %}" />
   </head>
 
-  <body class="d-flex flex-column h-100 main-bg">
+  <body class="d-flex flex-column h-100 main-bg {% block body_class %}rtl{% endblock %}">
     <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div class="container-fluid">
