@@ -1,17 +1,20 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <!-- Hero Section -->
-<section class="hero-section bg-dark text-white mb-4" style="background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%); padding: 2rem 0;">
+<section
+  class="hero-section bg-dark text-white mb-4"
+  style="
+    background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+    padding: 2rem 0;
+  "
+>
   <div class="container">
     <div class="row justify-content-center text-center">
       <div class="col-lg-8">
         <h1 class="hero-title mb-3">
-          <i class="fas fa-star me-2"></i>Your Favorite Posts
+          <i class="fas fa-star ms-2"></i>پست‌های علاقه‌مندی شما
         </h1>
         <p class="hero-subtitle">
-          All the posts you've saved for later reading.
+          تمام پست‌هایی که برای خواندن بعدی ذخیره کرده‌اید.
         </p>
       </div>
     </div>
@@ -23,7 +26,8 @@
   <div class="row mb-3">
     <div class="col-12">
       <p class="text-muted">
-        <i class="fas fa-info-circle me-2"></i>You have <strong>{{ favorite_posts|length }}</strong> favorite post{{ favorite_posts|length|pluralize }}.
+        <i class="fas fa-info-circle ms-2"></i>شما
+        <strong>{{ favorite_posts|length }}</strong> پست علاقه‌مندی دارید.
       </p>
     </div>
   </div>
@@ -34,9 +38,17 @@
       <div class="card post-card mb-4 position-relative">
         <div class="card-body">
           <!-- Remove Favorite Button -->
-          <form action="{% url 'remove_from_favorites' post.id %}" method="POST" class="favorite-remove-form">
+          <form
+            action="{% url 'remove_from_favorites' post.id %}"
+            method="POST"
+            class="favorite-remove-form"
+          >
             {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-danger favorite-remove-btn" title="Remove from favorites">
+            <button
+              type="submit"
+              class="btn btn-sm btn-danger favorite-remove-btn"
+              title="حذف از علاقه‌مندی‌ها"
+            >
               <i class="fas fa-times"></i>
             </button>
           </form>
@@ -59,28 +71,32 @@
           <a href="{% url 'post_detail' post.slug %}" class="post-link">
             <h2 class="card-title">{{ post.title }}</h2>
           </a>
-          
+
           {% if post.pinned %}
-          <div class="pinned-badge" title="Pinned{% if post.pinned_row %} • Row {{ post.pinned_row }}{% endif %}">
+          <div
+            class="pinned-badge"
+            title="پین شده{% if post.pinned_row %} • ردیف {{ post.pinned_row }}{% endif %}"
+          >
             <i class="fas fa-check-circle"></i>
           </div>
-          {% endif %}
-
-          {% if post.category %}
+          {% endif %} {% if post.category %}
           <div class="mb-2">
-            <a href="{% url 'category_posts' post.category.slug %}" class="category-badge">
-              <i class="fas fa-tag me-1"></i>{{ post.category.name }}
+            <a
+              href="{% url 'category_posts' post.category.slug %}"
+              class="category-badge"
+            >
+              <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
             </a>
           </div>
           {% endif %}
-          
-          <p class="post-author-inline">Author: {{ post.author }}</p>
+
+          <p class="post-author-inline">نویسنده: {{ post.author }}</p>
           <hr />
           <p class="card-text text-muted h6">
-            {{ post.created_on|date:"M d, Y" }} | 
-            <i class="far fa-comments me-1"></i>{{ post.comment_count }}
-            {% if post.like_count > 0 %}
-            | <i class="fas fa-heart me-1 text-danger"></i>{{ post.like_count }}
+            {{ post.created_on|date:"M d, Y" }} |
+            <i class="far fa-comments ms-1"></i>{{ post.comment_count }} {% if
+            post.like_count > 0 %} |
+            <i class="fas fa-heart ms-1 text-danger"></i>{{ post.like_count }}
             {% endif %}
           </p>
         </div>
@@ -90,23 +106,22 @@
     <!-- divisibleby:4 for 4 columns per row -->
     {% if forloop.counter|divisibleby:4 %}
   </div>
-  <div class="row blog-post-row">
-    {% endif %}
-    {% endfor %}
-  </div>
+  <div class="row blog-post-row">{% endif %} {% endfor %}</div>
   {% else %}
   <!-- Empty State -->
   <div class="row">
     <div class="col-12">
       <div class="card shadow-sm text-center py-5">
         <div class="card-body">
-          <i class="fas fa-star fa-4x text-muted mb-4" style="opacity: 0.3;"></i>
-          <h3 class="text-muted mb-3">No Favorite Posts Yet</h3>
+          <i class="fas fa-star fa-4x text-muted mb-4" style="opacity: 0.3"></i>
+          <h3 class="text-muted mb-3">هنوز پست علاقه‌مندی ندارید</h3>
           <p class="text-muted mb-4">
-            Start saving posts you love! Click the <i class="fas fa-star text-warning"></i> icon on any post to add it to your favorites.
+            شروع به ذخیره پست‌هایی که دوست دارید کنید! روی آیکون
+            <i class="fas fa-star text-warning"></i> هر پست کلیک کنید تا به
+            علاقه‌مندی‌های شما اضافه شود.
           </p>
           <a href="{% url 'home' %}" class="btn btn-primary">
-            <i class="fas fa-arrow-left me-2"></i>Browse Posts
+            <i class="fas fa-arrow-right ms-2"></i>مرور پست‌ها
           </a>
         </div>
       </div>

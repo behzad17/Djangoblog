@@ -35,6 +35,464 @@
   text-align: right;
 }
 
+/* Navbar RTL adjustments */
+.rtl .navbar-nav.me-auto {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+.rtl .navbar-nav.ms-auto {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
+/* Navbar icon spacing in RTL - icons should be on left side of text */
+.rtl .nav-link i.me-1,
+.rtl .nav-link i.me-2 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .dropdown-item i.me-1,
+.rtl .dropdown-item i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Dropdown menu positioning in RTL */
+.rtl .dropdown-menu-end {
+  right: auto;
+  left: 0;
+}
+
+/* Hero section RTL adjustments */
+.rtl .hero-content {
+  text-align: right;
+}
+
+.rtl .hero-title {
+  text-align: right;
+}
+
+.rtl .hero-subtitle {
+  text-align: right;
+}
+
+/* Hero button spacing in RTL - swap me-3 to ms-3 */
+.rtl .hero-buttons .btn.me-3 {
+  margin-left: 1rem !important;
+  margin-right: 0 !important;
+}
+
+/* Hero button icon spacing in RTL */
+.rtl .hero-buttons .btn i.me-1,
+.rtl .hero-buttons .btn i.me-2 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .hero-buttons .btn-ask-me-hero {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Featured post card RTL adjustments */
+.rtl .featured-post-meta i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .featured-post-meta .ms-3 {
+  margin-right: 1rem !important;
+  margin-left: 0 !important;
+}
+
+/* Category section RTL adjustments */
+.rtl .category-section-title {
+  text-align: right;
+}
+
+.rtl .category-section-title i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Post boxes (post cards) RTL adjustments */
+.rtl .post-card {
+  text-align: right;
+}
+
+.rtl .post-card .card-body {
+  text-align: right;
+}
+
+.rtl .post-card .category-badge i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .post-author-inline {
+  text-align: right;
+}
+
+.rtl .post-card .card-text {
+  text-align: right;
+}
+
+/* Category list page RTL adjustments */
+.rtl .category-page-title {
+  text-align: right;
+}
+
+.rtl .category-page-title i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .category-description {
+  text-align: right;
+}
+
+.rtl .breadcrumb {
+  direction: rtl;
+}
+
+.rtl .breadcrumb-item + .breadcrumb-item::before {
+  content: var(--bs-breadcrumb-divider, "←");
+  padding-left: 0.5rem;
+  padding-right: 0;
+  float: right;
+}
+
+/* Post detail page RTL adjustments */
+.rtl .masthead-text {
+  text-align: right;
+}
+
+.rtl .post-title {
+  text-align: right;
+}
+
+.rtl .post-subtitle {
+  text-align: right;
+}
+
+.rtl .category-badge-large i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .masthead-text .btn i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .post-detail-card {
+  text-align: right;
+}
+
+.rtl .post-detail-card .badge i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .event-dates-info {
+  text-align: right;
+}
+
+.rtl .event-dates-info .card-title i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .external-url-badge-related i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .comment-form-card {
+  text-align: right;
+}
+
+.rtl .comments-card {
+  text-align: right;
+}
+
+.rtl .comments {
+  text-align: right;
+}
+
+.rtl .popular-post-author i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .sidebar-title i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Pagination RTL adjustments */
+.rtl .pagination {
+  direction: rtl;
+  justify-content: center;
+}
+
+.rtl .page-link {
+  direction: rtl;
+}
+
+/* Ask Me RTL adjustments */
+.rtl .moderator-card {
+  text-align: right;
+}
+
+.rtl .moderator-card .card-body {
+  text-align: right;
+}
+
+.rtl .moderator-card i.me-1,
+.rtl .moderator-card i.me-2 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .ask-question-btn i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .notification-badge {
+  left: auto !important;
+  right: 0 !important;
+  transform: translate(50%, -50%);
+}
+
+.rtl .position-relative .notification-badge.start-100 {
+  left: auto !important;
+  right: 0 !important;
+}
+
+.rtl .modal-header {
+  text-align: right;
+}
+
+.rtl .modal-header i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .modal-body {
+  text-align: right;
+}
+
+.rtl .form-label {
+  text-align: right;
+}
+
+.rtl .form-text {
+  text-align: right;
+}
+
+.rtl .question-text,
+.rtl .answer-text {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .answer-section {
+  text-align: right;
+}
+
+.rtl .answer-section i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+.rtl .card-header {
+  text-align: right;
+}
+
+.rtl .card-header i.me-1,
+.rtl .card-header i.me-2 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+/* Ads RTL adjustments */
+.rtl .ads-image-250x500,
+.rtl .ads-image-250x500-detail {
+  direction: ltr; /* Images should not be flipped */
+}
+
+.rtl .card-title {
+  text-align: right;
+}
+
+.rtl .card-text {
+  text-align: right;
+}
+
+/* About page RTL adjustments */
+.rtl .about-card {
+  text-align: right;
+}
+
+.rtl .about-content {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .collaboration-card {
+  text-align: right;
+}
+
+.rtl .collaboration-title {
+  text-align: center;
+}
+
+.rtl .collaboration-description {
+  text-align: center;
+}
+
+/* Member Guide RTL adjustments */
+.rtl .member-guide-hero {
+  text-align: center;
+}
+
+.rtl .guide-language-section {
+  text-align: right;
+}
+
+.rtl .guide-section-header {
+  text-align: right;
+}
+
+.rtl .guide-section-title {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.rtl .guide-content-card {
+  text-align: right;
+}
+
+.rtl .guide-content-body {
+  text-align: right;
+}
+
+.rtl .guide-text {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .guide-text-ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.rtl .guide-category-card {
+  text-align: right;
+}
+
+.rtl .guide-category-title {
+  text-align: right;
+}
+
+.rtl .guide-list {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .guide-type-card {
+  text-align: right;
+}
+
+.rtl .guide-type-title {
+  text-align: right;
+}
+
+.rtl .guide-cta-section {
+  text-align: center;
+}
+
+.rtl .guide-cta-title {
+  text-align: center;
+}
+
+/* Favorites page RTL adjustments */
+.rtl .favorite-remove-form {
+  text-align: left;
+  direction: ltr;
+}
+
+.rtl .favorite-remove-btn {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  right: auto;
+}
+
+/* Create/Edit Post page RTL adjustments */
+.rtl .card-header {
+  text-align: center;
+}
+
+.rtl .card-header h2 {
+  text-align: center;
+}
+
+/* Terms page RTL adjustments */
+.rtl .terms-card {
+  text-align: right;
+}
+
+.rtl .terms-section {
+  text-align: right;
+}
+
+.rtl .terms-section-title {
+  text-align: right;
+}
+
+.rtl .terms-section-title i.me-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+.rtl .terms-content {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .terms-list {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .terms-sublist {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .terms-intro {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl .terms-subtitle {
+  text-align: right;
+}
+
+.rtl .terms-footer {
+  text-align: center;
+}
+
+.rtl .terms-footer i.me-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
 /* Summernote editor area in RTL */
 .rtl .note-editable {
   direction: rtl;
@@ -68,9 +526,19 @@
   text-align: left;
 }
 
+/* Navbar LTR (default Bootstrap behavior - ensure it works) */
+.ltr .navbar-nav.me-auto {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
+.ltr .navbar-nav.ms-auto {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
 /* Summernote editor area in LTR */
 .ltr .note-editable {
   direction: ltr;
   text-align: left;
 }
-

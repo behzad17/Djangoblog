@@ -1,17 +1,21 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 <!-- Hero Section -->
-<section class="hero-section bg-dark text-white mb-4" style="background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%); padding: 3rem 0;">
+<section
+  class="hero-section bg-dark text-white mb-4"
+  style="
+    background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+    padding: 3rem 0;
+  "
+>
   <div class="container">
     <div class="row justify-content-center text-center">
       <div class="col-lg-8">
         <h1 class="hero-title mb-3">
-          <i class="fas fa-question-circle me-2"></i>Ask Me
+          <i class="fas fa-question-circle ms-2"></i>از من بپرس
         </h1>
         <p class="hero-subtitle">
-          Get expert advice from our team of moderators. Click on any moderator below to ask your question.
+          از تیم متخصصان ما مشاوره دریافت کنید. روی هر متخصص در زیر کلیک کنید تا
+          سوال خود را بپرسید.
         </p>
       </div>
     </div>
@@ -23,7 +27,7 @@
   <div class="row">
     <div class="col-12">
       <h2 class="text-center mb-4">
-        <i class="fas fa-users me-2"></i>Our Expert Moderators
+        <i class="fas fa-users ms-2"></i>متخصصان ما
       </h2>
     </div>
   </div>
@@ -35,27 +39,32 @@
       <div class="moderator-card card h-100 shadow-sm">
         <div class="card-body text-center p-4">
           <div class="moderator-image-wrapper mb-3">
-            <img 
-              src="{{ moderator.profile_image.url }}" 
+            <img
+              src="{{ moderator.profile_image.url }}"
               alt="{{ moderator.user.get_full_name|default:moderator.user.username }}"
               class="moderator-image"
             />
           </div>
-          <h5 class="moderator-name mb-2">{{ moderator.user.get_full_name|default:moderator.user.username }}</h5>
+          <h5 class="moderator-name mb-2">
+            {{ moderator.user.get_full_name|default:moderator.user.username }}
+          </h5>
           <p class="moderator-title text-primary mb-3">
-            <i class="fas fa-certificate me-1"></i>{{ moderator.expert_title }}
+            <i class="fas fa-certificate ms-1"></i>{{ moderator.expert_title }}
           </p>
           {% if moderator.bio %}
-          <p class="moderator-bio small text-muted mb-3">{{ moderator.bio|truncatewords:15 }}</p>
+          <p class="moderator-bio small text-muted mb-3">
+            {{ moderator.bio|truncatewords:15 }}
+          </p>
           {% endif %}
           <div class="moderator-stats mb-3">
             <small class="text-muted">
-              <i class="fas fa-question-circle me-1"></i>{{ moderator.question_count }} questions answered
+              <i class="fas fa-question-circle ms-1"></i>{{
+              moderator.question_count }} سوال پاسخ داده شده
             </small>
           </div>
           {% if user.is_authenticated %}
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn btn-primary btn-sm w-100 ask-question-btn"
             data-moderator-id="{{ moderator.id }}"
             data-moderator-name="{{ moderator.user.get_full_name|default:moderator.user.username }}"
@@ -63,11 +72,14 @@
             data-bs-toggle="modal"
             data-bs-target="#questionModal"
           >
-            <i class="fas fa-paper-plane me-2"></i>Ask Question
+            <i class="fas fa-paper-plane ms-2"></i>پرسیدن سوال
           </button>
           {% else %}
-          <a href="{% url 'account_login' %}" class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-sign-in-alt me-2"></i>Login to Ask
+          <a
+            href="{% url 'account_login' %}"
+            class="btn btn-outline-primary btn-sm w-100"
+          >
+            <i class="fas fa-sign-in-alt ms-2"></i>ورود برای پرسیدن
           </a>
           {% endif %}
         </div>
@@ -78,26 +90,34 @@
   {% else %}
   <div class="row">
     <div class="col-12 text-center">
-      <p class="text-muted">No moderators available at the moment. Please check back later.</p>
+      <p class="text-muted">
+        در حال حاضر متخصصی در دسترس نیست. لطفاً بعداً بررسی کنید.
+      </p>
     </div>
   </div>
-  {% endif %}
-
-  {% if user.is_authenticated %}
+  {% endif %} {% if user.is_authenticated %}
   <div class="row mt-4">
     <div class="col-12 text-center">
-      <a href="{% url 'my_questions' %}" class="btn btn-outline-secondary position-relative">
-        <i class="fas fa-list me-2"></i>View My Questions
-        {% if answered_count > 0 %}
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+      <a
+        href="{% url 'my_questions' %}"
+        class="btn btn-outline-secondary position-relative"
+      >
+        <i class="fas fa-list ms-2"></i>مشاهده سوالات من {% if answered_count >
+        0 %}
+        <span
+          class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger notification-badge"
+        >
           {{ answered_count }}
-          <span class="visually-hidden">answered questions</span>
+          <span class="visually-hidden">سوالات پاسخ داده شده</span>
         </span>
         {% endif %}
       </a>
       {% if user.moderator_profile %}
-      <a href="{% url 'moderator_dashboard' %}" class="btn btn-outline-info ms-2">
-        <i class="fas fa-tachometer-alt me-2"></i>Moderator Dashboard
+      <a
+        href="{% url 'moderator_dashboard' %}"
+        class="btn btn-outline-info me-2"
+      >
+        <i class="fas fa-tachometer-alt ms-2"></i>پنل متخصص
       </a>
       {% endif %}
     </div>
@@ -106,37 +126,53 @@
 </div>
 
 <!-- Question Modal -->
-<div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="questionModal"
+  tabindex="-1"
+  aria-labelledby="questionModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="questionModalLabel">
-          <i class="fas fa-question-circle me-2"></i>Ask a Question
+          <i class="fas fa-question-circle ms-2"></i>پرسیدن سوال
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="بستن"
+        ></button>
       </div>
       <div class="modal-body">
         <div id="moderatorInfo" class="mb-3 p-3 bg-light rounded">
-          <strong id="moderatorName"></strong> - <span id="moderatorTitle" class="text-primary"></span>
+          <strong id="moderatorName"></strong> -
+          <span id="moderatorTitle" class="text-primary"></span>
         </div>
         <form id="questionForm" method="post">
           {% csrf_token %}
-          <input type="hidden" id="moderatorId" name="moderator_id" value="">
+          <input type="hidden" id="moderatorId" name="moderator_id" value="" />
           <div class="mb-3">
-            <label for="id_question_text" class="form-label">Your Question <span class="text-danger">*</span></label>
-            <textarea 
-              name="question_text" 
-              id="id_question_text" 
-              class="form-control" 
-              rows="5" 
-              placeholder="Ask your question here..."
+            <label for="id_question_text" class="form-label"
+              >سوال شما <span class="text-danger">*</span></label
+            >
+            <textarea
+              name="question_text"
+              id="id_question_text"
+              class="form-control"
+              rows="5"
+              placeholder="سوال خود را اینجا بنویسید..."
               required
             ></textarea>
-            <div class="form-text">Your question will be private and only visible to you and the moderator.</div>
+            <div class="form-text">
+              سوال شما خصوصی است و فقط برای شما و متخصص قابل مشاهده است.
+            </div>
           </div>
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">
-              <i class="fas fa-paper-plane me-2"></i>Submit Question
+              <i class="fas fa-paper-plane ms-2"></i>ارسال سوال
             </button>
           </div>
         </form>
@@ -145,4 +181,3 @@
   </div>
 </div>
 {% endblock content %}
-

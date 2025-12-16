@@ -1,51 +1,54 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="mb-0">Ads in {{ category.name }}</h1>
+    <h1 class="mb-0">تبلیغات در {{ category.name }}</h1>
     <a href="{% url 'ads:ads_home' %}" class="btn btn-outline-secondary btn-sm">
-      &larr; All Categories
+      &rarr; همه دسته‌بندی‌ها
     </a>
   </div>
   {% if category.description %}
-    <p class="text-muted mb-4">{{ category.description }}</p>
+  <p class="text-muted mb-4">{{ category.description }}</p>
   {% endif %}
 
   <div class="row">
     {% for ad in ads %}
-      <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-          <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
-            <img
-              src="{{ ad.image.url }}"
-              alt="{{ ad.title }}"
-              class="card-img-top ads-image-250x500"
-            />
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">
-              <a href="{% url 'ads:ad_detail' ad.slug %}">
-                {{ ad.title }}
-              </a>
-            </h5>
-            {% if ad.target_url and ad.url_approved %}
-              <p class="card-text">
-                <a href="{{ ad.target_url }}" target="_blank" rel="noopener noreferrer">
-                  Visit sponsor site &raquo;
-                </a>
-              </p>
-            {% endif %}
-          </div>
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <a
+          href="{% url 'ads:ad_detail' ad.slug %}"
+          class="text-decoration-none"
+        >
+          <img
+            src="{{ ad.image.url }}"
+            alt="{{ ad.title }}"
+            class="card-img-top ads-image-250x500"
+          />
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'ads:ad_detail' ad.slug %}"> {{ ad.title }} </a>
+          </h5>
+          {% if ad.target_url and ad.url_approved %}
+          <p class="card-text">
+            <a
+              href="{{ ad.target_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              بازدید از سایت اسپانسر &laquo;
+            </a>
+          </p>
+          {% endif %}
         </div>
       </div>
+    </div>
     {% empty %}
-      <div class="col-12">
-        <p class="text-muted">There are no active ads in this category right now.</p>
-      </div>
+    <div class="col-12">
+      <p class="text-muted">
+        در حال حاضر تبلیغ فعالی در این دسته‌بندی وجود ندارد.
+      </p>
+    </div>
     {% endfor %}
   </div>
 </div>
 {% endblock content %}
-
-

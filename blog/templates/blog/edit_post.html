@@ -1,39 +1,38 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block content %}
 <div class="container">
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <div class="card">
         <div class="card-header">
-          <h2 class="text-center">Edit Post</h2>
+          <h2 class="text-center">ویرایش پست</h2>
         </div>
         <div class="card-body">
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
+
             <!-- Regular fields -->
-            {{ form.title|as_crispy_field }}
-            {{ form.category|as_crispy_field }}
-            {{ form.excerpt|as_crispy_field }}
-            {{ form.featured_image|as_crispy_field }}
-            {{ form.content|as_crispy_field }}
-            {{ form.external_url|as_crispy_field }}
-            
+            {{ form.title|as_crispy_field }} {{ form.category|as_crispy_field }}
+            {{ form.excerpt|as_crispy_field }} {{
+            form.featured_image|as_crispy_field }} {{
+            form.content|as_crispy_field }} {{ form.external_url|as_crispy_field
+            }}
+
             <!-- Event date fields (initially hidden) -->
-            <div id="event-fields-container" style="display: none;">
-              {{ form.event_start_date|as_crispy_field }}
-              {{ form.event_end_date|as_crispy_field }}
+            <div id="event-fields-container" style="display: none">
+              {{ form.event_start_date|as_crispy_field }} {{
+              form.event_end_date|as_crispy_field }}
             </div>
-            
+
             <div class="text-center mt-4">
               <button type="submit" class="btn btn-primary btn-lg">
-                <i class="fas fa-save"></i> Update Post
+                <i class="fas fa-save"></i> به‌روزرسانی پست
               </button>
-              <a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary btn-lg ms-2">
-                <i class="fas fa-arrow-left"></i> Cancel
+              <a
+                href="{% url 'post_detail' post.slug %}"
+                class="btn btn-secondary btn-lg me-2"
+              >
+                <i class="fas fa-arrow-right"></i> انصراف
               </a>
             </div>
           </form>
@@ -43,9 +42,7 @@
   </div>
 </div>
 
-{% endblock %}
-
-{% block extras %}
+{% endblock %} {% block extras %}
 <!-- Summernote initialization for rich text editing -->
 <script>
   $(document).ready(function () {
@@ -69,75 +66,76 @@
 <script>
   // Function to show/hide event date fields based on category selection
   function toggleEventFields() {
-    const categorySelect = document.getElementById('id_category');
-    const eventFieldsContainer = document.getElementById('event-fields-container');
-    const startDateField = document.getElementById('id_event_start_date');
-    const endDateField = document.getElementById('id_event_end_date');
-    
+    const categorySelect = document.getElementById("id_category");
+    const eventFieldsContainer = document.getElementById(
+      "event-fields-container"
+    );
+    const startDateField = document.getElementById("id_event_start_date");
+    const endDateField = document.getElementById("id_event_end_date");
+
     if (!categorySelect || !eventFieldsContainer) {
       return;
     }
-    
+
     const selectedOption = categorySelect.options[categorySelect.selectedIndex];
     if (selectedOption && selectedOption.value) {
       const categoryText = selectedOption.text.trim();
-      
+
       // Check if Events category is selected
-      if (categoryText === 'Events') {
+      if (categoryText === "Events") {
         // Show event fields with smooth transition
-        eventFieldsContainer.style.display = 'block';
-        eventFieldsContainer.style.opacity = '0';
-        setTimeout(function() {
-          eventFieldsContainer.style.transition = 'opacity 0.3s ease';
-          eventFieldsContainer.style.opacity = '1';
+        eventFieldsContainer.style.display = "block";
+        eventFieldsContainer.style.opacity = "0";
+        setTimeout(function () {
+          eventFieldsContainer.style.transition = "opacity 0.3s ease";
+          eventFieldsContainer.style.opacity = "1";
         }, 10);
-        
-        if (startDateField) startDateField.setAttribute('required', 'required');
-        if (endDateField) endDateField.setAttribute('required', 'required');
+
+        if (startDateField) startDateField.setAttribute("required", "required");
+        if (endDateField) endDateField.setAttribute("required", "required");
       } else {
         // Hide event fields
-        eventFieldsContainer.style.transition = 'opacity 0.3s ease';
-        eventFieldsContainer.style.opacity = '0';
-        setTimeout(function() {
-          eventFieldsContainer.style.display = 'none';
+        eventFieldsContainer.style.transition = "opacity 0.3s ease";
+        eventFieldsContainer.style.opacity = "0";
+        setTimeout(function () {
+          eventFieldsContainer.style.display = "none";
         }, 300);
-        
+
         if (startDateField) {
-          startDateField.removeAttribute('required');
+          startDateField.removeAttribute("required");
           // Don't clear values when editing (preserve existing dates)
         }
         if (endDateField) {
-          endDateField.removeAttribute('required');
+          endDateField.removeAttribute("required");
           // Don't clear values when editing (preserve existing dates)
         }
       }
     } else {
       // No category selected
-      eventFieldsContainer.style.display = 'none';
-      if (startDateField) startDateField.removeAttribute('required');
-      if (endDateField) endDateField.removeAttribute('required');
+      eventFieldsContainer.style.display = "none";
+      if (startDateField) startDateField.removeAttribute("required");
+      if (endDateField) endDateField.removeAttribute("required");
     }
   }
-  
+
   // Initialize when DOM is ready
   function initEventFields() {
     // Check on page load (for edit mode - category may already be selected)
     toggleEventFields();
-    
+
     // Check on category change
-    const categorySelect = document.getElementById('id_category');
+    const categorySelect = document.getElementById("id_category");
     if (categorySelect) {
-      categorySelect.addEventListener('change', toggleEventFields);
+      categorySelect.addEventListener("change", toggleEventFields);
     }
   }
-  
+
   // Wait for DOM to be fully loaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initEventFields);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initEventFields);
   } else {
     // DOM already loaded
     initEventFields();
   }
 </script>
 {% endblock %}
-

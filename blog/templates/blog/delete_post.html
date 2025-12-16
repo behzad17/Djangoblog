@@ -1,29 +1,30 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <div class="container">
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <div class="card">
         <div class="card-header bg-danger text-white">
-          <h2 class="text-center">Delete Post</h2>
+          <h2 class="text-center">حذف پست</h2>
         </div>
         <div class="card-body">
           <div class="alert alert-warning">
             <i class="fas fa-exclamation-triangle"></i>
-            <strong>Warning:</strong> Are you sure you want to delete this post? This action cannot be undone.
+            <strong>هشدار:</strong> آیا مطمئن هستید که می‌خواهید این پست را حذف
+            کنید؟ این عمل قابل بازگشت نیست.
           </div>
           <h4>{{ post.title }}</h4>
-          <p class="text-muted">Created on: {{ post.created_on }}</p>
+          <p class="text-muted">ایجاد شده در: {{ post.created_on }}</p>
           <form method="post">
             {% csrf_token %}
             <div class="text-center mt-4">
               <button type="submit" class="btn btn-danger btn-lg">
-                <i class="fas fa-trash"></i> Yes, Delete Post
+                <i class="fas fa-trash"></i> بله، حذف پست
               </button>
-              <a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary btn-lg ms-2">
-                <i class="fas fa-arrow-left"></i> Cancel
+              <a
+                href="{% url 'post_detail' post.slug %}"
+                class="btn btn-secondary btn-lg me-2"
+              >
+                <i class="fas fa-arrow-right"></i> انصراف
               </a>
             </div>
           </form>
@@ -34,4 +35,3 @@
 </div>
 
 {% endblock %}
-

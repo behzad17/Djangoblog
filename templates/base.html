@@ -1,18 +1,16 @@
-{% load static %}
-{% url 'home' as home_url %} 
-{% url 'about' as about_url %} 
-{% url 'ask_me' as ask_me_url %}
-{% url 'terms' as terms_url %}
-{% url 'ads:ads_home' as ads_home_url %}
-{% url 'member_guide' as member_guide_url %}
-{% url 'account_login' as login_url %}
-{% url 'account_signup' as signup_url %}
-{% url 'account_logout' as logout_url %}
-{% url 'favorites' as favorites_url %}
+{% load static %} {% url 'home' as home_url %} {% url 'about' as about_url %} {%
+url 'ask_me' as ask_me_url %} {% url 'terms' as terms_url %} {% url
+'ads:ads_home' as ads_home_url %} {% url 'member_guide' as member_guide_url %}
+{% url 'account_login' as login_url %} {% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %} {% url 'favorites' as favorites_url %}
 {% url 'create_post' as create_post_url %}
 
 <!DOCTYPE html>
-<html class="h-100" lang="{% block html_lang %}fa{% endblock %}" dir="{% block html_dir %}rtl{% endblock %}">
+<html
+  class="h-100"
+  lang="{% block html_lang %}fa{% endblock %}"
+  dir="{% block html_dir %}rtl{% endblock %}"
+>
   <head>
     <!-- Page Title and Meta Tags -->
     <title>swedentoday Blog</title>
@@ -50,12 +48,17 @@
     />
 
     <!-- Custom CSS - Site-specific styles -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/style.css' %}?v={% now 'U' %}"
+    />
     <!-- Bidi (RTL/LTR) CSS - Directional support -->
     <link rel="stylesheet" href="{% static 'css/bidi.css' %}?v={% now 'U' %}" />
   </head>
 
-  <body class="d-flex flex-column h-100 main-bg {% block body_class %}rtl{% endblock %}">
+  <body
+    class="d-flex flex-column h-100 main-bg {% block body_class %}rtl{% endblock %}"
+  >
     <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div class="container-fluid">
@@ -74,7 +77,7 @@
           data-bs-target="#navbarText"
           aria-controls="navbarText"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          aria-label="نمایش منو"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -86,28 +89,28 @@
               <a
                 class="nav-link {% if request.path == home_url %}active{% endif %}"
                 href="{{ home_url }}"
-                >Home</a
+                >خانه</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == about_url %}active{% endif %}"
                 href="{{ about_url }}"
-                >About</a
+                >درباره</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == ask_me_url %}active{% endif %}"
                 href="{{ ask_me_url }}"
-                ><i class="fas fa-question-circle me-1"></i>Ask Me</a
+                ><i class="fas fa-question-circle ms-1"></i>از من بپرس</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
                 href="{{ ads_home_url }}"
-                >Ads</a
+                >تبلیغات</a
               >
             </li>
           </ul>
@@ -123,34 +126,38 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <i class="fas fa-user-circle me-1"></i>Welcome, {{ user.username }}
+                <i class="fas fa-user-circle ms-1"></i>خوش آمدید، {{
+                user.username }}
               </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="userDropdown"
+              >
                 <li>
                   <a class="dropdown-item" href="{{ create_post_url }}">
-                    <i class="fas fa-plus me-2"></i>Create Post
+                    <i class="fas fa-plus ms-2"></i>ایجاد پست
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item" href="{{ favorites_url }}">
-                    <i class="fas fa-star me-2"></i>Favorites
+                    <i class="fas fa-star ms-2"></i>علاقه‌مندی‌ها
                   </a>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a class="dropdown-item" href="{{ logout_url }}">
-                    <i class="fas fa-sign-out-alt me-2"></i>Log Out
+                    <i class="fas fa-sign-out-alt ms-2"></i>خروج
                   </a>
                 </li>
               </ul>
             </li>
             {% else %}
-            <li class="nav-item me-2">
-              <a class="btn btn-outline-light" href="{{ login_url }}">Login</a>
+            <li class="nav-item ms-2">
+              <a class="btn btn-outline-light" href="{{ login_url }}">ورود</a>
             </li>
-            <li class="nav-item me-2">
+            <li class="nav-item ms-2">
               <a class="btn btn-outline-light" href="{{ signup_url }}"
-                >Register</a
+                >ثبت‌نام</a
               >
             </li>
             {% endif %}
@@ -163,18 +170,28 @@
     <div id="adBanner" class="ad-banner" role="banner" aria-live="polite">
       <div class="ad-banner-content">
         <div class="ad-banner-message">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-banner-link">
-            <img src="{% static 'images/ad-banner-top.jpg' %}" alt="Advertisement" class="ad-banner-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="ad-banner-fallback" style="display: none;">
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="ad-banner-link"
+          >
+            <img
+              src="{% static 'images/ad-banner-top.jpg' %}"
+              alt="Advertisement"
+              class="ad-banner-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-banner-fallback" style="display: none">
               <i class="fas fa-bullhorn me-2"></i>
               <span class="sr-only">Announcement: </span>
               Promotional banner / important info
             </div>
           </a>
         </div>
-        <button 
-          type="button" 
-          class="ad-banner-close" 
+        <button
+          type="button"
+          class="ad-banner-close"
           id="closeBanner"
           aria-label="Close announcement banner"
         >
@@ -188,30 +205,28 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          {% for message in messages %}
-            {# Don't show pending messages on published post detail pages #}
-            {# Pending messages are WARNING level, so we hide all WARNING messages on published posts #}
-            {# Don't show "Successfully signed in" messages #}
-            {% if hide_pending_messages|default:False and message.tags == 'warning' %}
-              {# Skip this message - it's a pending message on a published post #}
-            {% elif 'Successfully signed in' in message|stringformat:'s' %}
-              {# Skip login success messages #}
-            {% else %}
-              <div
-                class="alert {{ message.tags }} alert-dismissible fade show"
-                id="msg"
-                role="alert"
-              >
-                {{ message | safe }}
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="alert"
-                  aria-label="Close"
-                ></button>
-              </div>
-            {% endif %}
-          {% endfor %}
+          {% for message in messages %} {# Don't show pending messages on
+          published post detail pages #} {# Pending messages are WARNING level,
+          so we hide all WARNING messages on published posts #} {# Don't show
+          "Successfully signed in" messages #} {% if
+          hide_pending_messages|default:False and message.tags == 'warning' %}
+          {# Skip this message - it's a pending message on a published post #}
+          {% elif 'Successfully signed in' in message|stringformat:'s' %} {#
+          Skip login success messages #} {% else %}
+          <div
+            class="alert {{ message.tags }} alert-dismissible fade show"
+            id="msg"
+            role="alert"
+          >
+            {{ message | safe }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          {% endif %} {% endfor %}
         </div>
       </div>
     </div>
@@ -254,25 +269,50 @@
           <div class="col-md-4">
             <h6 class="text-white text-uppercase small mb-2">Connect</h6>
             <p class="text-white-50 small mb-2">
-              Email: <a class="text-white" href="mailto:info@bjcode.se">info@bjcode.se</a><br />
-              Mobile: <a class="text-white" href="tel:+46706840018">+46 706 84 00 18</a>
+              Email:
+              <a class="text-white" href="mailto:info@bjcode.se"
+                >info@bjcode.se</a
+              ><br />
+              Mobile:
+              <a class="text-white" href="tel:+46706840018">+46 706 84 00 18</a>
             </p>
             <div class="d-flex align-items-center gap-3 footer-social mb-3">
-              <a href="https://www.facebook.com/swedentoday" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <a
+                href="https://www.facebook.com/swedentoday"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
                 <i class="fab fa-facebook-square"></i>
               </a>
-              <a href="https://twitter.com/swedentoday" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <a
+                href="https://twitter.com/swedentoday"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+              >
                 <i class="fab fa-twitter-square"></i>
               </a>
-              <a href="https://www.instagram.com/swedentoday" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a
+                href="https://www.instagram.com/swedentoday"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
                 <i class="fab fa-instagram-square"></i>
               </a>
-              <a href="https://www.youtube.com/@swedentoday" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <a
+                href="https://www.youtube.com/@swedentoday"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+              >
                 <i class="fab fa-youtube-square"></i>
               </a>
             </div>
             <p class="text-white-50 small mb-0 mt-2">
-              {% block copyright %}© {% now "Y" %} Sweden|today{% endblock copyright %}
+              {% block copyright %}© {% now "Y" %} Sweden|today{% endblock
+              copyright %}
             </p>
           </div>
         </div>
@@ -283,29 +323,109 @@
               <div class="footer-logo-loop">
                 <!-- First set of logos -->
                 <div class="footer-logo-slide">
-                  <img src="{% static 'images/logo1.png' %}" alt="Partner Logo 1" class="footer-logo-img">
-                  <img src="{% static 'images/logo2.png' %}" alt="Partner Logo 2" class="footer-logo-img">
-                  <img src="{% static 'images/logo3.png' %}" alt="Partner Logo 3" class="footer-logo-img">
-                  <img src="{% static 'images/logo4.png' %}" alt="Partner Logo 4" class="footer-logo-img">
-                  <img src="{% static 'images/logo5.png' %}" alt="Partner Logo 5" class="footer-logo-img">
-                  <img src="{% static 'images/logo6.png' %}" alt="Partner Logo 6" class="footer-logo-img">
-                  <img src="{% static 'images/logo7.png' %}" alt="Partner Logo 7" class="footer-logo-img">
-                  <img src="{% static 'images/logo8.png' %}" alt="Partner Logo 8" class="footer-logo-img">
-                  <img src="{% static 'images/logo9.png' %}" alt="Partner Logo 9" class="footer-logo-img">
-                  <img src="{% static 'images/logo10.png' %}" alt="Partner Logo 10" class="footer-logo-img">
+                  <img
+                    src="{% static 'images/logo1.png' %}"
+                    alt="Partner Logo 1"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo2.png' %}"
+                    alt="Partner Logo 2"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo3.png' %}"
+                    alt="Partner Logo 3"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo4.png' %}"
+                    alt="Partner Logo 4"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo5.png' %}"
+                    alt="Partner Logo 5"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo6.png' %}"
+                    alt="Partner Logo 6"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo7.png' %}"
+                    alt="Partner Logo 7"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo8.png' %}"
+                    alt="Partner Logo 8"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo9.png' %}"
+                    alt="Partner Logo 9"
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo10.png' %}"
+                    alt="Partner Logo 10"
+                    class="footer-logo-img"
+                  />
                 </div>
                 <!-- Duplicate set for seamless loop -->
                 <div class="footer-logo-slide" aria-hidden="true">
-                  <img src="{% static 'images/logo1.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo2.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo3.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo4.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo5.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo6.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo7.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo8.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo9.png' %}" alt="" class="footer-logo-img">
-                  <img src="{% static 'images/logo10.png' %}" alt="" class="footer-logo-img">
+                  <img
+                    src="{% static 'images/logo1.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo2.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo3.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo4.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo5.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo6.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo7.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo8.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo9.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
+                  <img
+                    src="{% static 'images/logo10.png' %}"
+                    alt=""
+                    class="footer-logo-img"
+                  />
                 </div>
               </div>
             </div>

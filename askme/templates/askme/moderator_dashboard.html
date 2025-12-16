@@ -1,17 +1,22 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 <!-- Hero Section -->
-<section class="hero-section bg-dark text-white mb-4" style="background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%); padding: 2rem 0;">
+<section
+  class="hero-section bg-dark text-white mb-4"
+  style="
+    background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+    padding: 2rem 0;
+  "
+>
   <div class="container">
     <div class="row justify-content-center text-center">
       <div class="col-lg-8">
         <h1 class="hero-title mb-3">
-          <i class="fas fa-tachometer-alt me-2"></i>Moderator Dashboard
+          <i class="fas fa-tachometer-alt ms-2"></i>پنل متخصص
         </h1>
         <p class="hero-subtitle">
-          Welcome, {{ moderator.user.get_full_name|default:moderator.user.username }} - {{ moderator.expert_title }}
+          خوش آمدید، {{
+          moderator.user.get_full_name|default:moderator.user.username }} - {{
+          moderator.expert_title }}
         </p>
       </div>
     </div>
@@ -25,7 +30,7 @@
       <div class="card text-center bg-primary text-white">
         <div class="card-body">
           <h3>{{ stats.total }}</h3>
-          <p class="mb-0">Total Questions</p>
+          <p class="mb-0">کل سوالات</p>
         </div>
       </div>
     </div>
@@ -33,7 +38,7 @@
       <div class="card text-center bg-success text-white">
         <div class="card-body">
           <h3>{{ stats.answered }}</h3>
-          <p class="mb-0">Answered</p>
+          <p class="mb-0">پاسخ داده شده</p>
         </div>
       </div>
     </div>
@@ -41,7 +46,7 @@
       <div class="card text-center bg-warning text-dark">
         <div class="card-body">
           <h3>{{ stats.pending }}</h3>
-          <p class="mb-0">Pending</p>
+          <p class="mb-0">در انتظار</p>
         </div>
       </div>
     </div>
@@ -50,7 +55,7 @@
   <div class="row mb-3">
     <div class="col-12">
       <a href="{% url 'ask_me' %}" class="btn btn-outline-primary">
-        <i class="fas fa-arrow-left me-2"></i>Back to Ask Me
+        <i class="fas fa-arrow-right ms-2"></i>بازگشت به از من بپرس
       </a>
     </div>
   </div>
@@ -60,7 +65,7 @@
   <div class="row mb-4">
     <div class="col-12">
       <h3 class="mb-3">
-        <i class="fas fa-clock text-warning me-2"></i>Pending Questions
+        <i class="fas fa-clock text-warning ms-2"></i>سوالات در انتظار
       </h3>
       {% for question in pending_questions %}
       <div class="card mb-3 shadow-sm">
@@ -68,37 +73,42 @@
           <div class="d-flex justify-content-between align-items-center">
             <div>
               <strong>{{ question.user.username }}</strong>
-              <span class="text-muted ms-2">({{ question.user.email }})</span>
+              <span class="text-muted me-2">({{ question.user.email }})</span>
             </div>
             <small class="text-muted">
-              <i class="fas fa-calendar me-1"></i>{{ question.created_on|date:"F d, Y H:i" }}
+              <i class="fas fa-calendar ms-1"></i>{{ question.created_on|date:"F
+              d, Y H:i" }}
             </small>
           </div>
         </div>
         <div class="card-body">
           <div class="mb-3">
             <h6 class="text-muted mb-2">
-              <i class="fas fa-question me-1"></i>Question:
+              <i class="fas fa-question ms-1"></i>سوال:
             </h6>
             <p class="question-text">{{ question.question_text }}</p>
           </div>
-          <form method="post" action="{% url 'answer_question' question.id %}" class="answer-form">
+          <form
+            method="post"
+            action="{% url 'answer_question' question.id %}"
+            class="answer-form"
+          >
             {% csrf_token %}
             <div class="mb-3">
               <label for="answer_{{ question.id }}" class="form-label">
-                <i class="fas fa-reply me-1"></i>Your Answer:
+                <i class="fas fa-reply ms-1"></i>پاسخ شما:
               </label>
-              <textarea 
-                name="answer_text" 
-                id="answer_{{ question.id }}" 
-                class="form-control" 
-                rows="5" 
-                placeholder="Provide your answer here..."
+              <textarea
+                name="answer_text"
+                id="answer_{{ question.id }}"
+                class="form-control"
+                rows="5"
+                placeholder="پاسخ خود را اینجا بنویسید..."
                 required
               ></textarea>
             </div>
             <button type="submit" class="btn btn-success">
-              <i class="fas fa-check me-2"></i>Submit Answer
+              <i class="fas fa-check ms-2"></i>ارسال پاسخ
             </button>
           </form>
         </div>
@@ -113,7 +123,8 @@
   <div class="row">
     <div class="col-12">
       <h3 class="mb-3">
-        <i class="fas fa-check-circle text-success me-2"></i>Answered Questions
+        <i class="fas fa-check-circle text-success ms-2"></i>سوالات پاسخ داده
+        شده
       </h3>
       {% for question in answered_questions %}
       <div class="card mb-3 shadow-sm">
@@ -121,23 +132,24 @@
           <div class="d-flex justify-content-between align-items-center">
             <div>
               <strong>{{ question.user.username }}</strong>
-              <span class="text-muted ms-2">({{ question.user.email }})</span>
+              <span class="text-muted me-2">({{ question.user.email }})</span>
             </div>
             <small class="text-muted">
-              <i class="fas fa-calendar me-1"></i>Answered: {{ question.answered_on|date:"F d, Y H:i" }}
+              <i class="fas fa-calendar ms-1"></i>پاسخ داده شده: {{
+              question.answered_on|date:"F d, Y H:i" }}
             </small>
           </div>
         </div>
         <div class="card-body">
           <div class="mb-3">
             <h6 class="text-muted mb-2">
-              <i class="fas fa-question me-1"></i>Question:
+              <i class="fas fa-question ms-1"></i>سوال:
             </h6>
             <p class="question-text">{{ question.question_text }}</p>
           </div>
           <div class="answer-section p-3 bg-light rounded">
             <h6 class="text-primary mb-2">
-              <i class="fas fa-reply me-1"></i>Your Answer:
+              <i class="fas fa-reply ms-1"></i>پاسخ شما:
             </h6>
             <p class="answer-text mb-0">{{ question.answer_text }}</p>
           </div>
@@ -146,16 +158,13 @@
       {% endfor %}
     </div>
   </div>
-  {% endif %}
-
-  {% if not pending_questions and not answered_questions %}
+  {% endif %} {% if not pending_questions and not answered_questions %}
   <div class="row">
     <div class="col-12 text-center py-5">
       <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-      <p class="text-muted">No questions assigned to you yet.</p>
+      <p class="text-muted">هنوز سوالی به شما اختصاص داده نشده است.</p>
     </div>
   </div>
   {% endif %}
 </div>
 {% endblock content %}
-

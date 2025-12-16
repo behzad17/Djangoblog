@@ -1,7 +1,5 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block content %}
 <div class="masthead">
   <div class="container">
     <div class="row g-0">
@@ -10,18 +8,26 @@
         <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
         {% if post.category %}
         <div class="mb-3">
-          <a href="{% url 'category_posts' post.category.slug %}" class="category-badge-large">
-            <i class="fas fa-tag me-2"></i>{{ post.category.name }}
+          <a
+            href="{% url 'category_posts' post.category.slug %}"
+            class="category-badge-large"
+          >
+            <i class="fas fa-tag ms-2"></i>{{ post.category.name }}
           </a>
         </div>
-        {% endif %}
-        {% if user.is_authenticated and user == post.author %}
+        {% endif %} {% if user.is_authenticated and user == post.author %}
         <div class="mb-3 d-flex flex-wrap gap-2">
-          <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary">
-            <i class="fas fa-edit me-1"></i> Edit Post
+          <a
+            href="{% url 'edit_post' post.slug %}"
+            class="btn btn-sm btn-outline-primary"
+          >
+            <i class="fas fa-edit ms-1"></i> ویرایش پست
           </a>
-          <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger">
-            <i class="fas fa-trash me-1"></i> Delete Post
+          <a
+            href="{% url 'delete_post' post.slug %}"
+            class="btn btn-sm btn-outline-danger"
+          >
+            <i class="fas fa-trash ms-1"></i> حذف پست
           </a>
         </div>
         {% endif %}
@@ -35,21 +41,21 @@
           >
             {% csrf_token %} {% if not is_favorited %}
             <button type="submit" class="btn btn-success">
-              Add to Favorite
+              افزودن به علاقه‌مندی‌ها
             </button>
             {% else %}
             <button type="button" class="btn btn-secondary" disabled>
-              Added to Favorites
+              افزوده شده به علاقه‌مندی‌ها
             </button>
             {% endif %}
           </form>
           {% else %}
           <a href="{% url 'account_login' %}" class="btn btn-primary"
-            >Login to add favorite</a
+            >ورود برای افزودن به علاقه‌مندی‌ها</a
           >
           {% endif %}
-          <span class="ms-2">{{ post.favorite_count }}</span>
-          
+          <span class="me-2">{{ post.favorite_count }}</span>
+
           <!-- Like Button -->
           <div class="like-section">
             {% if user.is_authenticated %}
@@ -59,17 +65,23 @@
               class="d-inline"
             >
               {% csrf_token %}
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 class="btn-like {% if is_liked %}liked{% endif %}"
-                title="{% if is_liked %}Unlike{% else %}Like{% endif %} this post"
+                title="{% if is_liked %}حذف لایک{% else %}لایک{% endif %} این پست"
               >
-                <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+                <i
+                  class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"
+                ></i>
                 <span class="like-count">{{ post.like_count }}</span>
               </button>
             </form>
             {% else %}
-            <a href="{% url 'account_login' %}" class="btn-like" title="Login to like">
+            <a
+              href="{% url 'account_login' %}"
+              class="btn-like"
+              title="ورود برای لایک"
+            >
               <i class="far fa-heart"></i>
               <span class="like-count">{{ post.like_count }}</span>
             </a>
@@ -101,43 +113,49 @@
     <div class="col-lg-9 col-md-12">
       <!-- Post Content Card -->
       <div class="card mb-4 shadow-sm border-0 post-detail-card">
-      <div class="card-body">
+        <div class="card-body">
           <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
             <span class="badge bg-light text-dark border">
-              <i class="far fa-clock me-1"></i>{{ post.created_on }}
+              <i class="far fa-clock ms-1"></i>{{ post.created_on }}
             </span>
             <span class="badge bg-light text-dark border">
-              <i class="far fa-comments me-1"></i>{{ comment_count }} Comments
+              <i class="far fa-comments ms-1"></i>{{ comment_count }} نظر
             </span>
           </div>
-          
+
           <!-- Event Dates Display (only for Events category) -->
-          {% if post.category.slug == 'events-announcements' and post.event_start_date %}
+          {% if post.category.slug == 'events-announcements' and
+          post.event_start_date %}
           <div class="event-dates-info mb-4">
             <div class="card bg-primary text-white">
               <div class="card-body">
                 <h5 class="card-title mb-2">
-                  <i class="fas fa-calendar-alt me-2"></i>Event Dates
+                  <i class="fas fa-calendar-alt ms-2"></i>تاریخ رویداد
                 </h5>
                 <p class="mb-0">
-                  <strong>Start:</strong> {{ post.event_start_date|date:"F d, Y" }}
-                  {% if post.event_end_date %}
-                  <br>
-                  <strong>End:</strong> {{ post.event_end_date|date:"F d, Y" }}
-                  {% endif %}
+                  <strong>شروع:</strong> {{ post.event_start_date|date:"F d, Y"
+                  }} {% if post.event_end_date %}
+                  <br />
+                  <strong>پایان:</strong> {{ post.event_end_date|date:"F d, Y"
+                  }} {% endif %}
                 </p>
               </div>
             </div>
           </div>
           {% endif %}
-          
+
           <div class="card-text post-content-body">
             {{ post.content | safe }}
           </div>
           {% if post.external_url and post.url_approved %}
           <div class="text-center mt-4 mb-3">
-            <a href="{{ post.external_url }}" target="_blank" rel="noopener noreferrer" class="external-url-badge-related">
-              <i class="fas fa-external-link-alt me-2"></i>Visit Related Link
+            <a
+              href="{{ post.external_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="external-url-badge-related"
+            >
+              <i class="fas fa-external-link-alt ms-2"></i>مشاهده لینک مرتبط
             </a>
           </div>
           {% endif %}
@@ -149,56 +167,67 @@
         <div class="card-body">
           {% if user.is_authenticated %}
           <div class="d-flex align-items-center justify-content-between mb-2">
-            <h5 class="mb-0">Leave a comment</h5>
-            <span class="text-muted small">Posting as: {{ user.username }}</span>
-    </div>
-          <form id="commentForm" method="post" action="{% url 'post_detail' post.slug %}" class="mt-2">
+            <h5 class="mb-0">ثبت نظر</h5>
+            <span class="text-muted small"
+              >ارسال به عنوان: {{ user.username }}</span
+            >
+          </div>
+          <form
+            id="commentForm"
+            method="post"
+            action="{% url 'post_detail' post.slug %}"
+            class="mt-2"
+          >
             {{ comment_form | crispy }} {% csrf_token %}
-            <button id="submitButton" type="submit" class="btn btn-primary btn-sm">
-              Submit
+            <button
+              id="submitButton"
+              type="submit"
+              class="btn btn-primary btn-sm"
+            >
+              ارسال
             </button>
           </form>
           {% else %}
-          <p class="text-muted mb-0">Log in to leave a comment</p>
+          <p class="text-muted mb-0">برای ثبت نظر وارد شوید</p>
           {% endif %}
-    </div>
-  </div>
+        </div>
+      </div>
 
       <!-- Comments Section -->
       <div class="card mb-4 shadow-sm border-0 comments-card">
-      <div class="card-body">
+        <div class="card-body">
           <div class="d-flex align-items-center justify-content-between mb-3">
-            <h5 class="mb-0">Comments</h5>
+            <h5 class="mb-0">نظرات</h5>
             <span class="badge bg-secondary">{{ comment_count }}</span>
           </div>
-        {% for comment in comments %}
+          {% for comment in comments %}
           <div class="comments p-3 rounded mb-3 bg-light border">
             <div class="d-flex align-items-center justify-content-between mb-1">
               <p class="mb-0 fw-semibold">{{ comment.author }}</p>
               <span class="text-muted small">{{ comment.created_on }}</span>
             </div>
             <div id="comment{{ comment.id }}" class="mb-2">
-            {{ comment.body | linebreaks }}
-          </div>
-          {% if user.is_authenticated and comment.author == user %}
+              {{ comment.body | linebreaks }}
+            </div>
+            {% if user.is_authenticated and comment.author == user %}
             <div class="d-flex gap-2">
-            <a
-              href="{% url 'comment_delete' post.slug comment.id %}"
-              class="btn btn-sm btn-outline-danger"
-              >Delete</a
-            >
-            <button
-              class="btn btn-sm btn-outline-secondary edit-comment"
-              data-comment-id="{{ comment.id }}"
-            >
-              Edit
-            </button>
+              <a
+                href="{% url 'comment_delete' post.slug comment.id %}"
+                class="btn btn-sm btn-outline-danger"
+                >حذف</a
+              >
+              <button
+                class="btn btn-sm btn-outline-secondary edit-comment"
+                data-comment-id="{{ comment.id }}"
+              >
+                ویرایش
+              </button>
+            </div>
+            {% endif %}
           </div>
-          {% endif %}
-        </div>
-        {% empty %}
-          <p class="text-muted">No comments yet.</p>
-        {% endfor %}
+          {% empty %}
+          <p class="text-muted">هنوز نظری ثبت نشده است.</p>
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -208,8 +237,13 @@
       <!-- Ad Above Popular Posts -->
       <div class="ad-placeholder ad-placeholder-top mb-3">
         <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-          <img src="{% static 'images/ad-top.jpg' %}" alt="Advertisement" class="ad-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="ad-content" style="display: none;">
+          <img
+            src="{% static 'images/ad-top.jpg' %}"
+            alt="Advertisement"
+            class="ad-image"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="ad-content" style="display: none">
             <i class="fas fa-ad"></i>
             <p class="ad-text">Your Ads Here!</p>
           </div>
@@ -218,26 +252,42 @@
 
       <div class="popular-posts-sidebar">
         <h4 class="sidebar-title">
-          <i class="fas fa-star me-2"></i>Expert Content
+          <i class="fas fa-star ms-2"></i>محتوای متخصص
         </h4>
         {% if popular_posts %}
         <ol class="popular-posts-list">
           {% for p in popular_posts %}
           <li class="popular-post-item">
             <div class="popular-post-content">
-              <a href="{% url 'post_detail' p.slug %}" class="popular-post-thumbnail" title="{{ p.title }}">
+              <a
+                href="{% url 'post_detail' p.slug %}"
+                class="popular-post-thumbnail"
+                title="{{ p.title }}"
+              >
                 {% if "placeholder" in p.featured_image.url %}
-                <img src="{% static 'images/default.jpg' %}" alt="{{ p.title }}" class="popular-post-image">
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  alt="{{ p.title }}"
+                  class="popular-post-image"
+                />
                 {% else %}
-                <img src="{{ p.featured_image.url }}" alt="{{ p.title }}" class="popular-post-image">
+                <img
+                  src="{{ p.featured_image.url }}"
+                  alt="{{ p.title }}"
+                  class="popular-post-image"
+                />
                 {% endif %}
               </a>
               <div class="popular-post-text">
-                <a href="{% url 'post_detail' p.slug %}" class="popular-post-link" title="{{ p.title }}">
+                <a
+                  href="{% url 'post_detail' p.slug %}"
+                  class="popular-post-link"
+                  title="{{ p.title }}"
+                >
                   {{ p.title|truncatewords:8 }}
                 </a>
                 <div class="popular-post-author">
-                  <i class="fas fa-user me-1"></i>{{ p.author.username }}
+                  <i class="fas fa-user ms-1"></i>{{ p.author.username }}
                 </div>
               </div>
             </div>
@@ -245,7 +295,7 @@
           {% endfor %}
         </ol>
         {% else %}
-        <p class="text-muted small">No expert content available yet.</p>
+        <p class="text-muted small">هنوز محتوای متخصصی در دسترس نیست.</p>
         {% endif %}
       </div>
 
@@ -253,8 +303,13 @@
       <div class="ads-container-bottom">
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img src="{% static 'images/ad-1.jpg' %}" alt="Advertisement 1" class="ad-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="ad-content" style="display: none;">
+            <img
+              src="{% static 'images/ad-1.jpg' %}"
+              alt="Advertisement 1"
+              class="ad-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
               <i class="fas fa-ad"></i>
               <p class="ad-text">Your Ads Here!</p>
             </div>
@@ -262,8 +317,13 @@
         </div>
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img src="{% static 'images/ad-2.jpg' %}" alt="Advertisement 2" class="ad-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="ad-content" style="display: none;">
+            <img
+              src="{% static 'images/ad-2.jpg' %}"
+              alt="Advertisement 2"
+              class="ad-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
               <i class="fas fa-ad"></i>
               <p class="ad-text">Your Ads Here!</p>
             </div>
@@ -271,8 +331,13 @@
         </div>
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img src="{% static 'images/ad-3.jpg' %}" alt="Advertisement 3" class="ad-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="ad-content" style="display: none;">
+            <img
+              src="{% static 'images/ad-3.jpg' %}"
+              alt="Advertisement 3"
+              class="ad-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
               <i class="fas fa-ad"></i>
               <p class="ad-text">Your Ads Here!</p>
             </div>
@@ -280,8 +345,13 @@
         </div>
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img src="{% static 'images/ad-4.jpg' %}" alt="Advertisement 4" class="ad-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="ad-content" style="display: none;">
+            <img
+              src="{% static 'images/ad-4.jpg' %}"
+              alt="Advertisement 4"
+              class="ad-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
               <i class="fas fa-ad"></i>
               <p class="ad-text">Your Ads Here!</p>
             </div>
@@ -289,8 +359,13 @@
         </div>
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img src="{% static 'images/ad-5.jpg' %}" alt="Advertisement 5" class="ad-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="ad-content" style="display: none;">
+            <img
+              src="{% static 'images/ad-5.jpg' %}"
+              alt="Advertisement 5"
+              class="ad-image"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
               <i class="fas fa-ad"></i>
               <p class="ad-text">Your Ads Here!</p>
             </div>
@@ -311,23 +386,23 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
+        <h5 class="modal-title" id="deleteModalLabel">حذف نظر؟</h5>
         <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"
+          aria-label="بستن"
         ></button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete your comment? This action cannot be
-        undone.
+        آیا مطمئن هستید که می‌خواهید نظر خود را حذف کنید؟ این عمل قابل بازگشت
+        نیست.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
+          بستن
         </button>
-        <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
+        <a id="deleteConfirm" href="#" class="btn btn-danger">حذف</a>
       </div>
     </div>
   </div>
