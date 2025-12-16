@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <!-- Category Header Section -->
 <section class="py-4 bg-light">
   <div class="container">
@@ -38,10 +40,8 @@
         <div class="category-buttons-container">
           <!-- First Row -->
           <div class="category-row">
-            {% for cat in categories %} {% if cat.name == "Platform Updates" or
-            cat.name == "Careers & Economy" or cat.name == "Life in Sweden" or
-            cat.name == "Law & Integration" or cat.name == "Skills & Learning"
-            %}
+            {% for cat in categories %}
+            {% if cat.name == "Platform Updates" or cat.name == "Careers & Economy" or cat.name == "Life in Sweden" or cat.name == "Law & Integration" or cat.name == "Skills & Learning" %}
             <a
               href="{% url 'category_posts' cat.slug %}"
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
@@ -70,15 +70,14 @@
                 {% endif %}
               </span>
             </a>
-            {% endif %} {% endfor %}
+            {% endif %}
+            {% endfor %}
           </div>
 
           <!-- Second Row -->
           <div class="category-row">
-            {% for cat in categories %} {% if cat.name == "Events &
-            Announcements" or cat.name == "Photo Gallery" or cat.name == "Public
-            Services" or cat.name == "Stories & Experiences" or cat.name ==
-            "Community & Engagement" %}
+            {% for cat in categories %}
+            {% if cat.name == "Events & Announcements" or cat.name == "Photo Gallery" or cat.name == "Public Services" or cat.name == "Stories & Experiences" or cat.name == "Community & Engagement" %}
             <a
               href="{% url 'category_posts' cat.slug %}"
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
@@ -107,7 +106,8 @@
                 {% endif %}
               </span>
             </a>
-            {% endif %} {% endfor %}
+            {% endif %}
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -116,6 +116,9 @@
 </div>
 
 <!-- Posts Section - Category-Specific Layout -->
-{% if category.slug == 'events-announcements' %} {% include
-'blog/category_layouts/events_grid.html' %} {% else %} {% include
-'blog/category_layouts/default_grid.html' %} {% endif %} {% endblock %}
+{% if category.slug == 'events-announcements' %}
+  {% include 'blog/category_layouts/events_grid.html' %}
+{% else %}
+  {% include 'blog/category_layouts/default_grid.html' %}
+{% endif %}
+{% endblock %}
