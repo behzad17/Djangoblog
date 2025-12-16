@@ -93,8 +93,8 @@
                 {{ collaborate_form.email.label }}
                 <span class="text-danger">*</span>
               </label>
-              {{ collaborate_form.email }} {% if collaborate_form.email.errors
-              %}
+              {{ collaborate_form.email }}
+              {% if collaborate_form.email.errors %}
               <div class="text-danger small mt-1">
                 {{ collaborate_form.email.errors }}
               </div>
@@ -109,8 +109,8 @@
                 {{ collaborate_form.message.label }}
                 <span class="text-danger">*</span>
               </label>
-              {{ collaborate_form.message }} {% if
-              collaborate_form.message.errors %}
+              {{ collaborate_form.message }}
+              {% if collaborate_form.message.errors %}
               <div class="text-danger small mt-1">
                 {{ collaborate_form.message.errors }}
               </div>
