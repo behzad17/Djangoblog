@@ -6,6 +6,12 @@
  * 
  * Default: Site is RTL (Persian-first) via body.rtl class
  * Override: Use .ltr class on body or specific sections for LTR content
+ * 
+ * Font Usage:
+ * - .rtl elements use Shabnam font (Persian/Farsi)
+ * - .ltr elements use system fonts (optimized for Latin scripts)
+ * - Wrap Persian blocks: <div class="rtl">...</div>
+ * - Wrap English blocks inside RTL pages: <div class="ltr">...</div>
  */
 
 /* ============================================
@@ -14,6 +20,7 @@
 .rtl {
   direction: rtl;
   text-align: right;
+  font-family: "Shabnam", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 /* Input and textarea alignment in RTL */
@@ -523,6 +530,7 @@
 .ltr {
   direction: ltr;
   text-align: left;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 /* Input and textarea alignment in LTR */
@@ -559,4 +567,25 @@
 .ltr .note-editable {
   direction: ltr;
   text-align: left;
+}
+
+/* ============================================
+   Summernote Editor - RTL Support with Shabnam Font
+   ============================================ */
+/* Summernote editor area in RTL with Shabnam font */
+.rtl .note-editable {
+  font-family: "Shabnam", system-ui, Arial, sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Summernote toolbar in RTL */
+.rtl .note-toolbar {
+  direction: ltr; /* Keep toolbar buttons LTR for usability */
+}
+
+/* Summernote placeholder text in RTL */
+.rtl .note-placeholder {
+  direction: rtl;
+  text-align: right;
 }
