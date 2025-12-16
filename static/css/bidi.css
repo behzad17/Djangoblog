@@ -59,6 +59,24 @@
   margin-right: 0;
 }
 
+/* Dropdown toggle RTL adjustments - ensure username is visible */
+.rtl .navbar-nav .dropdown-toggle {
+  display: inline-flex !important;
+  align-items: center;
+  white-space: nowrap;
+  text-align: right;
+  direction: rtl;
+  min-width: auto;
+  overflow: visible;
+  max-width: none;
+  color: #ffffff !important;
+}
+
+.rtl .navbar-nav .dropdown-toggle * {
+  color: inherit;
+  visibility: visible !important;
+}
+
 /* Dropdown menu positioning in RTL */
 .rtl .dropdown-menu-end {
   right: auto;
