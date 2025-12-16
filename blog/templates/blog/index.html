@@ -177,10 +177,8 @@
 
           <!-- Second Row -->
           <div class="category-row">
-            {% for category in categories %} {% if category.name == "Events &
-            Announcements" or category.name == "Photo Gallery" or category.name
-            == "Public Services" or category.name == "Stories & Experiences" or
-            category.name == "Community & Engagement" %}
+            {% for category in categories %}
+            {% if category.name == "Events & Announcements" or category.name == "Photo Gallery" or category.name == "Public Services" or category.name == "Stories & Experiences" or category.name == "Community & Engagement" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
