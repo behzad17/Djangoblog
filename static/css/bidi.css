@@ -20,7 +20,8 @@
 .rtl {
   direction: rtl;
   text-align: right;
-  font-family: "Shabnam", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Shabnam", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
 }
 
 /* Input and textarea alignment in RTL */
