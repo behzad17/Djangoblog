@@ -237,7 +237,9 @@ MESSAGE_TAGS = {
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Use CompressedStaticFilesStorage instead of Manifest version to avoid build errors
+# Manifest can fail if there are any missing references in CSS/JS
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Media files (for local development, Cloudinary is used in production)
 MEDIA_URL = '/media/'
