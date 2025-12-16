@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <div class="container py-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -7,21 +9,31 @@
           <h1 class="h3 mb-3">{{ ad.title }}</h1>
           <p class="text-muted small mb-4">دسته‌بندی: {{ ad.category.name }}</p>
 
-          {% if ad.target_url and ad.url_approved %}
-          <a
-            href="{{ ad.target_url }}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          {% if ad.image %}
+            {% if ad.target_url and ad.url_approved %}
+            <a
+              href="{{ ad.target_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="{{ ad.image.url }}"
+                alt="{{ ad.title }}"
+                class="img-fluid ads-image-250x500-detail"
+                onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+              />
+            </a>
+            {% else %}
             <img
               src="{{ ad.image.url }}"
               alt="{{ ad.title }}"
               class="img-fluid ads-image-250x500-detail"
+              onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
             />
-          </a>
+            {% endif %}
           {% else %}
           <img
-            src="{{ ad.image.url }}"
+            src="{% static 'images/default.jpg' %}"
             alt="{{ ad.title }}"
             class="img-fluid ads-image-250x500-detail"
           />

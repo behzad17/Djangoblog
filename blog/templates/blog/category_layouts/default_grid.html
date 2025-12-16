@@ -10,16 +10,25 @@
           <div class="card post-card mb-4">
             <div class="card-body">
               <div class="image-container">
-                {% if "placeholder" in post.featured_image.url %}
-                <img
-                  class="card-img-top"
-                  src="{% static 'images/default.jpg' %}"
-                  alt="placeholder image"
-                />
+                {% if post.featured_image %}
+                  {% if "placeholder" in post.featured_image.url|default:"" %}
+                  <img
+                    class="card-img-top"
+                    src="{% static 'images/default.jpg' %}"
+                    alt="placeholder image"
+                  />
+                  {% else %}
+                  <img
+                    class="card-img-top"
+                    src="{{ post.featured_image.url }}"
+                    alt="{{ post.title }}"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                  {% endif %}
                 {% else %}
                 <img
                   class="card-img-top"
-                  src="{{ post.featured_image.url }}"
+                  src="{% static 'images/default.jpg' %}"
                   alt="{{ post.title }}"
                 />
                 {% endif %}

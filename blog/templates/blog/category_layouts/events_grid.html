@@ -9,15 +9,24 @@
           <div class="row g-0">
             <!-- Event Image -->
             <div class="col-md-4 event-card-image-wrapper">
-              {% if "placeholder" in post.featured_image.url %}
-              <img
-                src="{% static 'images/default.jpg' %}"
-                alt="{{ post.title }}"
-                class="event-card-image"
-              />
+              {% if post.featured_image %}
+                {% if "placeholder" in post.featured_image.url|default:"" %}
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  alt="{{ post.title }}"
+                  class="event-card-image"
+                />
+                {% else %}
+                <img
+                  src="{{ post.featured_image.url }}"
+                  alt="{{ post.title }}"
+                  class="event-card-image"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+                {% endif %}
               {% else %}
               <img
-                src="{{ post.featured_image.url }}"
+                src="{% static 'images/default.jpg' %}"
                 alt="{{ post.title }}"
                 class="event-card-image"
               />

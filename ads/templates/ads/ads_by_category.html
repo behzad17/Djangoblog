@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">تبلیغات در {{ category.name }}</h1>
@@ -18,11 +20,20 @@
           href="{% url 'ads:ad_detail' ad.slug %}"
           class="text-decoration-none"
         >
+          {% if ad.image %}
           <img
             src="{{ ad.image.url }}"
             alt="{{ ad.title }}"
             class="card-img-top ads-image-250x500"
+            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
           />
+          {% else %}
+          <img
+            src="{% static 'images/default.jpg' %}"
+            alt="{{ ad.title }}"
+            class="card-img-top ads-image-250x500"
+          />
+          {% endif %}
         </a>
         <div class="card-body">
           <h5 class="card-title">

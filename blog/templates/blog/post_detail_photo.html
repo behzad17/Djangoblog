@@ -4,15 +4,24 @@
 {% block content %}
 <!-- Photo Hero Section - Full Width Image -->
 <div class="photo-detail-hero">
-  {% if "placeholder" in post.featured_image.url %}
-  <img
-    src="{% static 'images/default.jpg' %}"
-    class="photo-hero-image"
-    alt="{{ post.title }}"
-  />
+  {% if post.featured_image %}
+    {% if "placeholder" in post.featured_image.url|default:"" %}
+    <img
+      src="{% static 'images/default.jpg' %}"
+      class="photo-hero-image"
+      alt="{{ post.title }}"
+    />
+    {% else %}
+    <img
+      src="{{ post.featured_image.url }}"
+      class="photo-hero-image"
+      alt="{{ post.title }}"
+      onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+    />
+    {% endif %}
   {% else %}
   <img
-    src="{{ post.featured_image.url }}"
+    src="{% static 'images/default.jpg' %}"
     class="photo-hero-image"
     alt="{{ post.title }}"
   />

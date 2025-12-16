@@ -53,7 +53,7 @@
           <div class="card featured-post-card h-100">
             {% if featured_post.featured_image %}
             <div class="featured-post-image">
-              {% if "placeholder" in featured_post.featured_image.url %}
+              {% if "placeholder" in featured_post.featured_image.url|default:"" %}
               <img
                 src="{% static 'images/default.jpg' %}"
                 class="card-img-top"
@@ -64,6 +64,7 @@
                 src="{{ featured_post.featured_image.url }}"
                 class="card-img-top"
                 alt="{{ featured_post.title }}"
+                onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
               />
               {% endif %}
             </div>
@@ -229,16 +230,25 @@
           <div class="card post-card mb-4">
             <div class="card-body">
               <div class="image-container">
-                {% if "placeholder" in post.featured_image.url %}
-                <img
-                  class="card-img-top"
-                  src="{% static 'images/default.jpg' %}"
-                  alt="placeholder image"
-                />
+                {% if post.featured_image %}
+                  {% if "placeholder" in post.featured_image.url|default:"" %}
+                  <img
+                    class="card-img-top"
+                    src="{% static 'images/default.jpg' %}"
+                    alt="placeholder image"
+                  />
+                  {% else %}
+                  <img
+                    class="card-img-top"
+                    src="{{ post.featured_image.url }}"
+                    alt="{{ post.title }}"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                  {% endif %}
                 {% else %}
                 <img
                   class="card-img-top"
-                  src="{{ post.featured_image.url }}"
+                  src="{% static 'images/default.jpg' %}"
                   alt="{{ post.title }}"
                 />
                 {% endif %}
@@ -311,15 +321,24 @@
                 class="popular-post-thumbnail"
                 title="{{ post.title }}"
               >
-                {% if "placeholder" in post.featured_image.url %}
-                <img
-                  src="{% static 'images/default.jpg' %}"
-                  alt="{{ post.title }}"
-                  class="popular-post-image"
-                />
+                {% if post.featured_image %}
+                  {% if "placeholder" in post.featured_image.url|default:"" %}
+                  <img
+                    src="{% static 'images/default.jpg' %}"
+                    alt="{{ post.title }}"
+                    class="popular-post-image"
+                  />
+                  {% else %}
+                  <img
+                    src="{{ post.featured_image.url }}"
+                    alt="{{ post.title }}"
+                    class="popular-post-image"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                  {% endif %}
                 {% else %}
                 <img
-                  src="{{ post.featured_image.url }}"
+                  src="{% static 'images/default.jpg' %}"
                   alt="{{ post.title }}"
                   class="popular-post-image"
                 />
