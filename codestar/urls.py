@@ -21,9 +21,9 @@ from allauth.account import views as allauth_views
 
 
 urlpatterns = [
-    path("about/", include("about.urls"), name="about-urls"),
-    path("ask-me/", include("askme.urls"), name="askme-urls"),
-    path("ads/", include("ads.urls", namespace="ads"), name="ads-urls"),
+    path("about/", include("about.urls")),
+    path("ask-me/", include("askme.urls")),
+    path("ads/", include("ads.urls", namespace="ads")),
     # Rate-limit login and signup endpoints (5 requests per minute per IP)
     path(
         "accounts/login/",
