@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <!-- Hero Section -->
 <section
   class="hero-section bg-dark text-white mb-4"
@@ -88,7 +90,8 @@
           >
             <i class="fas fa-check-circle"></i>
           </div>
-          {% endif %} {% if post.category %}
+          {% endif %}
+          {% if post.category %}
           <div class="mb-2">
             <a
               href="{% url 'category_posts' post.category.slug %}"
@@ -103,8 +106,8 @@
           <hr />
           <p class="card-text text-muted h6">
             {{ post.created_on|date:"M d, Y" }} |
-            <i class="far fa-comments ms-1"></i>{{ post.comment_count }} {% if
-            post.like_count > 0 %} |
+            <i class="far fa-comments ms-1"></i>{{ post.comment_count }}
+            {% if post.like_count > 0 %} |
             <i class="fas fa-heart ms-1 text-danger"></i>{{ post.like_count }}
             {% endif %}
           </p>
@@ -115,7 +118,10 @@
     <!-- divisibleby:4 for 4 columns per row -->
     {% if forloop.counter|divisibleby:4 %}
   </div>
-  <div class="row blog-post-row">{% endif %} {% endfor %}</div>
+  <div class="row blog-post-row">
+    {% endif %}
+    {% endfor %}
+  </div>
   {% else %}
   <!-- Empty State -->
   <div class="row">
