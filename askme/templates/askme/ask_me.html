@@ -40,9 +40,10 @@
         <div class="card-body text-center p-4">
           <div class="moderator-image-wrapper mb-3">
             <img
-              src="{{ moderator.profile_image.url }}"
+              src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
               alt="{{ moderator.user.get_full_name|default:moderator.user.username }}"
               class="moderator-image"
+              onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
             />
           </div>
           <h5 class="moderator-name mb-2">

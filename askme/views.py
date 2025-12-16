@@ -17,15 +17,21 @@ def ask_me(request):
     Display list of all active moderators.
     Public view - anyone can see moderators, but only authenticated users can ask questions.
     """
-    moderators = Moderator.objects.filter(is_active=True).select_related('user')
+    try:
+        moderators = Moderator.objects.filter(is_active=True).select_related('user')
+    except Exception:
+        moderators = []
     
     # Count answered questions for notification badge (only for authenticated users)
     answered_count = 0
     if request.user.is_authenticated:
-        answered_count = Question.objects.filter(
-            user=request.user,
-            answered=True
-        ).count()
+        try:
+            answered_count = Question.objects.filter(
+                user=request.user,
+                answered=True
+            ).count()
+        except Exception:
+            answered_count = 0
     
     return render(
         request,
