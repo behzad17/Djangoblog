@@ -140,10 +140,8 @@
         <div class="category-buttons-container">
           <!-- First Row -->
           <div class="category-row">
-            {% for category in categories %} {% if category.name == "Platform
-            Updates" or category.name == "Careers & Economy" or category.name ==
-            "Life in Sweden" or category.name == "Law & Integration" or
-            category.name == "Skills & Learning" %}
+            {% for category in categories %}
+            {% if category.name == "Platform Updates" or category.name == "Careers & Economy" or category.name == "Life in Sweden" or category.name == "Law & Integration" or category.name == "Skills & Learning" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"

@@ -1,4 +1,9 @@
-{% load static %} {% url 'home' as home_url %} {% url 'about' as about_url %} {% url 'ask_me' as ask_me_url %} {% url 'terms' as terms_url %} {% url 'ads:ads_home' as ads_home_url %} {% url 'member_guide' as member_guide_url %} {% url 'account_login' as login_url %} {% url 'account_signup' as signup_url %} {% url 'account_logout' as logout_url %} {% url 'favorites' as favorites_url %} {% url 'create_post' as create_post_url %}
+{% load static %} {% url 'home' as home_url %} {% url 'about' as about_url %} {%
+url 'ask_me' as ask_me_url %} {% url 'terms' as terms_url %} {% url
+'ads:ads_home' as ads_home_url %} {% url 'member_guide' as member_guide_url %}
+{% url 'account_login' as login_url %} {% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %} {% url 'favorites' as favorites_url %}
+{% url 'create_post' as create_post_url %}
 
 <!DOCTYPE html>
 <html
@@ -200,14 +205,15 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          {% for message in messages %} {# Don't show pending messages on
-          published post detail pages #} {# Pending messages are WARNING level,
-          so we hide all WARNING messages on published posts #} {# Don't show
-          "Successfully signed in" messages #} {% if
-          hide_pending_messages|default:False and message.tags == 'warning' %}
+          {% for message in messages %}
+          {# Don't show pending messages on published post detail pages #}
+          {# Pending messages are WARNING level, so we hide all WARNING messages on published posts #}
+          {# Don't show "Successfully signed in" messages #}
+          {% if hide_pending_messages|default:False and message.tags == 'warning' %}
           {# Skip this message - it's a pending message on a published post #}
-          {% elif 'Successfully signed in' in message|stringformat:'s' %} {#
-          Skip login success messages #} {% else %}
+          {% elif 'Successfully signed in' in message|stringformat:'s' %}
+          {# Skip login success messages #}
+          {% else %}
           <div
             class="alert {{ message.tags }} alert-dismissible fade show"
             id="msg"
@@ -221,7 +227,8 @@
               aria-label="Close"
             ></button>
           </div>
-          {% endif %} {% endfor %}
+          {% endif %}
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -306,8 +313,7 @@
               </a>
             </div>
             <p class="text-white-50 small mb-0 mt-2">
-              {% block copyright %}© {% now "Y" %} Sweden|today{% endblock
-              copyright %}
+              {% block copyright %}© {% now "Y" %} Sweden|today{% endblock copyright %}
             </p>
           </div>
         </div>
