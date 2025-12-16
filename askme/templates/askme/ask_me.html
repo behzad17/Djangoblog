@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <!-- Hero Section -->
 <section
   class="hero-section bg-dark text-white mb-4"
@@ -96,7 +98,8 @@
       </p>
     </div>
   </div>
-  {% endif %} {% if user.is_authenticated %}
+  {% endif %}
+  {% if user.is_authenticated %}
   <div class="row mt-4">
     <div class="col-12 text-center">
       <a
