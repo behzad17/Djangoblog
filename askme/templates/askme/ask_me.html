@@ -106,8 +106,8 @@
         href="{% url 'my_questions' %}"
         class="btn btn-outline-secondary position-relative"
       >
-        <i class="fas fa-list ms-2"></i>مشاهده سوالات من {% if answered_count >
-        0 %}
+        <i class="fas fa-list ms-2"></i>مشاهده سوالات من
+        {% if answered_count > 0 %}
         <span
           class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger notification-badge"
         >
