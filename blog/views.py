@@ -44,6 +44,9 @@ class PostList(generic.ListView):
         Add categories and popular posts to the context for display in template.
         Also reorders posts so pinned posts appear in the second slot of each row.
         """
+        # Ensure object_list is set before calling super()
+        if not hasattr(self, 'object_list'):
+            self.object_list = self.get_queryset()
         # Base context (includes pagination, but we'll recompute with pinned ordering)
         context = super().get_context_data(**kwargs)
 
