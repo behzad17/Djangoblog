@@ -1,5 +1,7 @@
-{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
-block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
 <div class="masthead">
   <div class="container">
     <div class="row g-0">
@@ -142,11 +144,11 @@ block content %}
                   <i class="fas fa-calendar-alt ms-2"></i>تاریخ رویداد
                 </h5>
                 <p class="mb-0">
-                  <strong>شروع:</strong> {{ post.event_start_date|date:"F d, Y"
-                  }} {% if post.event_end_date %}
+                  <strong>شروع:</strong> {{ post.event_start_date|date:"F d, Y" }}
+                  {% if post.event_end_date %}
                   <br />
-                  <strong>پایان:</strong> {{ post.event_end_date|date:"F d, Y"
-                  }} {% endif %}
+                  <strong>پایان:</strong> {{ post.event_end_date|date:"F d, Y" }}
+                  {% endif %}
                 </p>
               </div>
             </div>
