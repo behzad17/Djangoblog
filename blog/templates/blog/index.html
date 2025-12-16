@@ -142,7 +142,7 @@
           <!-- First Row -->
           <div class="category-row">
             {% for category in categories %}
-            {% if category.name == "Platform Updates" or category.name == "Careers & Economy" or category.name == "Life in Sweden" or category.name == "Law & Integration" or category.name == "Skills & Learning" %}
+            {% if category.slug == "platform-updates" or category.slug == "careers-economy" or category.slug == "life-in-sweden" or category.slug == "law-integration" or category.slug == "skills-learning" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
@@ -155,19 +155,19 @@
                 >({{ category.post_count }})</span
               >
               <span class="cat-icon">
-                {% if category.name == "Careers & Economy" %}<i
+                {% if category.slug == "careers-economy" %}<i
                   class="bi bi-cash-coin"
                 ></i>
-                {% elif category.name == "Law & Integration" %}<i
+                {% elif category.slug == "law-integration" %}<i
                   class="bi bi-globe"
                 ></i>
-                {% elif category.name == "Life in Sweden" %}<i
+                {% elif category.slug == "life-in-sweden" %}<i
                   class="bi bi-briefcase"
                 ></i>
-                {% elif category.name == "Skills & Learning" %}<i
+                {% elif category.slug == "skills-learning" %}<i
                   class="bi bi-bank"
                 ></i>
-                {% elif category.name == "Platform Updates" %}<i
+                {% elif category.slug == "platform-updates" %}<i
                   class="bi bi-newspaper"
                 ></i>
                 {% endif %}
@@ -179,11 +179,11 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for category in categories %}
-            {% if category.name == "Events & Announcements" or category.name == "Photo Gallery" or category.name == "Public Services" or category.name == "Stories & Experiences" or category.name == "Community & Engagement" %}
+            {% if category.slug == "events-announcements" or category.slug == "photo-gallery" or category.slug == "public-services" or category.slug == "stories-experiences" or category.slug == "community-engagement" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
-              data-tone="{% if category.name == 'Events & Announcements' or category.name == 'Photo Gallery' %}purple{% else %}peach{% endif %}"
+              data-tone="{% if category.slug == 'events-announcements' or category.slug == 'photo-gallery' %}purple{% else %}peach{% endif %}"
               title="{{ category.name }}"
               aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >
@@ -192,19 +192,19 @@
                 >({{ category.post_count }})</span
               >
               <span class="cat-icon">
-                {% if category.name == "Events & Announcements" %}<i
+                {% if category.slug == "events-announcements" %}<i
                   class="bi bi-calendar-event"
                 ></i>
-                {% elif category.name == "Photo Gallery" %}<i
+                {% elif category.slug == "photo-gallery" %}<i
                   class="bi bi-camera"
                 ></i>
-                {% elif category.name == "Public Services" %}<i
+                {% elif category.slug == "public-services" %}<i
                   class="bi bi-cart"
                 ></i>
-                {% elif category.name == "Stories & Experiences" %}<i
+                {% elif category.slug == "stories-experiences" %}<i
                   class="bi bi-heart-pulse"
                 ></i>
-                {% elif category.name == "Community & Engagement" %}<i
+                {% elif category.slug == "community-engagement" %}<i
                   class="bi bi-translate"
                 ></i>
                 {% endif %}
