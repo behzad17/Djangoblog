@@ -56,7 +56,7 @@
           </p>
           {% if moderator.bio %}
           <p class="moderator-bio small text-muted mb-3">
-            {{ moderator.bio|truncatewords:15 }}
+            {{ moderator.bio|striptags|truncatewords:15 }}
           </p>
           {% endif %}
           <div class="moderator-stats mb-3">
