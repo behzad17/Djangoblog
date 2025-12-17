@@ -141,8 +141,10 @@
         <div class="category-buttons-container">
           <!-- First Row -->
           <div class="category-row">
-            {% for category in categories %}
-            {% if category.slug == "platform-updates" or category.slug == "careers-economy" or category.slug == "life-in-sweden" or category.slug == "law-integration" or category.slug == "skills-learning" %}
+            {% for category in categories %} {% if category.slug ==
+            "platform-updates" or category.slug == "careers-economy" or
+            category.slug == "life-in-sweden" or category.slug ==
+            "law-integration" or category.slug == "skills-learning" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
@@ -178,8 +180,10 @@
 
           <!-- Second Row -->
           <div class="category-row">
-            {% for category in categories %}
-            {% if category.slug == "events-announcements" or category.slug == "photo-gallery" or category.slug == "public-services" or category.slug == "stories-experiences" or category.slug == "community-engagement" %}
+            {% for category in categories %} {% if category.slug ==
+            "events-announcements" or category.slug == "photo-gallery" or
+            category.slug == "public-services" or category.slug ==
+            "stories-experiences" or category.slug == "community-engagement" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
@@ -230,8 +234,7 @@
           <div class="card post-card mb-4">
             <div class="card-body">
               <div class="image-container">
-                {% if post.featured_image %}
-                  {% if "placeholder" in
+                {% if post.featured_image %} {% if "placeholder" in
                 post.featured_image.url|default:"" %}
                 <img
                   class="card-img-top"
@@ -321,8 +324,7 @@
                 class="popular-post-thumbnail"
                 title="{{ post.title }}"
               >
-                {% if post.featured_image %}
-                  {% if "placeholder" in
+                {% if post.featured_image %} {% if "placeholder" in
                 post.featured_image.url|default:"" %}
                 <img
                   src="{% static 'images/default.jpg' %}"
