@@ -20,11 +20,18 @@ body {
 }
 
 /* Navbar Links - Bold Styling */
+.navbar-nav .nav-item {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
 .navbar-nav .nav-link {
   font-weight: 600;
   font-size: 1.2rem;
   color: #ffffff !important;
   transition: all 0.3s ease;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .navbar-nav .nav-link:hover {
