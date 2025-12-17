@@ -16,7 +16,7 @@
   <!-- Category Icons Row -->
   <div class="row justify-content-center mb-4">
     {% for category in categories %}
-    <div class="col-6 col-md-3 col-lg-auto mb-3">
+    <div class="col-6 col-md-3 col-lg-auto category-box-margin">
       <a href="{% url 'ads:ads_by_category' category.slug %}" class="text-decoration-none">
         <div class="card shadow-sm h-100 category-card-hover text-center">
           <div class="card-body p-2 d-flex flex-column justify-content-center align-items-center">

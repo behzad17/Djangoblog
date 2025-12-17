@@ -1897,6 +1897,10 @@ body {
   padding: 0.25rem 0.5rem !important;
 }
 
+.category-box-margin {
+  margin-bottom: 0.5rem !important; /* 50% reduction from mb-3 (1rem) */
+}
+
 .ads-image-250x500 {
   width: 250px;
   height: 500px;
