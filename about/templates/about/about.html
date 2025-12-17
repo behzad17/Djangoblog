@@ -1,46 +1,130 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{# About page - RTL with Persian UI #}
+{# About page - Bilingual (Persian/Swedish) #}
 {% block content %}
 <!-- About Section -->
 <div class="container mt-4 mb-5">
-  <!-- About Content Card -->
+  <!-- Page Header -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 text-center">
+      <h1 class="display-4 fw-bold mb-2">درباره پلتفرم | Om Plattformen</h1>
+      <div class="header-divider mx-auto"></div>
+    </div>
+  </div>
+
+  <!-- Two-Column About Content -->
   <div class="row justify-content-center mb-5">
-    <div class="col-lg-10">
-      <div class="card about-card shadow-sm">
-        <div class="card-body p-4 p-md-5">
-          <div class="row align-items-center">
-            <!-- Profile Image -->
-            <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
-              <div class="about-image-wrapper">
-                <img
-                  src="{% static 'images/default.jpg' %}"
-                  class="about-profile-image"
-                  alt="About page image"
-                />
+    <div class="col-lg-11">
+      <div class="card about-bilingual-card shadow-sm">
+        <div class="card-body p-0">
+          <div class="row g-0">
+            <!-- Swedish Column (Left) -->
+            <div class="col-lg-6 about-column about-column-swedish border-end">
+              <div class="p-4 p-md-5">
+                <div class="lang-badge lang-badge-swedish mb-3">
+                  <i class="fas fa-globe ms-2"></i>Svenska
+                </div>
+                
+                <h2 class="section-title-swedish mb-4">Om plattformen</h2>
+                <p class="about-text">
+                  Den här plattformen är varken ett nyhetsmedium, en ersättning för myndigheter och officiella institutioner eller en politisk talarstol. Den är i stället ett fristående och samhällsorienterat forum som strävar efter att samla verkliga erfarenheter, praktisk information och begripliga vägar till livet i Sverige – på ett sätt som går att använda i vardagen, inte bara läsa om. Plattformen har därför skapats med ett enkelt men viktigt mål: att hjälpa iranier som bor i Sverige att fatta mer informerade och medvetna beslut.
+                </p>
+
+                <h3 class="section-subtitle-swedish mb-3">Varför skapades plattformen?</h3>
+                <p class="about-text">
+                  Många av de utmaningar som finns i migrationslivet beror inte på brist på information, utan på att informationen är splittrad, komplicerad och att det saknas trygga rum för dialog och erfarenhetsutbyte. Plattformen bygger på övertygelsen att mänskliga erfarenheter, när de delas ansvarsfullt och transparent, kan vara lika vägledande som officiella källor. Den är utformad för att skapa ett online-community för iranier bosatta i Sverige – en gemenskap där människor kan dela sina erfarenheter, lära av varandra och känna mindre ensamhet på vägen i ett nytt land.
+                </p>
+
+                <h3 class="section-subtitle-swedish mb-3">Huvudfokus: integration och förståelse av det svenska samhället</h3>
+                <p class="about-text">
+                  Plattformens kärna är att stödja en mer medveten integration i det svenska samhället – inte enbart genom lagar och blanketter, utan genom förståelse för kultur, sociala strukturer, arbetsliv, rättigheter och skyldigheter samt de oskrivna regler som präglar vardagen. Bridge strävar efter att hjälpa användare att, samtidigt som de bevarar sin personliga och kulturella identitet, hitta en tydligare plats i det svenska samhället och använda befintliga juridiska och sociala möjligheter på ett mer informerat sätt.
+                </p>
+
+                <h3 class="section-subtitle-swedish mb-3">Vilka funktioner erbjuder plattformen?</h3>
+                <p class="about-text">Detta är en innehållsdriven och interaktiv plattform med följande tekniska möjligheter:</p>
+                <ul class="about-list">
+                  <li>Publicering av strukturerade och användbara erfarenheter och guider</li>
+                  <li>Skapande av en öppen och inkluderande yta för deltagande</li>
+                  <li>Tematisk kategorisering av innehåll (liv, arbete, lag, kultur, hälsa m.m.)</li>
+                  <li>Fråge- och svarsfunktion (Ask Me)</li>
+                  <li>Utvalda evenemang och tillkännagivanden</li>
+                  <li>Möjlighet för användare samt betrodda och kunniga skribenter att bidra</li>
+                </ul>
+                <p class="about-text">
+                  Dessa funktioner är utformade för att underlätta delaktighet, säkerställa innehållets kvalitet och skapa en trygg och pålitlig miljö.
+                </p>
+
+                <h3 class="section-subtitle-swedish mb-3">Synlighet</h3>
+                <p class="about-text">
+                  Plattformen är inte bara till för att läsa. Den bygger på övertygelsen att varje individ har något värdefullt att bidra med. Genom aktivt deltagande kan du dela dina erfarenheter, kunskaper, din kompetens eller ditt perspektiv inom olika områden och bli synlig i det iranska communityt i Sverige. Det är en plats där varje egenskap, färdighet eller erfarenhet – om den uttrycks ansvarsfullt och ärligt – kan hjälpa andra och tydliggöra din roll i denna digitala gemenskap.
+                </p>
+
+                <h3 class="section-subtitle-swedish mb-3">Ägande och utveckling</h3>
+                <p class="about-text">
+                  Plattformen ägs och utvecklas av företaget <strong>BJcode</strong>, ett svenskt webbutvecklingsföretag som arbetar med design och implementering av digitala plattformar. Projektet drivs som ett självständigt initiativ med ett långsiktigt perspektiv och en tydlig samhällsansvarlig inriktning.
+                </p>
+
+                <div class="conclusion-box mt-4 p-3">
+                  <p class="mb-0">
+                    <strong>Detta är därför en plats för verkligt liv</strong> – inte perfekt, inte felfri, men ärlig. En plattform för att bygga ett levande, ansvarsfullt och mänskligt online-community för iranier i Sverige – där erfarenheter delas för att göra beslut enklare.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <!-- About Content -->
-            <div class="col-12 col-md-8">
-              {% if about %}
-                <h1 class="about-title mb-3">{{ about.title }}</h1>
-                <div class="about-content">{{ about.content | safe }}</div>
-                {% if about.updated_on %}
-                <div class="mt-3">
-                  <small class="text-muted">
-                    <i class="fas fa-clock ms-1"></i>
-                    آخرین به‌روزرسانی: {{ about.updated_on|date:"F d, Y" }}
-                  </small>
+            <!-- Persian Column (Right) -->
+            <div class="col-lg-6 about-column about-column-persian">
+              <div class="p-4 p-md-5">
+                <div class="lang-badge lang-badge-persian mb-3">
+                  <i class="fas fa-globe ms-2"></i>فارسی
                 </div>
-                {% endif %}
-              {% else %}
-                <h1 class="about-title mb-3">درباره ما</h1>
-                <div class="about-content">
-                  <p>محتوای صفحه درباره ما در حال حاضر در دسترس نیست.</p>
+                
+                <h2 class="section-title-persian mb-4">درباره این پلتفرم</h2>
+                <p class="about-text">
+                  این پلتفرم نه یک رسانه خبری است، نه جایگزین اداره‌ها و نهادهای رسمی، و نه تریبون سیاسی بلکه یک فضای مستقل و جامعه‌محور است که تلاش می‌کند تجربه‌های واقعی، اطلاعات کاربردی و مسیرهای قابل‌فهم زندگی در سوئد را در کنار هم قرار دهد؛ به شکلی که برای زندگی روزمره قابل استفاده باشد، نه فقط برای خواندن. پس این پلتفرم با یک هدف ساده اما مهم ساخته شده است: کمک به ایرانیانی که در سوئد زندگی می‌کنند تا تصمیم‌های آگاهانه‌تری بگیرند.
+                </p>
+
+                <h3 class="section-subtitle-persian mb-3">چرا این پلتفرم شکل گرفت؟</h3>
+                <p class="about-text">
+                  بسیاری از چالش‌های زندگی در مهاجرت، نه به‌دلیل نبود اطلاعات، بلکه به‌خاطر پراکندگی، پیچیدگی و نبود فضای امن برای گفت‌وگو و انتقال تجربه به وجود می‌آیند. این پلتفرم با این نگاه ساخته شده است که تجربه‌های انسانی، اگر مسئولانه و شفاف به اشتراک گذاشته شوند، می‌توانند به اندازه منابع رسمی راهگشا باشند. این پلتفرم با هدف ایجاد یک جامعه آنلاین برای ایرانیان ساکن سوئد طراحی شده است؛ جامعه‌ای که در آن افراد بتوانند تجربه‌های خود را بیان کنند، از تجربه دیگران بیاموزند و احساس تنهایی کمتری در مسیر زندگی در یک کشور جدید داشته باشند.
+                </p>
+
+                <h3 class="section-subtitle-persian mb-3">محور اصلی Integration و شناخت جامعه سوئد</h3>
+                <p class="about-text">
+                  محور اصلی فعالیت این پلتفرم، کمک به ادغام آگاهانه‌تر (Integration) در جامعه سوئد است؛ نه فقط از مسیر قانون و فرم، بلکه از طریق شناخت فرهنگ، ساختارهای اجتماعی، محیط کار، حقوق و مسئولیت‌ها و نانوشته‌هایی که بخش مهمی از زندگی روزمره را شکل می‌دهند. Bridge تلاش می‌کند به کاربران کمک کند تا در عین حفظ هویت فردی و فرهنگی خود، جایگاه روشن‌تری در جامعه سوئد پیدا کنند و از امکانات قانونی و اجتماعی موجود به شکلی آگاهانه‌تر استفاده کنند.
+                </p>
+
+                <h3 class="section-subtitle-persian mb-3">این پلتفرم چه امکاناتی دارد؟</h3>
+                <p class="about-text">یک پلتفرم محتوایی و تعاملی است که امکانات فنی آن شامل:</p>
+                <ul class="about-list">
+                  <li>انتشار تجربه‌ها و راهنماهای ساختارمند و مفید</li>
+                  <li>ایجاد فضای مشارکت برای همه</li>
+                  <li>دسته‌بندی موضوعی محتوا (زندگی، کار، قانون، فرهنگ، سلامت و…)</li>
+                  <li>بخش پرسش‌وپاسخ (Ask Me)</li>
+                  <li>رویدادها و اطلاعیه‌های منتخب</li>
+                  <li>ایجاد امکان مشارکت کاربران و نویسندگان مورد اعتماد و متخصص</li>
+                </ul>
+                <p class="about-text">
+                  این امکانات با هدف تسهیل مشارکت، حفظ کیفیت محتوا و ایجاد یک فضای امن و قابل اعتماد طراحی شده‌اند.
+                </p>
+
+                <h3 class="section-subtitle-persian mb-3">دیده‌شدن</h3>
+                <p class="about-text">
+                  این پلتفرم فقط یک سایت برای خواندن نیست. این پلتفرم با این باور ساخته شده که هر فرد می‌تواند چیزی برای گفتن داشته باشد. شما می‌توانید با تعامل فعال در این وب‌سایت، تجربه‌ها، دانش، تخصص یا نگاه خود را در هر حوزه ای با دیگران به اشتراک بگذارید و در میان جامعه ایرانیان ساکن سوئد دیده شوید، فضایی است که در آن، هر ویژگی، مهارت یا تجربه‌ای—اگر مسئولانه و صادقانه بیان شود—می‌تواند به دیگران کمک کند و جایگاه شما را در این جامعه آنلاین مشخص‌تر سازد.
+                </p>
+
+                <h3 class="section-subtitle-persian mb-3">مالکیت و توسعه</h3>
+                <p class="about-text">
+                  پروژه این پلتفرم متعلق به شرکت <strong>BJcode</strong> است؛ یک شرکت توسعه وب فعال در سوئد که در زمینه طراحی و پیاده‌سازی پلتفرم‌های دیجیتال فعالیت می‌کند که به‌عنوان یک پروژه مستقل، با رویکردی بلندمدت و مبتنی بر مسئولیت اجتماعی توسعه داده شده است.
+                </p>
+
+                <div class="conclusion-box mt-4 p-3">
+                  <p class="mb-0">
+                    <strong>بنابراین اینجا جایی است برای زندگی واقعی؛</strong> نه کامل، نه بی‌نقص، اما صادقانه. پلتفرمی برای ساختن یک جامعه آنلاین پویا، مسئولانه و انسانی برای ایرانیان ساکن سوئد—جایی که تجربه‌ها گفته می‌شوند تا تصمیم‌ها ساده‌تر شوند.
+                  </p>
                 </div>
-              {% endif %}
+              </div>
             </div>
           </div>
         </div>
@@ -129,4 +213,236 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Header Styling */
+.header-divider {
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, #0056b3, #007bff, #0056b3);
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+/* Bilingual Card */
+.about-bilingual-card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.about-column {
+  min-height: 500px;
+}
+
+.about-column-persian {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  direction: rtl;
+  text-align: right;
+}
+
+.about-column-swedish {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+  direction: ltr;
+  text-align: left;
+}
+
+/* Language Badges */
+.lang-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.lang-badge-persian {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.lang-badge-swedish {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+/* Section Titles */
+.section-title-persian,
+.section-title-swedish {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.section-title-persian::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+.section-title-swedish::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  border-radius: 2px;
+}
+
+/* Section Subtitles */
+.section-subtitle-persian,
+.section-subtitle-swedish {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-top: 1.5rem;
+}
+
+/* About Text */
+.about-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4a5568;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+/* Lists */
+.about-list {
+  margin: 1rem 0;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.about-column-persian .about-list {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+.about-column-swedish .about-list {
+  padding-left: 1.5rem;
+  padding-right: 0;
+}
+
+.about-list li {
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+/* Conclusion Box */
+.conclusion-box {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-radius: 8px;
+  border-left: 4px solid #f39c12;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.about-column-persian .conclusion-box {
+  border-left: none;
+  border-right: 4px solid #f39c12;
+}
+
+.conclusion-box p {
+  color: #2c3e50;
+  line-height: 1.7;
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+  .about-column {
+    min-height: auto;
+  }
+  
+  .about-column-swedish {
+    border-bottom: 2px solid #dee2e6 !important;
+  }
+  
+  .section-title-persian,
+  .section-title-swedish {
+    font-size: 1.5rem;
+  }
+  
+  .section-subtitle-persian,
+  .section-subtitle-swedish {
+    font-size: 1.2rem;
+  }
+  
+  .about-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Collaboration Card Styling */
+.collaboration-card {
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.collaboration-icon {
+  font-size: 3rem;
+  color: #ffd700;
+}
+
+.collaboration-title {
+  color: white;
+  font-weight: 700;
+}
+
+.collaboration-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.collaboration-form .form-label {
+  color: white;
+  font-weight: 600;
+}
+
+.collaboration-form .form-control,
+.collaboration-form textarea {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.collaboration-form .form-control:focus,
+.collaboration-form textarea:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+  background: white;
+}
+
+.btn-signup {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #2c3e50;
+  border: none;
+  font-weight: 700;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-signup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+  color: #1a202c;
+}
+</style>
+
 {% endblock content %}
