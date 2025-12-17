@@ -4,6 +4,40 @@ Management command to create initial ad categories.
 from django.core.management.base import BaseCommand
 from ads.models import AdCategory
 from django.utils.text import slugify
+import re
+
+
+def create_slug_from_persian(text):
+    """
+    Create a slug from Persian text by transliterating to English.
+    Falls back to a simple slug if transliteration fails.
+    """
+    # Persian to English transliteration map
+    transliteration_map = {
+        'وسایل نقلیه': 'vehicles',
+        'مسکن': 'housing',
+        'کار و خدمات': 'work-services',
+        'اوقات فراغت': 'leisure',
+        'غذا و رستوران': 'food-restaurant',
+        'سلامت و رفاه': 'health-welfare',
+        'وسایل منزل': 'home-appliances',
+        'حقوقی و مالی': 'legal-financial',
+    }
+    
+    # Check if we have a direct mapping
+    if text in transliteration_map:
+        return transliteration_map[text]
+    
+    # Fallback: try slugify, if empty use a simple replacement
+    slug = slugify(text)
+    if not slug:
+        # Create a simple slug from the text
+        slug = text.lower().replace(' ', '-').replace('و', '-')
+        slug = re.sub(r'[^\w\-]', '', slug)
+        if not slug:
+            slug = f'category-{hash(text) % 10000}'
+    
+    return slug
 
 
 class Command(BaseCommand):
@@ -24,7 +58,7 @@ class Command(BaseCommand):
         created_count = 0
         updated_count = 0
         for category_name in categories:
-            slug = slugify(category_name)
+            slug = create_slug_from_persian(category_name)
             # Use name as the unique identifier since it's the unique field
             try:
                 category, created = AdCategory.objects.get_or_create(
@@ -34,11 +68,11 @@ class Command(BaseCommand):
                 if created:
                     created_count += 1
                     self.stdout.write(
-                        self.style.SUCCESS(f'Created category: {category_name}')
+                        self.style.SUCCESS(f'Created category: {category_name} (slug: {slug})')
                     )
                 else:
                     # Update slug if it's missing, empty, or incorrect
-                    if not category.slug or category.slug != slug:
+                    if not category.slug or category.slug == '' or category.slug != slug:
                         # Check if the slug is already taken by another category
                         existing_with_slug = AdCategory.objects.filter(slug=slug).exclude(pk=category.pk).first()
                         if existing_with_slug:
