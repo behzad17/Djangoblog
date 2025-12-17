@@ -669,7 +669,7 @@ body {
   padding: 1rem 0; /* Minimized padding for maximum compactness */
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
-  background: #00A693;
+  background: #0A655D;
 }
 
 .hero-content {
