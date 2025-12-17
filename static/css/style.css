@@ -679,11 +679,11 @@ body {
 }
 
 .hero-subtitle {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   margin-bottom: 0.75rem; /* Minimized spacing */
   line-height: 1.5; /* Slightly tighter line-height */
-  opacity: 0.95;
-  color: rgba(255, 255, 255, 0.95);
+  color: #FFF8E1;
+  font-weight: 500;
   max-width: 90%;
 }
 
@@ -725,40 +725,18 @@ body {
 
 /* Ask Me - Hero CTA Button */
 .hero-buttons .btn-ask-me-hero {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.1rem;
-  padding: 0.7rem 1.6rem;
-  background: linear-gradient(135deg, #0d9488 0%, #22c55e 50%, #facc15 100%);
-  color: #111827;
+  background-color: #ffc107;
+  color: #1b1f24;
   border: none;
   border-radius: 999px;
   box-shadow: 0 8px 24px rgba(5, 150, 105, 0.45);
   overflow: hidden;
 }
 
-.hero-buttons .btn-ask-me-hero .btn-ask-me-main {
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
-.hero-buttons .btn-ask-me-hero .btn-ask-me-subtext {
-  font-size: 0.8rem;
-  opacity: 0.9;
-}
-
 .hero-buttons .btn-ask-me-hero:hover {
+  background-color: #ffd54f;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(5, 150, 105, 0.55);
-  filter: brightness(1.03);
-}
-
-.hero-buttons .btn-ask-me-hero:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.55);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
 }
 
 .hero-features {
