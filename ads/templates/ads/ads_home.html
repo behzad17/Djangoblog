@@ -22,26 +22,26 @@
           <div class="card-body p-2 d-flex flex-column justify-content-center align-items-center">
             <div class="category-icon mb-1">
               {% if category.name == "وسایل نقلیه" %}
-                <i class="fas fa-car fa-2x category-icon-color"></i>
+                <i class="fas fa-car category-icon-size category-icon-color"></i>
               {% elif category.name == "مسکن" %}
-                <i class="fas fa-home fa-2x category-icon-color"></i>
+                <i class="fas fa-home category-icon-size category-icon-color"></i>
               {% elif category.name == "کار و خدمات" %}
-                <i class="fas fa-briefcase fa-2x category-icon-color"></i>
+                <i class="fas fa-briefcase category-icon-size category-icon-color"></i>
               {% elif category.name == "اوقات فراغت" %}
-                <i class="fas fa-gamepad fa-2x category-icon-color"></i>
+                <i class="fas fa-gamepad category-icon-size category-icon-color"></i>
               {% elif category.name == "غذا و رستوران" %}
-                <i class="fas fa-utensils fa-2x category-icon-color"></i>
+                <i class="fas fa-utensils category-icon-size category-icon-color"></i>
               {% elif category.name == "سلامت و رفاه" %}
-                <i class="fas fa-heart fa-2x category-icon-color"></i>
+                <i class="fas fa-heart category-icon-size category-icon-color"></i>
               {% elif category.name == "وسایل منزل" %}
-                <i class="fas fa-couch fa-2x category-icon-color"></i>
+                <i class="fas fa-couch category-icon-size category-icon-color"></i>
               {% elif category.name == "حقوقی و مالی" %}
-                <i class="fas fa-gavel fa-2x category-icon-color"></i>
+                <i class="fas fa-gavel category-icon-size category-icon-color"></i>
               {% else %}
-                <i class="fas fa-tag fa-2x category-icon-color"></i>
+                <i class="fas fa-tag category-icon-size category-icon-color"></i>
               {% endif %}
             </div>
-            <h6 class="card-title mb-1 text-center">{{ category.name }}</h6>
+            <h6 class="card-title mb-1 text-center category-title-color">{{ category.name }}</h6>
             <span class="badge category-badge-color">
               {{ ad_counts|get_item:category.id|default:0 }} تبلیغ
             </span>
