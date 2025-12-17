@@ -14,3 +14,22 @@ def get_item(dictionary, key):
     return None
 
 
+@register.filter
+def category_icon(category_name):
+    """
+    Get the appropriate icon for a category name.
+    Usage: {{ category.name|category_icon }}
+    """
+    icon_map = {
+        "وسایل نقلیه": "fas fa-car",
+        "مسکن": "fas fa-home",
+        "کار و خدمات": "fas fa-briefcase",
+        "اوقات فراغت": "fas fa-gamepad",
+        "غذا و رستوران": "fas fa-utensils",
+        "سلامت و رفاه": "fas fa-heart",
+        "وسایل منزل": "fas fa-couch",
+        "حقوقی و مالی": "fas fa-gavel",
+    }
+    return icon_map.get(category_name, "fas fa-tag")
+
+
