@@ -1,5 +1,4 @@
 {% extends "base.html" %} {% load static %} {% block content %}
-
 <!-- Hero section -->
 <section class="hero-section bg-dark text-white">
   <div class="container">
@@ -53,7 +52,8 @@
           <div class="card featured-post-card h-100">
             {% if featured_post.featured_image %}
             <div class="featured-post-image">
-              {% if "placeholder" in featured_post.featured_image.url|default:"" %}
+              {% if "placeholder" in featured_post.featured_image.url|default:""
+              %}
               <img
                 src="{% static 'images/default.jpg' %}"
                 class="card-img-top"
@@ -64,7 +64,8 @@
                 src="{{ featured_post.featured_image.url }}"
                 class="card-img-top"
                 alt="{{ featured_post.title }}"
-                onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                data-fallback="{% static 'images/default.jpg' %}"
+                onerror="this.onerror=null; this.src=this.dataset.fallback;"
               />
               {% endif %}
             </div>
@@ -246,7 +247,8 @@
                   class="card-img-top"
                   src="{{ post.featured_image.url }}"
                   alt="{{ post.title }}"
-                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  data-fallback="{% static 'images/default.jpg' %}"
+                  onerror="this.onerror=null; this.src=this.dataset.fallback;"
                 />
                 {% endif %} {% else %}
                 <img
@@ -336,7 +338,8 @@
                   src="{{ post.featured_image.url }}"
                   alt="{{ post.title }}"
                   class="popular-post-image"
-                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  data-fallback="{% static 'images/default.jpg' %}"
+                  onerror="this.onerror=null; this.src=this.dataset.fallback;"
                 />
                 {% endif %} {% else %}
                 <img
@@ -466,8 +469,8 @@
   {% endif %}
 </div>
 
-<!-- index.html content ends here -->
-{% endblock content %} {% block extras %}
 <!-- Splash Cursor Effect - Only loads on homepage -->
 <script src="{% static 'js/splash-cursor.js' %}?v={% now 'U' %}"></script>
-{% endblock %} {% block copyright %} Copyright 2025 BJ {% endblock %}
+
+<!-- index.html content ends here -->
+{% endblock %}
