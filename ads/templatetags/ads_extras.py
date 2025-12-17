@@ -20,19 +20,23 @@ def category_icon(category_name):
     Get the appropriate icon for a category name.
     Usage: {{ category.name|category_icon }}
     """
-    if not category_name:
+    try:
+        if not category_name:
+            return "fas fa-tag"
+        
+        icon_map = {
+            "وسایل نقلیه": "fas fa-car",
+            "مسکن": "fas fa-home",
+            "کار و خدمات": "fas fa-briefcase",
+            "اوقات فراغت": "fas fa-gamepad",
+            "غذا و رستوران": "fas fa-utensils",
+            "سلامت و رفاه": "fas fa-heart",
+            "وسایل منزل": "fas fa-couch",
+            "حقوقی و مالی": "fas fa-gavel",
+        }
+        category_str = str(category_name).strip()
+        return icon_map.get(category_str, "fas fa-tag")
+    except Exception:
         return "fas fa-tag"
-    
-    icon_map = {
-        "وسایل نقلیه": "fas fa-car",
-        "مسکن": "fas fa-home",
-        "کار و خدمات": "fas fa-briefcase",
-        "اوقات فراغت": "fas fa-gamepad",
-        "غذا و رستوران": "fas fa-utensils",
-        "سلامت و رفاه": "fas fa-heart",
-        "وسایل منزل": "fas fa-couch",
-        "حقوقی و مالی": "fas fa-gavel",
-    }
-    return icon_map.get(str(category_name), "fas fa-tag")
 
 
