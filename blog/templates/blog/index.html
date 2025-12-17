@@ -1,15 +1,13 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <!-- Hero section -->
-<section class="hero-section bg-dark text-white">
+<section class="hero-section text-white">
   <div class="container">
     <div class="row align-items-center g-2">
       <!-- Left Column: Content -->
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-6 order-lg-2">
         <div class="hero-content">
-          <h1 class="hero-title">جامعه آنلاین ایرانیان سوئد</h1>
           <p class="hero-subtitle">
-            بخوانید، بنویسید و بحث کنید. به Sweden|today بپیوندید تا صدای خود را
-            به اشتراک بگذارید و با جامعه ارتباط برقرار کنید.
+            پلتفرمی برای همه ایرانیان ساکن سوئد
           </p>
           <div class="hero-buttons">
             {% if user.is_authenticated %}
@@ -17,12 +15,7 @@
               <i class="fas fa-plus ms-2"></i>ایجاد پست
             </a>
             <a href="{% url 'ask_me' %}" class="btn btn-ask-me-hero btn-lg">
-              <span class="btn-ask-me-main">
-                <i class="fas fa-question-circle ms-2"></i>از من بپرس
-              </span>
-              <span class="btn-ask-me-subtext d-none d-sm-inline">
-                سوال خود را بپرسید و پاسخ‌های متخصص دریافت کنید
-              </span>
+              <i class="fas fa-question-circle ms-2"></i>از من بپرس
             </a>
             {% else %}
             <a
@@ -43,7 +36,7 @@
       </div>
 
       <!-- Right Column: Featured Post Card -->
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-6 order-lg-1">
         {% if featured_post %}
         <a
           href="{% url 'post_detail' featured_post.slug %}"
@@ -92,10 +85,7 @@
               <div class="featured-post-meta">
                 <small class="text-muted">
                   <i class="fas fa-user ms-1"></i>{{ featured_post.author }}
-                  <span class="me-3"
-                    ><i class="far fa-calendar ms-1"></i>{{
-                    featured_post.created_on|date:"M d, Y" }}</span
-                  >
+                  <span class="me-3"><i class="far fa-calendar ms-1"></i>{{ featured_post.created_on|date:"M d, Y" }}</span>
                 </small>
               </div>
             </div>

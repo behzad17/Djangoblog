@@ -663,7 +663,7 @@ body {
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
   /* Enhanced gradient background with depth */
-  background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+  background: #00A693;
   /* Add subtle radial glow/vignette for depth */
   background-image: 
     radial-gradient(ellipse at top left, rgba(13, 110, 253, 0.3) 0%, transparent 50%),
