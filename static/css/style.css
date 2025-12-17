@@ -662,13 +662,7 @@ body {
   padding: 1rem 0; /* Minimized padding for maximum compactness */
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
-  /* Enhanced gradient background with depth */
   background: #00A693;
-  /* Add subtle radial glow/vignette for depth */
-  background-image: 
-    radial-gradient(ellipse at top left, rgba(13, 110, 253, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(27, 31, 36, 0.4) 0%, transparent 50%),
-    linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
 }
 
 .hero-content {
