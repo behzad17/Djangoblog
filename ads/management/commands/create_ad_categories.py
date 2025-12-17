@@ -23,10 +23,10 @@ class Command(BaseCommand):
 
         created_count = 0
         for category_name in categories:
-            slug = slugify(category_name)
+            # Use name as the unique identifier since it's the unique field
             category, created = AdCategory.objects.get_or_create(
-                slug=slug,
-                defaults={'name': category_name}
+                name=category_name,
+                defaults={'slug': slugify(category_name)}
             )
             if created:
                 created_count += 1
@@ -34,6 +34,10 @@ class Command(BaseCommand):
                     self.style.SUCCESS(f'Created category: {category_name}')
                 )
             else:
+                # Update slug if it's missing or incorrect
+                if not category.slug:
+                    category.slug = slugify(category_name)
+                    category.save()
                 self.stdout.write(
                     self.style.WARNING(f'Category already exists: {category_name}')
                 )
