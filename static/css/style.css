@@ -2758,7 +2758,7 @@ body {
   margin: 0 auto;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid #007bff;
+  border: 4px solid #00A693;
   background: #f0f0f0;
 }
 
@@ -2795,11 +2795,15 @@ body {
 
 .ask-question-btn {
   transition: all 0.3s ease;
+  background-color: #00A693 !important;
+  border-color: #00A693 !important;
 }
 
 .ask-question-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  background-color: #008a7a !important;
+  border-color: #008a7a !important;
+  box-shadow: 0 4px 8px rgba(0, 166, 147, 0.4);
 }
 
 /* Question/Answer Cards */
