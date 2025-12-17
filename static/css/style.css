@@ -22,7 +22,7 @@ body {
 /* Navbar Links - Bold Styling */
 .navbar-nav .nav-link {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #ffffff !important;
   transition: all 0.3s ease;
 }
