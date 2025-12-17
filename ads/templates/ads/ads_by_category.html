@@ -4,16 +4,9 @@
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <h1 class="mb-0">تبلیغات در {{ category.name }}</h1>
-    <div class="d-flex gap-2">
-      {% if user.is_authenticated %}
-      <a href="{% url 'ads:create_ad' %}?category={{ category.slug }}" class="btn btn-primary">
-        <i class="fas fa-plus ms-2"></i>ایجاد تبلیغ
-      </a>
-      {% endif %}
-      <a href="{% url 'ads:ads_home' %}" class="btn btn-outline-secondary btn-sm">
-        &rarr; همه دسته‌بندی‌ها
-      </a>
-    </div>
+    <a href="{% url 'ads:ads_home' %}" class="btn btn-outline-secondary btn-sm">
+      &rarr; همه دسته‌بندی‌ها
+    </a>
   </div>
   {% if category.description %}
   <p class="text-muted mb-4">{{ category.description }}</p>
