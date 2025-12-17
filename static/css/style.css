@@ -2848,6 +2848,16 @@ body {
   padding: 1.5rem;
 }
 
+#questionModal .modal-body .btn-primary {
+  background-color: #00A693 !important;
+  border-color: #00A693 !important;
+}
+
+#questionModal .modal-body .btn-primary:hover {
+  background-color: #008a7a !important;
+  border-color: #008a7a !important;
+}
+
 #questionModal #moderatorInfo {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-left: 4px solid #007bff;
