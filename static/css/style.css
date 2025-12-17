@@ -2559,6 +2559,8 @@ body {
 .collaboration-card:hover {
   box-shadow: 0 8px 20px rgba(24, 129, 129, 0.2);
   transform: translateY(-2px);
+  background: #058073 !important;
+  color: white !important;
 }
 
 .collaboration-icon {
