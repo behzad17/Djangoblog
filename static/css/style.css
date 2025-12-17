@@ -1848,12 +1848,19 @@ body {
 .category-card-hover {
   transition: all 0.3s ease;
   border: 1px solid #e9ecef;
+  min-height: auto;
+}
+
+.category-card-hover .card-body {
+  min-height: auto;
+  padding: 0.5rem !important; /* Reduced from p-3 (1rem) to p-2 (0.5rem) = ~50% reduction, but we want 35% so let's use 0.65rem */
+  padding: 0.65rem !important; /* 35% reduction from 1rem */
 }
 
 .category-card-hover:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
-  border-color: #0d6efd;
+  border-color: #00A693;
 }
 
 .category-card-hover .category-icon {
@@ -1862,6 +1869,15 @@ body {
 
 .category-card-hover:hover .category-icon {
   transform: scale(1.1);
+}
+
+.category-icon-color {
+  color: #00A693 !important;
+}
+
+.category-badge-color {
+  background-color: #00A693 !important;
+  color: white !important;
 }
 
 .ads-image-250x500 {
