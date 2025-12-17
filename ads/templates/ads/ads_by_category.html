@@ -2,11 +2,18 @@
 {% load static %}
 {% block content %}
 <div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <h1 class="mb-0">تبلیغات در {{ category.name }}</h1>
-    <a href="{% url 'ads:ads_home' %}" class="btn btn-outline-secondary btn-sm">
-      &rarr; همه دسته‌بندی‌ها
-    </a>
+    <div class="d-flex gap-2">
+      {% if user.is_authenticated %}
+      <a href="{% url 'ads:create_ad' %}?category={{ category.slug }}" class="btn btn-primary">
+        <i class="fas fa-plus ms-2"></i>ایجاد تبلیغ
+      </a>
+      {% endif %}
+      <a href="{% url 'ads:ads_home' %}" class="btn btn-outline-secondary btn-sm">
+        &rarr; همه دسته‌بندی‌ها
+      </a>
+    </div>
   </div>
   {% if category.description %}
   <p class="text-muted mb-4">{{ category.description }}</p>
@@ -50,7 +57,34 @@
             </a>
           </p>
           {% endif %}
+          {% if user.is_authenticated and ad.owner == user %}
+          <div class="mt-2">
+            <span class="badge bg-info">
+              <i class="fas fa-user ms-1"></i>تبلیغ شما
+            </span>
+            {% if not ad.is_approved or not ad.url_approved %}
+            <span class="badge bg-warning text-dark">
+              <i class="fas fa-clock ms-1"></i>در انتظار تایید
+            </span>
+            {% endif %}
+          </div>
+          {% endif %}
         </div>
+        {% if user.is_authenticated and ad.owner == user %}
+        <div class="card-footer bg-light">
+          <div class="btn-group w-100" role="group">
+            <a href="{% url 'ads:edit_ad' ad.slug %}" class="btn btn-sm btn-warning">
+              <i class="fas fa-edit ms-1"></i>ویرایش
+            </a>
+            <a href="{% url 'ads:delete_ad' ad.slug %}" class="btn btn-sm btn-danger">
+              <i class="fas fa-trash ms-1"></i>حذف
+            </a>
+            <a href="{% url 'ads:my_ads' %}" class="btn btn-sm btn-info">
+              <i class="fas fa-list ms-1"></i>همه تبلیغات من
+            </a>
+          </div>
+        </div>
+        {% endif %}
       </div>
     </div>
     {% empty %}

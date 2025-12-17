@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.utils import timezone
 from django.db import models
 from .models import AdCategory, Ad
+from .forms import AdForm
 
 
 def _visible_ads_queryset():
@@ -70,6 +73,107 @@ def ad_detail(request, slug):
         "ad": ad,
     }
     return render(request, "ads/ad_detail.html", context)
+
+
+@login_required
+def create_ad(request):
+    """
+    Allow authenticated users to create ads.
+    Ads require admin approval before being visible.
+    """
+    if request.method == 'POST':
+        form = AdForm(request.POST, request.FILES)
+        if form.is_valid():
+            ad = form.save(commit=False)
+            ad.owner = request.user
+            ad.is_approved = False  # Require admin approval
+            ad.url_approved = False  # Require URL approval
+            ad.is_active = True
+            ad.save()
+            messages.success(
+                request,
+                'تبلیغ شما با موفقیت ایجاد شد! در انتظار تایید مدیر می‌باشد.'
+            )
+            return redirect('ads:my_ads')
+    else:
+        # Pre-select category if provided in query string
+        initial = {}
+        category_slug = request.GET.get('category')
+        if category_slug:
+            try:
+                category = AdCategory.objects.get(slug=category_slug)
+                initial['category'] = category
+            except AdCategory.DoesNotExist:
+                pass
+        form = AdForm(initial=initial)
+    
+    return render(request, 'ads/create_ad.html', {'form': form})
+
+
+@login_required
+def edit_ad(request, slug):
+    """
+    Allow ad owners to edit their ads.
+    Resets approval status if content is changed.
+    """
+    ad = get_object_or_404(Ad, slug=slug)
+    
+    # Permission check - only owner can edit
+    if ad.owner != request.user:
+        messages.error(request, 'شما اجازه ویرایش این تبلیغ را ندارید.')
+        return redirect('ads:ads_home')
+    
+    if request.method == 'POST':
+        form = AdForm(request.POST, request.FILES, instance=ad)
+        if form.is_valid():
+            ad = form.save(commit=False)
+            # Reset approval if content changed (admin needs to review again)
+            if ad.is_approved:
+                ad.is_approved = False
+                ad.url_approved = False
+                messages.info(
+                    request,
+                    'تبلیغ به‌روزرسانی شد. در انتظار تایید مجدد مدیر می‌باشد.'
+                )
+            else:
+                messages.success(request, 'تبلیغ با موفقیت به‌روزرسانی شد.')
+            ad.save()
+            return redirect('ads:my_ads')
+    else:
+        form = AdForm(instance=ad)
+    
+    return render(request, 'ads/edit_ad.html', {'form': form, 'ad': ad})
+
+
+@login_required
+def delete_ad(request, slug):
+    """
+    Allow ad owners to delete their ads.
+    """
+    ad = get_object_or_404(Ad, slug=slug)
+    
+    # Permission check - only owner can delete
+    if ad.owner != request.user:
+        messages.error(request, 'شما اجازه حذف این تبلیغ را ندارید.')
+        return redirect('ads:ads_home')
+    
+    if request.method == 'POST':
+        ad_title = ad.title
+        ad.delete()
+        messages.success(request, f'تبلیغ "{ad_title}" با موفقیت حذف شد.')
+        return redirect('ads:my_ads')
+    
+    return render(request, 'ads/delete_ad.html', {'ad': ad})
+
+
+@login_required
+def my_ads(request):
+    """
+    List all ads created by the current user.
+    Shows approval status and allows edit/delete.
+    """
+    ads = Ad.objects.filter(owner=request.user).order_by('-created_on')
+    return render(request, 'ads/my_ads.html', {'ads': ads})
 
 
 # Create your views here.

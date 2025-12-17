@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 from django.utils import timezone
@@ -45,6 +46,14 @@ class Ad(models.Model):
         AdCategory,
         on_delete=models.PROTECT,
         related_name="ads",
+    )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="ads",
+        null=True,
+        blank=True,
+        help_text="User who created this ad",
     )
 
     image = CloudinaryField(

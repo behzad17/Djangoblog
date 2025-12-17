@@ -20,6 +20,7 @@ class AdAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "category",
+        "owner",
         "is_active",
         "is_approved",
         "url_status",
@@ -29,6 +30,7 @@ class AdAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "category",
+        "owner",
         "is_active",
         "is_approved",
         "url_approved",
@@ -47,6 +49,7 @@ class AdAdmin(admin.ModelAdmin):
                     "title",
                     "slug",
                     "category",
+                    "owner",
                 )
             },
         ),

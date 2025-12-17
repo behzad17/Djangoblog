@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+          <h2 class="text-center mb-0">
+            <i class="fas fa-trash-alt ms-2"></i>حذف تبلیغ
+          </h2>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle ms-2"></i>
+            آیا مطمئن هستید که می‌خواهید این تبلیغ را حذف کنید؟ این عمل غیرقابل بازگشت است.
+          </div>
+
+          {% if ad.image %}
+          <div class="text-center mb-3">
+            <img
+              src="{{ ad.image.url }}"
+              alt="{{ ad.title }}"
+              class="img-thumbnail"
+              style="max-height: 200px;"
+            />
+          </div>
+          {% endif %}
+
+          <h4 class="text-center mb-3">{{ ad.title }}</h4>
+          <p class="text-center text-muted">
+            <i class="fas fa-tag ms-1"></i>{{ ad.category.name }}
+          </p>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-danger btn-lg">
+                <i class="fas fa-trash-alt ms-2"></i>بله، حذف کن
+              </button>
+              <a href="{% url 'ads:my_ads' %}" class="btn btn-secondary btn-lg me-2">
+                <i class="fas fa-times ms-2"></i>انصراف
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
