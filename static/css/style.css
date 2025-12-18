@@ -666,7 +666,7 @@ body {
 
 /* Hero Section Styles */
 .hero-section {
-  padding: 1rem 0; /* Minimized padding for maximum compactness */
+  padding: 0.75rem 0; /* Reduced padding: 12px top and bottom */
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
   background: #0A655D;
