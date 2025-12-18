@@ -15,56 +15,47 @@
   <div class="row">
     {% for ad in ads %}
     <div class="col-md-4 mb-4">
-      <div class="card shadow-sm h-100">
+      <div class="glass-morphism-card">
         <a
           href="{% url 'ads:ad_detail' ad.slug %}"
-          class="text-decoration-none"
+          class="text-decoration-none glass-card-link"
         >
-          {% if ad.image %}
-          <img
-            src="{{ ad.image.url }}"
-            alt="{{ ad.title }}"
-            class="card-img-top ads-image-250x500"
-            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
-          />
-          {% else %}
-          <img
-            src="{% static 'images/default.jpg' %}"
-            alt="{{ ad.title }}"
-            class="card-img-top ads-image-250x500"
-          />
-          {% endif %}
-        </a>
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="{% url 'ads:ad_detail' ad.slug %}"> {{ ad.title }} </a>
-          </h5>
-          {% if ad.target_url and ad.url_approved %}
-          <p class="card-text">
-            <a
-              href="{{ ad.target_url }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              بازدید از سایت اسپانسر &laquo;
-            </a>
-          </p>
-          {% endif %}
-          {% if user.is_authenticated and ad.owner == user %}
-          <div class="mt-2">
-            <span class="badge bg-info">
+          <div class="glass-card-image-wrapper">
+            {% if ad.image %}
+            <img
+              src="{{ ad.image.url }}"
+              alt="{{ ad.title }}"
+              class="glass-card-image"
+              onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+            />
+            {% else %}
+            <img
+              src="{% static 'images/default.jpg' %}"
+              alt="{{ ad.title }}"
+              class="glass-card-image"
+            />
+            {% endif %}
+            {% if user.is_authenticated and ad.owner == user %}
+            <span class="glass-card-badge glass-card-badge-owner">
               <i class="fas fa-user ms-1"></i>تبلیغ شما
             </span>
-            {% if not ad.is_approved or not ad.url_approved %}
-            <span class="badge bg-warning text-dark">
-              <i class="fas fa-clock ms-1"></i>در انتظار تایید
+            {% elif ad.is_approved and ad.url_approved %}
+            <span class="glass-card-badge glass-card-badge-trending">
+              <i class="fas fa-fire ms-1"></i>فعال
             </span>
             {% endif %}
           </div>
-          {% endif %}
-        </div>
+          <div class="glass-card-overlay">
+            <h5 class="glass-card-title">{{ ad.title }}</h5>
+            {% if ad.target_url and ad.url_approved %}
+            <p class="glass-card-url">
+              <i class="fas fa-external-link-alt ms-1"></i>{{ ad.target_url|truncatechars:30 }}
+            </p>
+            {% endif %}
+          </div>
+        </a>
         {% if user.is_authenticated and ad.owner == user %}
-        <div class="card-footer bg-light">
+        <div class="glass-card-actions">
           <div class="btn-group w-100" role="group">
             <a href="{% url 'ads:edit_ad' ad.slug %}" class="btn btn-sm btn-warning">
               <i class="fas fa-edit ms-1"></i>ویرایش
@@ -76,6 +67,13 @@
               <i class="fas fa-list ms-1"></i>همه تبلیغات من
             </a>
           </div>
+          {% if not ad.is_approved or not ad.url_approved %}
+          <div class="mt-2 text-center">
+            <span class="badge bg-warning text-dark">
+              <i class="fas fa-clock ms-1"></i>در انتظار تایید
+            </span>
+          </div>
+          {% endif %}
         </div>
         {% endif %}
       </div>
