@@ -1149,11 +1149,16 @@ body {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
+  direction: ltr;
 }
 
 .footer-contact-link {
   color: #ffffff;
   text-decoration: none;
+}
+
+.footer-contact-item i {
+  color: #ffffff;
 }
 
 .footer-contact-link:hover {
