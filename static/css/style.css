@@ -2034,6 +2034,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
+  text-align: center;
   min-height: 96px;
 }
 
@@ -2052,6 +2054,7 @@ body {
   word-break: break-all;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
 }
 
