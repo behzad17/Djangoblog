@@ -1950,6 +1950,49 @@ body {
   margin: 0 auto;
 }
 
+/* Ad Detail Page Styles */
+.ad-detail-image {
+  width: 550px;
+  height: 550px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ad-image-link:hover .ad-detail-image {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ad-visit-btn {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: #0A655D;
+  border-color: #0A655D;
+}
+
+.ad-visit-btn:hover {
+  background-color: #058073;
+  border-color: #058073;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 101, 93, 0.3);
+}
+
+@media (max-width: 768px) {
+  .ad-detail-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+  }
+}
+
 /* Glass Morphism Card Styles for Ads */
 .glass-morphism-card {
   position: relative;
