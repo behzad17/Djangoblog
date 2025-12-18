@@ -30,7 +30,7 @@
   <div class="row">
     <div class="col-12">
       <h2 class="text-center mb-4">
-        <i class="fas fa-users ms-2"></i>متخصصان ما
+        <i class="fas fa-users ms-2"></i>صفحه متخصصان
       </h2>
     </div>
   </div>
@@ -40,8 +40,8 @@
     {% for moderator in moderators %}
     <div class="col-lg-3 col-md-4 col-sm-6">
       <div class="moderator-card card h-100 shadow-sm">
-        <div class="card-body text-center p-4">
-          <div class="moderator-image-wrapper mb-3">
+        <div class="card-body text-center p-3">
+          <div class="moderator-image-wrapper mb-2">
             <img
               src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{{ default_image_url }}{% endif %}"
               alt="{{ moderator.get_display_name }}"
@@ -49,18 +49,18 @@
               onerror="this.onerror=null; this.src='{{ default_image_url }}';"
             />
           </div>
-          <h5 class="moderator-name mb-2">
+          <h5 class="moderator-name mb-1">
             {{ moderator.get_display_name }}
           </h5>
-          <p class="moderator-title text-primary mb-3">
+          <p class="moderator-title text-primary mb-2">
             <i class="fas fa-certificate ms-1"></i>{{ moderator.expert_title }}
           </p>
           {% if moderator.bio %}
-          <p class="moderator-bio small text-muted mb-3">
+          <p class="moderator-bio small text-muted mb-2">
             {{ moderator.bio|striptags|truncatewords:15 }}
           </p>
           {% endif %}
-          <div class="moderator-stats mb-3">
+          <div class="moderator-stats mb-2">
             <small class="text-muted">
               <i class="fas fa-question-circle ms-1"></i>{{ moderator.question_count }} سوال پاسخ داده شده
             </small>
@@ -107,7 +107,7 @@
         href="{% url 'my_questions' %}"
         class="btn btn-outline-secondary position-relative askme-action-btn"
       >
-        <i class="fas fa-list ms-2"></i>مشاهده سوالات من
+        مشاهده سوالات من
         {% if answered_count > 0 %}
         <span
           class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger notification-badge"
@@ -122,7 +122,7 @@
         href="{% url 'moderator_dashboard' %}"
         class="btn btn-outline-info me-2 askme-action-btn"
       >
-        <i class="fas fa-tachometer-alt ms-2"></i>پنل متخصص
+        پنل متخصص
       </a>
       {% endif %}
       </div>
