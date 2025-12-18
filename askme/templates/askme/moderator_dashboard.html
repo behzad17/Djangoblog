@@ -71,7 +71,6 @@
           <div class="d-flex justify-content-between align-items-center">
             <div>
               <strong>{{ question.user.username }}</strong>
-              <span class="text-muted me-2">({{ question.user.email }})</span>
             </div>
             <small class="text-muted">
               <i class="fas fa-calendar ms-1"></i>{{ question.created_on|date:"F d, Y H:i" }}
@@ -128,7 +127,6 @@
           <div class="d-flex justify-content-between align-items-center">
             <div>
               <strong class="text-dark">{{ question.user.username }}</strong>
-              <span class="text-muted me-2">({{ question.user.email }})</span>
             </div>
             <small class="text-dark">
               <i class="fas fa-calendar ms-1"></i>پاسخ داده شده: {{ question.answered_on|date:"F d, Y H:i" }}
