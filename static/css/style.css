@@ -1142,6 +1142,7 @@ body {
 /* Footer contact links (email / phone) */
 .footer-contact {
   font-size: 0.95rem;
+  text-align: right;
 }
 
 .footer-contact-item {
@@ -1150,6 +1151,7 @@ body {
   gap: 0.5rem;
   margin-bottom: 0.25rem;
   direction: ltr;
+  justify-content: flex-end;
 }
 
 .footer-contact-link {
