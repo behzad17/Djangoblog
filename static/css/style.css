@@ -1139,6 +1139,28 @@ body {
   line-height: 1;
 }
 
+/* Footer contact links (email / phone) */
+.footer-contact {
+  font-size: 0.95rem;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.footer-contact-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-contact-link:hover {
+  color: #ffc107;
+  text-decoration: none;
+}
+
 /* Category Styles */
 .category-filter-section {
   /* Subtle radial gradient background to make glass cards pop */
