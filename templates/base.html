@@ -256,7 +256,21 @@
     <footer class="footer mt-auto py-4 dark-bg footer-enhanced">
       <div class="container">
         <div class="row gy-3 align-items-start">
-          <!-- Connect / Contact section (right side in RTL) -->
+          <!-- Quick links (right side in RTL) -->
+          <div class="col-md-4">
+            <h6 class="text-white text-uppercase small mb-2">لینک‌های سریع</h6>
+            <ul class="list-unstyled footer-links mb-0">
+              <li><a href="{{ home_url }}">خانه</a></li>
+              <li><a href="{{ about_url }}">درباره ما</a></li>
+              <li><a href="{{ create_post_url }}">ایجاد پست</a></li>
+              <li><a href="{{ favorites_url }}">علاقه‌مندی‌ها</a></li>
+              <li><a href="{{ ads_home_url }}">تبلیغات</a></li>
+              <li><a href="{{ terms_url }}">شرایط و قوانین</a></li>
+              <li><a href="{{ member_guide_url }}">راهنمای اعضا</a></li>
+            </ul>
+          </div>
+
+          <!-- Connect / Contact section (center) -->
           <div class="col-md-4">
             <h6 class="text-white text-uppercase small mb-2">ارتباط با ما</h6>
             <div class="footer-contact mb-3">
@@ -310,20 +324,6 @@
             <p class="text-white-50 small mb-0 mt-2">
               {% block copyright %}© {% now "Y" %} Sweden|today{% endblock copyright %}
             </p>
-          </div>
-
-          <!-- Quick links (center) -->
-          <div class="col-md-4">
-            <h6 class="text-white text-uppercase small mb-2">لینک‌های سریع</h6>
-            <ul class="list-unstyled footer-links mb-0">
-              <li><a href="{{ home_url }}">خانه</a></li>
-              <li><a href="{{ about_url }}">درباره ما</a></li>
-              <li><a href="{{ create_post_url }}">ایجاد پست</a></li>
-              <li><a href="{{ favorites_url }}">علاقه‌مندی‌ها</a></li>
-              <li><a href="{{ ads_home_url }}">تبلیغات</a></li>
-              <li><a href="{{ terms_url }}">شرایط و قوانین</a></li>
-              <li><a href="{{ member_guide_url }}">راهنمای اعضا</a></li>
-            </ul>
           </div>
 
           <!-- Brand logo (left side in RTL) -->
