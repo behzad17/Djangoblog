@@ -49,12 +49,19 @@ class Moderator(models.Model):
         verbose_name_plural = "Moderators"
 
     def __str__(self):
-        display_name = self.complete_name or self.user.get_full_name() or self.user.username
-        return f"{display_name} - {self.expert_title}"
+        return f"{self.get_display_name()} - {self.expert_title}"
     
     def get_display_name(self):
         """Returns the complete name, or falls back to user's full name or username."""
-        return self.complete_name or self.user.get_full_name() or self.user.username
+        try:
+            # Safely get complete_name, handling case where field might not exist in DB yet
+            complete_name = getattr(self, 'complete_name', None)
+            if complete_name:
+                return complete_name
+        except (AttributeError, Exception):
+            pass
+        # Fallback to user's full name or username
+        return self.user.get_full_name() or self.user.username
     
     def question_count(self):
         """Returns the number of questions for this moderator."""
