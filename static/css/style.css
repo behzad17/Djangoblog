@@ -3004,10 +3004,14 @@ body {
 
 .askme-action-btn {
   flex: 1 1 0;
+  min-width: 0; /* Allow flex items to shrink below content size */
+  width: 100%; /* Ensure equal width */
   background-color: #E3F2FD !important; /* Light blue background */
   border-color: #90CAF9 !important; /* Slightly darker blue border */
   color: #1976D2 !important; /* Darker blue text for contrast */
   transition: all 0.3s ease;
+  text-align: center;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 .askme-action-btn:hover {
