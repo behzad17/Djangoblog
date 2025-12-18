@@ -2998,12 +2998,24 @@ body {
 .askme-actions {
   gap: 1rem;
   width: 100%;
-  max-width: 700px;
+  max-width: 350px; /* 50% of previous 700px */
   margin: 0 auto;
 }
 
 .askme-action-btn {
   flex: 1 1 0;
+  background-color: #E3F2FD !important; /* Light blue background */
+  border-color: #90CAF9 !important; /* Slightly darker blue border */
+  color: #1976D2 !important; /* Darker blue text for contrast */
+  transition: all 0.3s ease;
+}
+
+.askme-action-btn:hover {
+  background-color: #BBDEFB !important; /* Slightly darker blue on hover */
+  border-color: #64B5F6 !important;
+  color: #1565C0 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.2);
 }
 
 @media (max-width: 576px) {
