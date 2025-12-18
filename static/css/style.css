@@ -2994,6 +2994,26 @@ body {
   box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
 }
 
+/* Ask Me page action buttons */
+.askme-actions {
+  gap: 1rem;
+}
+
+.askme-action-btn {
+  min-width: 260px;
+}
+
+@media (max-width: 576px) {
+  .askme-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .askme-action-btn {
+    width: 100%;
+  }
+}
+
 .post-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

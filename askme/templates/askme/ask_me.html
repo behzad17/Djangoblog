@@ -100,10 +100,11 @@
   {% endif %}
   {% if user.is_authenticated %}
   <div class="row mt-5">
-    <div class="col-12 text-center">
-      <a
+    <div class="col-12">
+      <div class="askme-actions d-flex justify-content-center">
+        <a
         href="{% url 'my_questions' %}"
-        class="btn btn-outline-secondary position-relative"
+        class="btn btn-outline-secondary position-relative askme-action-btn"
       >
         <i class="fas fa-list ms-2"></i>مشاهده سوالات من
         {% if answered_count > 0 %}
@@ -118,11 +119,12 @@
       {% if user.moderator_profile %}
       <a
         href="{% url 'moderator_dashboard' %}"
-        class="btn btn-outline-info me-2"
+        class="btn btn-outline-info me-2 askme-action-btn"
       >
         <i class="fas fa-tachometer-alt ms-2"></i>پنل متخصص
       </a>
       {% endif %}
+      </div>
     </div>
   </div>
   {% endif %}
