@@ -23,12 +23,12 @@ class ModeratorAdmin(admin.ModelAdmin):
         'created_on'
     )
     list_filter = ('is_active', 'expert_title', 'created_on')
-    search_fields = ('user__username', 'user__email', 'expert_title', 'bio')
+    search_fields = ('user__username', 'user__email', 'expert_title', 'complete_name', 'bio')
     readonly_fields = ('created_on', 'updated_on')
     
     fieldsets = (
         ('Moderator Information', {
-            'fields': ('user', 'expert_title', 'profile_image', 'bio', 'is_active')
+            'fields': ('user', 'expert_title', 'complete_name', 'profile_image', 'bio', 'is_active')
         }),
         ('Timestamps', {
             'fields': ('created_on', 'updated_on'),

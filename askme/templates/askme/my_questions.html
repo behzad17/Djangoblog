@@ -40,7 +40,7 @@
             <div>
               <strong>
                 <i class="fas fa-user-tie ms-2"></i>{{
-                question.moderator.user.get_full_name|default:question.moderator.user.username
+                question.moderator.complete_name|default:question.moderator.user.get_full_name|default:question.moderator.user.username
                 }}
               </strong>
               <span class="text-muted me-2"

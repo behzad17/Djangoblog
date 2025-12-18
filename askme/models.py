@@ -23,6 +23,11 @@ class Moderator(models.Model):
         max_length=100,
         help_text="Expert title (e.g., 'Lawyer', 'Doctor', 'Accountant')"
     )
+    complete_name = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Complete/full name to display in Ask Me boxes (if empty, will use user's full name or username)"
+    )
     profile_image = CloudinaryField(
         'image',
         default='placeholder',
@@ -44,7 +49,12 @@ class Moderator(models.Model):
         verbose_name_plural = "Moderators"
 
     def __str__(self):
-        return f"{self.user.get_full_name() or self.user.username} - {self.expert_title}"
+        display_name = self.complete_name or self.user.get_full_name() or self.user.username
+        return f"{display_name} - {self.expert_title}"
+    
+    def get_display_name(self):
+        """Returns the complete name, or falls back to user's full name or username."""
+        return self.complete_name or self.user.get_full_name() or self.user.username
     
     def question_count(self):
         """Returns the number of questions for this moderator."""

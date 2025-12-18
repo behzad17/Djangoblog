@@ -15,7 +15,7 @@
         </h1>
         <p class="hero-subtitle">
           خوش آمدید، {{
-          moderator.user.get_full_name|default:moderator.user.username }} - {{
+          moderator.complete_name|default:moderator.user.get_full_name|default:moderator.user.username }} - {{
           moderator.expert_title }}
         </p>
       </div>
