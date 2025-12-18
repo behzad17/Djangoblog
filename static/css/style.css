@@ -2999,30 +2999,75 @@ body {
 
 /* Ask Me page action buttons */
 .askme-actions {
-  gap: 1rem;
   width: 100%;
-  max-width: 350px; /* 50% of previous 700px */
+  max-width: 500px;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
 .askme-action-btn {
-  flex: 1 1 0;
-  min-width: 0; /* Allow flex items to shrink below content size */
-  width: 100%; /* Ensure equal width */
-  background-color: #FFEB3B !important; /* Yellow background */
-  border-color: #FDD835 !important; /* Slightly darker yellow border */
-  color: #F57F17 !important; /* Darker yellow/brown text for contrast */
+  flex: 1 1 auto;
+  min-width: 200px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 8px;
   transition: all 0.3s ease;
   text-align: center;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: 2px solid transparent;
 }
 
-.askme-action-btn:hover {
-  background-color: #FFF176 !important; /* Lighter yellow on hover */
-  border-color: #FBC02D !important;
-  color: #F57F17 !important;
+.askme-primary-btn {
+  background-color: #0A655D !important;
+  border-color: #0A655D !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(10, 101, 93, 0.2);
+}
+
+.askme-primary-btn:hover {
+  background-color: #058073 !important;
+  border-color: #058073 !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 235, 59, 0.3);
+  box-shadow: 0 4px 12px rgba(10, 101, 93, 0.3);
+}
+
+.askme-secondary-btn {
+  background-color: #ffffff !important;
+  border-color: #0A655D !important;
+  color: #0A655D !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.askme-secondary-btn:hover {
+  background-color: #f8f9fa !important;
+  border-color: #058073 !important;
+  color: #058073 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 101, 93, 0.2);
+}
+
+.askme-action-btn i {
+  font-size: 0.95rem;
+}
+
+/* Responsive styles for Ask Me action buttons */
+@media (max-width: 576px) {
+  .askme-actions {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 100%;
+  }
+
+  .askme-action-btn {
+    min-width: 100%;
+    width: 100%;
+  }
 }
 
 @media (max-width: 576px) {

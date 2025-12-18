@@ -101,12 +101,12 @@
   {% if user.is_authenticated %}
   <div class="row mt-5">
     <div class="col-12">
-      <div class="askme-actions d-flex justify-content-center">
+      <div class="askme-actions d-flex justify-content-center gap-3">
         <a
         href="{% url 'my_questions' %}"
-        class="btn btn-outline-secondary position-relative askme-action-btn"
+        class="btn position-relative askme-action-btn askme-primary-btn"
       >
-        مشاهده سوالات من
+        <i class="fas fa-list-alt me-2"></i>مشاهده سوالات من
         {% if answered_count > 0 %}
         <span
           class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger notification-badge"
@@ -119,9 +119,9 @@
       {% if user.moderator_profile %}
       <a
         href="{% url 'moderator_dashboard' %}"
-        class="btn btn-outline-info me-2 askme-action-btn"
+        class="btn askme-action-btn askme-secondary-btn"
       >
-        پنل متخصص
+        <i class="fas fa-tachometer-alt me-2"></i>پنل متخصص
       </a>
       {% endif %}
       </div>
