@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% static 'images/default.jpg' as default_image_url %}
 <!-- Hero Section -->
 <section
   class="hero-section text-white mb-4"
@@ -42,10 +43,10 @@
         <div class="card-body text-center p-4">
           <div class="moderator-image-wrapper mb-3">
             <img
-              src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
+              src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{{ default_image_url }}{% endif %}"
               alt="{{ moderator.get_display_name }}"
               class="moderator-image"
-              onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+              onerror="this.onerror=null; this.src='{{ default_image_url }}';"
             />
           </div>
           <h5 class="moderator-name mb-2">
