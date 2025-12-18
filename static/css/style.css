@@ -2108,7 +2108,7 @@ body {
 .footer-logo-loop {
   display: flex;
   width: fit-content;
-  animation: scroll-logos 30s linear infinite;
+  animation: none;
   gap: 20px;
   will-change: transform;
 }
@@ -2160,7 +2160,7 @@ body {
 .footer-logo-loop {
   display: flex;
   width: fit-content;
-  animation: scroll-logos 30s linear infinite;
+  animation: none;
   gap: 20px;
   will-change: transform;
 }
