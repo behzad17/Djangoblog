@@ -2824,6 +2824,7 @@ body {
   transition: all 0.3s ease;
   background-color: #00A693 !important;
   border-color: #00A693 !important;
+  margin-bottom: 0 !important;
 }
 
 .ask-question-btn:hover {

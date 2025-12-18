@@ -6,7 +6,6 @@
 <section
   class="hero-section text-white mb-4"
   style="
-    background: #0A655D;
     padding: 3rem 0;
   "
 >
@@ -40,7 +39,7 @@
     {% for moderator in moderators %}
     <div class="col-lg-3 col-md-4 col-sm-6">
       <div class="moderator-card card h-100 shadow-sm">
-        <div class="card-body text-center p-3">
+        <div class="card-body text-center px-3 pt-3 pb-1">
           <div class="moderator-image-wrapper mb-2">
             <img
               src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{{ default_image_url }}{% endif %}"
