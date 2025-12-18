@@ -2129,10 +2129,7 @@ body {
   }
 }
 
-/* Pause animation on hover (optional - can be removed if you want continuous scroll) */
-.footer-logo-loop-wrapper:hover .footer-logo-loop {
-  animation-play-state: paused;
-}
+/* Footer logo loop runs continuously without pause on hover */
 
 /* Original footer-logos class kept for backward compatibility */
 /* Footer Logo Infinite Loop Animation */
@@ -2181,10 +2178,7 @@ body {
   }
 }
 
-/* Pause animation on hover (optional - can be removed if you want continuous scroll) */
-.footer-logo-loop-wrapper:hover .footer-logo-loop {
-  animation-play-state: paused;
-}
+/* Footer logo loop runs continuously without pause on hover */
 
 /* Original footer-logos class kept for backward compatibility */
 .footer-logos {
