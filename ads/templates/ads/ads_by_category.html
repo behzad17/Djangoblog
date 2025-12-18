@@ -17,7 +17,7 @@
         </h1>
         {% if category.description %}
           {% with clean_description=category.description|cut:"click on each ad to connect to service"|cut:"Click on each ad to connect to service"|cut:"CLICK ON EACH AD TO CONNECT TO SERVICE" %}
-            {% if clean_description|striptags|trim %}
+            {% if clean_description %}
               <p class="hero-subtitle mb-3">{{ clean_description }}</p>
             {% endif %}
           {% endwith %}
