@@ -1,52 +1,50 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <!-- Hero Section -->
 <section
-  class="hero-section bg-dark text-white mb-4"
+  class="hero-section text-white mb-4"
   style="
-    background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+    background: #058073;
     padding: 2rem 0;
   "
 >
-  <div class="container">
-    <div class="row justify-content-center text-center">
-      <div class="col-lg-8">
-        <h1 class="hero-title mb-3">
-          <i class="fas fa-tachometer-alt ms-2"></i>پنل متخصص
-        </h1>
-        <p class="hero-subtitle">
-          خوش آمدید، {{
-          moderator.get_display_name }} - {{
-          moderator.expert_title }}
-        </p>
+      <div class="container">
+        <div class="row justify-content-center text-center">
+          <div class="col-lg-8">
+            <h1 class="hero-title mb-3">
+              <i class="fas fa-tachometer-alt ms-2"></i>پنل متخصص
+            </h1>
+            <p class="hero-subtitle">
+              خوش آمدید، {{ moderator.get_display_name }} - {{ moderator.expert_title }}
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 <div class="container mb-5">
   <!-- Statistics Cards -->
   <div class="row mb-4">
     <div class="col-md-4 mb-3">
       <div class="card text-center bg-primary text-white">
-        <div class="card-body">
-          <h3>{{ stats.total }}</h3>
-          <p class="mb-0">کل سوالات</p>
+        <div class="card-body py-3">
+          <h4 class="mb-2">{{ stats.total }}</h4>
+          <p class="mb-0 small">کل سوالات</p>
         </div>
       </div>
     </div>
     <div class="col-md-4 mb-3">
       <div class="card text-center bg-success text-white">
-        <div class="card-body">
-          <h3>{{ stats.answered }}</h3>
-          <p class="mb-0">پاسخ داده شده</p>
+        <div class="card-body py-3">
+          <h4 class="mb-2">{{ stats.answered }}</h4>
+          <p class="mb-0 small">پاسخ داده شده</p>
         </div>
       </div>
     </div>
     <div class="col-md-4 mb-3">
       <div class="card text-center bg-warning text-dark">
-        <div class="card-body">
-          <h3>{{ stats.pending }}</h3>
-          <p class="mb-0">در انتظار</p>
+        <div class="card-body py-3">
+          <h4 class="mb-2">{{ stats.pending }}</h4>
+          <p class="mb-0 small">در انتظار</p>
         </div>
       </div>
     </div>
@@ -76,8 +74,7 @@
               <span class="text-muted me-2">({{ question.user.email }})</span>
             </div>
             <small class="text-muted">
-              <i class="fas fa-calendar ms-1"></i>{{ question.created_on|date:"F
-              d, Y H:i" }}
+              <i class="fas fa-calendar ms-1"></i>{{ question.created_on|date:"F d, Y H:i" }}
             </small>
           </div>
         </div>
@@ -123,20 +120,18 @@
   <div class="row">
     <div class="col-12">
       <h3 class="mb-3">
-        <i class="fas fa-check-circle text-success ms-2"></i>سوالات پاسخ داده
-        شده
+        <i class="fas fa-check-circle text-success ms-2"></i>سوالات پاسخ داده شده
       </h3>
       {% for question in answered_questions %}
       <div class="card mb-3 shadow-sm">
         <div class="card-header bg-success bg-opacity-10">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <strong>{{ question.user.username }}</strong>
+              <strong class="text-dark">{{ question.user.username }}</strong>
               <span class="text-muted me-2">({{ question.user.email }})</span>
             </div>
-            <small class="text-muted">
-              <i class="fas fa-calendar ms-1"></i>پاسخ داده شده: {{
-              question.answered_on|date:"F d, Y H:i" }}
+            <small class="text-dark">
+              <i class="fas fa-calendar ms-1"></i>پاسخ داده شده: {{ question.answered_on|date:"F d, Y H:i" }}
             </small>
           </div>
         </div>
