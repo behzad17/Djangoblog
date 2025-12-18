@@ -2997,10 +2997,13 @@ body {
 /* Ask Me page action buttons */
 .askme-actions {
   gap: 1rem;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .askme-action-btn {
-  min-width: 260px;
+  flex: 1 1 0;
 }
 
 @media (max-width: 576px) {
