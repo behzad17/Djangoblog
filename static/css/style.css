@@ -3056,6 +3056,34 @@ body {
   font-size: 0.95rem;
 }
 
+/* Moderator dashboard statistics cards */
+.moderator-stat-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.moderator-stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.25rem !important;
+}
+
+.moderator-stat-label {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+  .moderator-stat-number {
+    font-size: 2rem;
+  }
+  .moderator-stat-label {
+    font-size: 0.9rem;
+  }
+}
+
 /* Responsive styles for Ask Me action buttons */
 @media (max-width: 576px) {
   .askme-actions {
