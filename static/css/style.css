@@ -798,12 +798,15 @@ body {
   height: 140px; /* Reduced from 200px for more compact card */
   overflow: hidden;
   background-color: #f8f9fa;
+  position: relative;
 }
 
 .featured-post-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   transition: transform 0.3s ease;
 }
 
@@ -977,11 +980,19 @@ body {
   }
   
   .featured-post-image {
-    height: 100px; /* Reduced from 160px for mobile */
+    height: 180px; /* Increased height for better mobile display */
+    min-height: 180px;
+  }
+  
+  .featured-post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
   
   .featured-post-image-placeholder {
-    height: 100px;
+    height: 180px;
     font-size: 1.5rem;
   }
   
