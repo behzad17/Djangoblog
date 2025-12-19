@@ -2278,7 +2278,7 @@ body {
   color: #ffc107;
 }
 
-/* Footer Logo Infinite Loop Animation - Seamless Continuous Loop */
+/* Footer Logo Infinite Loop Animation - Seamless Continuous Marquee */
 .footer-logo-loop-wrapper {
   width: 100%;
   overflow: hidden;
@@ -2302,28 +2302,53 @@ body {
 
 .footer-logo-loop {
   display: flex;
-  width: fit-content;
+  width: max-content;
   animation: scroll-logos 30s linear infinite;
-  gap: 20px;
   will-change: transform;
-  /* Ensure smooth continuous animation */
   animation-play-state: running;
+  /* Prevent any layout shifts and rendering issues */
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* Ensure no gap between slides */
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  /* Force hardware acceleration for smooth animation */
+  transform: translateZ(0);
 }
 
 .footer-logo-slide {
   display: flex;
-  gap: 20px;
   flex-shrink: 0;
-  /* Ensure each slide maintains its width */
-  min-width: max-content;
+  /* Critical: Each slide must maintain exact same width */
+  width: max-content;
+  gap: 20px;
+  /* Ensure no spacing between duplicate slides for seamless connection */
+  margin: 0;
+  padding: 0;
+}
+
+/* Fixed width for icons to prevent layout shifts */
+.footer-logo-img {
+  width: 120px;
+  height: 80px;
+  object-fit: contain;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  flex: 0 0 120px; /* Fixed width, no shrinking or growing */
+  aspect-ratio: 3 / 2;
+  transition: opacity 0.3s ease;
+  /* Prevent any rendering issues */
+  display: block;
 }
 
 /* Smooth infinite scroll animation - perfectly seamless loop */
 @keyframes scroll-logos {
-  from {
+  0% {
     transform: translateX(0);
   }
-  to {
+  100% {
     transform: translateX(-50%);
   }
 }
@@ -2469,27 +2494,14 @@ body {
   }
 }
 
-.footer-logo-img {
-  width: 120px; /* 5% smaller than 126px (126 * 0.95 = 119.7 ≈ 120) */
-  height: 80px; /* 5% smaller than 84px (84 * 0.95 = 79.8 ≈ 80) */
-  object-fit: contain;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  flex: 0 0 auto;
-  aspect-ratio: 3 / 2;
-  transition: opacity 0.3s ease;
-}
-
 /* Logo hover effect for better interactivity */
 .footer-logo-img:hover {
   opacity: 0.8;
 }
 
-/* Responsive adjustments for logo loop - ensure continuous animation */
+/* Responsive adjustments for logo loop - ensure continuous seamless animation */
 @media (max-width: 991px) {
   .footer-logo-loop {
-    gap: 15px;
     animation: scroll-logos 28s linear infinite;
     animation-play-state: running;
   }
@@ -2501,12 +2513,12 @@ body {
   .footer-logo-loop-wrapper .footer-logo-img {
     width: 100px;
     height: 67px;
+    flex: 0 0 100px; /* Fixed width for seamless loop */
   }
 }
 
 @media (max-width: 768px) {
   .footer-logo-loop {
-    gap: 12px;
     animation: scroll-logos 25s linear infinite; /* Slightly faster on mobile */
     animation-play-state: running;
   }
@@ -2518,6 +2530,7 @@ body {
   .footer-logo-loop-wrapper .footer-logo-img {
     width: 90px;
     height: 60px;
+    flex: 0 0 90px; /* Fixed width for seamless loop */
   }
 }
 
