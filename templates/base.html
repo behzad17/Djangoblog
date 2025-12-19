@@ -106,6 +106,13 @@
             </li>
             <li class="nav-item">
               <a
+                class="nav-link {% if request.path == home_url %}active{% endif %}"
+                href="{{ home_url }}#category-filter-section"
+                ><i class="fas fa-tags ms-1"></i>دسته بندی</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
                 class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
                 href="{{ ask_me_url|default:'/ask-me/' }}"
                 ><i class="fas fa-question-circle ms-1"></i>پرسش و پاسخ</a
