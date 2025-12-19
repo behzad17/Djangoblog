@@ -56,6 +56,9 @@
     <!-- Shabnam Font - Persian/Farsi web font (loaded first for optimal rendering) -->
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}?v={% now 'U' %}" />
     
+    <!-- Vazir Font - For brand logo Persian text -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirfont@v30.1.0/dist/font-face.css" />
+    
     <!-- Custom CSS - Site-specific styles -->
     <link
       rel="stylesheet"
@@ -75,8 +78,8 @@
         <a class="navbar-brand" href="{{ home_url }}">
           <div class="d-flex flex-column">
             <span class="brand">
-              <span class="blue-o">Pey</span><span class="yellow-o">vand</span
-              ><span class="thin">|today</span>
+              <span class="blue-o">Pey</span><span class="yellow-o">vand</span>
+              <span class="brand-persian">پیوند</span>
             </span>
             <span class="brand-tagline">جامعه آنلاین ایرانیانِ مقیم سوئد</span>
           </div>

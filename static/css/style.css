@@ -36,13 +36,18 @@ body {
 
 .navbar-nav .nav-link:hover {
   font-weight: 700;
-  color: #ffc107 !important;
+  color: #ffffff !important; /* White on hover */
   transform: translateY(-1px);
 }
 
 .navbar-nav .nav-link.active {
   font-weight: 700;
-  color: #ffc107 !important;
+  color: #ffffff !important; /* White when active */
+}
+
+/* Ensure icons in navbar links are also white */
+.navbar-nav .nav-link i {
+  color: #ffffff !important;
 }
 
 .blue-o {
@@ -56,6 +61,16 @@ body {
 .thin {
   font-weight: 300;
   color: #fff;
+}
+
+/* Persian word in brand logo */
+.brand-persian {
+  font-family: 'Vazir', sans-serif;
+  font-size: 2.07rem; /* 20% bigger than 1.725rem (1.725 * 1.20 = 2.07) */
+  font-weight: 700;
+  color: #4a4a4f;
+  margin-right: 0.5rem; /* Space between Peyvand and پیوند */
+  display: inline-block;
 }
 
 .card-img-top {
