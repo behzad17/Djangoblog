@@ -2278,7 +2278,7 @@ body {
   color: #ffc107;
 }
 
-/* Footer Logo Infinite Loop Animation */
+/* Footer Logo Infinite Loop Animation - Seamless Continuous Loop */
 .footer-logo-loop-wrapper {
   width: 100%;
   overflow: hidden;
@@ -2306,74 +2306,32 @@ body {
   animation: scroll-logos 30s linear infinite;
   gap: 20px;
   will-change: transform;
+  /* Ensure smooth continuous animation */
+  animation-play-state: running;
 }
 
 .footer-logo-slide {
   display: flex;
   gap: 20px;
   flex-shrink: 0;
+  /* Ensure each slide maintains its width */
+  min-width: max-content;
 }
 
-/* Smooth infinite scroll animation */
+/* Smooth infinite scroll animation - perfectly seamless loop */
 @keyframes scroll-logos {
-  0% {
+  from {
     transform: translateX(0);
   }
-  100% {
+  to {
     transform: translateX(-50%);
   }
 }
 
-/* Footer logo loop runs continuously without pause on hover */
-
-/* Original footer-logos class kept for backward compatibility */
-/* Footer Logo Infinite Loop Animation */
-.footer-logo-loop-wrapper {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  padding: 20px 0;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
+/* Ensure animation never stops - no pause on hover or interaction */
+.footer-logo-loop-wrapper:hover .footer-logo-loop {
+  animation-play-state: running;
 }
-
-.footer-logo-loop {
-  display: flex;
-  width: fit-content;
-  animation: scroll-logos 30s linear infinite;
-  gap: 20px;
-  will-change: transform;
-}
-
-.footer-logo-slide {
-  display: flex;
-  gap: 20px;
-  flex-shrink: 0;
-}
-
-/* Smooth infinite scroll animation */
-@keyframes scroll-logos {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Footer logo loop runs continuously without pause on hover */
 
 /* Original footer-logos class kept for backward compatibility */
 .footer-logos {
@@ -2507,11 +2465,12 @@ body {
   opacity: 0.8;
 }
 
-/* Responsive adjustments for logo loop */
+/* Responsive adjustments for logo loop - ensure continuous animation */
 @media (max-width: 991px) {
   .footer-logo-loop {
     gap: 15px;
-    animation-duration: 28s;
+    animation: scroll-logos 28s linear infinite;
+    animation-play-state: running;
   }
   
   .footer-logo-slide {
@@ -2527,7 +2486,8 @@ body {
 @media (max-width: 768px) {
   .footer-logo-loop {
     gap: 12px;
-    animation-duration: 25s; /* Slightly faster on mobile */
+    animation: scroll-logos 25s linear infinite; /* Slightly faster on mobile */
+    animation-play-state: running;
   }
   
   .footer-logo-slide {
