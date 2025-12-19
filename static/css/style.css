@@ -696,6 +696,17 @@ body {
   max-width: 90%;
 }
 
+.hero-subtitle-line1 {
+  font-size: 1.4375rem; /* 15% bigger than 1.25rem (1.25 * 1.15 = 1.4375) */
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.hero-subtitle-line2 {
+  font-size: 1.25rem;
+  display: block;
+}
+
 .hero-buttons {
   margin-top: 0.75rem; /* Minimized spacing */
   margin-bottom: 0;
