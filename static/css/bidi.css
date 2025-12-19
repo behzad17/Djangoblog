@@ -129,6 +129,29 @@
     justify-content: center;
     text-align: center;
   }
+  
+  /* Login and Register buttons RTL mobile adjustments */
+  .rtl .navbar-nav.ms-auto .nav-item .btn-outline-light {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+/* RTL adjustments for very small screens */
+@media (max-width: 576px) {
+  .rtl .navbar-nav.ms-auto {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .rtl .navbar-nav.ms-auto .nav-item {
+    width: 100%;
+  }
+  
+  .rtl .navbar-nav.ms-auto .nav-item .btn-outline-light {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* Featured post card RTL adjustments */
