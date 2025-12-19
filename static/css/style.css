@@ -697,7 +697,7 @@ body {
 }
 
 .hero-subtitle-line1 {
-  font-size: 2rem;
+  font-size: 1.6rem;
   display: block;
   margin-bottom: 0; /* Lines very close together */
   line-height: 1.2; /* Tighter line height for closer spacing */
