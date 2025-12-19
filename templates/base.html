@@ -78,8 +78,9 @@
         <a class="navbar-brand" href="{{ home_url }}">
           <div class="d-flex flex-column">
             <span class="brand">
-              <span class="blue-o">Pey</span><span class="yellow-o">vand</span>
               <span class="brand-persian">پیوند</span>
+              <span class="thin">|</span>
+              <span class="blue-o">Pey</span><span class="yellow-o">vand</span>
             </span>
             <span class="brand-tagline">جامعه آنلاین ایرانیانِ مقیم سوئد</span>
           </div>
@@ -474,8 +475,6 @@
     ></script>
     <!-- Custom JavaScript -->
     <script src="{% static 'js/script.js' %}?v={% now 'U' %}"></script>
-    <!-- Splash Cursor Effect for Hero Section -->
-    <script src="{% static 'js/splash-cursor.js' %}?v={% now 'U' %}"></script>
     <!-- Additional JavaScript Block - For child templates -->
     {% block extras %} {% endblock %}
   </body>
