@@ -122,6 +122,15 @@
   text-align: right;
 }
 
+/* Center text in Ask Me button on mobile devices (override RTL) */
+@media (max-width: 768px) {
+  .rtl .hero-buttons .btn-ask-me-hero {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 /* Featured post card RTL adjustments */
 .rtl .featured-post-meta i.me-1 {
   margin-left: 0.25rem;

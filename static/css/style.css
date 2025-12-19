@@ -740,12 +740,28 @@ body {
   border-radius: 999px;
   box-shadow: 0 8px 24px rgba(5, 150, 105, 0.45);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .hero-buttons .btn-ask-me-hero:hover {
   background-color: #ffd54f;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+/* Center text in Ask Me button on mobile devices */
+@media (max-width: 768px) {
+  .hero-buttons .btn-ask-me-hero {
+    justify-content: center;
+    text-align: center;
+  }
+  .hero-buttons .btn-ask-me-hero i {
+    margin-left: 0.5rem;
+    margin-right: 0;
+  }
 }
 
 .hero-features {
