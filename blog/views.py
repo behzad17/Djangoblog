@@ -125,23 +125,19 @@ class PostList(generic.ListView):
         expert_users = User.objects.filter(
             profile__can_publish_without_approval=True
         )
-        context['popular_posts'] = (
+        expert_posts_qs = (
             Post.objects.filter(
                 status=1,
                 author__in=expert_users
             )
             .select_related('category', 'author', 'author__profile')
-            .order_by('-created_on')[:10]
-        )
-        
-        # Featured post for hero section (most recent published post)
-        context['featured_post'] = (
-            Post.objects.filter(status=1)
-            .select_related('category', 'author')
             .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
             .order_by('-created_on')
-            .first()
         )
+        context['popular_posts'] = expert_posts_qs[:10]
+        
+        # Featured post for hero section (most recent post from experts content section)
+        context['featured_post'] = expert_posts_qs.first()
 
         return context
 
