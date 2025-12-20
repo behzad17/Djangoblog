@@ -2330,6 +2330,51 @@ body {
   color: #ffc107;
 }
 
+/* Center all footer content on mobile devices */
+@media (max-width: 768px) {
+  .footer .row {
+    text-align: center;
+  }
+  
+  .footer .col-md-4 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer h6 {
+    text-align: center !important;
+  }
+  
+  .footer-links {
+    text-align: center;
+    display: inline-block;
+  }
+  
+  .footer-links li {
+    text-align: center;
+  }
+  
+  .footer-contact {
+    text-align: center !important;
+  }
+  
+  .footer-contact-item {
+    justify-content: center !important;
+  }
+  
+  .footer-brand {
+    text-align: center;
+  }
+  
+  .footer-social {
+    justify-content: center !important;
+  }
+  
+  .footer p {
+    text-align: center;
+  }
+}
+
 /* Footer Logo Infinite Loop Animation - Seamless Continuous Marquee */
 .footer-logo-loop-wrapper {
   width: 100%;
