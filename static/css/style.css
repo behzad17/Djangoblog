@@ -2221,6 +2221,7 @@ body {
   width: 100%;
   aspect-ratio: 5 / 6; /* width:height = 1:1.2 */
   min-height: 240px;
+  margin-top: 10%;
 }
 
 /* Ads Below Popular Posts - Height = Width * 50% */
