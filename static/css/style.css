@@ -2524,25 +2524,28 @@ body {
   }
 }
 
-/* Stack buttons vertically on very small screens */
+/* Stack buttons vertically on very small screens - match navbar link size */
 @media (max-width: 576px) {
   .navbar-nav.ms-auto {
     flex-direction: column;
-    width: 100%;
-    gap: 0.5rem;
+    width: auto;
+    gap: 0.25rem;
     margin-top: 0.5rem;
-    align-items: stretch;
+    align-items: flex-start;
   }
   
   .navbar-nav.ms-auto .nav-item {
-    width: 100%;
+    width: auto;
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
   
   .navbar-nav.ms-auto .nav-item .btn-outline-light {
-    width: 100%;
-    min-width: 100%;
+    width: auto;
+    min-width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.96rem;
+    display: inline-block;
   }
 }
 
