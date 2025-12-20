@@ -17,6 +17,7 @@ import json
 
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
+from .utils import track_page_view
 
 
 class PostList(generic.ListView):
@@ -154,6 +155,11 @@ def post_detail(request, slug):
     """
     queryset = Post.objects.filter(status=1).select_related('category', 'author')
     post = get_object_or_404(queryset, slug=slug)
+    
+    # Track page view (only for GET requests)
+    if request.method == 'GET':
+        track_page_view(request, post=post)
+    
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
     comment_form = CommentForm()

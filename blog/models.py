@@ -150,6 +150,25 @@ class Post(models.Model):
     def like_count(self):
         """Returns the number of users who have liked this post."""
         return Like.objects.filter(post=self).count()
+    
+    def view_count(self):
+        """
+        Get total view count for this post.
+        Uses cached count for performance.
+        """
+        if hasattr(self, 'view_count_cache'):
+            return self.view_count_cache.total_views
+        return PageView.objects.filter(post=self, is_bot=False).count()
+    
+    def unique_view_count(self):
+        """
+        Get unique view count (approximate).
+        """
+        if hasattr(self, 'view_count_cache'):
+            return self.view_count_cache.unique_views
+        return PageView.objects.filter(
+            post=self, is_bot=False
+        ).values('session_key', 'ip_hash', 'user_agent_hash').distinct().count()
 
 class Comment(models.Model):
     """
@@ -223,3 +242,120 @@ class Like(models.Model):
     def __str__(self):
         """Returns a string representation of the like."""
         return f"{self.user.username} liked {self.post.title}"
+
+
+class PageView(models.Model):
+    """
+    Tracks individual page views with deduplication support.
+    
+    This model records each page view with anonymized data for privacy compliance.
+    Uses hashed IP addresses and user agents to prevent storing personal data.
+    """
+    # What was viewed
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='page_views',
+        null=True,
+        blank=True,
+        help_text="The post that was viewed (null for non-post pages)"
+    )
+    url_path = models.CharField(
+        max_length=500,
+        help_text="Full URL path for non-post pages"
+    )
+    
+    # Who viewed (optional for privacy)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='page_views',
+        help_text="User who viewed (if authenticated)"
+    )
+    
+    # Session tracking (for deduplication)
+    session_key = models.CharField(
+        max_length=40,
+        db_index=True,
+        help_text="Django session key for session-based deduplication"
+    )
+    
+    # Anonymized tracking (privacy-compliant)
+    ip_hash = models.CharField(
+        max_length=64,
+        db_index=True,
+        help_text="SHA256 hash of IP address (anonymized for privacy)"
+    )
+    user_agent_hash = models.CharField(
+        max_length=64,
+        db_index=True,
+        help_text="SHA256 hash of user agent (anonymized)"
+    )
+    
+    # When viewed
+    viewed_at = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True
+    )
+    
+    # Additional metadata
+    referer = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text="HTTP Referer header"
+    )
+    is_bot = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text="Whether this view is from a bot/crawler"
+    )
+    
+    class Meta:
+        ordering = ['-viewed_at']
+        indexes = [
+            models.Index(fields=['post', '-viewed_at']),
+            models.Index(fields=['session_key', 'post']),
+            models.Index(fields=['ip_hash', 'user_agent_hash', 'post']),
+        ]
+        verbose_name = "Page View"
+        verbose_name_plural = "Page Views"
+    
+    def __str__(self):
+        if self.post:
+            return f"View of {self.post.title} at {self.viewed_at}"
+        return f"View of {self.url_path} at {self.viewed_at}"
+
+
+class PostViewCount(models.Model):
+    """
+    Aggregated view count cache for performance.
+    
+    This model stores pre-calculated view counts to avoid expensive
+    queries when displaying view counts. Updated periodically or via signals.
+    """
+    post = models.OneToOneField(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='view_count_cache'
+    )
+    total_views = models.PositiveIntegerField(
+        default=0,
+        help_text="Total number of views (excluding bots)"
+    )
+    unique_views = models.PositiveIntegerField(
+        default=0,
+        help_text="Approximate unique views (based on session/IP/UA combination)"
+    )
+    last_updated = models.DateTimeField(
+        auto_now=True,
+        help_text="When the count was last updated"
+    )
+    
+    class Meta:
+        verbose_name = "Post View Count"
+        verbose_name_plural = "Post View Counts"
+    
+    def __str__(self):
+        return f"{self.post.title}: {self.total_views} views"
