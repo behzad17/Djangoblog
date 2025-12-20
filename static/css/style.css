@@ -2524,14 +2524,15 @@ body {
   }
 }
 
-/* Stack buttons vertically on very small screens - match navbar link size */
+/* Stack buttons vertically on very small screens - centered with border matching text */
 @media (max-width: 576px) {
   .navbar-nav.ms-auto {
     flex-direction: column;
-    width: auto;
-    gap: 0.25rem;
+    width: 100%;
+    gap: 0.5rem;
     margin-top: 0.5rem;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
   }
   
   .navbar-nav.ms-auto .nav-item {
@@ -2546,6 +2547,9 @@ body {
     padding: 0.5rem 1rem;
     font-size: 0.96rem;
     display: inline-block;
+    text-align: center;
+    /* Border matches text content size */
+    box-sizing: border-box;
   }
 }
 
