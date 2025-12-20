@@ -2216,11 +2216,11 @@ body {
   letter-spacing: 1px;
 }
 
-/* Ad Above Popular Posts - Height = Width * 1.5 */
+/* Ad Above Popular Posts - Height = Width * 1.2 (reduced by 20%) */
 .ad-placeholder-top {
   width: 100%;
-  aspect-ratio: 2 / 3; /* width:height = 1:1.5 */
-  min-height: 300px;
+  aspect-ratio: 5 / 6; /* width:height = 1:1.2 */
+  min-height: 240px;
 }
 
 /* Ads Below Popular Posts - Height = Width * 50% */
