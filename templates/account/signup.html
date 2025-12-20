@@ -8,22 +8,35 @@
 {% endblock %} 
 
 {% block content %}
+<!-- Hero Section -->
+<section
+  class="hero-section hero-section-signup text-white mb-4"
+  style="
+    background: #0A655D;
+    padding: 2rem 0;
+  "
+>
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="hero-title mb-3">{% trans "Create Account" %}</h1>
+        <p class="hero-subtitle mb-0">
+          {% blocktrans %}
+          Join us today! Create your account to get started.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Signup Container -->
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-lg-5 col-md-7 col-sm-9">
       <!-- Signup Card -->
-      <div class="card login-card mt-5 mb-5">
+      <div class="card login-card login-ltr mt-4 mb-5">
         <div class="card-body p-4">
-          <!-- Signup Header -->
-          <div class="text-center mb-4">
-            <h2 class="card-title mb-2">{% trans "Create Account" %}</h2>
-            <p class="text-muted mb-0">
-              {% blocktrans %}
-              Join us today! Create your account to get started.
-              {% endblocktrans %}
-            </p>
-          </div>
 
           <!-- Google Sign Up Button (Prominent) -->
           <div class="mb-4">

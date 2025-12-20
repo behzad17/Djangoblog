@@ -712,6 +712,28 @@ body {
   max-width: 90%;
 }
 
+/* Ensure hero section text is centered on login and signup pages */
+.hero-section-login .hero-title,
+.hero-section-login .hero-subtitle,
+.hero-section-signup .hero-title,
+.hero-section-signup .hero-subtitle {
+  text-align: center !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  max-width: 100%;
+  width: 100%;
+}
+
+.hero-section-login .container .row,
+.hero-section-signup .container .row {
+  justify-content: center !important;
+}
+
+.hero-section-login .container .row .col-lg-8,
+.hero-section-signup .container .row .col-lg-8 {
+  text-align: center !important;
+}
+
 .hero-subtitle-line1 {
   font-size: 1.6rem;
   display: block;
@@ -2621,6 +2643,83 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+}
+
+/* LTR (Left-to-Right) styling for login page - English page */
+.login-card.login-ltr {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* All text elements LTR */
+.login-card.login-ltr * {
+  direction: ltr !important;
+}
+
+.login-card.login-ltr .form-label,
+.login-card.login-ltr .form-check-label,
+.login-card.login-ltr .form-control,
+.login-card.login-ltr input,
+.login-card.login-ltr label,
+.login-card.login-ltr .form-check,
+.login-card.login-ltr .card-body,
+.login-card.login-ltr .mb-3,
+.login-card.login-ltr .mb-4,
+.login-card.login-ltr p,
+.login-card.login-ltr span,
+.login-card.login-ltr a,
+.login-card.login-ltr button,
+.login-card.login-ltr .btn,
+.login-card.login-ltr .alert,
+.login-card.login-ltr .text-danger,
+.login-card.login-ltr .text-muted,
+.login-card.login-ltr .divider-wrapper,
+.login-card.login-ltr .divider-text {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Center only specific elements */
+.login-card.login-ltr .text-center {
+  text-align: center !important;
+}
+
+.login-card.login-ltr .form-check {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.login-card.login-ltr .form-check input[type="checkbox"] {
+  margin-right: 0.5rem;
+  margin-left: 0;
+  order: -1;
+}
+
+/* Labels should be above inputs, aligned left */
+.login-card.login-ltr .form-label {
+  display: block;
+  text-align: left !important;
+  margin-bottom: 0.5rem;
+}
+
+/* Input fields LTR */
+.login-card.login-ltr input[type="text"],
+.login-card.login-ltr input[type="email"],
+.login-card.login-ltr input[type="password"] {
+  text-align: left !important;
+  direction: ltr !important;
+}
+
+/* Override any RTL rules for login-ltr */
+.rtl .login-card.login-ltr,
+.rtl .login-card.login-ltr * {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.rtl .login-card.login-ltr .text-center {
+  text-align: center !important;
 }
 
 .login-card .card-title {
