@@ -170,7 +170,7 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for category in categories %} 
-            {% if category.slug == "events-announcements" or category.slug == "photo-gallery" or category.slug == "public-services" or category.slug == "stories-experiences" or category.slug == "community-engagement" %}
+            {% if category.slug == "events-announcements" or category.slug == "photo-gallery" or category.slug == "public-services" or category.slug == "stories-experiences" or category.slug == "community-engagement" or category.slug == "personalities" %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
@@ -197,6 +197,9 @@
                 ></i>
                 {% elif category.slug == "community-engagement" %}<i
                   class="bi bi-translate"
+                ></i>
+                {% elif category.slug == "personalities" %}<i
+                  class="bi bi-person-star"
                 ></i>
                 {% endif %}
               </span>
