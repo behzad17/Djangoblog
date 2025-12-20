@@ -2406,12 +2406,17 @@ body {
   /* Prevent any layout shifts and rendering issues */
   backface-visibility: hidden;
   perspective: 1000px;
-  /* Ensure no gap between slides */
+  /* Ensure no gap between slides - critical for seamless loop */
   gap: 0;
   margin: 0;
   padding: 0;
   /* Force hardware acceleration for smooth animation */
   transform: translateZ(0);
+  /* Ensure continuous animation without breaks */
+  animation-fill-mode: both;
+  /* Prevent any visual glitches during animation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .footer-logo-slide {
@@ -2423,6 +2428,10 @@ body {
   /* Ensure no spacing between duplicate slides for seamless connection */
   margin: 0;
   padding: 0;
+  /* Prevent any spacing that could break the loop */
+  box-sizing: border-box;
+  /* Ensure slides are perfectly adjacent */
+  position: relative;
 }
 
 /* Fixed width for icons to prevent layout shifts */
@@ -2438,6 +2447,11 @@ body {
   transition: opacity 0.3s ease;
   /* Prevent any rendering issues */
   display: block;
+  /* Ensure no spacing issues */
+  margin: 0;
+  /* Prevent any image loading delays from affecting layout */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 /* Smooth infinite scroll animation - perfectly seamless loop */
@@ -2446,7 +2460,10 @@ body {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    /* Move exactly one slide width (33.333% of total since we have 3 identical slides) */
+    /* This creates a perfect seamless loop - when animation resets, next slide is in first slide's position */
+    /* With 3 sets, we always have content visible, ensuring continuous movement */
+    transform: translateX(-33.333%);
   }
 }
 
