@@ -2379,60 +2379,30 @@ body {
 /* Footer Logo Infinite Loop Animation - Seamless Continuous Marquee */
 .footer-logo-loop-wrapper {
   width: 100%;
-  overflow: hidden;
   position: relative;
   padding: 20px 0;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
 }
 
 .footer-logo-loop {
   display: flex;
-  width: max-content;
-  animation: scroll-logos 30s linear infinite;
-  will-change: transform;
-  animation-play-state: running;
-  /* Prevent any layout shifts and rendering issues */
-  backface-visibility: hidden;
-  perspective: 1000px;
-  /* Ensure no gap between slides - critical for seamless loop */
-  gap: 0;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
   margin: 0;
   padding: 0;
-  /* Force hardware acceleration for smooth animation */
-  transform: translateZ(0);
-  /* Ensure continuous animation without breaks */
-  animation-fill-mode: both;
-  /* Prevent any visual glitches during animation */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .footer-logo-slide {
   display: flex;
-  flex-shrink: 0;
-  /* Critical: Each slide must maintain exact same width */
-  width: max-content;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
-  /* Ensure no spacing between duplicate slides for seamless connection */
   margin: 0;
   padding: 0;
-  /* Prevent any spacing that could break the loop */
-  box-sizing: border-box;
-  /* Ensure slides are perfectly adjacent */
-  position: relative;
+  width: 100%;
 }
 
 /* Fixed width for icons to prevent layout shifts */
@@ -2455,23 +2425,7 @@ body {
   image-rendering: crisp-edges;
 }
 
-/* Smooth infinite scroll animation - perfectly seamless loop */
-@keyframes scroll-logos {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* Move exactly one slide width (33.333% of total since we have 3 identical slides) */
-    /* This creates a perfect seamless loop - when animation resets, next slide is in first slide's position */
-    /* With 3 sets, we always have content visible, ensuring continuous movement */
-    transform: translateX(-33.333%);
-  }
-}
-
-/* Ensure animation never stops - no pause on hover or interaction */
-.footer-logo-loop-wrapper:hover .footer-logo-loop {
-  animation-play-state: running;
-}
+/* Animation removed - logos are now static */
 
 /* Original footer-logos class kept for backward compatibility */
 .footer-logos {
@@ -2621,13 +2575,8 @@ body {
   opacity: 0.8;
 }
 
-/* Responsive adjustments for logo loop - ensure continuous seamless animation */
+/* Responsive adjustments for static logo display */
 @media (max-width: 991px) {
-  .footer-logo-loop {
-    animation: scroll-logos 28s linear infinite;
-    animation-play-state: running;
-  }
-  
   .footer-logo-slide {
     gap: 15px;
   }
@@ -2635,16 +2584,11 @@ body {
   .footer-logo-loop-wrapper .footer-logo-img {
     width: 100px;
     height: 67px;
-    flex: 0 0 100px; /* Fixed width for seamless loop */
+    flex: 0 0 100px;
   }
 }
 
 @media (max-width: 768px) {
-  .footer-logo-loop {
-    animation: scroll-logos 25s linear infinite; /* Slightly faster on mobile */
-    animation-play-state: running;
-  }
-  
   .footer-logo-slide {
     gap: 12px;
   }
@@ -2652,7 +2596,7 @@ body {
   .footer-logo-loop-wrapper .footer-logo-img {
     width: 90px;
     height: 60px;
-    flex: 0 0 90px; /* Fixed width for seamless loop */
+    flex: 0 0 90px;
   }
 }
 
