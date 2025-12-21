@@ -7,7 +7,7 @@
           <h2 class="text-center">ایجاد پست جدید</h2>
         </div>
         <div class="card-body">
-          <form method="post" enctype="multipart/form-data">
+          <form method="post" enctype="multipart/form-data" dir="ltr" style="text-align: left;">
             {% csrf_token %}
 
             <!-- Regular fields -->
@@ -40,6 +40,27 @@
 </div>
 
 {% endblock content %} {% block extras %}
+<style>
+  /* Force LTR direction for form fields */
+  .card-body form input,
+  .card-body form textarea,
+  .card-body form select {
+    direction: ltr;
+    text-align: left;
+  }
+  
+  .card-body form label {
+    text-align: left;
+  }
+  
+  /* Ensure form help text is LTR */
+  .card-body form .help-block,
+  .card-body form .form-text {
+    direction: ltr;
+    text-align: left;
+  }
+</style>
+
 <!-- Summernote initialization for rich text editing -->
 <script>
   $(document).ready(function () {
