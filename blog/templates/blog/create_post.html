@@ -11,16 +11,17 @@
             {% csrf_token %}
 
             <!-- Regular fields -->
-            {{ form.title|as_crispy_field }} {{ form.category|as_crispy_field }}
-            {{ form.excerpt|as_crispy_field }} {{
-            form.featured_image|as_crispy_field }} {{
-            form.content|as_crispy_field }} {{ form.external_url|as_crispy_field
-            }}
+            {{ form.title|as_crispy_field }}
+            {{ form.category|as_crispy_field }}
+            {{ form.excerpt|as_crispy_field }}
+            {{ form.featured_image|as_crispy_field }}
+            {{ form.content|as_crispy_field }}
+            {{ form.external_url|as_crispy_field }}
 
             <!-- Event date fields (initially hidden) -->
             <div id="event-fields-container" style="display: none">
-              {{ form.event_start_date|as_crispy_field }} {{
-              form.event_end_date|as_crispy_field }}
+              {{ form.event_start_date|as_crispy_field }}
+              {{ form.event_end_date|as_crispy_field }}
             </div>
 
             <div class="text-center mt-4">
@@ -76,9 +77,17 @@
     const selectedOption = categorySelect.options[categorySelect.selectedIndex];
     if (selectedOption && selectedOption.value) {
       const categoryText = selectedOption.text.trim();
+      const categoryValue = selectedOption.value;
 
-      // Check if Events category is selected
-      if (categoryText === "Events") {
+      // Check if Events category is selected (check both English and Persian names)
+      // Also check if the category slug matches 'events-announcements'
+      // Get category slug by checking the option's value (category ID) or text
+      const isEventsCategory = categoryText === "Events" || 
+                               categoryText === "رویدادها" || 
+                               categoryText.includes("رویداد") ||
+                               categoryText.toLowerCase().includes("event");
+      
+      if (isEventsCategory) {
         // Show event fields with smooth transition
         eventFieldsContainer.style.display = "block";
         eventFieldsContainer.style.opacity = "0";
