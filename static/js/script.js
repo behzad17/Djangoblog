@@ -389,7 +389,11 @@ function initAdBanner() {
   
   // Handle close button click
   if (closeButton) {
-    closeButton.addEventListener('click', function() {
+    closeButton.addEventListener('click', function(e) {
+      // Prevent event from bubbling to ad link
+      e.preventDefault();
+      e.stopPropagation();
+      
       console.log('[Ad Banner] Close button clicked');
       
       try {
@@ -397,18 +401,17 @@ function initAdBanner() {
         // Storage key: 'adBannerDismissed', value: 'true'
         localStorage.setItem('adBannerDismissed', 'true');
         console.log('[Ad Banner] Dismissal state saved to localStorage (key: adBannerDismissed)');
-      } catch (e) {
+      } catch (err) {
         // localStorage not available, but still hide banner for this session
-        console.log('[Ad Banner] localStorage not available, hiding for session only:', e);
+        console.log('[Ad Banner] localStorage not available, hiding for session only:', err);
       }
       
       // Hide banner with smooth animation
       if (adBanner) {
         // Add smooth transition
-        adBanner.style.transition = 'opacity 0.3s ease, height 0.3s ease';
+        adBanner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         adBanner.style.opacity = '0';
-        adBanner.style.height = '0';
-        adBanner.style.overflow = 'hidden';
+        adBanner.style.transform = 'translateX(-50%) translateY(-10px)';
         
         console.log('[Ad Banner] Hiding banner with animation');
         
@@ -426,6 +429,7 @@ function initAdBanner() {
     closeButton.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
+        e.stopPropagation();
         closeButton.click();
       }
     });

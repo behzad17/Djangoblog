@@ -3768,7 +3768,14 @@ body {
 
 /* Ad Banner Styles */
 .ad-banner {
-  width: 100%;
+  /* Overlay positioning - sits half on navbar and half on hero section */
+  position: fixed;
+  top: calc(65px - 30px); /* Navbar height (~65px) minus half banner height (30px) */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70vw;
+  max-width: 900px;
+  min-width: 300px;
   height: 60px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
   color: white;
@@ -3776,11 +3783,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 9999; /* Higher than navbar and hero section */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
   visibility: visible;
   opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Hidden modifier class - applied when banner is dismissed */
@@ -3794,8 +3802,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0;
+  padding: 0 1rem;
   position: relative;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 .ad-banner-message {
@@ -3824,6 +3834,7 @@ body {
   display: block;
   margin: 0;
   object-fit: cover;
+  border-radius: 15px;
 }
 
 .ad-banner-fallback {
@@ -3844,7 +3855,7 @@ body {
   border-radius: 4px;
   transition: background-color 0.2s ease;
   position: absolute;
-  right: 0.5rem;
+  right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   min-width: 44px;
@@ -3852,7 +3863,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 10000; /* Higher than ad link to prevent click-through */
+  pointer-events: auto; /* Ensure button is clickable */
 }
 
 .ad-banner-close:hover {
@@ -3880,7 +3892,17 @@ body {
 /* Responsive adjustments for ad banner */
 @media (max-width: 768px) {
   .ad-banner {
-    height: 60px;
+    width: 90vw;
+    max-width: none;
+    min-width: 280px;
+    top: calc(60px - 27.5px); /* Adjusted for smaller navbar and banner height */
+    height: 55px;
+    border-radius: 12px;
+  }
+  
+  .ad-banner-content {
+    padding: 0 0.75rem;
+    border-radius: 12px;
   }
   
   .ad-banner-message {
@@ -3891,6 +3913,35 @@ body {
   .ad-banner-close {
     right: 0.5rem;
     font-size: 1.1rem;
+  }
+  
+  .ad-banner-image {
+    max-height: 55px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .ad-banner {
+    width: 95vw;
+    top: calc(55px - 25px); /* Adjusted for mobile navbar and banner height */
+    height: 50px;
+    border-radius: 10px;
+  }
+  
+  .ad-banner-content {
+    padding: 0 0.5rem;
+    border-radius: 10px;
+  }
+  
+  .ad-banner-message {
+    font-size: 0.75rem;
+    padding-right: 2rem;
+  }
+  
+  .ad-banner-image {
+    max-height: 50px;
+    border-radius: 10px;
   }
 }
 
