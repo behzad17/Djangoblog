@@ -77,6 +77,11 @@ body {
 .card-img-top {
   border-radius: 5px;
   overflow: hidden;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .card-title {
@@ -627,6 +632,145 @@ body {
     min-height: 400px;
     width: 100%;
     max-width: 100%;
+  }
+  
+  .card-img-top {
+    height: 180px;
+  }
+}
+
+/* iPad Pro and Surface Pro specific fixes */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Surface Pro 7 (912px) and iPad Pro 11" (834px) landscape */
+  .post-card {
+    height: 410px;
+    max-height: 410px;
+    min-height: 410px;
+  }
+  
+  .card-img-top {
+    height: 190px;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+  
+  .post-card .card-body {
+    padding: 14px;
+  }
+  
+  /* Ensure container is responsive */
+  .container,
+  .container-fluid {
+    max-width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  /* Fix grid columns for better display */
+  .blog-post-row .col-lg-3,
+  .blog-post-row .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  
+  /* Fix image container */
+  .image-container {
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+  /* iPad Pro 12.9" (1024px-1366px) */
+  .post-card {
+    height: 420px;
+    max-height: 420px;
+    min-height: 420px;
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+  
+  .post-card .card-body {
+    padding: 12px;
+  }
+  
+  /* Ensure proper container width */
+  .container {
+    max-width: 1200px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Better grid layout for iPad Pro */
+  .blog-post-row .col-lg-3 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+  
+  /* Fix image container */
+  .image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@media (min-width: 1368px) and (max-width: 1440px) {
+  /* Surface Pro 7 landscape and Surface Pro X */
+  .post-card {
+    height: 420px;
+    max-height: 420px;
+    min-height: 420px;
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+  
+  .post-card .card-body {
+    padding: 12px;
+  }
+  
+  /* Ensure container is responsive */
+  .container {
+    max-width: 1320px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Fix image container */
+  .image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
