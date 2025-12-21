@@ -51,16 +51,16 @@ body {
 }
 
 .blue-o {
-  color: #006aa7;
+  color: #ffc107; /* Changed to yellow */
 }
 
 .yellow-o {
-  color: #fecc00;
+  color: #ffc107; /* Changed to match yellow color */
 }
 
 .thin {
   font-weight: 300;
-  color: #fff;
+  color: #ffc107; /* Changed to yellow */
   font-size: 1.725rem; /* Match brand font size for the vertical line */
 }
 
@@ -69,7 +69,7 @@ body {
   font-family: 'Shabnam', sans-serif;
   font-size: 2.07rem; /* 20% bigger than 1.725rem (1.725 * 1.20 = 2.07) */
   font-weight: 500; /* Shabnam Medium */
-  color: #ffffff; /* White color */
+  color: #ffc107; /* Changed to yellow */
   margin-left: 0.2rem; /* Reduced spacing - closer to the line */
   display: inline-block;
 }
