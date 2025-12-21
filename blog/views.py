@@ -228,6 +228,20 @@ def post_detail(request, slug):
         .order_by('-created_on')[:10]
     )
 
+    # Get related posts (3 max) from the same category, excluding current post
+    related_posts = []
+    if post.category:
+        related_posts = (
+            Post.objects.filter(
+                status=1,
+                category=post.category
+            )
+            .exclude(id=post.id)
+            .select_related('category', 'author')
+            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
+            .order_by('-created_on')[:3]
+        )
+
     # Flag to hide pending messages on published posts
     hide_pending_messages = post.status == 1
 
@@ -245,9 +259,11 @@ def post_detail(request, slug):
             "comments": comments,
             "comment_count": comment_count,
             "comment_form": comment_form,
+            "related_posts": related_posts,
             "is_favorited": is_favorited,
             "is_liked": is_liked,
             "popular_posts": expert_posts,
+            "related_posts": related_posts,
             "hide_pending_messages": hide_pending_messages,
         },
     )

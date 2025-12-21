@@ -36,6 +36,20 @@
 {% block content %}
 <div class="masthead">
   <div class="container">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-2">
+      <ol class="breadcrumb small text-muted mb-0">
+        <li class="breadcrumb-item">
+          <a href="{% url 'home' %}" class="text-muted text-decoration-none">خانه</a>
+        </li>
+        {% if post.category %}
+        <li class="breadcrumb-item">
+          <a href="{% url 'category_posts' post.category.slug %}" class="text-muted text-decoration-none">{{ post.category.name }}</a>
+        </li>
+        {% endif %}
+        <li class="breadcrumb-item active text-muted" aria-current="page">{{ post.title|truncatewords:5 }}</li>
+      </ol>
+    </nav>
     <div class="row g-0">
       <div class="col-md-6 masthead-text">
         <h1 class="post-title">{{ post.title }}</h1>
@@ -275,6 +289,73 @@
           {% endfor %}
         </div>
       </div>
+
+      <!-- Related Posts Section -->
+      {% if related_posts %}
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="fas fa-th-list ms-2"></i>پست‌های مرتبط
+          </h5>
+          <div class="row g-3">
+            {% for related_post in related_posts %}
+            <div class="col-md-4 col-sm-6">
+              <div class="card post-card h-100">
+                <div class="card-body">
+                  <div class="image-container">
+                    {% if related_post.featured_image %}
+                      {% if "placeholder" in related_post.featured_image.url|default:"" %}
+                      <img
+                        class="card-img-top"
+                        src="{% static 'images/default.jpg' %}"
+                        alt="تصویر پیش‌فرض برای {{ related_post.title }}"
+                        loading="lazy"
+                      />
+                      {% else %}
+                      <img
+                        class="card-img-top"
+                        src="{{ related_post.featured_image.url }}"
+                        alt="{{ related_post.title }}"
+                        loading="lazy"
+                        data-fallback="{% static 'images/default.jpg' %}"
+                        onerror="this.onerror=null; this.src=this.dataset.fallback;"
+                      />
+                      {% endif %}
+                    {% else %}
+                    <img
+                      class="card-img-top"
+                      src="{% static 'images/default.jpg' %}"
+                      alt="تصویر پیش‌فرض برای {{ related_post.title }}"
+                      loading="lazy"
+                    />
+                    {% endif %}
+                  </div>
+                  <a href="{% url 'post_detail' related_post.slug %}" class="post-link">
+                    <h6 class="card-title">{{ related_post.title|truncatewords:8 }}</h6>
+                  </a>
+                  {% if related_post.category %}
+                  <div class="mb-2">
+                    <a
+                      href="{% url 'category_posts' related_post.category.slug %}"
+                      class="category-badge"
+                    >
+                      <i class="fas fa-tag ms-1"></i>{{ related_post.category.name }}
+                    </a>
+                  </div>
+                  {% endif %}
+                  <p class="post-author-inline small">نویسنده: {{ related_post.author }}</p>
+                  <hr class="my-2" />
+                  <p class="card-text text-muted small mb-0">
+                    {{ related_post.created_on|date:"M d, Y" }} | <i class="far fa-comments"></i> {{ related_post.comment_count|default:0 }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <!-- Sidebar -->
