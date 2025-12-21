@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}{{ category.name }} | Peyvand{% endblock title %}
+{% block meta_description %}{% if category.description %}{{ category.description|truncatewords:25 }}{% else %}مطالب و پست‌های دسته‌بندی {{ category.name }}{% endif %}{% endblock meta_description %}
 {% block content %}
 <!-- Category Hero Section -->
 <section class="category-hero-section text-white">

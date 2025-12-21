@@ -19,11 +19,17 @@
 >
   <head>
     <!-- Page Title and Meta Tags -->
-    <title>swedentoday Blog</title>
+    <title>{% block title %}Peyvand | جامعه آنلاین ایرانیانِ مقیم سوئد{% endblock title %}</title>
+    <meta name="description" content="{% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق{% endblock meta_description %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}" />
 
     <!-- Google Fonts CSS - Loading custom fonts for the site -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
       rel="stylesheet"
@@ -34,6 +40,7 @@
     />
 
     <!-- Font Awesome CSS - For social media and other icons -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -66,6 +73,33 @@
     />
     <!-- Bidi (RTL/LTR) CSS - Directional support -->
     <link rel="stylesheet" href="{% static 'css/bidi.css' %}?v={% now 'U' %}" />
+    
+    <!-- Structured Data - Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Peyvand",
+      "alternateName": "پیوند",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo1.png' %}",
+      "description": "جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق",
+      "sameAs": [
+        "https://www.facebook.com/swedentoday",
+        "https://twitter.com/swedentoday",
+        "https://www.instagram.com/swedentoday",
+        "https://www.youtube.com/@swedentoday"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "info@bjcode.se",
+        "telephone": "+46-706-84-00-18",
+        "contactType": "customer service"
+      }
+    }
+    </script>
+    
+    {% block structured_data %}{% endblock structured_data %}
   </head>
 
   <body
@@ -193,8 +227,9 @@
           >
             <img
               src="{% static 'images/ad-banner-top.jpg' %}"
-              alt="Advertisement"
+              alt="تبلیغات"
               class="ad-banner-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-banner-fallback" style="display: none">
@@ -406,9 +441,10 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
       crossorigin="anonymous"
+      defer
     ></script>
     <!-- Custom JavaScript -->
-    <script src="{% static 'js/script.js' %}?v={% now 'U' %}"></script>
+    <script src="{% static 'js/script.js' %}?v={% now 'U' %}" defer></script>
     <!-- Additional JavaScript Block - For child templates -->
     {% block extras %} {% endblock %}
   </body>

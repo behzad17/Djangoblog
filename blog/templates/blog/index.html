@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %} {% load static %}
+{% block title %}خانه | Peyvand{% endblock title %}
+{% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
+{% block content %}
 <!-- Hero section -->
 <section class="hero-section text-white">
   <div class="container">
@@ -228,13 +231,15 @@
                 <img
                   class="card-img-top"
                   src="{% static 'images/default.jpg' %}"
-                  alt="placeholder image"
+                  alt="تصویر پیش‌فرض برای {{ post.title }}"
+                  loading="lazy"
                 />
                 {% else %}
                 <img
                   class="card-img-top"
                   src="{{ post.featured_image.url }}"
                   alt="{{ post.title }}"
+                  loading="lazy"
                   data-fallback="{% static 'images/default.jpg' %}"
                   onerror="this.onerror=null; this.src=this.dataset.fallback;"
                 />
@@ -242,7 +247,8 @@
                 <img
                   class="card-img-top"
                   src="{% static 'images/default.jpg' %}"
-                  alt="{{ post.title }}"
+                  alt="تصویر پیش‌فرض برای {{ post.title }}"
+                  loading="lazy"
                 />
                 {% endif %}
               </div>
@@ -289,8 +295,9 @@
         <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
           <img
             src="{% static 'images/ad-top.jpg' %}"
-            alt="Advertisement"
+            alt="تبلیغات"
             class="ad-image"
+            loading="lazy"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
           />
           <div class="ad-content" style="display: none">
@@ -319,12 +326,14 @@
                   src="{% static 'images/default.jpg' %}"
                   alt="{{ post.title }}"
                   class="popular-post-image"
+                  loading="lazy"
                 />
                 {% else %}
                 <img
                   src="{{ post.featured_image.url }}"
                   alt="{{ post.title }}"
                   class="popular-post-image"
+                  loading="lazy"
                   data-fallback="{% static 'images/default.jpg' %}"
                   onerror="this.onerror=null; this.src=this.dataset.fallback;"
                 />
@@ -333,6 +342,7 @@
                   src="{% static 'images/default.jpg' %}"
                   alt="{{ post.title }}"
                   class="popular-post-image"
+                  loading="lazy"
                 />
                 {% endif %}
               </a>
@@ -363,8 +373,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-1.jpg' %}"
-              alt="Advertisement 1"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -377,8 +388,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-2.jpg' %}"
-              alt="Advertisement 2"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -391,8 +403,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-3.jpg' %}"
-              alt="Advertisement 3"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -405,8 +418,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-4.jpg' %}"
-              alt="Advertisement 4"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -419,8 +433,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-5.jpg' %}"
-              alt="Advertisement 5"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">

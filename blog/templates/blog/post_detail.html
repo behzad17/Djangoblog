@@ -1,6 +1,38 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% block title %}{{ post.title }} | Peyvand{% endblock title %}
+{% block meta_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% else %}{{ post.content|striptags|truncatewords:25 }}{% endif %}{% endblock meta_description %}
+{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ post.title|escapejs }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ post.author.get_full_name|default:post.author.username|escapejs }}"
+  },
+  "datePublished": "{{ post.created_on|date:'c' }}",
+  "dateModified": "{{ post.updated_on|date:'c' }}",
+  {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}",{% endif %}
+  "publisher": {
+    "@type": "Organization",
+    "name": "Peyvand",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo1.png' %}"
+    }
+  },
+  {% if post.category %}"articleSection": "{{ post.category.name|escapejs }}",{% endif %}
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ request.build_absolute_uri }}"
+  }
+}
+</script>
+{% endblock structured_data %}
 {% block content %}
 <div class="masthead">
   <div class="container">
@@ -99,7 +131,7 @@
           <img
             src="{% static 'images/default.jpg' %}"
             class="scale"
-            alt="placeholder"
+            alt="تصویر پیش‌فرض برای {{ post.title }}"
           />
           {% else %}
           <img
@@ -113,7 +145,7 @@
         <img
           src="{% static 'images/default.jpg' %}"
           class="scale"
-          alt="{{ post.title }}"
+          alt="تصویر پیش‌فرض برای {{ post.title }}"
         />
         {% endif %}
       </div>
@@ -252,8 +284,9 @@
         <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
           <img
             src="{% static 'images/ad-top.jpg' %}"
-            alt="Advertisement"
+            alt="تبلیغات"
             class="ad-image"
+            loading="lazy"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
           />
           <div class="ad-content" style="display: none">
@@ -283,12 +316,14 @@
                     src="{% static 'images/default.jpg' %}"
                     alt="{{ p.title }}"
                     class="popular-post-image"
+                    loading="lazy"
                   />
                   {% else %}
                   <img
                     src="{{ p.featured_image.url }}"
                     alt="{{ p.title }}"
                     class="popular-post-image"
+                    loading="lazy"
                     onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
                   />
                   {% endif %}
@@ -297,6 +332,7 @@
                   src="{% static 'images/default.jpg' %}"
                   alt="{{ p.title }}"
                   class="popular-post-image"
+                  loading="lazy"
                 />
                 {% endif %}
               </a>
@@ -327,8 +363,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-1.jpg' %}"
-              alt="Advertisement 1"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -341,8 +378,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-2.jpg' %}"
-              alt="Advertisement 2"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -355,8 +393,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-3.jpg' %}"
-              alt="Advertisement 3"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -369,8 +408,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-4.jpg' %}"
-              alt="Advertisement 4"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">
@@ -383,8 +423,9 @@
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
               src="{% static 'images/ad-5.jpg' %}"
-              alt="Advertisement 5"
+              alt="تبلیغات"
               class="ad-image"
+              loading="lazy"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
             <div class="ad-content" style="display: none">

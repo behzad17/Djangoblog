@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.sitemaps.views import sitemap
 from ratelimit.decorators import ratelimit
 from allauth.account import views as allauth_views
+from blog.sitemaps import PostSitemap, CategorySitemap
+from blog.views_robots import robots_txt
 
+# Sitemap configuration
+sitemaps = {
+    'posts': PostSitemap,
+    'categories': CategorySitemap,
+}
 
 urlpatterns = [
     path("about/", include("about.urls")),
@@ -44,5 +52,8 @@ urlpatterns = [
     path("captcha/", include("captcha.urls")),
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
+    # SEO: Sitemap and robots.txt
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', robots_txt, name='robots_txt'),
     path("", include("blog.urls"), name="blog-urls"),
 ]
