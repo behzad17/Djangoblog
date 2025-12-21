@@ -1,29 +1,38 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<!-- Category Header Section -->
-<section class="py-4 bg-light">
+<!-- Category Hero Section -->
+<section class="category-hero-section text-white">
   <div class="container">
-    <div class="row">
+    <div class="row align-items-center">
       <div class="col-12">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
-            <li class="breadcrumb-item active" aria-current="page">
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb breadcrumb-category">
+            <li class="breadcrumb-item">
+              <a href="{% url 'home' %}" class="text-white-50">خانه</a>
+            </li>
+            <li class="breadcrumb-item active text-white" aria-current="page">
               {{ category.name }}
             </li>
           </ol>
         </nav>
-        <h1 class="category-page-title">
-          <i class="fas fa-tag ms-2"></i>{{ category.name }}
-        </h1>
-        {% if category.description %}
-        <p class="category-description">{{ category.description }}</p>
-        {% endif %}
-        <p class="text-muted">
-          <i class="fas fa-file-alt ms-1"></i>
-          {{ post_list|length }} پست در این دسته‌بندی
-        </p>
+        <div class="category-hero-content text-center">
+          <h1 class="category-hero-title mb-3">
+            <i class="fas fa-tag ms-2"></i>{{ category.name }}
+          </h1>
+          {% if category.description %}
+          <p class="category-hero-description mb-3">
+            {{ category.description }}
+          </p>
+          {% endif %}
+          <div class="category-hero-stats d-flex justify-content-center align-items-center gap-4 flex-wrap">
+            <div class="stat-item">
+              <i class="fas fa-file-alt ms-1"></i>
+              <span class="stat-number">{{ page_obj.paginator.count|default:0 }}</span>
+              <span class="stat-label">پست</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -35,13 +44,16 @@
     <div class="col-12">
       <div class="category-filter-section">
         <h4 class="category-section-title mb-3">
-          <i class="fas fa-tags ms-2"></i>همه دسته‌بندی‌ها
+          <i class="fas fa-tags ms-2"></i>
+          <a href="{% url 'home' %}#category-filter-section" class="text-decoration-none text-dark">
+            همه دسته‌بندی‌ها
+          </a>
         </h4>
         <div class="category-buttons-container">
           <!-- First Row -->
           <div class="category-row">
             {% for cat in categories %}
-            {% if cat.name == "Platform Updates" or cat.name == "Careers & Economy" or cat.name == "Life in Sweden" or cat.name == "Law & Integration" or cat.name == "Skills & Learning" %}
+            {% if cat.slug == "platform-updates" or cat.slug == "careers-economy" or cat.slug == "life-in-sweden" or cat.slug == "law-integration" or cat.slug == "skills-learning" %}
             <a
               href="{% url 'category_posts' cat.slug %}"
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
@@ -52,19 +64,19 @@
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
               <span class="cat-icon">
-                {% if cat.name == "Careers & Economy" %}<i
+                {% if cat.slug == "careers-economy" %}<i
                   class="bi bi-cash-coin"
                 ></i>
-                {% elif cat.name == "Law & Integration" %}<i
+                {% elif cat.slug == "law-integration" %}<i
                   class="bi bi-globe"
                 ></i>
-                {% elif cat.name == "Life in Sweden" %}<i
+                {% elif cat.slug == "life-in-sweden" %}<i
                   class="bi bi-briefcase"
                 ></i>
-                {% elif cat.name == "Skills & Learning" %}<i
+                {% elif cat.slug == "skills-learning" %}<i
                   class="bi bi-bank"
                 ></i>
-                {% elif cat.name == "Platform Updates" %}<i
+                {% elif cat.slug == "platform-updates" %}<i
                   class="bi bi-newspaper"
                 ></i>
                 {% endif %}
@@ -77,31 +89,34 @@
           <!-- Second Row -->
           <div class="category-row">
             {% for cat in categories %}
-            {% if cat.name == "Events & Announcements" or cat.name == "Photo Gallery" or cat.name == "Public Services" or cat.name == "Stories & Experiences" or cat.name == "Community & Engagement" %}
+            {% if cat.slug == "events-announcements" or cat.slug == "photo-gallery" or cat.slug == "public-services" or cat.slug == "stories-experiences" or cat.slug == "community-engagement" or cat.slug == "personalities" %}
             <a
               href="{% url 'category_posts' cat.slug %}"
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
-              data-tone="{% if cat.name == 'Events & Announcements' or cat.name == 'Photo Gallery' %}purple{% else %}peach{% endif %}"
+              data-tone="{% if cat.slug == 'events-announcements' or cat.slug == 'photo-gallery' %}purple{% else %}peach{% endif %}"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
               <span class="category-btn-text">{{ cat.name }}</span>
               <span class="category-btn-count">({{ cat.post_count }})</span>
               <span class="cat-icon">
-                {% if cat.name == "Events & Announcements" %}<i
+                {% if cat.slug == "events-announcements" %}<i
                   class="bi bi-calendar-event"
                 ></i>
-                {% elif cat.name == "Photo Gallery" %}<i
+                {% elif cat.slug == "photo-gallery" %}<i
                   class="bi bi-camera"
                 ></i>
-                {% elif cat.name == "Public Services" %}<i
+                {% elif cat.slug == "public-services" %}<i
                   class="bi bi-cart"
                 ></i>
-                {% elif cat.name == "Stories & Experiences" %}<i
+                {% elif cat.slug == "stories-experiences" %}<i
                   class="bi bi-heart-pulse"
                 ></i>
-                {% elif cat.name == "Community & Engagement" %}<i
+                {% elif cat.slug == "community-engagement" %}<i
                   class="bi bi-translate"
+                ></i>
+                {% elif cat.slug == "personalities" %}<i
+                  class="bi bi-person-star"
                 ></i>
                 {% endif %}
               </span>
