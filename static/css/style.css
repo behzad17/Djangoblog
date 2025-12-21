@@ -4590,7 +4590,7 @@ body {
 
 /* Hero Section */
 .favorites-hero {
-  background: linear-gradient(135deg, #1b1f24 0%, #ffc107 100%);
+  background: #00A693;
   position: relative;
   overflow: hidden;
 }
