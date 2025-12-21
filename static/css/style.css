@@ -3892,7 +3892,7 @@ body {
 /* Responsive adjustments for ad banner */
 @media (max-width: 768px) {
   .ad-banner {
-    width: 90vw;
+    width: 70vw;
     max-width: none;
     min-width: 280px;
     top: calc(60px - 27.5px); /* Adjusted for smaller navbar and banner height */
