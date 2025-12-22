@@ -278,23 +278,22 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = (
     "'self'",
     "'unsafe-inline'",  # Required for Bootstrap inline scripts and some Django templates
-    "cdn.jsdelivr.net",
-    "cdnjs.cloudflare.com",
-    "accounts.google.com",  # Google OAuth
-    "apis.google.com",  # Google APIs
+    "https://cdn.jsdelivr.net",
+    "https://cdnjs.cloudflare.com",
+    "https://accounts.google.com",  # Google OAuth
+    "https://apis.google.com",  # Google APIs
 )
 CSP_STYLE_SRC = (
     "'self'",
     "'unsafe-inline'",  # Required for Bootstrap inline styles
-    "fonts.googleapis.com",
-    "cdn.jsdelivr.net",
-    "cdnjs.cloudflare.com",
-    "cdn.jsdelivr.net",
+    "https://fonts.googleapis.com",
+    "https://cdn.jsdelivr.net",
+    "https://cdnjs.cloudflare.com",
 )
 CSP_FONT_SRC = (
     "'self'",
-    "fonts.gstatic.com",
-    "cdn.jsdelivr.net",
+    "https://fonts.gstatic.com",
+    "https://cdn.jsdelivr.net",
     "data:",  # For inline font data
 )
 CSP_IMG_SRC = (
@@ -305,19 +304,20 @@ CSP_IMG_SRC = (
 )
 CSP_CONNECT_SRC = (
     "'self'",
-    "accounts.google.com",  # Google OAuth
-    "oauth2.googleapis.com",  # Google OAuth
-    "www.googleapis.com",  # Google APIs
+    "https://accounts.google.com",  # Google OAuth
+    "https://oauth2.googleapis.com",  # Google OAuth
+    "https://www.googleapis.com",  # Google APIs
+    "https://cdn.jsdelivr.net",  # Source maps and other requests
 )
 CSP_FRAME_SRC = (
     "'self'",
-    "accounts.google.com",  # Google OAuth iframe
-    "www.google.com",  # Google OAuth
+    "https://accounts.google.com",  # Google OAuth iframe
+    "https://www.google.com",  # Google OAuth
 )
 CSP_FRAME_ANCESTORS = ("'none'",)  # Prevent clickjacking (complements X-Frame-Options)
 CSP_BASE_URI = ("'self'",)
 CSP_OBJECT_SRC = ("'none'",)  # Disable plugins
-CSP_FORM_ACTION = ("'self'", "accounts.google.com")  # Allow Google OAuth form submissions
+CSP_FORM_ACTION = ("'self'", "https://accounts.google.com")  # Allow Google OAuth form submissions
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
