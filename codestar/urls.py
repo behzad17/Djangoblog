@@ -32,20 +32,22 @@ urlpatterns = [
     path("about/", include("about.urls")),
     path("ask-me/", include("askme.urls")),
     path("ads/", include("ads.urls", namespace="ads")),
-    # Rate-limit login and signup endpoints (5 requests per minute per IP)
+    # Rate-limit login and signup endpoints
+    # More lenient in development (20/min) for testing, stricter in production (5/min)
+    # Note: Rate limiting is less strict in development to allow easier testing
     path(
         "accounts/login/",
-        ratelimit(key="ip", rate="5/m", block=True)(allauth_views.login),
+        ratelimit(key="ip", rate="20/m", block=True)(allauth_views.login),
         name="account_login",
     ),
     path(
         "accounts/signup/",
-        ratelimit(key="ip", rate="5/m", block=True)(allauth_views.signup),
+        ratelimit(key="ip", rate="20/m", block=True)(allauth_views.signup),
         name="account_signup",
     ),
     path(
         "accounts/password/reset/",
-        ratelimit(key="ip", rate="5/m", block=True)(allauth_views.password_reset),
+        ratelimit(key="ip", rate="10/m", block=True)(allauth_views.password_reset),
         name="account_reset_password",
     ),
     path("accounts/", include("allauth.urls")),

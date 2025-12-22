@@ -206,15 +206,18 @@ AUTHENTICATION_BACKENDS = [
 # In production (DEBUG=False): Use 'mandatory' to require email verification
 if DEBUG:
     ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Allow login without email verification in development
+    ACCOUNT_EMAIL_REQUIRED = False  # Don't require email in development for easier testing
     # Use console backend for development (emails printed to console)
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification in production
+    ACCOUNT_EMAIL_REQUIRED = True  # Require email in production
     # Production email backend should be configured via environment variables
     EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
-ACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Google emails are already verified, but we still require site verification
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically create account on social login
+SOCIALACCOUNT_QUERY_EMAIL = True  # Request email from social providers
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CaptchaSignupForm",
 }
