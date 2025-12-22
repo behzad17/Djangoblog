@@ -201,7 +201,18 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification for email/password signup
+# Email verification settings
+# In development (DEBUG=True): Use 'optional' to allow login without email verification
+# In production (DEBUG=False): Use 'mandatory' to require email verification
+if DEBUG:
+    ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Allow login without email verification in development
+    # Use console backend for development (emails printed to console)
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification in production
+    # Production email backend should be configured via environment variables
+    EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+
 ACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Google emails are already verified, but we still require site verification
 ACCOUNT_FORMS = {

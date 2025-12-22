@@ -11,7 +11,14 @@ from .models import UserProfile
 def create_user_profile(sender, instance, created, **kwargs):
     """Create UserProfile when a User is created."""
     if created:
-        UserProfile.objects.get_or_create(user=instance)
+        profile, _ = UserProfile.objects.get_or_create(user=instance)
+        # In development (DEBUG=True), auto-verify users to allow immediate login
+        # In production, email verification is mandatory and will verify via handle_email_confirmed
+        from django.conf import settings
+        if settings.DEBUG and not profile.is_site_verified:
+            profile.is_site_verified = True
+            profile.site_verified_at = timezone.now()
+            profile.save()
 
 
 @receiver(email_confirmed)
