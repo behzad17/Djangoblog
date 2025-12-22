@@ -2239,7 +2239,8 @@ body {
 /* Ad Category Cards */
 .category-card-hover {
   transition: all 0.3s ease;
-  border: 1px solid #e9ecef;
+  border: 1px solid #000;
+  background: #FFFF99;
   min-height: auto;
   height: auto !important;
 }
