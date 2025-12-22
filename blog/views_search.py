@@ -9,7 +9,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.db.models.functions import Coalesce
 
-from ..models import Post, Category
+from .models import Post, Category
 
 
 def search_posts(request):
