@@ -16,20 +16,20 @@ class PostForm(forms.ModelForm):
     category = forms.ModelChoiceField(
         queryset=Category.objects.all().order_by('name'),
         required=True,
-        empty_label="-- Select a Category --",
+        empty_label="-- انتخاب دسته‌بندی --",
         widget=forms.Select(attrs={'class': 'form-control'}),
-        label='Category',
-        help_text='Please select a category for your post (required)'
+        label='دسته‌بندی',
+        help_text='لطفاً دسته‌بندی پست خود را انتخاب کنید (الزامی)'
     )
     
     external_url = forms.URLField(
         required=False,
         widget=forms.URLInput(attrs={
             'class': 'form-control',
-            'placeholder': 'https://example.com (optional - requires admin approval)'
+            'placeholder': 'https://example.com (اختیاری - نیاز به تایید مدیر دارد)'
         }),
-        label='External URL',
-        help_text='Optional: Add an external URL. It will be reviewed and approved by admin before being displayed.'
+        label='لینک خارجی',
+        help_text='اختیاری: یک لینک خارجی اضافه کنید. قبل از نمایش توسط مدیر بررسی و تایید می‌شود.'
     )
     
     # Event date fields (optional, required only for Events category)
@@ -40,8 +40,8 @@ class PostForm(forms.ModelForm):
             'class': 'form-control',
             'id': 'id_event_start_date'
         }),
-        label='Event Start Date',
-        help_text='Required for Events category'
+        label='تاریخ شروع رویداد',
+        help_text='برای دسته‌بندی رویدادها الزامی است'
     )
     event_end_date = forms.DateField(
         required=False,
@@ -50,8 +50,8 @@ class PostForm(forms.ModelForm):
             'class': 'form-control',
             'id': 'id_event_end_date'
         }),
-        label='Event End Date',
-        help_text='Required for Events category'
+        label='تاریخ پایان رویداد',
+        help_text='برای دسته‌بندی رویدادها الزامی است'
     )
     
     class Meta:
@@ -59,9 +59,21 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('title', 'excerpt', 'content', 'featured_image', 'category', 'external_url', 'event_start_date', 'event_end_date')
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'عنوان پست'}),
+            'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'خلاصه پست (اختیاری)'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'title': 'عنوان',
+            'excerpt': 'خلاصه',
+            'content': 'محتوا',
+            'featured_image': 'تصویر شاخص',
+        }
+        help_texts = {
+            'title': 'عنوان پست خود را وارد کنید',
+            'excerpt': 'خلاصه کوتاهی از پست (اختیاری)',
+            'content': 'محتوا و متن کامل پست',
+            'featured_image': 'تصویر اصلی پست (اختیاری)',
         }
     
     def clean(self):
