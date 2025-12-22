@@ -74,8 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
     commentForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const submitButton = document.getElementById("submitButton");
+      const originalButtonText = submitButton.textContent;
       submitButton.disabled = true;
-      submitButton.textContent = "Submitting...";
+      submitButton.textContent = "در حال ارسال...";
 
       const formData = new FormData(this);
       const csrfToken = document.querySelector(
@@ -90,7 +91,18 @@ document.addEventListener("DOMContentLoaded", function () {
           "X-Requested-With": "XMLHttpRequest",
         },
       })
-        .then((response) => response.json())
+        .then((response) => {
+          // Check if response is ok (status 200-299)
+          if (!response.ok) {
+            // Try to parse error response
+            return response.json().then(data => {
+              throw new Error(data.message || 'An error occurred');
+            }).catch(() => {
+              throw new Error('Server error: ' + response.status);
+            });
+          }
+          return response.json();
+        })
         .then((data) => {
           if (data.status === "success") {
             // Create new comment element - target the comments section specifically
@@ -152,16 +164,21 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Redirect to clear POST data from browser history
             window.history.replaceState({}, document.title, window.location.pathname);
+          } else if (data.status === "error") {
+            // Show error message from server
+            alert(data.message || "خطا در ارسال نظر. لطفاً دوباره تلاش کنید.");
           } else {
-            alert("Error submitting comment. Please try again.");
+            alert("خطا در ارسال نظر. لطفاً دوباره تلاش کنید.");
           }
           submitButton.disabled = false;
-          submitButton.textContent = "Submit";
+          submitButton.textContent = originalButtonText;
         })
         .catch((error) => {
           console.error("Error:", error);
+          // Show user-friendly error message
+          alert(error.message || "خطایی رخ داد. لطفاً دوباره تلاش کنید.");
           submitButton.disabled = false;
-          submitButton.textContent = "Submit";
+          submitButton.textContent = originalButtonText;
         });
     });
   }

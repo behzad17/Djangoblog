@@ -192,7 +192,13 @@ def post_detail(request, slug):
             return redirect('account_login')
         
         # Require site verification for comments
-        if hasattr(request.user, 'profile') and not request.user.profile.is_site_verified:
+        # Ensure user has a profile (create if missing)
+        if not hasattr(request.user, 'profile'):
+            from .models import UserProfile
+            UserProfile.objects.get_or_create(user=request.user)
+        
+        # Check site verification
+        if not request.user.profile.is_site_verified:
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse(
                     {
