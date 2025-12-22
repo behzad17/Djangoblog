@@ -2363,16 +2363,23 @@ body {
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background: #fff;
+  background: #FFFF99;
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #000;
 }
 
 .glass-morphism-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Ad cards in my_ads page */
+.ads-page .card,
+.my-ads-page .card {
+  background: #FFFF99;
+  border: 1px solid #000;
 }
 
 .glass-card-link {
