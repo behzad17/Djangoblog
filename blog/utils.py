@@ -106,22 +106,42 @@ def track_page_view(request, post=None, url_path=None):
     # Set cache for 1 hour to prevent duplicate tracking
     cache.set(cache_key, True, 3600)
     
-    # Create page view record
-    page_view = PageView.objects.create(
-        post=post,
-        url_path=url_path,
-        user=request.user if request.user.is_authenticated else None,
-        session_key=session_key,
-        ip_hash=ip_hash,
-        user_agent_hash=user_agent_hash,
-        referer=request.META.get('HTTP_REFERER', '')[:500] if request.META.get('HTTP_REFERER') else '',
-        is_bot=False
-    )
+    # Create page view record with error handling
+    try:
+        page_view = PageView.objects.create(
+            post=post,
+            url_path=url_path,
+            user=request.user if request.user.is_authenticated else None,
+            session_key=session_key,
+            ip_hash=ip_hash,
+            user_agent_hash=user_agent_hash,
+            referer=request.META.get('HTTP_REFERER', '')[:500] if request.META.get('HTTP_REFERER') else '',
+            is_bot=False
+        )
+    except Exception as e:
+        # Log database errors but don't break the page
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error creating page view record: {e}", exc_info=True)
+        return None
     
     # Update aggregated view count (async or via signal)
+    # Wrap in try-except to prevent signal errors from breaking tracking
     if post:
-        from .signals import update_post_view_count
-        update_post_view_count.delay(post.id) if hasattr(update_post_view_count, 'delay') else update_post_view_count(post.id)
+        try:
+            from .signals import update_post_view_count
+            if hasattr(update_post_view_count, 'delay'):
+                update_post_view_count.delay(post.id)
+            else:
+                update_post_view_count(post.id)
+        except (ImportError, AttributeError):
+            # Signal function doesn't exist, skip update (this is OK)
+            pass
+        except Exception as e:
+            # Log signal errors but don't break tracking
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error updating post view count for post {post.id}: {e}", exc_info=True)
     
     return page_view
 

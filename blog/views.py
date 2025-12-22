@@ -158,8 +158,15 @@ def post_detail(request, slug):
     post = get_object_or_404(queryset, slug=slug)
     
     # Track page view (only for GET requests)
+    # Wrap in try-except to prevent tracking errors from breaking the page
     if request.method == 'GET':
-        track_page_view(request, post=post)
+        try:
+            track_page_view(request, post=post)
+        except Exception as e:
+            # Log the error but don't break the page view
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error tracking page view for post {post.slug}: {e}", exc_info=True)
     
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.count()
@@ -236,17 +243,29 @@ def post_detail(request, slug):
             return redirect('post_detail', slug=post.slug)
 
     # Get expert posts for sidebar (replaces Popular Posts)
-    expert_users = User.objects.filter(
-        profile__can_publish_without_approval=True
-    )
-    expert_posts = (
-        Post.objects.filter(
-            status=1,
-            author__in=expert_users
+    # Filter users with profiles that have can_publish_without_approval=True
+    # Use profile__isnull=False to ensure we only get users with profiles
+    try:
+        expert_users = User.objects.filter(
+            profile__isnull=False,
+            profile__can_publish_without_approval=True
+        ).select_related('profile')
+        
+        expert_posts = (
+            Post.objects.filter(
+                status=1,
+                author__in=expert_users
+            )
+            .select_related('category', 'author')
+            .order_by('-created_on')[:10]
         )
-        .select_related('category', 'author', 'author__profile')
-        .order_by('-created_on')[:10]
-    )
+    except Exception as e:
+        # If there's any error (database connection, missing profile, etc.),
+        # fall back to empty queryset to prevent 500 error
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error fetching expert posts: {e}", exc_info=True)
+        expert_posts = Post.objects.none()
 
     # Get related posts (3 max) from the same category, excluding current post
     related_posts = []
