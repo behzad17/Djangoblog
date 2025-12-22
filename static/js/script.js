@@ -105,51 +105,61 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
           if (data.status === "success") {
-            // Create new comment element - target the comments section specifically
-            const commentsHeading = Array.from(document.querySelectorAll("h3")).find(h3 => h3.textContent.includes("Comments:"));
-            const commentsContainer = commentsHeading ? commentsHeading.nextElementSibling : document.querySelector(".col-md-8 .card-body");
+            // Find the comments container - use the comments-card class
+            const commentsContainer = document.querySelector(".comments-card .card-body");
             
-            // Debug logging
-            console.log("Comments heading found:", commentsHeading);
-            console.log("Comments container:", commentsContainer);
+            if (!commentsContainer) {
+              console.error("Comments container not found");
+              alert("خطا در نمایش نظر. صفحه را رفرش کنید.");
+              submitButton.disabled = false;
+              submitButton.textContent = originalButtonText;
+              return;
+            }
+
+            // Create new comment element matching the template structure
             const newComment = document.createElement("div");
-            newComment.className = "comments";
-            newComment.style.padding = "10px";
+            newComment.className = "comments p-3 rounded mb-3 bg-light border";
 
             newComment.innerHTML = `
-            <p class="font-weight-bold">
-              ${data.author}
-              <span class="text-muted font-weight-normal">${data.created_on}</span>
-              wrote:
-            </p>
-            <div id="comment${data.id}">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <p class="mb-0 fw-semibold">${data.author}</p>
+              <span class="text-muted small">${data.created_on}</span>
+            </div>
+            <div id="comment${data.id}" class="mb-2">
               ${data.body}
             </div>
-            <div class="mt-2">
-              <a href="/comment/delete/${data.post_slug}/${data.id}/" class="btn btn-sm btn-outline-danger">Delete</a>
-              <button class="btn btn-sm btn-outline-secondary edit-comment" data-comment-id="${data.id}">Edit</button>
+            <div class="d-flex gap-2 mt-2">
+              <a href="/${data.post_slug}/delete_comment/${data.id}" class="btn btn-sm btn-outline-danger">حذف</a>
+              <button class="btn btn-sm btn-outline-secondary edit-comment" data-comment-id="${data.id}">ویرایش</button>
             </div>
           `;
 
-            // Remove "No comments yet" message if it exists
-            const noComments = commentsContainer.querySelector("p");
-            if (noComments && noComments.textContent === "No comments yet.") {
+            // Remove "No comments yet" message if it exists (Persian text)
+            const noComments = commentsContainer.querySelector("p.text-muted");
+            if (noComments && (noComments.textContent.includes("هنوز نظری ثبت نشده") || noComments.textContent.includes("No comments yet"))) {
               noComments.remove();
             }
 
-            // Add new comment at the top
-            commentsContainer.insertBefore(
-              newComment,
-              commentsContainer.firstChild
-            );
+            // Find where to insert - after the heading/badge, before existing comments
+            const commentsList = commentsContainer.querySelectorAll(".comments");
+            if (commentsList.length > 0) {
+              // Insert before first existing comment
+              commentsContainer.insertBefore(newComment, commentsList[0]);
+            } else {
+              // No existing comments, insert after heading section
+              const headingSection = commentsContainer.querySelector(".d-flex.align-items-center");
+              if (headingSection && headingSection.nextSibling) {
+                commentsContainer.insertBefore(newComment, headingSection.nextSibling);
+              } else {
+                commentsContainer.appendChild(newComment);
+              }
+            }
 
-            // Update comment count
-            const commentCount = document.querySelector(
-              ".text-secondary strong"
-            );
-            if (commentCount) {
-              const currentCount = parseInt(commentCount.textContent) || 0;
-              commentCount.textContent = currentCount + 1;
+            // Update comment count badge
+            const commentCountBadge = commentsContainer.querySelector(".badge.bg-secondary");
+            if (commentCountBadge) {
+              const currentCount = parseInt(commentCountBadge.textContent) || 0;
+              commentCountBadge.textContent = currentCount + 1;
             }
 
             // Reset form
@@ -160,7 +170,10 @@ document.addEventListener("DOMContentLoaded", function () {
             existingAlerts.forEach(alert => alert.remove());
             
             // Show success message
-            showSuccessMessage("Your comment was added successfully!");
+            showSuccessMessage("نظر شما با موفقیت اضافه شد!");
+            
+            // Scroll to new comment
+            newComment.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
             // Redirect to clear POST data from browser history
             window.history.replaceState({}, document.title, window.location.pathname);
