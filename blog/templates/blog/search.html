@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}جستجو{% if query %} - {{ query }}{% endif %} | Peyvand{% endblock title %}
+{% block meta_description %}جستجو در پست‌های منتشر شده{% if query %} برای "{{ query }}"{% endif %}{% endblock meta_description %}
+
+{% block content %}
+<!-- Search Section -->
+<div class="container-fluid mt-4 mb-5">
+  <div class="row">
+    <div class="col-12">
+      <!-- Search Form -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title mb-4">
+            <i class="fas fa-search ms-2"></i>جستجو در پست‌ها
+          </h2>
+          
+          <form method="get" action="{% url 'search' %}" class="search-form">
+            <div class="row g-3">
+              <!-- Search Query Input -->
+              <div class="col-md-6">
+                <label for="id_q" class="form-label">کلمه کلیدی</label>
+                <input
+                  type="text"
+                  name="q"
+                  id="id_q"
+                  class="form-control"
+                  placeholder="جستجو در عنوان، محتوا و خلاصه..."
+                  value="{{ query }}"
+                  autofocus
+                />
+              </div>
+              
+              <!-- Category Filter -->
+              <div class="col-md-3">
+                <label for="id_category" class="form-label">دسته‌بندی</label>
+                <select name="category" id="id_category" class="form-select">
+                  <option value="">همه دسته‌بندی‌ها</option>
+                  {% for category in categories %}
+                  <option value="{{ category.slug }}" {% if category_param == category.slug %}selected{% endif %}>
+                    {{ category.name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <!-- Sort Option -->
+              <div class="col-md-2">
+                <label for="id_sort" class="form-label">مرتب‌سازی</label>
+                <select name="sort" id="id_sort" class="form-select">
+                  <option value="newest" {% if sort_param == 'newest' %}selected{% endif %}>جدیدترین</option>
+                  <option value="popular" {% if sort_param == 'popular' %}selected{% endif %}>محبوب‌ترین</option>
+                </select>
+              </div>
+              
+              <!-- Submit Button -->
+              <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="fas fa-search"></i> جستجو
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Results Section -->
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <!-- Results Count -->
+          {% if query or category_param %}
+          <div class="mb-3">
+            <h3 class="h5">
+              {% if total_count > 0 %}
+              <i class="fas fa-check-circle text-success ms-2"></i>
+              {{ total_count }} نتیجه یافت شد
+              {% else %}
+              <i class="fas fa-info-circle text-warning ms-2"></i>
+              نتیجه‌ای یافت نشد
+              {% endif %}
+            </h3>
+          </div>
+          {% else %}
+          <div class="mb-3">
+            <p class="text-muted">
+              <i class="fas fa-info-circle ms-2"></i>
+              برای جستجو، کلمه کلیدی را وارد کنید یا دسته‌بندی را انتخاب کنید.
+            </p>
+          </div>
+          {% endif %}
+          
+          <!-- Results List -->
+          {% if page_obj.object_list %}
+          <div class="row blog-post-row">
+            {% for post in page_obj.object_list %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+              <div class="card post-card h-100 shadow-sm">
+                <!-- Post Image -->
+                <div class="image-container">
+                  {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
+                  <img
+                    src="{{ post.featured_image.url }}"
+                    class="card-img-top"
+                    alt="{{ post.title }}"
+                    loading="lazy"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                  {% else %}
+                  <img
+                    src="{% static 'images/default.jpg' %}"
+                    class="card-img-top"
+                    alt="تصویر پیش‌فرض برای {{ post.title }}"
+                    loading="lazy"
+                  />
+                  {% endif %}
+                </div>
+                
+                <div class="card-body">
+                  <!-- Post Title -->
+                  <a href="{% url 'post_detail' post.slug %}" class="post-link">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                  </a>
+                  
+                  <!-- Pinned Badge -->
+                  {% if post.pinned %}
+                  <div class="pinned-badge" title="پین شده">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  {% endif %}
+                  
+                  <!-- Category Badge -->
+                  {% if post.category %}
+                  <div class="mb-2">
+                    <a
+                      href="{% url 'category_posts' post.category.slug %}"
+                      class="category-badge"
+                    >
+                      <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
+                    </a>
+                  </div>
+                  {% endif %}
+                  
+                  <!-- Author -->
+                  <p class="post-author-inline">نویسنده: {{ post.author }}</p>
+                  <hr />
+                  
+                  <!-- Post Meta -->
+                  <p class="card-text text-muted h6">
+                    <i class="far fa-calendar ms-1"></i>{{ post.created_on|date:"Y/m/d" }}
+                    <span class="me-2">|</span>
+                    <i class="far fa-comments ms-1"></i>{{ post.comment_count|default:0 }}
+                  </p>
+                  
+                  <!-- Excerpt (if available) -->
+                  {% if post.excerpt %}
+                  <p class="card-text text-muted small mt-2">
+                    {{ post.excerpt|truncatewords:15 }}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            
+            <!-- Row break for 4 columns -->
+            {% if forloop.counter|divisibleby:4 %}
+          </div>
+          <div class="row blog-post-row">
+            {% endif %}
+            {% endfor %}
+          </div>
+          
+          <!-- Pagination -->
+          {% if page_obj.has_other_pages %}
+          <nav aria-label="صفحه‌بندی نتایج جستجو" class="mt-4">
+            <ul class="pagination justify-content-center">
+              <!-- Previous Page -->
+              {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if category_param %}category={{ category_param|urlencode }}&{% endif %}{% if sort_param %}sort={{ sort_param|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                  <i class="fas fa-chevron-right"></i> قبلی
+                </a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">
+                  <i class="fas fa-chevron-right"></i> قبلی
+                </span>
+              </li>
+              {% endif %}
+              
+              <!-- Page Numbers -->
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if category_param %}category={{ category_param|urlencode }}&{% endif %}{% if sort_param %}sort={{ sort_param|urlencode }}&{% endif %}page={{ num }}">
+                    {{ num }}
+                  </a>
+                </li>
+                {% endif %}
+              {% endfor %}
+              
+              <!-- Next Page -->
+              {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if category_param %}category={{ category_param|urlencode }}&{% endif %}{% if sort_param %}sort={{ sort_param|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">
+                  بعدی <i class="fas fa-chevron-left"></i>
+                </a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">
+                  بعدی <i class="fas fa-chevron-left"></i>
+                </span>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+          {% endif %}
+          
+          {% else %}
+          <!-- Empty State -->
+          <div class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <p class="text-muted h5">
+              {% if query or category_param %}
+              نتیجه‌ای برای جستجوی شما یافت نشد.
+              {% else %}
+              لطفاً کلمه کلیدی یا دسته‌بندی را انتخاب کنید.
+              {% endif %}
+            </p>
+            {% if query or category_param %}
+            <p class="text-muted">
+              پیشنهادات:
+            </p>
+            <ul class="list-unstyled text-muted">
+              <li>• املای کلمات را بررسی کنید</li>
+              <li>• از کلمات کلیدی ساده‌تر استفاده کنید</li>
+              <li>• دسته‌بندی دیگری را امتحان کنید</li>
+            </ul>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

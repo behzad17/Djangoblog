@@ -1,8 +1,10 @@
 from . import views
+from .views import search
 from django.urls import path
 
 urlpatterns = [
     path('', views.PostList.as_view(), name='home'),
+    path('search/', search.search_posts, name='search'),
     path('category/<slug:category_slug>/', views.category_posts, name='category_posts'),
     path('create-post/', views.create_post, name='create_post'),
     path('favorites/', views.favorite_posts, name='favorites'),

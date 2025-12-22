@@ -10,6 +10,7 @@
 {% url 'account_logout' as logout_url %}
 {% url 'favorites' as favorites_url %}
 {% url 'create_post' as create_post_url %}
+{% url 'search' as search_url %}
 
 <!DOCTYPE html>
 <html
@@ -147,6 +148,13 @@
                 class="nav-link {% if request.path == home_url %}active{% endif %}"
                 href="{{ home_url }}#category-filter-section"
                 >دسته بندی ها</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == search_url %}active{% endif %}"
+                href="{{ search_url }}"
+                ><i class="fas fa-search ms-1"></i>جستجو</a
               >
             </li>
             <li class="nav-item">
