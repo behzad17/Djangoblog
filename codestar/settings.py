@@ -18,7 +18,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.contrib.messages import constants as messages
 import dj_database_url
 
-if os.path.isfile('env.py'):
+# Only import env.py in local development (when DEBUG=True)
+# This prevents env.py from being used in production on Heroku
+_is_debug = os.environ.get("DEBUG", "False").lower() in {"1", "true", "yes", "on"}
+if os.path.isfile('env.py') and _is_debug:
     import env  # noqa: F401
 
 # Load environment variables from .env at project root (BASE_DIR)
@@ -137,14 +140,35 @@ WSGI_APPLICATION = 'codestar.wsgi.application'
 #    }
 # }
 
+# Database configuration
+# In production: MUST use DATABASE_URL from Heroku environment
+# In development: Falls back to SQLite if DATABASE_URL not set
 _default_sqlite_url = f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
 _database_url = os.environ.get("DATABASE_URL", _default_sqlite_url)
+
+# Parse database URL with proper SSL and connection settings
+# conn_max_age=0: Disable persistent connections to prevent SSL connection errors
+# DISABLE_SERVER_SIDE_CURSORS=True: Prevents SSL connection issues with PostgreSQL
+# ssl_require=True in production: Enforce SSL for security
+_db_config = dj_database_url.parse(
+    _database_url,
+    conn_max_age=0,  # Disable persistent connections to fix SSL errors
+    ssl_require=not DEBUG  # Require SSL in production
+)
+
+# Add DISABLE_SERVER_SIDE_CURSORS for PostgreSQL to prevent SSL connection errors
+if _db_config.get('ENGINE') == 'django.db.backends.postgresql':
+    _db_config['DISABLE_SERVER_SIDE_CURSORS'] = True
+    # Ensure SSL is required in production
+    if not DEBUG:
+        # Get or create OPTIONS dict
+        _db_config['OPTIONS'] = _db_config.get('OPTIONS', {})
+        # Force sslmode=require if not already set in OPTIONS
+        if 'sslmode' not in _db_config['OPTIONS']:
+            _db_config['OPTIONS']['sslmode'] = 'require'
+
 DATABASES = {
-    'default': dj_database_url.parse(
-        _database_url,
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
+    'default': _db_config
 }
 
 if not DEBUG and os.environ.get("DATABASE_URL") is None:
