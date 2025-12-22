@@ -87,8 +87,21 @@ def handle_social_account_added(request, sociallogin, **kwargs):
     """
     user = sociallogin.user
     if sociallogin.account.provider == 'google':
-        # Ensure user is saved before accessing related objects
+        # Ensure user is saved first (needed for checking username uniqueness)
         if not user.pk:
+            user.save()
+        
+        # Ensure username is set (use email prefix if username is empty)
+        if not user.username and user.email:
+            # Generate username from email (before @ symbol)
+            username_base = user.email.split('@')[0]
+            # Ensure username is unique
+            username = username_base
+            counter = 1
+            while User.objects.filter(username=username).exclude(pk=user.pk).exists():
+                username = f"{username_base}{counter}"
+                counter += 1
+            user.username = username
             user.save()
         
         # Google emails are verified, so mark email as verified
