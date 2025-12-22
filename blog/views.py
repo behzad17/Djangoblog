@@ -18,6 +18,7 @@ import json
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
 from .utils import track_page_view
+from .decorators import site_verified_required
 
 
 class PostList(generic.ListView):
@@ -143,8 +144,90 @@ class PostList(generic.ListView):
         return context
 
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=True)
+@ratelimit(key='ip', rate='20/m', method='POST', block=True)
 def post_detail(request, slug):
+    """
+    View function for displaying a single blog post and its comments.
+    
+    This view handles both displaying the post and processing new comments.
+    It shows approved comments to all users and unapproved comments to
+    the comment author. It also tracks whether the post is in the user's
+    favorites.
+    """
+    queryset = Post.objects.filter(status=1).select_related('category', 'author')
+    post = get_object_or_404(queryset, slug=slug)
+    
+    # Track page view (only for GET requests)
+    if request.method == 'GET':
+        track_page_view(request, post=post)
+    
+    comments = post.comments.all().order_by("-created_on")
+    comment_count = post.comments.count()
+    comment_form = CommentForm()
+    # Determine if current user has already favorited this post
+    is_favorited = False
+    is_liked = False
+    if request.user.is_authenticated:
+        is_favorited = Favorite.objects.filter(
+            user=request.user,
+            post=post,
+        ).exists()
+        is_liked = Like.objects.filter(
+            user=request.user,
+            post=post,
+        ).exists()
+
+    if request.method == "POST":
+        # Require authentication before accepting comments
+        if not request.user.is_authenticated:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse(
+                    {
+                        'status': 'error',
+                        'message': 'Authentication required to comment.'
+                    },
+                    status=401
+                )
+            messages.error(request, 'Please log in to comment.')
+            return redirect('account_login')
+        
+        # Require site verification for comments
+        if hasattr(request.user, 'profile') and not request.user.profile.is_site_verified:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse(
+                    {
+                        'status': 'error',
+                        'message': 'Please complete your account setup before commenting.'
+                    },
+                    status=403
+                )
+            messages.warning(request, 'لطفاً ابتدا تنظیمات حساب کاربری خود را تکمیل کنید.')
+            return redirect('complete_setup')
+
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'id': comment.id,
+                    'author': comment.author.username,
+                    'created_on': comment.created_on.strftime(
+                        '%B %d, %Y %H:%M'
+                    ),
+                    'body': comment.body,
+                    'post_slug': post.slug,
+                })
+
+            messages.add_message(
+                request, messages.SUCCESS,
+                'Comment submitted successfully!'
+            )
+            return redirect('post_detail', slug=post.slug)
     """
     View function for displaying a single blog post and its comments.
 
@@ -269,6 +352,7 @@ def post_detail(request, slug):
     )
 
 
+@site_verified_required
 @login_required
 def comment_edit(request, slug, comment_id):
     """
@@ -310,6 +394,7 @@ def comment_edit(request, slug, comment_id):
     return redirect('post_detail', slug=slug)
 
 
+@site_verified_required
 @login_required
 def comment_delete(request, slug, comment_id):
     """
@@ -431,6 +516,9 @@ def like_post(request, post_id):
     return redirect('post_detail', slug=post.slug)
 
 
+@ratelimit(key='user', rate='5/h', method='POST', block=True)
+@ratelimit(key='ip', rate='10/h', method='POST', block=True)
+@site_verified_required
 @login_required
 def create_post(request):
     """
@@ -574,6 +662,7 @@ def edit_post(request, slug):
     )
 
 
+@site_verified_required
 @login_required
 def delete_post(request, slug):
     """
@@ -605,6 +694,48 @@ def delete_post(request, slug):
         'blog/delete_post.html',
         {'post': post},
     )
+
+
+@login_required
+def complete_setup(request):
+    """
+    View for completing site verification setup.
+    Users can accept terms and complete their profile to enable write actions.
+    """
+    if request.method == 'POST':
+        # User accepts terms and completes setup
+        if hasattr(request.user, 'profile'):
+            if not request.user.profile.is_site_verified:
+                from django.utils import timezone
+                request.user.profile.is_site_verified = True
+                request.user.profile.site_verified_at = timezone.now()
+                request.user.profile.save()
+                messages.success(
+                    request,
+                    'حساب کاربری شما با موفقیت فعال شد! اکنون می‌توانید پست و نظر ایجاد کنید.'
+                )
+                return redirect('home')
+        else:
+            # Create profile if it doesn't exist
+            from .models import UserProfile
+            from django.utils import timezone
+            profile = UserProfile.objects.create(
+                user=request.user,
+                is_site_verified=True,
+                site_verified_at=timezone.now()
+            )
+            messages.success(
+                request,
+                'حساب کاربری شما با موفقیت فعال شد! اکنون می‌توانید پست و نظر ایجاد کنید.'
+            )
+            return redirect('home')
+    
+    # Check if already verified
+    if hasattr(request.user, 'profile') and request.user.profile.is_site_verified:
+        messages.info(request, 'حساب کاربری شما قبلاً فعال شده است.')
+        return redirect('home')
+    
+    return render(request, 'blog/complete_setup.html')
 
 
 def category_posts(request, category_slug):

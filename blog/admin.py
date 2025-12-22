@@ -55,20 +55,35 @@ class PostAdmin(SummernoteModelAdmin):
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     """Admin interface for UserProfile model."""
-    list_display = ('user', 'expert_status', 'expert_since', 'post_count')
-    list_filter = ('can_publish_without_approval', 'expert_since')
+    list_display = ('user', 'expert_status', 'expert_since', 'site_verified_status', 'post_count')
+    list_filter = ('can_publish_without_approval', 'is_site_verified', 'expert_since', 'site_verified_at')
     search_fields = ('user__username', 'user__email', 'user__first_name', 'user__last_name')
-    readonly_fields = ('expert_since',)
+    readonly_fields = ('expert_since', 'site_verified_at')
     
     fieldsets = (
         ('User', {
             'fields': ('user',)
+        }),
+        ('Site Verification', {
+            'fields': ('is_site_verified', 'site_verified_at'),
+            'description': 'Site verification is required for write actions (posts, comments, ads).'
         }),
         ('Expert Access', {
             'fields': ('can_publish_without_approval', 'expert_since'),
             'description': 'Grant or revoke expert publishing access. Expert users can publish posts without admin approval.'
         }),
     )
+    
+    def site_verified_status(self, obj):
+        """Display site verification status."""
+        if obj.is_site_verified:
+            return format_html(
+                '<span style="color: green; font-weight: bold;">✓ Verified</span>'
+            )
+        return format_html(
+            '<span style="color: red;">✗ Not Verified</span>'
+        )
+    site_verified_status.short_description = 'Site Verified'
     
     def expert_status(self, obj):
         """Display expert status with colored badge."""

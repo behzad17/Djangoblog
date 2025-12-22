@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db import models
+from ratelimit.decorators import ratelimit
+from blog.decorators import site_verified_required
 from .models import AdCategory, Ad
 from .forms import AdForm
 
@@ -75,6 +77,9 @@ def ad_detail(request, slug):
     return render(request, "ads/ad_detail.html", context)
 
 
+@ratelimit(key='user', rate='5/h', method='POST', block=True)
+@ratelimit(key='ip', rate='10/h', method='POST', block=True)
+@site_verified_required
 @login_required
 def create_ad(request):
     """
@@ -110,6 +115,7 @@ def create_ad(request):
     return render(request, 'ads/create_ad.html', {'form': form})
 
 
+@site_verified_required
 @login_required
 def edit_ad(request, slug):
     """

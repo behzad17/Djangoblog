@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}تکمیل تنظیمات حساب کاربری | Peyvand{% endblock title %}
+{% block meta_description %}تکمیل تنظیمات حساب کاربری برای فعال‌سازی امکان ایجاد پست و نظر{% endblock meta_description %}
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <i class="fas fa-user-check fa-3x text-primary mb-3"></i>
+            <h2 class="card-title mb-3">تکمیل تنظیمات حساب کاربری</h2>
+            <p class="text-muted">
+              برای فعال‌سازی امکان ایجاد پست، نظر و سایر فعالیت‌ها، لطفاً تنظیمات حساب کاربری خود را تکمیل کنید.
+            </p>
+          </div>
+          
+          <form method="post" action="{% url 'complete_setup' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="accept_terms" required>
+                <label class="form-check-label" for="accept_terms">
+                  <strong>شرایط و قوانین استفاده از سایت را می‌پذیرم</strong>
+                  <br>
+                  <small class="text-muted">
+                    با فعال‌سازی حساب کاربری، شما شرایط و قوانین استفاده از پلتفرم Peyvand را می‌پذیرید.
+                  </small>
+                </label>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-check-circle ms-2"></i>فعال‌سازی حساب کاربری
+              </button>
+              <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-right ms-2"></i>بازگشت به صفحه اصلی
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

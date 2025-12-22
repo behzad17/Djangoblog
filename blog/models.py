@@ -30,6 +30,15 @@ class UserProfile(models.Model):
         blank=True,
         help_text="When expert access was granted"
     )
+    is_site_verified = models.BooleanField(
+        default=False,
+        help_text="Whether the user has completed site-level verification (terms acceptance, profile completion). Required for write actions."
+    )
+    site_verified_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When site verification was completed"
+    )
     
     class Meta:
         verbose_name = "User Profile"

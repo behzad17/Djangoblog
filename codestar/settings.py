@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'csp',  # Content Security Policy
     'captcha',
     'cloudinary_storage',
     'django.contrib.sites',
@@ -92,6 +93,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
+    'csp.middleware.CSPMiddleware',  # Content Security Policy - must be early
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -199,8 +201,9 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Changed from 'mandatory' to allow regular login without email verification
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification for email/password signup
 ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Google emails are already verified, but we still require site verification
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CaptchaSignupForm",
 }
@@ -255,6 +258,66 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Security Headers (applied in all environments)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# Permissions Policy (disable unused browser features)
+PERMISSIONS_POLICY = {
+    'camera': [],
+    'microphone': [],
+    'geolocation': [],
+    'interest-cohort': [],  # FLoC
+}
+
+# Content Security Policy (CSP)
+# Configured to allow necessary CDNs and Google OAuth while maintaining security
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'unsafe-inline'",  # Required for Bootstrap inline scripts and some Django templates
+    "cdn.jsdelivr.net",
+    "cdnjs.cloudflare.com",
+    "accounts.google.com",  # Google OAuth
+    "apis.google.com",  # Google APIs
+)
+CSP_STYLE_SRC = (
+    "'self'",
+    "'unsafe-inline'",  # Required for Bootstrap inline styles
+    "fonts.googleapis.com",
+    "cdn.jsdelivr.net",
+    "cdnjs.cloudflare.com",
+    "cdn.jsdelivr.net",
+)
+CSP_FONT_SRC = (
+    "'self'",
+    "fonts.gstatic.com",
+    "cdn.jsdelivr.net",
+    "data:",  # For inline font data
+)
+CSP_IMG_SRC = (
+    "'self'",
+    "res.cloudinary.com",  # Cloudinary images
+    "data:",  # Data URLs for images
+    "https:",  # Allow HTTPS images from any source (needed for user content)
+)
+CSP_CONNECT_SRC = (
+    "'self'",
+    "accounts.google.com",  # Google OAuth
+    "oauth2.googleapis.com",  # Google OAuth
+    "www.googleapis.com",  # Google APIs
+)
+CSP_FRAME_SRC = (
+    "'self'",
+    "accounts.google.com",  # Google OAuth iframe
+    "www.google.com",  # Google OAuth
+)
+CSP_FRAME_ANCESTORS = ("'none'",)  # Prevent clickjacking (complements X-Frame-Options)
+CSP_BASE_URI = ("'self'",)
+CSP_OBJECT_SRC = ("'none'",)  # Disable plugins
+CSP_FORM_ACTION = ("'self'", "accounts.google.com")  # Allow Google OAuth form submissions
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -1,6 +1,7 @@
 from .models import Comment, Post, Category
 from django import forms
 from django.core.exceptions import ValidationError
+from .utils import sanitize_html
 
 
 class PostForm(forms.ModelForm):
@@ -87,7 +88,39 @@ class PostForm(forms.ModelForm):
                         'event_end_date': 'End date must be on or after start date.'
                     })
         
+        # Sanitize HTML content to prevent XSS
+        if 'content' in cleaned_data and cleaned_data.get('content'):
+            cleaned_data['content'] = sanitize_html(cleaned_data['content'])
+        
+        # Sanitize excerpt if it contains HTML
+        if 'excerpt' in cleaned_data and cleaned_data.get('excerpt'):
+            cleaned_data['excerpt'] = sanitize_html(cleaned_data['excerpt'])
+        
         return cleaned_data
+    
+    def clean_featured_image(self):
+        """Validate uploaded image file size and type."""
+        image = self.cleaned_data.get('featured_image')
+        if image:
+            # Check file size (max 5MB)
+            max_size = 5 * 1024 * 1024  # 5MB in bytes
+            if hasattr(image, 'size') and image.size > max_size:
+                raise ValidationError('Image file too large. Maximum size is 5MB.')
+            
+            # Check file type by content type
+            if hasattr(image, 'content_type'):
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
+                if image.content_type not in allowed_types:
+                    raise ValidationError('Invalid file type. Only JPEG, PNG, WebP, and GIF images are allowed.')
+            
+            # Check file extension as additional validation
+            if hasattr(image, 'name'):
+                allowed_extensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
+                file_ext = image.name.lower()
+                if not any(file_ext.endswith(ext) for ext in allowed_extensions):
+                    raise ValidationError('Invalid file extension. Only .jpg, .jpeg, .png, .webp, and .gif files are allowed.')
+        
+        return image
 
 
 class CommentForm(forms.ModelForm):
@@ -120,3 +153,13 @@ class CommentForm(forms.ModelForm):
         if data:
             raise ValidationError("Bot detected.")
         return data
+    
+    def clean_body(self):
+        """Sanitize comment body to prevent XSS."""
+        body = self.cleaned_data.get('body')
+        if body:
+            # Comments are plain text, but sanitize just in case
+            # Use bleach to strip any HTML tags
+            from .utils import sanitize_html
+            body = sanitize_html(body)
+        return body

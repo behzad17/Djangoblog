@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load security_filters %}
 {% block content %}
 <!-- Photo Hero Section - Full Width Image -->
 <div class="photo-detail-hero">
@@ -147,7 +148,7 @@
           {% endif %}
           
           <div class="card-text post-content-body">
-            {{ post.content | safe }}
+            {{ post.content | sanitize }}
           </div>
           {% if post.external_url and post.url_approved %}
           <div class="text-center mt-4 mb-3">

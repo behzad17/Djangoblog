@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Q
+from ratelimit.decorators import ratelimit
+from blog.decorators import site_verified_required
 from .models import Moderator, Question
 from .forms import QuestionForm, AnswerForm
 
@@ -43,6 +45,9 @@ def ask_me(request):
     )
 
 
+@ratelimit(key='user', rate='10/h', method='POST', block=True)
+@ratelimit(key='ip', rate='20/h', method='POST', block=True)
+@site_verified_required
 @login_required
 def ask_question(request, moderator_id):
     """
