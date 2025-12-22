@@ -992,6 +992,9 @@ body {
   text-decoration: none;
   color: inherit;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: fit-content; /* Only as wide as the card */
+  max-width: 380px; /* Match card max-width */
+  margin-left: auto; /* Align to right on desktop */
 }
 
 .featured-post-card-link:hover {
@@ -1133,6 +1136,11 @@ body {
     font-size: 0.95rem;
   }
   
+  .featured-post-card-link {
+    max-width: 100%; /* Full width on tablet */
+    margin-left: 0;
+  }
+  
   .featured-post-card {
     max-width: 100%; /* Full width on tablet */
     margin-left: 0;
@@ -1198,6 +1206,11 @@ body {
   
   .hero-features {
     margin-top: 1rem;
+  }
+  
+  .featured-post-card-link {
+    max-width: 100%; /* Full width on mobile */
+    margin-left: 0;
   }
   
   .featured-post-card {
