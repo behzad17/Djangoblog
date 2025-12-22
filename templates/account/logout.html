@@ -3,7 +3,7 @@ Out" %}{% endblock %} {% block content %}
 <!-- Logout Container -->
 <div class="container">
   <div class="row">
-    <div class="col-md-8 mt-3 offset-md-2">
+    <div class="col-md-8 mt-3 offset-md-2 text-center">
       <!-- Logout Header -->
       <h3>{% trans "Sign Out" %}</h3>
 
@@ -14,7 +14,7 @@ Out" %}{% endblock %} {% block content %}
   <div class="row">
     <div class="col-md-8 mt-3 offset-md-2">
       <!-- Logout Form -->
-      <form method="post" action="{% url 'account_logout' %}">
+      <form method="post" action="{% url 'account_logout' %}" class="text-center">
         {% csrf_token %} {% if redirect_field_value %}
         <input
           type="hidden"
@@ -23,7 +23,7 @@ Out" %}{% endblock %} {% block content %}
         />
         {% endif %}
         <!-- Logout Button -->
-        <button class="btn btn-signup right" type="submit">
+        <button class="btn btn-signup" type="submit">
           {% trans 'Sign Out' %}
         </button>
       </form>
