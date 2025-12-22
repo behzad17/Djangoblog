@@ -214,18 +214,25 @@ if DEBUG:
 else:
     ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification in production
     ACCOUNT_EMAIL_REQUIRED = True  # Require email in production
-    # Production email backend should be configured via environment variables
-    EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+    # Production email backend: Gmail SMTP configuration
+    # All credentials read from environment variables (set on Heroku)
+    EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
     
-    # SMTP email configuration (required for sending verification emails)
-    # These should be set as environment variables on Heroku
-    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
-    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in {'true', '1', 'yes', 'on'}
-    EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False').lower() in {'true', '1', 'yes', 'on'}
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@example.com')
+    # Gmail SMTP configuration (for peyvandsw@gmail.com)
+    # These must be set as environment variables on Heroku:
+    # EMAIL_HOST_USER=peyvandsw@gmail.com
+    # EMAIL_HOST_PASSWORD=<Gmail App Password>
+    EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+    EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
+    EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False').lower() in ('true', '1', 'yes')
+    
+    # Credentials from environment (no hardcoded values)
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    
+    # Default from email: use environment variable or fallback to EMAIL_HOST_USER
+    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@example.com')
     SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error reporting emails
 
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Google emails are already verified, but we still require site verification
