@@ -219,6 +219,9 @@ else:
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Google emails are already verified, but we still require site verification
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically create account on social login
 SOCIALACCOUNT_QUERY_EMAIL = True  # Request email from social providers
+# Auto-connect social accounts by email: automatically link Google account to existing user with same email
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True  # Enable email-based authentication for social accounts
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True  # Automatically connect social account if email matches existing verified user
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CaptchaSignupForm",
 }
@@ -401,7 +404,3 @@ LOGGING = {
         },
     },
 }
-# TEMP: prevent email-related 500 errors on Heroku
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_FAIL_SILENTLY = True
-ACCOUNT_EMAIL_VERIFICATION = "none"

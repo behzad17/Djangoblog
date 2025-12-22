@@ -118,9 +118,18 @@ def handle_social_account_added(request, sociallogin, **kwargs):
     - Email is already verified by Google (trusted)
     - In development: auto-verify for immediate access
     - In production: require site-level verification (terms acceptance)
+    - Logs auto-connect events when social account is linked to existing user
     """
     user = sociallogin.user
     if sociallogin.account.provider == 'google':
+        # Log auto-connect event if this is linking to an existing account
+        import logging
+        logger = logging.getLogger(__name__)
+        if user.pk:  # User already exists (auto-connected)
+            logger.info(
+                f"Auto-connected Google account for existing user: {user.email} (user_id: {user.pk})",
+                extra={'user_id': user.pk, 'email': user.email, 'provider': 'google'}
+            )
         # User should already be saved by django-allauth at this point
         # Don't save the user here - it's already saved
         
