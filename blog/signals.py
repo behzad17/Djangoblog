@@ -53,11 +53,32 @@ def handle_pre_social_login(request, sociallogin, **kwargs):
     """
     Before Google OAuth login completes, ensure email is marked as verified.
     Google emails are trusted, but site verification is still required.
+    Also ensure username is set before login completes (so welcome message shows it).
     """
     if sociallogin.account.provider == 'google' and sociallogin.user.email:
         # Ensure user is saved before accessing related objects
         if not sociallogin.user.pk:
             sociallogin.user.save()
+        
+        # Ensure username is set BEFORE login completes (so welcome message shows it)
+        # This must happen in pre_social_login, not social_account_added
+        if not sociallogin.user.username and sociallogin.user.email:
+            try:
+                # Generate username from email (before @ symbol)
+                username_base = sociallogin.user.email.split('@')[0]
+                # Ensure username is unique
+                username = username_base
+                counter = 1
+                while User.objects.filter(username=username).exclude(pk=sociallogin.user.pk).exists():
+                    username = f"{username_base}{counter}"
+                    counter += 1
+                sociallogin.user.username = username
+                sociallogin.user.save()
+            except Exception as e:
+                # Log error but don't block login
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Error setting username in pre_social_login: {e}")
         
         from allauth.account.models import EmailAddress
         try:
@@ -87,22 +108,28 @@ def handle_social_account_added(request, sociallogin, **kwargs):
     """
     user = sociallogin.user
     if sociallogin.account.provider == 'google':
-        # Ensure user is saved first (needed for checking username uniqueness)
+        # Ensure user is saved first (needed for accessing related objects)
         if not user.pk:
             user.save()
         
-        # Ensure username is set (use email prefix if username is empty)
+        # Username should already be set in pre_social_login, but check again as fallback
         if not user.username and user.email:
-            # Generate username from email (before @ symbol)
-            username_base = user.email.split('@')[0]
-            # Ensure username is unique
-            username = username_base
-            counter = 1
-            while User.objects.filter(username=username).exclude(pk=user.pk).exists():
-                username = f"{username_base}{counter}"
-                counter += 1
-            user.username = username
-            user.save()
+            try:
+                # Generate username from email (before @ symbol)
+                username_base = user.email.split('@')[0]
+                # Ensure username is unique
+                username = username_base
+                counter = 1
+                while User.objects.filter(username=username).exclude(pk=user.pk).exists():
+                    username = f"{username_base}{counter}"
+                    counter += 1
+                user.username = username
+                user.save()
+            except Exception as e:
+                # Log error but don't block signup
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Error setting username in social_account_added: {e}")
         
         # Google emails are verified, so mark email as verified
         if user.email:
