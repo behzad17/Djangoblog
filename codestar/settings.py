@@ -294,7 +294,10 @@ CSP_FONT_SRC = (
     "'self'",
     "https://fonts.gstatic.com",
     "https://cdn.jsdelivr.net",
+    "https://cdnjs.cloudflare.com",  # Font Awesome fonts
+    "https://raw.githubusercontent.com",  # Vazir font may load from GitHub raw
     "data:",  # For inline font data
+    "blob:",  # For blob URLs (some browsers use this for fonts)
 )
 CSP_IMG_SRC = (
     "'self'",
