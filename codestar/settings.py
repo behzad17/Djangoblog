@@ -401,3 +401,7 @@ LOGGING = {
         },
     },
 }
+# TEMP: prevent email-related 500 errors on Heroku
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_FAIL_SILENTLY = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
