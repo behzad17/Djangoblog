@@ -243,18 +243,23 @@ def build_toc_and_anchors(content_html):
             
             # Build new opening tag with ID
             # Check if ID already exists in attributes
+            attrs = attrs.strip()
             if 'id=' in attrs:
                 # Replace existing ID
                 new_attrs = re.sub(r'id="[^"]*"', f'id="{anchor}"', attrs)
             else:
                 # Add ID attribute
-                if attrs.strip():
-                    new_attrs = attrs.strip() + f' id="{anchor}"'
+                if attrs:
+                    new_attrs = attrs + f' id="{anchor}"'
                 else:
                     new_attrs = f'id="{anchor}"'
             
             # Return the reconstructed heading with anchor ID
-            return f'<{tag} {new_attrs}>{title}</{tag}>'
+            # Handle spacing correctly
+            if new_attrs:
+                return f'<{tag} {new_attrs}>{title}</{tag}>'
+            else:
+                return f'<{tag}>{title}</{tag}>'
         except Exception:
             # If anything goes wrong, return original
             return match.group(0)
