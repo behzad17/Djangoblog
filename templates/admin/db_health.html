@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}وضعیت پایگاه داده | Peyvand{% endblock title %}
+{% block content %}
+<div class="container my-5" style="direction: rtl; text-align: right;">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="mb-2">وضعیت پایگاه داده</h1>
+      <p class="text-muted mb-0">این صفحه فقط برای مشاهده سلامت پایگاه داده است و هیچ تغییری ایجاد نمی‌کند.</p>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3">خلاصه</h5>
+          <p class="mb-1"><strong>اندازه کل پایگاه داده:</strong> {{ db_size_human }}</p>
+          <p class="mb-0"><strong>نوع پایگاه داده:</strong> {{ backend_engine }}</p>
+          {% if not is_postgres %}
+          <p class="text-warning small mt-2 mb-0">اندازه پایگاه داده فقط در PostgreSQL قابل نمایش است.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">اندازه جداول</h5>
+          {% if table_sizes %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-end">نام جدول</th>
+                  <th scope="col" class="text-end">حجم</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for t in table_sizes %}
+                <tr>
+                  <td class="text-end">{{ t.table_name }}</td>
+                  <td class="text-end">{{ t.total_size_pretty }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted mb-0">اطلاعات اندازه جداول در این پایگاه داده در دسترس نیست.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">تعداد رکوردهای کلیدی</h5>
+          {% if model_counts %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-end">بخش</th>
+                  <th scope="col" class="text-end">مدل</th>
+                  <th scope="col" class="text-end">تعداد</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for m in model_counts %}
+                <tr>
+                  <td class="text-end">{{ m.label }}</td>
+                  <td class="text-end"><code>{{ m.model }}</code></td>
+                  <td class="text-end">{{ m.count }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted mb-0">مدلی برای شمارش یافت نشد.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if warnings %}
+  <div class="row g-3 mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-warning">
+        <div class="card-body">
+          <h5 class="card-title mb-3 text-warning">هشدارها</h5>
+          <ul class="mb-0">
+            {% for w in warnings %}
+            <li class="text-warning">{{ w }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}
+

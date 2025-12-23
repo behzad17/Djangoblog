@@ -21,6 +21,7 @@ from ratelimit.decorators import ratelimit
 from allauth.account import views as allauth_views
 from blog.sitemaps import PostSitemap, CategorySitemap
 from blog.views_robots import robots_txt
+from codestar.views_db_health import db_health_dashboard
 
 # Sitemap configuration
 sitemaps = {
@@ -50,6 +51,8 @@ urlpatterns = [
         ratelimit(key="ip", rate="10/m", block=True)(allauth_views.password_reset),
         name="account_reset_password",
     ),
+    # Internal: Database Health Dashboard (staff-only, read-only)
+    path("admin/db-health/", db_health_dashboard, name="db_health_dashboard"),
     path("accounts/", include("allauth.urls")),
     path("captcha/", include("captcha.urls")),
     path('admin/', admin.site.urls),
