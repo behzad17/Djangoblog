@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خوش آمدید به پیوند</title>
+    <style>
+        body {
+            font-family: 'Vazir', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #00A693 0%, #058073 100%);
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .email-body {
+            padding: 30px 20px;
+            color: #333333;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00A693;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin-bottom: 25px;
+            color: #555555;
+        }
+        .links-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+        }
+        .links-section h3 {
+            margin-top: 0;
+            color: #00A693;
+            font-size: 16px;
+        }
+        .link-item {
+            margin: 12px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border-right: 3px solid #00A693;
+            border-radius: 4px;
+        }
+        .link-item a {
+            color: #00A693;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            color: #888888;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .disclaimer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 11px;
+            color: #999999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>🌿 به پیوند خوش آمدید</h1>
+        </div>
+        <div class="email-body">
+            <div class="greeting">
+                سلام {{ user_display_name }}،
+            </div>
+            <div class="content">
+                <p>به پلتفرم پیوند، جامعه آنلاین ایرانیانِ مقیم سوئد خوش آمدید!</p>
+                <p>پیوند یک پلتفرم مستقل و جامعه‌محور برای ایرانیان مقیم سوئد است که در آن می‌توانید:</p>
+                <ul style="padding-right: 20px;">
+                    <li>مطالب و تجربیات خود را به اشتراک بگذارید</li>
+                    <li>با دیگر اعضای جامعه در ارتباط باشید</li>
+                    <li>از منابع و اطلاعات مفید استفاده کنید</li>
+                </ul>
+            </div>
+            <div class="links-section">
+                <h3>لینک‌های مفید:</h3>
+                <div class="link-item">
+                    <a href="{{ home_url }}">🏠 صفحه اصلی</a>
+                </div>
+                <div class="link-item">
+                    <a href="{{ member_guide_url }}">📚 راهنمای اعضا</a>
+                </div>
+                <div class="link-item">
+                    <a href="{{ complete_setup_url }}">⚙️ تکمیل تنظیمات حساب</a>
+                </div>
+            </div>
+            <div class="content">
+                <p>ما خوشحالیم که شما به جامعه ما پیوسته‌اید!</p>
+                <p>با احترام،<br><strong>تیم پیوند</strong></p>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="disclaimer">
+                این یک پیام خوش‌آمدگویی است و پاسخ‌دادن به آن ضروری نیست.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

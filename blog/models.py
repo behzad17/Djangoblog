@@ -39,6 +39,10 @@ class UserProfile(models.Model):
         blank=True,
         help_text="When site verification was completed"
     )
+    welcome_email_sent = models.BooleanField(
+        default=False,
+        help_text="Whether the welcome email has been sent to this user"
+    )
     
     class Meta:
         verbose_name = "User Profile"
