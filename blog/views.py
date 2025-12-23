@@ -285,7 +285,7 @@ def post_detail(request, slug):
     hide_pending_messages = post.status == 1
 
     # Calculate reading time and generate TOC
-    from .utils.content import compute_reading_time, build_toc_and_anchors, should_show_toc
+    from .utils import compute_reading_time, build_toc_and_anchors, should_show_toc
     
     reading_time_minutes = compute_reading_time(post.content)
     toc_items, content_with_anchors = build_toc_and_anchors(post.content)
