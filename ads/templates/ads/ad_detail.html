@@ -26,8 +26,13 @@
 <div class="container py-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center p-4">
+      <div class="card shadow-sm border-0 {% if ad.is_currently_featured %}ad-featured{% endif %}">
+        <div class="card-body text-center p-4 position-relative">
+          {% if ad.is_currently_featured %}
+          <span class="glass-card-badge glass-card-badge-featured" style="position: absolute; top: 15px; right: 15px;">
+            <i class="fas fa-star ms-1"></i>ویژه
+          </span>
+          {% endif %}
           {% if ad.image %}
             {% if ad.target_url and ad.url_approved %}
             <a

@@ -12,8 +12,10 @@ from .forms import AdForm
 def _visible_ads_queryset():
     """
     Base queryset for ads that should be visible on the site.
+    Featured ads appear first, then ordered by newest.
     """
     today = timezone.now().date()
+    now = timezone.now()
     qs = Ad.objects.filter(
         is_active=True,
         is_approved=True,
@@ -24,6 +26,19 @@ def _visible_ads_queryset():
         models.Q(start_date__isnull=True) | models.Q(start_date__lte=today),
         models.Q(end_date__isnull=True) | models.Q(end_date__gte=today),
     )
+    # Order by: featured first (only if featured_until is in future or null), then newest
+    # Annotate to check if featured status is currently active
+    from django.db.models import Case, When, BooleanField, Q
+    qs = qs.annotate(
+        is_currently_featured=Case(
+            When(
+                Q(is_featured=True) & (Q(featured_until__isnull=True) | Q(featured_until__gt=now)),
+                then=True
+            ),
+            default=False,
+            output_field=BooleanField()
+        )
+    ).order_by('-is_currently_featured', '-created_on')
     return qs.select_related("category")
 
 

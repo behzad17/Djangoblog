@@ -94,6 +94,17 @@ class Ad(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    # Featured ad feature
+    is_featured = models.BooleanField(
+        default=False,
+        help_text="Featured ads appear first in listings and have special highlighting.",
+    )
+    featured_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Optional: Featured status expires after this date. Leave blank for permanent featured status.",
+    )
+
     class Meta:
         ordering = ["-created_on"]
 
@@ -127,6 +138,16 @@ class Ad(models.Model):
         if self.end_date and today > self.end_date:
             return False
         return True
+
+    def is_currently_featured(self):
+        """
+        Check if the ad is currently featured (is_featured=True and featured_until is in future or null).
+        """
+        if not self.is_featured:
+            return False
+        if self.featured_until is None:
+            return True
+        return timezone.now() < self.featured_until
 
 
 # Create your models here.

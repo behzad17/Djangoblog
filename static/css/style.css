@@ -2444,6 +2444,24 @@ body {
   box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
 }
 
+.glass-card-badge-featured {
+  background: rgba(255, 193, 7, 0.95);
+  color: #000;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+  font-weight: 700;
+}
+
+/* Featured ad card styling */
+.ad-featured {
+  border: 2px solid #ffc107;
+  box-shadow: 0 12px 48px rgba(255, 193, 7, 0.25);
+}
+
+.ad-featured:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 56px rgba(255, 193, 7, 0.35);
+}
+
 .glass-card-overlay {
   position: relative;
   background: linear-gradient(

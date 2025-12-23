@@ -23,6 +23,7 @@ class AdAdmin(admin.ModelAdmin):
         "owner",
         "is_active",
         "is_approved",
+        "is_featured",
         "url_status",
         "start_date",
         "end_date",
@@ -33,10 +34,12 @@ class AdAdmin(admin.ModelAdmin):
         "owner",
         "is_active",
         "is_approved",
+        "is_featured",
         "url_approved",
         "start_date",
         "end_date",
     )
+    list_editable = ("is_featured",)
     search_fields = ("title", "target_url", "category__name")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on")
@@ -72,6 +75,13 @@ class AdAdmin(admin.ModelAdmin):
             {
                 "fields": ("is_active", "is_approved", "start_date", "end_date"),
                 "description": "Control when this ad is visible to users.",
+            },
+        ),
+        (
+            "Featured Ad",
+            {
+                "fields": ("is_featured", "featured_until"),
+                "description": "Featured ads appear first in listings and have special highlighting.",
             },
         ),
         (

@@ -40,7 +40,7 @@
   <div class="row">
     {% for ad in ads %}
     <div class="col-md-4 mb-4">
-      <div class="glass-morphism-card">
+      <div class="glass-morphism-card {% if ad.is_currently_featured %}ad-featured{% endif %}">
         <a
           href="{% url 'ads:ad_detail' ad.slug %}"
           class="text-decoration-none glass-card-link"
@@ -59,6 +59,11 @@
               alt="{{ ad.title }}"
               class="glass-card-image"
             />
+            {% endif %}
+            {% if ad.is_currently_featured %}
+              <span class="glass-card-badge glass-card-badge-featured">
+                <i class="fas fa-star ms-1"></i>ویژه
+              </span>
             {% endif %}
             {% if user.is_authenticated and ad.owner == user %}
             <span class="glass-card-badge glass-card-badge-owner">
