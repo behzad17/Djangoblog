@@ -191,74 +191,80 @@ def build_toc_and_anchors(content_html):
             - updated_html: HTML with anchor IDs added to headings
     """
     if not content_html:
-        return [], content_html
+        return [], content_html or ''
+    
+    # Ensure content_html is a string
+    if not isinstance(content_html, str):
+        content_html = str(content_html)
     
     toc_items = []
     updated_html = content_html
     heading_counter = {}
     
-    # Pattern to match h2 and h3 tags
-    # Match: <h2>Title</h2> or <h3>Title</h3>
-    pattern = r'<(h[23])[^>]*>(.*?)</\1>'
+    # Pattern to match h2 and h3 tags with any attributes
+    # Match: <h2>Title</h2> or <h3 class="something">Title</h3>
+    pattern = r'<(h[23])([^>]*)>(.*?)</\1>'
     
     def replace_heading(match):
         """Replace heading with version that includes anchor ID."""
-        tag = match.group(1)  # h2 or h3
-        title = match.group(2).strip()
-        
-        # Remove any HTML inside the heading title (keep only text)
-        title_text = re.sub(r'<[^>]+>', '', title)
-        
-        if not title_text:
-            return match.group(0)  # Return original if no text
-        
-        # Generate unique anchor ID
-        base_slug = slugify(title_text, allow_unicode=True)
-        if not base_slug:
-            base_slug = 'section'
-        
-        # Ensure uniqueness
-        if base_slug in heading_counter:
-            heading_counter[base_slug] += 1
-            anchor = f"{base_slug}-{heading_counter[base_slug]}"
-        else:
-            heading_counter[base_slug] = 0
-            anchor = base_slug
-        
-        # Extract level (2 or 3)
-        level = int(tag[1])
-        
-        # Add to TOC
-        toc_items.append({
-            'level': level,
-            'title': title_text,
-            'anchor': anchor
-        })
-        
-        # Return heading with anchor ID
-        # Reconstruct the opening tag properly
-        full_match = match.group(0)
-        # Find where the title content starts (after the closing > of opening tag)
-        title_start = full_match.find('>') + 1
-        # Find where the title content ends (before the closing </tag>)
-        title_end = full_match.rfind(f'</{tag}>')
-        
-        # Extract the opening tag (everything before the title)
-        opening_tag = full_match[:title_start]
-        
-        # Add or replace ID attribute
-        if 'id=' in opening_tag:
-            # If ID already exists, replace it
-            opening_tag = re.sub(r'id="[^"]*"', f'id="{anchor}"', opening_tag)
-        else:
-            # Add ID attribute before the closing >
-            opening_tag = opening_tag.rstrip('>') + f' id="{anchor}">'
-        
-        # Return the reconstructed heading with anchor ID
-        return f'{opening_tag}{title}</{tag}>'
+        try:
+            tag = match.group(1)  # h2 or h3
+            attrs = match.group(2)  # existing attributes (if any)
+            title = match.group(3).strip()  # title content
+            
+            # Remove any HTML inside the heading title (keep only text)
+            title_text = re.sub(r'<[^>]+>', '', title)
+            
+            if not title_text:
+                return match.group(0)  # Return original if no text
+            
+            # Generate unique anchor ID
+            base_slug = slugify(title_text, allow_unicode=True)
+            if not base_slug:
+                base_slug = 'section'
+            
+            # Ensure uniqueness
+            if base_slug in heading_counter:
+                heading_counter[base_slug] += 1
+                anchor = f"{base_slug}-{heading_counter[base_slug]}"
+            else:
+                heading_counter[base_slug] = 0
+                anchor = base_slug
+            
+            # Extract level (2 or 3)
+            level = int(tag[1])
+            
+            # Add to TOC
+            toc_items.append({
+                'level': level,
+                'title': title_text,
+                'anchor': anchor
+            })
+            
+            # Build new opening tag with ID
+            # Check if ID already exists in attributes
+            if 'id=' in attrs:
+                # Replace existing ID
+                new_attrs = re.sub(r'id="[^"]*"', f'id="{anchor}"', attrs)
+            else:
+                # Add ID attribute
+                if attrs.strip():
+                    new_attrs = attrs.strip() + f' id="{anchor}"'
+                else:
+                    new_attrs = f'id="{anchor}"'
+            
+            # Return the reconstructed heading with anchor ID
+            return f'<{tag} {new_attrs}>{title}</{tag}>'
+        except Exception:
+            # If anything goes wrong, return original
+            return match.group(0)
     
     # Process all headings
-    updated_html = re.sub(pattern, replace_heading, updated_html, flags=re.IGNORECASE | re.DOTALL)
+    try:
+        updated_html = re.sub(pattern, replace_heading, updated_html, flags=re.IGNORECASE | re.DOTALL)
+    except Exception:
+        # If regex fails, return original content
+        updated_html = content_html
     
     return toc_items, updated_html
 
