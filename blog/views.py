@@ -284,6 +284,13 @@ def post_detail(request, slug):
     # Flag to hide pending messages on published posts
     hide_pending_messages = post.status == 1
 
+    # Calculate reading time and generate TOC
+    from .utils.content import compute_reading_time, build_toc_and_anchors, should_show_toc
+    
+    reading_time_minutes = compute_reading_time(post.content)
+    toc_items, content_with_anchors = build_toc_and_anchors(post.content)
+    show_toc = should_show_toc(post.content, toc_items)
+
     # Select template based on category
     if post.category and post.category.slug == 'photo-gallery':
         template_name = 'blog/post_detail_photo.html'
@@ -302,8 +309,11 @@ def post_detail(request, slug):
             "is_favorited": is_favorited,
             "is_liked": is_liked,
             "popular_posts": expert_posts,
-            "related_posts": related_posts,
             "hide_pending_messages": hide_pending_messages,
+            "reading_time_minutes": reading_time_minutes,
+            "toc_items": toc_items if show_toc else [],
+            "content_with_anchors": content_with_anchors,
+            "show_toc": show_toc,
         },
     )
 

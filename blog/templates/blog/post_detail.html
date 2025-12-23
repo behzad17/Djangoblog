@@ -181,6 +181,9 @@
             <span class="badge bg-light text-dark border">
               <i class="far fa-comments ms-1"></i>{{ comment_count }} نظر
             </span>
+            <span class="badge bg-info text-white">
+              <i class="fas fa-stopwatch ms-1"></i>زمان مطالعه: {{ reading_time_minutes }} دقیقه
+            </span>
           </div>
 
           <!-- Event Dates Display (only for Events category) -->
@@ -203,8 +206,30 @@
           </div>
           {% endif %}
 
+          <!-- Table of Contents (TOC) -->
+          {% if show_toc and toc_items %}
+          <div class="toc-card mb-4">
+            <div class="card border-primary">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                  <i class="fas fa-list ms-2"></i>فهرست مطالب
+                </h5>
+              </div>
+              <div class="card-body">
+                <ul class="toc-list">
+                  {% for item in toc_items %}
+                  <li class="toc-item toc-level-{{ item.level }}">
+                    <a href="#{{ item.anchor }}" class="toc-link">{{ item.title }}</a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
           <div class="card-text post-content-body">
-            {{ post.content | sanitize }}
+            {{ content_with_anchors | sanitize }}
           </div>
           {% if post.external_url and post.url_approved %}
           <div class="text-center mt-4 mb-3">
@@ -552,8 +577,136 @@
     </div>
   </div>
 </div>
-{% endblock content %}
 
 {% block extras %}
+<style>
+/* Table of Contents (TOC) Styles - RTL Support */
+.toc-card {
+  direction: rtl;
+  text-align: right;
+}
+
+.toc-card .card-header {
+  direction: rtl;
+  text-align: right;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  direction: rtl;
+  text-align: right;
+}
+
+.toc-item {
+  margin-bottom: 0.5rem;
+  padding-right: 0;
+}
+
+.toc-item.toc-level-2 {
+  padding-right: 0;
+  font-weight: 600;
+}
+
+.toc-item.toc-level-3 {
+  padding-right: 1.5rem;
+  font-weight: 400;
+  font-size: 0.95em;
+}
+
+.toc-link {
+  color: #0d6efd;
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.toc-link:hover {
+  color: #0a58ca;
+  text-decoration: underline;
+}
+
+.toc-link:visited {
+  color: #6f42c1;
+}
+
+/* Smooth scroll behavior for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reading time badge styling */
+.badge.bg-info {
+  background-color: #0dcaf0 !important;
+}
+</style>
+{% endblock extras %}
+{% block extras %}
+<style>
+/* Table of Contents (TOC) Styles - RTL Support */
+.toc-card {
+  direction: rtl;
+  text-align: right;
+}
+
+.toc-card .card-header {
+  direction: rtl;
+  text-align: right;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  direction: rtl;
+  text-align: right;
+}
+
+.toc-item {
+  margin-bottom: 0.5rem;
+  padding-right: 0;
+}
+
+.toc-item.toc-level-2 {
+  padding-right: 0;
+  font-weight: 600;
+}
+
+.toc-item.toc-level-3 {
+  padding-right: 1.5rem;
+  font-weight: 400;
+  font-size: 0.95em;
+}
+
+.toc-link {
+  color: #0d6efd;
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.toc-link:hover {
+  color: #0a58ca;
+  text-decoration: underline;
+}
+
+.toc-link:visited {
+  color: #6f42c1;
+}
+
+/* Smooth scroll behavior for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reading time badge styling */
+.badge.bg-info {
+  background-color: #0dcaf0 !important;
+}
+</style>
 <script src="{% static 'js/comments.js' %}" defer></script>
 {% endblock extras %}
+{% endblock content %}
