@@ -1,4 +1,0 @@
-"""
-Blog utilities package.
-"""
-
