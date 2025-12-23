@@ -131,7 +131,7 @@
           </div>
           
           <!-- Event Dates Display (only for Events category) -->
-          {% if post.category.slug == 'events-announcements' and post.event_start_date %}
+          {% if post.category and post.category.slug == 'events-announcements' and post.event_start_date %}
           <div class="event-dates-info mb-4">
             <div class="card bg-primary text-white">
               <div class="card-body">
