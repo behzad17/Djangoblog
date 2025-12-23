@@ -157,25 +157,36 @@ def compute_reading_time(content_html):
     Returns:
         int: Reading time in minutes (minimum 1)
     """
-    if not content_html:
+    try:
+        if not content_html:
+            return 1
+        
+        # Ensure content_html is a string
+        if not isinstance(content_html, str):
+            content_html = str(content_html)
+        
+        # Strip HTML tags to get plain text
+        # Simple regex to remove HTML tags (safe for sanitized content)
+        text = re.sub(r'<[^>]+>', ' ', content_html)
+        
+        # Remove extra whitespace and split into words
+        text = re.sub(r'\s+', ' ', text).strip()
+        
+        # Split by whitespace (works for both Persian and English)
+        words = text.split()
+        word_count = len(words)
+        
+        # Calculate reading time: ~200 words per minute
+        # Minimum 1 minute
+        reading_time = max(1, round(word_count / 200))
+        
+        return reading_time
+    except Exception as e:
+        # If anything fails, return default reading time
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error calculating reading time: {e}", exc_info=True)
         return 1
-    
-    # Strip HTML tags to get plain text
-    # Simple regex to remove HTML tags (safe for sanitized content)
-    text = re.sub(r'<[^>]+>', ' ', content_html)
-    
-    # Remove extra whitespace and split into words
-    text = re.sub(r'\s+', ' ', text).strip()
-    
-    # Split by whitespace (works for both Persian and English)
-    words = text.split()
-    word_count = len(words)
-    
-    # Calculate reading time: ~200 words per minute
-    # Minimum 1 minute
-    reading_time = max(1, round(word_count / 200))
-    
-    return reading_time
 
 
 def build_toc_and_anchors(content_html):
@@ -267,8 +278,11 @@ def build_toc_and_anchors(content_html):
     # Process all headings
     try:
         updated_html = re.sub(pattern, replace_heading, updated_html, flags=re.IGNORECASE | re.DOTALL)
-    except Exception:
+    except Exception as e:
         # If regex fails, return original content
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error processing headings in build_toc_and_anchors: {e}", exc_info=True)
         updated_html = content_html
     
     return toc_items, updated_html
