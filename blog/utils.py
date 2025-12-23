@@ -236,15 +236,25 @@ def build_toc_and_anchors(content_html):
         })
         
         # Return heading with anchor ID
-        # Preserve any existing attributes in the opening tag
-        opening_tag = match.group(0)[:match.start(2) - len(match.group(2))]
+        # Reconstruct the opening tag properly
+        full_match = match.group(0)
+        # Find where the title content starts (after the closing > of opening tag)
+        title_start = full_match.find('>') + 1
+        # Find where the title content ends (before the closing </tag>)
+        title_end = full_match.rfind(f'</{tag}>')
+        
+        # Extract the opening tag (everything before the title)
+        opening_tag = full_match[:title_start]
+        
+        # Add or replace ID attribute
         if 'id=' in opening_tag:
             # If ID already exists, replace it
             opening_tag = re.sub(r'id="[^"]*"', f'id="{anchor}"', opening_tag)
         else:
-            # Add ID attribute
-            opening_tag = opening_tag.replace(f'<{tag}', f'<{tag} id="{anchor}"')
+            # Add ID attribute before the closing >
+            opening_tag = opening_tag.rstrip('>') + f' id="{anchor}">'
         
+        # Return the reconstructed heading with anchor ID
         return f'{opening_tag}{title}</{tag}>'
     
     # Process all headings

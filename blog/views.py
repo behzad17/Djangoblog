@@ -285,11 +285,22 @@ def post_detail(request, slug):
     hide_pending_messages = post.status == 1
 
     # Calculate reading time and generate TOC
-    from .utils import compute_reading_time, build_toc_and_anchors, should_show_toc
-    
-    reading_time_minutes = compute_reading_time(post.content)
-    toc_items, content_with_anchors = build_toc_and_anchors(post.content)
-    show_toc = should_show_toc(post.content, toc_items)
+    # Wrap in try-except to prevent errors from breaking the page
+    try:
+        from .utils import compute_reading_time, build_toc_and_anchors, should_show_toc
+        
+        reading_time_minutes = compute_reading_time(post.content)
+        toc_items, content_with_anchors = build_toc_and_anchors(post.content)
+        show_toc = should_show_toc(post.content, toc_items)
+    except Exception as e:
+        # If TOC/reading time calculation fails, fall back to original content
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error calculating reading time/TOC for post {post.slug}: {e}", exc_info=True)
+        reading_time_minutes = 1
+        toc_items = []
+        content_with_anchors = post.content
+        show_toc = False
 
     # Select template based on category
     if post.category and post.category.slug == 'photo-gallery':
