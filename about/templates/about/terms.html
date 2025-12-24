@@ -1,473 +1,671 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}قوانین و مقررات | Terms and Conditions | Peyvand{% endblock title %}
+{% block meta_description %}قوانین و مقررات استفاده از وب‌سایت پیوند - شرایط استفاده، حقوق کاربران، مسئولیت‌ها و مقررات بخش‌های مختلف{% endblock meta_description %}
+{% block content %}
 <!-- Hero Section -->
 <section
-  class="hero-section bg-dark text-white mb-4"
+  class="hero-section text-white mb-4"
   style="
-    background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+    background: #00A693;
     padding: 3rem 0;
   "
 >
   <div class="container">
     <div class="row justify-content-center text-center">
-      <div class="col-lg-10">
+      <div class="col-lg-8">
         <h1 class="hero-title mb-3">
-          <i class="fas fa-gavel ms-2"></i>قوانین و مقررات
+          <i class="fas fa-gavel ms-2"></i>قوانین و مقررات استفاده از وب‌سایت
         </h1>
-        <p class="hero-subtitle">نسخه رسمی و قانونی - لطفاً با دقت بخوانید</p>
+        <p class="hero-subtitle mb-0">نسخه رسمی و حقوقی | Officiell och Juridisk Version</p>
       </div>
     </div>
   </div>
 </section>
 
-<div class="container mb-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-10">
-      <div class="card shadow-sm border-0 terms-card">
-        <div class="card-body p-4 p-md-5">
-          <!-- Introduction -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-info-circle ms-2 text-primary"></i>1. مقدمه
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  These Terms and Conditions govern the use of all services,
-                  sections, and content published on this website.
-                </li>
-                <li>
-                  Accessing, registering on, or using any part of the website
-                  constitutes full and unconditional acceptance of these Terms
-                  by the user.
-                </li>
-                <li>
-                  The website administration reserves the right to modify or
-                  update these Terms at any time. Continued use of the website
-                  after changes indicates acceptance of the updated version.
-                </li>
-              </ul>
+<!-- Terms Section -->
+<div class="container mt-4 mb-5">
+  <!-- Two-Column Terms Content -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-11">
+      <div class="card about-bilingual-card shadow-sm">
+        <div class="card-body p-0">
+          <div class="row g-0" style="direction: ltr;">
+            <!-- Swedish Column (Left) -->
+            <div class="col-lg-6 about-column about-column-swedish border-end">
+              <div class="p-4 p-md-5">
+                <div class="lang-badge lang-badge-swedish mb-3">
+                  <i class="fas fa-globe ms-2"></i>Svenska
+                </div>
+                
+                <h2 class="section-title-swedish mb-4">Användarvillkor för Webbplatsen</h2>
+
+                <!-- Section 1 -->
+                <h3 class="section-subtitle-swedish mb-3">1. Introduktion</h3>
+                <p class="about-text">
+                  Dessa användarvillkor reglerar användningen av alla tjänster, sektioner och allt innehåll som publiceras på denna webbplats.
+                </p>
+                <p class="about-text">
+                  Genom att få åtkomst till, registrera sig på eller använda någon del av webbplatsen accepterar användaren fullt ut och utan förbehåll dessa villkor.
+                </p>
+                <p class="about-text">
+                  Webbplatsens administration förbehåller sig rätten att när som helst ändra eller uppdatera villkoren. Fortsatt användning av webbplatsen efter ändringar innebär att användaren accepterar den uppdaterade versionen.
+                </p>
+
+                <!-- Section 2 -->
+                <h3 class="section-subtitle-swedish mb-3">2. Användarens rättigheter och ansvar</h3>
+                <p class="about-text">
+                  Användare måste följa alla gällande lagar och regler i det land där de vistas, samt denna webbplats policyer.
+                </p>
+                <p class="about-text">
+                  Användaren ansvarar fullt ut för riktighet, laglighet och äkthet i allt innehåll som hen publicerar.
+                </p>
+                <p class="about-text">
+                  Användaren får inte publicera innehåll som är olagligt, kränkande, ärekränkande, diskriminerande, hotfullt, obscen, våldsbejakande eller hatframkallande.
+                </p>
+                <p class="about-text">
+                  Om användaren publicerar material som ägs av någon annan måste korrekt källa eller upphovsrättsinnehavare anges.
+                </p>
+                <p class="about-text">
+                  Missbruk, identitetsstöld, spam, obehörig reklam eller trakasserier av andra användare är strikt förbjudet.
+                </p>
+
+                <!-- Section 3 -->
+                <h3 class="section-subtitle-swedish mb-3">3. Immateriella rättigheter och upphovsrätt</h3>
+                <p class="about-text">
+                  Alla immateriella rättigheter till innehåll som publiceras av webbplatsens administration eller webbplatsens innehållsteam tillhör webbplatsen.
+                </p>
+                <p class="about-text">
+                  Återgivning, kopiering, distribution eller återpublicering av detta material utan skriftligt tillstånd är strikt förbjudet.
+                </p>
+                <p class="about-text">
+                  Användare som publicerar innehåll bekräftar att de:
+                </p>
+                <ul class="about-list">
+                  <li>är lagliga ägare av innehållet, eller</li>
+                  <li>har korrekt tillstånd att publicera det.</li>
+                </ul>
+                <p class="about-text">
+                  Vid brott mot upphovsrätt kan administrationen ta bort innehållet utan föregående meddelande och vid behov rapportera ärendet till relevanta myndigheter.
+                </p>
+
+                <!-- Section 4 -->
+                <h3 class="section-subtitle-swedish mb-3">4. Användargenererat innehåll och ansvar</h3>
+                <p class="about-text">
+                  Innehåll som skickas in av användare (texter, bilder, videor, ljudfiler m.m.) förblir användarens juridiska egendom, men genom att skicka in det ger användaren webbplatsen rätt att lagra, visa och använda innehållet vid behov.
+                </p>
+                <p class="about-text">
+                  Användaren bär det fulla juridiska ansvaret för allt innehåll som hen skickar in. Webbplatsen ansvarar inte för några juridiska eller administrativa konsekvenser som uppstår till följd av användargenererat innehåll.
+                </p>
+                <p class="about-text">
+                  Administrationen kan när som helst ta bort vilket innehåll som helst, utan förvarning och utan att förklara skälen, om det strider mot dessa villkor eller rapporteras som otillåtet.
+                </p>
+
+                <!-- Section 5 -->
+                <h3 class="section-subtitle-swedish mb-3">5. Rapportering av överträdelser och klagomål</h3>
+                <p class="about-text">
+                  Användare kan rapportera olämpligt eller misstänkt innehåll via sektionen "Rapportera problem" eller via webbplatsens officiella e-postadress.
+                </p>
+                <p class="about-text">
+                  Rapporter behandlas konfidentiellt och om en överträdelse bekräftas vidtas nödvändiga åtgärder.
+                </p>
+                <p class="about-text">
+                  Användare kan även rapportera tekniska problem, fel eller missbruk av andra användare.
+                </p>
+
+                <!-- Section 6 -->
+                <h3 class="section-subtitle-swedish mb-3">6. Förbjudet innehåll och begränsningar</h3>
+                <p class="about-text">
+                  Det är strikt förbjudet att publicera eller sprida följande innehåll:
+                </p>
+                <ul class="about-list">
+                  <li>Kränkande, förolämpande eller hotfullt material</li>
+                  <li>Rasistiskt, diskriminerande eller hatframkallande material</li>
+                  <li>Olagligt innehåll eller material som främjar våld, droger, exploatering eller skada</li>
+                  <li>Falsk, vilseledande eller bedräglig information</li>
+                  <li>Pornografiskt eller socialt olämpligt innehåll</li>
+                  <li>Obehörig reklam eller marknadsföring i begränsade områden</li>
+                </ul>
+
+                <!-- Section 7 -->
+                <h3 class="section-subtitle-swedish mb-3">7. Webbplatsadministrationens rättigheter</h3>
+                <p class="about-text">
+                  Webbplatsens administration har full rätt att radera eller begränsa innehåll eller användarkonton som bryter mot dessa villkor, gällande lagar eller etiska riktlinjer — utan föregående meddelande.
+                </p>
+                <p class="about-text">
+                  Administrationen kan tillfälligt eller permanent begränsa åtkomst för användare som inte följer villkoren.
+                </p>
+                <p class="about-text">
+                  Webbplatsen är inte skyldig att lagra eller återställa borttaget innehåll.
+                </p>
+
+                <!-- Section 8 -->
+                <h3 class="section-subtitle-swedish mb-3">8. Säkerhet och integritet</h3>
+                <p class="about-text">
+                  Användaren ansvarar för att skydda sina inloggningsuppgifter (användarnamn och lösenord). All aktivitet som sker via användarens konto anses vara användarens ansvar.
+                </p>
+                <p class="about-text">
+                  Webbplatsen åtar sig att hantera personuppgifter i enlighet med gällande dataskyddslagstiftning och avslöjar inte sådan information utan laglig grund.
+                </p>
+                <p class="about-text">
+                  Administrationen kan lämna ut användarinformation till behöriga myndigheter om det krävs enligt lag.
+                </p>
+
+                <!-- Section 9 -->
+                <h3 class="section-subtitle-swedish mb-3">9. Annonser och kommersiellt innehåll</h3>
+                <p class="about-text">
+                  Annonsering är endast tillåten i områden som uttryckligen godkänts av webbplatsens administration.
+                </p>
+                <p class="about-text">
+                  Webbplatsen ansvarar inte för riktighet, kvalitet eller laglighet av varor eller tjänster som marknadsförs av tredje part.
+                </p>
+                <p class="about-text">
+                  Användare får inte publicera någon form av reklam utan föregående godkännande.
+                </p>
+
+                <!-- Section 10 -->
+                <h3 class="section-subtitle-swedish mb-3">10. Avslut och radering av konto</h3>
+                <p class="about-text">
+                  Användare kan begära radering av sitt konto.
+                </p>
+                <p class="about-text">
+                  Administrationen får stänga av eller radera konton utan förvarning vid överträdelser.
+                </p>
+                <p class="about-text">
+                  Radering av konto innebär inte automatiskt att tidigare publicerat innehåll tas bort, om inte administrationen uttryckligen godkänner detta.
+                </p>
+
+                <!-- Section 11 -->
+                <h3 class="section-subtitle-swedish mb-3">11. Tillämplig lag</h3>
+                <p class="about-text">
+                  Vid eventuell tvist tillämpas lagstiftningen i det land där webbplatsen är registrerad eller hostad.
+                </p>
+
+                <!-- Section 12 -->
+                <h3 class="section-subtitle-swedish mb-3">12. Regler för sektionen "Fråga mig"</h3>
+                <p class="about-text">
+                  Sektionen "Fråga mig" erbjuder en plattform där användare kan skicka frågor och få svar från godkända experter eller moderatorer.
+                </p>
+                <p class="about-text">
+                  Användare får inte lämna ut känslig personlig information (t.ex. personnummer, fullständiga hemadresser, ekonomiska uppgifter eller konfidentiella medicinska detaljer).
+                </p>
+                <p class="about-text">
+                  Alla frågor och svar lagras privat och konfidentiellt mellan användaren och den tilldelade experten.
+                </p>
+                <p class="about-text">
+                  Administrationen har endast tillgång till generell metadata såsom tidpunkt för inskick, status, avsändarens användarnamn och namnet på den ansvariga experten.
+                </p>
+                <p class="about-text">
+                  Fullständiga texter av frågor och svar visas inte i administrationspanelen.
+                </p>
+                <p class="about-text">
+                  Frågor får inte innehålla kränkande, olagligt, diskriminerande eller moraliskt olämpligt innehåll.
+                </p>
+                <p class="about-text">
+                  Experter fungerar endast i en rådgivande roll. Deras svar utgör inte juridisk, medicinsk, finansiell eller annan professionell rådgivning. Varken experterna eller webbplatsen bär något juridiskt ansvar för konsekvenser av givna svar.
+                </p>
+                <p class="about-text">
+                  Administrationen förbehåller sig rätten att ta bort frågor utan förvarning om de anses:
+                </p>
+                <ul class="about-list">
+                  <li>olämpliga,</li>
+                  <li>innehålla känslig information,</li>
+                  <li>strida mot lag, eller</li>
+                  <li>ligga utanför plattformens syfte.</li>
+                </ul>
+                <p class="about-text">
+                  Genom att använda "Fråga mig"-sektionen accepterar användaren att:
+                </p>
+                <ul class="about-list">
+                  <li>svar inte visas offentligt,</li>
+                  <li>svarstider kan variera, och</li>
+                  <li>svaren inte ersätter formell juridisk, medicinsk, finansiell eller professionell rådgivning.</li>
+                </ul>
+
+                <!-- Section 13 -->
+                <h3 class="section-subtitle-swedish mb-3">13. Regler för annonseringssektionen</h3>
+                <p class="about-text">
+                  Publicering av annonser är endast tillåten i områden som tydligt angivits av webbplatsens administration.
+                </p>
+                <p class="about-text">
+                  Annonsörer måste:
+                </p>
+                <ul class="about-list">
+                  <li>tillhandahålla korrekt, lagligt och sanningsenligt innehåll,</li>
+                  <li>avstå från vilseledande eller rättighetskränkande information, och</li>
+                  <li>på begäran uppvisa relevanta dokument eller tillstånd för varor eller tjänster.</li>
+                </ul>
+                <p class="about-text">
+                  Webbplatsen ansvarar inte för:
+                </p>
+                <ul class="about-list">
+                  <li>riktigheten i annonsörens påståenden,</li>
+                  <li>kvaliteten på annonserade varor eller tjänster, eller</li>
+                  <li>eventuella ekonomiska eller avtalsmässiga relationer mellan användare och annonsörer.</li>
+                </ul>
+                <p class="about-text">
+                  Administrationen har rätt att ta bort eller redigera annonser utan förvarning om de anses:
+                </p>
+                <ul class="about-list">
+                  <li>olämpliga,</li>
+                  <li>olagliga,</li>
+                  <li>strida mot webbplatsens policy, eller</li>
+                  <li>vilseledande eller bedrägliga.</li>
+                </ul>
+                <p class="about-text">
+                  Publicering av politiska annonser, innehåll som strider mot lokal lag, våldsrelaterat material eller stötande/omoraliskt innehåll är strängt förbjudet.
+                </p>
+                <p class="about-text">
+                  Annonsörer måste ange korrekt och aktuell kontaktinformation.
+                </p>
+                <p class="about-text">
+                  Försök att kringgå webbplatsens annonsregler eller publicera annonser i icke avsedda områden utgör en överträdelse och kan leda till tillfällig eller permanent avstängning av användarkontot.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <!-- User Rights and Responsibilities -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-user-shield ms-2 text-primary"></i>2. حقوق و
-              مسئولیت‌های کاربر
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  Users must comply with all applicable laws and regulations of
-                  their country of residence, as well as the policies of this
-                  website.
-                </li>
-                <li>
-                  Users bear full responsibility for the accuracy, legality, and
-                  authenticity of any content they publish.
-                </li>
-                <li>
-                  Users agree not to post any content that is unlawful,
-                  offensive, defamatory, discriminatory, threatening, obscene,
-                  violent, or promoting hate.
-                </li>
-                <li>
-                  If users publish content owned by others, they must properly
-                  cite the source or copyright holder.
-                </li>
-                <li>
-                  Any misuse, impersonation, spamming, unauthorized advertising,
-                  or harassment of other users is strictly prohibited.
-                </li>
-              </ul>
+            <!-- Persian Column (Right) -->
+            <div class="col-lg-6 about-column about-column-persian">
+              <div class="p-4 p-md-5">
+                <div class="lang-badge lang-badge-persian mb-3">
+                  <i class="fas fa-globe ms-2"></i>فارسی
+                </div>
+                
+                <h2 class="section-title-persian mb-4">قوانین و مقررات استفاده از وب‌سایت</h2>
+
+                <!-- Section 1 -->
+                <h3 class="section-subtitle-persian mb-3">۱. مقدمه</h3>
+                <p class="about-text">
+                  این مجموعه قوانین و مقررات، شرایط استفاده از خدمات، بخش‌ها و محتوای منتشرشده در این وب‌سایت را تعیین می‌کند.
+                </p>
+                <p class="about-text">
+                  ورود، ثبت‌نام و هرگونه استفاده از خدمات وب‌سایت به منزله‌ی پذیرش کامل و بی‌قید و شرط این قوانین از سوی کاربر است.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت حق دارد در هر زمانی این قوانین را اصلاح یا به‌روزرسانی کند. ادامه استفاده از وب‌سایت پس از اعمال تغییرات، به‌منزله‌ی پذیرش نسخه جدید خواهد بود.
+                </p>
+
+                <!-- Section 2 -->
+                <h3 class="section-subtitle-persian mb-3">۲. حقوق و مسئولیت‌های کاربران</h3>
+                <p class="about-text">
+                  کاربران موظف‌اند در هنگام استفاده از وب‌سایت، قوانین و مقررات جاری کشور محل اقامت خود و همچنین مقررات این وب‌سایت را رعایت کنند.
+                </p>
+                <p class="about-text">
+                  مسئولیت کامل صحت، دقت و حقوقی بودن محتوای منتشرشده توسط هر کاربر، صرفاً بر عهده همان کاربر است.
+                </p>
+                <p class="about-text">
+                  کاربران متعهد می‌شوند از انتشار هرگونه محتوای ناقض حقوق دیگران، خلاف قانون، توهین‌آمیز، تبعیض‌آمیز، تهدیدآمیز، مستهجن، خشونت‌آمیز یا مروج نفرت خودداری کنند.
+                </p>
+                <p class="about-text">
+                  کاربران موظف‌اند در صورت استفاده از آثار یا محتوای متعلق به دیگران، منبع یا صاحب اثر را به‌طور دقیق ذکر کنند.
+                </p>
+                <p class="about-text">
+                  هرگونه سوءاستفاده، جعل هویت، ارسال اسپم، انتشار تبلیغات غیرمجاز یا ایجاد مزاحمت برای دیگر کاربران ممنوع است.
+                </p>
+
+                <!-- Section 3 -->
+                <h3 class="section-subtitle-persian mb-3">۳. مالکیت فکری و حقوق نشر</h3>
+                <p class="about-text">
+                  تمامی حقوق مادی و معنوی محتوایی که توسط مدیریت یا تیم تولید محتوای وب‌سایت منتشر می‌شود، متعلق به وب‌سایت است.
+                </p>
+                <p class="about-text">
+                  استفاده، کپی، تکثیر یا بازنشر این محتوا بدون اجازه کتبی ممنوع است.
+                </p>
+                <p class="about-text">
+                  کاربرانی که محتوایی منتشر می‌کنند، با این کار تأیید می‌کنند که:
+                </p>
+                <ul class="about-list">
+                  <li>صاحب اثر هستند، یا</li>
+                  <li>اجازه انتشار قانونی از صاحب اثر دارند.</li>
+                </ul>
+                <p class="about-text">
+                  در صورت نقض حقوق نشر، مدیریت وب‌سایت می‌تواند محتوا را بدون اطلاع قبلی حذف و در صورت لزوم موضوع را به مراجع قانونی گزارش دهد.
+                </p>
+
+                <!-- Section 4 -->
+                <h3 class="section-subtitle-persian mb-3">۴. ارسال محتوا و مسئولیت‌های مرتبط</h3>
+                <p class="about-text">
+                  محتوای ارسال‌شده توسط کاربران (شامل متن، تصویر، ویدیو، فایل صوتی و…) در مالکیت قانونی ارسال‌کننده باقی می‌ماند اما کاربر حق استفاده، نمایش و نگهداری آن را به وب‌سایت اعطا می‌کند.
+                </p>
+                <p class="about-text">
+                  مسئولیت حقوقی تمامی مطالب منتشرشده توسط کاربر، بر عهده خود اوست و وب‌سایت هیچ‌گونه مسئولیتی در قبال پیامدهای حقوقی یا اداری این محتوا ندارد.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت در صورت مشاهده یا دریافت گزارش مبنی بر تخلف، حق دارد محتوا را بدون نیاز به ارائه توضیح یا اخطار قبلی حذف نماید.
+                </p>
+
+                <!-- Section 5 -->
+                <h3 class="section-subtitle-persian mb-3">۵. گزارش تخلفات و رسیدگی</h3>
+                <p class="about-text">
+                  کاربران می‌توانند محتوای نامناسب یا مشکوک را از طریق بخش «گزارش مشکل» یا از طریق ایمیل رسمی وب‌سایت به مدیریت اطلاع دهند.
+                </p>
+                <p class="about-text">
+                  گزارش‌ها به‌صورت محرمانه بررسی می‌شود و در صورت تأیید تخلف، اقدامات لازم انجام خواهد شد.
+                </p>
+                <p class="about-text">
+                  کاربران می‌توانند مشکلات فنی، خطاهای احتمالی یا سوءاستفاده‌های احتمالی دیگر کاربران را نیز گزارش کنند.
+                </p>
+
+                <!-- Section 6 -->
+                <h3 class="section-subtitle-persian mb-3">۶. محتوای نامناسب، ممنوع و محدودیت‌ها</h3>
+                <p class="about-text">
+                  انتشار یا بازنشر موارد زیر در وب‌سایت اکیداً ممنوع است:
+                </p>
+                <ul class="about-list">
+                  <li>محتوای توهین‌آمیز، تحقیرآمیز یا تهدید‌کننده</li>
+                  <li>محتوای نژادپرستانه، تبعیض‌آمیز یا تحریک‌کننده خشونت</li>
+                  <li>مطالب خلاف قانون، مروج خشونت، مواد مخدر، سوءاستفاده یا آسیب‌رسان</li>
+                  <li>محتوای دارای اطلاعات نادرست، فریبنده یا گمراه‌کننده</li>
+                  <li>هر نوع محتوای مستهجن یا مغایر با اخلاق عمومی</li>
+                  <li>تبلیغات بدون مجوز یا معرفی خدمات/محصولات در بخش‌های غیرمجاز</li>
+                </ul>
+
+                <!-- Section 7 -->
+                <h3 class="section-subtitle-persian mb-3">۷. اختیارات مدیریت وب‌سایت</h3>
+                <p class="about-text">
+                  مدیریت وب‌سایت اختیار کامل دارد که هرگونه محتوا یا حساب کاربری را که برخلاف قوانین سایت، قوانین کشور یا شرایط اخلاقی باشد، بدون اخطار قبلی حذف یا محدود کند.
+                </p>
+                <p class="about-text">
+                  مدیریت می‌تواند دسترسی کاربران متخلف را به‌صورت موقت یا دائمی معلق کند.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت هیچ‌گونه تعهدی مبنی بر ذخیره یا بازیابی محتوای حذف‌شده ندارد.
+                </p>
+
+                <!-- Section 8 -->
+                <h3 class="section-subtitle-persian mb-3">۸. مسئولیت‌های امنیتی و حفظ حریم خصوصی</h3>
+                <p class="about-text">
+                  کاربران مسئول حفاظت از اطلاعات ورود خود (نام کاربری و رمز عبور) هستند.
+                </p>
+                <p class="about-text">
+                  هرگونه فعالیت انجام‌شده با حساب کاربری، به نام همان کاربر ثبت می‌شود و مسئولیت آن بر عهده کاربر است.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت متعهد است اطلاعات شخصی کاربران را مطابق قوانین مربوطه نگهداری کند و از افشای آن بدون مجوز قانونی خودداری نماید.
+                </p>
+                <p class="about-text">
+                  مدیریت ممکن است در صورت نیاز قانونی، اطلاعات کاربران را در اختیار مراجع ذی‌صلاح قرار دهد.
+                </p>
+
+                <!-- Section 9 -->
+                <h3 class="section-subtitle-persian mb-3">۹. تبلیغات و محتوای تجاری</h3>
+                <p class="about-text">
+                  هرگونه تبلیغ فقط در بخش‌هایی مجاز است که توسط مدیریت مشخص شده‌اند.
+                </p>
+                <p class="about-text">
+                  وب‌سایت مسئولیتی نسبت به کیفیت، صحت یا قانونی بودن کالاها یا خدمات معرفی‌شده توسط آگهی‌دهندگان ندارد.
+                </p>
+                <p class="about-text">
+                  کاربران موظف‌اند از انتشار هرگونه تبلیغ بدون هماهنگی قبلی خودداری کنند.
+                </p>
+
+                <!-- Section 10 -->
+                <h3 class="section-subtitle-persian mb-3">۱۰. خاتمه عضویت و حذف حساب</h3>
+                <p class="about-text">
+                  کاربران می‌توانند درخواست حذف حساب کاربری خود را ثبت کنند.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت حق دارد حساب کاربری را در صورت نقض قوانین، بدون اخطار قبلی مسدود یا حذف کند.
+                </p>
+                <p class="about-text">
+                  حذف حساب کاربری لزوماً به‌معنای حذف محتوای منتشرشده توسط کاربر نمی‌باشد مگر در موارد خاص که مدیریت تشخیص دهد.
+                </p>
+
+                <!-- Section 11 -->
+                <h3 class="section-subtitle-persian mb-3">۱۱. قانون حاکم</h3>
+                <p class="about-text">
+                  در صورت بروز اختلاف، قوانین کشور محل ثبت یا میزبانی وب‌سایت ملاک عمل خواهد بود.
+                </p>
+
+                <!-- Section 12 -->
+                <h3 class="section-subtitle-persian mb-3">۱۲. مقررات مربوط به بخش Ask Me (پرسش از کارشناسان)</h3>
+                <p class="about-text">
+                  بخش Ask Me بستری برای ارسال پرسش توسط کاربران و دریافت پاسخ از سوی کارشناسان یا مدیران تأیید‌شده وب‌سایت است.
+                </p>
+                <p class="about-text">
+                  کاربران موظف‌اند هنگام ارسال پرسش، از ارائه اطلاعات شخصی حساس (مانند شماره ملی، آدرس کامل، اطلاعات مالی، اطلاعات پزشکی محرمانه و…) خودداری کنند.
+                </p>
+                <p class="about-text">
+                  تمامی پرسش‌ها و پاسخ‌ها به‌صورت خصوصی و محرمانه میان کاربر و کارشناس مربوطه نگهداری می‌شود.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت تنها به اطلاعات کلی و متادیتا (مانند زمان ارسال، وضعیت، نام کاربر و نام کارشناس) دسترسی دارد.
+                </p>
+                <p class="about-text">
+                  محتوای کامل سؤال و پاسخ در پنل مدیریت نمایش داده نمی‌شود.
+                </p>
+                <p class="about-text">
+                  کاربران موظف‌اند در پرسش‌های خود از ارسال محتوای توهین‌آمیز، خلاف قانون، تبعیض‌آمیز یا مغایر با اخلاق عمومی خودداری کنند.
+                </p>
+                <p class="about-text">
+                  کارشناسان (Moderators) فقط نقش پاسخ‌دهی دارند و نظرات آن‌ها جنبه مشاوره‌ای دارد و مسئولیت حقوقی ناشی از پاسخ‌ها متوجه ایشان یا مدیریت وب‌سایت نمی‌باشد.
+                </p>
+                <p class="about-text">
+                  مدیریت وب‌سایت اختیار دارد پرسش‌های نامناسب، حاوی اطلاعات حساس، مغایر قوانین، یا خارج از چارچوب سایت را بدون اخطار قبلی حذف کند.
+                </p>
+                <p class="about-text">
+                  استفاده از بخش Ask Me به‌معنای پذیرش این است که:
+                </p>
+                <ul class="about-list">
+                  <li>پاسخ‌ها عمومی منتشر نمی‌شوند،</li>
+                  <li>تأخیر در پاسخ‌گویی محتمل است و</li>
+                  <li>پاسخ‌ها جایگزین مشاوره حقوقی/پزشکی/مالی تخصصی نیستند.</li>
+                </ul>
+
+                <!-- Section 13 -->
+                <h3 class="section-subtitle-persian mb-3">۱۳. مقررات مربوط به بخش Advertise (تبلیغات در سایت)</h3>
+                <p class="about-text">
+                  انتشار تبلیغات در سایت فقط در بخش‌های تعیین‌شده توسط مدیریت مجاز است.
+                </p>
+                <p class="about-text">
+                  آگهی‌دهنده موظف است:
+                </p>
+                <ul class="about-list">
+                  <li>اطلاعات صحیح، دقیق و قانونی ارائه کند،</li>
+                  <li>از انتشار مطالب گمراه‌کننده، خلاف واقع یا نقض‌کننده حقوق دیگران خودداری کند،</li>
+                  <li>مدارک و مجوزهای لازم برای ارائه خدمات یا فروش کالا را، در صورت نیاز، ارائه نماید.</li>
+                </ul>
+                <p class="about-text">
+                  وب‌سایت مسئولیتی در قبال:
+                </p>
+                <ul class="about-list">
+                  <li>صحت ادعاهای آگهی‌دهنده،</li>
+                  <li>کیفیت کالا یا خدمات،</li>
+                  <li>تعهدات مالی یا قراردادی میان کاربر و آگهی‌دهنده ندارد.</li>
+                </ul>
+                <p class="about-text">
+                  مدیریت وب‌سایت حق دارد هر آگهی را که:
+                </p>
+                <ul class="about-list">
+                  <li>نامناسب،</li>
+                  <li>خلاف قانون،</li>
+                  <li>مغایر با سیاست‌های سایت، یا</li>
+                  <li>دارای محتوای فریبنده باشد،</li>
+                </ul>
+                <p class="about-text">
+                  بدون اخطار قبلی حذف یا ویرایش کند.
+                </p>
+                <p class="about-text">
+                  انتشار تبلیغات سیاسی، مغایر با قوانین کشور میزبان، حاوی خشونت، مخالف اخلاق عمومی یا توهین‌آمیز اکیداً ممنوع است.
+                </p>
+                <p class="about-text">
+                  آگهی‌دهنده موظف است اطلاعات تماس خود را دقیق ثبت کند تا کاربران بتوانند در صورت نیاز با وی ارتباط برقرار کنند.
+                </p>
+                <p class="about-text">
+                  هرگونه تلاش برای دور زدن سیستم تبلیغات سایت یا انتشار تبلیغات در بخش‌های غیرمجاز، تخلف محسوب می‌شود و ممکن است منجر به مسدودسازی حساب کاربری گردد.
+                </p>
+              </div>
             </div>
-          </div>
-
-          <!-- Intellectual Property -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-copyright ms-2 text-primary"></i>3. مالکیت فکری و
-              حق تکثیر
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  All intellectual property rights to content published by the
-                  website administration or the website's content team belong to
-                  the website.
-                </li>
-                <li>
-                  Reproduction, copying, distributing, or republishing this
-                  content without written permission is strictly prohibited.
-                </li>
-                <li>
-                  Users who publish content confirm that they:
-                  <ul class="terms-sublist">
-                    <li>are the legal owners of the content, or</li>
-                    <li>have obtained proper authorization to publish it.</li>
-                  </ul>
-                </li>
-                <li>
-                  In cases of copyright infringement, the website administration
-                  may remove the content without prior notice and report the
-                  matter to relevant authorities if necessary.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- User-Generated Content -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-file-upload ms-2 text-primary"></i>4. محتوای
-              تولید شده توسط کاربر و مسئولیت‌های مرتبط
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  Content submitted by users (including text, images, videos,
-                  audio files, etc.) remains the legal property of the user, but
-                  by submitting it, the user grants the website the right to
-                  store, display, and use the content as necessary.
-                </li>
-                <li>
-                  Users bear full legal liability for all content they submit,
-                  and the website assumes no responsibility for any legal or
-                  administrative consequences resulting from such content.
-                </li>
-                <li>
-                  The website administration may remove any content at any time,
-                  without explanation or prior notice, if it is found or
-                  reported to violate these Terms.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Reporting Violations -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-flag ms-2 text-primary"></i>5. گزارش تخلفات و
-              شکایات
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  Users may report inappropriate or suspicious content through
-                  the "Report Issue" section or via the website's official
-                  email.
-                </li>
-                <li>
-                  Reports are reviewed confidentially, and if a violation is
-                  confirmed, appropriate action will be taken.
-                </li>
-                <li>
-                  Users may also report technical issues, errors, or cases of
-                  misuse by other users.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Prohibited Content -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-ban ms-2 text-danger"></i>6. محتوای ممنوع و
-              محدودیت‌ها
-            </h2>
-            <div class="terms-content">
-              <p class="terms-intro">
-                انتشار یا بازنشر محتوای انواع زیر به شدت ممنوع است:
-              </p>
-              <ul class="terms-list">
-                <li>Offensive, abusive, or threatening content</li>
-                <li>Racist, discriminatory, or hate-promoting material</li>
-                <li>
-                  Illegal content or content promoting violence, drugs,
-                  exploitation, or harm
-                </li>
-                <li>False, misleading, or deceptive information</li>
-                <li>Pornographic or socially inappropriate content</li>
-                <li>
-                  Unauthorized advertisements or promotion of products/services
-                  in restricted areas
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Website Administration Rights -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-shield-alt ms-2 text-primary"></i>7. حقوق مدیریت
-              وب‌سایت
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  The website administration retains full authority to remove or
-                  restrict any content or user account that violates these
-                  Terms, applicable laws, or ethical standards, without prior
-                  notice.
-                </li>
-                <li>
-                  The administration may temporarily or permanently suspend
-                  access for users who fail to comply with these Terms.
-                </li>
-                <li>
-                  The website bears no obligation to store or restore removed
-                  content.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Security and Privacy -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-lock ms-2 text-primary"></i>8. مسئولیت‌های امنیتی
-              و حریم خصوصی
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  Users are responsible for safeguarding their login credentials
-                  (username and password).
-                </li>
-                <li>
-                  Any activity performed under a user's account is considered
-                  their responsibility.
-                </li>
-                <li>
-                  The website administration is committed to storing users'
-                  personal information in accordance with applicable privacy
-                  laws and will not disclose such information without legal
-                  authorization.
-                </li>
-                <li>
-                  The administration may provide user information to competent
-                  authorities when legally required.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Advertising -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-ad ms-2 text-primary"></i>9. تبلیغات و محتوای
-              تجاری
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  Advertising is permitted only in designated areas as
-                  determined by the website administration.
-                </li>
-                <li>
-                  The website assumes no responsibility for the accuracy,
-                  quality, or legality of goods or services advertised by third
-                  parties.
-                </li>
-                <li>
-                  Users must refrain from posting any advertisement without
-                  prior approval.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Account Termination -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-user-times ms-2 text-primary"></i>10. خاتمه و حذف
-              حساب کاربری
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>Users may request the deletion of their account.</li>
-                <li>
-                  The website administration may suspend or delete user accounts
-                  without prior notice in the event of violations.
-                </li>
-                <li>
-                  Account deletion does not necessarily include removal of
-                  previously published content unless specifically approved by
-                  the administration.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Governing Law -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-balance-scale ms-2 text-primary"></i>11. قانون
-              حاکم
-            </h2>
-            <div class="terms-content">
-              <p>
-                In case of any dispute, the applicable laws will be those of the
-                country in which the website is registered or hosted.
-              </p>
-            </div>
-          </div>
-
-          <!-- Ask Me Section -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-question-circle ms-2 text-primary"></i>12. مقررات
-              حاکم بر بخش "از من بپرس"
-            </h2>
-            <div class="terms-content">
-              <ul class="terms-list">
-                <li>
-                  The Ask Me section provides a platform for users to submit
-                  questions and receive answers from approved experts or
-                  moderators of the website.
-                </li>
-                <li>
-                  Users must refrain from submitting any highly sensitive
-                  personal information when asking questions (including national
-                  ID numbers, full home addresses, financial information,
-                  confidential medical details, and similar data).
-                </li>
-                <li>
-                  All questions and answers are stored and maintained privately
-                  and confidentially between the user and the assigned expert.
-                </li>
-                <li>
-                  The website administration has access only to general metadata
-                  such as submission time, question status, the username of the
-                  sender, and the name of the assigned expert.
-                </li>
-                <li>
-                  The full text of questions and answers is not displayed in the
-                  administration panel.
-                </li>
-                <li>
-                  Users must ensure that their submitted questions do not
-                  contain offensive, unlawful, discriminatory, or morally
-                  inappropriate content.
-                </li>
-                <li>
-                  Experts (Moderators) serve solely in a consultative role.
-                  Their responses do not constitute professional legal, medical,
-                  financial, or other specialized advice, and neither the
-                  experts nor the website administration hold any legal
-                  liability arising from such responses.
-                </li>
-                <li>
-                  The website administration reserves the right to remove any
-                  question, without prior notice, if it is deemed:
-                  <ul class="terms-sublist">
-                    <li>inappropriate,</li>
-                    <li>containing sensitive information,</li>
-                    <li>in violation of applicable laws, or</li>
-                    <li>
-                      outside the intended scope and purpose of the platform.
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  By using the Ask Me section, users acknowledge and accept
-                  that:
-                  <ul class="terms-sublist">
-                    <li>responses may not be publicly displayed,</li>
-                    <li>delays in receiving answers may occur, and</li>
-                    <li>
-                      the responses do not replace specialized legal, medical,
-                      financial, or professional formal consultation.
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Advertising Section -->
-          <div class="terms-section mb-5">
-            <h2 class="terms-section-title">
-              <i class="fas fa-bullhorn ms-2 text-primary"></i>13. مقررات حاکم
-              بر بخش تبلیغات (تبلیغات در وب‌سایت)
-            </h2>
-            <div class="terms-content">
-              <p class="terms-intro">
-                انتشار تبلیغات در وب‌سایت فقط در مناطقی که به صراحت توسط مدیریت
-                وب‌سایت تعیین شده است مجاز است.
-              </p>
-
-              <h5 class="terms-subtitle mt-4">تبلیغ‌کنندگان موظفند:</h5>
-              <ul class="terms-list">
-                <li>provide accurate, lawful, and truthful information,</li>
-                <li>
-                  refrain from publishing misleading, false, or
-                  rights-infringing content, and
-                </li>
-                <li>
-                  provide any necessary documentation or permits related to the
-                  offered goods or services upon request.
-                </li>
-              </ul>
-
-              <h5 class="terms-subtitle mt-4">
-                وب‌سایت هیچ مسئولیتی در قبال موارد زیر ندارد:
-              </h5>
-              <ul class="terms-list">
-                <li>the accuracy of claims made by advertisers,</li>
-                <li>the quality of advertised goods or services, or</li>
-                <li>
-                  any financial or contractual obligations between users and
-                  advertisers.
-                </li>
-              </ul>
-
-              <h5 class="terms-subtitle mt-4">
-                مدیریت وب‌سایت حق حذف یا ویرایش هر تبلیغی را بدون اطلاع قبلی
-                محفوظ می‌دارد، در صورتی که مشخص شود:
-              </h5>
-              <ul class="terms-list">
-                <li>inappropriate,</li>
-                <li>unlawful,</li>
-                <li>in conflict with site policies, or</li>
-                <li>misleading or deceptive.</li>
-              </ul>
-
-              <ul class="terms-list mt-3">
-                <li>
-                  The publication of political advertisements, content contrary
-                  to the laws of the hosting country, content involving
-                  violence, or material that is offensive or immoral is strictly
-                  prohibited.
-                </li>
-                <li>
-                  Advertisers must provide accurate and up-to-date contact
-                  information so users may reach them when necessary.
-                </li>
-                <li>
-                  Any attempt to bypass the website's advertising system or to
-                  publish advertisements in non-designated areas is considered a
-                  violation and may result in temporary or permanent suspension
-                  of the user account.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Footer Note -->
-          <div class="terms-footer mt-5 pt-4 border-top">
-            <p class="text-muted small mb-0 text-center">
-              <i class="fas fa-info-circle ms-1"></i>
-              آخرین به‌روزرسانی: {% now "F d, Y" %} | برای سوالات، لطفاً با ما
-              تماس بگیرید در
-              <a href="mailto:info@bjcode.se" class="text-decoration-none"
-                >info@bjcode.se</a
-              >
-            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Footer Note -->
+  <div class="row justify-content-center">
+    <div class="col-lg-11">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 text-center">
+          <p class="text-muted small mb-0">
+            <i class="fas fa-info-circle ms-1"></i>
+            آخرین به‌روزرسانی: {% now "F d, Y" %} | Senast uppdaterad: {% now "F d, Y" %}
+            <br>
+            برای سوالات، لطفاً با ما تماس بگیرید در
+            <a href="mailto:info@bjcode.se" class="text-decoration-none">info@bjcode.se</a>
+            | För frågor, vänligen kontakta oss på
+            <a href="mailto:info@bjcode.se" class="text-decoration-none">info@bjcode.se</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+/* Reuse styles from about page */
+.about-bilingual-card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.about-column {
+  min-height: 500px;
+}
+
+.about-column-persian {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  direction: rtl;
+  text-align: right;
+}
+
+.about-column-swedish {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+  direction: ltr;
+  text-align: left;
+}
+
+/* Language Badges */
+.lang-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.lang-badge-persian {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.lang-badge-swedish {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+/* Section Titles */
+.section-title-persian,
+.section-title-swedish {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.section-title-persian::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+.section-title-swedish::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  border-radius: 2px;
+}
+
+/* Section Subtitles */
+.section-subtitle-persian,
+.section-subtitle-swedish {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-top: 1.5rem;
+}
+
+/* About Text */
+.about-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4a5568;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+/* Lists */
+.about-list {
+  margin: 1rem 0;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.about-column-persian .about-list {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+.about-column-swedish .about-list {
+  padding-left: 1.5rem;
+  padding-right: 0;
+}
+
+.about-list li {
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+  .about-column {
+    min-height: auto;
+  }
+  
+  .border-end {
+    border-right: none !important;
+  }
+  
+  .about-column-swedish {
+    border-bottom: 2px solid #dee2e6 !important;
+  }
+  
+  .section-title-persian,
+  .section-title-swedish {
+    font-size: 1.5rem;
+  }
+  
+  .section-subtitle-persian,
+  .section-subtitle-swedish {
+    font-size: 1.2rem;
+  }
+  
+  .about-text {
+    font-size: 0.95rem;
+  }
+}
+</style>
+
 {% endblock content %}
