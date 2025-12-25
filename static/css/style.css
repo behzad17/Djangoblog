@@ -9,10 +9,10 @@ body {
   color: #fecb00; /* Changed to yellow */
 }
 
-/* Brand Tagline - Small orange text under logo */
+/* Brand Tagline - Small yellow text under logo */
 .brand-tagline {
   font-size: 0.968rem; /* 10% bigger than 0.88rem (0.88 * 1.10 = 0.968) */
-  color: #ff6b35;
+  color: #fecb00;
   font-weight: 500;
   margin-top: -2px;
   line-height: 1;
