@@ -1238,6 +1238,19 @@ body {
   background: linear-gradient(135deg, #ffd54f 0%, #ffc107 100%);
 }
 
+/* Grey text color for yellow card for better readability */
+.hero-cta-card-purple .hero-cta-card-title {
+  color: #4a4a4a !important; /* Dark grey for title */
+}
+
+.hero-cta-card-purple .hero-cta-card-subtitle {
+  color: #666666 !important; /* Medium grey for subtitle */
+}
+
+.hero-cta-card-purple .hero-cta-card-arrow {
+  color: #4a4a4a !important; /* Dark grey for arrow */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero-cta-cards-container {
