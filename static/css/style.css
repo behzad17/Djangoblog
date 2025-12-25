@@ -6,7 +6,7 @@ body {
   font-family: Lato, sans-serif;
   font-size: 1.725rem; /* 15% bigger than 1.5rem (1.5 * 1.15 = 1.725) */
   font-weight: 700;
-  color: #ff6b35;
+  color: #fecb00; /* Changed to yellow */
 }
 
 /* Brand Tagline - Small orange text under logo */
@@ -69,7 +69,7 @@ body {
   font-family: 'Shabnam', sans-serif;
   font-size: 2.07rem; /* 20% bigger than 1.725rem (1.725 * 1.20 = 2.07) */
   font-weight: 500; /* Shabnam Medium */
-  color: #ff6b35; /* Changed to orange */
+  color: #fecb00; /* Changed to yellow */
   margin-left: 0.2rem; /* Reduced spacing - closer to the line */
   display: inline-block;
 }
@@ -894,16 +894,16 @@ body {
 }
 
 .hero-mobile-img {
-  max-height: 220px;
+  max-height: 150px;
   width: 100%;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
 }
 
 @media (max-width: 576px) {
   .hero-mobile-img {
-    max-height: 200px;
+    max-height: 130px;
     border-radius: 10px;
   }
   
