@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.db import models
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
-from .models import AdCategory, Ad
+from .models import AdCategory, Ad, FavoriteAd
 from .forms import AdForm
 
 
@@ -86,8 +86,18 @@ def ad_detail(request, slug):
     active, approved, and within its date range.
     """
     ad = get_object_or_404(_visible_ads_queryset(), slug=slug)
+    
+    # Determine if current user has already favorited this ad
+    is_favorited = False
+    if request.user.is_authenticated:
+        is_favorited = FavoriteAd.objects.filter(
+            user=request.user,
+            ad=ad,
+        ).exists()
+    
     context = {
         "ad": ad,
+        "is_favorited": is_favorited,
     }
     return render(request, "ads/ad_detail.html", context)
 
@@ -195,6 +205,28 @@ def my_ads(request):
     """
     ads = Ad.objects.filter(owner=request.user).order_by('-created_on')
     return render(request, 'ads/my_ads.html', {'ads': ads})
+
+
+@login_required
+def add_ad_to_favorites(request, ad_id):
+    """
+    View function for adding or removing an ad from favorites.
+
+    This view toggles the favorite status of an ad for the current user.
+    If the ad is already favorited, it will be removed from favorites.
+    If not, it will be added to favorites.
+    """
+    ad = get_object_or_404(Ad, id=ad_id)
+    favorite, created = FavoriteAd.objects.get_or_create(
+        user=request.user, ad=ad
+    )
+
+    if not created:
+        favorite.delete()  # delete if an ad is saved before
+
+    return redirect(
+        request.META.get('HTTP_REFERER', 'ads:ads_home')
+    )
 
 
 # Create your views here.

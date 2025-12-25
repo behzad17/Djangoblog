@@ -155,4 +155,25 @@ class Ad(models.Model):
         return timezone.now() < self.featured_until
 
 
+class FavoriteAd(models.Model):
+    """
+    A model representing a user's favorite/saved advertisement.
+    
+    This model creates a many-to-many relationship between users and ads,
+    allowing users to save ads for later reference. It includes a timestamp
+    of when the ad was favorited.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, related_name='favorites')
+    added_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta options for FavoriteAd model."""
+        unique_together = ('user', 'ad')
+
+    def __str__(self):
+        """Returns a string representation of the favorite."""
+        return f"{self.user.username} saved {self.ad.title}"
+
+
 # Create your models here.

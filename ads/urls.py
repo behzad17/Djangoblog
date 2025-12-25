@@ -12,6 +12,8 @@ urlpatterns = [
     path("my-ads/", views.my_ads, name="my_ads"),
     path("edit/<slug:slug>/", views.edit_ad, name="edit_ad"),
     path("delete/<slug:slug>/", views.delete_ad, name="delete_ad"),
+    # Favorites
+    path("add-to-favorites/<int:ad_id>/", views.add_ad_to_favorites, name="add_ad_to_favorites"),
 ]
 
 

@@ -87,6 +87,32 @@
             </p>
           </div>
           {% endif %}
+          
+          <!-- Favorite Button -->
+          <div class="mt-4 d-flex align-items-center justify-content-center gap-3 flex-wrap">
+            {% if user.is_authenticated %}
+            <form
+              action="{% url 'ads:add_ad_to_favorites' ad.id %}"
+              method="POST"
+              class="d-inline"
+            >
+              {% csrf_token %}
+              {% if not is_favorited %}
+              <button type="submit" class="btn btn-success">
+                <i class="fas fa-heart ms-1"></i>افزودن به علاقه‌مندی‌ها
+              </button>
+              {% else %}
+              <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-heart ms-1"></i>حذف از علاقه‌مندی‌ها
+              </button>
+              {% endif %}
+            </form>
+            {% else %}
+            <a href="{% url 'account_login' %}" class="btn btn-primary">
+              <i class="fas fa-heart ms-1"></i>ورود برای افزودن به علاقه‌مندی‌ها
+            </a>
+            {% endif %}
+          </div>
         </div>
       </div>
       <div class="mt-4 text-center">
