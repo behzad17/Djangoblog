@@ -1017,7 +1017,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem; /* 20% smaller: 1rem * 0.8 */
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
@@ -1027,9 +1027,9 @@ body {
 .hero-cta-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  border-radius: 30px;
+  gap: 0.8rem; /* 20% smaller: 1rem * 0.8 */
+  padding: 1rem 1.2rem; /* 20% smaller: 1.25rem*0.8=1rem, 1.5rem*0.8=1.2rem */
+  border-radius: 24px; /* 20% smaller: 30px * 0.8 */
   text-decoration: none;
   color: #ffffff;
   width: 100%;
@@ -1037,7 +1037,7 @@ body {
   overflow: hidden;
   transition: all 0.2s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  min-height: 90px;
+  min-height: 72px; /* 20% smaller: 90px * 0.8 */
 }
 
 .hero-cta-card:hover {
@@ -1048,10 +1048,10 @@ body {
 }
 
 .hero-cta-card-icon {
-  font-size: 2.5rem;
+  font-size: 2rem; /* 20% smaller: 2.5rem * 0.8 */
   opacity: 0.3;
   flex-shrink: 0;
-  width: 60px;
+  width: 48px; /* 20% smaller: 60px * 0.8 */
   text-align: center;
 }
 
@@ -1062,7 +1062,7 @@ body {
 }
 
 .hero-cta-card-title {
-  font-size: 1.4rem;
+  font-size: 1.12rem; /* 20% smaller: 1.4rem * 0.8 */
   font-weight: 700;
   margin: 0 0 0.25rem 0;
   color: #ffffff;
@@ -1070,7 +1070,7 @@ body {
 }
 
 .hero-cta-card-subtitle {
-  font-size: 1rem;
+  font-size: 0.8rem; /* 20% smaller: 1rem * 0.8 */
   font-weight: 400;
   margin: 0;
   color: rgba(255, 255, 255, 0.9);
@@ -1078,7 +1078,7 @@ body {
 }
 
 .hero-cta-card-arrow {
-  font-size: 1.2rem;
+  font-size: 0.96rem; /* 20% smaller: 1.2rem * 0.8 */
   opacity: 0.7;
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -1120,56 +1120,56 @@ body {
   .hero-cta-cards-container {
     max-width: 100%;
     padding: 0 1rem;
-    gap: 0.875rem;
+    gap: 0.7rem; /* 20% smaller: 0.875rem * 0.8 */
   }
 
   .hero-cta-card {
-    padding: 1rem 1.25rem;
-    min-height: 85px;
-    border-radius: 28px;
+    padding: 0.8rem 1rem; /* 20% smaller: 1rem*0.8=0.8rem, 1.25rem*0.8=1rem */
+    min-height: 68px; /* 20% smaller: 85px * 0.8 */
+    border-radius: 22px; /* 20% smaller: 28px * 0.8 */
   }
 
   .hero-cta-card-icon {
-    font-size: 2rem;
-    width: 55px;
+    font-size: 1.6rem; /* 20% smaller: 2rem * 0.8 */
+    width: 44px; /* 20% smaller: 55px * 0.8 */
   }
 
   .hero-cta-card-title {
-    font-size: 1.25rem;
+    font-size: 1rem; /* 20% smaller: 1.25rem * 0.8 */
   }
 
   .hero-cta-card-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.75rem; /* 20% smaller: 0.95rem * 0.8 (rounded) */
   }
 
   .hero-cta-card-arrow {
-    font-size: 1.1rem;
+    font-size: 0.9rem; /* 20% smaller: 1.1rem * 0.8 (rounded) */
   }
 }
 
 @media (max-width: 576px) {
   .hero-cta-cards-container {
-    gap: 0.75rem;
+    gap: 0.6rem; /* 20% smaller: 0.75rem * 0.8 */
     margin-top: 1.25rem;
   }
 
   .hero-cta-card {
-    padding: 0.875rem 1rem;
-    min-height: 80px;
-    border-radius: 24px;
+    padding: 0.7rem 0.8rem; /* 20% smaller: 0.875rem*0.8=0.7rem, 1rem*0.8=0.8rem */
+    min-height: 64px; /* 20% smaller: 80px * 0.8 */
+    border-radius: 19px; /* 20% smaller: 24px * 0.8 (rounded) */
   }
 
   .hero-cta-card-icon {
-    font-size: 1.75rem;
-    width: 50px;
+    font-size: 1.4rem; /* 20% smaller: 1.75rem * 0.8 */
+    width: 40px; /* 20% smaller: 50px * 0.8 */
   }
 
   .hero-cta-card-title {
-    font-size: 1.1rem;
+    font-size: 0.9rem; /* 20% smaller: 1.1rem * 0.8 (rounded) */
   }
 
   .hero-cta-card-subtitle {
-    font-size: 0.85rem;
+    font-size: 0.7rem; /* 20% smaller: 0.85rem * 0.8 (rounded) */
   }
 }
 
