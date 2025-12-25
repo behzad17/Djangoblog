@@ -918,8 +918,8 @@ body {
 
 @media (max-width: 768px) {
   .hero-image-mobile-wrapper {
-    margin-top: 15px; /* Add 15px top margin on mobile */
-    margin-bottom: 1rem;
+    margin-top: 0 !important; /* Remove gap A: no margin between navbar and hero image */
+    margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
   }
   
   .hero-section {
@@ -944,21 +944,28 @@ body {
   .hero-section .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
+    margin-top: 0 !important; /* Remove any top margin that could create gap B */
+    margin-bottom: 0 !important;
+  }
+  
+  .hero-content {
+    margin-top: 0 !important; /* Remove any top margin from content wrapper */
+    margin-bottom: 0 !important;
   }
 }
 
 @media (max-width: 576px) {
   .hero-image-mobile-wrapper {
-    margin-top: 15px; /* Add 15px top margin on small mobile */
-    margin-bottom: 0.75rem;
+    margin-top: 0 !important; /* Remove gap A: no margin between navbar and hero image */
+    margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
   }
   
-  /* Add 15px top margin to first hero card on small mobile */
+  /* Remove top margin from first hero card to eliminate gap B */
   .hero-cta-cards-container .hero-cta-card:first-child {
-    margin-top: 15px;
+    margin-top: 0 !important;
   }
   
-  /* Add 15px bottom margin to last hero card on small mobile */
+  /* Keep bottom margin on last hero card for spacing from next section */
   .hero-cta-cards-container .hero-cta-card:last-child {
     margin-bottom: 15px;
   }
@@ -1114,6 +1121,13 @@ body {
   width: 100%;
 }
 
+/* Remove top margin on mobile to eliminate gap B */
+@media (max-width: 768px) {
+  .hero-cta-cards-container {
+    margin-top: 0 !important; /* Remove gap B: no margin between hero image and cards */
+  }
+}
+
 .hero-cta-card {
   display: flex;
   align-items: center;
@@ -1213,12 +1227,12 @@ body {
     gap: 0.7rem; /* 20% smaller: 0.875rem * 0.8 */
   }
   
-  /* Add 15px top margin to first hero card */
+  /* Remove top margin from first hero card to eliminate gap B */
   .hero-cta-cards-container .hero-cta-card:first-child {
-    margin-top: 15px;
+    margin-top: 0 !important;
   }
   
-  /* Add 15px bottom margin to last hero card */
+  /* Keep bottom margin on last hero card for spacing from next section */
   .hero-cta-cards-container .hero-cta-card:last-child {
     margin-bottom: 15px;
   }
