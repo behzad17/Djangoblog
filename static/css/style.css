@@ -1242,6 +1242,7 @@ body {
 
   .hero-cta-card {
     padding: 0.8rem 1rem; /* 20% smaller: 1rem*0.8=0.8rem, 1.25rem*0.8=1rem */
+    padding-top: calc(0.8rem + 10px) !important; /* Add 10px top padding for each card on mobile */
     min-height: 68px; /* 20% smaller: 85px * 0.8 */
     border-radius: 22px; /* 20% smaller: 28px * 0.8 */
     width: 80% !important; /* Reduce width by 20% (100% - 20% = 80%) */
@@ -1288,6 +1289,7 @@ body {
 
   .hero-cta-card {
     padding: 0.7rem 0.8rem; /* 20% smaller: 0.875rem*0.8=0.7rem, 1rem*0.8=0.8rem */
+    padding-top: calc(0.7rem + 10px) !important; /* Add 10px top padding for each card on mobile */
     min-height: 64px; /* 20% smaller: 80px * 0.8 */
     border-radius: 19px; /* 20% smaller: 24px * 0.8 (rounded) */
     width: 80% !important; /* Reduce width by 20% (100% - 20% = 80%) */
