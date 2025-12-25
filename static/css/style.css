@@ -885,7 +885,7 @@ body {
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 0; /* Remove all padding on mobile */
+    padding: 0 !important; /* Remove all padding on mobile */
   }
 }
 
@@ -906,7 +906,7 @@ body {
 }
 
 .hero-mobile-img {
-  width: 70% !important; /* 30% smaller than original (100% - 30% = 70%) - override Bootstrap w-100 */
+  width: 56% !important; /* 20% smaller than current 70% (70% * 0.8 = 56%) - override Bootstrap w-100 */
   height: auto;
   display: block;
   border-radius: 0;
@@ -923,16 +923,26 @@ body {
   
   .hero-section {
     padding: 0 !important; /* Force remove padding on mobile */
+    margin: 0 !important;
   }
   
   .hero-section .container {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   
   .hero-section .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  .hero-section .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 
@@ -943,6 +953,15 @@ body {
   
   .hero-section {
     padding: 0 !important; /* Force remove padding on small mobile */
+    margin: 0 !important;
+  }
+  
+  .hero-section .container {
+    padding: 0 !important;
+  }
+  
+  .hero-section .row {
+    margin: 0 !important;
   }
 }
 
@@ -1370,9 +1389,9 @@ body {
 }
 
 /* Responsive Hero Section */
-@media (max-width: 992px) {
+@media (max-width: 992px) and (min-width: 769px) {
   .hero-section {
-    padding: 0.75rem 0; /* Minimized padding */
+    padding: 0.75rem 0; /* Minimized padding - only for tablet, not mobile */
   }
   
   .hero-title {
