@@ -887,6 +887,32 @@ body {
   max-width: 100%;
 }
 
+/* Mobile Hero Image */
+.hero-image-mobile {
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.hero-mobile-img {
+  max-height: 220px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 576px) {
+  .hero-mobile-img {
+    max-height: 200px;
+    border-radius: 10px;
+  }
+  
+  .hero-image-mobile {
+    padding: 0 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
 .hero-title {
   font-size: 2.5rem;
   font-weight: 700;
