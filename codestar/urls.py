@@ -53,6 +53,8 @@ urlpatterns = [
     ),
     # Internal: Database Health Dashboard (staff-only, read-only)
     path("admin/db-health/", db_health_dashboard, name="db_health_dashboard"),
+    # Custom account URLs (must come before allauth.urls to avoid conflicts)
+    path("accounts/", include("accounts.urls")),
     path("accounts/", include("allauth.urls")),
     path("captcha/", include("captcha.urls")),
     path('admin/', admin.site.urls),
