@@ -1123,6 +1123,13 @@ body {
   width: 100%;
 }
 
+/* Reduce hero cards width by 15% on desktop/tablet */
+@media (min-width: 769px) {
+  .hero-cta-cards-container {
+    max-width: 425px; /* 15% smaller: 500px * 0.85 = 425px */
+  }
+}
+
 /* Remove top margin on mobile to eliminate gap B */
 @media (max-width: 768px) {
   .hero-cta-cards-container {
