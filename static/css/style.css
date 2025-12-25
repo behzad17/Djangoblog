@@ -920,7 +920,7 @@ body {
   .hero-image-mobile-wrapper {
     margin-top: 0 !important; /* Remove gap A: no margin between navbar and hero image */
     margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
-    padding-top: 10px; /* Add 10px top padding for mobile devices */
+    padding-top: 10px !important; /* Add 10px top padding for mobile devices */
   }
   
   .hero-section {
@@ -959,7 +959,7 @@ body {
   .hero-image-mobile-wrapper {
     margin-top: 0 !important; /* Remove gap A: no margin between navbar and hero image */
     margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
-    padding-top: 10px; /* Add 10px top padding for mobile devices */
+    padding-top: 10px !important; /* Add 10px top padding for mobile devices */
   }
   
   /* Remove top margin from first hero card to eliminate gap B */
