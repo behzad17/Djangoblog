@@ -42,8 +42,8 @@
                                         {% if emailaddress.primary or emailaddresses|length == 1 %}checked{% endif %}
                                     />
                                     <label class="form-check-label flex-grow-1" for="email_radio_{{forloop.counter}}">
-                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
-                                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <div class="d-flex justify-content-center align-items-center w-100">
+                                            <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
                                                 <strong class="email-address-text">{{ emailaddress.email }}</strong>
                                                 <div class="d-flex flex-wrap gap-2">
                                                     {% if emailaddress.primary %}
@@ -182,8 +182,37 @@
         padding: 1rem;
     }
     
+    .email_list .form-check {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
     .email_list .form-check-input {
-        margin-top: 0.5rem;
+        margin-top: 0;
+        position: absolute;
+        left: 1rem;
+    }
+    
+    /* Center the label content */
+    .email_list .form-check-label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding-left: 2rem;
+    }
+    
+    /* RTL support for radio button positioning */
+    .rtl .email_list .form-check-input {
+        left: auto;
+        right: 1rem;
+    }
+    
+    .rtl .email_list .form-check-label {
+        padding-left: 0;
+        padding-right: 2rem;
     }
     
     /* Email address and badges spacing */
