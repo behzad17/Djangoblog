@@ -42,21 +42,23 @@
                                         {% if emailaddress.primary or emailaddresses|length == 1 %}checked{% endif %}
                                     />
                                     <label class="form-check-label flex-grow-1" for="email_radio_{{forloop.counter}}">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <strong>{{ emailaddress.email }}</strong>
-                                                {% if emailaddress.primary %}
-                                                    <span class="badge bg-primary ms-2">اصلی</span>
-                                                {% endif %}
-                                                {% if emailaddress.verified %}
-                                                    <span class="badge bg-success ms-2">
-                                                        <i class="fas fa-check-circle me-1"></i>تأیید شده
-                                                    </span>
-                                                {% else %}
-                                                    <span class="badge bg-warning ms-2">
-                                                        <i class="fas fa-exclamation-circle me-1"></i>تأیید نشده
-                                                    </span>
-                                                {% endif %}
+                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+                                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                                <strong class="email-address-text">{{ emailaddress.email }}</strong>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    {% if emailaddress.primary %}
+                                                        <span class="badge bg-primary">اصلی</span>
+                                                    {% endif %}
+                                                    {% if emailaddress.verified %}
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check-circle me-1"></i>تأیید شده
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="badge bg-warning">
+                                                            <i class="fas fa-exclamation-circle me-1"></i>تأیید نشده
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                         </div>
                                     </label>
@@ -177,10 +179,96 @@
         border: 1px solid #dee2e6;
         margin-bottom: 8px;
         border-radius: 4px;
+        padding: 1rem;
     }
     
     .email_list .form-check-input {
         margin-top: 0.5rem;
+    }
+    
+    /* Email address and badges spacing */
+    .email_list .email-address-text {
+        margin-left: 0;
+        margin-right: 0;
+        word-break: break-all;
+        min-width: 150px;
+        display: inline-block;
+    }
+    
+    .email_list .badge {
+        white-space: nowrap;
+        font-size: 0.875rem;
+        padding: 0.35em 0.65em;
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .email_list .form-check-label {
+        width: 100%;
+    }
+    
+    /* Ensure proper spacing between email and badges */
+    .email_list .d-flex.gap-2 > * + * {
+        margin-left: 0.5rem;
+    }
+    
+    /* Badge container spacing */
+    .email_list .d-flex.flex-wrap.gap-2 {
+        gap: 0.5rem;
+    }
+    
+    .email_list .d-flex.flex-wrap.gap-2 > * {
+        margin: 0;
+    }
+    
+    /* Fallback spacing for browsers without gap support */
+    @supports not (gap: 0.5rem) {
+        .email_list .d-flex.flex-wrap.gap-2 > * + * {
+            margin-left: 0.5rem;
+        }
+        
+        .email_list .d-flex.flex-wrap.align-items-center > * + * {
+            margin-left: 0.75rem;
+        }
+    }
+    
+    /* RTL adjustments for email list */
+    .rtl .email_list .d-flex.gap-2 > * + * {
+        margin-right: 0.5rem;
+        margin-left: 0;
+    }
+    
+    @supports not (gap: 0.5rem) {
+        .rtl .email_list .d-flex.flex-wrap.gap-2 > * + * {
+            margin-right: 0.5rem;
+            margin-left: 0;
+        }
+        
+        .rtl .email_list .d-flex.flex-wrap.align-items-center > * + * {
+            margin-right: 0.75rem;
+            margin-left: 0;
+        }
+    }
+    
+    /* Ensure badges don't overlap with email text */
+    .email_list .d-flex.flex-wrap.align-items-center {
+        gap: 0.75rem;
+    }
+    
+    .email_list .d-flex.flex-wrap.align-items-center > * {
+        margin: 0;
+    }
+    
+    /* Additional spacing for email address text */
+    .email_list .email-address-text + .d-flex {
+        margin-left: 0.75rem;
+    }
+    
+    .rtl .email_list .email-address-text + .d-flex {
+        margin-right: 0.75rem;
+        margin-left: 0;
     }
     
     /* Form labels RTL */
