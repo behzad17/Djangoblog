@@ -229,4 +229,23 @@ def add_ad_to_favorites(request, ad_id):
     )
 
 
+@login_required
+def remove_ad_from_favorites(request, ad_id):
+    """
+    View function for removing an ad from favorites.
+    
+    This view removes the favorite status of an ad for the current user.
+    Used from the favorites page to remove ads.
+    """
+    ad = get_object_or_404(Ad, id=ad_id)
+    try:
+        favorite = FavoriteAd.objects.get(user=request.user, ad=ad)
+        favorite.delete()
+        messages.success(request, 'تبلیغ از علاقه‌مندی‌ها حذف شد.')
+    except FavoriteAd.DoesNotExist:
+        messages.error(request, 'این تبلیغ در علاقه‌مندی‌های شما نیست.')
+    
+    return redirect('favorites')
+
+
 # Create your views here.

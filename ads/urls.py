@@ -14,6 +14,7 @@ urlpatterns = [
     path("delete/<slug:slug>/", views.delete_ad, name="delete_ad"),
     # Favorites
     path("add-to-favorites/<int:ad_id>/", views.add_ad_to_favorites, name="add_ad_to_favorites"),
+    path("remove-from-favorites/<int:ad_id>/", views.remove_ad_from_favorites, name="remove_ad_from_favorites"),
 ]
 
 

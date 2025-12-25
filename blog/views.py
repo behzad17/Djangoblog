@@ -19,6 +19,7 @@ from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
 from .utils import track_page_view
 from .decorators import site_verified_required
+from ads.models import FavoriteAd
 
 
 class PostList(generic.ListView):
@@ -429,22 +430,37 @@ def add_to_favorites(request, post_id):
 @login_required
 def favorite_posts(request):
     """
-    View function for displaying a user's favorite posts.
+    View function for displaying a user's favorite posts and ads.
 
-    This view shows all posts that the current user has marked as favorites.
+    This view shows all posts and ads that the current user has marked as favorites.
     The view requires user authentication.
     """
+    # Get favorite posts
     favorites = Favorite.objects.filter(user=request.user).select_related('post', 'post__category', 'post__author')
-    
-    # Get the posts from favorites (only published posts)
     favorite_posts = [favorite.post for favorite in favorites if favorite.post.status == 1]
     
-    # Annotate with comment count
+    # Annotate posts with comment count
     posts_with_counts = []
     for post in favorite_posts:
         post.comment_count = post.comments.filter(approved=True).count()
         post.like_count = post.like_count()
         posts_with_counts.append(post)
+    
+    # Get favorite ads (only visible/approved ads)
+    favorite_ads_queryset = FavoriteAd.objects.filter(
+        user=request.user
+    ).select_related('ad', 'ad__category')
+    
+    # Filter to only visible ads (using the same logic as _visible_ads_queryset)
+    from django.utils import timezone
+    today = timezone.now().date()
+    favorite_ads = []
+    for fav_ad in favorite_ads_queryset:
+        ad = fav_ad.ad
+        if (ad.is_active and ad.is_approved and ad.url_approved and
+            (ad.start_date is None or ad.start_date <= today) and
+            (ad.end_date is None or ad.end_date >= today)):
+            favorite_ads.append(ad)
     
     return render(
         request,
@@ -452,6 +468,7 @@ def favorite_posts(request):
         {
             'favorites': favorites,
             'favorite_posts': posts_with_counts,
+            'favorite_ads': favorite_ads,
         },
     )
 

@@ -9,15 +9,15 @@
         <div class="hero-icon mb-4">
           <i class="fas fa-star fa-3x"></i>
         </div>
-        <h1 class="display-4 fw-bold mb-3">پست‌های مورد علاقه‌ شما</h1>
-        <p class="lead mb-0">تمام پست‌هایی که برای خواندن بعدی ذخیره کرده‌اید</p>
-        {% if favorite_posts %}
+        <h1 class="display-4 fw-bold mb-3">علاقه‌مندی‌های شما</h1>
+        <p class="lead mb-0">تمام پست‌ها و تبلیغاتی که ذخیره کرده‌اید</p>
+        {% if favorite_posts or favorite_ads %}
         <p class="mt-3 mb-0 opacity-75">
-          شما <strong>{{ favorite_posts|length }}</strong> پست مورد علاقه‌ دارید
+          شما <strong>{{ favorite_posts|length }}</strong> پست و <strong>{{ favorite_ads|length }}</strong> تبلیغ مورد علاقه‌ دارید
         </p>
         {% else %}
         <p class="mt-3 mb-0 opacity-75">
-          هنوز پست مورد علاقه‌ ندارید
+          هنوز مورد علاقه‌ ندارید
         </p>
         {% endif %}
       </div>
@@ -26,9 +26,13 @@
 </section>
 
 <div class="container mb-5">
+  {% if favorite_posts or favorite_ads %}
+  <!-- Favorite Posts Section -->
   {% if favorite_posts %}
-  <div class="row blog-post-row">
-    {% for post in favorite_posts %}
+  <div class="mb-5">
+    <h2 class="mb-4 text-center">پست‌های مورد علاقه</h2>
+    <div class="row blog-post-row">
+      {% for post in favorite_posts %}
     <div class="col-lg-3 col-md-6 col-sm-12">
       <div class="card post-card mb-4 position-relative">
         <div class="card-body">
@@ -113,8 +117,85 @@
   </div>
   <div class="row blog-post-row">
     {% endif %}
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
+  {% endif %}
+  
+  <!-- Favorite Ads Section -->
+  {% if favorite_ads %}
+  <div class="mb-5">
+    <h2 class="mb-4 text-center">تبلیغات مورد علاقه</h2>
+    <div class="row">
+      {% for ad in favorite_ads %}
+      <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="card post-card mb-4 position-relative">
+          <div class="card-body">
+            <!-- Remove Favorite Button -->
+            <form
+              action="{% url 'ads:remove_ad_from_favorites' ad.id %}"
+              method="POST"
+              class="favorite-remove-form"
+            >
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="btn btn-sm btn-danger favorite-remove-btn"
+                title="حذف از علاقه‌مندی‌ها"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </form>
+
+            <div class="image-container">
+              {% if ad.image %}
+              <img
+                class="card-img-top"
+                src="{{ ad.image.url }}"
+                alt="{{ ad.title }}"
+                onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+              />
+              {% else %}
+              <img
+                class="card-img-top"
+                src="{% static 'images/default.jpg' %}"
+                alt="{{ ad.title }}"
+              />
+              {% endif %}
+            </div>
+            <a href="{% url 'ads:ad_detail' ad.slug %}" class="post-link">
+              <h2 class="card-title">{{ ad.title }}</h2>
+            </a>
+
+            {% if ad.category %}
+            <div class="mb-2">
+              <a
+                href="{% url 'ads:ads_by_category' ad.category.slug %}"
+                class="category-badge"
+              >
+                <i class="fas fa-tag ms-1"></i>{{ ad.category.name }}
+              </a>
+            </div>
+            {% endif %}
+
+            {% if ad.city %}
+            <p class="post-author-inline">
+              <i class="fas fa-map-marker-alt ms-1"></i>{{ ad.city }}
+            </p>
+            {% endif %}
+            
+            <hr />
+            <p class="card-text text-muted h6">
+              {{ ad.created_on|date:"M d, Y" }}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  
   {% else %}
   <!-- Empty State -->
   <div class="row">
@@ -122,15 +203,20 @@
       <div class="card shadow-sm text-center py-5">
         <div class="card-body">
           <i class="fas fa-star fa-4x text-muted mb-4" style="opacity: 0.3"></i>
-          <h3 class="text-muted mb-3">هنوز پست علاقه‌مندی ندارید</h3>
+          <h3 class="text-muted mb-3">هنوز مورد علاقه‌ ندارید</h3>
           <p class="text-muted mb-4">
-            شروع به ذخیره پست‌هایی که دوست دارید کنید! روی آیکون
-            <i class="fas fa-star text-warning"></i> هر پست کلیک کنید تا به
+            شروع به ذخیره پست‌ها و تبلیغاتی که دوست دارید کنید! روی دکمه
+            <i class="fas fa-heart text-danger"></i> هر پست یا تبلیغ کلیک کنید تا به
             علاقه‌مندی‌های شما اضافه شود.
           </p>
-          <a href="{% url 'home' %}" class="btn btn-primary">
-            <i class="fas fa-arrow-right ms-2"></i>مرور پست‌ها
-          </a>
+          <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'home' %}" class="btn btn-primary">
+              <i class="fas fa-arrow-right ms-2"></i>مرور پست‌ها
+            </a>
+            <a href="{% url 'ads:ads_home' %}" class="btn btn-outline-primary">
+              <i class="fas fa-arrow-right ms-2"></i>مرور تبلیغات
+            </a>
+          </div>
         </div>
       </div>
     </div>
