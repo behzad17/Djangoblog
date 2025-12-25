@@ -1011,10 +1011,10 @@ body {
 }
 
 .hero-cta-card-icon {
-  font-size: 2rem;
+  font-size: 2.5rem;
   opacity: 0.3;
   flex-shrink: 0;
-  width: 50px;
+  width: 60px;
   text-align: center;
 }
 
@@ -1025,7 +1025,7 @@ body {
 }
 
 .hero-cta-card-title {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 700;
   margin: 0 0 0.25rem 0;
   color: #ffffff;
@@ -1033,7 +1033,7 @@ body {
 }
 
 .hero-cta-card-subtitle {
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 400;
   margin: 0;
   color: rgba(255, 255, 255, 0.9);
@@ -1093,16 +1093,16 @@ body {
   }
 
   .hero-cta-card-icon {
-    font-size: 1.75rem;
-    width: 45px;
+    font-size: 2rem;
+    width: 55px;
   }
 
   .hero-cta-card-title {
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 
   .hero-cta-card-subtitle {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 
   .hero-cta-card-arrow {
@@ -1123,16 +1123,16 @@ body {
   }
 
   .hero-cta-card-icon {
-    font-size: 1.5rem;
-    width: 40px;
+    font-size: 1.75rem;
+    width: 50px;
   }
 
   .hero-cta-card-title {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
   }
 
   .hero-cta-card-subtitle {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
   }
 }
 
