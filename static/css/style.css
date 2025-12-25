@@ -140,14 +140,19 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background-color: #FFFFF0 !important;
 }
 
 .card:hover {
   transform: translateY(-10px) scale(1.03);
-  /* Neutral hover shadow - customize hover shadow strength here */
+  /* Neutral hover shadow - customize shadow strength here */
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
   border-color: #D1D5DB; /* Slightly darker gray on hover */
   background-color: #f8f9fa;
+}
+
+.post-card:hover {
+  background-color: #FFFFF0 !important;
 }
 
 /* Customize hover styling here - adjust transform, shadow, border-color */
