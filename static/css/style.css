@@ -662,7 +662,11 @@ body {
 
 /* Center author name in post cards */
 .post-card .post-author-inline {
-  text-align: center;
+  text-align: center !important;
+  display: block;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .blog-post-row > div .card .card-text:last-of-type {
