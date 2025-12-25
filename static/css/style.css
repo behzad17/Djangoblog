@@ -2338,6 +2338,7 @@ body {
   
   .category-section-title {
     font-size: 1.25rem;
+    text-align: center !important; /* Center category title on mobile */
   }
   
   .category-page-title {
@@ -2365,6 +2366,11 @@ body {
 @media (max-width: 576px) {
   .category-filter-section {
     padding: 15px;
+  }
+  
+  /* Center category section title on mobile */
+  .category-section-title {
+    text-align: center !important;
   }
   
   .category-buttons-container {
