@@ -2,20 +2,20 @@
 {% block title %}خانه | Peyvand{% endblock title %}
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block content %}
+<!-- Hero Image (Mobile Only - Full Width) -->
+<div class="d-lg-none hero-image-mobile-wrapper">
+  <img 
+    src="{% static 'images/hero-mobile.png' %}" 
+    alt="جامعه آنلاین ایرانیانِ مقیم سوئد - پلتفرم پیوند" 
+    class="img-fluid w-100 hero-mobile-img"
+    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+  />
+</div>
+
 <!-- Hero section -->
 <section class="hero-section text-white">
   <div class="container">
     <div class="row align-items-center g-2">
-      <!-- Hero Image (Mobile Only) -->
-      <div class="col-12 d-lg-none hero-image-mobile">
-        <img 
-          src="{% static 'images/hero-mobile.png' %}" 
-          alt="جامعه آنلاین ایرانیانِ مقیم سوئد - پلتفرم پیوند" 
-          class="img-fluid w-100 hero-mobile-img"
-          onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
-        />
-      </div>
-
       <!-- Left Column: Content -->
       <div class="col-12 col-lg-6 order-lg-2">
         <div class="hero-content text-center">
