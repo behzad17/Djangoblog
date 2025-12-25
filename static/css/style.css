@@ -906,7 +906,7 @@ body {
 }
 
 .hero-mobile-img {
-  width: 70%; /* 30% smaller than original (100% - 30% = 70%) */
+  width: 70% !important; /* 30% smaller than original (100% - 30% = 70%) - override Bootstrap w-100 */
   height: auto;
   display: block;
   border-radius: 0;
@@ -1435,7 +1435,7 @@ body {
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 0.75rem 0; /* Minimized padding */
+    padding: 0 !important; /* Remove all padding on mobile */
   }
   
   .hero-title {
@@ -1520,7 +1520,7 @@ body {
 
 @media (max-width: 576px) {
   .hero-section {
-    padding: 0.5rem 0; /* Minimized padding */
+    padding: 0 !important; /* Remove all padding on small mobile */
   }
   
   .hero-title {
