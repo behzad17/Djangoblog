@@ -1168,6 +1168,22 @@ body {
   direction: rtl;
 }
 
+/* Center text in hero cards for desktop/laptop sizes */
+@media (min-width: 992px) {
+  .hero-cta-card-content {
+    text-align: center !important;
+    direction: ltr; /* Change to LTR for centered text */
+  }
+  
+  .hero-cta-card-title {
+    text-align: center !important;
+  }
+  
+  .hero-cta-card-subtitle {
+    text-align: center !important;
+  }
+}
+
 .hero-cta-card-title {
   font-size: 1.12rem; /* 20% smaller: 1.4rem * 0.8 */
   font-weight: 700;
