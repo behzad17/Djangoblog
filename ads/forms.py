@@ -7,7 +7,7 @@ class AdForm(forms.ModelForm):
     
     class Meta:
         model = Ad
-        fields = ['title', 'category', 'image', 'target_url', 'start_date', 'end_date']
+        fields = ['title', 'category', 'image', 'target_url', 'city', 'start_date', 'end_date']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -24,6 +24,10 @@ class AdForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'https://example.com'
             }),
+            'city': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'شهر'
+            }),
             'start_date': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date'
@@ -38,6 +42,7 @@ class AdForm(forms.ModelForm):
             'category': 'دسته‌بندی',
             'image': 'تصویر تبلیغ',
             'target_url': 'لینک مقصد',
+            'city': 'شهر',
             'start_date': 'تاریخ شروع (اختیاری)',
             'end_date': 'تاریخ پایان (اختیاری)',
         }

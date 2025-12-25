@@ -70,6 +70,11 @@ class Ad(models.Model):
         default=False,
         help_text="Whether the target URL has been reviewed and approved by an admin.",
     )
+    city = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="City where the service/business is located (optional).",
+    )
 
     # Moderation and scheduling
     is_active = models.BooleanField(

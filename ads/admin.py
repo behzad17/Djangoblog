@@ -40,7 +40,7 @@ class AdAdmin(admin.ModelAdmin):
         "end_date",
     )
     list_editable = ("is_featured",)
-    search_fields = ("title", "target_url", "category__name")
+    search_fields = ("title", "target_url", "category__name", "city")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on")
 
@@ -66,8 +66,8 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Target URL",
             {
-                "fields": ("target_url", "url_approved"),
-                "description": "Advertiser-provided URL. Must be approved before being used on the site.",
+                "fields": ("target_url", "url_approved", "city"),
+                "description": "Advertiser-provided URL. Must be approved before being used on the site. City is optional location information.",
             },
         ),
         (
