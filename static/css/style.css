@@ -918,6 +918,7 @@ body {
 
 @media (max-width: 768px) {
   .hero-image-mobile-wrapper {
+    margin-top: 15px; /* Add 15px top margin on mobile */
     margin-bottom: 1rem;
   }
   
@@ -948,7 +949,18 @@ body {
 
 @media (max-width: 576px) {
   .hero-image-mobile-wrapper {
+    margin-top: 15px; /* Add 15px top margin on small mobile */
     margin-bottom: 0.75rem;
+  }
+  
+  /* Add 15px top margin to first hero card on small mobile */
+  .hero-cta-cards-container .hero-cta-card:first-child {
+    margin-top: 15px;
+  }
+  
+  /* Add 15px bottom margin to last hero card on small mobile */
+  .hero-cta-cards-container .hero-cta-card:last-child {
+    margin-bottom: 15px;
   }
   
   .hero-section {
@@ -1199,6 +1211,16 @@ body {
     max-width: 100%;
     padding: 0 1rem;
     gap: 0.7rem; /* 20% smaller: 0.875rem * 0.8 */
+  }
+  
+  /* Add 15px top margin to first hero card */
+  .hero-cta-cards-container .hero-cta-card:first-child {
+    margin-top: 15px;
+  }
+  
+  /* Add 15px bottom margin to last hero card */
+  .hero-cta-cards-container .hero-cta-card:last-child {
+    margin-bottom: 15px;
   }
 
   .hero-cta-card {
