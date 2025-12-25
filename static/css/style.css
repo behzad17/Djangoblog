@@ -1127,6 +1127,7 @@ body {
 @media (max-width: 768px) {
   .hero-cta-cards-container {
     margin-top: 0 !important; /* Remove gap B: no margin between hero image and cards */
+    padding-top: 10px; /* Add 10px top padding for mobile devices */
   }
 }
 
@@ -1243,6 +1244,21 @@ body {
     padding: 0.8rem 1rem; /* 20% smaller: 1rem*0.8=0.8rem, 1.25rem*0.8=1rem */
     min-height: 68px; /* 20% smaller: 85px * 0.8 */
     border-radius: 22px; /* 20% smaller: 28px * 0.8 */
+    width: 80% !important; /* Reduce width by 20% (100% - 20% = 80%) */
+  }
+  
+  /* Center text in hero cards on mobile */
+  .hero-cta-card-content {
+    text-align: center !important;
+    direction: ltr; /* Change to LTR for centered text */
+  }
+  
+  .hero-cta-card-title {
+    text-align: center !important;
+  }
+  
+  .hero-cta-card-subtitle {
+    text-align: center !important;
   }
 
   .hero-cta-card-icon {
@@ -1267,12 +1283,28 @@ body {
   .hero-cta-cards-container {
     gap: 0.6rem; /* 20% smaller: 0.75rem * 0.8 */
     margin-top: 1.25rem;
+    padding-top: 10px; /* Add 10px top padding for mobile devices */
   }
 
   .hero-cta-card {
     padding: 0.7rem 0.8rem; /* 20% smaller: 0.875rem*0.8=0.7rem, 1rem*0.8=0.8rem */
     min-height: 64px; /* 20% smaller: 80px * 0.8 */
     border-radius: 19px; /* 20% smaller: 24px * 0.8 (rounded) */
+    width: 80% !important; /* Reduce width by 20% (100% - 20% = 80%) */
+  }
+  
+  /* Center text in hero cards on small mobile */
+  .hero-cta-card-content {
+    text-align: center !important;
+    direction: ltr; /* Change to LTR for centered text */
+  }
+  
+  .hero-cta-card-title {
+    text-align: center !important;
+  }
+  
+  .hero-cta-card-subtitle {
+    text-align: center !important;
   }
 
   .hero-cta-card-icon {
