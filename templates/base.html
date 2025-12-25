@@ -152,13 +152,6 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == search_url %}active{% endif %}"
-                href="{{ search_url }}"
-                ><i class="fas fa-search ms-1"></i>جستجو</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
                 class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
                 href="{{ ask_me_url|default:'/ask-me/' }}"
                 ><i class="fas fa-question-circle ms-1"></i>پرسش و پاسخ</a
@@ -169,6 +162,13 @@
                 class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
                 href="{{ ads_home_url }}"
                 >راهنما</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == search_url %}active{% endif %}"
+                href="{{ search_url }}"
+                ><i class="fas fa-search ms-1"></i>جستجو</a
               >
             </li>
           </ul>
