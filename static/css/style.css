@@ -5095,6 +5095,31 @@ body {
   background: #76DFB1 !important;
   position: relative;
   overflow: hidden;
+  padding: 0.5rem 0 !important;
+}
+
+.member-guide-hero .container {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.member-guide-hero .row {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.member-guide-hero .hero-icon {
+  margin-bottom: 0.5rem !important;
+}
+
+.member-guide-hero .display-4,
+.member-guide-hero h1 {
+  margin-bottom: 0.25rem !important;
+}
+
+.member-guide-hero .lead,
+.member-guide-hero p {
+  margin-bottom: 0 !important;
 }
 
 .member-guide-hero::before {
