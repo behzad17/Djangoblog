@@ -1235,11 +1235,11 @@ body {
 
 /* Orange Gradient Card */
 .hero-cta-card-orange {
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  background: #00A8A5 !important;
 }
 
 .hero-cta-card-orange:hover {
-  background: linear-gradient(135deg, #ff7a45 0%, #ffa347 100%);
+  background: #00B8B5 !important;
 }
 
 /* Blue Gradient Card */
