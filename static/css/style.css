@@ -3120,28 +3120,54 @@ body {
   width: 100%;
   position: relative;
   padding: 20px 0;
+  overflow: hidden; /* Hide duplicated logos */
 }
 
 .footer-logo-loop {
   display: flex;
   width: 100%;
-  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
   margin: 0;
   padding: 0;
 }
 
 .footer-logo-slide {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
   gap: 20px;
   margin: 0;
   padding: 0;
-  width: 100%;
+  /* Width is 200% to accommodate duplicated logos */
+  width: 200%;
+  /* RTL animation: scroll from right to left */
+  animation: scroll-logos-rtl 30s linear infinite;
+  will-change: transform; /* Optimize for animation */
+}
+
+/* Pause animation on hover */
+.footer-logo-loop-wrapper:hover .footer-logo-slide {
+  animation-play-state: paused;
+}
+
+/* RTL infinite scroll animation */
+@keyframes scroll-logos-rtl {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Move exactly 50% (one set of logos) for seamless loop */
+    transform: translateX(50%);
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .footer-logo-slide {
+    animation: none;
+    /* Show only first set of logos when motion is reduced */
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Fixed width for icons to prevent layout shifts */
@@ -3314,10 +3340,11 @@ body {
   opacity: 0.8;
 }
 
-/* Responsive adjustments for static logo display */
+/* Responsive adjustments for animated logo display */
 @media (max-width: 991px) {
   .footer-logo-slide {
     gap: 15px;
+    animation-duration: 25s; /* Slightly faster on tablets */
   }
   
   .footer-logo-loop-wrapper .footer-logo-img {
@@ -3330,6 +3357,7 @@ body {
 @media (max-width: 768px) {
   .footer-logo-slide {
     gap: 12px;
+    animation-duration: 20s; /* Faster on mobile for better visibility */
   }
   
   .footer-logo-loop-wrapper .footer-logo-img {
