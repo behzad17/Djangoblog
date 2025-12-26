@@ -885,7 +885,7 @@ body {
   padding: 0.75rem 0; /* Reduced padding: 12px top and bottom */
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
-  background: #93e9be !important;
+  background: #76DFB1 !important;
 }
 
 @media (max-width: 768px) {
@@ -906,7 +906,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #93e9be !important;
+  background: #76DFB1 !important;
   line-height: 0; /* Remove white space from inline image */
 }
 
