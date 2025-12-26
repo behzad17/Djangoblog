@@ -1778,6 +1778,7 @@ body {
 
 .footer p {
   font-size: 1.1rem; /* slightly larger footer text */
+  color: #415a77 !important;
 }
 
 .footer .fab {
@@ -1805,12 +1806,12 @@ body {
 }
 
 .footer-contact-link {
-  color: #ffffff;
+  color: #415a77 !important;
   text-decoration: none;
 }
 
 .footer-contact-item i {
-  color: #ffffff;
+  color: #415a77 !important;
 }
 
 .footer-contact-link:hover {
@@ -3041,8 +3042,17 @@ body {
   border-top: 1px solid #2d3748;
 }
 
+/* Override all text colors in footer */
+.footer h6,
+.footer .text-white,
+.footer .text-white-50,
+.footer .brand,
+.footer .brand-persian {
+  color: #415a77 !important;
+}
+
 .footer-links a {
-  color: #e9ecef;
+  color: #415a77 !important;
   text-decoration: none;
   font-size: 0.95rem;
 }
@@ -3052,7 +3062,7 @@ body {
 }
 
 .footer-social a {
-  color: #e9ecef;
+  color: #415a77 !important;
   font-size: 1.4rem;
 }
 
