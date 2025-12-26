@@ -2239,7 +2239,7 @@ body {
 /* Category Page Styles */
 /* Category Hero Section */
 .category-hero-section {
-  background: linear-gradient(135deg, #00A693 0%, #00A693 100%);
+  background: linear-gradient(135deg, #76DFB1 0%, #76DFB1 100%);
   padding: 3rem 0;
   position: relative;
   overflow: hidden;
@@ -5028,7 +5028,7 @@ body {
 
 /* Hero Section */
 .favorites-hero {
-  background: #00A693;
+  background: #76DFB1 !important;
   position: relative;
   overflow: hidden;
 }
@@ -5065,7 +5065,7 @@ body {
 
 /* Hero Section */
 .member-guide-hero {
-  background: linear-gradient(135deg, #1b1f24 0%, #0d6efd 100%);
+  background: #76DFB1 !important;
   position: relative;
   overflow: hidden;
 }
