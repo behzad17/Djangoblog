@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Hero Section -->
+<section
+  class="hero-section text-white mb-4"
+  style="
+    background: #058073;
+    padding: 2rem 0;
+  "
+>
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="hero-title mb-3">
+          <i class="fas fa-question-circle ms-2"></i>پرسیدن سوال
+        </h1>
+        <p class="hero-subtitle">
+          سوال خود را از {{ moderator.get_display_name }} - {{ moderator.expert_title }} بپرسید
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container mb-5">
+  <div class="row">
+    <!-- Back Button -->
+    <div class="col-12 mb-3">
+      <a href="{% url 'expert_profile' moderator.slug %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-right ms-2"></i>بازگشت به پروفایل متخصص
+      </a>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header" style="background-color: #058073; border-bottom: 1px solid #058073;">
+          <h5 class="mb-0 text-white">
+            <i class="fas fa-user-tie ms-2"></i>پرسیدن سوال از {{ moderator.get_display_name }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="moderator-info mb-4 p-3 bg-light rounded">
+            <strong><i class="fas fa-certificate ms-2"></i>متخصص:</strong> 
+            <span class="text-primary">{{ moderator.expert_title }}</span>
+            {% if moderator.field_specialty %}
+            <br>
+            <strong><i class="fas fa-tag ms-2"></i>حوزه تخصص:</strong> {{ moderator.field_specialty }}
+            {% endif %}
+          </div>
+
+          <form method="post" action="{% url 'ask_question' moderator.id %}">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-triangle ms-2"></i>
+              لطفاً خطاهای زیر را برطرف کنید:
+              <ul class="mb-0 mt-2">
+                {% for field, errors in form.errors.items %}
+                  {% for error in errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+              <label for="{{ form.question_text.id_for_label }}" class="form-label">
+                سوال شما <span class="text-danger">*</span>
+              </label>
+              {{ form.question_text }}
+              <div class="form-text">
+                <i class="fas fa-info-circle ms-1"></i>
+                سوال شما خصوصی است و فقط برای شما و متخصص قابل مشاهده است.
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane ms-2"></i>ارسال سوال
+              </button>
+              <a href="{% url 'expert_profile' moderator.slug %}" class="btn btn-outline-secondary">
+                <i class="fas fa-times ms-2"></i>انصراف
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

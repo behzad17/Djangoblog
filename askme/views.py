@@ -99,6 +99,9 @@ def ask_question(request, moderator_id):
                 })
             
             messages.success(request, 'Your question has been submitted successfully! The moderator will respond soon.')
+            # Redirect to expert profile if we came from there, otherwise to ask_me
+            if request.GET.get('from') == 'profile':
+                return redirect('expert_profile', slug=moderator.slug)
             return redirect('ask_me')
         else:
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
