@@ -3115,6 +3115,32 @@ body {
   }
 }
 
+/* Footer GDPR Text Styling */
+.footer-gdpr-text {
+  color: #8b9dc4 !important;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  padding: 0.5rem 1rem;
+}
+
+.footer-gdpr-link {
+  color: #ffc107 !important;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.footer-gdpr-link:hover {
+  color: #ffd54f !important;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-gdpr-text {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+}
+
 /* Footer Logo Infinite Loop Animation - Seamless Continuous Marquee */
 .footer-logo-loop-wrapper {
   width: 100%;

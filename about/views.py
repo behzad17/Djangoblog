@@ -33,4 +33,9 @@ def terms_and_conditions(request):
 def member_guide(request):
     """View for Member Guide page."""
     return render(request, "about/member_guide.html")
+
+
+def integritetspolicy(request):
+    """View for Integritetspolicy (Privacy Policy) page."""
+    return render(request, "about/integritetspolicy.html")
     

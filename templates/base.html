@@ -3,6 +3,7 @@
 {% url 'about' as about_url %}
 {% url 'ask_me' as ask_me_url %}
 {% url 'terms' as terms_url %}
+{% url 'integritetspolicy' as integritetspolicy_url %}
 {% url 'ads:ads_home' as ads_home_url %}
 {% url 'member_guide' as member_guide_url %}
 {% url 'account_login' as login_url %}
@@ -378,6 +379,20 @@
                 <i class="fab fa-youtube-square"></i>
               </a>
             </div>
+          </div>
+        </div>
+        <!-- GDPR Statement -->
+        <div class="row mt-3 mb-3">
+          <div class="col-12">
+            <p class="footer-gdpr-text text-center mb-0">
+              استفاده از این پلتفرم به معنای پذیرش شرایط و قوانین و 
+              <a href="{% url 'integritetspolicy' %}" class="footer-gdpr-link">سیاست حفظ حریم خصوصی</a> 
+              پیوند است. | 
+              Genom att använda denna plattform godkänner du våra 
+              <a href="{% url 'terms' %}" class="footer-gdpr-link">Användarvillkor</a> 
+              och vår 
+              <a href="{% url 'integritetspolicy' %}" class="footer-gdpr-link">Integritetspolicy</a>.
+            </p>
           </div>
         </div>
         <div class="row mt-3">

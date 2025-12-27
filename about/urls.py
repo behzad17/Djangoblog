@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.about_me, name='about'),
     path('terms/', views.terms_and_conditions, name='terms'),
     path('member-guide/', views.member_guide, name='member_guide'),
+    path('integritetspolicy/', views.integritetspolicy, name='integritetspolicy'),
 ]
