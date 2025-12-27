@@ -5,6 +5,8 @@ Models for the 'Ask Me' Q&A system with moderators.
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.text import slugify
+from django.urls import reverse
 from cloudinary.models import CloudinaryField
 
 
@@ -36,6 +38,21 @@ class Moderator(models.Model):
     bio = models.TextField(
         blank=True,
         help_text="Short bio about the moderator"
+    )
+    field_specialty = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Field/Specialty domain (e.g., 'Legal', 'Medical', 'Financial')"
+    )
+    disclaimer = models.TextField(
+        blank=True,
+        help_text="Custom disclaimer text for this expert (shown on profile page)"
+    )
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        blank=True,
+        help_text="URL-friendly identifier for expert profile page"
     )
     is_active = models.BooleanField(
         default=True,
@@ -74,6 +91,29 @@ class Moderator(models.Model):
     def pending_count(self):
         """Returns the number of pending questions."""
         return self.questions.filter(answered=False).count()
+    
+    def get_absolute_url(self):
+        """Returns the URL for the expert profile page."""
+        return reverse('expert_profile', kwargs={'slug': self.slug})
+    
+    def save(self, *args, **kwargs):
+        """Override save to auto-generate slug if not provided."""
+        if not self.slug:
+            # Generate slug from complete_name, or fallback to username
+            base_slug = slugify(self.get_display_name())
+            if not base_slug:
+                base_slug = slugify(self.user.username)
+            
+            # Ensure uniqueness
+            slug = base_slug
+            counter = 1
+            while Moderator.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            
+            self.slug = slug
+        
+        super().save(*args, **kwargs)
 
 
 class Question(models.Model):

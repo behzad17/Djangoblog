@@ -49,7 +49,13 @@
             />
           </div>
           <h5 class="moderator-name mb-1">
+            {% if moderator.slug %}
+            <a href="{% url 'expert_profile' moderator.slug %}" class="text-decoration-none text-dark">
+              {{ moderator.get_display_name }}
+            </a>
+            {% else %}
             {{ moderator.get_display_name }}
+            {% endif %}
           </h5>
           <p class="moderator-title text-primary mb-2">
             <i class="fas fa-certificate ms-1"></i>{{ moderator.expert_title }}

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% static 'images/default.jpg' as default_image_url %}
+
+<!-- Hero Section -->
+<section
+  class="hero-section text-white mb-4"
+  style="
+    background: #058073;
+    padding: 2rem 0;
+  "
+>
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="hero-title mb-3">
+          <i class="fas fa-user-tie ms-2"></i>پروفایل متخصص
+        </h1>
+        <p class="hero-subtitle">
+          {{ moderator.get_display_name }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container mb-5">
+  <div class="row">
+    <!-- Back Button -->
+    <div class="col-12 mb-3">
+      <a href="{% url 'ask_me' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-right ms-2"></i>بازگشت به صفحه متخصصان
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Expert Profile Card -->
+    <div class="col-lg-4 col-md-5 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="expert-image-wrapper mb-3">
+            <img
+              src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{{ default_image_url }}{% endif %}"
+              alt="{{ moderator.get_display_name }}"
+              class="img-fluid rounded-circle"
+              style="width: 200px; height: 200px; object-fit: cover;"
+              onerror="this.onerror=null; this.src='{{ default_image_url }}';"
+            />
+          </div>
+          <h2 class="expert-name mb-2">{{ moderator.get_display_name }}</h2>
+          <p class="expert-title text-primary mb-3">
+            <i class="fas fa-certificate ms-1"></i>{{ moderator.expert_title }}
+          </p>
+          {% if moderator.field_specialty %}
+          <p class="expert-specialty mb-3">
+            <strong>حوزه تخصص:</strong> {{ moderator.field_specialty }}
+          </p>
+          {% endif %}
+          
+          <!-- Statistics -->
+          <div class="expert-stats mt-4 pt-3 border-top">
+            <div class="row text-center">
+              <div class="col-4">
+                <div class="stat-item">
+                  <h4 class="mb-1 text-primary">{{ stats.total_questions }}</h4>
+                  <small class="text-muted">کل سوالات</small>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-item">
+                  <h4 class="mb-1 text-success">{{ stats.answered_questions }}</h4>
+                  <small class="text-muted">پاسخ داده</small>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-item">
+                  <h4 class="mb-1 text-warning">{{ stats.pending_questions }}</h4>
+                  <small class="text-muted">در انتظار</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ask Question Button -->
+          {% if user.is_authenticated %}
+          <div class="mt-4">
+            <a
+              href="{% url 'ask_question' moderator.id %}"
+              class="btn btn-primary w-100"
+            >
+              <i class="fas fa-paper-plane ms-2"></i>پرسیدن سوال از این متخصص
+            </a>
+          </div>
+          {% else %}
+          <div class="mt-4">
+            <a
+              href="{% url 'account_login' %}"
+              class="btn btn-outline-primary w-100"
+            >
+              <i class="fas fa-sign-in-alt ms-2"></i>ورود برای پرسیدن سوال
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Expert Details -->
+    <div class="col-lg-8 col-md-7">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h3 class="mb-0">
+            <i class="fas fa-info-circle ms-2"></i>درباره متخصص
+          </h3>
+        </div>
+        <div class="card-body">
+          {% if moderator.bio %}
+          <div class="expert-bio mb-4">
+            <p class="text-justify" style="line-height: 1.8;">
+              {{ moderator.bio|linebreaks }}
+            </p>
+          </div>
+          {% else %}
+          <p class="text-muted">اطلاعاتی در دسترس نیست.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      {% if moderator.disclaimer %}
+      <div class="card shadow-sm mb-4 border-warning">
+        <div class="card-header bg-warning text-dark">
+          <h4 class="mb-0">
+            <i class="fas fa-exclamation-triangle ms-2"></i>سلب مسئولیت
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="disclaimer-text">
+            {{ moderator.disclaimer|linebreaks }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Additional Info -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-light">
+          <h4 class="mb-0">
+            <i class="fas fa-calendar-alt ms-2"></i>اطلاعات تکمیلی
+          </h4>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <strong><i class="fas fa-user ms-2"></i>نام:</strong> {{ moderator.get_display_name }}
+            </li>
+            <li class="mb-2">
+              <strong><i class="fas fa-briefcase ms-2"></i>عنوان:</strong> {{ moderator.expert_title }}
+            </li>
+            {% if moderator.field_specialty %}
+            <li class="mb-2">
+              <strong><i class="fas fa-tag ms-2"></i>حوزه تخصص:</strong> {{ moderator.field_specialty }}
+            </li>
+            {% endif %}
+            <li class="mb-2">
+              <strong><i class="fas fa-clock ms-2"></i>عضویت از:</strong> {{ moderator.created_on|date:"Y/m/d" }}
+            </li>
+            <li class="mb-2">
+              <strong><i class="fas fa-check-circle ms-2 text-success"></i>وضعیت:</strong> 
+              <span class="badge bg-success">فعال</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

@@ -16,19 +16,25 @@ class ModeratorAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'expert_title',
+        'field_specialty',
+        'slug',
         'is_active',
         'question_count',
         'answered_count',
         'pending_count',
         'created_on'
     )
-    list_filter = ('is_active', 'expert_title', 'created_on')
-    search_fields = ('user__username', 'user__email', 'expert_title', 'complete_name', 'bio')
+    list_filter = ('is_active', 'expert_title', 'field_specialty', 'created_on')
+    search_fields = ('user__username', 'user__email', 'expert_title', 'complete_name', 'bio', 'field_specialty', 'slug')
     readonly_fields = ('created_on', 'updated_on')
     
     fieldsets = (
         ('Moderator Information', {
-            'fields': ('user', 'expert_title', 'complete_name', 'profile_image', 'bio', 'is_active')
+            'fields': ('user', 'expert_title', 'complete_name', 'field_specialty', 'profile_image', 'bio', 'is_active')
+        }),
+        ('Expert Profile', {
+            'fields': ('slug', 'disclaimer'),
+            'description': 'Profile page settings. Slug is auto-generated if left blank. Disclaimer is shown on the expert profile page.'
         }),
         ('Timestamps', {
             'fields': ('created_on', 'updated_on'),

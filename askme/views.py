@@ -45,6 +45,34 @@ def ask_me(request):
     )
 
 
+def expert_profile(request, slug):
+    """
+    Display individual expert profile page.
+    Public view - anyone can view expert profiles.
+    """
+    moderator = get_object_or_404(
+        Moderator.objects.select_related('user'),
+        slug=slug,
+        is_active=True
+    )
+    
+    # Get statistics
+    stats = {
+        'total_questions': moderator.question_count(),
+        'answered_questions': moderator.answered_count(),
+        'pending_questions': moderator.pending_count(),
+    }
+    
+    return render(
+        request,
+        'askme/expert_profile.html',
+        {
+            'moderator': moderator,
+            'stats': stats,
+        }
+    )
+
+
 @ratelimit(key='user', rate='10/h', method='POST', block=True)
 @ratelimit(key='ip', rate='20/h', method='POST', block=True)
 @site_verified_required
