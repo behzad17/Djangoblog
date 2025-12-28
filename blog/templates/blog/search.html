@@ -146,17 +146,19 @@
                       <p class="post-author-inline">نویسنده: {{ post.author }}</p>
                       <!-- 4) Date & time -->
                       <!-- 5) Comment icon + count -->
-                      <p class="card-text text-muted h6">
-                        <i class="far fa-calendar ms-1"></i>{{ post.created_on|date:"Y/m/d" }}
-                        <span class="me-2">|</span>
-                        <i class="far fa-comments ms-1"></i>{{ post.comment_count|default:0 }}
-                      </p>
-                      <!-- Excerpt (if available) -->
-                      {% if post.excerpt %}
-                      <p class="card-text text-muted small mt-2">
-                        {{ post.excerpt|truncatewords:15 }}
-                      </p>
-                      {% endif %}
+                      <div class="postbox__bottom">
+                        <p class="card-text text-muted h6">
+                          <i class="far fa-calendar ms-1"></i>{{ post.created_on|date:"Y/m/d" }}
+                          <span class="me-2">|</span>
+                          <i class="far fa-comments ms-1"></i>{{ post.comment_count|default:0 }}
+                        </p>
+                        <!-- Excerpt (if available) -->
+                        {% if post.excerpt %}
+                        <p class="card-text text-muted small mt-2">
+                          {{ post.excerpt|truncatewords:15 }}
+                        </p>
+                        {% endif %}
+                      </div>
                     </div>
                   </div>
                 </div>

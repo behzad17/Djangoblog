@@ -625,16 +625,16 @@ body {
   direction: rtl;
   overflow: hidden;
   border-radius: 14px;
+  height: 160px;
   min-height: 160px;
   max-height: 160px;
-  height: 100%;
 }
 
 .postbox__media {
   width: 20%;
-  min-width: 100px;
-  min-height: 100px;
-  max-height: 100px;
+  flex: 0 0 20%;
+  min-width: 120px;
+  height: 160px;
   flex-shrink: 0;
   overflow: hidden;
   display: flex;
@@ -643,14 +643,14 @@ body {
 
 .postbox__media .image-container {
   width: 100%;
-  height: 100%;
+  height: 160px;
   display: flex;
   align-items: stretch;
 }
 
 .postbox__img {
   width: 100%;
-  height: 100%;
+  height: 160px;
   object-fit: cover;
   display: block;
   border-radius: 0;
@@ -658,11 +658,15 @@ body {
 
 .postbox__content {
   width: 80%;
+  height: 160px;
   padding: 12px 12px 0 12px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   text-align: right; /* RTL text alignment */
   direction: rtl;
+  overflow: hidden;
+  min-width: 0;
 }
 
 /* Postbox content styling - RTL layout */
@@ -673,13 +677,16 @@ body {
   margin-top: 0;
   margin-bottom: 0.5rem;
   text-align: right; /* RTL alignment */
-  /* Limit title to 3 lines max */
+  /* Limit title to 2 lines max */
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .postbox__content .post-link {
@@ -688,6 +695,7 @@ body {
   width: 100%;
   text-decoration: none;
   color: inherit;
+  min-width: 0;
 }
 
 .postbox__content .post-link:hover {
@@ -724,6 +732,18 @@ body {
   padding-bottom: 0;
   text-align: right; /* RTL alignment */
   font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+/* Postbox bottom section wrapper for date/time */
+.postbox__bottom {
+  margin-top: auto;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  flex-shrink: 0;
+}
+
+.postbox__bottom *:last-child {
   margin-bottom: 0;
 }
 
@@ -981,7 +1001,9 @@ body {
 @media (max-width: 576px) {
   .postbox {
     flex-direction: column;
+    height: auto;
     min-height: auto;
+    max-height: none;
   }
   
   .postbox__media {
@@ -993,6 +1015,7 @@ body {
   
   .postbox__content {
     width: 100%;
+    height: auto;
     padding: 12px;
   }
   

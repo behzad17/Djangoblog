@@ -112,13 +112,15 @@
               <p class="post-author-inline">نویسنده: {{ post.author }}</p>
               <!-- 4) Date & time -->
               <!-- 5) Comment icon + count -->
-              <p class="card-text text-muted h6">
-                {{ post.created_on|date:"M d, Y" }} |
-                <i class="far fa-comments ms-1"></i>{{ post.comment_count }}
-                {% if post.like_count > 0 %} |
-                <i class="fas fa-heart ms-1 text-danger"></i>{{ post.like_count }}
-                {% endif %}
-              </p>
+              <div class="postbox__bottom">
+                <p class="card-text text-muted h6">
+                  {{ post.created_on|date:"M d, Y" }} |
+                  <i class="far fa-comments ms-1"></i>{{ post.comment_count }}
+                  {% if post.like_count > 0 %} |
+                  <i class="fas fa-heart ms-1 text-danger"></i>{{ post.like_count }}
+                  {% endif %}
+                </p>
+              </div>
             </div>
           </div>
         </div>
