@@ -637,7 +637,18 @@ body {
   overflow: hidden;
   border-radius: 14px;
   width: 100%;
+  height: 160px;
   min-height: 160px;
+  max-height: 160px;
+}
+
+/* Desktop/Tablet: Allow postbox to match content height */
+@media (min-width: 768px) {
+  .postbox {
+    height: auto;
+    min-height: 160px;
+    max-height: none;
+  }
 }
 
 .postbox__media {
