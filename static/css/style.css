@@ -637,9 +637,7 @@ body {
   overflow: hidden;
   border-radius: 14px;
   width: 100%;
-  height: 160px;
   min-height: 160px;
-  max-height: 160px;
 }
 
 .postbox__media {
