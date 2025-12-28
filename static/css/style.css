@@ -3116,28 +3116,59 @@ body {
 }
 
 /* Footer GDPR Text Styling */
+.footer-gdpr-container {
+  background-color: rgba(65, 90, 119, 0.15);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
 .footer-gdpr-text {
-  color: #8b9dc4 !important;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  padding: 0.5rem 1rem;
+  color: #b8c5d6 !important;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.footer-gdpr-lang {
+  color: #ffc107 !important;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .footer-gdpr-link {
   color: #ffc107 !important;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: 500;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid transparent;
 }
 
 .footer-gdpr-link:hover {
   color: #ffd54f !important;
-  text-decoration: underline;
+  border-bottom-color: #ffd54f;
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {
+  .footer-gdpr-container {
+    padding: 0.75rem 1rem;
+  }
+  
   .footer-gdpr-text {
-    font-size: 0.75rem;
-    padding: 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+  
+  .footer-gdpr-lang {
+    display: block;
+    margin-bottom: 0.25rem;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 

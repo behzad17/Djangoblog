@@ -382,17 +382,25 @@
           </div>
         </div>
         <!-- GDPR Statement -->
-        <div class="row mt-3 mb-3">
+        <div class="row mt-4 mb-3">
           <div class="col-12">
-            <p class="footer-gdpr-text text-center mb-0">
-              استفاده از این پلتفرم به معنای پذیرش شرایط و قوانین و 
-              <a href="{% url 'integritetspolicy' %}" class="footer-gdpr-link">سیاست حفظ حریم خصوصی</a> 
-              پیوند است. | 
-              Genom att använda denna plattform godkänner du våra 
-              <a href="{% url 'terms' %}" class="footer-gdpr-link">Användarvillkor</a> 
-              och vår 
-              <a href="{% url 'integritetspolicy' %}" class="footer-gdpr-link">Integritetspolicy</a>.
-            </p>
+            <div class="footer-gdpr-container">
+              <p class="footer-gdpr-text mb-2">
+                <span class="footer-gdpr-lang">فارسی:</span>
+                استفاده از این پلتفرم به معنای پذیرش 
+                <a href="{% url 'terms' %}" class="footer-gdpr-link">شرایط و قوانین</a> 
+                و 
+                <a href="{% url 'integritetspolicy' %}" class="footer-gdpr-link">سیاست حفظ حریم خصوصی</a> 
+                پیوند است.
+              </p>
+              <p class="footer-gdpr-text mb-0">
+                <span class="footer-gdpr-lang">Svenska:</span>
+                Genom att använda denna plattform godkänner du våra 
+                <a href="{% url 'terms' %}" class="footer-gdpr-link">Användarvillkor</a> 
+                och vår 
+                <a href="{% url 'integritetspolicy' %}" class="footer-gdpr-link">Integritetspolicy</a>.
+              </p>
+            </div>
           </div>
         </div>
         <div class="row mt-3">
