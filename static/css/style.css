@@ -3412,15 +3412,9 @@ body {
 }
 
 @media (max-width: 768px) {
-  .footer-logo-slide {
-    gap: 12px;
-    animation-duration: 20s; /* Faster on mobile for better visibility */
-  }
-  
-  .footer-logo-loop-wrapper .footer-logo-img {
-    width: 90px;
-    height: 60px;
-    flex: 0 0 90px;
+  /* Hide logo loop animation on mobile devices */
+  .footer-logo-loop-wrapper {
+    display: none !important;
   }
 }
 
