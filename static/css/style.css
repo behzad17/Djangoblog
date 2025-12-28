@@ -631,9 +631,9 @@ body {
 
 .postbox__media {
   width: 20%;
-  min-width: 80px;
-  min-height: 80px;
-  max-height: 80px;
+  min-width: 100px;
+  min-height: 100px;
+  max-height: 100px;
   flex-shrink: 0;
   overflow: hidden;
   display: flex;
