@@ -756,7 +756,7 @@ body {
   text-align: right !important;
   display: block;
   width: 100%;
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.08rem;
   font-size: 0.85rem;
 }
 
@@ -773,7 +773,7 @@ body {
 /* Postbox bottom section wrapper for date/time */
 .postbox__bottom {
   margin-top: auto;
-  padding-top: 0.2rem;
+  padding-top: 0.16rem;
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
   flex-shrink: 0;
