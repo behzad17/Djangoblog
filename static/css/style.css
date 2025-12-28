@@ -658,7 +658,7 @@ body {
 
 .postbox__content {
   width: 80%;
-  padding: 12px;
+  padding: 12px 12px 0 12px;
   display: flex;
   flex-direction: column;
   text-align: right; /* RTL text alignment */
@@ -721,7 +721,7 @@ body {
   margin-top: auto; /* Pushes the date/comment info to the bottom */
   flex-shrink: 0;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 0;
   text-align: right; /* RTL alignment */
   font-size: 0.85rem;
   margin-bottom: 0;
