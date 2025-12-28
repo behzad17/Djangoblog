@@ -637,7 +637,6 @@ body {
   overflow: hidden;
   border-radius: 14px;
   width: 100%;
-  height: 160px;
   min-height: 160px;
   max-height: 160px;
 }
@@ -684,7 +683,7 @@ body {
 
 .postbox__content {
   width: calc(100% - 100px);
-  height: 160px;
+  min-height: 160px;
   padding: 12px 12px 0 12px;
   display: flex;
   flex-direction: column;
