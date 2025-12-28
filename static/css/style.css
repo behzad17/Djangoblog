@@ -642,8 +642,8 @@ body {
   max-height: 160px;
 }
 
-/* Desktop/Tablet: Allow postbox to match content height */
-@media (min-width: 768px) {
+/* Mobile: Allow postbox to match content height */
+@media (max-width: 767px) {
   .postbox {
     height: auto;
     min-height: 160px;
