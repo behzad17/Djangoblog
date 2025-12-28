@@ -3140,7 +3140,7 @@ body {
 }
 
 .footer-gdpr-link {
-  color: #ffc107 !important;
+  color: #ffffff !important;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -3148,8 +3148,8 @@ body {
 }
 
 .footer-gdpr-link:hover {
-  color: #ffd54f !important;
-  border-bottom-color: #ffd54f;
+  color: #ffc107 !important;
+  border-bottom-color: #ffc107;
   text-decoration: none;
 }
 
