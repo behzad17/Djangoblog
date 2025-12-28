@@ -133,10 +133,9 @@ body {
 }
 
 .post-card {
-  /* Fixed height to prevent size adjustments */
-  height: 420px;
-  max-height: 420px;
-  min-height: 420px;
+  /* Flexible height for new layout */
+  height: auto;
+  min-height: 200px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -616,21 +615,61 @@ body {
 }
 
 .post-card .card-body {
-  padding: 12px;
+  padding: 0;
   overflow: hidden; /* Prevent content overflow */
-  display: flex;
-  flex-direction: column;
-  text-align: center; /* Center all content in post cards */
 }
 
-/* Ensure title doesn't overflow and date/time stays visible */
-.post-card .card-title {
+/* New Postbox Layout - RTL with image on right */
+.postbox {
+  display: flex;
+  direction: rtl;
+  overflow: hidden;
+  border-radius: 14px;
+  min-height: 180px;
+  height: 100%;
+}
+
+.postbox__media {
+  width: 20%;
+  min-width: 120px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.postbox__media .image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+.postbox__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.postbox__content {
+  width: 80%;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  text-align: right; /* RTL text alignment */
+  direction: rtl;
+}
+
+/* Postbox content styling - RTL layout */
+.postbox__content .card-title {
   font-size: 0.9rem;
   font-weight: bold;
   line-height: 1.2;
-  margin-top: 0.5rem;
+  margin-top: 0;
   margin-bottom: 0.5rem;
-  text-align: center; /* Center post title */
+  text-align: right; /* RTL alignment */
   /* Limit title to 3 lines max */
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -640,32 +679,87 @@ body {
   flex-shrink: 0;
 }
 
-/* Center post link (title) in post cards */
+.postbox__content .post-link {
+  text-align: right;
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.postbox__content .post-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.postbox__content .post-link .card-title {
+  text-align: right;
+}
+
+.postbox__content .mb-2 {
+  text-align: right;
+  margin-bottom: 0.5rem;
+}
+
+.postbox__content .category-badge {
+  display: inline-block;
+  text-align: right;
+}
+
+.postbox__content .post-author-inline {
+  text-align: right !important;
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.postbox__content .card-text {
+  margin-top: auto; /* Pushes the date/comment info to the bottom */
+  flex-shrink: 0;
+  padding-top: 0.5rem;
+  text-align: right; /* RTL alignment */
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+/* Legacy support for old structure (if any) */
+.post-card .card-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
 .post-card .post-link {
   text-align: center;
   display: block;
   width: 100%;
 }
 
-/* Ensure card-title is centered even with -webkit-box */
 .post-card .post-link .card-title {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Center category badge container in post cards */
 .post-card .mb-2 {
   text-align: center;
 }
 
-/* Center category badge in post cards */
 .post-card .category-badge {
   display: inline-block;
-  margin: 0 auto; /* Center the badge */
+  margin: 0 auto;
 }
 
-/* Center author name in post cards */
 .post-card .post-author-inline {
   text-align: center !important;
   display: block;
@@ -675,19 +769,22 @@ body {
 }
 
 .blog-post-row > div .card .card-text:last-of-type {
-  margin-top: auto; /* Pushes the date/comment info to the bottom */
-  flex-shrink: 0; /* Prevent date/time from being cut off */
+  margin-top: auto;
+  flex-shrink: 0;
   padding-top: 0.5rem;
-  text-align: center; /* Center date/comment info */
+  text-align: center;
 }
 
 @media (max-width: 991px) {
   .post-card {
-    height: 400px;
-    max-height: 400px;
-    min-height: 400px;
+    height: auto; /* Allow flexible height for new layout */
+    min-height: 200px;
     width: 100%;
     max-width: 100%;
+  }
+  
+  .postbox {
+    min-height: 200px;
   }
   
   .card-img-top {
@@ -699,9 +796,12 @@ body {
 @media (min-width: 768px) and (max-width: 1024px) {
   /* Surface Pro 7 (912px) and iPad Pro 11" (834px) landscape */
   .post-card {
-    height: 410px;
-    max-height: 410px;
-    min-height: 410px;
+    height: auto; /* Allow flexible height for new layout */
+    min-height: 200px;
+  }
+  
+  .postbox {
+    min-height: 200px;
   }
   
   .card-img-top {
@@ -712,7 +812,7 @@ body {
   }
   
   .post-card .card-body {
-    padding: 14px;
+    padding: 0;
   }
   
   /* Ensure container is responsive */
@@ -747,9 +847,12 @@ body {
 @media (min-width: 1024px) and (max-width: 1366px) {
   /* iPad Pro 12.9" (1024px-1366px) */
   .post-card {
-    height: 420px;
-    max-height: 420px;
-    min-height: 420px;
+    height: auto; /* Allow flexible height for new layout */
+    min-height: 200px;
+  }
+  
+  .postbox {
+    min-height: 200px;
   }
   
   .card-img-top {
@@ -760,7 +863,7 @@ body {
   }
   
   .post-card .card-body {
-    padding: 12px;
+    padding: 0;
   }
   
   /* Ensure proper container width */
@@ -793,9 +896,12 @@ body {
 @media (min-width: 1368px) and (max-width: 1440px) {
   /* Surface Pro 7 landscape and Surface Pro X */
   .post-card {
-    height: 420px;
-    max-height: 420px;
-    min-height: 420px;
+    height: auto; /* Allow flexible height for new layout */
+    min-height: 200px;
+  }
+  
+  .postbox {
+    min-height: 200px;
   }
   
   .card-img-top {
@@ -806,7 +912,7 @@ body {
   }
   
   .post-card .card-body {
-    padding: 12px;
+    padding: 0;
   }
   
   /* Ensure container is responsive */
@@ -838,14 +944,23 @@ body {
   }
   
   .post-card {
-    height: 380px; /* Increased from 340px to accommodate content */
-    max-height: 380px;
-    min-height: 380px;
+    height: auto; /* Allow flexible height for new layout */
+    min-height: auto;
     width: 100%;
     max-width: 100%;
   }
   
+  .postbox {
+    min-height: auto;
+  }
+  
   /* Ensure date/time is always visible on mobile */
+  .postbox__content .card-text {
+    font-size: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  
   .post-card .card-text:last-of-type {
     font-size: 0.75rem;
     margin-top: auto;
@@ -853,7 +968,25 @@ body {
   }
 }
 
+/* Mobile: Stack image on top */
 @media (max-width: 576px) {
+  .postbox {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .postbox__media {
+    width: 100%;
+    height: 160px;
+    min-width: 0;
+    order: -1; /* Image appears first (on top) */
+  }
+  
+  .postbox__content {
+    width: 100%;
+    padding: 12px;
+  }
+  
   /* Further reduce spacing on small mobile devices */
   .card {
     margin-top: 12px;
@@ -861,18 +994,34 @@ body {
   }
   
   .post-card {
-    height: 360px; /* Slightly smaller for very small screens */
-    max-height: 360px;
-    min-height: 360px;
+    height: auto; /* Allow flexible height for new layout */
+    min-height: auto;
+  }
+  
+  .postbox {
+    min-height: auto;
   }
   
   .post-card .card-body {
+    padding: 0;
+  }
+  
+  .postbox__content {
     padding: 10px;
+  }
+  
+  .postbox__content .card-title {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2; /* Limit to 2 lines on very small screens */
   }
   
   .post-card .card-title {
     font-size: 0.85rem;
-    -webkit-line-clamp: 2; /* Limit to 2 lines on very small screens */
+    -webkit-line-clamp: 2;
+  }
+  
+  .postbox__content .card-text {
+    font-size: 0.7rem;
   }
   
   .post-card .card-text:last-of-type {

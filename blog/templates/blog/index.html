@@ -291,69 +291,82 @@
   <div class="row">
     <!-- Blog Entries Column (Mobile: order-6, Desktop: order-lg-1) -->
     <div class="col-lg-9 col-md-12 mt-2 left order-6 order-lg-1">
-      <div class="row blog-post-row">
+      <div class="row blog-post-row g-3">
         {% for post in post_list %}
-        <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="col-md-6 col-sm-12">
           <div class="card post-card mb-4">
-            <div class="card-body">
-              <div class="image-container">
-                {% if post.featured_image %} {% if "placeholder" in post.featured_image.url|default:"" %}
-                <img
-                  class="card-img-top"
-                  src="{% static 'images/default.jpg' %}"
-                  alt="تصویر پیش‌فرض برای {{ post.title }}"
-                  loading="lazy"
-                />
-                {% else %}
-                <img
-                  class="card-img-top"
-                  src="{{ post.featured_image.url }}"
-                  alt="{{ post.title }}"
-                  loading="lazy"
-                  data-fallback="{% static 'images/default.jpg' %}"
-                  onerror="this.onerror=null; this.src=this.dataset.fallback;"
-                />
-                {% endif %} {% else %}
-                <img
-                  class="card-img-top"
-                  src="{% static 'images/default.jpg' %}"
-                  alt="تصویر پیش‌فرض برای {{ post.title }}"
-                  loading="lazy"
-                />
-                {% endif %}
+            <div class="card-body p-0">
+              <div class="postbox">
+                <!-- Image on RIGHT side (20% width) -->
+                <div class="postbox__media">
+                  <div class="image-container">
+                    {% if post.featured_image %} {% if "placeholder" in post.featured_image.url|default:"" %}
+                    <img
+                      class="postbox__img"
+                      src="{% static 'images/default.jpg' %}"
+                      alt="تصویر پیش‌فرض برای {{ post.title }}"
+                      loading="lazy"
+                    />
+                    {% else %}
+                    <img
+                      class="postbox__img"
+                      src="{{ post.featured_image.url }}"
+                      alt="{{ post.title }}"
+                      loading="lazy"
+                      data-fallback="{% static 'images/default.jpg' %}"
+                      onerror="this.onerror=null; this.src=this.dataset.fallback;"
+                    />
+                    {% endif %} {% else %}
+                    <img
+                      class="postbox__img"
+                      src="{% static 'images/default.jpg' %}"
+                      alt="تصویر پیش‌فرض برای {{ post.title }}"
+                      loading="lazy"
+                    />
+                    {% endif %}
+                  </div>
+                </div>
+                <!-- Content on LEFT side (80% width) -->
+                <div class="postbox__content">
+                  <!-- 1) Title -->
+                  <a href="{% url 'post_detail' post.slug %}" class="post-link">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                  </a>
+                  {% if post.pinned %}
+                  <div
+                    class="pinned-badge"
+                    title="پین شده{% if post.pinned_row %} • ردیف {{ post.pinned_row }}{% endif %}"
+                  >
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  {% endif %}
+                  <!-- 2) Category -->
+                  {% if post.category %}
+                  <div class="mb-2">
+                    <a
+                      href="{% url 'category_posts' post.category.slug %}"
+                      class="category-badge"
+                    >
+                      <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
+                    </a>
+                  </div>
+                  {% endif %}
+                  <!-- 3) Author -->
+                  <p class="post-author-inline">نویسنده: {{ post.author }}</p>
+                  <!-- 4) Date & time -->
+                  <!-- 5) Comment icon + count -->
+                  <p class="card-text text-muted h6">
+                    {{ post.created_on }} | <i class="far fa-comments"></i>
+                    {{ post.comment_count }}
+                  </p>
+                </div>
               </div>
-              <a href="{% url 'post_detail' post.slug %}" class="post-link">
-                <h2 class="card-title">{{ post.title }}</h2>
-              </a>
-              {% if post.pinned %}
-              <div
-                class="pinned-badge"
-                title="پین شده{% if post.pinned_row %} • ردیف {{ post.pinned_row }}{% endif %}"
-              >
-                <i class="fas fa-check-circle"></i>
-              </div>
-              {% endif %} {% if post.category %}
-              <div class="mb-2">
-                <a
-                  href="{% url 'category_posts' post.category.slug %}"
-                  class="category-badge"
-                >
-                  <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
-                </a>
-              </div>
-              {% endif %}
-              <p class="post-author-inline">نویسنده: {{ post.author }}</p>
-              <hr />
-              <p class="card-text text-muted h6">
-                {{ post.created_on }} | <i class="far fa-comments"></i>
-                {{ post.comment_count }}
-              </p>
             </div>
           </div>
         </div>
 
-        <!--   divisibleby:4 for 4 columns per row -->
-        {% if forloop.counter|divisibleby:4 %}
+        <!--   divisibleby:2 for 2 columns per row -->
+        {% if forloop.counter|divisibleby:2 %}
       </div>
       <div class="row blog-post-row">{% endif %} {% endfor %}</div>
     </div>

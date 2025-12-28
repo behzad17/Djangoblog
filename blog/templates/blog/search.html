@@ -92,72 +92,73 @@
           
           <!-- Results List -->
           {% if page_obj.object_list %}
-          <div class="row blog-post-row">
+          <div class="row blog-post-row g-3">
             {% for post in page_obj.object_list %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-md-6 col-sm-12 mb-4">
               <div class="card post-card h-100 shadow-sm">
-                <!-- Post Image -->
-                <div class="image-container">
-                  {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
-                  <img
-                    src="{{ post.featured_image.url }}"
-                    class="card-img-top"
-                    alt="{{ post.title }}"
-                    loading="lazy"
-                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
-                  />
-                  {% else %}
-                  <img
-                    src="{% static 'images/default.jpg' %}"
-                    class="card-img-top"
-                    alt="تصویر پیش‌فرض برای {{ post.title }}"
-                    loading="lazy"
-                  />
-                  {% endif %}
-                </div>
-                
-                <div class="card-body">
-                  <!-- Post Title -->
-                  <a href="{% url 'post_detail' post.slug %}" class="post-link">
-                    <h2 class="card-title">{{ post.title }}</h2>
-                  </a>
-                  
-                  <!-- Pinned Badge -->
-                  {% if post.pinned %}
-                  <div class="pinned-badge" title="پین شده">
-                    <i class="fas fa-check-circle"></i>
+                <div class="card-body p-0">
+                  <div class="postbox">
+                    <!-- Image on RIGHT side (20% width) -->
+                    <div class="postbox__media">
+                      <div class="image-container">
+                        {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
+                        <img
+                          src="{{ post.featured_image.url }}"
+                          class="postbox__img"
+                          alt="{{ post.title }}"
+                          loading="lazy"
+                          onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                        />
+                        {% else %}
+                        <img
+                          src="{% static 'images/default.jpg' %}"
+                          class="postbox__img"
+                          alt="تصویر پیش‌فرض برای {{ post.title }}"
+                          loading="lazy"
+                        />
+                        {% endif %}
+                      </div>
+                    </div>
+                    <!-- Content on LEFT side (80% width) -->
+                    <div class="postbox__content">
+                      <!-- 1) Title -->
+                      <a href="{% url 'post_detail' post.slug %}" class="post-link">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                      </a>
+                      <!-- Pinned Badge -->
+                      {% if post.pinned %}
+                      <div class="pinned-badge" title="پین شده">
+                        <i class="fas fa-check-circle"></i>
+                      </div>
+                      {% endif %}
+                      <!-- 2) Category -->
+                      {% if post.category %}
+                      <div class="mb-2">
+                        <a
+                          href="{% url 'category_posts' post.category.slug %}"
+                          class="category-badge"
+                        >
+                          <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
+                        </a>
+                      </div>
+                      {% endif %}
+                      <!-- 3) Author -->
+                      <p class="post-author-inline">نویسنده: {{ post.author }}</p>
+                      <!-- 4) Date & time -->
+                      <!-- 5) Comment icon + count -->
+                      <p class="card-text text-muted h6">
+                        <i class="far fa-calendar ms-1"></i>{{ post.created_on|date:"Y/m/d" }}
+                        <span class="me-2">|</span>
+                        <i class="far fa-comments ms-1"></i>{{ post.comment_count|default:0 }}
+                      </p>
+                      <!-- Excerpt (if available) -->
+                      {% if post.excerpt %}
+                      <p class="card-text text-muted small mt-2">
+                        {{ post.excerpt|truncatewords:15 }}
+                      </p>
+                      {% endif %}
+                    </div>
                   </div>
-                  {% endif %}
-                  
-                  <!-- Category Badge -->
-                  {% if post.category %}
-                  <div class="mb-2">
-                    <a
-                      href="{% url 'category_posts' post.category.slug %}"
-                      class="category-badge"
-                    >
-                      <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
-                    </a>
-                  </div>
-                  {% endif %}
-                  
-                  <!-- Author -->
-                  <p class="post-author-inline">نویسنده: {{ post.author }}</p>
-                  <hr />
-                  
-                  <!-- Post Meta -->
-                  <p class="card-text text-muted h6">
-                    <i class="far fa-calendar ms-1"></i>{{ post.created_on|date:"Y/m/d" }}
-                    <span class="me-2">|</span>
-                    <i class="far fa-comments ms-1"></i>{{ post.comment_count|default:0 }}
-                  </p>
-                  
-                  <!-- Excerpt (if available) -->
-                  {% if post.excerpt %}
-                  <p class="card-text text-muted small mt-2">
-                    {{ post.excerpt|truncatewords:15 }}
-                  </p>
-                  {% endif %}
                 </div>
               </div>
             </div>
