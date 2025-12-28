@@ -710,7 +710,7 @@ body {
 .postbox__content {
   width: 65%;
   flex: 1 1 65%;
-  padding: 12px 15px;
+  padding: 12px 15px 0 15px; /* Remove bottom padding to eliminate empty space */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
