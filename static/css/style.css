@@ -693,7 +693,7 @@ body {
 
 .postbox__content {
   width: calc(100% - 100px);
-  padding: 12px 12px 0 12px;
+  padding: 3px 3px 0 3px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
