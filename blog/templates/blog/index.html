@@ -298,7 +298,7 @@
             <div class="card-body p-0">
               <div class="postbox">
                 <!-- Image on RIGHT side (20% width) -->
-                <div class="postbox__media">
+                <div class="postbox__media {% if post.pinned %}postbox__media--pinned{% endif %}">
                   <div class="image-container">
                     {% if post.featured_image %} {% if "placeholder" in post.featured_image.url|default:"" %}
                     <img
@@ -332,14 +332,6 @@
                   <a href="{% url 'post_detail' post.slug %}" class="post-link">
                     <h2 class="card-title">{{ post.title }}</h2>
                   </a>
-                  {% if post.pinned %}
-                  <div
-                    class="pinned-badge"
-                    title="پین شده{% if post.pinned_row %} • ردیف {{ post.pinned_row }}{% endif %}"
-                  >
-                    <i class="fas fa-check-circle"></i>
-                  </div>
-                  {% endif %}
                   <!-- 2) Category -->
                   {% if post.category %}
                   <div class="mb-2">
