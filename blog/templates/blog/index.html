@@ -202,6 +202,27 @@
     </div>
   </div>
 
+  <!-- Main Ad (Mobile only: appears right after categories, Desktop: hidden - shown in sidebar) -->
+  <div class="row d-lg-none mt-2">
+    <div class="col-12">
+      <div class="ad-placeholder ad-placeholder-top">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+          <img
+            src="{% static 'images/ad-top.jpg' %}"
+            alt="تبلیغات"
+            class="ad-image"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="ad-content" style="display: none">
+            <i class="fas fa-ad"></i>
+            <p class="ad-text">Your Ads Here!</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <!-- Blog Entries Column (Mobile: order-6, Desktop: order-lg-1) -->
     <div class="col-lg-9 col-md-12 mt-2 left order-6 order-lg-1">
@@ -428,25 +449,6 @@
             </div>
           </a>
         </div>
-      </div>
-    </div>
-
-    <!-- Main Ad (Mobile only: order-4, Desktop: hidden - shown in sidebar) -->
-    <div class="col-12 order-4 d-lg-none mt-2">
-      <div class="ad-placeholder ad-placeholder-top">
-        <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-          <img
-            src="{% static 'images/ad-top.jpg' %}"
-            alt="تبلیغات"
-            class="ad-image"
-            loading="lazy"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-          />
-          <div class="ad-content" style="display: none">
-            <i class="fas fa-ad"></i>
-            <p class="ad-text">Your Ads Here!</p>
-          </div>
-        </a>
       </div>
     </div>
 
