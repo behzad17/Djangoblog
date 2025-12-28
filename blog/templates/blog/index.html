@@ -223,6 +223,71 @@
     </div>
   </div>
 
+  <!-- Expert Contents (Mobile only: appears right after main ad, Desktop: in sidebar) -->
+  <div class="row d-lg-none mt-2">
+    <div class="col-12 sidebar-wrapper">
+      <div class="popular-posts-sidebar">
+        <h4 class="sidebar-title">
+          <i class="fas fa-star ms-2"></i>مطالب تخصصی
+        </h4>
+        {% if popular_posts %}
+        <ol class="popular-posts-list">
+          {% for post in popular_posts %}
+          <li class="popular-post-item">
+            <div class="popular-post-content">
+              <a
+                href="{% url 'post_detail' post.slug %}"
+                class="popular-post-thumbnail"
+                title="{{ post.title }}"
+              >
+                {% if post.featured_image %} {% if "placeholder" in post.featured_image.url|default:"" %}
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  alt="{{ post.title }}"
+                  class="popular-post-image"
+                  loading="lazy"
+                />
+                {% else %}
+                <img
+                  src="{{ post.featured_image.url }}"
+                  alt="{{ post.title }}"
+                  class="popular-post-image"
+                  loading="lazy"
+                  data-fallback="{% static 'images/default.jpg' %}"
+                  onerror="this.onerror=null; this.src=this.dataset.fallback;"
+                />
+                {% endif %} {% else %}
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  alt="{{ post.title }}"
+                  class="popular-post-image"
+                  loading="lazy"
+                />
+                {% endif %}
+              </a>
+              <div class="popular-post-text">
+                <a
+                  href="{% url 'post_detail' post.slug %}"
+                  class="popular-post-link"
+                  title="{{ post.title }}"
+                >
+                  {{ post.title|truncatewords:8 }}
+                </a>
+                <div class="popular-post-author">
+                  <i class="fas fa-user me-1"></i>{{ post.author.username }}
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ol>
+        {% else %}
+        <p class="text-muted small">هنوز مطالب تخصصی در دسترس نیست.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <!-- Blog Entries Column (Mobile: order-6, Desktop: order-lg-1) -->
     <div class="col-lg-9 col-md-12 mt-2 left order-6 order-lg-1">
@@ -293,8 +358,8 @@
       <div class="row blog-post-row">{% endif %} {% endfor %}</div>
     </div>
 
-    <!-- Popular Posts Sidebar (Mobile: order-5, Desktop: order-lg-2) -->
-    <div class="col-lg-3 col-md-12 mt-3 order-5 order-lg-2 sidebar-wrapper">
+    <!-- Popular Posts Sidebar (Desktop only: order-lg-2, Mobile: shown above in separate row) -->
+    <div class="col-lg-3 col-md-12 mt-3 d-none d-lg-block order-lg-2 sidebar-wrapper">
       <!-- Ad Above Popular Posts (Desktop only - hidden on mobile) -->
       <div class="ad-placeholder ad-placeholder-top d-none d-lg-block">
         <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
