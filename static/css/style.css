@@ -135,7 +135,7 @@ body {
 .post-card {
   /* Flexible height for new layout */
   height: auto;
-  min-height: 100px;
+  min-height: 70px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -625,7 +625,7 @@ body {
   direction: rtl;
   overflow: hidden;
   border-radius: 14px;
-  min-height: 90px;
+  min-height: 60px;
   height: 100%;
 }
 
@@ -778,13 +778,13 @@ body {
 @media (max-width: 991px) {
   .post-card {
     height: auto; /* Allow flexible height for new layout */
-    min-height: 100px;
+    min-height: 70px;
     width: 100%;
     max-width: 100%;
   }
   
   .postbox {
-    min-height: 100px;
+    min-height: 60px;
   }
   
   .card-img-top {
@@ -797,11 +797,11 @@ body {
   /* Surface Pro 7 (912px) and iPad Pro 11" (834px) landscape */
   .post-card {
     height: auto; /* Allow flexible height for new layout */
-    min-height: 100px;
+    min-height: 70px;
   }
   
   .postbox {
-    min-height: 100px;
+    min-height: 60px;
   }
   
   .card-img-top {
@@ -848,11 +848,11 @@ body {
   /* iPad Pro 12.9" (1024px-1366px) */
   .post-card {
     height: auto; /* Allow flexible height for new layout */
-    min-height: 100px;
+    min-height: 70px;
   }
   
   .postbox {
-    min-height: 100px;
+    min-height: 60px;
   }
   
   .card-img-top {
@@ -897,11 +897,11 @@ body {
   /* Surface Pro 7 landscape and Surface Pro X */
   .post-card {
     height: auto; /* Allow flexible height for new layout */
-    min-height: 100px;
+    min-height: 70px;
   }
   
   .postbox {
-    min-height: 100px;
+    min-height: 60px;
   }
   
   .card-img-top {
@@ -977,7 +977,7 @@ body {
   
   .postbox__media {
     width: 100%;
-    height: 80px;
+    height: 160px;
     min-width: 0;
     order: -1; /* Image appears first (on top) */
   }
