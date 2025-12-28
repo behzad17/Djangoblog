@@ -625,7 +625,8 @@ body {
   direction: rtl;
   overflow: hidden;
   border-radius: 14px;
-  min-height: 60px;
+  min-height: 160px;
+  max-height: 160px;
   height: 100%;
 }
 
@@ -786,7 +787,8 @@ body {
   }
   
   .postbox {
-    min-height: 60px;
+    min-height: 160px;
+    max-height: 160px;
   }
   
   .card-img-top {
@@ -803,7 +805,8 @@ body {
   }
   
   .postbox {
-    min-height: 60px;
+    min-height: 160px;
+    max-height: 160px;
   }
   
   .card-img-top {
@@ -854,7 +857,8 @@ body {
   }
   
   .postbox {
-    min-height: 60px;
+    min-height: 160px;
+    max-height: 160px;
   }
   
   .card-img-top {
@@ -903,7 +907,8 @@ body {
   }
   
   .postbox {
-    min-height: 60px;
+    min-height: 160px;
+    max-height: 160px;
   }
   
   .card-img-top {
