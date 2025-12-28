@@ -133,7 +133,9 @@ body {
 }
 
 .post-card {
-  /* Flexible height for new layout */
+  /* Fixed width for consistent card sizing */
+  width: 100%;
+  min-width: 0;
   height: auto;
   min-height: 70px;
   overflow: hidden;
@@ -598,6 +600,15 @@ body {
 
 .blog-post-row > div {
   display: flex;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .blog-post-row > div {
+    flex: 0 0 50%;
+    max-width: 50%;
+    width: 50%;
+  }
 }
 
 .blog-post-row > div .card {
@@ -625,6 +636,7 @@ body {
   direction: rtl;
   overflow: hidden;
   border-radius: 14px;
+  width: 100%;
   height: 160px;
   min-height: 160px;
   max-height: 160px;
