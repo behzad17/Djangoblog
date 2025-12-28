@@ -672,6 +672,7 @@ body {
 /* Pinned post: solid border around image */
 .postbox__media--pinned {
   border: 3px solid #e63946;
+  border-radius: 5px;
   box-sizing: border-box;
 }
 
