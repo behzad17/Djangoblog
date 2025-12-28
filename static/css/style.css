@@ -633,13 +633,14 @@ body {
 /* New Postbox Layout - RTL with image on right */
 .postbox {
   display: flex;
+  align-items: stretch; /* Make both sections same height */
   direction: rtl;
   overflow: hidden;
   border-radius: 14px;
   width: 100%;
-  height: 120px;
-  min-height: 120px;
-  max-height: 120px;
+  height: auto; /* Flexible height to match content */
+  min-height: 120px; /* Minimum height */
+  max-height: none; /* No maximum limit */
 }
 
 /* Mobile: Allow postbox to match content height */
@@ -670,7 +671,8 @@ body {
   width: 35%;
   flex: 0 0 35%;
   min-width: 0;
-  height: 100%;
+  height: auto; /* Flexible height to match content */
+  min-height: 120px; /* Minimum height */
   flex-shrink: 0;
   overflow: hidden;
   display: flex;
@@ -718,7 +720,6 @@ body {
   direction: rtl;
   overflow: hidden;
   min-width: 0;
-  height: 100%; /* Fill full height of parent */
   border-right: 1px solid #e0e0e0; /* Divider line between content and image (RTL: right side) */
 }
 
@@ -791,7 +792,7 @@ body {
 
 /* Postbox bottom section wrapper for date/time */
 .postbox__bottom {
-  margin-top: auto; /* Push to bottom of flex container */
+  margin-top: 0; /* Remove auto margin - let content flow naturally */
   padding-top: 0.1rem;
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
