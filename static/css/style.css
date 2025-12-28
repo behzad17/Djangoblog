@@ -734,14 +734,14 @@ body {
   text-align: right !important;
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.1rem;
   font-size: 0.85rem;
 }
 
 .postbox__content .card-text {
-  margin-top: auto; /* Pushes the date/comment info to the bottom */
+  margin-top: 0; /* No auto margin when inside postbox__bottom */
   flex-shrink: 0;
-  padding-top: 10px;
+  padding-top: 0;
   padding-bottom: 0;
   text-align: right; /* RTL alignment */
   font-size: 0.85rem;
@@ -751,6 +751,7 @@ body {
 /* Postbox bottom section wrapper for date/time */
 .postbox__bottom {
   margin-top: auto;
+  padding-top: 0.2rem;
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
   flex-shrink: 0;
