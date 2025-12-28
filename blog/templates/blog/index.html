@@ -203,8 +203,8 @@
   </div>
 
   <div class="row">
-    <!-- Blog Entries Column -->
-    <div class="col-lg-9 col-md-12 mt-2 left">
+    <!-- Blog Entries Column (Mobile: order-6, Desktop: order-lg-1) -->
+    <div class="col-lg-9 col-md-12 mt-2 left order-6 order-lg-1">
       <div class="row blog-post-row">
         {% for post in post_list %}
         <div class="col-lg-3 col-md-6 col-sm-12">
@@ -272,10 +272,10 @@
       <div class="row blog-post-row">{% endif %} {% endfor %}</div>
     </div>
 
-    <!-- Popular Posts Sidebar -->
-    <div class="col-lg-3 col-md-12 mt-3 sidebar-wrapper">
-      <!-- Ad Above Popular Posts -->
-      <div class="ad-placeholder ad-placeholder-top">
+    <!-- Popular Posts Sidebar (Mobile: order-5, Desktop: order-lg-2) -->
+    <div class="col-lg-3 col-md-12 mt-3 order-5 order-lg-2 sidebar-wrapper">
+      <!-- Ad Above Popular Posts (Desktop only - hidden on mobile) -->
+      <div class="ad-placeholder ad-placeholder-top d-none d-lg-block">
         <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
           <img
             src="{% static 'images/ad-top.jpg' %}"
@@ -351,7 +351,107 @@
         {% endif %}
       </div>
 
-      <!-- Ads Below Popular Posts -->
+      <!-- Ads Below Popular Posts (Desktop only - hidden on mobile) -->
+      <div class="ads-container-bottom d-none d-lg-block">
+        <div class="ad-placeholder ad-placeholder-bottom">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+            <img
+              src="{% static 'images/ad-1.jpg' %}"
+              alt="تبلیغات"
+              class="ad-image"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
+              <i class="fas fa-ad"></i>
+              <p class="ad-text">Your Ads Here!</p>
+            </div>
+          </a>
+        </div>
+        <div class="ad-placeholder ad-placeholder-bottom">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+            <img
+              src="{% static 'images/ad-2.jpg' %}"
+              alt="تبلیغات"
+              class="ad-image"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
+              <i class="fas fa-ad"></i>
+              <p class="ad-text">Your Ads Here!</p>
+            </div>
+          </a>
+        </div>
+        <div class="ad-placeholder ad-placeholder-bottom">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+            <img
+              src="{% static 'images/ad-3.jpg' %}"
+              alt="تبلیغات"
+              class="ad-image"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
+              <i class="fas fa-ad"></i>
+              <p class="ad-text">Your Ads Here!</p>
+            </div>
+          </a>
+        </div>
+        <div class="ad-placeholder ad-placeholder-bottom">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+            <img
+              src="{% static 'images/ad-4.jpg' %}"
+              alt="تبلیغات"
+              class="ad-image"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
+              <i class="fas fa-ad"></i>
+              <p class="ad-text">Your Ads Here!</p>
+            </div>
+          </a>
+        </div>
+        <div class="ad-placeholder ad-placeholder-bottom">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+            <img
+              src="{% static 'images/ad-5.jpg' %}"
+              alt="تبلیغات"
+              class="ad-image"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="ad-content" style="display: none">
+              <i class="fas fa-ad"></i>
+              <p class="ad-text">Your Ads Here!</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Ad (Mobile only: order-4, Desktop: hidden - shown in sidebar) -->
+    <div class="col-12 order-4 d-lg-none mt-2">
+      <div class="ad-placeholder ad-placeholder-top">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+          <img
+            src="{% static 'images/ad-top.jpg' %}"
+            alt="تبلیغات"
+            class="ad-image"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="ad-content" style="display: none">
+            <i class="fas fa-ad"></i>
+            <p class="ad-text">Your Ads Here!</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 5 Ads Below (Mobile only: order-7, Desktop: hidden - shown in sidebar) -->
+    <div class="col-12 order-7 d-lg-none mt-2">
       <div class="ads-container-bottom">
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
