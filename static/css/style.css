@@ -672,7 +672,7 @@ body {
 /* Pinned post: solid border around image */
 .postbox__media--pinned {
   border: 3px solid #e63946;
-  border-radius: 5px;
+  border-radius: 10px;
   box-sizing: border-box;
 }
 
@@ -713,6 +713,7 @@ body {
   min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
+  min-height: calc(0.9rem * 1.2 * 2); /* Always reserve space for 2 lines */
 }
 
 .postbox__content .post-link {
