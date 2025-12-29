@@ -4846,7 +4846,12 @@ body {
   max-width: 900px;
   min-width: 300px;
   height: 50px; /* Desktop / large tablet height */
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  /* Background image set via inline style in template for Django static path resolution */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* Fallback gradient background (shown if image fails to load) */
+  background-color: #ff6b6b;
   color: white;
   /* Visible by default - banner shows on first visit */
   display: flex;
@@ -4896,13 +4901,9 @@ body {
   color: inherit;
 }
 
+/* Hide img tag - using CSS background-image instead */
 .ad-banner-image {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0;
-  object-fit: cover;
-  border-radius: 15px;
+  display: none !important;
 }
 
 .ad-banner-fallback {
@@ -4983,10 +4984,7 @@ body {
     font-size: 1.1rem;
   }
   
-  .ad-banner-image {
-    height: 100%;
-    border-radius: 12px;
-  }
+  /* Image hidden - using CSS background-image instead */
 }
 
 @media (max-width: 576px) {
@@ -5007,10 +5005,7 @@ body {
     padding-right: 2rem;
   }
   
-  .ad-banner-image {
-    height: 100%;
-    border-radius: 10px;
-  }
+  /* Image hidden - using CSS background-image instead */
 }
 
 /* ============================================
