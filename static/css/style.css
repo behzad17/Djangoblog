@@ -664,7 +664,7 @@ body {
   .postbox__media {
     width: 100%;
     flex: 0 0 auto;
-    height: 230px; /* Image height for mobile */
+    height: 200px; /* Match related posts image height */
     border-bottom: 1px solid #e0e0e0; /* Divider line on mobile */
     order: -1; /* Image on top for mobile */
   }
@@ -673,7 +673,33 @@ body {
     width: 100%;
     flex: 1 1 auto;
     border-right: none; /* Remove divider on mobile since image is on top */
-    padding: 15px 15px; /* Content padding: all sides 15px */
+    padding: 0; /* Match related posts - no extra padding since card-body is 0 */
+    text-align: center; /* Center align content like related posts */
+  }
+  
+  /* Match related posts text styling on medium mobile */
+  .postbox__content .card-title {
+    text-align: center !important; /* Center title like related posts */
+  }
+  
+  .postbox__content .post-link {
+    text-align: center !important; /* Center title link */
+  }
+  
+  .postbox__content .mb-2 {
+    text-align: center !important; /* Center category */
+  }
+  
+  .postbox__content .category-badge {
+    margin: 0 auto; /* Center category badge */
+  }
+  
+  .postbox__content .post-author-inline {
+    text-align: center !important; /* Center author like related posts */
+  }
+  
+  .postbox__content .card-text {
+    text-align: center !important; /* Center date/comments like related posts */
   }
 }
 
@@ -1063,15 +1089,15 @@ body {
   }
 }
 
-/* Mobile: Stack image on top */
+/* Mobile: Stack image on top - Match related posts styling */
 @media (max-width: 576px) {
   .post-card {
-    padding: 12px 20px; /* Card padding: top/bottom 12px, left/right 20px */
+    padding: 12px 20px; /* Card padding: top/bottom 12px, left/right 20px - Match related posts */
     box-sizing: border-box;
   }
   
   .post-card .card-body {
-    padding: 0 !important; /* Keep card-body padding at 0 */
+    padding: 0 !important; /* Keep card-body padding at 0 - Match related posts */
   }
   
   .postbox {
@@ -1083,7 +1109,7 @@ body {
   
   .postbox__media {
     width: 100%;
-    height: 230px; /* Image height for mobile */
+    height: 200px; /* Match related posts image height */
     min-width: 0;
     order: -1; /* Image appears first (on top) */
   }
@@ -1091,7 +1117,8 @@ body {
   .postbox__content {
     width: 100%;
     height: auto;
-    padding: 15px 15px; /* Content padding: all sides 15px */
+    padding: 0; /* Match related posts - no extra padding since card-body is 0 */
+    text-align: center; /* Center align content like related posts */
   }
   
   /* Further reduce spacing on small mobile devices */
@@ -1113,26 +1140,46 @@ body {
     padding: 0;
   }
   
-  .postbox__content {
-    padding: 10px;
-  }
-  
+  /* Match related posts text styling */
   .postbox__content .card-title {
-    font-size: 0.85rem;
-    -webkit-line-clamp: 2; /* Limit to 2 lines on very small screens */
+    font-size: 0.85rem; /* Match related posts title size */
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    text-align: center !important; /* Center like related posts */
+    margin-top: 0.5rem; /* Match related posts margin */
+    margin-bottom: 0.5rem;
   }
   
   .post-card .card-title {
     font-size: 0.85rem;
     -webkit-line-clamp: 2;
+    text-align: center;
+  }
+  
+  .postbox__content .post-link {
+    text-align: center !important; /* Center title link */
+  }
+  
+  .postbox__content .mb-2 {
+    text-align: center !important; /* Center category */
+  }
+  
+  .postbox__content .category-badge {
+    margin: 0 auto; /* Center category badge */
+  }
+  
+  .postbox__content .post-author-inline {
+    text-align: center !important; /* Center author like related posts */
+    font-size: 0.875rem; /* Match related posts small font size */
   }
   
   .postbox__content .card-text {
-    font-size: 0.7rem;
+    font-size: 0.7rem; /* Match related posts date/comments size */
+    text-align: center !important; /* Center date/comments like related posts */
   }
   
   .post-card .card-text:last-of-type {
     font-size: 0.7rem;
+    text-align: center;
   }
 }
 
