@@ -4919,17 +4919,19 @@ body {
   background: rgba(0, 0, 0, 0.3); /* Semi-transparent dark background for visibility */
   border: none;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.38rem; /* 15% bigger: 1.2rem * 1.15 = 1.38rem */
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.4rem; /* Reduced padding to make box smaller */
   border-radius: 4px;
   transition: background-color 0.2s ease;
   position: absolute;
   right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 37px; /* 15% smaller: 44px * 0.85 = 37.4px */
+  min-height: 37px; /* 15% smaller: 44px * 0.85 = 37.4px */
+  width: 37px; /* Fixed width for consistent size */
+  height: 37px; /* Fixed height for consistent size */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4983,7 +4985,12 @@ body {
   
   .ad-banner-close {
     right: 0.5rem;
-    font-size: 1.1rem;
+    font-size: 1.265rem; /* 15% bigger: 1.1rem * 1.15 = 1.265rem */
+    min-width: 37px; /* 15% smaller box */
+    min-height: 37px;
+    width: 37px;
+    height: 37px;
+    padding: 0.2rem 0.4rem; /* Reduced padding */
   }
   
   /* Image hidden - using CSS background-image instead */
