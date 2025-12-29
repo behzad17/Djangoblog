@@ -323,23 +323,26 @@
           <h5 class="card-title mb-3">
             <i class="fas fa-th-list ms-2"></i>پست‌های مرتبط
           </h5>
-          <div class="row g-3">
+          <div class="row blog-post-row g-3">
             {% for related_post in related_posts %}
-            <div class="col-md-4 col-sm-6">
-              <div class="card post-card h-100">
-                <div class="card-body">
-                  <div class="image-container">
+            <div class="col-md-6 col-sm-12">
+              <div class="card post-card mb-4">
+                <div class="card-body p-0">
+                  <div class="postbox">
+                    <!-- Image on RIGHT side (35% width) -->
+                    <div class="postbox__media {% if related_post.pinned %}postbox__media--pinned{% endif %}">
+                      <div class="image-container">
                     {% if related_post.featured_image %}
                       {% if "placeholder" in related_post.featured_image.url|default:"" %}
                       <img
-                        class="card-img-top"
+                        class="postbox__img"
                         src="{% static 'images/default.jpg' %}"
                         alt="تصویر پیش‌فرض برای {{ related_post.title }}"
                         loading="lazy"
                       />
                       {% else %}
                       <img
-                        class="card-img-top"
+                        class="postbox__img"
                         src="{{ related_post.featured_image.url }}"
                         alt="{{ related_post.title }}"
                         loading="lazy"
@@ -349,31 +352,43 @@
                       {% endif %}
                     {% else %}
                     <img
-                      class="card-img-top"
+                      class="postbox__img"
                       src="{% static 'images/default.jpg' %}"
                       alt="تصویر پیش‌فرض برای {{ related_post.title }}"
                       loading="lazy"
                     />
                     {% endif %}
+                      </div>
+                    </div>
+                    <!-- Content on LEFT side (65% width) -->
+                    <div class="postbox__content">
+                      <!-- 1) Title -->
+                      <a href="{% url 'post_detail' related_post.slug %}" class="post-link">
+                        <h2 class="card-title">{{ related_post.title }}</h2>
+                      </a>
+                      <!-- 2) Category -->
+                      {% if related_post.category %}
+                      <div class="mb-2">
+                        <a
+                          href="{% url 'category_posts' related_post.category.slug %}"
+                          class="category-badge"
+                        >
+                          <i class="fas fa-tag ms-1"></i>{{ related_post.category.name }}
+                        </a>
+                      </div>
+                      {% endif %}
+                      <!-- 3) Author -->
+                      <p class="post-author-inline">نویسنده: {{ related_post.author }}</p>
+                      <!-- 4) Date & time -->
+                      <!-- 5) Comment icon + count -->
+                      <div class="postbox__bottom">
+                        <p class="card-text text-muted h6">
+                          {{ related_post.created_on }} | <i class="far fa-comments"></i>
+                          {{ related_post.comment_count|default:0 }}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <a href="{% url 'post_detail' related_post.slug %}" class="post-link">
-                    <h6 class="card-title">{{ related_post.title|truncatewords:8 }}</h6>
-                  </a>
-                  {% if related_post.category %}
-                  <div class="mb-2">
-                    <a
-                      href="{% url 'category_posts' related_post.category.slug %}"
-                      class="category-badge"
-                    >
-                      <i class="fas fa-tag ms-1"></i>{{ related_post.category.name }}
-                    </a>
-                  </div>
-                  {% endif %}
-                  <p class="post-author-inline small">نویسنده: {{ related_post.author }}</p>
-                  <hr class="my-2" />
-                  <p class="card-text text-muted small mb-0">
-                    {{ related_post.created_on|date:"M d, Y" }} | <i class="far fa-comments"></i> {{ related_post.comment_count|default:0 }}
-                  </p>
                 </div>
               </div>
             </div>
