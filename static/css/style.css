@@ -1114,6 +1114,15 @@ body {
     order: -1; /* Image appears first (on top) */
   }
   
+  .postbox__media .image-container {
+    border-radius: 5px; /* Match related posts image border-radius */
+    overflow: hidden;
+  }
+  
+  .postbox__img {
+    border-radius: 5px; /* Match related posts image border-radius */
+  }
+  
   .postbox__content {
     width: 100%;
     height: auto;
@@ -1129,7 +1138,8 @@ body {
   
   .post-card {
     height: auto; /* Allow flexible height for new layout */
-    min-height: auto;
+    min-height: 70px; /* Match related posts min-height */
+    background-color: #FFFFF0 !important; /* Match related posts background */
   }
   
   .postbox {
@@ -1143,16 +1153,26 @@ body {
   /* Match related posts text styling */
   .postbox__content .card-title {
     font-size: 0.85rem; /* Match related posts title size */
+    font-weight: bold;
+    line-height: 1.2;
     -webkit-line-clamp: 2; /* Limit to 2 lines */
     text-align: center !important; /* Center like related posts */
     margin-top: 0.5rem; /* Match related posts margin */
     margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .post-card .card-title {
     font-size: 0.85rem;
+    font-weight: bold;
+    line-height: 1.2;
     -webkit-line-clamp: 2;
     text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
   
   .postbox__content .post-link {
@@ -1161,25 +1181,33 @@ body {
   
   .postbox__content .mb-2 {
     text-align: center !important; /* Center category */
+    margin-bottom: 0.5rem !important; /* Match related posts category margin */
   }
   
   .postbox__content .category-badge {
     margin: 0 auto; /* Center category badge */
+    display: inline-block; /* Match related posts */
   }
   
   .postbox__content .post-author-inline {
     text-align: center !important; /* Center author like related posts */
-    font-size: 0.875rem; /* Match related posts small font size */
+    font-size: 0.875rem; /* Match related posts small font size (Bootstrap small) */
+    display: block;
+    width: 100%;
+    color: #475569; /* Match related posts author color (slate-600) */
   }
   
   .postbox__content .card-text {
     font-size: 0.7rem; /* Match related posts date/comments size */
     text-align: center !important; /* Center date/comments like related posts */
+    color: #6c757d; /* Match related posts text-muted color */
+    margin-bottom: 0 !important; /* Match related posts mb-0 */
   }
   
   .post-card .card-text:last-of-type {
     font-size: 0.7rem;
     text-align: center;
+    margin-bottom: 0;
   }
 }
 
