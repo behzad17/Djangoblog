@@ -4839,7 +4839,7 @@ body {
 .ad-banner {
   /* Overlay positioning - 20% overlaps navbar, 80% overlaps hero section */
   position: fixed;
-  top: 58px; /* Desktop: Banner 50px tall. Adjusted to ensure mostly in hero section. Banner spans 58-108px: 7px (14%) overlaps navbar if navbar is 65px, 43px (86%) on hero */
+  top: 63px; /* Desktop: Banner 50px tall. Positioned lower for more hero overlap. Banner spans 63-113px: 2px (4%) overlaps navbar if navbar is 65px, 48px (96%) on hero */
   left: 50%;
   transform: translateX(-50%);
   width: 70vw;
@@ -4963,7 +4963,7 @@ body {
     width: 70vw;
     max-width: none;
     min-width: 280px;
-    top: 54px; /* Tablet: Banner 45px tall. Adjusted to ensure mostly in hero section. Banner spans 54-99px: 6px (13%) overlaps navbar if navbar is 60px, 39px (87%) on hero */
+    top: 58px; /* Tablet: Banner 45px tall. Positioned lower for more hero overlap. Banner spans 58-103px: 2px (4%) overlaps navbar if navbar is 60px, 43px (96%) on hero */
     height: 45px; /* Tablet height */
     border-radius: 12px;
   }
@@ -4992,7 +4992,7 @@ body {
 @media (max-width: 576px) {
   .ad-banner {
     width: 95vw;
-    top: 50px; /* Mobile: Banner 35px tall. Adjusted to ensure mostly in hero section. Banner spans 50-85px: 5px (14%) overlaps navbar if navbar is 55px, 30px (86%) on hero */
+    top: 53px; /* Mobile: Banner 35px tall. Positioned lower for more hero overlap. Banner spans 53-88px: 2px (6%) overlaps navbar if navbar is 55px, 33px (94%) on hero */
     height: 35px; /* Mobile height */
     border-radius: 10px;
   }
