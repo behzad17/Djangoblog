@@ -643,8 +643,17 @@ body {
   max-height: none; /* No maximum limit */
 }
 
-/* Mobile: Allow postbox to match content height - Match related posts styling */
+/* Mobile: Allow postbox to match content height */
 @media (max-width: 767px) {
+  .post-card {
+    padding: 12px 20px; /* Card padding: top/bottom 12px, left/right 20px */
+    box-sizing: border-box;
+  }
+  
+  .post-card .card-body {
+    padding: 0 !important; /* Keep card-body padding at 0 */
+  }
+  
   .postbox {
     height: auto;
     min-height: 120px;
@@ -655,7 +664,7 @@ body {
   .postbox__media {
     width: 100%;
     flex: 0 0 auto;
-    height: 200px; /* Match related posts image height */
+    height: 230px; /* Image height for mobile */
     border-bottom: 1px solid #e0e0e0; /* Divider line on mobile */
     order: -1; /* Image on top for mobile */
   }
@@ -664,7 +673,7 @@ body {
     width: 100%;
     flex: 1 1 auto;
     border-right: none; /* Remove divider on mobile since image is on top */
-    padding: 12px 15px; /* Match related posts card-body padding */
+    padding: 15px 15px; /* Content padding: all sides 15px */
   }
 }
 
@@ -1054,8 +1063,17 @@ body {
   }
 }
 
-/* Mobile: Stack image on top - Match related posts styling */
+/* Mobile: Stack image on top */
 @media (max-width: 576px) {
+  .post-card {
+    padding: 12px 20px; /* Card padding: top/bottom 12px, left/right 20px */
+    box-sizing: border-box;
+  }
+  
+  .post-card .card-body {
+    padding: 0 !important; /* Keep card-body padding at 0 */
+  }
+  
   .postbox {
     flex-direction: column;
     height: auto;
@@ -1065,7 +1083,7 @@ body {
   
   .postbox__media {
     width: 100%;
-    height: 200px; /* Match related posts image height */
+    height: 230px; /* Image height for mobile */
     min-width: 0;
     order: -1; /* Image appears first (on top) */
   }
@@ -1073,7 +1091,7 @@ body {
   .postbox__content {
     width: 100%;
     height: auto;
-    padding: 12px 15px; /* Match related posts card-body padding */
+    padding: 15px 15px; /* Content padding: all sides 15px */
   }
   
   /* Further reduce spacing on small mobile devices */
