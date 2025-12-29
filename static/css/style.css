@@ -1,3 +1,20 @@
+/* CSS Variables for Navbar Height */
+:root {
+  --navbar-height: 65px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --navbar-height: 55px;
+  }
+}
+
 body {
   background-color: #f9fafc;
 }
@@ -4820,15 +4837,15 @@ body {
 
 /* Ad Banner Styles */
 .ad-banner {
-  /* Overlay positioning - sits half on navbar and half on hero section */
+  /* Overlay positioning - 20% overlaps navbar, 80% overlaps hero section */
   position: fixed;
-  top: calc(65px - 30px); /* Navbar height (~65px) minus half banner height (30px) */
+  top: calc(var(--navbar-height) - 10px); /* Desktop: 65px - 10px = 55px (20% of 50px overlaps navbar) */
   left: 50%;
   transform: translateX(-50%);
   width: 70vw;
   max-width: 900px;
   min-width: 300px;
-  height: 60px;
+  height: 50px; /* Desktop / large tablet height */
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
   color: white;
   /* Visible by default - banner shows on first visit */
@@ -4946,8 +4963,8 @@ body {
     width: 70vw;
     max-width: none;
     min-width: 280px;
-    top: calc(60px - 27.5px); /* Adjusted for smaller navbar and banner height */
-    height: 55px;
+    top: calc(var(--navbar-height) - 9px); /* Tablet: 60px - 9px = 51px (20% of 45px overlaps navbar) */
+    height: 45px; /* Tablet height */
     border-radius: 12px;
   }
   
@@ -4975,8 +4992,8 @@ body {
 @media (max-width: 576px) {
   .ad-banner {
     width: 95vw;
-    top: calc(55px - 25px); /* Adjusted for mobile navbar and banner height */
-    height: 50px;
+    top: calc(var(--navbar-height) - 7px); /* Mobile: 55px - 7px = 48px (20% of 35px overlaps navbar) */
+    height: 35px; /* Mobile height */
     border-radius: 10px;
   }
   
