@@ -1101,6 +1101,9 @@ body {
   }
   
   .post-card {
+    width: 90%; /* Reduce card width to create space from borders */
+    margin-left: auto;
+    margin-right: auto;
     padding: 12px 17px; /* Card padding: top/bottom 12px, left/right 17px (reduced 15% from 20px) */
     box-sizing: border-box;
   }
