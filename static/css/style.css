@@ -4878,8 +4878,9 @@ body {
   justify-content: space-between;
   padding: 0 1rem;
   position: relative;
+  z-index: 2; /* Ensure content is above background */
   border-radius: 15px;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to visible so close button isn't clipped */
 }
 
 .ad-banner-message {
@@ -4915,7 +4916,7 @@ body {
 }
 
 .ad-banner-close {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.3); /* Semi-transparent dark background for visibility */
   border: none;
   color: white;
   font-size: 1.2rem;
@@ -4932,8 +4933,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000; /* Higher than ad link to prevent click-through */
+  z-index: 10001; /* Higher than ad link and content to ensure visibility */
   pointer-events: auto; /* Ensure button is clickable */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
 }
 
 .ad-banner-close:hover {
