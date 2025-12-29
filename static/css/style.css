@@ -601,6 +601,7 @@ body {
 .blog-post-row > div {
   display: flex;
   width: 100%;
+  align-items: flex-start; /* Prevent vertical stretching on mobile */
 }
 
 @media (min-width: 768px) {
@@ -645,8 +646,12 @@ body {
 
 /* Mobile: Allow postbox to match content height */
 @media (max-width: 767px) {
+  .blog-post-row > div {
+    align-items: flex-start !important; /* Prevent vertical stretching on mobile */
+  }
+  
   .post-card {
-    padding: 12px 20px; /* Card padding: top/bottom 12px, left/right 20px */
+    padding: 12px 17px; /* Card padding: top/bottom 12px, left/right 17px (reduced 15% from 20px) */
     box-sizing: border-box;
   }
   
@@ -671,7 +676,7 @@ body {
   
   .postbox__content {
     width: 100%;
-    flex: 1 1 auto;
+    flex: 0 0 auto; /* Prevent flex-grow from causing stretching */
     border-right: none; /* Remove divider on mobile since image is on top */
     padding: 0; /* Match related posts - no extra padding since card-body is 0 */
     text-align: center; /* Center align content like related posts */
@@ -1091,8 +1096,12 @@ body {
 
 /* Mobile: Stack image on top - Match related posts styling */
 @media (max-width: 576px) {
+  .blog-post-row > div {
+    align-items: flex-start !important; /* Prevent vertical stretching on mobile */
+  }
+  
   .post-card {
-    padding: 12px 20px; /* Card padding: top/bottom 12px, left/right 20px - Match related posts */
+    padding: 12px 17px; /* Card padding: top/bottom 12px, left/right 17px (reduced 15% from 20px) */
     box-sizing: border-box;
   }
   
@@ -1126,6 +1135,7 @@ body {
   .postbox__content {
     width: 100%;
     height: auto;
+    flex: 0 0 auto; /* Prevent flex-grow from causing stretching */
     padding: 0; /* Match related posts - no extra padding since card-body is 0 */
     text-align: center; /* Center align content like related posts */
   }
