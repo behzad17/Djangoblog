@@ -78,6 +78,7 @@ def ad_list_by_category(request, category_slug):
     return render(request, "ads/ads_by_category.html", context)
 
 
+@login_required
 def ad_detail(request, slug):
     """
     Detail page for a single ad.

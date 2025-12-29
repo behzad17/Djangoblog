@@ -146,6 +146,7 @@ class PostList(generic.ListView):
 
 
 @ratelimit(key='ip', rate='20/m', method='POST', block=True)
+@login_required
 def post_detail(request, slug):
     """
     View function for displaying a single blog post and its comments.
