@@ -1245,6 +1245,9 @@ body {
 @media (max-width: 768px) {
   .hero-section {
     padding: 0 !important; /* Remove all padding on mobile */
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 }
 
@@ -1284,7 +1287,9 @@ body {
   
   .hero-section {
     padding: 0 !important; /* Force remove padding on mobile */
-    margin: 0 !important;
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
   .hero-section .container {
@@ -1333,7 +1338,9 @@ body {
   
   .hero-section {
     padding: 0 !important; /* Force remove padding on small mobile */
-    margin: 0 !important;
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
   .hero-section .container {
