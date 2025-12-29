@@ -4992,7 +4992,7 @@ body {
 @media (max-width: 576px) {
   .ad-banner {
     width: 95vw;
-    top: 75px; /* Mobile: Banner 35px tall. Positioned lower in hero section. Banner spans 75-110px, completely below navbar (navbar ends at 55px), fully in hero section */
+    top: 80px; /* Mobile: Banner 35px tall. Positioned lower in hero section. Banner spans 80-115px, completely below navbar (navbar ends at 55px), fully in hero section */
     height: 35px; /* Mobile height */
     border-radius: 10px;
   }
