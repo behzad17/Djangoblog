@@ -1407,6 +1407,18 @@ body {
   }
 }
 
+/* Ask Me page hero section - wider text area and justified text for desktop/tablet */
+@media (min-width: 768px) {
+  .askme-hero-section .askme-hero-column {
+    max-width: 80% !important; /* Increase width by 20% (from 66.67% col-lg-8 to 80%) */
+    flex: 0 0 80% !important;
+  }
+  
+  .askme-hero-section .hero-subtitle {
+    text-align: justify !important;
+  }
+}
+
 /* Ensure hero section text is centered on login and signup pages */
 .hero-section-login .hero-title,
 .hero-section-login .hero-subtitle,
