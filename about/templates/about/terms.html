@@ -30,7 +30,7 @@
     <div class="col-lg-11">
       <div class="card about-bilingual-card shadow-sm">
         <div class="card-body p-0">
-          <div class="row g-0" style="direction: ltr;">
+          <div class="row g-0 align-items-stretch" style="direction: ltr;">
             <!-- Swedish Column (Left) -->
             <div class="col-lg-6 about-column about-column-swedish border-end">
               <div class="p-4 p-md-5">
@@ -532,6 +532,13 @@
 
 .about-column {
   min-height: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-column > div {
+  flex: 1;
 }
 
 .about-column-persian {
