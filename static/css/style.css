@@ -3725,6 +3725,7 @@ body {
     margin-right: auto !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    border-radius: 10% 10% 0 0 !important; /* Top-left and top-right rounded corners */
   }
   
   .navbar .container-fluid {
@@ -3760,6 +3761,7 @@ body {
     margin-right: auto !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    border-radius: 10% 10% 0 0 !important; /* Top-left and top-right rounded corners */
   }
   
   .navbar .container-fluid {
