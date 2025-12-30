@@ -3719,6 +3719,21 @@ body {
 
 /* Mobile adjustments for login/register buttons */
 @media (max-width: 768px) {
+  .navbar {
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .navbar .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
   .navbar-nav.ms-auto {
     flex-direction: row;
     gap: 0.5rem;
@@ -3739,6 +3754,21 @@ body {
 
 /* Stack buttons vertically on very small screens - centered with border matching text */
 @media (max-width: 576px) {
+  .navbar {
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .navbar .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
   .navbar-nav.ms-auto {
     flex-direction: column;
     width: 100%;
