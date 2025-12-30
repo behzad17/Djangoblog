@@ -5014,6 +5014,15 @@ body {
     padding-right: 2rem;
   }
   
+  .ad-banner-close {
+    min-width: 33px; /* 10% smaller than 37px: 37px * 0.9 = 33.3px */
+    min-height: 33px;
+    width: 33px;
+    height: 33px;
+    padding: 0.15rem 0.3rem; /* Reduced padding for smaller box */
+    font-size: 1.242rem; /* Keep icon size proportional: 1.38rem * 0.9 = 1.242rem */
+  }
+  
   /* Image hidden - using CSS background-image instead */
 }
 
