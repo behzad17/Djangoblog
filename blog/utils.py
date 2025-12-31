@@ -368,3 +368,82 @@ def sanitize_html(content):
     cleaned = re.sub(r'javascript:', '', cleaned, flags=re.IGNORECASE)
     
     return cleaned
+
+
+# Comment Moderation Utilities
+def is_trusted_commenter(user):
+    """
+    Check if user has 5+ approved comments (trusted commenter).
+    
+    Args:
+        user: User instance
+        
+    Returns:
+        bool: True if user has 5 or more approved comments
+    """
+    if not user or not user.is_authenticated:
+        return False
+    
+    approved_count = Comment.objects.filter(
+        author=user,
+        approved=True
+    ).count()
+    
+    return approved_count >= 5
+
+
+def contains_link(text):
+    """
+    Check if text contains any URL pattern.
+    
+    Detects:
+    - http:// and https:// URLs
+    - www. URLs
+    - Common domain extensions (.com, .org, .net, .io, .se, .ir)
+    
+    Args:
+        text: Text to check
+        
+    Returns:
+        bool: True if text contains a link pattern
+    """
+    if not text:
+        return False
+    
+    text_lower = text.lower()
+    
+    # Link patterns
+    link_patterns = [
+        r'https?://\S+',  # http:// or https://
+        r'www\.\S+',      # www.example.com
+        r'\S+\.(com|org|net|io|se|ir|co|uk|de|fr|es|it|nl|be|dk|fi|no|pl|cz|at|ch|au|ca|jp|cn|in|br|mx|ar|za|ae|sa|kw|qa|om|bh|jo|lb|eg|ma|tn|dz|ly|sd|ye|iq|sy|ps|af|pk|bd|lk|mm|kh|la|vn|th|my|sg|id|ph|nz|ie|is|lu|mt|cy|gr|pt|ro|bg|hr|si|sk|hu|ee|lv|lt|by|ua|md|ge|am|az|kz|uz|tm|kg|tj|mn|np|bt|mv|tw|hk|mo|kr|jp|cn|ru|tr|il|ir)\S*',  # domain extensions
+    ]
+    
+    for pattern in link_patterns:
+        if re.search(pattern, text_lower):
+            return True
+    
+    return False
+
+
+def determine_comment_approval(user, comment_body):
+    """
+    Determine if a comment should be auto-approved based on trust and link detection.
+    
+    Args:
+        user: User instance (comment author)
+        comment_body: Comment text content
+        
+    Returns:
+        tuple: (approved: bool, moderation_reason: str or None)
+    """
+    # Step 1: Check for links (strict rule - always requires moderation)
+    if contains_link(comment_body):
+        return False, 'contains_link'
+    
+    # Step 2: Check if user is trusted
+    if not is_trusted_commenter(user):
+        return False, 'new_user'
+    
+    # Step 3: Trusted user, no link - auto-approve
+    return True, None

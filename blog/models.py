@@ -191,17 +191,48 @@ class Comment(models.Model):
     author, and approval status. Comments are linked to both the post and the user
     who created them.
     """
+    MODERATION_REASONS = [
+        ('new_user', 'New user (first 5 comments)'),
+        ('contains_link', 'Contains link'),
+        ('manual_review', 'Manual review'),
+    ]
+    
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="commenter")
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    approved = models.BooleanField(default=True)
+    approved = models.BooleanField(default=False, help_text="Whether this comment has been approved by admin")
+    moderation_reason = models.CharField(
+        max_length=50,
+        choices=MODERATION_REASONS,
+        blank=True,
+        null=True,
+        help_text="Reason why comment requires moderation"
+    )
+    reviewed_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reviewed_comments',
+        help_text="Admin who reviewed this comment"
+    )
+    reviewed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this comment was reviewed"
+    )
 
     class Meta:
         """Meta options for Comment model."""
-        ordering = ["created_on"]  
+        ordering = ["created_on"]
+        indexes = [
+            models.Index(fields=['approved', 'created_on']),
+            models.Index(fields=['author', 'approved']),
+            models.Index(fields=['moderation_reason', 'approved']),
+        ]
 
     def __str__(self):
         """Returns a string representation of the comment."""

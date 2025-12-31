@@ -17,9 +17,10 @@ import json
 
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
-from .utils import track_page_view
+from .utils import track_page_view, determine_comment_approval
 from .decorators import site_verified_required
 from ads.models import FavoriteAd
+from django.utils import timezone
 
 
 class PostList(generic.ListView):
@@ -170,8 +171,16 @@ def post_detail(request, slug):
             logger = logging.getLogger(__name__)
             logger.error(f"Error tracking page view for post {post.slug}: {e}", exc_info=True)
     
-    comments = post.comments.all().order_by("-created_on")
-    comment_count = post.comments.count()
+    # Filter comments: show approved comments + user's own unapproved comments
+    if request.user.is_authenticated:
+        comments = post.comments.filter(
+            Q(approved=True) | Q(author=request.user)
+        ).order_by("-created_on")
+    else:
+        comments = post.comments.filter(approved=True).order_by("-created_on")
+    
+    # Count only approved comments for display
+    comment_count = post.comments.filter(approved=True).count()
     comment_form = CommentForm()
     # Determine if current user has already favorited this post
     is_favorited = False
@@ -224,6 +233,14 @@ def post_detail(request, slug):
             comment = comment_form.save(commit=False)
             comment.author = request.user
             comment.post = post
+            
+            # Determine approval status based on trust and link detection
+            approved, moderation_reason = determine_comment_approval(
+                request.user, comment.body
+            )
+            comment.approved = approved
+            comment.moderation_reason = moderation_reason
+            
             comment.save()
 
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -236,12 +253,28 @@ def post_detail(request, slug):
                     ),
                     'body': comment.body,
                     'post_slug': post.slug,
+                    'approved': comment.approved,
                 })
 
-            messages.add_message(
-                request, messages.SUCCESS,
-                'Comment submitted successfully!'
-            )
+            # Context-aware success message
+            if comment.approved:
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'نظر شما با موفقیت ثبت شد!'
+                )
+            else:
+                if comment.moderation_reason == 'contains_link':
+                    messages.add_message(
+                        request, messages.INFO,
+                        'نظر شما ثبت شد و در انتظار بررسی است. '
+                        'نظرات حاوی لینک نیاز به تایید مدیر دارند.'
+                    )
+                else:
+                    messages.add_message(
+                        request, messages.INFO,
+                        'نظر شما ثبت شد و در انتظار بررسی است. '
+                        'پس از تایید ۵ نظر، نظرات بعدی شما به صورت خودکار تایید می‌شوند.'
+                    )
             return redirect('post_detail', slug=post.slug)
 
     # Get expert posts for sidebar (replaces Popular Posts)
@@ -345,6 +378,7 @@ def comment_edit(request, slug, comment_id):
 
     This view handles both GET and POST requests for editing comments.
     It ensures that only the comment author can edit their comments.
+    Re-checks approval status if comment was previously approved.
     """
     comment = get_object_or_404(Comment, pk=comment_id)
     if request.user == comment.author:
@@ -352,11 +386,25 @@ def comment_edit(request, slug, comment_id):
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 try:
                     data = json.loads(request.body)
-                    comment.body = data.get('body')
+                    new_body = data.get('body')
+                    comment.body = new_body
+                    
+                    # Re-check approval if comment was previously approved
+                    if comment.approved:
+                        approved, moderation_reason = determine_comment_approval(
+                            request.user, new_body
+                        )
+                        if not approved:
+                            comment.approved = False
+                            comment.moderation_reason = moderation_reason
+                            comment.reviewed_by = None  # Reset review
+                            comment.reviewed_at = None
+                    
                     comment.save()
                     return JsonResponse({
                         'status': 'success',
-                        'body': comment.body
+                        'body': comment.body,
+                        'approved': comment.approved,
                     })
                 except json.JSONDecodeError:
                     return JsonResponse({
@@ -366,7 +414,21 @@ def comment_edit(request, slug, comment_id):
             else:
                 form = CommentForm(request.POST, instance=comment)
                 if form.is_valid():
-                    form.save()
+                    comment = form.save(commit=False)
+                    new_body = comment.body
+                    
+                    # Re-check approval if comment was previously approved
+                    if comment.approved:
+                        approved, moderation_reason = determine_comment_approval(
+                            request.user, new_body
+                        )
+                        if not approved:
+                            comment.approved = False
+                            comment.moderation_reason = moderation_reason
+                            comment.reviewed_by = None  # Reset review
+                            comment.reviewed_at = None
+                    
+                    comment.save()
                     return redirect('post_detail', slug=slug)
         else:
             form = CommentForm(instance=comment)

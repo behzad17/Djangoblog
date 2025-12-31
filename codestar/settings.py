@@ -259,6 +259,10 @@ else:
     DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@example.com')
     SERVER_EMAIL = DEFAULT_FROM_EMAIL  # For error reporting emails
 
+# Admin notification settings
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', DEFAULT_FROM_EMAIL)
+ADMIN_NOTIFICATION_ENABLED = os.getenv('ADMIN_NOTIFICATION_ENABLED', 'True').lower() in ('true', '1', 'yes')
+
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'  # Google emails are already verified, but we still require site verification
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically create account on social login
 SOCIALACCOUNT_QUERY_EMAIL = True  # Request email from social providers

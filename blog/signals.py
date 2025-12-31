@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.urls import reverse
-from .models import UserProfile
+from .models import UserProfile, Post
 import logging
 
 logger = logging.getLogger(__name__)
@@ -318,3 +318,65 @@ def handle_social_account_added(request, sociallogin, **kwargs):
                 import logging
                 logger = logging.getLogger(__name__)
                 logger.error(f"Error creating/updating profile for social login: {e}")
+
+
+# Admin Notification Signals
+@receiver(post_save, sender=Post)
+def notify_admin_new_post(sender, instance, created, **kwargs):
+    """Send email to admin when new draft post is created."""
+    if not created:
+        return  # Only on creation
+    
+    # Only notify for drafts (status=0)
+    if instance.status != 0:
+        return
+    
+    # Check if notifications are enabled
+    admin_email = getattr(settings, 'ADMIN_EMAIL', None)
+    if not admin_email:
+        logger.warning("ADMIN_EMAIL not set, skipping post notification")
+        return
+    
+    admin_notification_enabled = getattr(settings, 'ADMIN_NOTIFICATION_ENABLED', True)
+    if not admin_notification_enabled:
+        return
+    
+    try:
+        # Get site URL for admin link
+        try:
+            site = Site.objects.get_current()
+            site_domain = site.domain
+            if not site_domain.startswith('http'):
+                protocol = 'https' if not settings.DEBUG else 'http'
+                site_url = f"{protocol}://{site_domain}"
+            else:
+                site_url = site_domain
+        except Exception:
+            site_url = ''
+        
+        admin_post_url = f"{site_url}/admin/blog/post/{instance.id}/" if site_url else f"/admin/blog/post/{instance.id}/"
+        
+        subject = f"New Post Draft: {instance.title[:50]}"
+        message = f"""
+A new post draft has been submitted:
+
+Title: {instance.title}
+Author: {instance.author.username}
+Category: {instance.category.name if instance.category else 'None'}
+Created: {instance.created_on.strftime('%Y-%m-%d %H:%M')}
+
+Review at: {admin_post_url}
+"""
+        
+        from django.core.mail import send_mail
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [admin_email],
+            fail_silently=False,
+        )
+        
+        logger.info(f"Admin notification sent for new post draft: {instance.id}")
+    except Exception as e:
+        logger.error(f"Error sending admin notification for new post: {e}", exc_info=True)

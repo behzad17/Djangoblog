@@ -1,0 +1,272 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Incoming Items - Review Queue{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; Incoming Items
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Incoming Items - Review Queue</h1>
+
+<div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+    <strong>Statistics:</strong>
+    Draft Posts: {{ stats.total_pending_posts }},
+    Pending Ads: {{ stats.total_pending_ads }},
+    Pending URLs: {{ stats.total_pending_urls }},
+    Pending Questions: {{ stats.total_pending_questions }},
+    Pending Comments: {{ stats.total_pending_comments }},
+    Recent Expert Posts (24h): {{ stats.recent_expert_posts_count }}
+</div>
+
+<!-- Draft Posts Section -->
+{% if pending_posts %}
+<div style="margin: 30px 0;">
+    <h2>📝 Draft Posts ({{ stats.total_pending_posts }})</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Title</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Author</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Category</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Created</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in pending_posts %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.title|truncatewords:10 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.author.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.category.name|default:"-" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.created_on|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:blog_post_change' post.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if stats.total_pending_posts > 20 %}
+    <p style="margin-top: 10px;">
+        <a href="{% url 'admin:blog_post_changelist' %}?status__exact=0">View all {{ stats.total_pending_posts }} draft posts →</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Pending Ads Section -->
+{% if pending_ads %}
+<div style="margin: 30px 0;">
+    <h2>📢 Pending Ads ({{ stats.total_pending_ads }})</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Title</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Owner</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Category</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Created</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ad in pending_ads %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.title|truncatewords:10 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.owner.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.category.name|default:"-" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.created_on|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:ads_ad_change' ad.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if stats.total_pending_ads > 20 %}
+    <p style="margin-top: 10px;">
+        <a href="{% url 'admin:ads_ad_changelist' %}?is_approved__exact=0">View all {{ stats.total_pending_ads }} pending ads →</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Pending Comments Section -->
+{% if pending_comments %}
+<div style="margin: 30px 0;">
+    <h2>💬 Pending Comments ({{ stats.total_pending_comments }})</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Comment</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Author</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Post</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Reason</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Created</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in pending_comments %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ comment.body|truncatewords:15 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ comment.author.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ comment.post.title|truncatewords:5 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    {% if comment.moderation_reason == 'new_user' %}👤 New User
+                    {% elif comment.moderation_reason == 'contains_link' %}🔗 Contains Link
+                    {% else %}-{% endif %}
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ comment.created_on|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:blog_comment_change' comment.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if stats.total_pending_comments > 20 %}
+    <p style="margin-top: 10px;">
+        <a href="{% url 'admin:blog_comment_changelist' %}?approved__exact=0">View all {{ stats.total_pending_comments }} pending comments →</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Pending URL Approvals Section -->
+{% if pending_urls_ads or pending_urls_posts %}
+<div style="margin: 30px 0;">
+    <h2>🔗 Pending URL Approvals ({{ stats.total_pending_urls }})</h2>
+    
+    {% if pending_urls_ads %}
+    <h3>Ads with Pending URLs</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Ad Title</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">URL</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Owner</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ad in pending_urls_ads %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.title|truncatewords:10 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.url|truncatewords:5 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ ad.owner.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:ads_ad_change' ad.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    
+    {% if pending_urls_posts %}
+    <h3>Posts with Pending URLs</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Post Title</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">URL</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Author</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in pending_urls_posts %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.title|truncatewords:10 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.external_url|truncatewords:5 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.author.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:blog_post_change' post.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Pending Questions Section -->
+{% if pending_questions %}
+<div style="margin: 30px 0;">
+    <h2>❓ Pending Questions ({{ stats.total_pending_questions }})</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">User</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Moderator</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Created</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in pending_questions %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ question.user.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ question.moderator.user.username|default:"Unassigned" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ question.created_on|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:askme_question_change' question.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if stats.total_pending_questions > 20 %}
+    <p style="margin-top: 10px;">
+        <a href="{% url 'admin:askme_question_changelist' %}?answered__exact=0">View all {{ stats.total_pending_questions }} pending questions →</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Recent Expert Posts Section -->
+{% if recent_expert_posts %}
+<div style="margin: 30px 0;">
+    <h2>⭐ Recent Expert Posts (Last 24 Hours - {{ stats.recent_expert_posts_count }})</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Title</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Author</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Category</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Published</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in recent_expert_posts %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.title|truncatewords:10 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.author.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.category.name|default:"-" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ post.created_on|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:blog_post_change' post.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if not pending_posts and not pending_ads and not pending_comments and not pending_urls_ads and not pending_urls_posts and not pending_questions %}
+<div style="padding: 40px; text-align: center; color: #666;">
+    <h2>🎉 All Clear!</h2>
+    <p>No pending items requiring review at this time.</p>
+</div>
+{% endif %}
+
+{% endblock %}
+

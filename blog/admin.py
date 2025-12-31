@@ -110,8 +110,121 @@ class UserProfileAdmin(admin.ModelAdmin):
             obj.expert_since = None
         super().save_model(request, obj, form, change)
 
-# Register your models here.
-admin.site.register(Comment)
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    """Admin interface for comment moderation."""
+    
+    list_display = (
+        'id',
+        'body_preview',
+        'author',
+        'post',
+        'approved',  # Must be in list_display to use in list_editable
+        'approval_status',
+        'moderation_reason_display',
+        'created_on',
+        'reviewed_info'
+    )
+    
+    list_filter = (
+        'approved',
+        'moderation_reason',
+        'created_on',
+        'reviewed_at',
+    )
+    
+    search_fields = ('body', 'author__username', 'post__title')
+    
+    list_editable = ('approved',)  # Quick approve/reject
+    
+    readonly_fields = ('created_on', 'reviewed_by', 'reviewed_at')
+    
+    actions = ['approve_comments', 'reject_comments']
+    
+    fieldsets = (
+        ('Comment Content', {
+            'fields': ('body', 'post', 'author')
+        }),
+        ('Moderation', {
+            'fields': (
+                'approved',
+                'moderation_reason',
+                'reviewed_by',
+                'reviewed_at'
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_on',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def body_preview(self, obj):
+        """Show first 50 characters of comment."""
+        if len(obj.body) > 50:
+            return obj.body[:50] + '...'
+        return obj.body
+    body_preview.short_description = 'Comment'
+    
+    def approval_status(self, obj):
+        """Color-coded approval status."""
+        if obj.approved:
+            return format_html(
+                '<span style="color: green; font-weight: bold;">✓ Approved</span>'
+            )
+        return format_html(
+            '<span style="color: red; font-weight: bold;">⏳ Pending</span>'
+        )
+    approval_status.short_description = 'Status'
+    
+    def moderation_reason_display(self, obj):
+        """Display moderation reason with icon."""
+        if not obj.moderation_reason:
+            return '-'
+        reasons = {
+            'new_user': '👤 New User',
+            'contains_link': '🔗 Contains Link',
+            'manual_review': '📋 Manual Review',
+        }
+        return reasons.get(obj.moderation_reason, obj.moderation_reason)
+    moderation_reason_display.short_description = 'Reason'
+    
+    def reviewed_info(self, obj):
+        """Show who reviewed and when."""
+        if obj.reviewed_by and obj.reviewed_at:
+            return f"{obj.reviewed_by.username} ({obj.reviewed_at.strftime('%Y-%m-%d %H:%M')})"
+        return '-'
+    reviewed_info.short_description = 'Reviewed By'
+    
+    def approve_comments(self, request, queryset):
+        """Bulk approve action."""
+        from django.utils import timezone
+        updated = queryset.update(
+            approved=True,
+            reviewed_by=request.user,
+            reviewed_at=timezone.now()
+        )
+        self.message_user(request, f"{updated} comment(s) approved.")
+    approve_comments.short_description = 'Approve selected comments'
+    
+    def reject_comments(self, request, queryset):
+        """Bulk reject action."""
+        from django.utils import timezone
+        updated = queryset.update(
+            approved=False,
+            reviewed_by=request.user,
+            reviewed_at=timezone.now()
+        )
+        self.message_user(request, f"{updated} comment(s) rejected.")
+    reject_comments.short_description = 'Reject selected comments'
+    
+    def save_model(self, request, obj, form, change):
+        """Track who reviewed the comment."""
+        from django.utils import timezone
+        if change and 'approved' in form.changed_data:
+            obj.reviewed_by = request.user
+            obj.reviewed_at = timezone.now()
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(PageView)
