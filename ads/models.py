@@ -104,6 +104,12 @@ class Ad(models.Model):
         default=False,
         help_text="Featured ads appear first in listings and have special highlighting.",
     )
+    featured_priority = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=None,
+        help_text="Priority for featured ads (1-39). Lower numbers appear first. Ads with priority 1-39 appear in top positions on page 1. Leave blank for automatic ordering by date.",
+    )
     featured_until = models.DateTimeField(
         null=True,
         blank=True,

@@ -24,6 +24,7 @@ class AdAdmin(admin.ModelAdmin):
         "is_active",
         "is_approved",
         "is_featured",
+        "featured_priority",
         "url_status",
         "start_date",
         "end_date",
@@ -39,7 +40,7 @@ class AdAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
     )
-    list_editable = ("is_featured",)
+    list_editable = ("is_featured", "featured_priority")
     search_fields = ("title", "target_url", "category__name", "city")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on")
@@ -80,8 +81,8 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Featured Ad",
             {
-                "fields": ("is_featured", "featured_until"),
-                "description": "Featured ads appear first in listings and have special highlighting.",
+                "fields": ("is_featured", "featured_priority", "featured_until"),
+                "description": "Featured ads appear first in listings (positions 1-39 on page 1). Set featured_priority (1-39) to control exact position. Lower numbers = higher priority. Leave priority blank for automatic ordering by date.",
             },
         ),
         (

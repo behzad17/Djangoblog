@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db import models
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
 from .models import AdCategory, Ad, FavoriteAd
@@ -26,9 +27,9 @@ def _visible_ads_queryset():
         models.Q(start_date__isnull=True) | models.Q(start_date__lte=today),
         models.Q(end_date__isnull=True) | models.Q(end_date__gte=today),
     )
-    # Order by: featured first (only if featured_until is in future or null), then newest
+    # Order by: featured first (only if featured_until is in future or null), then by priority, then newest
     # Annotate to check if featured status is currently active
-    from django.db.models import Case, When, BooleanField, Q
+    from django.db.models import Case, When, BooleanField, Q, F, Value, IntegerField
     qs = qs.annotate(
         is_currently_featured=Case(
             When(
@@ -38,7 +39,21 @@ def _visible_ads_queryset():
             default=False,
             output_field=BooleanField()
         )
-    ).order_by('-is_currently_featured', '-created_on')
+    )
+    # Order: featured first, then by featured_priority (lower = higher priority), then by created_on
+    # Use a large number (999999) for featured ads without priority so they appear after prioritized ones
+    qs = qs.annotate(
+        priority_value=Case(
+            When(
+                is_currently_featured=True,
+                then=Case(
+                    When(featured_priority__isnull=False, then=F('featured_priority')),
+                    default=Value(999999, output_field=IntegerField())  # Featured ads without priority go to end
+                )
+            ),
+            default=Value(9999999, output_field=IntegerField())  # Non-featured ads go to very end
+        )
+    ).order_by('-is_currently_featured', 'priority_value', '-created_on')
     return qs.select_related("category")
 
 
@@ -66,15 +81,98 @@ def ad_category_list(request):
 
 def ad_list_by_category(request, category_slug):
     """
-    List all visible ads for a specific category.
+    List all visible ads for a specific category with pagination.
     Each category has its own dedicated URL.
+    
+    Pagination: 39 ads per page
+    Page 1: Featured ads first (positions 1-39), then normal ads to fill remaining slots
+    Page 2+: Only normal ads (featured ads excluded)
     """
     category = get_object_or_404(AdCategory, slug=category_slug)
-    ads = _visible_ads_queryset().filter(category=category)
-    context = {
-        "category": category,
-        "ads": ads,
-    }
+    all_ads = _visible_ads_queryset().filter(category=category)
+    
+    # Separate featured and normal ads
+    featured_ads = [ad for ad in all_ads if ad.is_currently_featured]
+    normal_ads = [ad for ad in all_ads if not ad.is_currently_featured]
+    
+    # Get page number
+    page_number = request.GET.get('page', 1)
+    try:
+        page_number = int(page_number)
+    except (ValueError, TypeError):
+        page_number = 1
+    
+    ads_per_page = 39
+    
+    if page_number == 1:
+        # Page 1: Featured ads first (up to 39), then fill with normal ads
+        page_ads = []
+        
+        # Add featured ads (up to 39)
+        featured_count = min(len(featured_ads), ads_per_page)
+        page_ads.extend(featured_ads[:featured_count])
+        
+        # Fill remaining slots with normal ads
+        remaining_slots = ads_per_page - len(page_ads)
+        if remaining_slots > 0:
+            page_ads.extend(normal_ads[:remaining_slots])
+        
+        # Calculate pagination for normal ads (excluding featured)
+        # Total normal ads that need pagination (skip the ones shown on page 1)
+        normal_ads_for_pagination = normal_ads[remaining_slots:]
+        
+        # Create paginator for remaining normal ads
+        paginator = Paginator(normal_ads_for_pagination, ads_per_page)
+        total_pages = 1 + paginator.num_pages  # Page 1 + remaining pages
+        
+        context = {
+            "category": category,
+            "ads": page_ads,
+            "page_obj": None,  # Custom pagination, not using page_obj
+            "is_paginated": total_pages > 1,
+            "has_previous": False,
+            "has_next": paginator.num_pages > 0,
+            "previous_page_number": None,
+            "next_page_number": 2 if paginator.num_pages > 0 else None,
+            "current_page": 1,
+            "total_pages": total_pages,
+        }
+    else:
+        # Page 2+: Only normal ads
+        # Skip the normal ads that were shown on page 1
+        featured_count = min(len(featured_ads), ads_per_page)
+        remaining_slots = ads_per_page - featured_count
+        normal_ads_for_pagination = normal_ads[remaining_slots:]
+        
+        # Paginate normal ads
+        paginator = Paginator(normal_ads_for_pagination, ads_per_page)
+        
+        # Adjust page number (page 2 in URL = page 1 in paginator)
+        paginator_page_number = page_number - 1
+        
+        try:
+            page_obj = paginator.page(paginator_page_number)
+        except (EmptyPage, PageNotAnInteger):
+            # Invalid page number, show page 1
+            page_obj = paginator.page(1)
+            paginator_page_number = 1
+        
+        # Total pages = 1 (page 1 with featured) + paginator pages
+        total_pages = 1 + paginator.num_pages
+        
+        context = {
+            "category": category,
+            "ads": list(page_obj.object_list),
+            "page_obj": page_obj,
+            "is_paginated": total_pages > 1,
+            "has_previous": page_number > 1,
+            "has_next": page_number < total_pages,
+            "previous_page_number": page_number - 1 if page_number > 1 else None,
+            "next_page_number": page_number + 1 if page_number < total_pages else None,
+            "current_page": page_number,
+            "total_pages": total_pages,
+        }
+    
     return render(request, "ads/ads_by_category.html", context)
 
 
