@@ -23,13 +23,13 @@ body {
   font-family: Lato, sans-serif;
   font-size: 1.725rem; /* 15% bigger than 1.5rem (1.5 * 1.15 = 1.725) */
   font-weight: 700;
-  color: #fecb00; /* Changed to yellow */
+  color: var(--pv-cta-services); /* Use CTA Services color token */
 }
 
-/* Brand Tagline - Small yellow text under logo */
+/* Brand Tagline - Small text under logo */
 .brand-tagline {
   font-size: 0.968rem; /* 10% bigger than 0.88rem (0.88 * 1.10 = 0.968) */
-  color: #fecb00;
+  color: var(--pv-cta-services); /* Use CTA Services color token */
   font-weight: 500;
   margin-top: -2px;
   line-height: 1;
@@ -86,7 +86,7 @@ body {
   font-family: 'Shabnam', sans-serif;
   font-size: 2.07rem; /* 20% bigger than 1.725rem (1.725 * 1.20 = 2.07) */
   font-weight: 500; /* Shabnam Medium */
-  color: #fecb00; /* Changed to yellow */
+  color: var(--pv-cta-services); /* Use CTA Services color token */
   margin-left: 0.2rem; /* Reduced spacing - closer to the line */
   display: inline-block;
 }
@@ -2172,12 +2172,12 @@ body {
 
 /* Footer sizing tweaks */
 .footer {
-  background: #76DFB1 !important;
+  background: var(--pv-color-primary) !important; /* Use primary color token */
 }
 
 .footer p {
   font-size: 1.1rem; /* slightly larger footer text */
-  color: #415a77 !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
 }
 
 .footer .fab {
@@ -2205,16 +2205,16 @@ body {
 }
 
 .footer-contact-link {
-  color: #415a77 !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
   text-decoration: none;
 }
 
 .footer-contact-item i {
-  color: #415a77 !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
 }
 
 .footer-contact-link:hover {
-  color: #ffc107;
+  color: var(--pv-cta-services); /* Use CTA Services color token */
   text-decoration: none;
 }
 
@@ -3442,7 +3442,7 @@ body {
 
 /* Footer enhancements */
 .footer-enhanced {
-  border-top: 1px solid #2d3748;
+  border-top: 1px solid var(--pv-border-soft); /* Use border token */
 }
 
 /* Override all text colors in footer */
@@ -3451,26 +3451,26 @@ body {
 .footer .text-white-50,
 .footer .brand,
 .footer .brand-persian {
-  color: #415a77 !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
 }
 
 .footer-links a {
-  color: #415a77 !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
   text-decoration: none;
   font-size: 0.95rem;
 }
 
 .footer-links a:hover {
-  color: #ffc107;
+  color: var(--pv-cta-services); /* Use CTA Services color token */
 }
 
 .footer-social a {
-  color: #415a77 !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
   font-size: 1.4rem;
 }
 
 .footer-social a:hover {
-  color: #ffc107;
+  color: var(--pv-cta-services); /* Use CTA Services color token */
 }
 
 /* Center all footer content on mobile devices */
@@ -3520,7 +3520,7 @@ body {
 
 /* Footer GDPR Text Styling */
 .footer-gdpr-container {
-  background-color: rgba(65, 90, 119, 0.15);
+  background-color: rgba(44, 44, 44, 0.15); /* Use text-main with opacity */
   border-radius: 8px;
   padding: 1rem 1.5rem;
   margin: 0 auto;
@@ -3528,7 +3528,7 @@ body {
 }
 
 .footer-gdpr-text {
-  color: #b8c5d6 !important;
+  color: var(--pv-text-muted) !important; /* Use muted text color token */
   font-size: 0.875rem;
   line-height: 1.7;
   margin-bottom: 0.5rem;
@@ -3536,14 +3536,14 @@ body {
 }
 
 .footer-gdpr-lang {
-  color: #ffc107 !important;
+  color: var(--pv-cta-services) !important; /* Use CTA Services color token */
   font-weight: 600;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
 
 .footer-gdpr-link {
-  color: #ffffff !important;
+  color: var(--pv-text-main) !important; /* Use main text color token */
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -3551,8 +3551,8 @@ body {
 }
 
 .footer-gdpr-link:hover {
-  color: #ffc107 !important;
-  border-bottom-color: #ffc107;
+  color: var(--pv-cta-services) !important; /* Use CTA Services color token */
+  border-bottom-color: var(--pv-cta-services);
   text-decoration: none;
 }
 
@@ -3682,7 +3682,7 @@ body {
 
 .navbar-nav .dropdown-menu {
   border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--pv-shadow-medium); /* Use shadow token */
   border-radius: 8px;
   margin-top: 0.5rem;
   padding: 0.5rem 0;
@@ -3696,8 +3696,8 @@ body {
 }
 
 .navbar-nav .dropdown-item:hover {
-  background-color: #f8f9fa;
-  color: #188181;
+  background-color: var(--pv-bg-main); /* Use main background token */
+  color: var(--pv-color-secondary); /* Use secondary color token */
 }
 
 .navbar-nav .dropdown-item i {
@@ -3731,7 +3731,7 @@ body {
 .navbar-nav .nav-item .btn-outline-light:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.5);
-  color: #ffc107 !important;
+  color: var(--pv-cta-services) !important; /* Use CTA Services color token */
   transform: translateY(-1px);
 }
 
