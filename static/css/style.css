@@ -279,43 +279,43 @@ body {
 }
 
 .masthead-text .btn-outline-primary {
-  border: 2px solid #4fc3f7;
-  color: #4fc3f7;
-  background: rgba(79, 195, 247, 0.1);
+  border: 2px solid var(--pv-cta-ask); /* Use CTA Ask color token */
+  color: var(--pv-cta-ask); /* Use CTA Ask color token */
+  background: rgba(52, 152, 219, 0.1); /* CTA Ask color with opacity */
   backdrop-filter: blur(10px);
 }
 
 .masthead-text .btn-outline-primary:hover {
-  background: #4fc3f7;
+  background: var(--pv-cta-ask); /* Use CTA Ask color token */
   color: #ffffff;
-  border-color: #29b6f6;
+  border-color: var(--pv-cta-ask); /* Use CTA Ask color token */
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(79, 195, 247, 0.4);
+  box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4); /* CTA Ask color with opacity */
 }
 
 .masthead-text .btn-outline-primary:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(79, 195, 247, 0.3);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3); /* CTA Ask color with opacity */
 }
 
 .masthead-text .btn-outline-danger {
-  border: 2px solid #ef5350;
-  color: #ef5350;
-  background: rgba(239, 83, 80, 0.1);
+  border: 2px solid var(--pv-validation-error); /* Use validation error token */
+  color: var(--pv-validation-error); /* Use validation error token */
+  background: rgba(231, 76, 60, 0.1); /* Validation error color with opacity */
   backdrop-filter: blur(10px);
 }
 
 .masthead-text .btn-outline-danger:hover {
-  background: #ef5350;
+  background: var(--pv-validation-error); /* Use validation error token */
   color: #ffffff;
-  border-color: #e53935;
+  border-color: var(--pv-validation-error); /* Use validation error token */
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(239, 83, 80, 0.4);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4); /* Validation error color with opacity */
 }
 
 .masthead-text .btn-outline-danger:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(239, 83, 80, 0.3);
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3); /* Validation error color with opacity */
 }
 
 /* Responsive adjustments for masthead */
@@ -408,12 +408,12 @@ body {
 
 .masthead-text .btn-success:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(25, 135, 84, 0.3);
+  box-shadow: 0 4px 8px var(--pv-shadow-medium); /* Use shadow token */
 }
 
 .masthead-text .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 8px var(--pv-shadow-medium); /* Use shadow token */
 }
 
 .masthead-text .like-section .btn-like {
@@ -434,13 +434,13 @@ body {
 }
 
 .masthead-text .like-section .btn-like.liked {
-  background: rgba(220, 53, 69, 0.2);
-  border-color: #dc3545;
-  color: #ff6b7a;
+  background: rgba(231, 76, 60, 0.2); /* Validation error color with opacity */
+  border-color: var(--pv-validation-error); /* Use validation error token */
+  color: var(--pv-validation-error); /* Use validation error token */
 }
 
 .masthead-text .like-section .btn-like.liked:hover {
-  background: rgba(220, 53, 69, 0.3);
+  background: rgba(231, 76, 60, 0.3); /* Validation error color with opacity */
 }
 
 @media (max-width: 768px) {
@@ -478,7 +478,7 @@ body {
 
 .post-link:hover,
 .page-link {
-  color: #e84610;
+  color: var(--pv-color-secondary); /* Use secondary color token */
 }
 
 .post-title {
@@ -2137,9 +2137,9 @@ body {
 }
 
 .pagination .page-link {
-  background-color: #fff;
-  border: 2px solid #188181;
-  color: #188181;
+  background-color: var(--pv-bg-card); /* Use card background token */
+  border: 2px solid var(--pv-color-secondary); /* Use secondary color token */
+  color: var(--pv-color-secondary); /* Use secondary color token */
   padding: 6px 16px;
   margin: 0 4px;
   border-radius: 20px;
@@ -2147,19 +2147,19 @@ body {
   font-size: 14px;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(24, 129, 129, 0.1);
+  box-shadow: 0 2px 4px var(--pv-shadow-soft); /* Use shadow token */
 }
 
 .pagination .page-link:hover {
-  background-color: #188181;
+  background-color: var(--pv-color-secondary); /* Use secondary color token */
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(24, 129, 129, 0.3);
-  border-color: #23bbbb;
+  box-shadow: 0 3px 6px var(--pv-shadow-medium); /* Use shadow token */
+  border-color: var(--pv-color-secondary); /* Use secondary color token */
 }
 
 .pagination .page-link:focus {
-  box-shadow: 0 0 0 0.2rem rgba(24, 129, 129, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(31, 138, 112, 0.25); /* Secondary color with opacity */
   outline: none;
 }
 
@@ -2722,21 +2722,21 @@ body {
 }
 
 .breadcrumb-category .breadcrumb-item a {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8); /* Keep white for dark backgrounds */
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .breadcrumb-category .breadcrumb-item a:hover {
-  color: #ffffff;
+  color: #ffffff; /* Keep white for dark backgrounds */
 }
 
 .breadcrumb-category .breadcrumb-item.active {
-  color: #ffffff;
+  color: #ffffff; /* Keep white for dark backgrounds */
 }
 
 .breadcrumb-category .breadcrumb-item + .breadcrumb-item::before {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6); /* Keep white for dark backgrounds */
   content: "/";
 }
 
@@ -4439,35 +4439,36 @@ body {
 .moderator-title {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #007bff;
+  color: var(--pv-cta-ask); /* Use CTA Ask color token */
   margin-bottom: 0.5rem;
 }
 
 .moderator-bio {
   font-size: 0.85rem;
   line-height: 1.4;
-  color: #666;
+  color: var(--pv-text-muted); /* Use muted text color token */
   min-height: 0;
 }
 
 .moderator-stats {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--pv-text-muted); /* Use muted text color token */
   margin-bottom: 0.5rem;
 }
 
 .ask-question-btn {
   transition: all 0.3s ease;
-  background-color: #00A693 !important;
-  border-color: #00A693 !important;
+  background-color: var(--pv-color-secondary) !important; /* Use secondary color token */
+  border-color: var(--pv-color-secondary) !important;
   margin-bottom: 0 !important;
 }
 
 .ask-question-btn:hover {
   transform: scale(1.05);
-  background-color: #008a7a !important;
-  border-color: #008a7a !important;
-  box-shadow: 0 4px 8px rgba(0, 166, 147, 0.4);
+  background-color: var(--pv-color-secondary) !important; /* Use secondary color token */
+  filter: brightness(0.9); /* Darken on hover */
+  border-color: var(--pv-color-secondary) !important;
+  box-shadow: 0 4px 8px var(--pv-shadow-medium); /* Use shadow token */
 }
 
 /* Question/Answer Cards */
@@ -4475,32 +4476,32 @@ body {
 .answer-text {
   font-size: 1rem;
   line-height: 1.6;
-  color: #333;
+  color: var(--pv-text-main); /* Use main text color token */
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
 .answer-section {
-  border-left: 4px solid #007bff;
-  background: #f8f9fa !important;
+  border-left: 4px solid var(--pv-cta-ask); /* Use CTA Ask color token */
+  background: var(--pv-bg-main) !important; /* Use main background token */
 }
 
 .answer-section h6 {
   font-weight: 600;
-  color: #007bff;
+  color: var(--pv-cta-ask); /* Use CTA Ask color token */
 }
 
 /* Modal Styles */
 #questionModal .modal-content {
   border-radius: 10px;
   border: none;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 40px var(--pv-shadow-strong); /* Use shadow token */
 }
 
 #questionModal .modal-header {
-  background: #00A693 !important;
+  background: var(--pv-color-secondary) !important; /* Use secondary color token */
   color: white;
-  border-bottom: 1px solid #00A693;
+  border-bottom: 1px solid var(--pv-color-secondary); /* Use secondary color token */
   border-radius: 10px 10px 0 0;
 }
 
@@ -4524,8 +4525,8 @@ body {
 }
 
 #questionModal #moderatorInfo {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-left: 4px solid #007bff;
+  background: linear-gradient(135deg, var(--pv-bg-main) 0%, var(--pv-bg-card) 100%); /* Use background tokens */
+  border-left: 4px solid var(--pv-cta-ask); /* Use CTA Ask color token */
 }
 
 /* Statistics Cards */
@@ -4534,7 +4535,7 @@ body {
 .card.bg-warning {
   border: none;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px var(--pv-shadow-soft); /* Use shadow token */
   transition: transform 0.3s ease;
 }
 
@@ -4588,7 +4589,7 @@ body {
   align-items: center;
   justify-content: center;
   animation: pulse 2s infinite;
-  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.4);
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.4); /* Validation error color with opacity */
 }
 
 @keyframes pulse {
