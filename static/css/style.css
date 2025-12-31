@@ -2221,10 +2221,10 @@ body {
 /* Category Styles */
 .category-filter-section {
   /* Subtle radial gradient background to make glass cards pop */
-  background: radial-gradient(ellipse at center, rgba(248, 249, 250, 0.95) 0%, rgba(233, 236, 239, 0.98) 100%);
+  background: radial-gradient(ellipse at center, rgba(var(--pv-bg-main-rgb), 0.95) 0%, rgba(var(--pv-border-soft-rgb), 0.98) 100%);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--pv-shadow-soft);
   margin-bottom: 15px;
 }
 
@@ -2370,83 +2370,83 @@ body {
 .category-row:nth-child(1) .category-btn,
 .category-btn[data-tone="mint"] {
   background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
-              0 2px 6px rgba(0, 0, 0, 0.08),
+  box-shadow: 0 4px 16px var(--pv-shadow-soft), 
+              0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(31, 138, 112, 0.22); /* secondary color accent ring */
+              inset 0 0 0 2px rgba(var(--pv-color-secondary-rgb), 0.22); /* secondary color accent ring */
   border-color: rgba(255, 255, 255, 0.8);
 }
 
 .category-row:nth-child(1) .category-btn:hover,
 .category-btn[data-tone="mint"]:hover {
   background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
-              0 4px 12px rgba(0, 0, 0, 0.12),
+  box-shadow: 0 8px 24px var(--pv-shadow-medium), 
+              0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(31, 138, 112, 0.3); /* secondary color accent ring */
+              inset 0 0 0 2px rgba(var(--pv-color-secondary-rgb), 0.3); /* secondary color accent ring */
 }
 
 /* Second Row - Purple tone - Using experiences semantic color */
 .category-row:nth-child(2) .category-btn,
 .category-btn[data-tone="purple"] {
   background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
-              0 2px 6px rgba(0, 0, 0, 0.08),
+  box-shadow: 0 4px 16px var(--pv-shadow-soft), 
+              0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(155, 89, 182, 0.22); /* experiences semantic color accent ring */
+              inset 0 0 0 2px rgba(var(--pv-semantic-experiences-rgb), 0.22); /* experiences semantic color accent ring */
   border-color: rgba(255, 255, 255, 0.8);
 }
 
 .category-row:nth-child(2) .category-btn:hover,
 .category-btn[data-tone="purple"]:hover {
   background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
-              0 4px 12px rgba(0, 0, 0, 0.12),
+  box-shadow: 0 8px 24px var(--pv-shadow-medium), 
+              0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(155, 89, 182, 0.3); /* experiences semantic color accent ring */
+              inset 0 0 0 2px rgba(var(--pv-semantic-experiences-rgb), 0.3); /* experiences semantic color accent ring */
 }
 
 /* Third Row - Peach/Orange tone - Using events semantic color */
 .category-row:nth-child(3) .category-btn,
 .category-btn[data-tone="peach"] {
   background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
-              0 2px 6px rgba(0, 0, 0, 0.08),
+  box-shadow: 0 4px 16px var(--pv-shadow-soft), 
+              0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(230, 126, 34, 0.22); /* events semantic color accent ring */
+              inset 0 0 0 2px rgba(var(--pv-semantic-events-rgb), 0.22); /* events semantic color accent ring */
   border-color: rgba(255, 255, 255, 0.8);
 }
 
 .category-row:nth-child(3) .category-btn:hover,
 .category-btn[data-tone="peach"]:hover {
   background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
-              0 4px 12px rgba(0, 0, 0, 0.12),
+  box-shadow: 0 8px 24px var(--pv-shadow-medium), 
+              0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(230, 126, 34, 0.3); /* events semantic color accent ring */
+              inset 0 0 0 2px rgba(var(--pv-semantic-events-rgb), 0.3); /* events semantic color accent ring */
 }
 
 .category-btn.active {
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #0f172a;
-  border-color: rgba(244, 180, 0, 0.6); /* CTA Services color for active state */
+  color: var(--pv-text-main); /* Use main text color token */
+  border-color: rgba(var(--pv-cta-services-rgb), 0.6); /* CTA Services color for active state */
   font-weight: 700; /* Bolder for active state */
-  box-shadow: 0 6px 20px rgba(244, 180, 0, 0.25), 
-              0 2px 8px rgba(0, 0, 0, 0.1),
+  box-shadow: 0 6px 20px rgba(var(--pv-cta-services-rgb), 0.25), 
+              0 2px 8px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.8),
-              inset 0 0 0 2px rgba(244, 180, 0, 0.35); /* CTA Services color */
+              inset 0 0 0 2px rgba(var(--pv-cta-services-rgb), 0.35); /* CTA Services color */
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .category-btn.active:hover {
   background: rgba(255, 255, 255, 0.75);
-  color: #0f172a;
-  box-shadow: 0 8px 24px rgba(244, 180, 0, 0.3), 
-              0 4px 12px rgba(0, 0, 0, 0.12),
+  color: var(--pv-text-main); /* Use main text color token */
+  box-shadow: 0 8px 24px rgba(var(--pv-cta-services-rgb), 0.3), 
+              0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.9),
-              inset 0 0 0 2px rgba(244, 180, 0, 0.45); /* CTA Services color */
+              inset 0 0 0 2px rgba(var(--pv-cta-services-rgb), 0.45); /* CTA Services color */
 }
 
 .category-btn-text {

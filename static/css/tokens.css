@@ -15,6 +15,10 @@
      ============================================ */
   --pv-color-primary: #6EDFB2;
   --pv-color-secondary: #1F8A70;
+  
+  /* RGB values for use in rgba() functions */
+  --pv-color-primary-rgb: 110, 223, 178;
+  --pv-color-secondary-rgb: 31, 138, 112;
 
   /* ============================================
      CTA BUTTON COLORS
@@ -22,6 +26,11 @@
   --pv-cta-create: #2ECC71;
   --pv-cta-ask: #3498DB;
   --pv-cta-services: #F4B400;
+  
+  /* RGB values for CTA colors */
+  --pv-cta-create-rgb: 46, 204, 113;
+  --pv-cta-ask-rgb: 52, 152, 219;
+  --pv-cta-services-rgb: 244, 180, 0;
 
   /* ============================================
      SEMANTIC CATEGORY COLORS
@@ -34,6 +43,16 @@
   --pv-semantic-education: #5DADE2;
   --pv-semantic-public: #7DCEA0;
   --pv-semantic-people: #566573;
+  
+  /* RGB values for semantic colors (for rgba() usage) */
+  --pv-semantic-legal-rgb: 44, 123, 229;
+  --pv-semantic-economy-rgb: 30, 132, 73;
+  --pv-semantic-life-rgb: 72, 201, 176;
+  --pv-semantic-experiences-rgb: 155, 89, 182;
+  --pv-semantic-events-rgb: 230, 126, 34;
+  --pv-semantic-education-rgb: 93, 173, 226;
+  --pv-semantic-public-rgb: 125, 206, 160;
+  --pv-semantic-people-rgb: 86, 101, 115;
 
   /* ============================================
      BACKGROUND COLORS
@@ -41,17 +60,27 @@
   --pv-bg-main: #F5F7F6;
   --pv-bg-card: #FFFFFF;
   --pv-bg-highlight: #ECFDF5;
+  
+  /* RGB values for background colors */
+  --pv-bg-main-rgb: 245, 247, 246;
+  --pv-bg-card-rgb: 255, 255, 255;
+  --pv-bg-highlight-rgb: 236, 253, 245;
 
   /* ============================================
      TEXT COLORS
      ============================================ */
   --pv-text-main: #2C2C2C;
   --pv-text-muted: #6B7280;
+  
+  /* RGB values for text colors */
+  --pv-text-main-rgb: 44, 44, 44;
+  --pv-text-muted-rgb: 107, 114, 128;
 
   /* ============================================
      UTILITY COLORS
      ============================================ */
   --pv-border-soft: rgba(229, 231, 235, 0.5); /* Subtle border with alpha */
+  --pv-border-soft-rgb: 229, 231, 235; /* RGB for border-soft */
   --pv-shadow-soft: rgba(0, 0, 0, 0.1);
   --pv-shadow-medium: rgba(0, 0, 0, 0.15);
   --pv-shadow-strong: rgba(0, 0, 0, 0.25);
@@ -70,6 +99,12 @@
   --pv-validation-error: #E74C3C; /* Red - error state */
   --pv-validation-warning: #F4B400; /* Yellow - warning state (uses CTA Services) */
   --pv-validation-info: #3498DB; /* Blue - info state (uses CTA Ask) */
+  
+  /* RGB values for validation colors */
+  --pv-validation-success-rgb: 30, 132, 73;
+  --pv-validation-error-rgb: 231, 76, 60;
+  --pv-validation-warning-rgb: 244, 180, 0;
+  --pv-validation-info-rgb: 52, 152, 219;
 }
 
 /* ============================================
