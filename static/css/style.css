@@ -122,12 +122,12 @@ body {
 }
 
 .card {
-  /* Neutral border instead of teal - customize border color here */
-  border: 1px solid #E5E7EB;
-  background-color: #fff;
+  /* Neutral border using token - customize border color here */
+  border: 1px solid var(--pv-border-soft);
+  background-color: var(--pv-bg-card);
   border-radius: 15px;
   /* Neutral shadow - customize shadow strength here */
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 12px 30px var(--pv-shadow-soft);
   transition: all 0.4s ease-in-out;
   margin-top: 30px;
   margin-bottom: 50px;
@@ -136,7 +136,7 @@ body {
   position: relative;
 }
 
-/* Optional accent bar at top of card - teal accent for brand identity */
+/* Optional accent bar at top of card - primary color accent for brand identity */
 .card::before {
   content: '';
   position: absolute;
@@ -144,7 +144,7 @@ body {
   left: 0;
   right: 0;
   height: 4px;
-  background: #0F766E; /* teal-700 - customize accent teal color here */
+  background: var(--pv-color-primary); /* Use primary color token */
   border-radius: 15px 15px 0 0;
   z-index: 1;
 }
@@ -158,19 +158,19 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: #FFFFF0 !important;
+  background-color: var(--pv-bg-card) !important; /* Use card background token */
 }
 
 .card:hover {
   transform: translateY(-10px) scale(1.03);
   /* Neutral hover shadow - customize shadow strength here */
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
-  border-color: #D1D5DB; /* Slightly darker gray on hover */
-  background-color: #f8f9fa;
+  box-shadow: 0 16px 40px var(--pv-shadow-medium);
+  border-color: var(--pv-border-soft); /* Use border token */
+  background-color: var(--pv-bg-main); /* Use main background token */
 }
 
 .post-card:hover {
-  background-color: #FFFFF0 !important;
+  background-color: var(--pv-bg-card) !important; /* Use card background token */
 }
 
 /* Customize hover styling here - adjust transform, shadow, border-color */
@@ -1169,7 +1169,7 @@ body {
   .post-card {
     height: auto; /* Allow flexible height for new layout */
     min-height: 70px; /* Match related posts min-height */
-    background-color: #FFFFF0 !important; /* Match related posts background */
+    background-color: var(--pv-bg-card) !important; /* Use card background token */
   }
   
   .postbox {
@@ -2492,37 +2492,39 @@ body {
 .cat-icon i {
   font-size: 14px; /* Small icon size (14-16px range) */
   opacity: 0.85; /* Subtle opacity */
-  color: #0F766E; /* Match post card teal accent color (teal-700) */
+  color: var(--pv-color-secondary); /* Use secondary color token */
   transition: opacity 0.3s ease, color 0.3s ease;
 }
 
 /* Slightly increase opacity on hover for better visibility */
 .category-btn:hover .cat-icon i {
   opacity: 1;
-  color: #115E59; /* Slightly darker teal on hover (teal-800) */
+  color: var(--pv-color-secondary); /* Use secondary color token */
+  filter: brightness(0.9); /* Slightly darker on hover */
 }
 
 /* Category Badge (on post cards) */
 .category-badge {
   display: inline-block;
   padding: 4px 12px;
-  /* Deeper, more elegant teal - customize accent teal colors here */
-  background: #0F766E; /* teal-700 */
+  /* Use secondary color token for category badges */
+  background: var(--pv-color-secondary);
   color: #fff;
   text-decoration: none;
   border-radius: 15px;
   font-size: 12px;
   font-weight: 600; /* Increased for better readability */
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.25);
+  box-shadow: 0 1px 3px var(--pv-shadow-soft);
 }
 
 .category-badge:hover {
-  /* Darker teal on hover - customize hover teal color here */
-  background: #115E59; /* teal-800 */
+  /* Slightly darker secondary on hover */
+  background: var(--pv-color-secondary);
+  filter: brightness(0.9); /* Darken on hover */
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.35);
+  box-shadow: 0 2px 6px var(--pv-shadow-medium);
   text-decoration: none;
 }
 
@@ -2574,21 +2576,23 @@ body {
 .category-badge-large {
   display: inline-block;
   padding: 8px 18px;
-  background: linear-gradient(135deg, #188181 0%, #23bbbb 100%);
+  /* Use secondary color with gradient effect */
+  background: linear-gradient(135deg, var(--pv-color-secondary) 0%, var(--pv-color-primary) 100%);
   color: #fff;
   text-decoration: none;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(24, 129, 129, 0.3);
+  box-shadow: 0 2px 6px var(--pv-shadow-soft);
 }
 
 .category-badge-large:hover {
-  background: linear-gradient(135deg, #23bbbb 0%, #188181 100%);
+  /* Reverse gradient on hover */
+  background: linear-gradient(135deg, var(--pv-color-primary) 0%, var(--pv-color-secondary) 100%);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(24, 129, 129, 0.4);
+  box-shadow: 0 4px 12px var(--pv-shadow-medium);
   text-decoration: none;
 }
 
@@ -2866,7 +2870,7 @@ body {
 }
 
 .popular-posts-sidebar {
-  background: #FFFFF0 !important;
+  background: var(--pv-bg-card) !important; /* Use card background token */
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
