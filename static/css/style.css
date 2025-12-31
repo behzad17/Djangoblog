@@ -2308,7 +2308,7 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   /* High contrast text for readability on light backgrounds */
-  color: #0f172a; /* slate-900 */
+  color: var(--pv-text-main); /* Use main text color token */
   text-decoration: none;
   border-radius: 16px;
   font-weight: 600; /* Increased from 500 for better readability */
@@ -2316,8 +2316,8 @@ body {
   /* Smooth transitions for all interactive states */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   /* Enhanced shadow depth for better separation from background */
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
-              0 2px 6px rgba(0, 0, 0, 0.08),
+  box-shadow: 0 4px 16px var(--pv-shadow-soft), 
+              0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7);
   /* Brighter border for better glass definition */
   border: 2px solid rgba(255, 255, 255, 0.8);
@@ -2345,11 +2345,11 @@ body {
 /* Hover state - lift effect with enhanced shadow and brighter background */
 .category-btn:hover {
   background: rgba(255, 255, 255, 0.7);
-  color: #0f172a;
+  color: var(--pv-text-main); /* Use main text color token */
   transform: translateY(-2px);
   /* Stronger shadow on hover for depth */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
-              0 4px 12px rgba(0, 0, 0, 0.12),
+  box-shadow: 0 8px 24px var(--pv-shadow-medium), 
+              0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85);
   border-color: rgba(255, 255, 255, 0.95);
   text-decoration: none;
@@ -2357,7 +2357,7 @@ body {
 
 /* Focus state for keyboard navigation accessibility */
 .category-btn:focus-visible {
-  outline: 2px solid rgba(59, 130, 246, 0.6); /* blue-500 with opacity */
+  outline: 2px solid var(--pv-cta-ask); /* Use CTA Ask color with opacity */
   outline-offset: 3px;
   background: rgba(255, 255, 255, 0.7);
 }
@@ -2366,14 +2366,14 @@ body {
   outline: none; /* Remove default focus, use focus-visible instead */
 }
 
-/* First Row - Mint/Teal tone (default) */
+/* First Row - Mint/Teal tone (default) - Using secondary color token */
 .category-row:nth-child(1) .category-btn,
 .category-btn[data-tone="mint"] {
   background: rgba(255, 255, 255, 0.55);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
               0 2px 6px rgba(0, 0, 0, 0.08),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(16, 185, 129, 0.22); /* mint accent ring */
+              inset 0 0 0 2px rgba(31, 138, 112, 0.22); /* secondary color accent ring */
   border-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -2383,17 +2383,17 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
               0 4px 12px rgba(0, 0, 0, 0.12),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(16, 185, 129, 0.3);
+              inset 0 0 0 2px rgba(31, 138, 112, 0.3); /* secondary color accent ring */
 }
 
-/* Second Row - Purple tone */
+/* Second Row - Purple tone - Using experiences semantic color */
 .category-row:nth-child(2) .category-btn,
 .category-btn[data-tone="purple"] {
   background: rgba(255, 255, 255, 0.55);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
               0 2px 6px rgba(0, 0, 0, 0.08),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(139, 92, 246, 0.22); /* purple accent ring */
+              inset 0 0 0 2px rgba(155, 89, 182, 0.22); /* experiences semantic color accent ring */
   border-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -2403,17 +2403,17 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
               0 4px 12px rgba(0, 0, 0, 0.12),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(139, 92, 246, 0.3);
+              inset 0 0 0 2px rgba(155, 89, 182, 0.3); /* experiences semantic color accent ring */
 }
 
-/* Third Row - Peach/Orange tone */
+/* Third Row - Peach/Orange tone - Using events semantic color */
 .category-row:nth-child(3) .category-btn,
 .category-btn[data-tone="peach"] {
   background: rgba(255, 255, 255, 0.55);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 
               0 2px 6px rgba(0, 0, 0, 0.08),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(251, 146, 60, 0.22); /* peach accent ring */
+              inset 0 0 0 2px rgba(230, 126, 34, 0.22); /* events semantic color accent ring */
   border-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -2423,7 +2423,7 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 
               0 4px 12px rgba(0, 0, 0, 0.12),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(251, 146, 60, 0.3);
+              inset 0 0 0 2px rgba(230, 126, 34, 0.3); /* events semantic color accent ring */
 }
 
 .category-btn.active {
@@ -2431,22 +2431,22 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #0f172a;
-  border-color: rgba(251, 191, 36, 0.6); /* amber border for active state */
+  border-color: rgba(244, 180, 0, 0.6); /* CTA Services color for active state */
   font-weight: 700; /* Bolder for active state */
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.25), 
+  box-shadow: 0 6px 20px rgba(244, 180, 0, 0.25), 
               0 2px 8px rgba(0, 0, 0, 0.1),
               inset 0 1px 0 rgba(255, 255, 255, 0.8),
-              inset 0 0 0 2px rgba(251, 191, 36, 0.35);
+              inset 0 0 0 2px rgba(244, 180, 0, 0.35); /* CTA Services color */
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .category-btn.active:hover {
   background: rgba(255, 255, 255, 0.75);
   color: #0f172a;
-  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.3), 
+  box-shadow: 0 8px 24px rgba(244, 180, 0, 0.3), 
               0 4px 12px rgba(0, 0, 0, 0.12),
               inset 0 1px 0 rgba(255, 255, 255, 0.9),
-              inset 0 0 0 2px rgba(251, 191, 36, 0.45);
+              inset 0 0 0 2px rgba(244, 180, 0, 0.45); /* CTA Services color */
 }
 
 .category-btn-text {
@@ -2463,7 +2463,7 @@ body {
   border-radius: 12px;
   font-size: 12px;
   font-weight: 700; /* Increased for better readability */
-  color: #0f172a; /* High contrast text */
+  color: var(--pv-text-main); /* Use main text color token */
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08),
               0 1px 2px rgba(255, 255, 255, 0.6);
