@@ -28,7 +28,7 @@ body {
 
 /* Brand Tagline - Small text under logo */
 .brand-tagline {
-  font-size: 0.968rem; /* 10% bigger than 0.88rem (0.88 * 1.10 = 0.968) */
+  font-size: 1.0164rem; /* 5% bigger than previous (0.968 * 1.05 = 1.0164) */
   color: var(--pv-cta-services); /* Use CTA Services color token */
   font-weight: 500;
   margin-top: -2px;
