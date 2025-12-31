@@ -498,14 +498,14 @@ body {
 
 .btn-signup,
 .btn-edit {
-  background-color: #188181;
+  background-color: var(--pv-color-secondary); /* Use secondary color token */
   color: #fff;
 }
 
 .btn-signup:hover,
 .btn-signup:active {
-  background-color: #fff;
-  color: #23bbbb;
+  background-color: var(--pv-bg-card); /* Use card background token */
+  color: var(--pv-color-secondary); /* Use secondary color token */
 }
 
 .link {
@@ -3992,34 +3992,34 @@ body {
 .login-card .card-title {
   font-size: 1.75rem;
   font-weight: 600;
-  color: #333;
+  color: var(--pv-text-main); /* Use main text color token */
 }
 
 /* Google Sign In Button */
 .btn-google {
-  background-color: #fff;
-  color: #3c4043;
-  border: 1px solid #dadce0;
+  background-color: var(--pv-bg-card); /* Use card background token */
+  color: var(--pv-text-main); /* Use main text color token */
+  border: 1px solid var(--pv-border-soft); /* Use border token */
   border-radius: 4px;
   padding: 12px 16px;
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 2px 0 var(--pv-shadow-soft), 0 1px 3px 1px var(--pv-shadow-soft);
 }
 
 .btn-google:hover {
-  background-color: #f8f9fa;
-  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
-  color: #3c4043;
-  border-color: #dadce0;
+  background-color: var(--pv-bg-main); /* Use main background token */
+  box-shadow: 0 1px 3px 0 var(--pv-shadow-soft), 0 4px 8px 3px var(--pv-shadow-medium);
+  color: var(--pv-text-main); /* Use main text color token */
+  border-color: var(--pv-border-soft); /* Use border token */
   transform: translateY(-1px);
 }
 
 .btn-google:active {
-  background-color: #f1f3f4;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  background-color: var(--pv-bg-main); /* Use main background token */
+  box-shadow: 0 1px 2px 0 var(--pv-shadow-soft), 0 1px 3px 1px var(--pv-shadow-soft);
   transform: translateY(0);
 }
 
@@ -4043,12 +4043,12 @@ body {
 .divider-line {
   flex: 1;
   height: 1px;
-  background-color: #e0e0e0;
+  background-color: var(--pv-border-soft); /* Use border token */
 }
 
 .divider-text {
   padding: 0 16px;
-  color: #757575;
+  color: var(--pv-text-muted); /* Use muted text color token */
   font-size: 14px;
   font-weight: 500;
 }
@@ -4061,7 +4061,7 @@ body {
 .login-card select,
 .login-card textarea,
 .login-card .form-control {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--pv-border-soft); /* Use border token */
   border-radius: 4px;
   padding: 10px 12px;
   font-size: 14px;
@@ -4077,8 +4077,8 @@ body {
 .login-card select:focus,
 .login-card textarea:focus,
 .login-card .form-control:focus {
-  border-color: #188181;
-  box-shadow: 0 0 0 3px rgba(24, 129, 129, 0.1);
+  border-color: var(--pv-color-secondary); /* Use secondary color token */
+  box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.1); /* Secondary color with opacity */
   outline: none;
 }
 
@@ -4089,7 +4089,7 @@ body {
 
 .login-card .form-label {
   font-weight: 500;
-  color: #3c4043;
+  color: var(--pv-text-main); /* Use main text color token */
   margin-bottom: 8px;
   font-size: 14px;
 }
@@ -4104,7 +4104,7 @@ body {
 
 .login-card .form-check-label {
   font-size: 14px;
-  color: #5f6368;
+  color: var(--pv-text-muted); /* Use muted text color token */
   cursor: pointer;
   margin-left: 8px;
 }
@@ -4112,17 +4112,17 @@ body {
 /* Signup Page - Additional Styles */
 .login-card .form-text {
   font-size: 12px;
-  color: #6c757d;
+  color: var(--pv-text-muted); /* Use muted text color token */
   margin-top: 4px;
 }
 
 .login-card .text-danger {
-  color: #dc3545 !important;
+  color: var(--pv-validation-error) !important; /* Use validation error token */
 }
 
 /* CAPTCHA Styling */
 .login-card #id_captcha_1 {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--pv-border-soft); /* Use border token */
   border-radius: 4px;
   padding: 8px;
   width: 100%;
@@ -4136,21 +4136,21 @@ body {
 }
 
 .login-card .captcha img {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--pv-border-soft); /* Use border token */
   border-radius: 4px;
 }
 
 .login-card .captcha input {
   flex: 1;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--pv-border-soft); /* Use border token */
   border-radius: 4px;
   padding: 8px 12px;
   font-size: 14px;
 }
 
 .login-card .captcha input:focus {
-  border-color: #188181;
-  box-shadow: 0 0 0 3px rgba(24, 129, 129, 0.1);
+  border-color: var(--pv-color-secondary); /* Use secondary color token */
+  box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.1); /* Secondary color with opacity */
   outline: none;
 }
 
@@ -4268,14 +4268,14 @@ body {
 .collaboration-form textarea,
 .collaboration-form input.form-control,
 .collaboration-form textarea.form-control {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--pv-border-soft); /* Use border token */
   border-radius: 6px;
   padding: 12px 16px;
   font-size: 14px;
   width: 100%;
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   font-family: inherit;
-  background-color: #fff;
+  background-color: var(--pv-bg-card); /* Use card background token */
 }
 
 .collaboration-form input[type="text"]:focus,
@@ -4283,10 +4283,10 @@ body {
 .collaboration-form textarea:focus,
 .collaboration-form input.form-control:focus,
 .collaboration-form textarea.form-control:focus {
-  border-color: #188181;
-  box-shadow: 0 0 0 3px rgba(24, 129, 129, 0.1);
+  border-color: var(--pv-color-secondary); /* Use secondary color token */
+  box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.1); /* Secondary color with opacity */
   outline: none;
-  background-color: #fff;
+  background-color: var(--pv-bg-card); /* Use card background token */
 }
 
 .collaboration-form textarea {
@@ -4304,33 +4304,33 @@ body {
 
 .collaboration-form .btn-signup:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(24, 129, 129, 0.3);
+  box-shadow: 0 6px 12px var(--pv-shadow-medium); /* Use shadow token */
 }
 
 /* Pending Post Alert Styling */
 .pending-post-alert {
   padding: 16px 20px;
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  border-left: 4px solid #ffc107;
+  background: linear-gradient(135deg, rgba(244, 180, 0, 0.1) 0%, rgba(244, 180, 0, 0.15) 100%); /* CTA Services color with opacity */
+  border-left: 4px solid var(--pv-validation-warning); /* Use validation warning token */
   border-radius: 8px;
-  color: #856404;
+  color: var(--pv-text-main); /* Use main text color token */
   line-height: 1.6;
 }
 
 .pending-post-alert strong {
-  color: #856404;
+  color: var(--pv-text-main); /* Use main text color token */
   font-size: 1.1rem;
   display: block;
   margin-bottom: 8px;
 }
 
 .pending-post-alert i {
-  color: #ffc107;
+  color: var(--pv-validation-warning); /* Use validation warning token */
   font-size: 1.2rem;
 }
 
 .alert-warning .pending-post-alert {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  background: linear-gradient(135deg, rgba(244, 180, 0, 0.1) 0%, rgba(244, 180, 0, 0.15) 100%); /* CTA Services color with opacity */
   border: none;
   margin: 0;
 }
@@ -4513,13 +4513,14 @@ body {
 }
 
 #questionModal .modal-body .btn-primary {
-  background-color: #00A693 !important;
-  border-color: #00A693 !important;
+  background-color: var(--pv-color-secondary) !important; /* Use secondary color token */
+  border-color: var(--pv-color-secondary) !important;
 }
 
 #questionModal .modal-body .btn-primary:hover {
-  background-color: #008a7a !important;
-  border-color: #008a7a !important;
+  background-color: var(--pv-color-secondary) !important; /* Use secondary color token */
+  filter: brightness(0.9); /* Darken on hover */
+  border-color: var(--pv-color-secondary) !important;
 }
 
 #questionModal #moderatorInfo {

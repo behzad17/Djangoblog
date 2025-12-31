@@ -62,6 +62,14 @@
   --pv-cta-create-hover: #27AE60;
   --pv-cta-ask-hover: #2980B9;
   --pv-cta-services-hover: #F39C12;
+
+  /* ============================================
+     VALIDATION STATES (Forms)
+     ============================================ */
+  --pv-validation-success: #1E8449; /* Green - success state */
+  --pv-validation-error: #E74C3C; /* Red - error state */
+  --pv-validation-warning: #F4B400; /* Yellow - warning state (uses CTA Services) */
+  --pv-validation-info: #3498DB; /* Blue - info state (uses CTA Ask) */
 }
 
 /* ============================================
