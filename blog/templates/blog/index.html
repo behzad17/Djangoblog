@@ -125,6 +125,7 @@
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
               data-tone="mint"
+              data-category="{{ category.slug }}"
               title="{{ category.name }}"
               aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >
@@ -162,6 +163,7 @@
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
               data-tone="{% if category.slug == 'events-announcements' or category.slug == 'photo-gallery' %}purple{% else %}peach{% endif %}"
+              data-category="{{ category.slug }}"
               title="{{ category.name }}"
               aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
             >

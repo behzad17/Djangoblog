@@ -66,6 +66,7 @@
               href="{% url 'category_posts' cat.slug %}"
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
               data-tone="mint"
+              data-category="{{ cat.slug }}"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
@@ -102,6 +103,7 @@
               href="{% url 'category_posts' cat.slug %}"
               class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
               data-tone="{% if cat.slug == 'events-announcements' or cat.slug == 'photo-gallery' %}purple{% else %}peach{% endif %}"
+              data-category="{{ cat.slug }}"
               title="{{ cat.name }}"
               aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
             >
