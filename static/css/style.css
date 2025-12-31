@@ -1280,7 +1280,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #76DFB1 !important;
+  background: var(--pv-color-primary) !important; /* Use primary color token */
   line-height: 0; /* Remove white space from inline image */
 }
 
@@ -1631,44 +1631,44 @@ body {
   transform: translateX(-5px);
 }
 
-/* Orange Gradient Card */
+/* Orange Gradient Card - Create Post CTA */
 .hero-cta-card-orange {
-  background: #00A8A5 !important;
+  background: var(--pv-cta-create) !important;
 }
 
 .hero-cta-card-orange:hover {
-  background: #00B8B5 !important;
+  background: var(--pv-cta-create-hover) !important;
 }
 
-/* Blue Gradient Card */
+/* Blue Gradient Card - Ask Me CTA */
 .hero-cta-card-blue {
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  background: var(--pv-cta-ask) !important;
 }
 
 .hero-cta-card-blue:hover {
-  background: linear-gradient(135deg, #5ba0f2 0%, #4a90e2 100%);
+  background: var(--pv-cta-ask-hover) !important;
 }
 
-/* Yellow Gradient Card */
+/* Yellow Gradient Card - Services CTA */
 .hero-cta-card-purple {
-  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+  background: var(--pv-cta-services) !important;
 }
 
 .hero-cta-card-purple:hover {
-  background: linear-gradient(135deg, #ffd54f 0%, #ffc107 100%);
+  background: var(--pv-cta-services-hover) !important;
 }
 
-/* Grey text color for yellow card for better readability */
+/* Dark text color for services card (yellow) for better readability */
 .hero-cta-card-purple .hero-cta-card-title {
-  color: #4a4a4a !important; /* Dark grey for title */
+  color: var(--pv-text-main) !important; /* Use token for dark text */
 }
 
 .hero-cta-card-purple .hero-cta-card-subtitle {
-  color: #666666 !important; /* Medium grey for subtitle */
+  color: var(--pv-text-muted) !important; /* Use token for muted text */
 }
 
 .hero-cta-card-purple .hero-cta-card-arrow {
-  color: #4a4a4a !important; /* Dark grey for arrow */
+  color: var(--pv-text-main) !important; /* Use token for dark text */
 }
 
 /* Responsive Design */

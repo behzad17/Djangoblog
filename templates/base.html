@@ -68,6 +68,12 @@
     <!-- Vazir Font - For brand logo Persian text -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirfont@v30.1.0/dist/font-face.css" />
     
+    <!-- Color Design Tokens - Load before style.css for proper cascade -->
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}?v={% now 'U' %}" />
+    
+    <!-- Utility Classes - Load before style.css for proper cascade -->
+    <link rel="stylesheet" href="{% static 'css/utilities.css' %}?v={% now 'U' %}" />
+    
     <!-- Custom CSS - Site-specific styles -->
     <link
       rel="stylesheet"

@@ -1,0 +1,222 @@
+/**
+ * Peyvand Utility Classes
+ * 
+ * Reusable utility classes that map to design tokens.
+ * Use these classes instead of hardcoded colors for consistency.
+ * 
+ * Naming convention: .pv-{type}-{name}
+ * Examples: .pv-bg-primary, .pv-text-main, .pv-btn-create
+ */
+
+/* ============================================
+   BACKGROUND UTILITIES
+   ============================================ */
+.pv-bg-primary {
+  background-color: var(--pv-color-primary);
+}
+
+.pv-bg-secondary {
+  background-color: var(--pv-color-secondary);
+}
+
+.pv-bg-main {
+  background-color: var(--pv-bg-main);
+}
+
+.pv-bg-card {
+  background-color: var(--pv-bg-card);
+}
+
+.pv-bg-highlight {
+  background-color: var(--pv-bg-highlight);
+}
+
+/* ============================================
+   TEXT UTILITIES
+   ============================================ */
+.pv-text-main {
+  color: var(--pv-text-main);
+}
+
+.pv-text-muted {
+  color: var(--pv-text-muted);
+}
+
+.pv-text-primary {
+  color: var(--pv-color-primary);
+}
+
+.pv-text-secondary {
+  color: var(--pv-color-secondary);
+}
+
+/* ============================================
+   CTA BUTTON UTILITIES
+   ============================================ */
+.pv-btn-create {
+  background-color: var(--pv-cta-create);
+  color: #ffffff;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.pv-btn-create:hover {
+  background-color: var(--pv-cta-create-hover);
+  color: #ffffff;
+}
+
+.pv-btn-create:focus {
+  background-color: var(--pv-cta-create-hover);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25);
+}
+
+.pv-btn-create:active {
+  background-color: var(--pv-cta-create-hover);
+  color: #ffffff;
+  transform: translateY(1px);
+}
+
+.pv-btn-ask {
+  background-color: var(--pv-cta-ask);
+  color: #ffffff;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.pv-btn-ask:hover {
+  background-color: var(--pv-cta-ask-hover);
+  color: #ffffff;
+}
+
+.pv-btn-ask:focus {
+  background-color: var(--pv-cta-ask-hover);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+.pv-btn-ask:active {
+  background-color: var(--pv-cta-ask-hover);
+  color: #ffffff;
+  transform: translateY(1px);
+}
+
+.pv-btn-services {
+  background-color: var(--pv-cta-services);
+  color: #2C2C2C; /* Dark text for better contrast on yellow */
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.pv-btn-services:hover {
+  background-color: var(--pv-cta-services-hover);
+  color: #2C2C2C;
+}
+
+.pv-btn-services:focus {
+  background-color: var(--pv-cta-services-hover);
+  color: #2C2C2C;
+  box-shadow: 0 0 0 3px rgba(244, 180, 0, 0.25);
+}
+
+.pv-btn-services:active {
+  background-color: var(--pv-cta-services-hover);
+  color: #2C2C2C;
+  transform: translateY(1px);
+}
+
+/* ============================================
+   BADGE/TAG UTILITIES (Category Colors)
+   ============================================ */
+.pv-badge-legal {
+  background-color: var(--pv-semantic-legal);
+  color: #ffffff;
+}
+
+.pv-badge-economy {
+  background-color: var(--pv-semantic-economy);
+  color: #ffffff;
+}
+
+.pv-badge-life {
+  background-color: var(--pv-semantic-life);
+  color: #ffffff;
+}
+
+.pv-badge-experiences {
+  background-color: var(--pv-semantic-experiences);
+  color: #ffffff;
+}
+
+.pv-badge-events {
+  background-color: var(--pv-semantic-events);
+  color: #ffffff;
+}
+
+.pv-badge-education {
+  background-color: var(--pv-semantic-education);
+  color: #ffffff;
+}
+
+.pv-badge-public {
+  background-color: var(--pv-semantic-public);
+  color: #ffffff;
+}
+
+.pv-badge-people {
+  background-color: var(--pv-semantic-people);
+  color: #ffffff;
+}
+
+/* ============================================
+   BORDER UTILITIES
+   ============================================ */
+.pv-border-soft {
+  border: 1px solid var(--pv-border-soft);
+}
+
+.pv-border-primary {
+  border-color: var(--pv-color-primary);
+}
+
+.pv-border-secondary {
+  border-color: var(--pv-color-secondary);
+}
+
+/* ============================================
+   FALLBACK STRATEGY
+   ============================================ */
+/* If CSS variables fail to load, provide safe fallbacks */
+@supports not (--css: variables) {
+  .pv-bg-main {
+    background-color: #F5F7F6;
+  }
+  
+  .pv-bg-card {
+    background-color: #FFFFFF;
+  }
+  
+  .pv-text-main {
+    color: #2C2C2C;
+  }
+  
+  .pv-text-muted {
+    color: #6B7280;
+  }
+  
+  .pv-btn-create {
+    background-color: #2ECC71;
+    color: #ffffff;
+  }
+  
+  .pv-btn-ask {
+    background-color: #3498DB;
+    color: #ffffff;
+  }
+  
+  .pv-btn-services {
+    background-color: #F4B400;
+    color: #2C2C2C;
+  }
+}
+
