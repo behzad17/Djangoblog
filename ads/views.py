@@ -121,9 +121,10 @@ def ad_list_by_category(request, category_slug):
         # Total normal ads that need pagination (skip the ones shown on page 1)
         normal_ads_for_pagination = normal_ads[remaining_slots:]
         
-        # Create paginator for remaining normal ads
+        # Create paginator for remaining normal ads - Django Paginator handles unlimited pages automatically
+        # It will create as many pages as needed (no limit - supports 2x39, 3x39, 4x39, etc.)
         paginator = Paginator(normal_ads_for_pagination, ads_per_page)
-        total_pages = 1 + paginator.num_pages  # Page 1 + remaining pages
+        total_pages = 1 + paginator.num_pages  # Page 1 + remaining pages (unlimited)
         
         context = {
             "category": category,
@@ -144,18 +145,25 @@ def ad_list_by_category(request, category_slug):
         remaining_slots = ads_per_page - featured_count
         normal_ads_for_pagination = normal_ads[remaining_slots:]
         
-        # Paginate normal ads
+        # Paginate normal ads - Django Paginator automatically handles unlimited pages
+        # It will create as many pages as needed based on total ads (no limit)
         paginator = Paginator(normal_ads_for_pagination, ads_per_page)
         
-        # Adjust page number (page 2 in URL = page 1 in paginator)
+        # Adjust page number (page 2 in URL = page 1 in paginator, page 3 = paginator page 2, etc.)
         paginator_page_number = page_number - 1
         
         try:
             page_obj = paginator.page(paginator_page_number)
-        except (EmptyPage, PageNotAnInteger):
-            # Invalid page number, show page 1
+        except EmptyPage:
+            # Page number is out of range, redirect to last valid page
+            page_obj = paginator.page(paginator.num_pages)
+            paginator_page_number = paginator.num_pages
+            page_number = 1 + paginator.num_pages  # Adjust page_number to match
+        except PageNotAnInteger:
+            # Invalid page number, show first page of normal ads (page 2)
             page_obj = paginator.page(1)
             paginator_page_number = 1
+            page_number = 2  # Adjust page_number to match
         
         # Total pages = 1 (page 1 with featured) + paginator pages
         total_pages = 1 + paginator.num_pages
