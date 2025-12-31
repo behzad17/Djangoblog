@@ -2460,192 +2460,214 @@ body {
 /* Row 1 - Individual Category Colors */
 
 /* Law Integration - Legal Color */
+.category-row .category-btn[data-category="law-integration"],
 .category-btn[data-category="law-integration"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-legal-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-legal-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-legal-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-legal-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="law-integration"]:hover,
 .category-btn[data-category="law-integration"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-legal-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-legal-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-legal-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-legal-rgb), 0.4) !important;
 }
 
 /* Careers Economy - Economy Color */
+.category-row .category-btn[data-category="careers-economy"],
 .category-btn[data-category="careers-economy"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-economy-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-economy-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-economy-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-economy-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="careers-economy"]:hover,
 .category-btn[data-category="careers-economy"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-economy-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-economy-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-economy-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-economy-rgb), 0.4) !important;
 }
 
 /* Life in Sweden - Life Color */
+.category-row .category-btn[data-category="life-in-sweden"],
 .category-btn[data-category="life-in-sweden"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-life-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-life-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-life-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-life-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="life-in-sweden"]:hover,
 .category-btn[data-category="life-in-sweden"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-life-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-life-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-life-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-life-rgb), 0.4) !important;
 }
 
 /* Skills Learning - Education Color */
+.category-row .category-btn[data-category="skills-learning"],
 .category-btn[data-category="skills-learning"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-education-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-education-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-education-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-education-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="skills-learning"]:hover,
 .category-btn[data-category="skills-learning"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-education-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-education-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-education-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-education-rgb), 0.4) !important;
 }
 
 /* Platform Updates - Public Color */
+.category-row .category-btn[data-category="platform-updates"],
 .category-btn[data-category="platform-updates"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-public-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-public-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="platform-updates"]:hover,
 .category-btn[data-category="platform-updates"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-public-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-public-rgb), 0.4) !important;
 }
 
 /* Row 2 - Individual Category Colors */
 
 /* Events Announcements - Events Color */
+.category-row .category-btn[data-category="events-announcements"],
 .category-btn[data-category="events-announcements"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-events-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-events-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-events-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-events-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="events-announcements"]:hover,
 .category-btn[data-category="events-announcements"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-events-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-events-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-events-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-events-rgb), 0.4) !important;
 }
 
 /* Photo Gallery - Experiences Color */
+.category-row .category-btn[data-category="photo-gallery"],
 .category-btn[data-category="photo-gallery"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="photo-gallery"]:hover,
 .category-btn[data-category="photo-gallery"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.4) !important;
 }
 
 /* Public Services - Public Color */
+.category-row .category-btn[data-category="public-services"],
 .category-btn[data-category="public-services"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-public-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-public-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="public-services"]:hover,
 .category-btn[data-category="public-services"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-public-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-public-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-public-rgb), 0.4) !important;
 }
 
 /* Stories Experiences - Experiences Color */
+.category-row .category-btn[data-category="stories-experiences"],
 .category-btn[data-category="stories-experiences"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="stories-experiences"]:hover,
 .category-btn[data-category="stories-experiences"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.4) !important;
 }
 
 /* Community Engagement - People Color */
+.category-row .category-btn[data-category="community-engagement"],
 .category-btn[data-category="community-engagement"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-people-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-people-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="community-engagement"]:hover,
 .category-btn[data-category="community-engagement"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-people-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-people-rgb), 0.4) !important;
 }
 
 /* Personalities - People Color */
+.category-row .category-btn[data-category="personalities"],
 .category-btn[data-category="personalities"] {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.4);
-  border-color: rgba(var(--pv-semantic-people-rgb), 0.3);
+              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.4) !important;
+  border-color: rgba(var(--pv-semantic-people-rgb), 0.3) !important;
 }
 
+.category-row .category-btn[data-category="personalities"]:hover,
 .category-btn[data-category="personalities"]:hover {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.5);
-  border-color: rgba(var(--pv-semantic-people-rgb), 0.4);
+              inset 0 0 0 3px rgba(var(--pv-semantic-people-rgb), 0.5) !important;
+  border-color: rgba(var(--pv-semantic-people-rgb), 0.4) !important;
 }
 
 .category-btn-text {
