@@ -16,7 +16,7 @@
 }
 
 body {
-  background-color: #f9fafc;
+  background-color: var(--pv-bg-main); /* Use main background token */
 }
 
 .brand {
@@ -68,16 +68,16 @@ body {
 }
 
 .blue-o {
-  color: #ff6b35; /* Changed to orange */
+  color: var(--pv-cta-services); /* Use CTA Services token for orange brand color */
 }
 
 .yellow-o {
-  color: #ff6b35; /* Changed to orange */
+  color: var(--pv-cta-services); /* Use CTA Services token for orange brand color */
 }
 
 .thin {
   font-weight: 300;
-  color: #ff6b35; /* Changed to orange */
+  color: var(--pv-cta-services); /* Use CTA Services token for orange brand color */
   font-size: 1.725rem; /* Match brand font size for the vertical line */
 }
 
@@ -110,15 +110,15 @@ body {
 }
 
 .light-bg {
-  background-color: #fff;
+  background-color: var(--pv-bg-card); /* Use card background token */
 }
 
 .dark-bg {
-  background-color: #445261;
+  background-color: var(--pv-text-main); /* Use main text color for dark backgrounds (inverted) */
 }
 
 .main-bg {
-  background-color: #f9fafc;
+  background-color: var(--pv-bg-main); /* Use main background token */
 }
 
 .card {
@@ -204,7 +204,7 @@ body {
   bottom: 5%;
   min-width: 30%;
   left: -2px;
-  background-color: #188181;
+  background-color: var(--pv-color-secondary); /* Use secondary color token */
   border-radius: 5%;
   font-size: 12px;
 }
@@ -473,7 +473,7 @@ body {
 
 .post-link {
   text-decoration: none;
-  color: #445261;
+  color: var(--pv-text-main); /* Use main text color token */
 }
 
 .post-link:hover,
@@ -515,7 +515,7 @@ body {
 
 .link:hover,
 .link:active {
-  color: #445261;
+  color: var(--pv-text-main); /* Use main text color token */
   text-decoration: underline;
 }
 
@@ -1824,7 +1824,7 @@ body {
   width: 100%;
   height: 140px; /* Reduced from 200px for more compact card */
   overflow: hidden;
-  background-color: #f8f9fa;
+  background-color: var(--pv-bg-main); /* Use main background token */
   position: relative;
 }
 
@@ -2893,7 +2893,7 @@ body {
 }
 
 .sidebar-title i {
-  color: #ff6b35;
+  color: var(--pv-cta-services); /* Use CTA Services token for orange accent */
 }
 
 .popular-posts-list {
@@ -2919,7 +2919,7 @@ body {
 
 .popular-post-item::marker {
   font-weight: 600;
-  color: #188181;
+  color: var(--pv-color-secondary); /* Use secondary color token */
 }
 
 /* Expert Content Layout with Thumbnail */
@@ -2937,7 +2937,7 @@ body {
   display: block;
   overflow: hidden;
   border-radius: 6px;
-  background: #f8f9fa;
+  background: var(--pv-bg-main); /* Use main background token */
 }
 
 .popular-post-image {
@@ -2976,7 +2976,7 @@ body {
 }
 
 .popular-post-link:hover {
-  color: #188181;
+  color: var(--pv-color-secondary); /* Use secondary color token */
   text-decoration: underline;
 }
 
@@ -3015,21 +3015,21 @@ body {
 }
 
 .popular-post-category {
-  color: #188181;
+  color: var(--pv-color-secondary); /* Use secondary color token */
   text-decoration: none;
   font-size: 0.75rem;
   transition: transform 0.2s ease;
 }
 
 .popular-post-category:hover {
-  color: #23bbbb;
+  color: var(--pv-color-primary); /* Use primary color token for hover */
   transform: scale(1.2);
 }
 
 /* Responsive Popular Posts Sidebar */
 /* Ad Placeholder Styles */
 .ad-placeholder {
-  background: #f8f9fa;
+  background: var(--pv-bg-main); /* Use main background token */
   border: none;
   border-radius: 8px;
   display: flex;
@@ -3041,7 +3041,7 @@ body {
 }
 
 .ad-placeholder:hover {
-  background: #f0f7f7;
+  background: var(--pv-bg-highlight); /* Use highlight background token */
 }
 
 .ad-link {
@@ -4171,8 +4171,8 @@ body {
   display: inline-block;
   border-radius: 50%;
   padding: 8px;
-  background: linear-gradient(135deg, #188181 0%, #23bbbb 100%);
-  box-shadow: 0 4px 12px rgba(24, 129, 129, 0.3);
+  background: linear-gradient(135deg, var(--pv-color-secondary) 0%, var(--pv-color-primary) 100%);
+  box-shadow: 0 4px 12px rgba(var(--pv-color-secondary-rgb), 0.3);
 }
 
 .about-profile-image {
