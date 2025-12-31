@@ -1,35 +1,107 @@
-{% extends "account/base.html" %}
-
+{% extends "base.html" %}
+{% load static %}
 {% load i18n %}
 {% load account %}
 
 {% block head_title %}{% trans "Confirm Email Address" %}{% endblock head_title %}
 
-
 {% block content %}
-<h1>{% trans "Confirm Email Address" %}</h1>
+<!-- Hero Section -->
+<section
+  class="hero-section hero-section-email text-white mb-4"
+  style="
+    background: #76DFB1;
+    padding: 2rem 0;
+  "
+>
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="hero-title mb-3">
+          <i class="fas fa-envelope-circle-check me-2"></i>
+          {% trans "Confirm Email Address" %}
+        </h1>
+        <p class="hero-subtitle mb-0">
+          {% trans "Verify your email to complete your account setup" %}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-{% if confirmation %}
+<!-- Email Confirmation Container -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <div class="card shadow-sm mt-4 mb-5">
+        <div class="card-body p-4">
+          {% if confirmation %}
+            {% user_display confirmation.email_address.user as user_display %}
+            
+            {% if can_confirm %}
+              <!-- Success State -->
+              <div class="text-center mb-4">
+                <div class="mb-3">
+                  <i class="fas fa-envelope-open-text" style="font-size: 4rem; color: #188181;"></i>
+                </div>
+                <h2 class="card-title mb-3">{% trans "Email Confirmation" %}</h2>
+                <p class="text-muted mb-4">
+                  {% blocktrans with confirmation.email_address.email as email %}
+                  Please confirm that <strong>{{ email }}</strong> is an email address for user <strong>{{ user_display }}</strong>.
+                  {% endblocktrans %}
+                </p>
+              </div>
 
-{% user_display confirmation.email_address.user as user_display %}
+              <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-signup btn-lg">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {% trans 'Confirm Email' %}
+                  </button>
+                </div>
+              </form>
+            {% else %}
+              <!-- Error State - Already Confirmed -->
+              <div class="text-center mb-4">
+                <div class="mb-3">
+                  <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #ffc107;"></i>
+                </div>
+                <h2 class="card-title mb-3 text-warning">{% trans "Email Already Confirmed" %}</h2>
+                <div class="alert alert-warning" role="alert">
+                  <i class="fas fa-info-circle me-2"></i>
+                  {% blocktrans %}Unable to confirm this email because it is already confirmed by a different account.{% endblocktrans %}
+                </div>
+              </div>
+            {% endif %}
 
-{% if can_confirm %}
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user_display }}.{% endblocktrans %}</p>
-
-<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-{% csrf_token %}
-    <button type="submit">{% trans 'Confirm' %}</button>
-</form>
-{% else %}
-<p>{% blocktrans %}Unable to confirm {{ email }} because it is already confirmed by a different account.{% endblocktrans %}</p>
-{% endif %}
-
-{% else %}
-
-{% url 'account_email' as email_url %}
-
-<p>{% blocktrans %}This email confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new email confirmation request</a>.{% endblocktrans %}</p>
-
-{% endif %}
-
+          {% else %}
+            <!-- Invalid/Expired Link -->
+            <div class="text-center mb-4">
+              <div class="mb-3">
+                <i class="fas fa-link-slash" style="font-size: 4rem; color: #dc3545;"></i>
+              </div>
+              <h2 class="card-title mb-3 text-danger">{% trans "Invalid Confirmation Link" %}</h2>
+              <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                {% url 'account_email' as email_url %}
+                {% blocktrans %}
+                This email confirmation link expired or is invalid. Please 
+                <a href="{{ email_url }}" class="alert-link">issue a new email confirmation request</a>.
+                {% endblocktrans %}
+              </div>
+              
+              <div class="mt-4">
+                <a href="{% url 'account_email' %}" class="btn btn-outline-primary">
+                  <i class="fas fa-envelope me-2"></i>
+                  {% trans "Go to Email Settings" %}
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
