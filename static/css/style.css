@@ -2131,30 +2131,30 @@ body {
 
 /* Pagination styling */
 .pagination {
-  margin-top: 60px;
-  margin-bottom: 40px;
-  padding: 0 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .pagination .page-link {
   background-color: #fff;
   border: 2px solid #188181;
   color: #188181;
-  padding: 12px 24px;
-  margin: 0 8px;
-  border-radius: 25px;
+  padding: 6px 16px;
+  margin: 0 4px;
+  border-radius: 20px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(24, 129, 129, 0.1);
+  box-shadow: 0 2px 4px rgba(24, 129, 129, 0.1);
 }
 
 .pagination .page-link:hover {
   background-color: #188181;
   color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(24, 129, 129, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(24, 129, 129, 0.3);
   border-color: #23bbbb;
 }
 
@@ -2163,10 +2163,11 @@ body {
   outline: none;
 }
 
-/* Pagination container spacing */
+/* Pagination container spacing - minimized */
 .pagination-container {
-  margin-top: 80px;
-  margin-bottom: 60px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 0;
 }
 
 /* Footer sizing tweaks */
