@@ -38,9 +38,9 @@ class PostList(generic.ListView):
         """
         Returns a queryset of published posts with comment counts.
         Posts are ordered by creation date (newest first).
-        Excludes pinned posts from pagination (they appear only on page 1 in specified rows).
+        Includes all posts (including pinned) for correct pagination count.
         """
-        return Post.objects.filter(status=1, pinned=False).select_related('category').annotate(
+        return Post.objects.filter(status=1).select_related('category').annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
         ).order_by('-created_on')
     
@@ -73,8 +73,17 @@ class PostList(generic.ListView):
         row_start = (page_number - 1) * rows_per_page + 1
         row_end = row_start + rows_per_page - 1
 
-        # Get posts from the current page (already paginated by Django, excludes pinned posts)
-        regular_posts = list(page_obj.object_list)
+        # Get posts from the current page (already paginated by Django)
+        page_posts = list(page_obj.object_list)
+        
+        # On page 2+, exclude pinned posts from display (they only appear on page 1)
+        # On page 1, we'll handle pinned posts separately
+        if page_number == 1:
+            # Separate pinned and regular posts from the current page
+            regular_posts = [p for p in page_posts if not p.pinned]
+        else:
+            # Page 2+: Exclude pinned posts from display
+            regular_posts = [p for p in page_posts if not p.pinned]
 
         # Pinned posts logic: ONLY on page 1, in specified rows
         pinned_by_row = {}
