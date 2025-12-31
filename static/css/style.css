@@ -91,6 +91,17 @@ body {
   display: inline-block;
 }
 
+/* English word in brand logo */
+.brand-english {
+  font-family: Lato, sans-serif;
+  font-size: 1.725rem; /* Match base brand font size */
+  font-weight: 700; /* Bold to match brand weight */
+  color: var(--pv-cta-services); /* Use CTA Services color token */
+  margin-right: 0.5rem; /* Space between Persian and English */
+  display: inline-block;
+  letter-spacing: 0.05em; /* Slight letter spacing for elegance */
+}
+
 .card-img-top {
   border-radius: 5px;
   overflow: hidden;
