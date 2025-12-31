@@ -2373,8 +2373,8 @@ body {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(var(--pv-color-secondary-rgb), 0.22); /* secondary color accent ring */
-  border-color: rgba(255, 255, 255, 0.8);
+              inset 0 0 0 3px rgba(var(--pv-color-secondary-rgb), 0.4); /* secondary color accent ring - more visible */
+  border-color: rgba(var(--pv-color-secondary-rgb), 0.3); /* Use accent color for border */
 }
 
 .category-row:nth-child(1) .category-btn:hover,
@@ -2383,7 +2383,8 @@ body {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(var(--pv-color-secondary-rgb), 0.3); /* secondary color accent ring */
+              inset 0 0 0 3px rgba(var(--pv-color-secondary-rgb), 0.5); /* secondary color accent ring - more visible on hover */
+  border-color: rgba(var(--pv-color-secondary-rgb), 0.4); /* Use accent color for border */
 }
 
 /* Second Row - Purple tone - Using experiences semantic color */
@@ -2393,8 +2394,8 @@ body {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(var(--pv-semantic-experiences-rgb), 0.22); /* experiences semantic color accent ring */
-  border-color: rgba(255, 255, 255, 0.8);
+              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.4); /* experiences semantic color accent ring - more visible */
+  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.3); /* Use accent color for border */
 }
 
 .category-row:nth-child(2) .category-btn:hover,
@@ -2403,7 +2404,8 @@ body {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(var(--pv-semantic-experiences-rgb), 0.3); /* experiences semantic color accent ring */
+              inset 0 0 0 3px rgba(var(--pv-semantic-experiences-rgb), 0.5); /* experiences semantic color accent ring - more visible on hover */
+  border-color: rgba(var(--pv-semantic-experiences-rgb), 0.4); /* Use accent color for border */
 }
 
 /* Third Row - Peach/Orange tone - Using events semantic color */
@@ -2413,8 +2415,8 @@ body {
   box-shadow: 0 4px 16px var(--pv-shadow-soft), 
               0 2px 6px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
-              inset 0 0 0 2px rgba(var(--pv-semantic-events-rgb), 0.22); /* events semantic color accent ring */
-  border-color: rgba(255, 255, 255, 0.8);
+              inset 0 0 0 3px rgba(var(--pv-semantic-events-rgb), 0.4); /* events semantic color accent ring - more visible */
+  border-color: rgba(var(--pv-semantic-events-rgb), 0.3); /* Use accent color for border */
 }
 
 .category-row:nth-child(3) .category-btn:hover,
@@ -2423,7 +2425,8 @@ body {
   box-shadow: 0 8px 24px var(--pv-shadow-medium), 
               0 4px 12px var(--pv-shadow-soft),
               inset 0 1px 0 rgba(255, 255, 255, 0.85),
-              inset 0 0 0 2px rgba(var(--pv-semantic-events-rgb), 0.3); /* events semantic color accent ring */
+              inset 0 0 0 3px rgba(var(--pv-semantic-events-rgb), 0.5); /* events semantic color accent ring - more visible on hover */
+  border-color: rgba(var(--pv-semantic-events-rgb), 0.4); /* Use accent color for border */
 }
 
 .category-btn.active {
