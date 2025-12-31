@@ -51,16 +51,32 @@ class PostList(generic.ListView):
         # Ensure object_list is set before calling super()
         if not hasattr(self, 'object_list'):
             self.object_list = self.get_queryset()
-        # Base context (includes pagination, but we'll recompute with pinned ordering)
+        # Base context (includes pagination from Django's ListView)
+        # This gives us page_obj with correct pagination info for ALL posts
         context = super().get_context_data(**kwargs)
 
+        # Get the paginated page object from Django's ListView
+        page_obj = context.get('page_obj')
+        if not page_obj:
+            # Fallback if pagination didn't work
+            page_size = self.paginate_by
+            page_number = int(self.request.GET.get('page', 1))
+            paginator = Paginator(self.get_queryset(), page_size)
+            page_obj = paginator.get_page(page_number)
+            context['page_obj'] = page_obj
+            context['is_paginated'] = page_obj.has_other_pages()
+
         page_size = self.paginate_by
-        page_number = int(self.request.GET.get('page', 1))
+        page_number = page_obj.number
         rows_per_page = page_size // 4  # 6 rows for 24 items
         row_start = (page_number - 1) * rows_per_page + 1
         row_end = row_start + rows_per_page - 1
 
+        # Get posts from the current page (already paginated by Django)
+        page_posts = list(page_obj.object_list)
+
         # Fetch pinned posts and map to target rows (if specified)
+        # Only get pinned posts that should appear on this page
         pinned_qs = Post.objects.filter(status=1, pinned=True).select_related('category', 'author').annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
         ).order_by('-created_on')
@@ -70,27 +86,27 @@ class PostList(generic.ListView):
             if p.pinned_row and row_start <= p.pinned_row <= row_end and p.pinned_row not in pinned_by_row:
                 pinned_by_row[p.pinned_row] = p
             else:
-                pinned_fallback.append(p)
+                # Only add to fallback if it's not already in the current page
+                if p not in page_posts:
+                    pinned_fallback.append(p)
 
-        # Regular posts (exclude pinned)
-        regular_posts = list(
-            Post.objects.filter(status=1, pinned=False)
-            .select_related('category', 'author')
-            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
-            .order_by('-created_on')
-        )
+        # Separate pinned and regular posts from the current page
+        regular_posts = [p for p in page_posts if not p.pinned]
+        page_pinned = [p for p in page_posts if p.pinned]
 
         # Compose rows of 4, placing pinned (targeted row) into column 1; if missing, use fallback pinned, else regular
         merged = []
         fb_idx = 0
         r_idx = 0
         current_row_number = row_start
-        while len(merged) < page_size and (r_idx < len(regular_posts) or fb_idx < len(pinned_fallback) or current_row_number in pinned_by_row):
+        while len(merged) < page_size and (r_idx < len(regular_posts) or fb_idx < len(pinned_fallback) or current_row_number in pinned_by_row or len(page_pinned) > 0):
             row = []
             for col in range(4):
                 if col == 1:
                     if current_row_number in pinned_by_row:
                         row.append(pinned_by_row[current_row_number])
+                    elif len(page_pinned) > 0:
+                        row.append(page_pinned.pop(0))
                     elif fb_idx < len(pinned_fallback):
                         row.append(pinned_fallback[fb_idx])
                         fb_idx += 1
@@ -104,6 +120,8 @@ class PostList(generic.ListView):
                     if r_idx < len(regular_posts):
                         row.append(regular_posts[r_idx])
                         r_idx += 1
+                    elif len(page_pinned) > 0:
+                        row.append(page_pinned.pop(0))
                     elif fb_idx < len(pinned_fallback):
                         row.append(pinned_fallback[fb_idx])
                         fb_idx += 1
@@ -111,18 +129,15 @@ class PostList(generic.ListView):
                         break
             merged.extend(row)
             current_row_number += 1
-            if current_row_number > row_end:
+            if len(merged) >= page_size:
                 break
 
-        # Paginate merged list (already page-sized or smaller)
-        paginator = Paginator(merged, page_size)
-        page_obj = paginator.get_page(page_number)
-
-        # Replace object_list and pagination context with reordered data
-        context['object_list'] = page_obj.object_list
-        context['post_list'] = page_obj.object_list
-        context['page_obj'] = page_obj
-        context['is_paginated'] = page_obj.has_other_pages()
+        # Replace object_list with reordered data, but keep the original page_obj for pagination
+        # The page_obj from Django's ListView has the correct pagination info for ALL posts
+        context['object_list'] = merged
+        context['post_list'] = merged
+        # page_obj and is_paginated are already set correctly by Django's ListView
+        # They reference the full queryset, not our reordered list
 
         # Categories and expert posts (replaces Popular Posts)
         context['categories'] = Category.objects.all().order_by('name')
