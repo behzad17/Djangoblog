@@ -2005,6 +2005,7 @@ body {
     flex-direction: column;
     gap: 0.5rem; /* Reduced gap */
     margin-top: 0.5rem; /* Minimized spacing */
+    padding-bottom: 5%; /* Add 5% bottom padding for better spacing on mobile */
   }
   
   .hero-buttons .btn {
