@@ -3610,6 +3610,22 @@ body {
   clear: both;
 }
 
+/* Desktop/Tablet grid layout for ads (>= 768px) */
+@media (min-width: 768px) {
+  .ads-container-bottom {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+/* Larger screens: 3 columns for ads */
+@media (min-width: 1200px) {
+  .ads-container-bottom {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .ad-placeholder-bottom {
   width: 100% !important;
   aspect-ratio: 2 / 1; /* width:height = 1:0.5 */

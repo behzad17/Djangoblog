@@ -361,6 +361,73 @@
           </div>
         </div>
 
+        <!-- Insert ad after every 4 posts on mobile only -->
+        {% if forloop.counter|divisibleby:4 %}
+          <!-- Calculate which ad: ad_index = ((counter // 4) - 1) % 5 -->
+          <!-- Pattern: 4->ad-1, 8->ad-2, 12->ad-3, 16->ad-4, 20->ad-5, 24->ad-1, etc. -->
+          {% if forloop.counter == 4 or forloop.counter == 24 or forloop.counter == 44 or forloop.counter == 64 or forloop.counter == 84 or forloop.counter == 104 or forloop.counter == 124 or forloop.counter == 144 or forloop.counter == 164 or forloop.counter == 184 %}
+            <!-- ad-1 -->
+            <div class="col-12 d-md-none mt-3 mb-3">
+              <div class="ad-placeholder ad-placeholder-bottom">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+                  <img src="{% static 'images/ad-1.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
+                </a>
+              </div>
+            </div>
+          {% elif forloop.counter == 8 or forloop.counter == 28 or forloop.counter == 48 or forloop.counter == 68 or forloop.counter == 88 or forloop.counter == 108 or forloop.counter == 128 or forloop.counter == 148 or forloop.counter == 168 or forloop.counter == 188 %}
+            <!-- ad-2 -->
+            <div class="col-12 d-md-none mt-3 mb-3">
+              <div class="ad-placeholder ad-placeholder-bottom">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+                  <img src="{% static 'images/ad-2.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
+                </a>
+              </div>
+            </div>
+          {% elif forloop.counter == 12 or forloop.counter == 32 or forloop.counter == 52 or forloop.counter == 72 or forloop.counter == 92 or forloop.counter == 112 or forloop.counter == 132 or forloop.counter == 152 or forloop.counter == 172 or forloop.counter == 192 %}
+            <!-- ad-3 -->
+            <div class="col-12 d-md-none mt-3 mb-3">
+              <div class="ad-placeholder ad-placeholder-bottom">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+                  <img src="{% static 'images/ad-3.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
+                </a>
+              </div>
+            </div>
+          {% elif forloop.counter == 16 or forloop.counter == 36 or forloop.counter == 56 or forloop.counter == 76 or forloop.counter == 96 or forloop.counter == 116 or forloop.counter == 136 or forloop.counter == 156 or forloop.counter == 176 or forloop.counter == 196 %}
+            <!-- ad-4 -->
+            <div class="col-12 d-md-none mt-3 mb-3">
+              <div class="ad-placeholder ad-placeholder-bottom">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+                  <img src="{% static 'images/ad-4.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
+                </a>
+              </div>
+            </div>
+          {% elif forloop.counter|divisibleby:20 %}
+            <!-- ad-5: positions 20, 40, 60, 80, 100, 120, 140, 160, 180, 200... -->
+            <div class="col-12 d-md-none mt-3 mb-3">
+              <div class="ad-placeholder ad-placeholder-bottom">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+                  <img src="{% static 'images/ad-5.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <!-- Fallback: use ad-1 for any unhandled cases -->
+            <div class="col-12 d-md-none mt-3 mb-3">
+              <div class="ad-placeholder ad-placeholder-bottom">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
+                  <img src="{% static 'images/ad-1.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
         <!--   divisibleby:2 for 2 columns per row -->
         {% if forloop.counter|divisibleby:2 %}
       </div>
@@ -446,8 +513,8 @@
         {% endif %}
       </div>
 
-      <!-- Ads Below Popular Posts (Desktop only - hidden on mobile) -->
-      <div class="ads-container-bottom d-none d-lg-block">
+      <!-- Ads Below Popular Posts (Desktop/Tablet >= 768px only - hidden on mobile) -->
+      <div class="ads-container-bottom d-none d-md-block">
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
@@ -526,86 +593,7 @@
       </div>
     </div>
 
-    <!-- 5 Ads Below (Mobile only: order-7, Desktop: hidden - shown in sidebar) -->
-    <div class="col-12 order-7 d-lg-none mt-2">
-      <div class="ads-container-bottom">
-        <div class="ad-placeholder ad-placeholder-bottom">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img
-              src="{% static 'images/ad-1.jpg' %}"
-              alt="تبلیغات"
-              class="ad-image"
-              loading="lazy"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="ad-content" style="display: none">
-              <i class="fas fa-ad"></i>
-              <p class="ad-text">Your Ads Here!</p>
-            </div>
-          </a>
-        </div>
-        <div class="ad-placeholder ad-placeholder-bottom">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img
-              src="{% static 'images/ad-2.jpg' %}"
-              alt="تبلیغات"
-              class="ad-image"
-              loading="lazy"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="ad-content" style="display: none">
-              <i class="fas fa-ad"></i>
-              <p class="ad-text">Your Ads Here!</p>
-            </div>
-          </a>
-        </div>
-        <div class="ad-placeholder ad-placeholder-bottom">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img
-              src="{% static 'images/ad-3.jpg' %}"
-              alt="تبلیغات"
-              class="ad-image"
-              loading="lazy"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="ad-content" style="display: none">
-              <i class="fas fa-ad"></i>
-              <p class="ad-text">Your Ads Here!</p>
-            </div>
-          </a>
-        </div>
-        <div class="ad-placeholder ad-placeholder-bottom">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img
-              src="{% static 'images/ad-4.jpg' %}"
-              alt="تبلیغات"
-              class="ad-image"
-              loading="lazy"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="ad-content" style="display: none">
-              <i class="fas fa-ad"></i>
-              <p class="ad-text">Your Ads Here!</p>
-            </div>
-          </a>
-        </div>
-        <div class="ad-placeholder ad-placeholder-bottom">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-            <img
-              src="{% static 'images/ad-5.jpg' %}"
-              alt="تبلیغات"
-              class="ad-image"
-              loading="lazy"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="ad-content" style="display: none">
-              <i class="fas fa-ad"></i>
-              <p class="ad-text">Your Ads Here!</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
+    <!-- Mobile ads block removed - ads now injected into posts feed on mobile -->
   </div>
 
   {% if is_paginated %}
