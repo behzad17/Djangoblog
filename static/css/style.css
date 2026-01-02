@@ -36,14 +36,19 @@ body {
   white-space: nowrap;
 }
 
-/* Navbar Links - Bold Styling */
+/* Navbar Background - Light Grey */
+.navbar {
+  background-color: #4B5563 !important;
+}
+
+/* Navbar Links - Thin Styling */
 .navbar-nav .nav-item {
   margin-left: 1rem;
   margin-right: 1rem;
 }
 
 .navbar-nav .nav-link {
-  font-weight: 600;
+  font-weight: 300;
   font-size: 1.008rem; /* Increased by 5% from 0.96rem */
   color: #ffffff !important;
   transition: all 0.3s ease;
@@ -52,13 +57,13 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-  font-weight: 700;
+  font-weight: 300;
   color: #ffffff !important; /* White on hover */
   transform: translateY(-1px);
 }
 
 .navbar-nav .nav-link.active {
-  font-weight: 700;
+  font-weight: 300;
   color: #ffffff !important; /* White when active */
 }
 
@@ -3907,6 +3912,7 @@ body {
 .navbar-nav .dropdown-toggle {
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: 300 !important;
 }
 
 .navbar-nav .dropdown-toggle:hover {
