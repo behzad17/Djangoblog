@@ -512,15 +512,9 @@
         <p class="text-muted small">هنوز مطالب تخصصی در دسترس نیست.</p>
         {% endif %}
       </div>
-    </div>
 
-    <!-- Mobile ads block removed - ads now injected into posts feed on mobile -->
-  </div>
-
-  <!-- Ads Section: Static position under Expert Content (Desktop/Tablet >= 768px only) -->
-  <div class="row d-none d-md-block">
-    <div class="col-lg-3 col-md-12 order-lg-2">
-      <div class="ads-container-bottom-static">
+      <!-- Ads Below Expert Content (Desktop/Tablet >= 768px only - hidden on mobile) -->
+      <div class="ads-container-bottom-static d-none d-md-block">
         <div class="ad-placeholder ad-placeholder-bottom">
           <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
             <img
@@ -598,7 +592,6 @@
         </div>
       </div>
     </div>
-  </div>
 
   {% if is_paginated %}
   <div class="pagination-container">

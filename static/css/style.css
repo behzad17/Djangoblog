@@ -3105,6 +3105,7 @@ body {
   flex-direction: column;
   overflow: visible !important;
   min-height: auto;
+  position: relative;
 }
 
 .popular-posts-sidebar {
@@ -3623,13 +3624,14 @@ body {
   clear: both;
 }
 
-/* Ensure no sticky/fixed behavior on desktop/tablet */
+/* Ensure no sticky/fixed behavior on desktop/tablet - ads stay in normal flow */
 @media (min-width: 768px) {
-  .ads-container-bottom-static {
+  .sidebar-wrapper .ads-container-bottom-static {
     position: static !important;
     top: auto !important;
     transform: none !important;
     overflow: visible !important;
+    align-self: stretch;
   }
 }
 
