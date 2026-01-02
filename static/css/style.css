@@ -3610,6 +3610,29 @@ body {
   clear: both;
 }
 
+/* Static ads container for desktop/tablet - no sticky/fixed positioning */
+.ads-container-bottom-static {
+  display: flex !important;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  position: static !important;
+  z-index: 1;
+  clear: both;
+}
+
+/* Ensure no sticky/fixed behavior on desktop/tablet */
+@media (min-width: 768px) {
+  .ads-container-bottom-static {
+    position: static !important;
+    top: auto !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+}
+
 .ad-placeholder-bottom {
   width: 100% !important;
   aspect-ratio: 2 / 1; /* width:height = 1:0.5 */
