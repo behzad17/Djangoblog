@@ -643,6 +643,11 @@ body {
     max-width: 50%;
     width: 50%;
   }
+  
+  /* Reduce spacing between post rows on desktop/tablet to 14px */
+  .blog-post-row .post-card.mb-4 {
+    margin-bottom: 14px !important;
+  }
 }
 
 .blog-post-row > div .card {
