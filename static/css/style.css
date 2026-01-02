@@ -3610,6 +3610,15 @@ body {
   clear: both;
 }
 
+/* Make ads sticky under Expert Content on desktop/tablet (>= 768px) */
+@media (min-width: 768px) {
+  .sidebar-wrapper .ads-container-bottom {
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+  }
+}
+
 .ad-placeholder-bottom {
   width: 100% !important;
   aspect-ratio: 2 / 1; /* width:height = 1:0.5 */
