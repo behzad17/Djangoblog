@@ -117,14 +117,13 @@
           <i class="fas fa-tags ms-2"></i>دسته بندی محتوا
         </h3>
         <div class="category-buttons-container">
-          <!-- First Row -->
+          <!-- All Categories -->
           <div class="category-row">
-            {% for category in categories %} 
-            {% if category.slug == "platform-updates" or category.slug == "careers-economy" or category.slug == "life-in-sweden" or category.slug == "law-integration" or category.slug == "skills-learning" %}
+            {% for category in categories %}
             <a
               href="{% url 'category_posts' category.slug %}"
               class="category-btn"
-              data-tone="mint"
+              data-tone="{% if category.slug == 'events-announcements' or category.slug == 'photo-gallery' %}purple{% elif category.slug == 'platform-updates' or category.slug == 'careers-economy' or category.slug == 'life-in-sweden' or category.slug == 'law-integration' or category.slug == 'skills-learning' %}mint{% else %}peach{% endif %}"
               data-category="{{ category.slug }}"
               title="{{ category.name }}"
               aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
@@ -149,30 +148,7 @@
                 {% elif category.slug == "platform-updates" %}<i
                   class="bi bi-newspaper"
                 ></i>
-                {% endif %}
-              </span>
-            </a>
-            {% endif %} {% endfor %}
-          </div>
-
-          <!-- Second Row -->
-          <div class="category-row">
-            {% for category in categories %} 
-            {% if category.slug == "events-announcements" or category.slug == "photo-gallery" or category.slug == "public-services" or category.slug == "stories-experiences" or category.slug == "community-engagement" or category.slug == "personalities" %}
-            <a
-              href="{% url 'category_posts' category.slug %}"
-              class="category-btn"
-              data-tone="{% if category.slug == 'events-announcements' or category.slug == 'photo-gallery' %}purple{% else %}peach{% endif %}"
-              data-category="{{ category.slug }}"
-              title="{{ category.name }}"
-              aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts)"
-            >
-              <span class="category-btn-text">{{ category.name }}</span>
-              <span class="category-btn-count"
-                >({{ category.post_count }})</span
-              >
-              <span class="cat-icon">
-                {% if category.slug == "events-announcements" %}<i
+                {% elif category.slug == "events-announcements" %}<i
                   class="bi bi-calendar-event"
                 ></i>
                 {% elif category.slug == "photo-gallery" %}<i
@@ -190,10 +166,13 @@
                 {% elif category.slug == "personalities" %}<i
                   class="bi bi-person-star"
                 ></i>
+                {% else %}<i
+                  class="bi bi-tag"
+                ></i>
                 {% endif %}
               </span>
             </a>
-            {% endif %} {% endfor %}
+            {% endfor %}
           </div>
 
           {% if not categories %}
