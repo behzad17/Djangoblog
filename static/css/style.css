@@ -3321,7 +3321,7 @@ body {
 .category-card-hover:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
-  border-color: #00A693;
+  border-color: #2C2C2C;
 }
 
 .category-card-hover .category-icon {
@@ -3337,7 +3337,7 @@ body {
 }
 
 .category-icon-color {
-  color: #00A693 !important;
+  color: #2C2C2C !important;
 }
 
 .category-card-hover .card-title {
@@ -3347,11 +3347,11 @@ body {
 }
 
 .category-title-color {
-  color: #00A693 !important;
+  color: #2C2C2C !important;
 }
 
 .category-badge-color {
-  background-color: #00A693 !important;
+  background-color: #2C2C2C !important;
   color: white !important;
   font-size: 0.75rem !important;
   padding: 0.25rem 0.5rem !important;
@@ -3548,7 +3548,7 @@ body {
 
 .glass-card-url {
   font-size: 0.85rem;
-  color: #00A693;
+  color: #2C2C2C;
   margin-bottom: 0;
   word-break: break-all;
   display: flex;
