@@ -3307,7 +3307,7 @@ body {
 .category-card-hover {
   transition: all 0.3s ease;
   border: 1px solid #000 !important;
-  background: #FDFF86 !important;
+  background: #F4B400 !important;
   min-height: auto;
   height: auto !important;
 }
