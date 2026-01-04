@@ -5,6 +5,7 @@
 {% url 'terms' as terms_url %}
 {% url 'integritetspolicy' as integritetspolicy_url %}
 {% url 'ads:ads_home' as ads_home_url %}
+{% url 'related_links:links_list' as related_links_url %}
 {% url 'member_guide' as member_guide_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
@@ -81,6 +82,9 @@
     />
     <!-- Bidi (RTL/LTR) CSS - Directional support -->
     <link rel="stylesheet" href="{% static 'css/bidi.css' %}?v={% now 'U' %}" />
+    
+    <!-- Extra CSS - Page-specific styles -->
+    {% block extra_css %}{% endblock extra_css %}
     
     <!-- Structured Data - Organization Schema -->
     <script type="application/ld+json">
@@ -168,6 +172,13 @@
                 class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
                 href="{{ ads_home_url }}"
                 >دسترسی ها</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path|slice:':14' == '/related-links' %}active{% endif %}"
+                href="{{ related_links_url }}"
+                >لینک‌های مرتبط</a
               >
             </li>
             <li class="nav-item">
