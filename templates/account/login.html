@@ -73,33 +73,33 @@
             {% csrf_token %}
             
             {% if form.non_field_errors %}
-              <div class="alert alert-danger" role="alert">
+              <div class="alert alert-danger text-center" role="alert">
                 {{ form.non_field_errors }}
               </div>
             {% endif %}
 
             <div class="mb-3">
-              <label for="{{ form.login.id_for_label }}" class="form-label">
+              <label for="{{ form.login.id_for_label }}" class="form-label text-center d-block">
                 {{ form.login.label }}
               </label>
               {{ form.login }}
               {% if form.login.errors %}
-                <div class="text-danger small mt-1">{{ form.login.errors }}</div>
+                <div class="text-danger small mt-1 text-center">{{ form.login.errors }}</div>
               {% endif %}
             </div>
 
             <div class="mb-3">
-              <label for="{{ form.password.id_for_label }}" class="form-label">
+              <label for="{{ form.password.id_for_label }}" class="form-label text-center d-block">
                 {{ form.password.label }}
               </label>
               {{ form.password }}
               {% if form.password.errors %}
-                <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                <div class="text-danger small mt-1 text-center">{{ form.password.errors }}</div>
               {% endif %}
             </div>
 
             {% if form.remember %}
-            <div class="mb-3 form-check">
+            <div class="mb-3 form-check text-center">
               {{ form.remember }}
               <label class="form-check-label" for="{{ form.remember.id_for_label }}">
                 {% trans "مرا به خاطر بسپار" %}
@@ -116,19 +116,19 @@
             {% endif %}
 
             <!-- Login Button -->
-            <button class="btn btn-signup w-100 mb-3" type="submit">
+            <button class="btn btn-signup w-100 mb-3 text-center" type="submit" style="text-align: center;">
               {% trans "ورود" %}
             </button>
           </form>
 
           <!-- Help Links -->
           <div class="text-center">
-            <p class="mb-2">
+            <p class="mb-2 text-center">
               <a class="link" href="{% url 'account_reset_password' %}">
                 {% trans "رمز عبور را فراموش کرده‌اید؟" %}
               </a>
             </p>
-            <p class="mb-0">
+            <p class="mb-0 text-center">
               {% blocktrans %}
               حساب کاربری ندارید؟ 
               <a class="link fw-bold" href="{{ signup_url }}">ثبت‌نام کنید</a>
