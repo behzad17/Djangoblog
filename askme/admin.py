@@ -36,6 +36,10 @@ class ModeratorAdmin(admin.ModelAdmin):
             'fields': ('slug', 'disclaimer'),
             'description': 'Profile page settings. Slug is auto-generated if left blank. Disclaimer is shown on the expert profile page.'
         }),
+        ('Contact & Social Links', {
+            'fields': ('website_url', 'instagram_url', 'linkedin_url'),
+            'description': 'Optional contact and social media links (displayed on expert profile page). URLs must start with https:// or http://'
+        }),
         ('Timestamps', {
             'fields': ('created_on', 'updated_on'),
             'classes': ('collapse',)

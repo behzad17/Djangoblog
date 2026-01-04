@@ -48,6 +48,24 @@ class Moderator(models.Model):
         blank=True,
         help_text="Custom disclaimer text for this expert (shown on profile page)"
     )
+    website_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text="Personal or professional website URL (https:// or http://)",
+        verbose_name="وب‌سایت"
+    )
+    instagram_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text="Instagram profile URL (https:// or http://)",
+        verbose_name="اینستاگرام"
+    )
+    linkedin_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text="LinkedIn profile URL (https:// or http://)",
+        verbose_name="لینکدین"
+    )
     slug = models.SlugField(
         max_length=200,
         unique=True,

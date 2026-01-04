@@ -174,6 +174,51 @@
           </ul>
         </div>
       </div>
+
+      <!-- Contact & Social Links -->
+      {% if moderator.website_url or moderator.instagram_url or moderator.linkedin_url %}
+      <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light">
+          <h4 class="mb-0">
+            <i class="fas fa-link ms-2"></i>راه‌های ارتباطی
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="expert-social-links">
+            {% if moderator.website_url %}
+            <a 
+              href="{{ moderator.website_url }}" 
+              target="_blank" 
+              rel="noopener noreferrer nofollow"
+              class="btn btn-outline-primary mb-2 w-100"
+            >
+              <i class="fas fa-globe ms-2"></i>وب‌سایت
+            </a>
+            {% endif %}
+            {% if moderator.instagram_url %}
+            <a 
+              href="{{ moderator.instagram_url }}" 
+              target="_blank" 
+              rel="noopener noreferrer nofollow"
+              class="btn btn-outline-danger mb-2 w-100"
+            >
+              <i class="fab fa-instagram ms-2"></i>اینستاگرام
+            </a>
+            {% endif %}
+            {% if moderator.linkedin_url %}
+            <a 
+              href="{{ moderator.linkedin_url }}" 
+              target="_blank" 
+              rel="noopener noreferrer nofollow"
+              class="btn btn-outline-primary mb-2 w-100"
+            >
+              <i class="fab fa-linkedin ms-2"></i>لینکدین
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
