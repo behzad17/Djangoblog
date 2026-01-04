@@ -71,17 +71,22 @@
             </small>
           </div>
           {% if user.is_authenticated %}
+          {% if moderator.slug %}
+          <a
+            href="{% url 'expert_profile' moderator.slug %}"
+            class="btn btn-primary btn-sm w-100 ask-question-btn"
+          >
+            <i class="fas fa-paper-plane ms-2"></i>پرسیدن سوال
+          </a>
+          {% else %}
           <button
             type="button"
             class="btn btn-primary btn-sm w-100 ask-question-btn"
-            data-moderator-id="{{ moderator.id }}"
-            data-moderator-name="{{ moderator.get_display_name }}"
-            data-moderator-title="{{ moderator.expert_title }}"
-            data-bs-toggle="modal"
-            data-bs-target="#questionModal"
+            disabled
           >
             <i class="fas fa-paper-plane ms-2"></i>پرسیدن سوال
           </button>
+          {% endif %}
           {% else %}
           <a
             href="{% url 'account_login' %}"
@@ -134,61 +139,5 @@
     </div>
   </div>
   {% endif %}
-</div>
-
-<!-- Question Modal -->
-<div
-  class="modal fade"
-  id="questionModal"
-  tabindex="-1"
-  aria-labelledby="questionModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header" style="background-color: #058073; border-bottom: 1px solid #058073;">
-        <h5 class="modal-title text-white" id="questionModalLabel">
-          <i class="fas fa-question-circle ms-2"></i>پرسیدن سوال
-        </h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="بستن"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div id="moderatorInfo" class="mb-3 p-3 bg-light rounded">
-          <strong id="moderatorName"></strong> -
-          <span id="moderatorTitle" class="text-primary"></span>
-        </div>
-        <form id="questionForm" method="post">
-          {% csrf_token %}
-          <input type="hidden" id="moderatorId" name="moderator_id" value="" />
-          <div class="mb-3">
-            <label for="id_question_text" class="form-label"
-              >سوال شما <span class="text-danger">*</span></label
-            >
-            <textarea
-              name="question_text"
-              id="id_question_text"
-              class="form-control"
-              rows="5"
-              placeholder="سوال خود را اینجا بنویسید..."
-              required
-            ></textarea>
-            <div class="form-text">
-              سوال شما خصوصی است و فقط برای شما و متخصص قابل مشاهده است.
-            </div>
-          </div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-paper-plane ms-2"></i>ارسال سوال
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock content %}
