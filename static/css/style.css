@@ -1301,7 +1301,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--pv-color-primary) !important; /* Use primary color token */
+  background: #BCD4E6 !important; /* Match homepage hero section background */
   line-height: 0; /* Remove white space from inline image */
 }
 
