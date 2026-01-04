@@ -47,11 +47,12 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 12px var(--pv-shadow-soft, rgba(0, 0, 0, 0.1));
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+  position: relative;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -72,16 +73,37 @@
 
 .related-link-image-wrapper {
   width: 100%;
-  height: 200px;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background-color: var(--pv-bg-main, #F5F7F6);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .related-link-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .related-link-card:hover .related-link-image {
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .related-link-image {
+    transition: none;
+  }
+  .related-link-card:hover .related-link-image {
+    transform: none;
+  }
 }
 
 .related-link-content {
@@ -89,26 +111,34 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0; /* Allow flex shrinking */
 }
 
 .related-link-badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background-color: var(--pv-bg-highlight, #ECFDF5);
+  padding: 0.35rem 0.85rem;
+  background: linear-gradient(135deg, var(--pv-bg-highlight, #ECFDF5) 0%, rgba(236, 253, 245, 0.8) 100%);
   color: var(--pv-color-secondary, #1F8A70);
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
   width: fit-content;
+  border: 1px solid rgba(31, 138, 112, 0.2);
+  box-shadow: 0 2px 4px rgba(31, 138, 112, 0.1);
 }
 
 .related-link-title {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--pv-text-main, #2C2C2C);
   margin-bottom: 0.5rem;
   line-height: 1.4;
+  min-height: 3.2em; /* Ensure consistent height for 2-line titles */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .related-link-source {
@@ -139,6 +169,8 @@
   font-weight: 500;
   transition: all 0.3s ease;
   margin-top: auto;
+  width: 100%;
+  text-align: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -175,7 +207,12 @@
   }
   
   .related-link-image-wrapper {
-    height: 180px;
+    aspect-ratio: 16 / 9; /* Maintain aspect ratio on mobile too */
+  }
+  
+  .related-link-button {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
   }
 }
 
