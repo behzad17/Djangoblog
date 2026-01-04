@@ -30,42 +30,37 @@
 </section>
 
 <div class="container py-4">
-  <!-- Category Icons Row -->
-  <div class="row justify-content-center mb-4">
+  <!-- Category Icons Row - Circular Design -->
+  <div class="ads-categories-grid mb-4">
     {% for category in categories %}
-    <div class="col-6 col-md-3 col-lg-auto category-box-margin">
-      <a href="{% url 'ads:ads_by_category' category.slug %}" class="text-decoration-none">
-        <div class="card shadow-sm h-100 category-card-hover text-center">
-          <div class="card-body p-2 d-flex flex-column justify-content-center align-items-center">
-            <div class="category-icon mb-1">
-              {% if category.name == "وسایل نقلیه" %}
-                <i class="fas fa-car category-icon-size category-icon-color"></i>
-              {% elif category.name == "مسکن" %}
-                <i class="fas fa-home category-icon-size category-icon-color"></i>
-              {% elif category.name == "کار و خدمات" %}
-                <i class="fas fa-briefcase category-icon-size category-icon-color"></i>
-              {% elif category.name == "اوقات فراغت" %}
-                <i class="fas fa-gamepad category-icon-size category-icon-color"></i>
-              {% elif category.name == "غذا و رستوران" %}
-                <i class="fas fa-utensils category-icon-size category-icon-color"></i>
-              {% elif category.name == "سلامت و رفاه" %}
-                <i class="fas fa-heart category-icon-size category-icon-color"></i>
-              {% elif category.name == "وسایل منزل" %}
-                <i class="fas fa-couch category-icon-size category-icon-color"></i>
-              {% elif category.name == "حقوقی و مالی" %}
-                <i class="fas fa-gavel category-icon-size category-icon-color"></i>
-              {% else %}
-                <i class="fas fa-tag category-icon-size category-icon-color"></i>
-              {% endif %}
-            </div>
-            <h6 class="card-title mb-1 text-center category-title-color">{{ category.name }}</h6>
-            <span class="badge category-badge-color">
-              {{ ad_counts|get_item:category.id|default:0 }} تبلیغ
-            </span>
-          </div>
-        </div>
-      </a>
-    </div>
+    <a 
+      href="{% url 'ads:ads_by_category' category.slug %}" 
+      class="ads-category-item"
+      aria-label="Browse {{ category.name }} category ({{ ad_counts|get_item:category.id|default:0 }} ads)"
+    >
+      <div class="ads-category-circle">
+        {% if "leisure" in category.slug|lower or "اوقات" in category.name or "فراغت" in category.name %}
+          <i class="fas fa-calendar-alt"></i>
+        {% elif "legal" in category.slug|lower or "حقوقی" in category.name or "مالی" in category.name %}
+          <i class="fas fa-gavel"></i>
+        {% elif "health" in category.slug|lower or "سلامت" in category.name or "رفاه" in category.name %}
+          <i class="fas fa-heart"></i>
+        {% elif "food" in category.slug|lower or "غذا" in category.name or "رستوران" in category.name %}
+          <i class="fas fa-utensils"></i>
+        {% elif "housing" in category.slug|lower or "مسکن" in category.name %}
+          <i class="fas fa-home"></i>
+        {% elif "home-items" in category.slug|lower or "وسایل-منزل" in category.slug|lower or "وسایل منزل" in category.name %}
+          <i class="fas fa-couch"></i>
+        {% elif "vehicles" in category.slug|lower or "وسایل-نقلیه" in category.slug|lower or "وسایل نقلیه" in category.name %}
+          <i class="fas fa-car"></i>
+        {% elif "work" in category.slug|lower or "کار" in category.name or "خدمات" in category.name %}
+          <i class="fas fa-briefcase"></i>
+        {% else %}
+          <i class="fas fa-tag"></i>
+        {% endif %}
+      </div>
+      <div class="ads-category-title">{{ category.name }}</div>
+    </a>
     {% empty %}
     <div class="col-12 text-center">
       <p class="text-muted">هنوز دسته‌بندی راهنمایی تعریف نشده است.</p>
