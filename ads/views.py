@@ -68,6 +68,9 @@ def ad_category_list(request):
     for ad in visible_ads:
         if ad.category_id in counts:
             counts[ad.category_id] += 1
+    
+    # Detect active category from query params
+    active_category_slug = request.GET.get('category') or request.GET.get('cat')
 
     return render(
         request,
@@ -75,6 +78,7 @@ def ad_category_list(request):
         {
             "categories": categories,
             "ad_counts": counts,
+            "active_category_slug": active_category_slug,
         },
     )
 
