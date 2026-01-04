@@ -1,5 +1,4 @@
-{% extends "base.html" %} {% load i18n %} {% block head_title %}{% trans "Sign
-Out" %}{% endblock %} {% block content %}
+{% extends "base.html" %} {% load i18n %} {% block head_title %}{% trans "خروج" %}{% endblock %} {% block content %}
 <!-- Logout Container -->
 <div class="container">
   <div class="row justify-content-center">
@@ -8,10 +7,10 @@ Out" %}{% endblock %} {% block content %}
       <div class="card login-card login-ltr mt-4 mb-5">
         <div class="card-body p-4 text-center">
           <!-- Logout Header -->
-          <h2 class="card-title mb-3">{% trans "Sign Out" %}</h2>
+          <h2 class="card-title mb-3">{% trans "خروج از حساب کاربری" %}</h2>
 
           <!-- Logout Confirmation Message -->
-          <p class="mb-4">{% trans 'Are you sure you want to sign out?' %}</p>
+          <p class="mb-4">{% trans 'آیا مطمئن هستید که می‌خواهید خارج شوید؟' %}</p>
 
           <!-- Logout Form -->
           <form method="post" action="{% url 'account_logout' %}">
@@ -24,7 +23,7 @@ Out" %}{% endblock %} {% block content %}
             {% endif %}
             <!-- Logout Button -->
             <button class="btn btn-signup w-100" type="submit">
-              {% trans 'Sign Out' %}
+              {% trans 'خروج' %}
             </button>
           </form>
         </div>
