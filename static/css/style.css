@@ -2194,7 +2194,7 @@ body {
 
 /* Footer sizing tweaks */
 .footer {
-  background: var(--pv-color-primary) !important; /* Use primary color token */
+  background: #A4D2E0 !important;
 }
 
 .footer p {
