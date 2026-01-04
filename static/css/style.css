@@ -3407,8 +3407,8 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: var(--pv-bg-card, #FFFFFF);
-  border: 2px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+  background-color: color-mix(in srgb, var(--accent, #7C9AA6) 8%, var(--pv-bg-card, #FFFFFF));
+  border: 2px solid color-mix(in srgb, var(--accent, #7C9AA6) 25%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3425,7 +3425,7 @@ body {
 
 .ads-category-icon i {
   font-size: 1.5rem;
-  color: var(--pv-text-main, #2C2C2C);
+  color: color-mix(in srgb, var(--accent, #7C9AA6) 70%, var(--pv-text-main, #2C2C2C));
 }
 
 /* Active state */
@@ -3476,7 +3476,8 @@ body {
   .ads-category-item:focus .ads-category-circle {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--pv-shadow-medium, rgba(0, 0, 0, 0.15));
-    border-color: var(--accent, #7C9AA6);
+    background-color: color-mix(in srgb, var(--accent, #7C9AA6) 12%, var(--pv-bg-card, #FFFFFF));
+    border-color: color-mix(in srgb, var(--accent, #7C9AA6) 40%, transparent);
   }
 
   .ads-category-item:hover .ads-category-icon i,
