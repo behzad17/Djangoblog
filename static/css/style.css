@@ -6298,12 +6298,17 @@ body {
   transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
   padding: 0 1rem;
   background-color: var(--pv-bg-card, #FFFFFF);
+  display: block;
+  visibility: visible;
 }
 
 .peyvand-faq-answer.is-open {
-  max-height: 1000px;
-  opacity: 1;
-  padding: 1rem 1rem 1.5rem 1rem;
+  max-height: 1000px !important;
+  opacity: 1 !important;
+  padding: 1rem 1rem 1.5rem 1rem !important;
+  overflow: visible !important;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .peyvand-faq-answer p {
@@ -6333,10 +6338,14 @@ body {
 
 /* Ensure .is-open class always shows answer (works on all devices) */
 .peyvand-faq-answer.is-open,
-.peyvand-faq-question[aria-expanded="true"] + .peyvand-faq-answer {
+.peyvand-faq-question[aria-expanded="true"] + .peyvand-faq-answer,
+.peyvand-faq-item .peyvand-faq-answer.is-open {
   max-height: 1000px !important;
   opacity: 1 !important;
   padding: 1rem 1rem 1.5rem 1rem !important;
+  overflow: visible !important;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* Mobile/Touch: Ensure transitions work smoothly */
