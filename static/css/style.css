@@ -2919,7 +2919,7 @@ body {
 }
 
 .category-hero-title {
-  font-size: 3rem;
+  font-size: 2.55rem; /* 15% smaller: 3rem * 0.85 = 2.55rem */
   font-weight: 700;
   color: #415a77 !important;
   text-shadow: none;
@@ -3032,7 +3032,7 @@ body {
   }
   
   .category-hero-title {
-    font-size: 2.25rem;
+    font-size: 1.91rem; /* 15% smaller: 2.25rem * 0.85 = 1.9125rem */
   }
   
   .category-hero-description {
@@ -3088,7 +3088,7 @@ body {
   }
   
   .category-hero-title {
-    font-size: 1.75rem;
+    font-size: 1.49rem; /* 15% smaller: 1.75rem * 0.85 = 1.4875rem */
   }
   
   .category-hero-description {
