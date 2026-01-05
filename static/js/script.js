@@ -349,9 +349,9 @@ function initFAQAccordion() {
   const faqQuestions = faqAccordion.querySelectorAll('.peyvand-faq-question');
   const faqAnswers = faqAccordion.querySelectorAll('.peyvand-faq-answer');
 
-  // Detect if device supports hover (desktop) or is touch-only (mobile)
-  const isTouchDevice = window.matchMedia('(hover: none)').matches || 
-                        window.matchMedia('(pointer: coarse)').matches;
+  // Detect if device supports hover (desktop)
+  const supportsHover = window.matchMedia('(hover: hover)').matches && 
+                        window.matchMedia('(pointer: fine)').matches;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Function to close all FAQ items except the specified one
@@ -361,8 +361,10 @@ function initFAQAccordion() {
         const question = item.querySelector('.peyvand-faq-question');
         const answer = item.querySelector('.peyvand-faq-answer');
         
-        question.setAttribute('aria-expanded', 'false');
-        answer.classList.remove('is-open');
+        if (question && answer) {
+          question.setAttribute('aria-expanded', 'false');
+          answer.classList.remove('is-open');
+        }
       }
     });
   }
@@ -371,6 +373,9 @@ function initFAQAccordion() {
   function toggleFAQ(index) {
     const question = faqQuestions[index];
     const answer = faqAnswers[index];
+    
+    if (!question || !answer) return;
+    
     const isExpanded = question.getAttribute('aria-expanded') === 'true';
 
     if (isExpanded) {
@@ -386,27 +391,40 @@ function initFAQAccordion() {
     }
   }
 
-  // For touch devices (mobile): Click/tap to toggle
-  if (isTouchDevice) {
-    faqQuestions.forEach((question, index) => {
-      question.addEventListener('click', function(e) {
+  // ALWAYS enable click/tap functionality for ALL devices (mobile and desktop)
+  faqQuestions.forEach((question, index) => {
+    if (!question) return;
+    
+    // Click/tap handler - works on all devices
+    question.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFAQ(index);
+    });
+
+    // Touch handler for better mobile support
+    question.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFAQ(index);
+    });
+
+    // Keyboard support
+    question.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         toggleFAQ(index);
-      });
-
-      // Keyboard support
-      question.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleFAQ(index);
-        }
-      });
+      }
     });
-  } else {
-    // For desktop: Hover to show, mouseout to hide
+  });
+
+  // ADDITIONAL: Hover functionality ONLY for desktop devices that support hover
+  if (supportsHover) {
     faqItems.forEach((item, index) => {
       const question = faqQuestions[index];
       const answer = faqAnswers[index];
+
+      if (!question || !answer) return;
 
       question.addEventListener('mouseenter', function() {
         // Close all others first
@@ -419,20 +437,6 @@ function initFAQAccordion() {
       item.addEventListener('mouseleave', function() {
         question.setAttribute('aria-expanded', 'false');
         answer.classList.remove('is-open');
-      });
-
-      // Also support click on desktop as fallback
-      question.addEventListener('click', function(e) {
-        e.preventDefault();
-        toggleFAQ(index);
-      });
-
-      // Keyboard support
-      question.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleFAQ(index);
-        }
       });
     });
   }
