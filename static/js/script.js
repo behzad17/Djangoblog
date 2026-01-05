@@ -349,6 +349,13 @@ function initFAQAccordion() {
   const faqQuestions = faqAccordion.querySelectorAll('.peyvand-faq-question');
   const faqAnswers = faqAccordion.querySelectorAll('.peyvand-faq-answer');
 
+  // Debug: Log if elements are found
+  console.log('FAQ Accordion initialized:', {
+    items: faqItems.length,
+    questions: faqQuestions.length,
+    answers: faqAnswers.length
+  });
+
   // Detect if device supports hover (desktop)
   const supportsHover = window.matchMedia('(hover: hover)').matches && 
                         window.matchMedia('(pointer: fine)').matches;
@@ -393,29 +400,56 @@ function initFAQAccordion() {
 
   // ALWAYS enable click/tap functionality for ALL devices (mobile and desktop)
   faqQuestions.forEach((question, index) => {
-    if (!question) return;
+    if (!question) {
+      console.warn('FAQ question element not found at index:', index);
+      return;
+    }
     
-    // Click/tap handler - works on all devices
-    question.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
+    // Ensure button type is set correctly
+    if (question.tagName === 'BUTTON' && !question.type) {
+      question.type = 'button';
+    }
+    
+    // Unified handler function
+    const handleToggle = function(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      console.log('FAQ toggle triggered for index:', index);
       toggleFAQ(index);
-    });
-
-    // Touch handler for better mobile support
+    };
+    
+    // Touch start - prevent default to avoid double-tap zoom
+    let touchStartTime = 0;
+    question.addEventListener('touchstart', function(e) {
+      touchStartTime = Date.now();
+    }, { passive: true });
+    
+    // Touch end handler for mobile devices
     question.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleFAQ(index);
-    });
+      const touchDuration = Date.now() - touchStartTime;
+      // Only handle if it was a quick tap (not a swipe)
+      if (touchDuration < 300) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleToggle(e);
+      }
+    }, { passive: false });
+    
+    // Click handler - works on all devices
+    // Use capture phase and make sure it's not passive
+    question.addEventListener('click', handleToggle, { capture: true, passive: false });
 
     // Keyboard support
     question.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        toggleFAQ(index);
+        handleToggle(e);
       }
     });
+    
+    console.log('Event listeners attached to FAQ question', index);
   });
 
   // ADDITIONAL: Hover functionality ONLY for desktop devices that support hover
