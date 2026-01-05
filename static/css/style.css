@@ -7018,9 +7018,9 @@ body {
 .category-carousel {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 240px; /* Reduced by ~40% from 400px */
   margin: 2rem 0;
-  perspective: 1200px;
+  perspective: 800px; /* Reduced proportionally */
   overflow: hidden;
 }
 
@@ -7034,29 +7034,98 @@ body {
   align-items: center;
 }
 
+/* Color palette for category cards - 12 soft pastel colors */
+:root {
+  --cat-color-0: #E8F5E9; /* Soft green */
+  --cat-color-1: #E3F2FD; /* Soft blue */
+  --cat-color-2: #FFF3E0; /* Soft orange */
+  --cat-color-3: #F3E5F5; /* Soft purple */
+  --cat-color-4: #E0F2F1; /* Soft teal */
+  --cat-color-5: #FCE4EC; /* Soft pink */
+  --cat-color-6: #FFF8E1; /* Soft yellow */
+  --cat-color-7: #E8EAF6; /* Soft indigo */
+  --cat-color-8: #F1F8E9; /* Soft lime */
+  --cat-color-9: #EDE7F6; /* Soft deep purple */
+  --cat-color-10: #E0F7FA; /* Soft cyan */
+  --cat-color-11: #FFF9C4; /* Soft amber */
+}
+
 .category-carousel-card {
   position: absolute;
-  width: 280px;
-  height: 320px;
-  background: rgba(255, 255, 255, 0.95);
+  width: 168px; /* Reduced by ~40% from 280px */
+  height: 192px; /* Reduced by ~40% from 320px */
+  /* Base glass-morphism background */
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2),
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
               0 0 0 1px rgba(255, 255, 255, 0.5);
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.6s ease,
-              z-index 0.6s ease;
+              z-index 0.6s ease,
+              background 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1.2rem; /* Reduced from 2rem */
   text-decoration: none;
-  color: var(--pv-text-main);
+  color: #333; /* Dark text for good contrast on light backgrounds */
   overflow: hidden;
+}
+
+/* Color assignment based on data-color-index attribute */
+.category-carousel-card[data-color-index="0"] {
+  background: linear-gradient(135deg, var(--cat-color-0) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="1"] {
+  background: linear-gradient(135deg, var(--cat-color-1) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="2"] {
+  background: linear-gradient(135deg, var(--cat-color-2) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="3"] {
+  background: linear-gradient(135deg, var(--cat-color-3) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="4"] {
+  background: linear-gradient(135deg, var(--cat-color-4) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="5"] {
+  background: linear-gradient(135deg, var(--cat-color-5) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="6"] {
+  background: linear-gradient(135deg, var(--cat-color-6) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="7"] {
+  background: linear-gradient(135deg, var(--cat-color-7) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="8"] {
+  background: linear-gradient(135deg, var(--cat-color-8) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="9"] {
+  background: linear-gradient(135deg, var(--cat-color-9) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="10"] {
+  background: linear-gradient(135deg, var(--cat-color-10) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.category-carousel-card[data-color-index="11"] {
+  background: linear-gradient(135deg, var(--cat-color-11) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+
+/* Maintain glass-morphism overlay */
+.category-carousel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+  pointer-events: none;
+  border-radius: 16px 16px 0 0;
 }
 
 .category-carousel-card::before {
@@ -7084,8 +7153,8 @@ body {
 }
 
 .category-carousel-card-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.4rem; /* Reduced by ~40% from 4rem */
+  margin-bottom: 0.9rem; /* Reduced from 1.5rem */
   color: var(--pv-color-secondary);
   transition: transform 0.3s ease, color 0.3s ease;
   z-index: 1;
@@ -7097,25 +7166,32 @@ body {
 }
 
 .category-carousel-card-name {
-  font-size: 1.25rem;
+  font-size: 0.9rem; /* Reduced by ~28% from 1.25rem */
   font-weight: 700;
   text-align: center;
-  margin-bottom: 0.5rem;
-  color: var(--pv-text-main);
+  margin-bottom: 0.3rem; /* Reduced from 0.5rem */
+  color: #333; /* Dark text for contrast on light backgrounds */
   z-index: 1;
-  line-height: 1.4;
+  line-height: 1.3;
   word-wrap: break-word;
   max-width: 100%;
 }
 
 .category-carousel-card-count {
-  font-size: 0.9rem;
-  color: var(--pv-text-secondary, #666);
+  font-size: 0.75rem; /* Reduced from 0.9rem */
+  color: #666;
   text-align: center;
   z-index: 1;
 }
 
-/* Card positions - 3D transform */
+/* Active category highlight */
+.category-carousel-card.active-category {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25),
+              0 0 0 2px var(--pv-cta-services);
+  transform: translateZ(20px) scale(1.02) !important;
+}
+
+/* Card positions - 3D transform (reduced by ~40%) */
 .category-carousel-card.active {
   transform: translateX(0) translateZ(0) rotateY(0deg);
   opacity: 1;
@@ -7123,25 +7199,25 @@ body {
 }
 
 .category-carousel-card.prev-1 {
-  transform: translateX(-200px) translateZ(-150px) rotateY(25deg);
+  transform: translateX(-120px) translateZ(-90px) rotateY(25deg); /* Reduced from -200px/-150px */
   opacity: 0.8;
   z-index: 4;
 }
 
 .category-carousel-card.prev-2 {
-  transform: translateX(-350px) translateZ(-250px) rotateY(40deg);
+  transform: translateX(-210px) translateZ(-150px) rotateY(40deg); /* Reduced from -350px/-250px */
   opacity: 0.6;
   z-index: 3;
 }
 
 .category-carousel-card.next-1 {
-  transform: translateX(200px) translateZ(-150px) rotateY(-25deg);
+  transform: translateX(120px) translateZ(-90px) rotateY(-25deg); /* Reduced from 200px/-150px */
   opacity: 0.8;
   z-index: 4;
 }
 
 .category-carousel-card.next-2 {
-  transform: translateX(350px) translateZ(-250px) rotateY(-40deg);
+  transform: translateX(210px) translateZ(-150px) rotateY(-40deg); /* Reduced from 350px/-250px */
   opacity: 0.6;
   z-index: 3;
 }
@@ -7152,21 +7228,21 @@ body {
   z-index: 1;
 }
 
-/* RTL Support - Reverse transform directions */
+/* RTL Support - Reverse transform directions (reduced sizes) */
 [dir="rtl"] .category-carousel-card.prev-1 {
-  transform: translateX(200px) translateZ(-150px) rotateY(-25deg);
+  transform: translateX(120px) translateZ(-90px) rotateY(-25deg);
 }
 
 [dir="rtl"] .category-carousel-card.prev-2 {
-  transform: translateX(350px) translateZ(-250px) rotateY(-40deg);
+  transform: translateX(210px) translateZ(-150px) rotateY(-40deg);
 }
 
 [dir="rtl"] .category-carousel-card.next-1 {
-  transform: translateX(-200px) translateZ(-150px) rotateY(25deg);
+  transform: translateX(-120px) translateZ(-90px) rotateY(25deg);
 }
 
 [dir="rtl"] .category-carousel-card.next-2 {
-  transform: translateX(-350px) translateZ(-250px) rotateY(40deg);
+  transform: translateX(-210px) translateZ(-150px) rotateY(40deg);
 }
 
 /* Navigation Buttons */
@@ -7310,38 +7386,38 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
   .category-carousel {
-    height: 350px;
+    height: 210px; /* Reduced by ~40% from 350px */
   }
   
   .category-carousel-card {
-    width: 240px;
-    height: 280px;
-    padding: 1.5rem;
+    width: 144px; /* Reduced by ~40% from 240px */
+    height: 168px; /* Reduced by ~40% from 280px */
+    padding: 0.9rem; /* Reduced from 1.5rem */
   }
   
   .category-carousel-card-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 1.8rem; /* Reduced by ~40% from 3rem */
+    margin-bottom: 0.6rem; /* Reduced from 1rem */
   }
   
   .category-carousel-card-name {
-    font-size: 1.1rem;
+    font-size: 0.8rem; /* Reduced from 1.1rem */
   }
   
   .category-carousel-card.prev-1 {
-    transform: translateX(-150px) translateZ(-100px) rotateY(25deg);
+    transform: translateX(-90px) translateZ(-60px) rotateY(25deg); /* Reduced */
   }
   
   .category-carousel-card.prev-2 {
-    transform: translateX(-250px) translateZ(-180px) rotateY(40deg);
+    transform: translateX(-150px) translateZ(-108px) rotateY(40deg); /* Reduced */
   }
   
   .category-carousel-card.next-1 {
-    transform: translateX(150px) translateZ(-100px) rotateY(-25deg);
+    transform: translateX(90px) translateZ(-60px) rotateY(-25deg); /* Reduced */
   }
   
   .category-carousel-card.next-2 {
-    transform: translateX(250px) translateZ(-180px) rotateY(-40deg);
+    transform: translateX(150px) translateZ(-108px) rotateY(-40deg); /* Reduced */
   }
   
   .category-carousel-nav {
@@ -7359,43 +7435,43 @@ body {
   }
   
   [dir="rtl"] .category-carousel-card.prev-1 {
-    transform: translateX(150px) translateZ(-100px) rotateY(-25deg);
+    transform: translateX(90px) translateZ(-60px) rotateY(-25deg);
   }
   
   [dir="rtl"] .category-carousel-card.prev-2 {
-    transform: translateX(250px) translateZ(-180px) rotateY(-40deg);
+    transform: translateX(150px) translateZ(-108px) rotateY(-40deg);
   }
   
   [dir="rtl"] .category-carousel-card.next-1 {
-    transform: translateX(-150px) translateZ(-100px) rotateY(25deg);
+    transform: translateX(-90px) translateZ(-60px) rotateY(25deg);
   }
   
   [dir="rtl"] .category-carousel-card.next-2 {
-    transform: translateX(-250px) translateZ(-180px) rotateY(40deg);
+    transform: translateX(-150px) translateZ(-108px) rotateY(40deg);
   }
 }
 
 @media (max-width: 576px) {
   .category-carousel {
-    height: 300px;
+    height: 180px; /* Reduced by ~40% from 300px */
   }
   
   .category-carousel-card {
-    width: 200px;
-    height: 240px;
-    padding: 1rem;
+    width: 120px; /* Reduced by ~40% from 200px */
+    height: 144px; /* Reduced by ~40% from 240px */
+    padding: 0.6rem; /* Reduced from 1rem */
   }
   
   .category-carousel-card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.5rem; /* Reduced by ~40% from 2.5rem */
+    margin-bottom: 0.45rem; /* Reduced from 0.75rem */
   }
   
   .category-carousel-card-name {
-    font-size: 1rem;
+    font-size: 0.75rem; /* Reduced from 1rem */
   }
   
   .category-carousel-card-count {
-    font-size: 0.8rem;
+    font-size: 0.65rem; /* Reduced from 0.8rem */
   }
 }

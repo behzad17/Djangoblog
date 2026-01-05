@@ -57,63 +57,8 @@
             همه دسته‌بندی‌ها
           </a>
         </h4>
-        <div class="category-buttons-container">
-          <!-- All Categories -->
-          <div class="category-row">
-            {% for cat in categories %}
-            <a
-              href="{% url 'category_posts' cat.slug %}"
-              class="category-btn {% if cat.slug == category.slug %}active{% endif %}"
-              data-tone="{% if cat.slug == 'events-announcements' or cat.slug == 'photo-gallery' %}purple{% elif cat.slug == 'platform-updates' or cat.slug == 'careers-economy' or cat.slug == 'life-in-sweden' or cat.slug == 'law-integration' or cat.slug == 'skills-learning' %}mint{% else %}peach{% endif %}"
-              data-category="{{ cat.slug }}"
-              title="{{ cat.name }}"
-              aria-label="Browse {{ cat.name }} category ({{ cat.post_count }} posts){% if cat.slug == category.slug %} - Current category{% endif %}"
-            >
-              <span class="category-btn-text">{{ cat.name }}</span>
-              <span class="category-btn-count">({{ cat.post_count }})</span>
-              <span class="cat-icon">
-                {% if cat.slug == "careers-economy" %}<i
-                  class="bi bi-cash-coin"
-                ></i>
-                {% elif cat.slug == "law-integration" %}<i
-                  class="bi bi-globe"
-                ></i>
-                {% elif cat.slug == "life-in-sweden" %}<i
-                  class="bi bi-briefcase"
-                ></i>
-                {% elif cat.slug == "skills-learning" %}<i
-                  class="bi bi-bank"
-                ></i>
-                {% elif cat.slug == "platform-updates" %}<i
-                  class="bi bi-newspaper"
-                ></i>
-                {% elif cat.slug == "events-announcements" %}<i
-                  class="bi bi-calendar-event"
-                ></i>
-                {% elif cat.slug == "photo-gallery" %}<i
-                  class="bi bi-camera"
-                ></i>
-                {% elif cat.slug == "public-services" %}<i
-                  class="bi bi-cart"
-                ></i>
-                {% elif cat.slug == "stories-experiences" %}<i
-                  class="bi bi-heart-pulse"
-                ></i>
-                {% elif cat.slug == "community-engagement" %}<i
-                  class="bi bi-translate"
-                ></i>
-                {% elif cat.slug == "personalities" %}<i
-                  class="bi bi-person-star"
-                ></i>
-                {% else %}<i
-                  class="bi bi-tag"
-                ></i>
-                {% endif %}
-              </span>
-            </a>
-            {% endfor %}
-          </div>
-        </div>
+        
+        {% include 'includes/category_carousel.html' with categories=categories current_category_slug=category.slug %}
       </div>
     </div>
   </div>
@@ -125,4 +70,8 @@
 {% else %}
   {% include 'blog/category_layouts/default_grid.html' %}
 {% endif %}
+{% endblock %}
+
+{% block extras %}
+<script src="{% static 'js/category-carousel.js' %}" defer></script>
 {% endblock %}
