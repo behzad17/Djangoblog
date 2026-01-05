@@ -6339,7 +6339,19 @@ body {
 /* Ensure .is-open class always shows answer (works on all devices) */
 .peyvand-faq-answer.is-open,
 .peyvand-faq-question[aria-expanded="true"] + .peyvand-faq-answer,
-.peyvand-faq-item .peyvand-faq-answer.is-open {
+.peyvand-faq-item .peyvand-faq-answer.is-open,
+.peyvand-faq-item:has(.peyvand-faq-question[aria-expanded="true"]) .peyvand-faq-answer {
+  max-height: 1000px !important;
+  opacity: 1 !important;
+  padding: 1rem 1rem 1.5rem 1rem !important;
+  overflow: visible !important;
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+}
+
+/* Additional selector for maximum compatibility */
+.peyvand-faq-item .peyvand-faq-question[aria-expanded="true"] ~ .peyvand-faq-answer {
   max-height: 1000px !important;
   opacity: 1 !important;
   padding: 1rem 1rem 1.5rem 1rem !important;

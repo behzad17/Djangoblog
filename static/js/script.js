@@ -340,10 +340,15 @@ if (document.readyState === 'loading') {
 
 // FAQ Accordion Functionality
 function initFAQAccordion() {
+  console.log('initFAQAccordion called - searching for accordion...');
+  
   const faqAccordion = document.querySelector('.peyvand-faq-accordion');
   if (!faqAccordion) {
+    console.warn('FAQ accordion not found on page');
     return; // FAQ accordion not on this page
   }
+
+  console.log('FAQ accordion found!', faqAccordion);
 
   const faqItems = faqAccordion.querySelectorAll('.peyvand-faq-item');
   const faqQuestions = faqAccordion.querySelectorAll('.peyvand-faq-question');
@@ -353,8 +358,16 @@ function initFAQAccordion() {
   console.log('FAQ Accordion initialized:', {
     items: faqItems.length,
     questions: faqQuestions.length,
-    answers: faqAnswers.length
+    answers: faqAnswers.length,
+    itemsArray: Array.from(faqItems),
+    questionsArray: Array.from(faqQuestions),
+    answersArray: Array.from(faqAnswers)
   });
+  
+  if (faqQuestions.length === 0 || faqAnswers.length === 0) {
+    console.error('No FAQ questions or answers found!');
+    return;
+  }
 
   // Detect device capabilities
   const supportsHover = window.matchMedia('(hover: hover)').matches && 
@@ -380,23 +393,31 @@ function initFAQAccordion() {
 
   // Function to toggle a FAQ item
   function toggleFAQ(index) {
+    console.log('toggleFAQ called with index:', index);
     const question = faqQuestions[index];
     const answer = faqAnswers[index];
     
     if (!question || !answer) {
       console.error('FAQ toggle failed: question or answer not found for index', index, {
         question: question,
-        answer: answer
+        answer: answer,
+        totalQuestions: faqQuestions.length,
+        totalAnswers: faqAnswers.length
       });
       return;
     }
     
     const isExpanded = question.getAttribute('aria-expanded') === 'true';
+    console.log('Current state - isExpanded:', isExpanded, 'index:', index);
 
     if (isExpanded) {
       // Close this item
       question.setAttribute('aria-expanded', 'false');
       answer.classList.remove('is-open');
+      // Also set inline style to ensure it closes
+      answer.style.maxHeight = '0';
+      answer.style.opacity = '0';
+      answer.style.padding = '0 1rem';
       console.log('FAQ item closed:', index);
     } else {
       // Close all others first (only one open at a time)
@@ -405,15 +426,28 @@ function initFAQAccordion() {
       question.setAttribute('aria-expanded', 'true');
       answer.classList.add('is-open');
       
+      // Set inline styles to FORCE visibility (overrides any CSS conflicts)
+      answer.style.maxHeight = '1000px';
+      answer.style.opacity = '1';
+      answer.style.padding = '1rem 1rem 1.5rem 1rem';
+      answer.style.display = 'block';
+      answer.style.visibility = 'visible';
+      answer.style.overflow = 'visible';
+      
       // Force a reflow to ensure CSS applies
       void answer.offsetHeight;
       
+      const computed = window.getComputedStyle(answer);
       console.log('FAQ item opened:', index, {
         answerElement: answer,
         hasIsOpenClass: answer.classList.contains('is-open'),
         ariaExpanded: question.getAttribute('aria-expanded'),
-        computedStyle: window.getComputedStyle(answer).maxHeight,
-        computedOpacity: window.getComputedStyle(answer).opacity
+        inlineMaxHeight: answer.style.maxHeight,
+        inlineOpacity: answer.style.opacity,
+        computedMaxHeight: computed.maxHeight,
+        computedOpacity: computed.opacity,
+        computedDisplay: computed.display,
+        computedVisibility: computed.visibility
       });
     }
   }
@@ -421,7 +455,12 @@ function initFAQAccordion() {
   // Attach click handlers DIRECTLY to each button for maximum reliability
   // This is more reliable than event delegation on mobile devices
   faqQuestions.forEach((question, index) => {
-    if (!question) return;
+    if (!question) {
+      console.warn('Question is null for index:', index);
+      return;
+    }
+    
+    console.log('Setting up handlers for question index:', index, question);
     
     // Ensure button type is set correctly
     if (question.tagName === 'BUTTON' && !question.type) {
@@ -430,7 +469,7 @@ function initFAQAccordion() {
     
     const answer = faqAnswers[index];
     if (!answer) {
-      console.warn('Answer not found for question index:', index);
+      console.error('Answer not found for question index:', index);
       return;
     }
     
@@ -463,7 +502,9 @@ function initFAQAccordion() {
     }, { passive: false });
     
     // Click handler - works for mouse and as fallback
+    // Use capture phase to ensure we catch it early
     question.addEventListener('click', function(e) {
+      console.log('FAQ click event fired for index:', index, 'isTouchInteraction:', isTouchInteraction);
       // Skip if this was already handled by touch
       if (isTouchInteraction) {
         e.preventDefault();
@@ -474,7 +515,17 @@ function initFAQAccordion() {
       e.stopPropagation();
       console.log('FAQ button clicked (mouse/fallback):', index);
       toggleFAQ(index);
-    }, { passive: false });
+    }, { passive: false, capture: true });
+    
+    // Also add a simpler click handler without preventDefault to catch any missed events
+    question.onclick = function(e) {
+      console.log('FAQ onclick handler fired for index:', index);
+      if (!isTouchInteraction) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFAQ(index);
+      }
+    };
     
     // Keyboard support
     question.addEventListener('keydown', function(e) {
@@ -483,6 +534,8 @@ function initFAQAccordion() {
         toggleFAQ(index);
       }
     });
+    
+    console.log('Handlers attached to question index:', index);
   });
   
   console.log('FAQ Accordion handlers attached:', {
@@ -519,11 +572,39 @@ function initFAQAccordion() {
 }
 
 // Initialize FAQ accordion on DOM ready
-document.addEventListener('DOMContentLoaded', initFAQAccordion);
+console.log('Script loading, readyState:', document.readyState);
 
-// Also try immediately in case DOM is already ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initFAQAccordion);
-} else {
+// Try multiple initialization strategies
+function tryInitFAQ() {
+  console.log('Attempting to initialize FAQ accordion...');
   initFAQAccordion();
 }
+
+// Try immediately
+if (document.readyState === 'loading') {
+  console.log('DOM is loading, waiting for DOMContentLoaded...');
+  document.addEventListener('DOMContentLoaded', tryInitFAQ);
+} else {
+  console.log('DOM already ready, initializing immediately...');
+  tryInitFAQ();
+}
+
+// Also try after a short delay in case of timing issues
+setTimeout(function() {
+  console.log('Delayed initialization attempt...');
+  const accordion = document.querySelector('.peyvand-faq-accordion');
+  if (accordion && !accordion.dataset.initialized) {
+    accordion.dataset.initialized = 'true';
+    initFAQAccordion();
+  }
+}, 100);
+
+// Try again after window load
+window.addEventListener('load', function() {
+  console.log('Window loaded, checking FAQ accordion...');
+  const accordion = document.querySelector('.peyvand-faq-accordion');
+  if (accordion && !accordion.dataset.initialized) {
+    accordion.dataset.initialized = 'true';
+    initFAQAccordion();
+  }
+});
