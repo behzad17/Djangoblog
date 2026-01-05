@@ -6,8 +6,8 @@ from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
-from .models import AdCategory, Ad, FavoriteAd
-from .forms import AdForm
+from .models import AdCategory, Ad, FavoriteAd, AdComment
+from .forms import AdForm, AdCommentForm
 
 
 def _visible_ads_queryset():
@@ -188,6 +188,7 @@ def ad_list_by_category(request, category_slug):
     return render(request, "ads/ads_by_category.html", context)
 
 
+@ratelimit(key='ip', rate='20/m', method='POST', block=True)
 @login_required
 def ad_detail(request, slug):
     """
@@ -195,8 +196,14 @@ def ad_detail(request, slug):
 
     Each ad has its own slug-based URL. Only visible if the ad is currently
     active, approved, and within its date range.
+    
+    Handles both GET (display) and POST (comment submission) requests.
+    Comments are published immediately (no moderation).
     """
-    ad = get_object_or_404(_visible_ads_queryset(), slug=slug)
+    ad = get_object_or_404(
+        _visible_ads_queryset().select_related('category', 'owner'),
+        slug=slug
+    )
     
     # Determine if current user has already favorited this ad
     is_favorited = False
@@ -206,9 +213,50 @@ def ad_detail(request, slug):
             ad=ad,
         ).exists()
     
+    # Load comments (exclude deleted ones)
+    comments = ad.comments.filter(is_deleted=False).select_related('author').order_by('created_on')
+    comment_count = comments.count()
+    comment_form = AdCommentForm()
+    
+    # Handle POST request for comment submission
+    if request.method == "POST":
+        # Require authentication (already handled by @login_required, but defensive check)
+        if not request.user.is_authenticated:
+            messages.error(request, 'لطفاً برای ثبت نظر وارد شوید.')
+            return redirect('account_login')
+        
+        # Require site verification for comments
+        # Ensure user has a profile (create if missing)
+        if not hasattr(request.user, 'profile'):
+            from blog.models import UserProfile
+            UserProfile.objects.get_or_create(user=request.user)
+        
+        # Check site verification
+        if not request.user.profile.is_site_verified:
+            messages.warning(request, 'لطفاً ابتدا تنظیمات حساب کاربری خود را تکمیل کنید.')
+            return redirect('complete_setup')
+        
+        # Process comment form
+        comment_form = AdCommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.ad = ad
+            # No approval needed - publish immediately
+            comment.save()
+            
+            messages.success(request, 'نظر شما با موفقیت ثبت شد!')
+            return redirect('ads:ad_detail', slug=slug)
+        else:
+            # Form has errors, will be displayed in template
+            messages.error(request, 'لطفاً خطاهای فرم را برطرف کنید.')
+    
     context = {
         "ad": ad,
         "is_favorited": is_favorited,
+        "comments": comments,
+        "comment_count": comment_count,
+        "comment_form": comment_form,
     }
     return render(request, "ads/ad_detail.html", context)
 
@@ -357,6 +405,33 @@ def remove_ad_from_favorites(request, ad_id):
         messages.error(request, 'این تبلیغ در علاقه‌مندی‌های شما نیست.')
     
     return redirect('favorites')
+
+
+@login_required
+def delete_ad_comment(request, slug, comment_id):
+    """
+    View function for deleting (soft delete) an ad comment.
+    
+    Only the comment author can delete their own comments.
+    Uses soft delete (is_deleted=True) instead of hard delete.
+    """
+    ad = get_object_or_404(_visible_ads_queryset(), slug=slug)
+    comment = get_object_or_404(AdComment, id=comment_id, ad=ad)
+    
+    # Permission check - only author can delete
+    if comment.author != request.user:
+        messages.error(request, 'شما اجازه حذف این نظر را ندارید.')
+        return redirect('ads:ad_detail', slug=slug)
+    
+    # Soft delete
+    if request.method == "POST":
+        comment.is_deleted = True
+        comment.save()
+        messages.success(request, 'نظر شما با موفقیت حذف شد.')
+    else:
+        messages.error(request, 'درخواست نامعتبر.')
+    
+    return redirect('ads:ad_detail', slug=slug)
 
 
 # Create your views here.

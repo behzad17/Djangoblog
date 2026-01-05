@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from PIL import Image
-from .models import Ad, AdCategory
+from .models import Ad, AdCategory, AdComment
 
 
 class AdForm(forms.ModelForm):
@@ -85,4 +85,68 @@ class AdForm(forms.ModelForm):
                 raise ValidationError('Please upload a valid image file.')
         
         return image
+
+
+class AdCommentForm(forms.ModelForm):
+    """
+    A form for creating comments on advertisements.
+    
+    Ad comments are published immediately (no moderation).
+    Includes honeypot field for spam protection and HTML sanitization.
+    """
+    honeypot = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'autocomplete': 'off',
+            'tabindex': '-1',
+            'aria-hidden': 'true',
+            'style': 'position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;'
+        })
+    )
+
+    class Meta:
+        """Meta options for AdCommentForm."""
+        model = AdComment
+        fields = ('body', 'honeypot')
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'rows': 5,
+                'style': 'height:100px;',
+                'class': 'form-control',
+                'placeholder': 'نظر خود را بنویسید...',
+                'maxlength': '2000'
+            })
+        }
+        labels = {
+            'body': 'نظر'
+        }
+
+    def clean_honeypot(self):
+        """Detect bot submissions via honeypot field."""
+        data = self.cleaned_data.get('honeypot')
+        if data:
+            raise ValidationError("Bot detected.")
+        return data
+    
+    def clean_body(self):
+        """Sanitize comment body to prevent XSS and enforce max length."""
+        body = self.cleaned_data.get('body')
+        if not body:
+            raise ValidationError('نظر نمی‌تواند خالی باشد.')
+        
+        # Enforce max length (2000 characters)
+        if len(body) > 2000:
+            raise ValidationError('نظر نمی‌تواند بیشتر از ۲۰۰۰ کاراکتر باشد.')
+        
+        # Sanitize HTML to prevent XSS
+        from blog.utils import sanitize_html
+        body = sanitize_html(body)
+        
+        # Strip whitespace
+        body = body.strip()
+        
+        if not body:
+            raise ValidationError('نظر نمی‌تواند خالی باشد.')
+        
+        return body
 

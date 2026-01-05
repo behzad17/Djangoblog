@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import AdCategory, Ad
+from .models import AdCategory, Ad, AdComment
 
 
 @admin.register(AdCategory)
@@ -103,6 +103,49 @@ class AdAdmin(admin.ModelAdmin):
         return format_html('<span style="color: orange;">⏳ URL Pending</span>')
 
     url_status.short_description = "URL Status"
+
+
+@admin.register(AdComment)
+class AdCommentAdmin(admin.ModelAdmin):
+    """Admin interface for ad comments."""
+    
+    list_display = (
+        'id',
+        'body_preview',
+        'author',
+        'ad',
+        'is_deleted',
+        'created_on',
+    )
+    
+    list_filter = (
+        'is_deleted',
+        'created_on',
+    )
+    
+    search_fields = ('body', 'author__username', 'ad__title')
+    
+    readonly_fields = ('created_on', 'updated_on')
+    
+    fieldsets = (
+        ('Comment Content', {
+            'fields': ('body', 'ad', 'author')
+        }),
+        ('Status', {
+            'fields': ('is_deleted',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_on', 'updated_on'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def body_preview(self, obj):
+        """Show first 50 characters of comment."""
+        if len(obj.body) > 50:
+            return obj.body[:50] + '...'
+        return obj.body
+    body_preview.short_description = 'Comment'
 
 
 # Register your models here.

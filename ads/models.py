@@ -182,4 +182,54 @@ class FavoriteAd(models.Model):
         return f"{self.user.username} saved {self.ad.title}"
 
 
+class AdComment(models.Model):
+    """
+    A model representing a comment on an advertisement.
+    
+    Ad comments are published immediately (no moderation queue).
+    Comments can be soft-deleted via is_deleted flag.
+    """
+    ad = models.ForeignKey(
+        Ad,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        help_text="The advertisement this comment belongs to"
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="ad_comments",
+        help_text="User who wrote this comment"
+    )
+    body = models.TextField(
+        help_text="Comment text content"
+    )
+    created_on = models.DateTimeField(
+        auto_now_add=True,
+        help_text="When this comment was created"
+    )
+    updated_on = models.DateTimeField(
+        auto_now=True,
+        help_text="When this comment was last updated"
+    )
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text="Soft delete flag (hide comment without deleting)"
+    )
+
+    class Meta:
+        """Meta options for AdComment model."""
+        ordering = ["created_on"]
+        indexes = [
+            models.Index(fields=['ad', 'created_on']),
+            models.Index(fields=['author', 'created_on']),
+        ]
+        verbose_name = "Ad Comment"
+        verbose_name_plural = "Ad Comments"
+
+    def __str__(self):
+        """Returns a string representation of the comment."""
+        return f"Comment on {self.ad.title} by {self.author.username}"
+
+
 # Create your models here.
