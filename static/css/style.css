@@ -3407,7 +3407,7 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: color-mix(in srgb, var(--accent, #7C9AA6) 8%, var(--pv-bg-card, #FFFFFF));
+  background-color: #FFD288 !important;
   border: 2px solid color-mix(in srgb, var(--accent, #7C9AA6) 25%, transparent);
   display: flex;
   align-items: center;
@@ -3476,7 +3476,7 @@ body {
   .ads-category-item:focus .ads-category-circle {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--pv-shadow-medium, rgba(0, 0, 0, 0.15));
-    background-color: color-mix(in srgb, var(--accent, #7C9AA6) 12%, var(--pv-bg-card, #FFFFFF));
+    background-color: #FFD288 !important;
     border-color: color-mix(in srgb, var(--accent, #7C9AA6) 40%, transparent);
   }
 
