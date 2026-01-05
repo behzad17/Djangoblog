@@ -5381,13 +5381,13 @@ body {
 .ad-banner {
   /* Overlay positioning - 20% overlaps navbar, 80% overlaps hero section */
   position: fixed;
-  top: 70px; /* Desktop: Banner 55px tall. Positioned lower for more hero overlap. Banner spans 70-125px: 5px (10%) overlaps navbar if navbar is 65px, 50px (90%) on hero */
+  top: 70px; /* Desktop: Banner 60px tall. Positioned lower for more hero overlap. Banner spans 70-130px: 5px (10%) overlaps navbar if navbar is 65px, 55px (90%) on hero */
   left: 50%;
   transform: translateX(-50%);
   width: 70vw;
   max-width: 900px;
   min-width: 300px;
-  height: 55px; /* Desktop / large tablet height */
+  height: 60px; /* Desktop / large tablet height */
   /* Background image set via inline style in template for Django static path resolution */
   background-size: cover;
   background-position: center center;
