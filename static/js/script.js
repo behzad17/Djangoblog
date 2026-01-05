@@ -337,3 +337,113 @@ if (document.readyState === 'loading') {
   // DOM is already ready, run immediately
   initAdBanner();
 }
+
+// FAQ Accordion Functionality
+function initFAQAccordion() {
+  const faqAccordion = document.querySelector('.peyvand-faq-accordion');
+  if (!faqAccordion) {
+    return; // FAQ accordion not on this page
+  }
+
+  const faqItems = faqAccordion.querySelectorAll('.peyvand-faq-item');
+  const faqQuestions = faqAccordion.querySelectorAll('.peyvand-faq-question');
+  const faqAnswers = faqAccordion.querySelectorAll('.peyvand-faq-answer');
+
+  // Detect if device supports hover (desktop) or is touch-only (mobile)
+  const isTouchDevice = window.matchMedia('(hover: none)').matches || 
+                        window.matchMedia('(pointer: coarse)').matches;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Function to close all FAQ items except the specified one
+  function closeAllExcept(exceptIndex) {
+    faqItems.forEach((item, index) => {
+      if (index !== exceptIndex) {
+        const question = item.querySelector('.peyvand-faq-question');
+        const answer = item.querySelector('.peyvand-faq-answer');
+        
+        question.setAttribute('aria-expanded', 'false');
+        answer.classList.remove('is-open');
+      }
+    });
+  }
+
+  // Function to toggle a FAQ item
+  function toggleFAQ(index) {
+    const question = faqQuestions[index];
+    const answer = faqAnswers[index];
+    const isExpanded = question.getAttribute('aria-expanded') === 'true';
+
+    if (isExpanded) {
+      // Close this item
+      question.setAttribute('aria-expanded', 'false');
+      answer.classList.remove('is-open');
+    } else {
+      // Close all others first (only one open at a time)
+      closeAllExcept(index);
+      // Open this item
+      question.setAttribute('aria-expanded', 'true');
+      answer.classList.add('is-open');
+    }
+  }
+
+  // For touch devices (mobile): Click/tap to toggle
+  if (isTouchDevice) {
+    faqQuestions.forEach((question, index) => {
+      question.addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleFAQ(index);
+      });
+
+      // Keyboard support
+      question.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleFAQ(index);
+        }
+      });
+    });
+  } else {
+    // For desktop: Hover to show, mouseout to hide
+    faqItems.forEach((item, index) => {
+      const question = faqQuestions[index];
+      const answer = faqAnswers[index];
+
+      question.addEventListener('mouseenter', function() {
+        // Close all others first
+        closeAllExcept(index);
+        // Show this one
+        question.setAttribute('aria-expanded', 'true');
+        answer.classList.add('is-open');
+      });
+
+      item.addEventListener('mouseleave', function() {
+        question.setAttribute('aria-expanded', 'false');
+        answer.classList.remove('is-open');
+      });
+
+      // Also support click on desktop as fallback
+      question.addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleFAQ(index);
+      });
+
+      // Keyboard support
+      question.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleFAQ(index);
+        }
+      });
+    });
+  }
+}
+
+// Initialize FAQ accordion on DOM ready
+document.addEventListener('DOMContentLoaded', initFAQAccordion);
+
+// Also try immediately in case DOM is already ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initFAQAccordion);
+} else {
+  initFAQAccordion();
+}
