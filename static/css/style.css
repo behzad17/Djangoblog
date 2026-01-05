@@ -6314,7 +6314,7 @@ body {
   text-align: right;
 }
 
-/* Desktop: Hover to show answer */
+/* Desktop: Hover to show answer (additional to click) */
 @media (min-width: 769px) and (hover: hover) {
   .peyvand-faq-item:hover .peyvand-faq-answer {
     max-height: 1000px;
@@ -6331,10 +6331,25 @@ body {
   }
 }
 
-/* Mobile/Touch: Click to toggle */
+/* Ensure .is-open class always shows answer (works on all devices) */
+.peyvand-faq-answer.is-open,
+.peyvand-faq-question[aria-expanded="true"] + .peyvand-faq-answer {
+  max-height: 1000px !important;
+  opacity: 1 !important;
+  padding: 1rem 1rem 1.5rem 1rem !important;
+}
+
+/* Mobile/Touch: Ensure transitions work smoothly */
 @media (max-width: 768px), (hover: none) {
   .peyvand-faq-answer {
     transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  }
+  
+  /* Ensure is-open works on mobile */
+  .peyvand-faq-answer.is-open {
+    max-height: 1000px !important;
+    opacity: 1 !important;
+    padding: 1rem 1rem 1.5rem 1rem !important;
   }
 }
 

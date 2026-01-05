@@ -356,9 +356,11 @@ function initFAQAccordion() {
     answers: faqAnswers.length
   });
 
-  // Detect if device supports hover (desktop)
+  // Detect device capabilities
   const supportsHover = window.matchMedia('(hover: hover)').matches && 
                         window.matchMedia('(pointer: fine)').matches;
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || 
+                        'ontouchstart' in window;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Function to close all FAQ items except the specified one
@@ -398,38 +400,8 @@ function initFAQAccordion() {
     }
   }
 
-  // Use event delegation on the accordion container for better mobile reliability
-  let touchStartTime = 0;
-  let touchStartTarget = null;
-  
-  // Touch start - track when and what was touched
-  faqAccordion.addEventListener('touchstart', function(e) {
-    if (e.target.closest('.peyvand-faq-question')) {
-      touchStartTime = Date.now();
-      touchStartTarget = e.target.closest('.peyvand-faq-question');
-    }
-  }, { passive: true });
-  
-  // Touch end - handle tap
-  faqAccordion.addEventListener('touchend', function(e) {
-    const question = e.target.closest('.peyvand-faq-question');
-    if (question && question === touchStartTarget) {
-      const touchDuration = Date.now() - touchStartTime;
-      // Only handle if it was a quick tap (not a swipe)
-      if (touchDuration < 300) {
-        e.preventDefault();
-        e.stopPropagation();
-        const index = Array.from(faqQuestions).indexOf(question);
-        if (index !== -1) {
-          console.log('FAQ toggle via touch for index:', index);
-          toggleFAQ(index);
-        }
-      }
-    }
-    touchStartTarget = null;
-  }, { passive: false });
-  
-  // Click handler using event delegation
+  // Unified click/pointer handler for mobile and desktop
+  // This works reliably on both touch and mouse devices
   faqAccordion.addEventListener('click', function(e) {
     const question = e.target.closest('.peyvand-faq-question');
     if (question) {
@@ -437,11 +409,26 @@ function initFAQAccordion() {
       e.stopPropagation();
       const index = Array.from(faqQuestions).indexOf(question);
       if (index !== -1) {
-        console.log('FAQ toggle via click for index:', index);
+        console.log('FAQ toggle via click/pointer for index:', index);
         toggleFAQ(index);
       }
     }
-  }, { capture: true, passive: false });
+  }, { passive: false });
+
+  // Also handle pointerup for better touch device support
+  faqAccordion.addEventListener('pointerup', function(e) {
+    const question = e.target.closest('.peyvand-faq-question');
+    if (question && e.pointerType !== 'mouse') {
+      // Only handle non-mouse pointer events (touch, pen)
+      e.preventDefault();
+      e.stopPropagation();
+      const index = Array.from(faqQuestions).indexOf(question);
+      if (index !== -1) {
+        console.log('FAQ toggle via pointerup for index:', index);
+        toggleFAQ(index);
+      }
+    }
+  }, { passive: false });
   
   // Keyboard support - attach to individual buttons
   faqQuestions.forEach((question, index) => {
@@ -462,10 +449,13 @@ function initFAQAccordion() {
   
   console.log('FAQ Accordion event delegation set up:', {
     questions: faqQuestions.length,
-    method: 'event delegation'
+    supportsHover: supportsHover,
+    isTouchDevice: isTouchDevice,
+    method: 'unified click/pointer handler'
   });
 
-  // ADDITIONAL: Hover functionality ONLY for desktop devices that support hover
+  // Hover functionality ONLY for desktop devices that support hover
+  // This is additional to click - click still works on desktop for accessibility
   if (supportsHover) {
     faqItems.forEach((item, index) => {
       const question = faqQuestions[index];
