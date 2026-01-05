@@ -66,8 +66,8 @@
     <!-- Shabnam Font - Persian/Farsi web font (loaded first for optimal rendering) -->
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}?v={% now 'U' %}" />
     
-    <!-- Vazir Font - For brand logo Persian text -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirfont@v30.1.0/dist/font-face.css" />
+    <!-- Vazir Font - For brand logo Persian text (local implementation) -->
+    <link rel="stylesheet" href="{% static 'css/vazirfont.css' %}?v={% now 'U' %}" />
     
     <!-- Color Design Tokens - Load before style.css for proper cascade -->
     <link rel="stylesheet" href="{% static 'css/tokens.css' %}?v={% now 'U' %}" />

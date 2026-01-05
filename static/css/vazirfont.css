@@ -1,0 +1,40 @@
+/**
+ * Vazir Font – Persian/Farsi Web Font
+ * 
+ * Local implementation to replace broken CDN
+ * Font files located in: static/fonts/vazir/
+ * 
+ * Usage:
+ * - Applied to elements that use font-family: 'Vazir'
+ * - Used for brand logo Persian text
+ */
+
+/* Vazir – Regular (400) */
+/* Note: If Vazir.woff2 is not available, Medium weight will be used as fallback */
+@font-face {
+  font-family: "Vazir";
+  src: url("../fonts/vazir/Vazir.woff2") format("woff2"),
+       url("../fonts/vazir/Vazir-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Vazir – Medium (500) */
+@font-face {
+  font-family: "Vazir";
+  src: url("../fonts/vazir/Vazir-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Vazir – Bold (700) */
+@font-face {
+  font-family: "Vazir";
+  src: url("../fonts/vazir/Vazir-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
