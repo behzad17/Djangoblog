@@ -1654,11 +1654,11 @@ body {
 
 /* Orange Gradient Card - Create Post CTA */
 .hero-cta-card-orange {
-  background: var(--pv-cta-create) !important;
+  background: #722f37 !important;
 }
 
 .hero-cta-card-orange:hover {
-  background: var(--pv-cta-create-hover) !important;
+  background: #8a3a44 !important;
 }
 
 /* Blue Gradient Card - Ask Me CTA */
