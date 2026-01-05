@@ -36,9 +36,9 @@ body {
   white-space: nowrap;
 }
 
-/* Navbar Background - Light Grey */
+/* Navbar Background - Dark Blue */
 .navbar {
-  background-color: #4B5563 !important;
+  background-color: #1B5583 !important;
 }
 
 /* Navbar Links - Thin Styling */
