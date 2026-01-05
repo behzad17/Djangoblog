@@ -2896,7 +2896,7 @@ body {
 /* Category Page Styles */
 /* Category Hero Section */
 .category-hero-section {
-  background: linear-gradient(135deg, #76DFB1 0%, #76DFB1 100%);
+  background: #BCD4E6 !important;
   padding: 3rem 0;
   position: relative;
   overflow: hidden;
