@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+{% block extra_css %}{% endblock extra_css %}
 <!-- Hero Section -->
 <section
   class="hero-section member-guide-hero text-white mb-5"
@@ -25,256 +26,256 @@
       <!-- Publishing Guide FAQ Section -->
       <div class="guide-section mb-5" style="direction: rtl; text-align: right;">
         <div class="guide-content-card" style="direction: rtl; text-align: right;">
-          <div class="peyvand-faq-accordion" style="direction: rtl;">
+          <div class="peyvand-faq" style="direction: rtl;">
             <!-- FAQ Item 1 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-1" id="faq-question-1">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-1" id="faq-question-1">
                 <span class="peyvand-faq-question-text">پیوند چیست؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-1" role="region" aria-labelledby="faq-question-1">
+              <div class="peyvand-faq__a" id="faq-answer-1" role="region" aria-labelledby="faq-question-1" hidden>
                 <p>پیوند یک فضای جامعه‌محور برای ایرانیان ساکن سوئد است تا اطلاعات و تجربه‌های واقعی را بخوانند و با هم به اشتراک بگذارند، مسیرهای قابل‌فهم زندگی در سوئد را پیدا کنند و در صورت نیاز، سؤال‌های خصوصی خود را از افراد آگاه یا متخصص بپرسند و در نهایت نیازهای اطلاعاتی جامعه ایرانی در مورد جامعه سوئد را در همه زمینه ها بخوانند یا به اشتراک بگذارند.</p>
               </div>
             </div>
 
             <!-- FAQ Item 2 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-2" id="faq-question-2">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-2" id="faq-question-2">
                 <span class="peyvand-faq-question-text">هدف پیوند چیست؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-2" role="region" aria-labelledby="faq-question-2">
+              <div class="peyvand-faq__a" id="faq-answer-2" role="region" aria-labelledby="faq-question-2" hidden>
                 <p>هدف پیوند ساده‌تر کردن تصمیم‌گیری‌ها و تقویت حس «تنها نیستی، مشارکت کن و تعلق بساز» در مسیر زندگی در سوئد است.</p>
               </div>
             </div>
 
             <!-- FAQ Item 3 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-3" id="faq-question-3">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-3" id="faq-question-3">
                 <span class="peyvand-faq-question-text">آیا پیوند یک رسانه خبری یا تریبون سیاسی است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-3" role="region" aria-labelledby="faq-question-3">
+              <div class="peyvand-faq__a" id="faq-answer-3" role="region" aria-labelledby="faq-question-3" hidden>
                 <p>خیر.<br>پیوند رسانه خبری نیست، جایگزین اداره‌های رسمی نیست و تریبون سیاسی هم نیست.</p>
               </div>
             </div>
 
             <!-- FAQ Item 4 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-4" id="faq-question-4">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-4" id="faq-question-4">
                 <span class="peyvand-faq-question-text">بدون ثبت‌نام چه امکاناتی در دسترس است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-4" role="region" aria-labelledby="faq-question-4">
+              <div class="peyvand-faq__a" id="faq-answer-4" role="region" aria-labelledby="faq-question-4" hidden>
                 <p>بدون ثبت‌نام می‌توانید:<br>- پست‌ها و کامنت‌ها را بخوانید<br>- دسته‌بندی‌ها را ببینید<br>- لیست آگهی‌ها را مشاهده کنید<br>- پروفایل متخصص‌ها را مرور کنید</p>
               </div>
             </div>
 
             <!-- FAQ Item 5 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-5" id="faq-question-5">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-5" id="faq-question-5">
                 <span class="peyvand-faq-question-text">برای چه کارهایی باید وارد حساب کاربری شوم؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-5" role="region" aria-labelledby="faq-question-5">
+              <div class="peyvand-faq__a" id="faq-answer-5" role="region" aria-labelledby="faq-question-5" hidden>
                 <p>برای دیدن جزئیات آگهی‌ها و انجام هر کاری که «نوشتنی» است (پست، کامنت، آگهی یا سؤال)، باید وارد حساب کاربری شوید.</p>
               </div>
             </div>
 
             <!-- FAQ Item 6 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-6" id="faq-question-6">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-6" id="faq-question-6">
                 <span class="peyvand-faq-question-text">بعد از ثبت‌نام چه امکاناتی فعال می‌شود؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-6" role="region" aria-labelledby="faq-question-6">
+              <div class="peyvand-faq__a" id="faq-answer-6" role="region" aria-labelledby="faq-question-6" hidden>
                 <p>بعد از ثبت‌نام و ورود:<br>- ارسال پست فعال می‌شود<br>- لایک و ذخیره پست‌ها فعال می‌شود<br>- جزئیات آگهی‌ها نمایش داده می‌شود<br>اما برای ارسال نهایی محتوا باید مرحله «تأیید سایت» را انجام دهید.</p>
               </div>
             </div>
 
             <!-- FAQ Item 7 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-7" id="faq-question-7">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-7" id="faq-question-7">
                 <span class="peyvand-faq-question-text">تأیید سایت یعنی چه؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-7" role="region" aria-labelledby="faq-question-7">
+              <div class="peyvand-faq__a" id="faq-answer-7" role="region" aria-labelledby="faq-question-7" hidden>
                 <p>تأیید سایت یعنی تکمیل چند مرحله ساده مثل تکمیل پروفایل و پذیرش قوانین پایه، تا مسئولیت‌پذیری کاربران مشخص باشد، کیفیت محتوا حفظ شود و از اسپم جلوگیری شود.</p>
               </div>
             </div>
 
             <!-- FAQ Item 8 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-8" id="faq-question-8">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-8" id="faq-question-8">
                 <span class="peyvand-faq-question-text">قبل و بعد از تأیید سایت چه تفاوتی وجود دارد؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-8" role="region" aria-labelledby="faq-question-8">
+              <div class="peyvand-faq__a" id="faq-answer-8" role="region" aria-labelledby="faq-question-8" hidden>
                 <p>قبل از تأیید، شما بیشتر در نقش «خواننده» هستید.<br>بعد از تأیید، وارد فاز «مشارکت‌کننده» می‌شوید.</p>
               </div>
             </div>
 
             <!-- FAQ Item 9 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-9" id="faq-question-9">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-9" id="faq-question-9">
                 <span class="peyvand-faq-question-text">بعد از تأیید سایت چه کارهایی می‌توانم انجام بدهم؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-9" role="region" aria-labelledby="faq-question-9">
+              <div class="peyvand-faq__a" id="faq-answer-9" role="region" aria-labelledby="faq-question-9" hidden>
                 <p>بعد از تأیید سایت می‌توانید:<br>- پست بسازید، ویرایش یا حذف کنید<br>- کامنت بگذارید و کامنت‌های خودتان را مدیریت کنید<br>- آگهی ثبت کنید و آگهی‌های خودتان را ویرایش یا حذف کنید<br>- از پرسش‌وپاسخ خصوصی با متخصص‌ها استفاده کنید<br>- سؤال‌ها و پاسخ‌های خود را در بخش «سؤال‌» ببینید</p>
               </div>
             </div>
 
             <!-- FAQ Item 10 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-10" id="faq-question-10">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-10" id="faq-question-10">
                 <span class="peyvand-faq-question-text">نقش‌های کاربران در پیوند چگونه تعریف شده‌اند؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-10" role="region" aria-labelledby="faq-question-10">
+              <div class="peyvand-faq__a" id="faq-answer-10" role="region" aria-labelledby="faq-question-10" hidden>
                 <p>همه کاربران می‌توانند عضو شوند و بعد از تأیید سایت مشارکت کنند.<br>پست‌های کاربران عادی معمولاً به‌صورت پیش‌نویس ثبت می‌شود و نیاز به بررسی دارد.</p>
               </div>
             </div>
 
             <!-- FAQ Item 11 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-11" id="faq-question-11">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-11" id="faq-question-11">
                 <span class="peyvand-faq-question-text">متخصص انتشار کیست؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-11" role="region" aria-labelledby="faq-question-11">
+              <div class="peyvand-faq__a" id="faq-answer-11" role="region" aria-labelledby="faq-question-11" hidden>
                 <p>برخی کاربران با نظر مدیریت نقش «متخصص انتشار» می‌گیرند و می‌توانند پست‌های خود را بدون انتظار برای تأیید ادمین مستقیماً منتشر کنند.</p>
               </div>
             </div>
 
             <!-- FAQ Item 12 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-12" id="faq-question-12">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-12" id="faq-question-12">
                 <span class="peyvand-faq-question-text">متخصص پرسش‌وپاسخ چه کسی است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-12" role="region" aria-labelledby="faq-question-12">
+              <div class="peyvand-faq__a" id="faq-answer-12" role="region" aria-labelledby="faq-question-12" hidden>
                 <p>متخصصان پرسش‌وپاسخ کسانی هستند که پروفایل تخصصی دارند و به سؤال‌های خصوصی کاربران پاسخ می‌دهند. هر متخصص صفحه اختصاصی دارد و فقط سؤال‌های مربوط به خودش را می‌بیند.</p>
               </div>
             </div>
 
             <!-- FAQ Item 13 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-13" id="faq-question-13">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-13" id="faq-question-13">
                 <span class="peyvand-faq-question-text">آیا محتوای پرسش‌وپاسخ خصوصی است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-13" role="region" aria-labelledby="faq-question-13">
+              <div class="peyvand-faq__a" id="faq-answer-13" role="region" aria-labelledby="faq-question-13" hidden>
                 <p>بله. محتوای سؤال و جواب فقط بین کاربر و متخصص مربوطه قابل مشاهده است.<br>ادمین فقط اطلاعات کلی مانند زمان، وضعیت و مشخصات سیستمی را می‌بیند و به محتوای گفتگو دسترسی ندارد.</p>
               </div>
             </div>
 
             <!-- FAQ Item 14 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-14" id="faq-question-14">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-14" id="faq-question-14">
                 <span class="peyvand-faq-question-text">نوشته‌ها چگونه منتشر می‌شوند؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-14" role="region" aria-labelledby="faq-question-14">
+              <div class="peyvand-faq__a" id="faq-answer-14" role="region" aria-labelledby="faq-question-14" hidden>
                 <p>اگر کاربر عادی باشید، پست شما به‌صورت پیش‌نویس ثبت می‌شود و بعد از بررسی منتشر می‌شود.<br>اگر متخصص انتشار باشید، پست شما بلافاصله منتشر می‌شود.</p>
               </div>
             </div>
 
             <!-- FAQ Item 15 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-15" id="faq-question-15">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-15" id="faq-question-15">
                 <span class="peyvand-faq-question-text">وضعیت حریم خصوصی پست‌ها و کامنت‌ها چگونه است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-15" role="region" aria-labelledby="faq-question-15">
+              <div class="peyvand-faq__a" id="faq-answer-15" role="region" aria-labelledby="faq-question-15" hidden>
                 <p>پست‌ها و کامنت‌ها عمومی هستند و برای همه قابل مشاهده‌اند.</p>
               </div>
             </div>
 
             <!-- FAQ Item 16 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-16" id="faq-question-16">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-16" id="faq-question-16">
                 <span class="peyvand-faq-question-text">وضعیت حریم خصوصی آگهی‌ها چگونه است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-16" role="region" aria-labelledby="faq-question-16">
+              <div class="peyvand-faq__a" id="faq-answer-16" role="region" aria-labelledby="faq-question-16" hidden>
                 <p>لیست آگهی‌ها عمومی است، اما جزئیات آگهی فقط برای کاربران ثبت‌نام‌کرده نمایش داده می‌شود.</p>
               </div>
             </div>
 
             <!-- FAQ Item 17 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-17" id="faq-question-17">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-17" id="faq-question-17">
                 <span class="peyvand-faq-question-text">برای جلوگیری از اسپم چه تمهیداتی وجود دارد؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-17" role="region" aria-labelledby="faq-question-17">
+              <div class="peyvand-faq__a" id="faq-answer-17" role="region" aria-labelledby="faq-question-17" hidden>
                 <p>برای ارسال پست، کامنت، سؤال و آگهی محدودیت‌های زمانی تعریف شده است تا از اسپم و سوءاستفاده جلوگیری شود و کیفیت فضا حفظ شود.</p>
               </div>
             </div>
 
             <!-- FAQ Item 18 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-18" id="faq-question-18">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-18" id="faq-question-18">
                 <span class="peyvand-faq-question-text">چه نوع محتوایی در پیوند مناسب است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-18" role="region" aria-labelledby="faq-question-18">
+              <div class="peyvand-faq__a" id="faq-answer-18" role="region" aria-labelledby="faq-question-18" hidden>
                 <p>دو نوع محتوای اصلی وجود دارد:<br><strong>اطلاعات و تجربه‌ها:</strong><br>روایت‌های واقعی، شخصی و تجربه‌محور بدون ادعای تخصص.<br><strong>راهنماها و محتوای تخصصی:</strong><br>مطالب مرحله‌به‌مرحله، قابل اقدام و معمولاً مبتنی بر منابع رسمی.</p>
               </div>
             </div>
 
             <!-- FAQ Item 19 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-19" id="faq-question-19">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-19" id="faq-question-19">
                 <span class="peyvand-faq-question-text">چه قابلیت‌هایی هنوز فعال نیست؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-19" role="region" aria-labelledby="faq-question-19">
+              <div class="peyvand-faq__a" id="faq-answer-19" role="region" aria-labelledby="faq-question-19" hidden>
                 <p>در حال حاضر این قابلیت‌ها فعال نیستند:<br>- بن یا تعلیق کاربر<br>- نوتیفیکیشن<br>- پروفایل عمومی کاربران<br>- دنبال کردن دیگران</p>
               </div>
             </div>
 
             <!-- FAQ Item 20 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-20" id="faq-question-20">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-20" id="faq-question-20">
                 <span class="peyvand-faq-question-text">سیاست تبلیغات در پیوند چگونه است؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-20" role="region" aria-labelledby="faq-question-20">
+              <div class="peyvand-faq__a" id="faq-answer-20" role="region" aria-labelledby="faq-question-20" hidden>
                 <p>پیوند تبلیغ پنهان ندارد. هر نوع تبلیغ باید شفاف، جدا از محتوای تحریری و غیرگمراه‌کننده باشد.</p>
               </div>
             </div>
 
             <!-- FAQ Item 21 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-21" id="faq-question-21">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-21" id="faq-question-21">
                 <span class="peyvand-faq-question-text">اگر تازه وارد پیوند شده‌ام، از کجا شروع کنم؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-21" role="region" aria-labelledby="faq-question-21">
+              <div class="peyvand-faq__a" id="faq-answer-21" role="region" aria-labelledby="faq-question-21" hidden>
                 <p>ابتدا چند مطلب بخوانید، با فضای سایت آشنا شوید، ثبت‌نام کنید و تأیید سایت را کامل کنید. سپس می‌توانید اولین تجربه یا راهنمای خود را منتشر کنید.</p>
               </div>
             </div>
 
             <!-- FAQ Item 22 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-22" id="faq-question-22">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-22" id="faq-question-22">
                 <span class="peyvand-faq-question-text">اگر سؤال خصوصی یا مشکل داشتم چه کار کنم؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-22" role="region" aria-labelledby="faq-question-22">
+              <div class="peyvand-faq__a" id="faq-answer-22" role="region" aria-labelledby="faq-question-22" hidden>
                 <p>می‌توانید از طریق باکس ایمیل صفحه «درباره ما» یا بخش «گزارش مشکل» اقدام کنید.</p>
               </div>
             </div>
 
             <!-- FAQ Item 23 -->
-            <div class="peyvand-faq-item">
-              <button class="peyvand-faq-question" aria-expanded="false" aria-controls="faq-answer-23" id="faq-question-23">
+            <div class="peyvand-faq__item">
+              <button type="button" class="peyvand-faq__q" aria-expanded="false" aria-controls="faq-answer-23" id="faq-question-23">
                 <span class="peyvand-faq-question-text">چگونه تخلفات یا محتوای نامناسب را گزارش کنم؟</span>
                 <i class="fas fa-chevron-down peyvand-faq-icon"></i>
               </button>
-              <div class="peyvand-faq-answer" id="faq-answer-23" role="region" aria-labelledby="faq-question-23">
+              <div class="peyvand-faq__a" id="faq-answer-23" role="region" aria-labelledby="faq-question-23" hidden>
                 <p>از طریق بخش «گزارش مشکل» یا ایمیل رسمی سایت.<br>گزارش‌ها محرمانه بررسی می‌شوند و در صورت تأیید، اقدامات لازم انجام خواهد شد.</p>
               </div>
             </div>
@@ -284,4 +285,5 @@
     </div>
   </div>
 </div>
+<script src="{% static 'js/peyvand_faq.js' %}?v={% now 'U' %}"></script>
 {% endblock content %}

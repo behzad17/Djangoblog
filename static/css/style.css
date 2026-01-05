@@ -6222,22 +6222,22 @@ body {
   padding: 2rem;
 }
 
-/* FAQ Accordion Styles */
-.peyvand-faq-accordion {
+/* FAQ Accordion Styles - New Clean Implementation */
+.peyvand-faq {
   width: 100%;
   direction: rtl;
 }
 
-.peyvand-faq-item {
+.peyvand-faq__item {
   border-bottom: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
   margin-bottom: 0;
 }
 
-.peyvand-faq-item:last-child {
+.peyvand-faq__item:last-child {
   border-bottom: none;
 }
 
-.peyvand-faq-question {
+.peyvand-faq__q {
   width: 100%;
   background: transparent;
   border: none;
@@ -6256,20 +6256,18 @@ body {
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
-  pointer-events: auto;
-  z-index: 1;
 }
 
-.peyvand-faq-question:hover {
+.peyvand-faq__q:hover {
   background-color: var(--pv-bg-highlight, #ECFDF5);
 }
 
-.peyvand-faq-question:focus {
+.peyvand-faq__q:focus {
   outline: 2px solid var(--pv-color-secondary, #1F8A70);
   outline-offset: -2px;
 }
 
-.peyvand-faq-question[aria-expanded="true"] {
+.peyvand-faq__q[aria-expanded="true"] {
   background-color: var(--pv-bg-highlight, #ECFDF5);
   border-bottom: 1px solid var(--pv-color-secondary, #1F8A70);
 }
@@ -6287,31 +6285,27 @@ body {
   flex-shrink: 0;
 }
 
-.peyvand-faq-question[aria-expanded="true"] .peyvand-faq-icon {
+.peyvand-faq__q[aria-expanded="true"] .peyvand-faq-icon {
   transform: rotate(180deg);
 }
 
-.peyvand-faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+/* Answer panel - hidden by default */
+.peyvand-faq__a {
   padding: 0 1rem;
   background-color: var(--pv-bg-card, #FFFFFF);
+  transition: padding 0.3s ease;
+}
+
+.peyvand-faq__a[hidden] {
+  display: none;
+}
+
+.peyvand-faq__item.is-open .peyvand-faq__a {
   display: block;
-  visibility: visible;
+  padding: 1rem 1rem 1.5rem 1rem;
 }
 
-.peyvand-faq-answer.is-open {
-  max-height: 1000px !important;
-  opacity: 1 !important;
-  padding: 1rem 1rem 1.5rem 1rem !important;
-  overflow: visible !important;
-  display: block !important;
-  visibility: visible !important;
-}
-
-.peyvand-faq-answer p {
+.peyvand-faq__a p {
   margin: 0;
   line-height: 1.8;
   color: var(--pv-text-main, #2C2C2C);
@@ -6319,59 +6313,52 @@ body {
   text-align: right;
 }
 
-/* Desktop: Hover to show answer (additional to click) */
-@media (min-width: 769px) and (hover: hover) {
-  .peyvand-faq-item:hover .peyvand-faq-answer {
-    max-height: 1000px;
-    opacity: 1;
+/* Optional: Desktop hover enhancement (only for devices that support hover) */
+@media (hover: hover) {
+  .peyvand-faq__item:hover .peyvand-faq__a {
+    display: block;
     padding: 1rem 1rem 1.5rem 1rem;
   }
 
-  .peyvand-faq-item:hover .peyvand-faq-question {
+  .peyvand-faq__item:hover .peyvand-faq__q {
     background-color: var(--pv-bg-highlight, #ECFDF5);
   }
 
-  .peyvand-faq-item:hover .peyvand-faq-icon {
+  .peyvand-faq__item:hover .peyvand-faq-icon {
     transform: rotate(180deg);
   }
 }
 
-/* Ensure .is-open class always shows answer (works on all devices) */
-.peyvand-faq-answer.is-open,
-.peyvand-faq-question[aria-expanded="true"] + .peyvand-faq-answer,
-.peyvand-faq-item .peyvand-faq-answer.is-open,
-.peyvand-faq-item:has(.peyvand-faq-question[aria-expanded="true"]) .peyvand-faq-answer {
-  max-height: 1000px !important;
-  opacity: 1 !important;
-  padding: 1rem 1rem 1.5rem 1rem !important;
-  overflow: visible !important;
-  display: block !important;
-  visibility: visible !important;
-  height: auto !important;
+/* Legacy support for old class names (if any remain) */
+.peyvand-faq-accordion {
+  width: 100%;
+  direction: rtl;
 }
 
-/* Additional selector for maximum compatibility */
-.peyvand-faq-item .peyvand-faq-question[aria-expanded="true"] ~ .peyvand-faq-answer {
-  max-height: 1000px !important;
-  opacity: 1 !important;
-  padding: 1rem 1rem 1.5rem 1rem !important;
-  overflow: visible !important;
-  display: block !important;
-  visibility: visible !important;
+.peyvand-faq-item {
+  border-bottom: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+  margin-bottom: 0;
 }
 
-/* Mobile/Touch: Ensure transitions work smoothly */
-@media (max-width: 768px), (hover: none) {
-  .peyvand-faq-answer {
-    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
-  }
-  
-  /* Ensure is-open works on mobile */
-  .peyvand-faq-answer.is-open {
-    max-height: 1000px !important;
-    opacity: 1 !important;
-    padding: 1rem 1rem 1.5rem 1rem !important;
-  }
+.peyvand-faq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 1.25rem 1rem;
+  text-align: right;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.peyvand-faq-answer {
+  padding: 0 1rem;
+  background-color: var(--pv-bg-card, #FFFFFF);
+}
+
+.peyvand-faq-answer[hidden] {
+  display: none;
 }
 
 /* Reduced motion support */
