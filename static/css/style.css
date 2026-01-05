@@ -1405,6 +1405,11 @@ body {
   text-shadow: none;
 }
 
+/* Ads category pages - hero title 20% smaller */
+.ads-category-hero-section .hero-title {
+  font-size: 2rem; /* 20% smaller: 2.5rem * 0.8 = 2rem */
+}
+
 .hero-subtitle {
   font-size: 1.25rem;
   margin-bottom: 0.75rem; /* Minimized spacing */
@@ -1941,6 +1946,10 @@ body {
     margin-bottom: 0.4rem; /* Minimized spacing */
   }
   
+  .ads-category-hero-section .hero-title {
+    font-size: 1.6rem; /* 20% smaller: 2rem * 0.8 = 1.6rem */
+  }
+  
   .hero-subtitle {
     font-size: 1rem;
     margin-bottom: 0.6rem; /* Minimized spacing */
@@ -2002,6 +2011,10 @@ body {
   .hero-title {
     font-size: 1.75rem;
     margin-bottom: 0.4rem; /* Minimized spacing */
+  }
+  
+  .ads-category-hero-section .hero-title {
+    font-size: 1.4rem; /* 20% smaller: 1.75rem * 0.8 = 1.4rem */
   }
   
   .hero-subtitle {
@@ -2088,6 +2101,10 @@ body {
   .hero-title {
     font-size: 1.5rem;
     margin-bottom: 0.35rem; /* Minimized spacing */
+  }
+  
+  .ads-category-hero-section .hero-title {
+    font-size: 1.2rem; /* 20% smaller: 1.5rem * 0.8 = 1.2rem */
   }
   
   .hero-subtitle {
