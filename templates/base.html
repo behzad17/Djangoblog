@@ -245,7 +245,8 @@
       </div>
     </nav>
 
-    <!-- Dismissible Ad Banner -->
+    <!-- Dismissible Ad Banner - Only show to unauthenticated users -->
+    {% if not user.is_authenticated %}
     <div id="adBanner" class="ad-banner" role="banner" aria-live="polite" style="background-image: url('{% static 'images/my-banner.jpg' %}');">
       <div class="ad-banner-content">
         <div class="ad-banner-message">
@@ -280,6 +281,7 @@
         </button>
       </div>
     </div>
+    {% endif %}
 
     <!-- Flash Messages Container -->
     <div class="container">
