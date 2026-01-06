@@ -1326,6 +1326,11 @@ body {
     padding-top: 10px !important; /* Add 10px top padding for mobile devices */
   }
   
+  .hero-mobile-img {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  
   .hero-section {
     padding: 0 !important; /* Force remove padding on mobile */
     width: 95% !important;
@@ -1368,6 +1373,11 @@ body {
     margin-left: auto !important;
     margin-right: auto !important;
     padding-top: 10px !important; /* Add 10px top padding for mobile devices */
+  }
+  
+  .hero-mobile-img {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
   
   /* Remove top margin from first hero card to eliminate gap B */
