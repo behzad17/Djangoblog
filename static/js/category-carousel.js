@@ -101,7 +101,20 @@
         // Remove old classes
         card.classList.remove('active', 'prev-1', 'prev-2', 'prev-3', 'next-1', 'next-2', 'next-3', 'hidden');
         
-        // Get transform values from curves
+        // Special handling for center card (diff === 0)
+        if (diff === 0) {
+          // Center card: no rotation, no translation, full scale, fully visible
+          const transformStr = 'translateX(0) translateZ(0) rotateY(0deg) scale(1.0)';
+          card.style.transform = transformStr;
+          card.style.setProperty('--card-transform', transformStr);
+          card.style.opacity = '1.0';
+          card.style.zIndex = '10';
+          card.style.pointerEvents = 'auto';
+          card.classList.add('active');
+          return; // Skip further processing for center card
+        }
+
+        // Get transform values from curves for side cards
         const scale = config.scaleCurve[absOffset] || config.scaleCurve[config.scaleCurve.length - 1];
         const translateZ = config.translateZCurve[absOffset] || config.translateZCurve[config.translateZCurve.length - 1];
         const rotateY = config.rotateYCurve[absOffset] || config.rotateYCurve[config.rotateYCurve.length - 1];
@@ -132,11 +145,6 @@
         card.style.opacity = opacity.toString();
         card.style.zIndex = zIndex.toString();
         card.style.pointerEvents = 'auto';
-
-        // Mark center card as active
-        if (diff === 0) {
-          card.classList.add('active');
-        }
       });
 
       // Update ARIA live region
