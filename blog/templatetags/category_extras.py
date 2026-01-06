@@ -21,26 +21,28 @@ CATEGORY_ICON_MAP = {
     'personalities': 'bi bi-person-badge',
 }
 
-# Color mapping: slug (lowercase) -> hex pastel color
+# Color mapping: slug (lowercase) -> {bg: hex, accent: hex}
+# Distinct palette with soft pastel backgrounds and stronger accent colors
 CATEGORY_COLOR_MAP = {
-    'skills-learning': '#E8F3FF',
-    'careers-economy': '#EAF7F1',
-    'stories-experiences': '#FFF4E8',
-    'photo-gallery': '#F3EEFF',
-    'events-announcements': '#FFF0E1',
-    'zbn-o-rtbt': '#E9F7FA',
-    'slmt-ron-dr-mhgrt': '#EFEAFF',
-    'platform-updates': '#F1F3F5',
-    'public-services': '#EEF7FA',
-    'law-integration': '#EAF0FF',
-    'life-in-social': '#ECF8F1',
-    'guide-questions': '#FFF9E6',
-    'personalities': '#FCEEF3',
+    'skills-learning': {'bg': '#DDEEFF', 'accent': '#2F80ED'},
+    'careers-economy': {'bg': '#DDF7E8', 'accent': '#27AE60'},
+    'stories-experiences': {'bg': '#FFE9D6', 'accent': '#F2994A'},
+    'photo-gallery': {'bg': '#E9E1FF', 'accent': '#8E44AD'},
+    'events-announcements': {'bg': '#FFE2DD', 'accent': '#EB5757'},
+    'zbn-o-rtbt': {'bg': '#D9FBFF', 'accent': '#00A3C4'},
+    'slmt-ron-dr-mhgrt': {'bg': '#E6E0FF', 'accent': '#6C5CE7'},
+    'platform-updates': {'bg': '#E6ECF2', 'accent': '#34495E'},
+    'public-services': {'bg': '#DDF3F7', 'accent': '#0E7490'},
+    'law-integration': {'bg': '#DDE4FF', 'accent': '#1D4ED8'},
+    'life-in-social': {'bg': '#DFF7E3', 'accent': '#16A34A'},
+    'guide-questions': {'bg': '#FFF2C9', 'accent': '#F59E0B'},
+    'personalities': {'bg': '#FFE0F0', 'accent': '#D63384'},
 }
 
 # Fallbacks
 ICON_FALLBACK = 'bi bi-grid-3x3-gap'
-COLOR_FALLBACK = '#F5F7FA'
+BG_FALLBACK = '#EEF2F7'
+ACCENT_FALLBACK = '#64748B'
 
 
 @register.filter
@@ -62,17 +64,54 @@ def category_icon(category):
 @register.filter
 def category_color(category):
     """
-    Get pastel color hex code for a category based on its slug.
+    Get background color hex code for a category based on its slug.
     Case-insensitive lookup with fallback.
     
+    DEPRECATED: Use category_bg instead.
+    Kept for backward compatibility.
+    
     Usage: {{ category|category_color }}
-    Returns: Hex color string (e.g., "#E8F3FF")
+    Returns: Hex color string (e.g., "#DDEEFF")
+    """
+    return category_bg(category)
+
+
+@register.filter
+def category_bg(category):
+    """
+    Get background color hex code for a category based on its slug.
+    Case-insensitive lookup with fallback.
+    
+    Usage: {{ category|category_bg }}
+    Returns: Hex color string (e.g., "#DDEEFF")
     """
     if not category or not hasattr(category, 'slug'):
-        return COLOR_FALLBACK
+        return BG_FALLBACK
     
     slug = str(category.slug).lower().strip()
-    return CATEGORY_COLOR_MAP.get(slug, COLOR_FALLBACK)
+    color_data = CATEGORY_COLOR_MAP.get(slug, {})
+    if isinstance(color_data, dict):
+        return color_data.get('bg', BG_FALLBACK)
+    return BG_FALLBACK
+
+
+@register.filter
+def category_accent(category):
+    """
+    Get accent color hex code for a category based on its slug.
+    Case-insensitive lookup with fallback.
+    
+    Usage: {{ category|category_accent }}
+    Returns: Hex color string (e.g., "#2F80ED")
+    """
+    if not category or not hasattr(category, 'slug'):
+        return ACCENT_FALLBACK
+    
+    slug = str(category.slug).lower().strip()
+    color_data = CATEGORY_COLOR_MAP.get(slug, {})
+    if isinstance(color_data, dict):
+        return color_data.get('accent', ACCENT_FALLBACK)
+    return ACCENT_FALLBACK
 
 
 @register.filter

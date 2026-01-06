@@ -7037,27 +7037,32 @@ body {
   will-change: transform;
 }
 
-/* Category carousel color fallback */
+/* Category carousel color fallbacks */
 :root {
-  --cat-bg-fallback: #F5F7FA;
+  --cat-bg-fallback: #EEF2F7;
+  --cat-accent-fallback: #64748B;
 }
 
 .category-carousel-card {
-  position: absolute;
+  position: absolute; /* For carousel positioning */
   width: 185px; /* Slightly wider: 168px + ~10% = 185px */
   height: 192px;
-  /* Base glass-morphism background with semantic color */
-  background: linear-gradient(135deg, var(--cat-bg, var(--cat-bg-fallback)) 0%, rgba(255, 255, 255, 0.9) 100%);
+  /* Base glass-morphism background with distinct pastel color */
+  background: linear-gradient(135deg, var(--cat-bg, var(--cat-bg-fallback)) 0%, rgba(255, 255, 255, 0.85) 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 16px;
+  /* Subtle border using accent color with low opacity (18%) */
+  /* Using color-mix to blend accent with transparent */
+  border: 1px solid color-mix(in srgb, var(--cat-accent, var(--cat-accent-fallback)) 18%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
               0 0 0 1px rgba(255, 255, 255, 0.5);
   transform-style: preserve-3d;
   /* Smooth transitions for transform and opacity only (no height animation) */
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              background 0.3s ease;
+              background 0.3s ease,
+              border-color 0.3s ease;
   /* GPU acceleration for smoother animations */
   will-change: transform, opacity;
   cursor: pointer;
@@ -7068,7 +7073,7 @@ body {
   padding: 1.2rem;
   text-decoration: none;
   color: #333; /* Dark text for good contrast on light backgrounds */
-  overflow: hidden;
+  overflow: hidden; /* Clip accent strip nicely */
   /* Ensure transform origin is center for proper scaling */
   transform-origin: center center;
   /* Ensure cards are always clickable */
@@ -7076,17 +7081,18 @@ body {
   z-index: 5; /* Default z-index, will be overridden by JS */
 }
 
-/* Maintain glass-morphism overlay */
+/* Top accent strip - نوار بالای کارت */
 .category-carousel-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 50%;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+  height: 6px; /* Desktop: 6px */
+  background: var(--cat-accent, var(--cat-accent-fallback));
   pointer-events: none;
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px 16px 0 0; /* Follow card radius at top */
+  z-index: 1;
 }
 
 .category-carousel-card:not(.hidden):hover {
@@ -7330,6 +7336,11 @@ body {
     padding: 1.1rem;
   }
   
+  /* Tablet: accent strip 5px */
+  .category-carousel-card::before {
+    height: 5px;
+  }
+  
   .category-carousel-card-icon {
     font-size: 2.2rem;
     margin-bottom: 0.8rem;
@@ -7390,6 +7401,11 @@ body {
     width: 144px;
     height: 168px;
     padding: 0.9rem;
+  }
+  
+  /* Mobile: accent strip 4px */
+  .category-carousel-card::before {
+    height: 4px;
   }
   
   .category-carousel-card-icon {

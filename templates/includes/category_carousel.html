@@ -23,7 +23,7 @@
       href="{% url 'category_posts' category.slug %}"
       class="category-carousel-card {% if current_category_slug and category.slug == current_category_slug %}active-category{% endif %}"
       data-category-slug="{{ category.slug }}"
-      style="--cat-bg: {{ category|category_color }};"
+      style="--cat-bg: {{ category|category_bg }}; --cat-accent: {{ category|category_accent }};"
       title="{{ category.name }}"
       aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts){% if current_category_slug and category.slug == current_category_slug %} - Current category{% endif %}"
     >
