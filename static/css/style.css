@@ -7018,8 +7018,8 @@ body {
 .category-carousel {
   position: relative;
   width: 100%;
-  height: 240px;
-  margin: 2rem 0;
+  height: 200px; /* Reduced from 240px - just enough for cards + 3D transforms */
+  margin: 1.5rem 0; /* Reduced from 2rem */
   perspective: 1200px; /* Increased for stronger 3D depth */
   perspective-origin: center center;
   overflow: hidden;
@@ -7327,7 +7327,7 @@ body {
 /* Tablet: 5 cards visible (center + 2 each side) */
 @media (max-width: 991px) and (min-width: 768px) {
   .category-carousel {
-    height: 240px;
+    height: 200px; /* Reduced from 240px */
   }
   
   .category-carousel-card {
@@ -7394,7 +7394,7 @@ body {
 /* Mobile: 3 cards visible (center + 1 each side) */
 @media (max-width: 767px) {
   .category-carousel {
-    height: 210px;
+    height: 175px; /* Reduced from 210px - just enough for 168px cards + transforms */
   }
   
   .category-carousel-card {
@@ -7460,7 +7460,7 @@ body {
 
 @media (max-width: 576px) {
   .category-carousel {
-    height: 180px;
+    height: 150px; /* Reduced from 180px - just enough for 144px cards + transforms */
   }
   
   .category-carousel-card {
