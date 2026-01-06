@@ -7116,7 +7116,7 @@ body {
 }
 
 .category-carousel-card-icon {
-  font-size: 2.4rem; /* Reduced by ~40% from 4rem */
+  font-size: 2.64rem; /* 10% bigger than 2.4rem */
   margin-bottom: 0.9rem; /* Reduced from 1.5rem */
   color: var(--pv-color-secondary);
   transition: transform 0.3s ease, color 0.3s ease;
@@ -7342,7 +7342,7 @@ body {
   }
   
   .category-carousel-card-icon {
-    font-size: 2.2rem;
+    font-size: 2.42rem; /* 10% bigger than 2.2rem */
     margin-bottom: 0.8rem;
   }
   
@@ -7409,7 +7409,7 @@ body {
   }
   
   .category-carousel-card-icon {
-    font-size: 1.8rem;
+    font-size: 1.98rem; /* 10% bigger than 1.8rem */
     margin-bottom: 0.6rem;
   }
   
@@ -7470,7 +7470,7 @@ body {
   }
   
   .category-carousel-card-icon {
-    font-size: 1.5rem;
+    font-size: 1.65rem; /* 10% bigger than 1.5rem */
     margin-bottom: 0.45rem;
   }
   
