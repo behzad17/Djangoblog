@@ -1675,26 +1675,26 @@ body {
   background: var(--pv-cta-ask-hover) !important;
 }
 
-/* Yellow Gradient Card - Services CTA */
+/* Third CTA Card - Guide/Services (Light Blue) */
 .hero-cta-card-purple {
-  background: var(--pv-cta-services) !important;
+  background: #91C4E8 !important;
 }
 
 .hero-cta-card-purple:hover {
-  background: var(--pv-cta-services-hover) !important;
+  background: #7ab0d6 !important; /* Slightly darker on hover */
 }
 
-/* Dark text color for services card (yellow) for better readability */
+/* White text color for light blue background */
 .hero-cta-card-purple .hero-cta-card-title {
-  color: var(--pv-text-main) !important; /* Use token for dark text */
+  color: #ffffff !important;
 }
 
 .hero-cta-card-purple .hero-cta-card-subtitle {
-  color: var(--pv-text-muted) !important; /* Use token for muted text */
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .hero-cta-card-purple .hero-cta-card-arrow {
-  color: var(--pv-text-main) !important; /* Use token for dark text */
+  color: #ffffff !important;
 }
 
 /* Responsive Design */
