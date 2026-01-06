@@ -2767,8 +2767,8 @@ body {
 .category-badge {
   display: inline-block;
   padding: 4px 12px;
-  /* Use secondary color token for category badges */
-  background: var(--pv-color-secondary);
+  /* Changed from green to #91C4E8 */
+  background: #91C4E8;
   color: #fff;
   text-decoration: none;
   border-radius: 15px;
@@ -2779,8 +2779,8 @@ body {
 }
 
 .category-badge:hover {
-  /* Slightly darker secondary on hover */
-  background: var(--pv-color-secondary);
+  /* Slightly darker on hover */
+  background: #91C4E8;
   filter: brightness(0.9); /* Darken on hover */
   color: #fff;
   transform: translateY(-1px);
