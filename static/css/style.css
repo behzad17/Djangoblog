@@ -1675,13 +1675,13 @@ body {
   background: var(--pv-cta-ask-hover) !important;
 }
 
-/* Third CTA Card - Guide/Services (Light Blue) */
+/* Third CTA Card - Guide/Services (Blue) */
 .hero-cta-card-purple {
-  background: #91C4E8 !important;
+  background: #56A5DA !important;
 }
 
 .hero-cta-card-purple:hover {
-  background: #7ab0d6 !important; /* Slightly darker on hover */
+  background: #4a8fc4 !important; /* Slightly darker on hover */
 }
 
 /* White text color for light blue background */
