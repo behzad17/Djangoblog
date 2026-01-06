@@ -32,24 +32,24 @@
     function getCarouselConfig() {
       const width = window.innerWidth;
       if (width >= 992) {
-        // Desktop: 7 cards, wider spacing
+        // Desktop: 7 cards, tighter spacing for better clickability
         return {
           visibleCount: 7,
           halfVisible: 3,
           cardWidth: 185, // Match CSS desktop width
-          spacingFactor: 1.15, // Spacing multiplier (cardWidth * spacingFactor)
+          spacingFactor: 0.85, // Reduced from 1.15 - cards closer together for better clickability
           scaleCurve: [1.0, 0.88, 0.78, 0.70], // Non-linear scale for offsets 0, 1, 2, 3
           translateZCurve: [0, -80, -150, -200], // Depth for offsets 0, 1, 2, 3
           rotateYCurve: [0, 18, 32, 42], // Rotation angles for offsets 0, 1, 2, 3
           opacityCurve: [1.0, 0.9, 0.75, 0.6] // Opacity for offsets 0, 1, 2, 3
         };
       } else if (width >= 768) {
-        // Tablet: 5 cards, medium spacing
+        // Tablet: 5 cards, tighter spacing
         return {
           visibleCount: 5,
           halfVisible: 2,
           cardWidth: 170,
-          spacingFactor: 1.1,
+          spacingFactor: 0.9, // Reduced from 1.1
           scaleCurve: [1.0, 0.85, 0.72],
           translateZCurve: [0, -70, -130],
           rotateYCurve: [0, 20, 38],
@@ -274,15 +274,13 @@
       });
     }
 
-    // Click on side cards to navigate
+    // Click on cards - allow direct navigation to category page
     cards.forEach((card, index) => {
       card.addEventListener('click', function(e) {
-        // Only navigate if clicking on a non-active card
-        if (!card.classList.contains('active')) {
-          e.preventDefault();
-          goTo(index);
-        }
-        // If active card, let the link work normally
+        // Always allow the link to work - cards are clickable to navigate to category
+        // The carousel navigation is handled by buttons, wheel, and keyboard
+        // Users should be able to click any visible card to go to that category
+        // No preventDefault - let the <a> tag work normally
       });
     });
 

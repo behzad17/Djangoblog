@@ -7071,6 +7071,9 @@ body {
   overflow: hidden;
   /* Ensure transform origin is center for proper scaling */
   transform-origin: center center;
+  /* Ensure cards are always clickable */
+  pointer-events: auto;
+  z-index: 5; /* Default z-index, will be overridden by JS */
 }
 
 /* Maintain glass-morphism overlay */
