@@ -105,6 +105,11 @@
   --pv-validation-error-rgb: 231, 76, 60;
   --pv-validation-warning-rgb: 244, 180, 0;
   --pv-validation-info-rgb: 52, 152, 219;
+
+  /* ============================================
+     POST CARD ACCENT COLOR
+     ============================================ */
+  --post-card-accent: #91C4E8; /* Top accent strip color for post cards */
 }
 
 /* ============================================
