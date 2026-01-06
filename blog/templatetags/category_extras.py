@@ -11,7 +11,8 @@ CATEGORY_ICON_MAP = {
     'photo-gallery': 'bi bi-images',
     'events-announcements': 'bi bi-calendar-event',
     'zbn-o-rtbt': 'bi bi-chat-dots',
-    'slmt-ron-dr-mhgrt': 'bi bi-people-heart',
+    # Mental health - heart with pulse (health/wellness icon)
+    'slmt-ron-dr-mhgrt': 'bi bi-heart-pulse',
     'platform-updates': 'bi bi-newspaper',
     'public-services': 'bi bi-compass',
     'law-integration': 'bi bi-shield-check',
@@ -77,7 +78,7 @@ def category_color(category):
 @register.filter
 def category_color_index(category):
     """
-    Generate a deterministic color index (0-11) for a category based on its slug.
+    Generate a deterministic color index (0-11) for a category slug.
     This ensures each category always gets the same color.
     
     DEPRECATED: Use category_color instead for semantic colors.
