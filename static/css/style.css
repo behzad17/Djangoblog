@@ -7020,7 +7020,8 @@ body {
   width: 100%;
   height: 240px;
   margin: 2rem 0;
-  perspective: 1000px; /* Increased for 7-card layout */
+  perspective: 1200px; /* Increased for stronger 3D depth */
+  perspective-origin: center center;
   overflow: hidden;
 }
 
@@ -7032,6 +7033,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Ensure smooth GPU acceleration */
+  will-change: transform;
 }
 
 /* Category carousel color fallback */
@@ -7051,10 +7054,12 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
               0 0 0 1px rgba(255, 255, 255, 0.5);
   transform-style: preserve-3d;
+  /* Smooth transitions for transform and opacity only (no height animation) */
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.6s ease,
-              z-index 0.6s ease,
+              opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
               background 0.3s ease;
+  /* GPU acceleration for smoother animations */
+  will-change: transform, opacity;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -7064,6 +7069,8 @@ body {
   text-decoration: none;
   color: #333; /* Dark text for good contrast on light backgrounds */
   overflow: hidden;
+  /* Ensure transform origin is center for proper scaling */
+  transform-origin: center center;
 }
 
 /* Maintain glass-morphism overlay */
@@ -7079,11 +7086,14 @@ body {
   border-radius: 16px 16px 0 0;
 }
 
-.category-carousel-card:hover {
-  transform: translateZ(50px) scale(1.05) !important;
+.category-carousel-card:not(.hidden):hover {
+  /* Enhance existing inline transform - JS sets --card-transform */
+  /* We multiply the scale by 1.05 and add translateZ(30px) */
+  transform: var(--card-transform) translateZ(30px) scale(1.05) !important;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3),
               0 0 0 1px rgba(255, 255, 255, 0.6);
-  z-index: 10 !important;
+  z-index: 15 !important;
+  filter: brightness(1.05);
 }
 
 .category-carousel-card:focus-visible {
@@ -7123,86 +7133,36 @@ body {
   z-index: 1;
 }
 
-/* Active category highlight */
+/* Active category highlight - works with inline transforms */
 .category-carousel-card.active-category {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25),
               0 0 0 2px var(--pv-cta-services);
-  transform: translateZ(20px) scale(1.02) !important;
+  /* Transform is set inline by JS, this adds extra styling */
 }
 
-/* Card positions - 3D transform */
-/* Desktop: 7 cards visible (center + 3 each side) */
+/* Card positions are now calculated dynamically via JavaScript */
+/* CSS classes are kept for backward compatibility but transforms are set inline */
+/* The active class is still used for styling purposes */
 .category-carousel-card.active {
-  transform: translateX(0) translateZ(0) rotateY(0deg);
-  opacity: 1;
-  z-index: 5;
+  /* Transform is set inline by JS, but we can add additional styling here */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25),
+              0 0 0 1px rgba(255, 255, 255, 0.6);
 }
 
-.category-carousel-card.prev-1 {
-  transform: translateX(-200px) translateZ(-100px) rotateY(20deg);
-  opacity: 0.85;
-  z-index: 4;
-}
-
-.category-carousel-card.prev-2 {
-  transform: translateX(-380px) translateZ(-180px) rotateY(35deg);
-  opacity: 0.7;
-  z-index: 3;
-}
-
-.category-carousel-card.prev-3 {
-  transform: translateX(-540px) translateZ(-240px) rotateY(45deg);
-  opacity: 0.5;
-  z-index: 2;
-}
-
-.category-carousel-card.next-1 {
-  transform: translateX(200px) translateZ(-100px) rotateY(-20deg);
-  opacity: 0.85;
-  z-index: 4;
-}
-
-.category-carousel-card.next-2 {
-  transform: translateX(380px) translateZ(-180px) rotateY(-35deg);
-  opacity: 0.7;
-  z-index: 3;
-}
-
+/* Legacy classes kept for compatibility but transforms are overridden by inline styles */
+.category-carousel-card.prev-1,
+.category-carousel-card.prev-2,
+.category-carousel-card.prev-3,
+.category-carousel-card.next-1,
+.category-carousel-card.next-2,
 .category-carousel-card.next-3 {
-  transform: translateX(540px) translateZ(-240px) rotateY(-45deg);
-  opacity: 0.5;
-  z-index: 2;
+  /* Transforms are set inline by JavaScript */
 }
 
 .category-carousel-card.hidden {
   opacity: 0;
   pointer-events: none;
   z-index: 1;
-}
-
-/* RTL Support - Reverse transform directions */
-[dir="rtl"] .category-carousel-card.prev-1 {
-  transform: translateX(200px) translateZ(-100px) rotateY(-20deg);
-}
-
-[dir="rtl"] .category-carousel-card.prev-2 {
-  transform: translateX(380px) translateZ(-180px) rotateY(-35deg);
-}
-
-[dir="rtl"] .category-carousel-card.prev-3 {
-  transform: translateX(540px) translateZ(-240px) rotateY(-45deg);
-}
-
-[dir="rtl"] .category-carousel-card.next-1 {
-  transform: translateX(-200px) translateZ(-100px) rotateY(20deg);
-}
-
-[dir="rtl"] .category-carousel-card.next-2 {
-  transform: translateX(-380px) translateZ(-180px) rotateY(35deg);
-}
-
-[dir="rtl"] .category-carousel-card.next-3 {
-  transform: translateX(-540px) translateZ(-240px) rotateY(45deg);
 }
 
 /* Navigation Buttons */

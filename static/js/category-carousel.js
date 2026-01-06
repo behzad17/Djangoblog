@@ -28,45 +28,114 @@
     const isRTL = document.documentElement.dir === 'rtl' || 
                   document.documentElement.getAttribute('dir') === 'rtl';
 
-    // Get visible card count based on breakpoint
-    function getVisibleCount() {
+    // Get visible card count and spacing configuration based on breakpoint
+    function getCarouselConfig() {
       const width = window.innerWidth;
       if (width >= 992) {
-        return 7; // Desktop: 7 cards (center + 3 each side)
+        // Desktop: 7 cards, wider spacing
+        return {
+          visibleCount: 7,
+          halfVisible: 3,
+          cardWidth: 185, // Match CSS desktop width
+          spacingFactor: 1.15, // Spacing multiplier (cardWidth * spacingFactor)
+          scaleCurve: [1.0, 0.88, 0.78, 0.70], // Non-linear scale for offsets 0, 1, 2, 3
+          translateZCurve: [0, -80, -150, -200], // Depth for offsets 0, 1, 2, 3
+          rotateYCurve: [0, 18, 32, 42], // Rotation angles for offsets 0, 1, 2, 3
+          opacityCurve: [1.0, 0.9, 0.75, 0.6] // Opacity for offsets 0, 1, 2, 3
+        };
       } else if (width >= 768) {
-        return 5; // Tablet: 5 cards (center + 2 each side)
+        // Tablet: 5 cards, medium spacing
+        return {
+          visibleCount: 5,
+          halfVisible: 2,
+          cardWidth: 170,
+          spacingFactor: 1.1,
+          scaleCurve: [1.0, 0.85, 0.72],
+          translateZCurve: [0, -70, -130],
+          rotateYCurve: [0, 20, 38],
+          opacityCurve: [1.0, 0.85, 0.65]
+        };
       } else {
-        return 3; // Mobile: 3 cards (center + 1 each side)
+        // Mobile: 3 cards, tighter spacing
+        return {
+          visibleCount: 3,
+          halfVisible: 1,
+          cardWidth: 144,
+          spacingFactor: 1.0,
+          scaleCurve: [1.0, 0.82],
+          translateZCurve: [0, -60],
+          rotateYCurve: [0, 25],
+          opacityCurve: [1.0, 0.8]
+        };
       }
     }
 
-    // Update card positions based on current index and visible count
+    // Update card positions with non-linear scaling and consistent spacing
     function updateCards() {
-      const visibleCount = getVisibleCount();
-      const halfVisible = Math.floor(visibleCount / 2); // 3 for desktop, 2 for tablet, 1 for mobile
+      const config = getCarouselConfig();
+      const baseSpacing = config.cardWidth * config.spacingFactor;
 
       cards.forEach((card, index) => {
-        // Remove all position classes
+        // Calculate wrapped offset (handles circular carousel)
+        let diff = index - currentIndex;
+        // Handle wrapping for circular carousel
+        if (diff > totalCards / 2) {
+          diff -= totalCards;
+        } else if (diff < -totalCards / 2) {
+          diff += totalCards;
+        }
+
+        const absOffset = Math.abs(diff);
+        const isVisible = absOffset <= config.halfVisible;
+
+        if (!isVisible) {
+          // Hide cards beyond visible range
+          card.style.transform = '';
+          card.style.opacity = '0';
+          card.style.pointerEvents = 'none';
+          card.style.zIndex = '1';
+          card.classList.remove('active');
+          return;
+        }
+
+        // Remove old classes
         card.classList.remove('active', 'prev-1', 'prev-2', 'prev-3', 'next-1', 'next-2', 'next-3', 'hidden');
+        
+        // Get transform values from curves
+        const scale = config.scaleCurve[absOffset] || config.scaleCurve[config.scaleCurve.length - 1];
+        const translateZ = config.translateZCurve[absOffset] || config.translateZCurve[config.translateZCurve.length - 1];
+        const rotateY = config.rotateYCurve[absOffset] || config.rotateYCurve[config.rotateYCurve.length - 1];
+        const opacity = config.opacityCurve[absOffset] || config.opacityCurve[config.opacityCurve.length - 1];
 
-        const diff = index - currentIndex;
+        // Calculate translateX: consistent spacing based on offset
+        const translateX = diff * baseSpacing;
+        
+        // Determine rotation direction (negative for left, positive for right)
+        const rotation = diff < 0 ? rotateY : -rotateY;
+        
+        // Stable z-index: center card highest, decreases with distance
+        const zIndex = 10 - absOffset;
 
+        // Build transform string
+        let transformStr;
+        if (isRTL) {
+          // RTL: flip translateX direction
+          transformStr = `translateX(${-translateX}px) translateZ(${translateZ}px) rotateY(${-rotation}deg) scale(${scale})`;
+        } else {
+          transformStr = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotation}deg) scale(${scale})`;
+        }
+        
+        // Apply transforms
+        card.style.transform = transformStr;
+        // Store base transform in CSS variable for hover enhancement
+        card.style.setProperty('--card-transform', transformStr);
+        card.style.opacity = opacity.toString();
+        card.style.zIndex = zIndex.toString();
+        card.style.pointerEvents = 'auto';
+
+        // Mark center card as active
         if (diff === 0) {
           card.classList.add('active');
-        } else if (diff === -1) {
-          card.classList.add('prev-1');
-        } else if (diff === -2 && halfVisible >= 2) {
-          card.classList.add('prev-2');
-        } else if (diff === -3 && halfVisible >= 3) {
-          card.classList.add('prev-3');
-        } else if (diff === 1) {
-          card.classList.add('next-1');
-        } else if (diff === 2 && halfVisible >= 2) {
-          card.classList.add('next-2');
-        } else if (diff === 3 && halfVisible >= 3) {
-          card.classList.add('next-3');
-        } else if (Math.abs(diff) > halfVisible) {
-          card.classList.add('hidden');
         }
       });
 
