@@ -23,36 +23,12 @@
       href="{% url 'category_posts' category.slug %}"
       class="category-carousel-card {% if current_category_slug and category.slug == current_category_slug %}active-category{% endif %}"
       data-category-slug="{{ category.slug }}"
-      data-color-index="{{ category|category_color_index }}"
+      style="--cat-bg: {{ category|category_color }};"
       title="{{ category.name }}"
       aria-label="Browse {{ category.name }} category ({{ category.post_count }} posts){% if current_category_slug and category.slug == current_category_slug %} - Current category{% endif %}"
     >
       <div class="category-carousel-card-icon">
-        {% if category.slug == "careers-economy" %}
-          <i class="bi bi-cash-coin"></i>
-        {% elif category.slug == "law-integration" %}
-          <i class="bi bi-globe"></i>
-        {% elif category.slug == "life-in-sweden" %}
-          <i class="bi bi-briefcase"></i>
-        {% elif category.slug == "skills-learning" %}
-          <i class="bi bi-bank"></i>
-        {% elif category.slug == "platform-updates" %}
-          <i class="bi bi-newspaper"></i>
-        {% elif category.slug == "events-announcements" %}
-          <i class="bi bi-calendar-event"></i>
-        {% elif category.slug == "photo-gallery" %}
-          <i class="bi bi-camera"></i>
-        {% elif category.slug == "public-services" %}
-          <i class="bi bi-cart"></i>
-        {% elif category.slug == "stories-experiences" %}
-          <i class="bi bi-heart-pulse"></i>
-        {% elif category.slug == "community-engagement" %}
-          <i class="bi bi-translate"></i>
-        {% elif category.slug == "personalities" %}
-          <i class="bi bi-person-star"></i>
-        {% else %}
-          <i class="bi bi-tag"></i>
-        {% endif %}
+        <i class="{{ category|category_icon }}" aria-hidden="true"></i>
       </div>
       <div class="category-carousel-card-name">{{ category.name }}</div>
       <div class="category-carousel-card-count">({{ category.post_count }} پست)</div>
@@ -78,7 +54,7 @@
       class="category-card-fallback {% if current_category_slug and category.slug == current_category_slug %}active{% endif %}"
       title="{{ category.name }}"
     >
-      <i class="bi bi-{% if category.slug == 'careers-economy' %}cash-coin{% elif category.slug == 'law-integration' %}globe{% elif category.slug == 'life-in-sweden' %}briefcase{% elif category.slug == 'skills-learning' %}bank{% elif category.slug == 'platform-updates' %}newspaper{% elif category.slug == 'events-announcements' %}calendar-event{% elif category.slug == 'photo-gallery' %}camera{% elif category.slug == 'public-services' %}cart{% elif category.slug == 'stories-experiences' %}heart-pulse{% elif category.slug == 'community-engagement' %}translate{% elif category.slug == 'personalities' %}person-star{% else %}tag{% endif %}"></i>
+      <i class="{{ category|category_icon }}" aria-hidden="true"></i>
       <span>{{ category.name }}</span>
     </a>
     {% endfor %}

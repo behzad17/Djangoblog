@@ -28,11 +28,26 @@
     const isRTL = document.documentElement.dir === 'rtl' || 
                   document.documentElement.getAttribute('dir') === 'rtl';
 
-    // Update card positions based on current index
+    // Get visible card count based on breakpoint
+    function getVisibleCount() {
+      const width = window.innerWidth;
+      if (width >= 992) {
+        return 7; // Desktop: 7 cards (center + 3 each side)
+      } else if (width >= 768) {
+        return 5; // Tablet: 5 cards (center + 2 each side)
+      } else {
+        return 3; // Mobile: 3 cards (center + 1 each side)
+      }
+    }
+
+    // Update card positions based on current index and visible count
     function updateCards() {
+      const visibleCount = getVisibleCount();
+      const halfVisible = Math.floor(visibleCount / 2); // 3 for desktop, 2 for tablet, 1 for mobile
+
       cards.forEach((card, index) => {
         // Remove all position classes
-        card.classList.remove('active', 'prev-1', 'prev-2', 'next-1', 'next-2', 'hidden');
+        card.classList.remove('active', 'prev-1', 'prev-2', 'prev-3', 'next-1', 'next-2', 'next-3', 'hidden');
 
         const diff = index - currentIndex;
 
@@ -40,13 +55,17 @@
           card.classList.add('active');
         } else if (diff === -1) {
           card.classList.add('prev-1');
-        } else if (diff === -2) {
+        } else if (diff === -2 && halfVisible >= 2) {
           card.classList.add('prev-2');
+        } else if (diff === -3 && halfVisible >= 3) {
+          card.classList.add('prev-3');
         } else if (diff === 1) {
           card.classList.add('next-1');
-        } else if (diff === 2) {
+        } else if (diff === 2 && halfVisible >= 2) {
           card.classList.add('next-2');
-        } else if (Math.abs(diff) > 2) {
+        } else if (diff === 3 && halfVisible >= 3) {
+          card.classList.add('next-3');
+        } else if (Math.abs(diff) > halfVisible) {
           card.classList.add('hidden');
         }
       });
@@ -217,6 +236,15 @@
     carousel.addEventListener('mouseleave', startAutoRotate);
     carousel.addEventListener('focusin', stopAutoRotate);
     carousel.addEventListener('focusout', startAutoRotate);
+
+    // Handle window resize to update card positions
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        updateCards();
+      }, 150);
+    });
 
     // Initialize
     updateCards();
