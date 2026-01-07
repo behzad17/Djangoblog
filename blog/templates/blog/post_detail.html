@@ -56,34 +56,8 @@
 <div class="post-hero-container">
   <div class="post-hero-card">
     <div class="row g-0">
-      <!-- Image Area (Left on desktop, Top on mobile) -->
-      <div class="col-lg-6 col-md-12 post-hero-image">
-        {% if post.featured_image %}
-          {% if "placeholder" in post.featured_image.url|default:"" %}
-          <img
-            src="{% static 'images/default.jpg' %}"
-            class="post-hero-img"
-            alt="تصویر پیش‌فرض برای {{ post.title }}"
-          />
-          {% else %}
-          <img
-            src="{{ post.featured_image.url }}"
-            class="post-hero-img"
-            alt="{{ post.title }}"
-            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
-          />
-          {% endif %}
-        {% else %}
-        <img
-          src="{% static 'images/default.jpg' %}"
-          class="post-hero-img"
-          alt="تصویر پیش‌فرض برای {{ post.title }}"
-        />
-        {% endif %}
-      </div>
-      
-      <!-- Content Area (Right on desktop, Bottom on mobile) -->
-      <div class="col-lg-6 col-md-12 post-hero-content">
+      <!-- Content Area (Right on desktop, Top on mobile) -->
+      <div class="col-lg-6 col-md-12 post-hero-content order-2 order-lg-1">
         <div class="post-hero-content-inner">
           <h1 class="post-hero-title">{{ post.title }}</h1>
           <p class="post-hero-meta">
@@ -108,16 +82,16 @@
           <div class="post-hero-actions">
             <a
               href="{% url 'edit_post' post.slug %}"
-              class="btn btn-primary"
+              class="btn btn-sm btn-primary"
             >
-              <i class="fas fa-edit ms-1"></i> ویرایش پست
+              <i class="fas fa-edit ms-1"></i> ویرایش
             </a>
             {% if not post.is_deleted %}
             <a
               href="{% url 'delete_post' post.slug %}"
-              class="btn btn-outline-danger"
+              class="btn btn-sm btn-outline-danger"
             >
-              <i class="fas fa-trash ms-1"></i> حذف پست
+              <i class="fas fa-trash ms-1"></i> حذف
             </a>
             {% endif %}
           </div>
@@ -183,6 +157,32 @@
             </div>
           </div>
         </div>
+      </div>
+      
+      <!-- Image Area (Left on desktop, Bottom on mobile) -->
+      <div class="col-lg-6 col-md-12 post-hero-image order-1 order-lg-2">
+        {% if post.featured_image %}
+          {% if "placeholder" in post.featured_image.url|default:"" %}
+          <img
+            src="{% static 'images/default.jpg' %}"
+            class="post-hero-img"
+            alt="تصویر پیش‌فرض برای {{ post.title }}"
+          />
+          {% else %}
+          <img
+            src="{{ post.featured_image.url }}"
+            class="post-hero-img"
+            alt="{{ post.title }}"
+            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+          />
+          {% endif %}
+        {% else %}
+        <img
+          src="{% static 'images/default.jpg' %}"
+          class="post-hero-img"
+          alt="تصویر پیش‌فرض برای {{ post.title }}"
+        />
+        {% endif %}
       </div>
     </div>
   </div>
