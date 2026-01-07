@@ -467,7 +467,7 @@ body {
 .post-hero-image {
   position: relative;
   overflow: hidden;
-  min-height: 380px;
+  min-height: 285px;
 }
 
 .post-hero-img {
@@ -484,7 +484,7 @@ body {
 }
 
 .post-hero-content-inner {
-  padding: 2rem;
+  padding: 1.5rem;
   width: 100%;
 }
 
@@ -492,14 +492,14 @@ body {
   font-size: 2rem;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   line-height: 1.3;
 }
 
 .post-hero-meta {
   font-size: 0.95rem;
   color: #6c757d;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -520,13 +520,14 @@ body {
 }
 
 .post-hero-category {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .post-hero-actions {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  margin-bottom: 0.75rem;
 }
 
 .post-hero-actions .btn {
@@ -567,7 +568,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .post-hero-interactions .btn-sm {
@@ -627,7 +628,7 @@ body {
   }
   
   .post-hero-content-inner {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
   
   .post-hero-title {
@@ -635,7 +636,7 @@ body {
   }
   
   .post-hero-image {
-    min-height: 320px;
+    min-height: 240px;
   }
 }
 
@@ -649,7 +650,7 @@ body {
   }
   
   .post-hero-image {
-    min-height: 220px;
+    min-height: 165px;
     border-radius: 12px 12px 0 0;
   }
   
@@ -658,7 +659,7 @@ body {
   }
   
   .post-hero-content-inner {
-    padding: 1.25rem;
+    padding: 1rem;
   }
   
   .post-hero-title {
@@ -698,11 +699,11 @@ body {
   }
   
   .post-hero-image {
-    min-height: 200px;
+    min-height: 150px;
   }
   
   .post-hero-content-inner {
-    padding: 1rem;
+    padding: 0.875rem;
   }
   
   .post-hero-title {

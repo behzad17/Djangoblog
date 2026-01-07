@@ -105,7 +105,7 @@
           
           <!-- Action Buttons (Edit/Delete) -->
           {% if user.is_authenticated and user == post.author or user.is_authenticated and user.is_staff %}
-          <div class="post-hero-actions mb-3">
+          <div class="post-hero-actions">
             <a
               href="{% url 'edit_post' post.slug %}"
               class="btn btn-primary"
