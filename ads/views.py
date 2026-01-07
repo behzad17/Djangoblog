@@ -14,13 +14,14 @@ def _visible_ads_queryset():
     """
     Base queryset for ads that should be visible on the site.
     Featured ads appear first, then ordered by newest.
+    Only requires is_approved=True (admin approval) to appear in list.
+    URL approval is separate and only affects whether the URL is clickable.
     """
     today = timezone.now().date()
     now = timezone.now()
     qs = Ad.objects.filter(
         is_active=True,
         is_approved=True,
-        url_approved=True,
     )
     # Apply date filters only when set
     qs = qs.filter(

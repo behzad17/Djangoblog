@@ -42,7 +42,7 @@ class AdAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
     )
-    list_editable = ("is_featured", "featured_priority")
+    list_editable = ("is_approved", "is_featured", "featured_priority")
     search_fields = ("title", "target_url", "category__name", "city", "address", "phone")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on")
@@ -91,7 +91,7 @@ class AdAdmin(admin.ModelAdmin):
             "Visibility & Scheduling",
             {
                 "fields": ("is_active", "is_approved", "start_date", "end_date"),
-                "description": "Control when this ad is visible to users.",
+                "description": "Control when this ad is visible to users. is_approved controls whether the ad appears in the ads list. You can approve ads even if URL or social links are not yet approved.",
             },
         ),
         (
