@@ -21,18 +21,18 @@
             <div class="row g-3">
                 <!-- Change Password Card -->
                 <div class="col-12">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm account-settings-card">
                         <div class="card-body d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <h5 class="card-title mb-1">
+                                <h5 class="card-title account-settings-title">
                                     <i class="fas fa-key me-2 text-primary"></i>تغییر رمز عبور
                                 </h5>
-                                <p class="card-text text-muted small mb-0">
+                                <p class="card-text text-muted small account-settings-text">
                                     رمز عبور خود را به‌روزرسانی کنید
                                 </p>
                             </div>
                             <div class="ms-3">
-                                <a href="{% url 'account_change_password' %}" class="btn btn-primary">
+                                <a href="{% url 'account_change_password' %}" class="btn btn-primary btn-sm account-settings-btn">
                                     تغییر رمز عبور
                                     <i class="fas fa-arrow-left ms-2"></i>
                                 </a>
@@ -43,18 +43,18 @@
 
                 <!-- Change Email Card -->
                 <div class="col-12">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm account-settings-card">
                         <div class="card-body d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <h5 class="card-title mb-1">
+                                <h5 class="card-title account-settings-title">
                                     <i class="fas fa-envelope me-2 text-primary"></i>تغییر ایمیل
                                 </h5>
-                                <p class="card-text text-muted small mb-0">
+                                <p class="card-text text-muted small account-settings-text">
                                     آدرس ایمیل خود را تغییر دهید
                                 </p>
                             </div>
                             <div class="ms-3">
-                                <a href="{% url 'account_email' %}" class="btn btn-primary">
+                                <a href="{% url 'account_email' %}" class="btn btn-primary btn-sm account-settings-btn">
                                     تغییر ایمیل
                                     <i class="fas fa-arrow-left ms-2"></i>
                                 </a>
