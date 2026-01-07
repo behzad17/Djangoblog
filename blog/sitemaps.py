@@ -10,7 +10,7 @@ class PostSitemap(Sitemap):
 
     def items(self):
         """Return all published posts."""
-        return Post.objects.filter(status=1)
+        return Post.objects.filter(status=1, is_deleted=False)
 
     def lastmod(self, obj):
         """Return the last modification date of the post."""

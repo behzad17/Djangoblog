@@ -65,7 +65,7 @@
           </a>
         </div>
         {% endif %}
-        {% if user.is_authenticated and user == post.author %}
+        {% if user.is_authenticated and user == post.author or user.is_authenticated and user.is_staff %}
         <div class="mb-3 d-flex flex-wrap gap-2">
           <a
             href="{% url 'edit_post' post.slug %}"
@@ -73,12 +73,14 @@
           >
             <i class="fas fa-edit ms-1"></i> ویرایش پست
           </a>
+          {% if not post.is_deleted %}
           <a
             href="{% url 'delete_post' post.slug %}"
             class="btn btn-sm btn-outline-danger"
           >
             <i class="fas fa-trash ms-1"></i> حذف پست
           </a>
+          {% endif %}
         </div>
         {% endif %}
         <div class="d-flex align-items-center gap-3 flex-wrap">

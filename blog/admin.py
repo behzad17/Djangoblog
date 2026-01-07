@@ -13,15 +13,15 @@ class CategoryAdmin(admin.ModelAdmin):
     
     def post_count(self, obj):
         """Returns the number of published posts in this category."""
-        return obj.posts.filter(status=1).count()
+        return obj.posts.filter(status=1, is_deleted=False).count()
     post_count.short_description = 'Published Posts'
 
 @admin.register(Post)
 class PostAdmin(SummernoteModelAdmin):
 
-    list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'created_on')
+    list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'is_deleted', 'deleted_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
-    list_filter = ('status', 'category', 'pinned', 'url_approved', 'created_on',)
+    list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on',)
     prepopulated_fields = {'slug': ('title',)}
     summernote_fields = ('content',)
     fieldsets = (
@@ -35,12 +35,17 @@ class PostAdmin(SummernoteModelAdmin):
             'fields': ('external_url', 'url_approved'),
             'description': 'Users can add an external URL. Admin must approve it before it will be displayed.'
         }),
+        ('Soft Delete', {
+            'fields': ('is_deleted', 'deleted_at', 'deleted_by'),
+            'description': 'Soft delete information. Deleted posts are hidden from public views.',
+            'classes': ('collapse',)
+        }),
         ('Timestamps', {
             'fields': ('created_on', 'updated_on'),
             'classes': ('collapse',)
         }),
     )
-    readonly_fields = ('created_on', 'updated_on')
+    readonly_fields = ('created_on', 'updated_on', 'deleted_at', 'deleted_by')
     
     def url_status(self, obj):
         """Display URL approval status."""
@@ -51,6 +56,21 @@ class PostAdmin(SummernoteModelAdmin):
         else:
             return "⏳ Pending"
     url_status.short_description = 'URL Status'
+    
+    def deleted_status(self, obj):
+        """Display soft delete status."""
+        if obj.is_deleted:
+            deleted_info = f"Deleted"
+            if obj.deleted_at:
+                deleted_info += f" ({obj.deleted_at.strftime('%Y-%m-%d')})"
+            if obj.deleted_by:
+                deleted_info += f" by {obj.deleted_by.username}"
+            return format_html(
+                '<span style="color: red; font-weight: bold;">🗑️ {}</span>',
+                deleted_info
+            )
+        return format_html('<span style="color: green;">✓ Active</span>')
+    deleted_status.short_description = 'Delete Status'
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -98,7 +118,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     
     def post_count(self, obj):
         """Display count of published posts by this user."""
-        return obj.user.blog_posts.filter(status=1).count()
+        return obj.user.blog_posts.filter(status=1, is_deleted=False).count()
     post_count.short_description = 'Published Posts'
     
     def save_model(self, request, obj, form, change):

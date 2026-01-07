@@ -6,6 +6,7 @@ from django.utils import timezone
 
 # Create your models here.
 STATUS = ((0, "Draft"), (1, "Published"))
+# Note: Status 0 (Draft) is also used for PENDING_REVIEW after edits
 
 
 class UserProfile(models.Model):
@@ -90,7 +91,7 @@ class Category(models.Model):
     
     def post_count(self):
         """Returns the number of published posts in this category."""
-        return self.posts.filter(status=1).count()
+        return self.posts.filter(status=1, is_deleted=False).count()
 
 
 class Post(models.Model):
@@ -146,6 +147,25 @@ class Post(models.Model):
         null=True,
         blank=True,
         help_text="End date for Events category posts only"
+    )
+    
+    # Soft delete fields
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text="Soft delete flag. If True, post is hidden from public views."
+    )
+    deleted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this post was soft-deleted."
+    )
+    deleted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="deleted_posts",
+        help_text="User who soft-deleted this post."
     )
 
     class Meta:

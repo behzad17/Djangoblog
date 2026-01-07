@@ -40,7 +40,7 @@ class PostList(generic.ListView):
         Posts are ordered by creation date (newest first).
         Includes all posts (including pinned) for correct pagination count.
         """
-        return Post.objects.filter(status=1).select_related('category').annotate(
+        return Post.objects.filter(status=1, is_deleted=False).select_related('category').annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
         ).order_by('-created_on')
     
@@ -92,7 +92,7 @@ class PostList(generic.ListView):
         # Only process pinned posts on page 1
         if page_number == 1:
             # Fetch pinned posts and map to target rows (if specified)
-            pinned_qs = Post.objects.filter(status=1, pinned=True).select_related('category', 'author').annotate(
+            pinned_qs = Post.objects.filter(status=1, pinned=True, is_deleted=False).select_related('category', 'author').annotate(
                 comment_count=Count('comments', filter=Q(comments__approved=True))
             ).order_by('-created_on')
             
@@ -153,7 +153,8 @@ class PostList(generic.ListView):
         expert_posts_qs = (
             Post.objects.filter(
                 status=1,
-                author__in=expert_users
+                author__in=expert_users,
+                is_deleted=False
             )
             .select_related('category', 'author', 'author__profile')
             .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
@@ -177,8 +178,23 @@ def post_detail(request, slug):
     the comment author. It also tracks whether the post is in the user's
     favorites.
     """
+    # Allow access to soft-deleted posts for author and staff
     queryset = Post.objects.filter(status=1).select_related('category', 'author')
     post = get_object_or_404(queryset, slug=slug)
+    
+    # Check if post is soft-deleted
+    is_owner_or_staff = (
+        request.user.is_authenticated and 
+        (request.user == post.author or request.user.is_staff)
+    )
+    
+    # If soft-deleted and user is not owner/staff, show placeholder
+    if post.is_deleted and not is_owner_or_staff:
+        return render(
+            request,
+            'blog/post_deleted.html',
+            {'post': post},
+        )
     
     # Track page view (only for GET requests)
     # Wrap in try-except to prevent tracking errors from breaking the page
@@ -309,7 +325,8 @@ def post_detail(request, slug):
         expert_posts = (
             Post.objects.filter(
                 status=1,
-                author__in=expert_users
+                author__in=expert_users,
+                is_deleted=False
             )
             .select_related('category', 'author')
             .order_by('-created_on')[:10]
@@ -328,7 +345,8 @@ def post_detail(request, slug):
         related_posts = (
             Post.objects.filter(
                 status=1,
-                category=post.category
+                category=post.category,
+                is_deleted=False
             )
             .exclude(id=post.id)
             .select_related('category', 'author')
@@ -520,7 +538,7 @@ def favorite_posts(request):
     """
     # Get favorite posts
     favorites = Favorite.objects.filter(user=request.user).select_related('post', 'post__category', 'post__author')
-    favorite_posts = [favorite.post for favorite in favorites if favorite.post.status == 1]
+    favorite_posts = [favorite.post for favorite in favorites if favorite.post.status == 1 and not favorite.post.is_deleted]
     
     # Annotate posts with comment count
     posts_with_counts = []
@@ -680,20 +698,29 @@ def create_post(request):
 
 
 @login_required
+@login_required
 def edit_post(request, slug):
     """
     View function for editing a blog post.
 
     This view allows post authors to edit their own posts.
-    It requires user authentication and ensures only the author can edit.
+    It requires user authentication and ensures only the author or staff can edit.
     """
     post = get_object_or_404(Post, slug=slug)
     
-    # Check if user is the author
-    if request.user != post.author:
+    # Check if user is the author or staff
+    if request.user != post.author and not request.user.is_staff:
         messages.add_message(
             request, messages.ERROR,
             'You can only edit your own posts!'
+        )
+        return redirect('post_detail', slug=slug)
+    
+    # Prevent editing soft-deleted posts (unless staff)
+    if post.is_deleted and not request.user.is_staff:
+        messages.add_message(
+            request, messages.ERROR,
+            'Cannot edit a deleted post!'
         )
         return redirect('post_detail', slug=slug)
     
@@ -701,19 +728,32 @@ def edit_post(request, slug):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
+            
+            # Anti-abuse: If post is published/approved (status=1), set to Draft/Pending (status=0)
+            # This requires re-approval by admin
+            original_status = Post.objects.get(pk=post.pk).status
+            if original_status == 1:  # Published
+                post.status = 0  # Set to Draft/Pending Review
+                needs_review = True
+            else:
+                needs_review = False
+            
             # Check if user has expert access
             is_expert = (
                 hasattr(request.user, 'profile') and
                 request.user.profile.can_publish_without_approval
             )
-            # Experts can change status, regular users cannot
-            if not is_expert:
-                # Preserve original status for regular users
-                original_status = Post.objects.get(pk=post.pk).status
-                post.status = original_status
-            # For experts, status can be changed via form (if form includes status field)
-            # Note: PostForm doesn't include status field, so experts keep current status
-            # If you want experts to be able to change status, you'd need to add status to PostForm
+            
+            # Staff can change status, regular users cannot
+            if not request.user.is_staff:
+                # For non-staff, preserve status change (already set above if published)
+                # Experts can publish without approval, but if editing published post, it goes to draft
+                if is_expert and original_status == 0:
+                    # Expert editing draft can keep it as draft or publish
+                    # But since form doesn't have status field, keep current behavior
+                    pass
+            # For staff, they can change status via admin, but this form doesn't include status
+            
             # Update slug if title changed
             new_slug = slugify(post.title)
             if new_slug != post.slug:
@@ -725,11 +765,20 @@ def edit_post(request, slug):
                     slug = f"{base_slug}-{counter}"
                     counter += 1
                 post.slug = slug
+            
             post.save()
-            messages.add_message(
-                request, messages.SUCCESS,
-                'Post updated successfully!'
-            )
+            
+            if needs_review:
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Your changes were saved and sent for review. The post will be reviewed before being published again.'
+                )
+            else:
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Post updated successfully!'
+                )
+            
             # Redirect based on status
             if post.status == 1:
                 return redirect('post_detail', slug=post.slug)
@@ -745,19 +794,19 @@ def edit_post(request, slug):
     )
 
 
-@site_verified_required
 @login_required
 def delete_post(request, slug):
     """
-    View function for deleting a blog post.
+    View function for soft-deleting a blog post.
 
-    This view allows post authors to delete their own posts.
-    It requires user authentication and ensures only the author can delete.
+    This view allows post authors to soft-delete their own posts.
+    It requires user authentication and ensures only the author or staff can delete.
+    Uses soft delete (is_deleted=True) instead of hard delete.
     """
     post = get_object_or_404(Post, slug=slug)
     
-    # Check if user is the author
-    if request.user != post.author:
+    # Check if user is the author or staff
+    if request.user != post.author and not request.user.is_staff:
         messages.add_message(
             request, messages.ERROR,
             'You can only delete your own posts!'
@@ -765,7 +814,12 @@ def delete_post(request, slug):
         return redirect('post_detail', slug=slug)
     
     if request.method == "POST":
-        post.delete()
+        # Soft delete: set flags instead of actually deleting
+        post.is_deleted = True
+        post.deleted_at = timezone.now()
+        post.deleted_by = request.user
+        post.save()
+        
         messages.add_message(
             request, messages.SUCCESS,
             'Post deleted successfully!'
@@ -830,7 +884,8 @@ def category_posts(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     posts = Post.objects.filter(
         category=category,
-        status=1
+        status=1,
+        is_deleted=False
     ).select_related('category', 'author').annotate(
         comment_count=Count('comments', filter=Q(comments__approved=True))
     ).order_by('-created_on')
