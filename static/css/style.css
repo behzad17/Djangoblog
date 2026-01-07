@@ -457,7 +457,7 @@ body {
 }
 
 .post-hero-card {
-  background: #ffffff;
+  background: #C5DFF2;
   border-radius: 18px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -482,7 +482,7 @@ body {
 .post-hero-content {
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: #C5DFF2;
 }
 
 .post-hero-content-inner {
