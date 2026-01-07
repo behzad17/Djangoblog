@@ -69,6 +69,83 @@
                 <i class="fas fa-info-circle me-2"></i>
                 <strong>نکته:</strong> پس از تغییر ایمیل، باید ایمیل جدید خود را تأیید کنید.
             </div>
+
+            <!-- My Published Posts Section -->
+            <div class="mt-5">
+                <h2 class="h4 mb-3">
+                    <i class="fas fa-file-alt me-2"></i>پست‌های منتشر شده من
+                </h2>
+                
+                {% if user_posts %}
+                    <div class="list-group">
+                        {% for post in user_posts %}
+                            <a href="{% url 'post_detail' post.slug %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h5 class="mb-1">{{ post.title }}</h5>
+                                        <p class="mb-1 text-muted small">
+                                            <span class="badge bg-secondary me-2">{{ post.category.name }}</span>
+                                            <span>{{ post.created_on|date:"Y/m/d" }}</span>
+                                        </p>
+                                        {% if post.excerpt %}
+                                            <p class="mb-0 text-muted small">{{ post.excerpt|truncatewords:20 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="ms-3">
+                                        <i class="fas fa-arrow-left text-muted"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Pagination -->
+                    {% if is_paginated %}
+                        <nav aria-label="صفحه‌بندی پست‌ها" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if user_posts.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_posts.previous_page_number }}">
+                                            <i class="fas fa-chevron-right"></i> قبلی
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            <i class="fas fa-chevron-right"></i> قبلی
+                                        </span>
+                                    </li>
+                                {% endif %}
+                                
+                                <li class="page-item active">
+                                    <span class="page-link">
+                                        صفحه {{ user_posts.number }} از {{ user_posts.paginator.num_pages }}
+                                    </span>
+                                </li>
+                                
+                                {% if user_posts.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_posts.next_page_number }}">
+                                            بعدی <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            بعدی <i class="fas fa-chevron-left"></i>
+                                        </span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        شما هنوز پستی منتشر نکرده‌اید.
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
