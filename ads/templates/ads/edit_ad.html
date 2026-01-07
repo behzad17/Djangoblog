@@ -93,6 +93,17 @@
               <div class="form-text">{{ form.address.help_text }}</div>
             </div>
 
+            <div class="mb-3">
+              <label for="{{ form.phone.id_for_label }}" class="form-label">
+                {{ form.phone.label }}
+              </label>
+              {{ form.phone }}
+              {% if form.phone.errors %}
+              <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
+              {% endif %}
+              <div class="form-text">{{ form.phone.help_text }}</div>
+            </div>
+
             <div class="alert alert-info">
               <i class="fas fa-info-circle ms-2"></i>
               <strong>لینک‌های شبکه‌های اجتماعی:</strong> در صورت تغییر لینک‌ها، مجدداً در انتظار تایید مدیر قرار خواهند گرفت.

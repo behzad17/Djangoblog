@@ -80,7 +80,7 @@
           {% endif %}
           
           <!-- Contact/Location Information Buttons -->
-          {% if ad.city or ad.address or ad.instagram_url or ad.telegram_url or ad.website_url %}
+          {% if ad.city or ad.address or ad.phone or ad.instagram_url or ad.telegram_url or ad.website_url %}
           <div class="mt-4">
             <h6 class="mb-3 text-center">
               <i class="fas fa-info-circle ms-2"></i>اطلاعات تماس و موقعیت
@@ -95,6 +95,12 @@
               {% if ad.address %}
               <button type="button" class="btn btn-outline-secondary" disabled>
                 <i class="fas fa-home ms-2"></i>{{ ad.address|truncatewords:10 }}
+              </button>
+              {% endif %}
+              
+              {% if ad.phone %}
+              <button type="button" class="btn btn-outline-secondary" disabled>
+                <i class="fas fa-phone ms-2"></i>{{ ad.phone }}
               </button>
               {% endif %}
               

@@ -43,7 +43,7 @@ class AdAdmin(admin.ModelAdmin):
         "end_date",
     )
     list_editable = ("is_featured", "featured_priority")
-    search_fields = ("title", "target_url", "category__name", "city", "address")
+    search_fields = ("title", "target_url", "category__name", "city", "address", "phone")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on")
 
@@ -76,8 +76,8 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Location & Contact Information",
             {
-                "fields": ("city", "address"),
-                "description": "Location information displayed publicly on the ad detail page.",
+                "fields": ("city", "address", "phone"),
+                "description": "Location and contact information displayed publicly on the ad detail page.",
             },
         ),
         (

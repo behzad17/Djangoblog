@@ -10,7 +10,7 @@ class AdForm(forms.ModelForm):
     class Meta:
         model = Ad
         fields = [
-            'title', 'category', 'image', 'target_url', 'city', 'address',
+            'title', 'category', 'image', 'target_url', 'city', 'address', 'phone',
             'instagram_url', 'telegram_url', 'website_url',
             'start_date', 'end_date'
         ]
@@ -38,6 +38,10 @@ class AdForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'آدرس کامل',
                 'rows': 3
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'شماره تماس'
             }),
             'instagram_url': forms.URLInput(attrs={
                 'class': 'form-control',
@@ -67,6 +71,7 @@ class AdForm(forms.ModelForm):
             'target_url': 'لینک مقصد',
             'city': 'شهر',
             'address': 'آدرس کامل',
+            'phone': 'شماره تماس',
             'instagram_url': 'لینک اینستاگرام',
             'telegram_url': 'لینک تلگرام',
             'website_url': 'لینک وب‌سایت',
@@ -76,6 +81,7 @@ class AdForm(forms.ModelForm):
         help_texts = {
             'target_url': 'آدرس وب‌سایتی که با کلیک روی تبلیغ باز می‌شود',
             'address': 'آدرس کامل محل کسب‌وکار یا ارائه خدمات (اختیاری)',
+            'phone': 'شماره تماس (اختیاری)',
             'instagram_url': 'لینک پروفایل یا صفحه اینستاگرام (اختیاری)',
             'telegram_url': 'لینک کانال یا گروه تلگرام (اختیاری)',
             'website_url': 'لینک وب‌سایت (اختیاری)',
@@ -92,6 +98,7 @@ class AdForm(forms.ModelForm):
         self.fields['end_date'].required = False
         self.fields['city'].required = False
         self.fields['address'].required = False
+        self.fields['phone'].required = False
         self.fields['instagram_url'].required = False
         self.fields['telegram_url'].required = False
         self.fields['website_url'].required = False
@@ -133,6 +140,13 @@ class AdForm(forms.ModelForm):
         if city:
             city = city.strip()
         return city
+    
+    def clean_phone(self):
+        """Sanitize phone field by stripping whitespace."""
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            phone = phone.strip()
+        return phone
     
     def clean_instagram_url(self):
         """Validate Instagram URL format."""

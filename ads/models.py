@@ -80,6 +80,11 @@ class Ad(models.Model):
         blank=True,
         help_text="Full address of the service/business (optional).",
     )
+    phone = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Telephone number (optional).",
+    )
     
     # Social media URLs
     instagram_url = models.URLField(
