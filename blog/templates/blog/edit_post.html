@@ -11,16 +11,17 @@
             {% csrf_token %}
 
             <!-- Regular fields -->
-            {{ form.title|as_crispy_field }} {{ form.category|as_crispy_field }}
-            {{ form.excerpt|as_crispy_field }} {{
-            form.featured_image|as_crispy_field }} {{
-            form.content|as_crispy_field }} {{ form.external_url|as_crispy_field
-            }}
+            {{ form.title|as_crispy_field }}
+            {{ form.category|as_crispy_field }}
+            {{ form.excerpt|as_crispy_field }}
+            {{ form.featured_image|as_crispy_field }}
+            {{ form.content|as_crispy_field }}
+            {{ form.external_url|as_crispy_field }}
 
             <!-- Event date fields (initially hidden) -->
             <div id="event-fields-container" style="display: none">
-              {{ form.event_start_date|as_crispy_field }} {{
-              form.event_end_date|as_crispy_field }}
+              {{ form.event_start_date|as_crispy_field }}
+              {{ form.event_end_date|as_crispy_field }}
             </div>
 
             <div class="text-center mt-4">
