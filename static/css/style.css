@@ -468,6 +468,8 @@ body {
   position: relative;
   overflow: hidden;
   min-height: 285px;
+  max-height: 285px;
+  height: 285px;
 }
 
 .post-hero-img {
@@ -637,6 +639,8 @@ body {
   
   .post-hero-image {
     min-height: 240px;
+    max-height: 240px;
+    height: 240px;
   }
 }
 
@@ -651,6 +655,8 @@ body {
   
   .post-hero-image {
     min-height: 165px;
+    max-height: 165px;
+    height: 165px;
     border-radius: 12px 12px 0 0;
   }
   
@@ -700,6 +706,8 @@ body {
   
   .post-hero-image {
     min-height: 150px;
+    max-height: 150px;
+    height: 150px;
   }
   
   .post-hero-content-inner {
