@@ -26,6 +26,7 @@ class AdAdmin(admin.ModelAdmin):
         "is_featured",
         "featured_priority",
         "url_status",
+        "social_urls_status",
         "start_date",
         "end_date",
         "created_on",
@@ -37,11 +38,12 @@ class AdAdmin(admin.ModelAdmin):
         "is_approved",
         "is_featured",
         "url_approved",
+        "social_urls_approved",
         "start_date",
         "end_date",
     )
     list_editable = ("is_featured", "featured_priority")
-    search_fields = ("title", "target_url", "category__name", "city")
+    search_fields = ("title", "target_url", "category__name", "city", "address")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on")
 
@@ -67,8 +69,22 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Target URL",
             {
-                "fields": ("target_url", "url_approved", "city"),
-                "description": "Advertiser-provided URL. Must be approved before being used on the site. City is optional location information.",
+                "fields": ("target_url", "url_approved"),
+                "description": "Advertiser-provided URL. Must be approved before being used on the site.",
+            },
+        ),
+        (
+            "Location & Contact Information",
+            {
+                "fields": ("city", "address"),
+                "description": "Location information displayed publicly on the ad detail page.",
+            },
+        ),
+        (
+            "Social Media URLs",
+            {
+                "fields": ("instagram_url", "telegram_url", "website_url", "social_urls_approved"),
+                "description": "Social media and website URLs. Must be approved before links become clickable on the site.",
             },
         ),
         (
@@ -103,6 +119,17 @@ class AdAdmin(admin.ModelAdmin):
         return format_html('<span style="color: orange;">⏳ URL Pending</span>')
 
     url_status.short_description = "URL Status"
+    
+    def social_urls_status(self, obj):
+        """Display social URLs approval status."""
+        has_social = bool(obj.instagram_url or obj.telegram_url or obj.website_url)
+        if not has_social:
+            return "No Social URLs"
+        if obj.social_urls_approved:
+            return format_html('<span style="color: green;">✓ Social URLs Approved</span>')
+        return format_html('<span style="color: orange;">⏳ Social URLs Pending</span>')
+    
+    social_urls_status.short_description = "Social URLs Status"
 
 
 @admin.register(AdComment)

@@ -79,13 +79,79 @@
           </div>
           {% endif %}
           
-          {% if ad.city %}
-          <div class="mt-3">
-            <p class="mb-0">
-              <i class="fas fa-map-marker-alt ms-2 text-muted"></i>
-              <span class="text-muted">شهر:</span>
-              <strong>{{ ad.city }}</strong>
-            </p>
+          <!-- Contact/Location Information Buttons -->
+          {% if ad.city or ad.address or ad.instagram_url or ad.telegram_url or ad.website_url %}
+          <div class="mt-4">
+            <h6 class="mb-3 text-center">
+              <i class="fas fa-info-circle ms-2"></i>اطلاعات تماس و موقعیت
+            </h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+              {% if ad.city %}
+              <button type="button" class="btn btn-outline-secondary" disabled>
+                <i class="fas fa-map-marker-alt ms-2"></i>{{ ad.city }}
+              </button>
+              {% endif %}
+              
+              {% if ad.address %}
+              <button type="button" class="btn btn-outline-secondary" disabled>
+                <i class="fas fa-home ms-2"></i>{{ ad.address|truncatewords:10 }}
+              </button>
+              {% endif %}
+              
+              {% if ad.instagram_url %}
+                {% if ad.social_urls_approved %}
+                <a
+                  href="{{ ad.instagram_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-outline-danger"
+                >
+                  <i class="fab fa-instagram ms-2"></i>اینستاگرام
+                </a>
+                {% else %}
+                <button type="button" class="btn btn-outline-secondary" disabled title="لینک در انتظار تایید">
+                  <i class="fab fa-instagram ms-2"></i>اینستاگرام
+                  <small class="d-block">(در انتظار تایید)</small>
+                </button>
+                {% endif %}
+              {% endif %}
+              
+              {% if ad.telegram_url %}
+                {% if ad.social_urls_approved %}
+                <a
+                  href="{{ ad.telegram_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-outline-primary"
+                >
+                  <i class="fab fa-telegram-plane ms-2"></i>تلگرام
+                </a>
+                {% else %}
+                <button type="button" class="btn btn-outline-secondary" disabled title="لینک در انتظار تایید">
+                  <i class="fab fa-telegram-plane ms-2"></i>تلگرام
+                  <small class="d-block">(در انتظار تایید)</small>
+                </button>
+                {% endif %}
+              {% endif %}
+              
+              {% if ad.website_url %}
+                {% if ad.social_urls_approved %}
+                <a
+                  href="{{ ad.website_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-outline-info"
+                >
+                  <i class="fas fa-globe ms-2"></i>وب‌سایت
+                </a>
+                {% else %}
+                <button type="button" class="btn btn-outline-secondary" disabled title="لینک در انتظار تایید">
+                  <i class="fas fa-globe ms-2"></i>وب‌سایت
+                  <small class="d-block">(در انتظار تایید)</small>
+                </button>
+                {% endif %}
+              {% endif %}
+            </div>
           </div>
           {% endif %}
           

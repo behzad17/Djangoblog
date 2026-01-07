@@ -9,7 +9,11 @@ class AdForm(forms.ModelForm):
     
     class Meta:
         model = Ad
-        fields = ['title', 'category', 'image', 'target_url', 'city', 'start_date', 'end_date']
+        fields = [
+            'title', 'category', 'image', 'target_url', 'city', 'address',
+            'instagram_url', 'telegram_url', 'website_url',
+            'start_date', 'end_date'
+        ]
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -30,6 +34,23 @@ class AdForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'شهر'
             }),
+            'address': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'آدرس کامل',
+                'rows': 3
+            }),
+            'instagram_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://instagram.com/username'
+            }),
+            'telegram_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://t.me/channel'
+            }),
+            'website_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com'
+            }),
             'start_date': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date'
@@ -45,11 +66,19 @@ class AdForm(forms.ModelForm):
             'image': 'تصویر تبلیغ',
             'target_url': 'لینک مقصد',
             'city': 'شهر',
+            'address': 'آدرس کامل',
+            'instagram_url': 'لینک اینستاگرام',
+            'telegram_url': 'لینک تلگرام',
+            'website_url': 'لینک وب‌سایت',
             'start_date': 'تاریخ شروع (اختیاری)',
             'end_date': 'تاریخ پایان (اختیاری)',
         }
         help_texts = {
             'target_url': 'آدرس وب‌سایتی که با کلیک روی تبلیغ باز می‌شود',
+            'address': 'آدرس کامل محل کسب‌وکار یا ارائه خدمات (اختیاری)',
+            'instagram_url': 'لینک پروفایل یا صفحه اینستاگرام (اختیاری)',
+            'telegram_url': 'لینک کانال یا گروه تلگرام (اختیاری)',
+            'website_url': 'لینک وب‌سایت (اختیاری)',
             'start_date': 'تاریخ شروع نمایش تبلیغ (اختیاری)',
             'end_date': 'تاریخ پایان نمایش تبلیغ (اختیاری)',
         }
@@ -58,9 +87,14 @@ class AdForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Ensure all categories are available
         self.fields['category'].queryset = AdCategory.objects.all().order_by('name')
-        # Make start_date and end_date optional
+        # Make optional fields not required
         self.fields['start_date'].required = False
         self.fields['end_date'].required = False
+        self.fields['city'].required = False
+        self.fields['address'].required = False
+        self.fields['instagram_url'].required = False
+        self.fields['telegram_url'].required = False
+        self.fields['website_url'].required = False
     
     def clean_image(self):
         """Validate uploaded image file size and type."""
@@ -85,6 +119,48 @@ class AdForm(forms.ModelForm):
                 raise ValidationError('Please upload a valid image file.')
         
         return image
+    
+    def clean_address(self):
+        """Sanitize address field by stripping whitespace."""
+        address = self.cleaned_data.get('address')
+        if address:
+            address = address.strip()
+        return address
+    
+    def clean_city(self):
+        """Sanitize city field by stripping whitespace."""
+        city = self.cleaned_data.get('city')
+        if city:
+            city = city.strip()
+        return city
+    
+    def clean_instagram_url(self):
+        """Validate Instagram URL format."""
+        url = self.cleaned_data.get('instagram_url')
+        if url:
+            url = url.strip()
+            # Basic validation - URLField already validates URL format
+            if not url.startswith(('http://', 'https://')):
+                raise ValidationError('لینک باید با http:// یا https:// شروع شود.')
+        return url
+    
+    def clean_telegram_url(self):
+        """Validate Telegram URL format."""
+        url = self.cleaned_data.get('telegram_url')
+        if url:
+            url = url.strip()
+            if not url.startswith(('http://', 'https://')):
+                raise ValidationError('لینک باید با http:// یا https:// شروع شود.')
+        return url
+    
+    def clean_website_url(self):
+        """Validate website URL format."""
+        url = self.cleaned_data.get('website_url')
+        if url:
+            url = url.strip()
+            if not url.startswith(('http://', 'https://')):
+                raise ValidationError('لینک باید با http:// یا https:// شروع شود.')
+        return url
 
 
 class AdCommentForm(forms.ModelForm):

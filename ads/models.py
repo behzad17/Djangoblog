@@ -75,6 +75,32 @@ class Ad(models.Model):
         blank=True,
         help_text="City where the service/business is located (optional).",
     )
+    address = models.TextField(
+        max_length=500,
+        blank=True,
+        help_text="Full address of the service/business (optional).",
+    )
+    
+    # Social media URLs
+    instagram_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Instagram profile URL (optional).",
+    )
+    telegram_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Telegram channel/group URL (optional).",
+    )
+    website_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Website URL (optional).",
+    )
+    social_urls_approved = models.BooleanField(
+        default=False,
+        help_text="Whether social media URLs have been reviewed and approved by an admin. URLs are only clickable if approved.",
+    )
 
     # Moderation and scheduling
     is_active = models.BooleanField(
