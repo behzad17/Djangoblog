@@ -13,7 +13,7 @@
 .ads-category-slider {
   --gap: 1rem;
   --speed: 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --closed: 4rem;
+  --closed: 5.5rem;
   --open: 24rem;
   --accent: #00A693;
 }
@@ -183,6 +183,15 @@
   text-align: center;
   margin: 0;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(180deg);
+  z-index: 3;
+  width: auto;
+  height: auto;
 }
 
 /* Hide thumbnail, description, button in collapsed state */
@@ -207,6 +216,11 @@
   transform: none;
   font-size: 2.4rem;
   margin-bottom: 0.5rem;
+  position: static;
+  left: auto;
+  top: auto;
+  width: auto;
+  height: auto;
 }
 
 .ads-category-slider .ads-project-card[active] .ads-project-card__thumb,
@@ -338,7 +352,7 @@
 
 @media (min-width: 768px) and (max-width: 991px) {
   .ads-category-slider {
-    --closed: 3.6rem;
+    --closed: 5rem;
     --open: 21rem;
   }
   
