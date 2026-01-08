@@ -41,256 +41,246 @@
        aria-label="Category list">
     
     {% for category in categories %}
-      {% with category_id=category.id|stringformat:"s" %}
-        {% with ad_count=ad_counts|get_item:category.id|default:0 %}
-          {% with is_active=active_category_slug == category.slug %}
-            
-            <!-- Determine accent color -->
-            {% if 'leisure' in category.slug|lower or 'اوقات' in category.name or 'فراغت' in category.name %}
-              {% with accent_color="#5E9CA0" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'legal' in category.slug|lower or 'finance' in category.slug|lower or 'حقوقی' in category.name or 'مالی' in category.name %}
-              {% with accent_color="#7B6DAA" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-gavel" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'health' in category.slug|lower or 'سلامت' in category.name or 'رفاه' in category.name %}
-              {% with accent_color="#7AAE7A" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-heart" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'food' in category.slug|lower or 'غذا' in category.name or 'رستوران' in category.name %}
-              {% with accent_color="#C28C5C" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-utensils" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'housing' in category.slug|lower or 'مسکن' in category.name %}
-              {% with accent_color="#6C8FBF" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-home" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'home-items' in category.slug|lower or 'وسایل-منزل' in category.slug|lower or 'وسایل منزل' in category.name %}
-              {% with accent_color="#9A8F7A" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-couch" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'vehicles' in category.slug|lower or 'وسایل-نقلیه' in category.slug|lower or 'وسایل نقلیه' in category.name %}
-              {% with accent_color="#7A7F8C" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-car" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% elif 'work' in category.slug|lower or 'کار' in category.name or 'خدمات' in category.name %}
-              {% with accent_color="#7C9AA6" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-briefcase" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-              
-            {% else %}
-              {% with accent_color="#7C9AA6" %}
-                <a href="{% url 'ads:ads_by_category' category.slug %}" 
-                   data-ads-card
-                   data-ads-card-index="{{ forloop.counter0 }}"
-                   class="slider-card"
-                   style="--accent: {{ accent_color }};"
-                   aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-                   {% if is_active %}aria-current="page"{% endif %}
-                   role="listitem">
-                  
-                  <div class="slider-card-icon">
-                    <i class="fas fa-tag" aria-hidden="true"></i>
-                  </div>
-                  
-                  <div class="slider-card-name">{{ category.name }}</div>
-                  
-                  {% if category.description %}
-                    <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
-                  {% endif %}
-                  
-                  <div class="slider-card-count">
-                    <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
-                  </div>
-                </a>
-              {% endwith %}
-            {% endif %}
-            
-          {% endwith %}
+      {% with ad_count=ad_counts|get_item:category.id|default:0 %}
+        {% with is_active=active_category_slug == category.slug %}
+          
+          <!-- Determine accent color and icon -->
+          {% if 'leisure' in category.slug|lower or 'اوقات' in category.name or 'فراغت' in category.name %}
+            {% with accent_color="#5E9CA0" icon_class="fas fa-calendar-alt" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'legal' in category.slug|lower or 'finance' in category.slug|lower or 'حقوقی' in category.name or 'مالی' in category.name %}
+            {% with accent_color="#7B6DAA" icon_class="fas fa-gavel" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'health' in category.slug|lower or 'سلامت' in category.name or 'رفاه' in category.name %}
+            {% with accent_color="#7AAE7A" icon_class="fas fa-heart" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'food' in category.slug|lower or 'غذا' in category.name or 'رستوران' in category.name %}
+            {% with accent_color="#C28C5C" icon_class="fas fa-utensils" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'housing' in category.slug|lower or 'مسکن' in category.name %}
+            {% with accent_color="#6C8FBF" icon_class="fas fa-home" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'home-items' in category.slug|lower or 'وسایل-منزل' in category.slug|lower or 'وسایل منزل' in category.name %}
+            {% with accent_color="#9A8F7A" icon_class="fas fa-couch" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'vehicles' in category.slug|lower or 'وسایل-نقلیه' in category.slug|lower or 'وسایل نقلیه' in category.name %}
+            {% with accent_color="#7A7F8C" icon_class="fas fa-car" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% elif 'work' in category.slug|lower or 'کار' in category.name or 'خدمات' in category.name %}
+            {% with accent_color="#7C9AA6" icon_class="fas fa-briefcase" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% else %}
+            {% with accent_color="#7C9AA6" icon_class="fas fa-tag" %}
+              <a href="{% url 'ads:ads_by_category' category.slug %}" 
+                 data-ads-card
+                 data-ads-card-index="{{ forloop.counter0 }}"
+                 class="slider-card"
+                 style="--accent: {{ accent_color }};"
+                 aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
+                 {% if is_active %}aria-current="page"{% endif %}
+                 role="listitem">
+                
+                <div class="slider-card-icon">
+                  <i class="{{ icon_class }}" aria-hidden="true"></i>
+                </div>
+                
+                <div class="slider-card-name">{{ category.name }}</div>
+                
+                {% if category.description %}
+                  <div class="slider-card-description">{{ category.description|truncatewords:15 }}</div>
+                {% endif %}
+                
+                <div class="slider-card-count">
+                  <span class="slider-card-count-badge">{{ ad_count }} آگهی</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% endif %}
+          
         {% endwith %}
       {% endwith %}
     {% empty %}
@@ -300,4 +290,3 @@
     {% endfor %}
   </div>
 </div>
-
