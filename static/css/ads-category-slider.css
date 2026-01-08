@@ -197,12 +197,11 @@
 /* Hide thumbnail, description, button in collapsed state */
 .ads-category-slider .ads-project-card__thumb,
 .ads-category-slider .ads-project-card__desc,
-.ads-category-slider .ads-project-card__btn,
 .ads-category-slider .ads-project-card__meta {
-  display: none !important;
+  display: none;
 }
 
-/* Ensure button is hidden in closed cards */
+/* Hide button only in closed cards (not active) */
 .ads-category-slider .ads-project-card:not([active]) .ads-project-card__btn {
   display: none !important;
   visibility: hidden;
