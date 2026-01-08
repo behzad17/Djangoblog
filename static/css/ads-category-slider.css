@@ -1,0 +1,402 @@
+/**
+ * Ads Category Slider - Center-Mode Category Navigation
+ * 
+ * Scoped under .ads-category-slider wrapper to prevent conflicts.
+ * No global selectors (body, *, :root).
+ * RTL-compatible, accessible, performant.
+ */
+
+/* ========================================
+   ROOT CONTAINER
+   ======================================== */
+
+.ads-category-slider {
+  position: relative;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+/* ========================================
+   TRACK CONTAINER (Scrollable)
+   ======================================== */
+
+.ads-category-slider [data-ads-track] {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 50%; /* Center snap point */
+}
+
+.ads-category-slider [data-ads-track]::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Fallback: Grid layout when JS is disabled */
+.ads-category-slider [data-ads-track].slider-track-fallback {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  overflow: visible;
+  scroll-snap-type: none;
+  scroll-padding: 0;
+}
+
+/* Enhanced: Slider mode when JS is enabled */
+.ads-category-slider.js-enabled [data-ads-track].slider-track-fallback {
+  display: flex;
+  overflow-x: auto;
+  grid-template-columns: none;
+}
+
+/* ========================================
+   CATEGORY CARDS
+   ======================================== */
+
+.ads-category-slider [data-ads-card] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  position: relative;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--pv-bg-card, #FFFFFF);
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px var(--pv-shadow-soft, rgba(0, 0, 0, 0.1));
+}
+
+/* Collapsed state (side cards) */
+.ads-category-slider [data-ads-card]:not(.is-center) {
+  width: 120px;
+  opacity: 0.7;
+  transform: scale(0.9);
+}
+
+/* Center state (expanded card) */
+.ads-category-slider [data-ads-card].is-center {
+  width: 200px;
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 8px 24px var(--pv-shadow-medium, rgba(0, 0, 0, 0.15));
+  border-color: var(--accent, #7C9AA6);
+  z-index: 10;
+}
+
+/* Active category (current page) */
+.ads-category-slider [data-ads-card][aria-current="page"] {
+  border-color: var(--accent, #7C9AA6);
+  box-shadow: 0 4px 16px var(--pv-shadow-medium, rgba(0, 0, 0, 0.15));
+}
+
+/* Focus state */
+.ads-category-slider [data-ads-card]:focus-visible {
+  outline: 3px solid var(--pv-cta-ask, #3498DB);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+/* Hover state */
+@media (hover: hover) {
+  .ads-category-slider [data-ads-card]:hover:not(.is-center) {
+    opacity: 0.85;
+    transform: scale(0.95);
+  }
+  
+  .ads-category-slider [data-ads-card].is-center:hover {
+    box-shadow: 0 12px 32px var(--pv-shadow-strong, rgba(0, 0, 0, 0.2));
+  }
+}
+
+/* ========================================
+   CARD CONTENT
+   ======================================== */
+
+.ads-category-slider [data-ads-card] .slider-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #FFD288;
+  border: 2px solid color-mix(in srgb, var(--accent, #7C9AA6) 25%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px var(--pv-shadow-soft, rgba(0, 0, 0, 0.1));
+  transition: all 0.3s ease;
+}
+
+.ads-category-slider [data-ads-card].is-center .slider-card-icon {
+  width: 72px;
+  height: 72px;
+  border-width: 3px;
+  border-color: var(--accent, #7C9AA6);
+  box-shadow: 0 4px 12px var(--pv-shadow-medium, rgba(0, 0, 0, 0.15));
+}
+
+.ads-category-slider [data-ads-card] .slider-card-icon i {
+  font-size: 1.5rem;
+  color: color-mix(in srgb, var(--accent, #7C9AA6) 70%, var(--pv-text-main, #2C2C2C));
+  transition: all 0.3s ease;
+}
+
+.ads-category-slider [data-ads-card].is-center .slider-card-icon i {
+  font-size: 2rem;
+  color: var(--accent, #7C9AA6);
+}
+
+.ads-category-slider [data-ads-card] .slider-card-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--pv-text-main, #2C2C2C);
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+}
+
+.ads-category-slider [data-ads-card].is-center .slider-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent, #7C9AA6);
+}
+
+.ads-category-slider [data-ads-card] .slider-card-description {
+  font-size: 0.75rem;
+  color: var(--pv-text-muted, #6B7280);
+  text-align: center;
+  line-height: 1.4;
+  margin-top: 0.5rem;
+  display: none; /* Hidden in collapsed state */
+}
+
+.ads-category-slider [data-ads-card].is-center .slider-card-description {
+  display: block; /* Visible in center state */
+}
+
+.ads-category-slider [data-ads-card] .slider-card-count {
+  font-size: 0.7rem;
+  color: var(--pv-text-muted, #6B7280);
+  text-align: center;
+  margin-top: 0.25rem;
+  display: none; /* Hidden in collapsed state */
+}
+
+.ads-category-slider [data-ads-card].is-center .slider-card-count {
+  display: block; /* Visible in center state */
+}
+
+.ads-category-slider [data-ads-card] .slider-card-count-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--accent, #7C9AA6);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* ========================================
+   NAVIGATION BUTTONS
+   ======================================== */
+
+.ads-category-slider [data-ads-prev],
+.ads-category-slider [data-ads-next] {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--pv-text-main, #2C2C2C);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 20;
+  user-select: none;
+  -webkit-user-select: none;
+  border: none;
+  padding: 0;
+}
+
+.ads-category-slider [data-ads-prev]:hover,
+.ads-category-slider [data-ads-next]:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ads-category-slider [data-ads-prev]:active,
+.ads-category-slider [data-ads-next]:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.ads-category-slider [data-ads-prev]:focus-visible,
+.ads-category-slider [data-ads-next]:focus-visible {
+  outline: 3px solid var(--pv-cta-ask, #3498DB);
+  outline-offset: 2px;
+}
+
+.ads-category-slider [data-ads-prev]:disabled,
+.ads-category-slider [data-ads-next]:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* RTL: Prev button on right, Next on left */
+.ads-category-slider [data-ads-prev] {
+  right: 10px;
+}
+
+.ads-category-slider [data-ads-next] {
+  left: 10px;
+}
+
+/* RTL layout adjustments */
+[dir="rtl"] .ads-category-slider [data-ads-prev] {
+  right: auto;
+  left: 10px;
+}
+
+[dir="rtl"] .ads-category-slider [data-ads-next] {
+  left: auto;
+  right: 10px;
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-category-slider * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .ads-category-slider [data-ads-track] {
+    scroll-behavior: auto;
+  }
+}
+
+/* ========================================
+   RESPONSIVE: TABLET (768px - 991px)
+   ======================================== */
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .ads-category-slider [data-ads-card]:not(.is-center) {
+    width: 140px;
+  }
+  
+  .ads-category-slider [data-ads-card].is-center {
+    width: 220px;
+  }
+  
+  .ads-category-slider [data-ads-prev],
+  .ads-category-slider [data-ads-next] {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE: MOBILE (<768px)
+   ======================================== */
+
+@media (max-width: 767px) {
+  .ads-category-slider {
+    margin: 1.5rem 0;
+  }
+  
+  /* Stack cards vertically on mobile */
+  .ads-category-slider [data-ads-track] {
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
+    max-height: 600px;
+    scroll-snap-type: y mandatory;
+    scroll-padding: 0;
+    gap: 1rem;
+  }
+  
+  .ads-category-slider [data-ads-card] {
+    width: 100% !important;
+    max-width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
+    scroll-snap-align: start;
+  }
+  
+  .ads-category-slider [data-ads-card] .slider-card-icon {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .ads-category-slider [data-ads-card] .slider-card-icon i {
+    font-size: 1.75rem;
+  }
+  
+  .ads-category-slider [data-ads-card] .slider-card-name {
+    font-size: 0.9rem;
+  }
+  
+  .ads-category-slider [data-ads-card] .slider-card-description {
+    display: block; /* Always show on mobile */
+  }
+  
+  .ads-category-slider [data-ads-card] .slider-card-count {
+    display: block; /* Always show on mobile */
+  }
+  
+  /* Hide navigation buttons on mobile */
+  .ads-category-slider [data-ads-prev],
+  .ads-category-slider [data-ads-next] {
+    display: none;
+  }
+}
+
+/* ========================================
+   FALLBACK: NO-JS GRID LAYOUT
+   ======================================== */
+
+.ads-category-slider [data-ads-track].slider-track-fallback {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  overflow: visible;
+  scroll-snap-type: none;
+  scroll-padding: 0;
+}
+
+.ads-category-slider [data-ads-track].slider-track-fallback [data-ads-card] {
+  width: 100% !important;
+  max-width: 100%;
+  opacity: 1 !important;
+  transform: none !important;
+  scroll-snap-align: none;
+}
+
+.ads-category-slider [data-ads-track].slider-track-fallback [data-ads-card] .slider-card-description,
+.ads-category-slider [data-ads-track].slider-track-fallback [data-ads-card] .slider-card-count {
+  display: block; /* Show all details in fallback */
+}
+

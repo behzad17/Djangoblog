@@ -1,4 +1,10 @@
-{% extends "base.html" %} {% load ads_extras %} {% block content %}
+{% extends "base.html" %} {% load ads_extras %} {% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ads-category-slider.css' %}?v={% now 'U' %}">
+{% endblock extra_css %}
+
+{% block content %}
 <!-- Hero Section -->
 <section
   class="hero-section text-white mb-4 ads-hero-section"
@@ -29,47 +35,11 @@
 </section>
 
 <div class="container py-4">
-  <!-- Category Icons Row - Circular Design -->
-  <div class="ads-categories">
-    <div class="ads-categories-track mb-4">
-      {% for category in categories %}
-      <a 
-        href="{% url 'ads:ads_by_category' category.slug %}" 
-        class="ads-category-item {% if active_category_slug == category.slug %}is-active{% endif %}"
-        style="--accent: {% if 'leisure' in category.slug|lower or 'اوقات' in category.name or 'فراغت' in category.name %}#5E9CA0{% elif 'legal' in category.slug|lower or 'finance' in category.slug|lower or 'حقوقی' in category.name or 'مالی' in category.name %}#7B6DAA{% elif 'health' in category.slug|lower or 'سلامت' in category.name or 'رفاه' in category.name %}#7AAE7A{% elif 'food' in category.slug|lower or 'غذا' in category.name or 'رستوران' in category.name %}#C28C5C{% elif 'housing' in category.slug|lower or 'مسکن' in category.name %}#6C8FBF{% elif 'home-items' in category.slug|lower or 'وسایل-منزل' in category.slug|lower or 'وسایل منزل' in category.name %}#9A8F7A{% elif 'vehicles' in category.slug|lower or 'وسایل-نقلیه' in category.slug|lower or 'وسایل نقلیه' in category.name %}#7A7F8C{% else %}#7C9AA6{% endif %};"
-        aria-label="Browse {{ category.name }} category ({{ ad_counts|get_item:category.id|default:0 }} ads)"
-      >
-        <div class="ads-category-circle">
-          <span class="ads-category-icon">
-            {% if "leisure" in category.slug|lower or "اوقات" in category.name or "فراغت" in category.name %}
-              <i class="fas fa-calendar-alt"></i>
-            {% elif "legal" in category.slug|lower or "finance" in category.slug|lower or "حقوقی" in category.name or "مالی" in category.name %}
-              <i class="fas fa-gavel"></i>
-            {% elif "health" in category.slug|lower or "سلامت" in category.name or "رفاه" in category.name %}
-              <i class="fas fa-heart"></i>
-            {% elif "food" in category.slug|lower or "غذا" in category.name or "رستوران" in category.name %}
-              <i class="fas fa-utensils"></i>
-            {% elif "housing" in category.slug|lower or "مسکن" in category.name %}
-              <i class="fas fa-home"></i>
-            {% elif "home-items" in category.slug|lower or "وسایل-منزل" in category.slug|lower or "وسایل منزل" in category.name %}
-              <i class="fas fa-couch"></i>
-            {% elif "vehicles" in category.slug|lower or "وسایل-نقلیه" in category.slug|lower or "وسایل نقلیه" in category.name %}
-              <i class="fas fa-car"></i>
-            {% elif "work" in category.slug|lower or "کار" in category.name or "خدمات" in category.name %}
-              <i class="fas fa-briefcase"></i>
-            {% else %}
-              <i class="fas fa-tag"></i>
-            {% endif %}
-          </span>
-        </div>
-        <div class="ads-category-title">{{ category.name }}</div>
-      </a>
-      {% empty %}
-      <div class="col-12 text-center">
-        <p class="text-muted">هنوز دسته‌بندی راهنمایی تعریف نشده است.</p>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+  <!-- Category Slider - Center-Mode Navigation -->
+  {% include 'ads/includes/_category_slider.html' with categories=categories ad_counts=ad_counts active_category_slug=active_category_slug %}
 </div>
 {% endblock content %}
+
+{% block extras %}
+<script src="{% static 'js/ads-category-slider.js' %}" defer></script>
+{% endblock extras %}
