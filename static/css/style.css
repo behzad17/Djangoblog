@@ -6677,10 +6677,10 @@ body {
   justify-content: space-between;
 }
 
-.peyvand-faq-answer {
+  .peyvand-faq-answer {
   padding: 0 1rem;
   background-color: var(--pv-bg-card, #FFFFFF);
-}
+  }
 
 .peyvand-faq-answer[hidden] {
   display: none;
