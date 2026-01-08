@@ -13,8 +13,8 @@
 .ads-category-slider {
   --gap: 1rem;
   --speed: 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --closed: 5.5rem;
-  --open: 24rem;
+  --closed: 4.4rem;
+  --open: 19.2rem;
   --accent: #00A693;
 }
 
@@ -115,7 +115,7 @@
 .ads-category-slider .ads-project-card {
   position: relative;
   flex: 0 0 var(--closed);
-  height: 21rem;
+  height: 16.8rem;
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
@@ -214,7 +214,7 @@
 .ads-category-slider .ads-project-card[active] .ads-project-card__title {
   writing-mode: horizontal-tb;
   transform: none;
-  font-size: 1.8rem;
+  font-size: 1.44rem;
   margin-bottom: 0.5rem;
   position: static;
   left: auto;
@@ -361,12 +361,12 @@
 
 @media (min-width: 768px) and (max-width: 991px) {
   .ads-category-slider {
-    --closed: 5rem;
-    --open: 21rem;
+    --closed: 4rem;
+    --open: 16.8rem;
   }
   
   .ads-category-slider .ads-project-card {
-    height: 19rem;
+    height: 15.2rem;
   }
   
   .ads-category-slider .ads-project-card__thumb {
@@ -453,7 +453,7 @@
   }
 
   .ads-category-slider .ads-project-card[active] .ads-project-card__title {
-    font-size: 1.35rem;
+    font-size: 1.08rem;
     margin-bottom: 1rem;
     margin-top: 0;
     width: 100%;
