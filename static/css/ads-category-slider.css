@@ -214,7 +214,7 @@
 .ads-category-slider .ads-project-card[active] .ads-project-card__title {
   writing-mode: horizontal-tb;
   transform: none;
-  font-size: 2.4rem;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
   position: static;
   left: auto;
@@ -444,7 +444,7 @@
   }
 
   .ads-category-slider .ads-project-card[active] .ads-project-card__title {
-    font-size: 1.8rem;
+    font-size: 1.35rem;
     margin-bottom: 1rem;
     margin-top: 0;
     width: 100%;
