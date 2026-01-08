@@ -72,10 +72,6 @@
                   <div class="ads-project-card__info">
                     <h3 class="ads-project-card__title">{{ category.name }}</h3>
                     
-                    {% if category.description %}
-                      <p class="ads-project-card__desc">{{ category.description|truncatewords:12 }}</p>
-                    {% endif %}
-                    
                     <div class="ads-project-card__meta">
                       <span class="ads-project-card__count">{{ ad_count }} آگهی</span>
                     </div>

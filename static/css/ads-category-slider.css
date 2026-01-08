@@ -13,8 +13,8 @@
 .ads-category-slider {
   --gap: 1rem;
   --speed: 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --closed: 5rem;
-  --open: 30rem;
+  --closed: 4rem;
+  --open: 24rem;
   --accent: #00A693;
 }
 
@@ -115,7 +115,7 @@
 .ads-category-slider .ads-project-card {
   position: relative;
   flex: 0 0 var(--closed);
-  height: 26rem;
+  height: 21rem;
   border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
@@ -338,12 +338,12 @@
 
 @media (min-width: 768px) and (max-width: 991px) {
   .ads-category-slider {
-    --closed: 4.5rem;
-    --open: 26rem;
+    --closed: 3.6rem;
+    --open: 21rem;
   }
   
   .ads-category-slider .ads-project-card {
-    height: 24rem;
+    height: 19rem;
   }
   
   .ads-category-slider .ads-project-card__thumb {
@@ -470,10 +470,6 @@
 /* ========================================
    RTL ADJUSTMENTS
    ======================================== */
-
-[dir="rtl"] .ads-category-slider .ads-project-card__title {
-  /* RTL: Keep vertical text but adjust if needed */
-}
 
 [dir="rtl"] .ads-category-slider .ads-project-card[active] .ads-project-card__content {
   /* RTL: Content flows right-to-left */
