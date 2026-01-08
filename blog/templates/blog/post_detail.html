@@ -36,20 +36,20 @@
 {% endblock structured_data %}
 {% block content %}
 <!-- Breadcrumbs -->
-<div class="container">
+  <div class="container">
   <nav aria-label="breadcrumb" class="mb-3 pt-3">
-    <ol class="breadcrumb small text-muted mb-0">
-      <li class="breadcrumb-item">
-        <a href="{% url 'home' %}" class="text-muted text-decoration-none">خانه</a>
-      </li>
-      {% if post.category %}
-      <li class="breadcrumb-item">
-        <a href="{% url 'category_posts' post.category.slug %}" class="text-muted text-decoration-none">{{ post.category.name }}</a>
-      </li>
-      {% endif %}
-      <li class="breadcrumb-item active text-muted" aria-current="page">{{ post.title|truncatewords:5 }}</li>
-    </ol>
-  </nav>
+      <ol class="breadcrumb small text-muted mb-0">
+        <li class="breadcrumb-item">
+          <a href="{% url 'home' %}" class="text-muted text-decoration-none">خانه</a>
+        </li>
+        {% if post.category %}
+        <li class="breadcrumb-item">
+          <a href="{% url 'category_posts' post.category.slug %}" class="text-muted text-decoration-none">{{ post.category.name }}</a>
+        </li>
+        {% endif %}
+        <li class="breadcrumb-item active text-muted" aria-current="page">{{ post.title|truncatewords:5 }}</li>
+      </ol>
+    </nav>
 </div>
 
 <!-- Post Hero Card -->
@@ -66,97 +66,97 @@
             <span class="post-hero-date">{{ post.created_on }}</span>
           </p>
           
-          {% if post.category %}
+        {% if post.category %}
           <div class="post-hero-category mb-3">
-            <a
-              href="{% url 'category_posts' post.category.slug %}"
-              class="category-badge-large"
-            >
-              <i class="fas fa-tag ms-2"></i>{{ post.category.name }}
-            </a>
-          </div>
-          {% endif %}
+          <a
+            href="{% url 'category_posts' post.category.slug %}"
+            class="category-badge-large"
+          >
+            <i class="fas fa-tag ms-2"></i>{{ post.category.name }}
+          </a>
+        </div>
+        {% endif %}
           
           <!-- Action Buttons (Edit/Delete) -->
           {% if user.is_authenticated and user == post.author or user.is_authenticated and user.is_staff %}
           <div class="post-hero-actions">
-            <a
-              href="{% url 'edit_post' post.slug %}"
+          <a
+            href="{% url 'edit_post' post.slug %}"
               class="btn btn-sm btn-primary"
-            >
+          >
               <i class="fas fa-edit ms-1"></i> ویرایش
-            </a>
+          </a>
             {% if not post.is_deleted %}
-            <a
-              href="{% url 'delete_post' post.slug %}"
-              class="btn btn-sm btn-outline-danger"
-            >
+          <a
+            href="{% url 'delete_post' post.slug %}"
+            class="btn btn-sm btn-outline-danger"
+          >
               <i class="fas fa-trash ms-1"></i> حذف
-            </a>
+          </a>
             {% endif %}
-          </div>
-          {% endif %}
+        </div>
+        {% endif %}
           
           <!-- Like/Favorite UI -->
           <div class="post-hero-interactions">
-            <!-- Favorite Button -->
+          <!-- Favorite Button -->
+          {% if user.is_authenticated %}
+          <form
+            action="{% url 'add_to_favorites' post.id %}"
+            method="POST"
+            class="d-inline"
+          >
+            {% csrf_token %}
+            {% if not is_favorited %}
+              <button type="submit" class="btn btn-sm btn-success">
+                <i class="fas fa-heart ms-1"></i> افزودن به علاقه‌مندی‌ها
+            </button>
+            {% else %}
+              <button type="button" class="btn btn-sm btn-secondary" disabled>
+                <i class="fas fa-heart ms-1"></i> افزوده شده
+            </button>
+            {% endif %}
+          </form>
+            <span class="post-hero-count me-2">{{ post.favorite_count }}</span>
+          {% else %}
+            <a href="{% url 'account_login' %}" class="btn btn-sm btn-primary">
+              <i class="fas fa-heart ms-1"></i> ورود برای افزودن به علاقه‌مندی‌ها
+            </a>
+          {% endif %}
+
+          <!-- Like Button -->
+            <div class="like-section d-inline-block">
             {% if user.is_authenticated %}
             <form
-              action="{% url 'add_to_favorites' post.id %}"
+              action="{% url 'like_post' post.id %}"
               method="POST"
               class="d-inline"
             >
               {% csrf_token %}
-              {% if not is_favorited %}
-              <button type="submit" class="btn btn-sm btn-success">
-                <i class="fas fa-heart ms-1"></i> افزودن به علاقه‌مندی‌ها
+              <button
+                type="submit"
+                class="btn-like {% if is_liked %}liked{% endif %}"
+                title="{% if is_liked %}حذف لایک{% else %}لایک{% endif %} این پست"
+              >
+                <i
+                  class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"
+                ></i>
+                <span class="like-count">{{ post.like_count }}</span>
               </button>
-              {% else %}
-              <button type="button" class="btn btn-sm btn-secondary" disabled>
-                <i class="fas fa-heart ms-1"></i> افزوده شده
-              </button>
-              {% endif %}
             </form>
-            <span class="post-hero-count me-2">{{ post.favorite_count }}</span>
             {% else %}
-            <a href="{% url 'account_login' %}" class="btn btn-sm btn-primary">
-              <i class="fas fa-heart ms-1"></i> ورود برای افزودن به علاقه‌مندی‌ها
+            <a
+              href="{% url 'account_login' %}"
+              class="btn-like"
+              title="ورود برای لایک"
+            >
+              <i class="far fa-heart"></i>
+              <span class="like-count">{{ post.like_count }}</span>
             </a>
             {% endif %}
-
-            <!-- Like Button -->
-            <div class="like-section d-inline-block">
-              {% if user.is_authenticated %}
-              <form
-                action="{% url 'like_post' post.id %}"
-                method="POST"
-                class="d-inline"
-              >
-                {% csrf_token %}
-                <button
-                  type="submit"
-                  class="btn-like {% if is_liked %}liked{% endif %}"
-                  title="{% if is_liked %}حذف لایک{% else %}لایک{% endif %} این پست"
-                >
-                  <i
-                    class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"
-                  ></i>
-                  <span class="like-count">{{ post.like_count }}</span>
-                </button>
-              </form>
-              {% else %}
-              <a
-                href="{% url 'account_login' %}"
-                class="btn-like"
-                title="ورود برای لایک"
-              >
-                <i class="far fa-heart"></i>
-                <span class="like-count">{{ post.like_count }}</span>
-              </a>
-              {% endif %}
-            </div>
           </div>
         </div>
+      </div>
       </div>
       
       <!-- Image Area (Left on desktop, Bottom on mobile) -->
