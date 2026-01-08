@@ -210,10 +210,11 @@
 /* Active state: Horizontal layout with all content */
 .ads-category-slider .ads-project-card[active] .ads-project-card__content {
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   padding: 1.2rem 2rem;
   gap: 1.1rem;
   background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.9) 100%);
+  overflow: visible;
 }
 
 .ads-category-slider .ads-project-card[active] .ads-project-card__title {
@@ -227,7 +228,8 @@
   width: 100%;
   max-width: 100%;
   height: auto;
-  line-height: 1.3;
+  min-height: auto;
+  line-height: 1.4;
   word-wrap: break-word;
   overflow-wrap: break-word;
   display: -webkit-box;
@@ -237,6 +239,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   hyphens: auto;
+  white-space: normal;
+  max-height: 4em;
 }
 
 .ads-category-slider .ads-project-card[active] .ads-project-card__thumb,
@@ -254,6 +258,7 @@
   min-width: 0;
   width: 100%;
   max-width: 100%;
+  overflow: visible;
 }
 
 .ads-category-slider .ads-project-card__thumb {
