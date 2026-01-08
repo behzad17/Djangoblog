@@ -42,8 +42,6 @@
     
     {% for category in categories %}
       {% with ad_count=ad_counts|get_item:category.id|default:0 %}
-        {% with is_active=active_category_slug == category.slug %}
-          
           <!-- Determine accent color and icon, then render card -->
           {% if 'leisure' in category.slug|lower or 'اوقات' in category.name or 'فراغت' in category.name %}
             <a href="{% url 'ads:ads_by_category' category.slug %}" 
@@ -52,7 +50,7 @@
                class="slider-card"
                style="--accent: #5E9CA0;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -77,7 +75,7 @@
                class="slider-card"
                style="--accent: #7B6DAA;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -102,7 +100,7 @@
                class="slider-card"
                style="--accent: #7AAE7A;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -127,7 +125,7 @@
                class="slider-card"
                style="--accent: #C28C5C;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -152,7 +150,7 @@
                class="slider-card"
                style="--accent: #6C8FBF;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -177,7 +175,7 @@
                class="slider-card"
                style="--accent: #9A8F7A;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -202,7 +200,7 @@
                class="slider-card"
                style="--accent: #7A7F8C;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -227,7 +225,7 @@
                class="slider-card"
                style="--accent: #7C9AA6;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -252,7 +250,7 @@
                class="slider-card"
                style="--accent: #7C9AA6;"
                aria-label="Browse {{ category.name }} category ({{ ad_count }} ads)"
-               {% if is_active %}aria-current="page"{% endif %}
+               {% if active_category_slug == category.slug %}aria-current="page"{% endif %}
                role="listitem">
               
               <div class="slider-card-icon">
@@ -270,8 +268,6 @@
               </div>
             </a>
           {% endif %}
-          
-        {% endwith %}
       {% endwith %}
     {% empty %}
       <div class="col-12 text-center">
