@@ -440,6 +440,17 @@
     margin-right: auto;
   }
 
+  /* Center title in closed cards on mobile */
+  .ads-category-slider .ads-project-card:not([active]) .ads-project-card__title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin-right: 0;
+    width: auto;
+    text-align: center;
+  }
+
   .ads-category-slider .ads-project-card__desc,
   .ads-category-slider .ads-project-card__btn,
   .ads-category-slider .ads-project-card__meta {
