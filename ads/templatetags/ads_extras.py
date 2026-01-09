@@ -65,69 +65,113 @@ def category_image(category):
             return None
 
         # Map category slug/name to image filename
-        # Based on images: car-naghlie.jpg, ghaza-farhang.jpg, etc.
+        # Based on actual database categories and images
+        # Priority: exact slug > exact name > keyword match (specific)
         image_map = {
-            # By slug (English)
+            # Exact slug matches (from database)
             'vehicles': 'car-naghlie.jpg',
-            'car-naghlie': 'car-naghlie.jpg',
             'housing': 'maskan-zendegi.jpg',
-            'maskan': 'maskan-zendegi.jpg',
-            'maskan-zendegi': 'maskan-zendegi.jpg',
             'work-services': 'kar-herfeh.jpg',
-            'work': 'kar-herfeh.jpg',
-            'kar-herfeh': 'kar-herfeh.jpg',
             'leisure': 'oghate-feraghat.jpg',
-            'oghate-feraghat': 'oghate-feraghat.jpg',
             'food-restaurant': 'ghaza-farhang.jpg',
-            'food': 'ghaza-farhang.jpg',
-            'ghaza-farhang': 'ghaza-farhang.jpg',
             'health-welfare': 'salamat-refah.jpg',
-            'health': 'salamat-refah.jpg',
-            'salamat-refah': 'salamat-refah.jpg',
             'home-appliances': 'khane-vasayel.jpg',
-            'home-items': 'khane-vasayel.jpg',
-            'khane-vasayel': 'khane-vasayel.jpg',
             'legal-financial': 'hoghooghi-mali.jpg',
-            'legal': 'hoghooghi-mali.jpg',
-            'hoghooghi-mali': 'hoghooghi-mali.jpg',
-            # By name (Persian)
-            'وسایل نقلیه': 'car-naghlie.jpg',
-            'مسکن': 'maskan-zendegi.jpg',
-            'کار و خدمات': 'kar-herfeh.jpg',
-            'اوقات فراغت': 'oghate-feraghat.jpg',
-            'غذا و رستوران': 'ghaza-farhang.jpg',
-            'سلامت و رفاه': 'salamat-refah.jpg',
-            'وسایل منزل': 'khane-vasayel.jpg',
-            'حقوقی و مالی': 'hoghooghi-mali.jpg',
-            # Additional categories (if they exist)
-            'زبان و آموزش': 'zaban-amozesh.jpg',
-            'language-education': 'zaban-amozesh.jpg',
-            'zaban-amozesh': 'zaban-amozesh.jpg',
-            'خدمات دیجیتال': 'khademat-digital.jpg',
-            'digital-services': 'khademat-digital.jpg',
-            'khademat-digital': 'khademat-digital.jpg',
+            # آموزش، زبان و یادگیری
+            'mozsh-zbn-o-dr': 'zaban-amozesh.jpg',
+            # فناوری و خدمات دیجیتال
+            'fnor-o-khdmt-dgtl': 'khademat-digital.jpg',
+            # Exact name matches (Persian - from database)
+            # رفت‌ وآمد و وسایل نقلیه
+            'رفت‌ وآمد و وسایل نقلیه': 'car-naghlie.jpg',
+            # مسکن و زندگی روزمره
+            'مسکن و زندگی روزمره': 'maskan-zendegi.jpg',
+            # کار و همراهی حرفه‌ای
+            'کار و همراهی حرفه‌ای': 'kar-herfeh.jpg',
+            # اوقات فراغت و زندگی اجتماعی
+            'اوقات فراغت و زندگی اجتماعی': 'oghate-feraghat.jpg',
+            # غذا، طعم و فرهنگ
+            'غذا، طعم و فرهنگ': 'ghaza-farhang.jpg',
+            # سلامت، رفاه و مراقبت
+            'سلامت، رفاه و مراقبت': 'salamat-refah.jpg',
+            # خانه و وسایل زندگی
+            'خانه و وسایل زندگی': 'khane-vasayel.jpg',
+            # خدمات حقوقی و مالی سوئد
+            'خدمات حقوقی و مالی سوئد': 'hoghooghi-mali.jpg',
+            # آموزش، زبان و یادگیری
+            'آموزش، زبان و یادگیری': 'zaban-amozesh.jpg',
+            # فناوری و خدمات دیجیتال
+            'فناوری و خدمات دیجیتال': 'khademat-digital.jpg',
         }
 
-        # Try slug first
+        # Keyword mapping for partial matches (ordered by priority)
+        keyword_map = {
+            # Vehicles
+            'vehicles': 'car-naghlie.jpg',
+            'نقلیه': 'car-naghlie.jpg',
+            # Housing
+            'housing': 'maskan-zendegi.jpg',
+            'مسکن': 'maskan-zendegi.jpg',
+            # Work
+            'work-services': 'kar-herfeh.jpg',
+            'work': 'kar-herfeh.jpg',
+            'کار': 'kar-herfeh.jpg',
+            # Leisure
+            'leisure': 'oghate-feraghat.jpg',
+            'فراغت': 'oghate-feraghat.jpg',
+            # Food
+            'food-restaurant': 'ghaza-farhang.jpg',
+            'food': 'ghaza-farhang.jpg',
+            'غذا': 'ghaza-farhang.jpg',
+            # Health
+            'health-welfare': 'salamat-refah.jpg',
+            'health': 'salamat-refah.jpg',
+            'سلامت': 'salamat-refah.jpg',
+            # Home
+            'home-appliances': 'khane-vasayel.jpg',
+            'home': 'khane-vasayel.jpg',
+            'خانه': 'khane-vasayel.jpg',
+            # Legal
+            'legal-financial': 'hoghooghi-mali.jpg',
+            'legal': 'hoghooghi-mali.jpg',
+            'حقوقی': 'hoghooghi-mali.jpg',
+            # Education/Language
+            'zaban': 'zaban-amozesh.jpg',
+            'amozesh': 'zaban-amozesh.jpg',
+            'آموزش': 'zaban-amozesh.jpg',
+            'زبان': 'zaban-amozesh.jpg',
+            # Digital
+            'digital': 'khademat-digital.jpg',
+            'دیجیتال': 'khademat-digital.jpg',
+            'فناوری': 'khademat-digital.jpg',
+        }
+
+        # Try exact slug match first
         if hasattr(category, 'slug') and category.slug:
-            slug_lower = category.slug.lower()
+            slug_lower = category.slug.lower().strip()
             if slug_lower in image_map:
                 return image_map[slug_lower]
 
-        # Try name
+        # Try exact name match
         if hasattr(category, 'name') and category.name:
             name_str = str(category.name).strip()
             if name_str in image_map:
                 return image_map[name_str]
 
-            # Try partial match on slug keywords
-            if hasattr(category, 'slug') and category.slug:
-                slug_lower = category.slug.lower()
-                for key, value in image_map.items():
-                    if key in slug_lower or slug_lower in key:
-                        return value
+        # Try keyword matching (more specific, check slug first, then name)
+        if hasattr(category, 'slug') and category.slug:
+            slug_lower = category.slug.lower().strip()
+            for keyword, image_file in keyword_map.items():
+                if keyword in slug_lower:
+                    return image_file
 
-        # Default fallback
+        if hasattr(category, 'name') and category.name:
+            name_str = str(category.name).strip()
+            for keyword, image_file in keyword_map.items():
+                if keyword in name_str:
+                    return image_file
+
+        # Default fallback (should not happen if mapping is complete)
         return 'car-naghlie.jpg'
     except Exception:
         return None
