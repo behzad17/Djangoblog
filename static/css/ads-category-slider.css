@@ -194,8 +194,7 @@
   height: auto;
 }
 
-/* Hide thumbnail, description, button in collapsed state */
-.ads-category-slider .ads-project-card__thumb,
+/* Hide description, button in collapsed state */
 .ads-category-slider .ads-project-card__desc,
 .ads-category-slider .ads-project-card__meta {
   display: none;
@@ -209,10 +208,11 @@
 
 /* Active state: Horizontal layout with all content */
 .ads-category-slider .ads-project-card[active] .ads-project-card__content {
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 1.2rem 2rem;
-  gap: 1.1rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+  gap: 1rem;
   background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.9) 100%);
   overflow: visible;
 }
@@ -243,7 +243,6 @@
   max-height: 4em;
 }
 
-.ads-category-slider .ads-project-card[active] .ads-project-card__thumb,
 .ads-category-slider .ads-project-card[active] .ads-project-card__desc,
 .ads-category-slider .ads-project-card[active] .ads-project-card__btn,
 .ads-category-slider .ads-project-card[active] .ads-project-card__meta {
@@ -259,15 +258,6 @@
   width: 100%;
   max-width: 100%;
   overflow: visible;
-}
-
-.ads-category-slider .ads-project-card__thumb {
-  width: 133px;
-  height: 269px;
-  border-radius: 0.45rem;
-  object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  flex-shrink: 0;
 }
 
 .ads-category-slider .ads-project-card__desc {
@@ -384,10 +374,6 @@
     height: 15.2rem;
   }
   
-  .ads-category-slider .ads-project-card__thumb {
-    width: 120px;
-    height: 240px;
-  }
 }
 
 /* ========================================
@@ -454,7 +440,6 @@
     margin-right: auto;
   }
 
-  .ads-category-slider .ads-project-card__thumb,
   .ads-category-slider .ads-project-card__desc,
   .ads-category-slider .ads-project-card__btn,
   .ads-category-slider .ads-project-card__meta {
@@ -481,14 +466,6 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .ads-category-slider .ads-project-card[active] .ads-project-card__thumb {
-    width: 200px;
-    height: 267px;
-    border-radius: 0.35rem;
-    margin-bottom: 1rem;
-    align-self: center;
   }
 
   .ads-category-slider .ads-project-card[active] .ads-project-card__desc {
@@ -553,7 +530,6 @@
   font-size: 1.5rem;
 }
 
-.ads-category-slider:not(.js-enabled) .ads-project-card__thumb,
 .ads-category-slider:not(.js-enabled) .ads-project-card__desc,
 .ads-category-slider:not(.js-enabled) .ads-project-card__btn,
 .ads-category-slider:not(.js-enabled) .ads-project-card__meta {
