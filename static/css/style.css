@@ -1565,7 +1565,7 @@ body {
   padding: 0.75rem 0; /* Reduced padding: 12px top and bottom */
   position: relative; /* Required for splash cursor positioning */
   overflow: hidden; /* Hide particles that go outside */
-  background: #BCD4E6 !important;
+  background: #A4D2E0 !important;
 }
 
 /* Override text-white class in hero sections */
@@ -1599,7 +1599,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #BCD4E6 !important; /* Match homepage hero section background */
+  background: #A4D2E0 !important; /* Match homepage hero section background */
   line-height: 0; /* Remove white space from inline image */
 }
 
@@ -3221,7 +3221,7 @@ body {
 /* Category Page Styles */
 /* Category Hero Section */
 .category-hero-section {
-  background: #BCD4E6 !important;
+  background: #A4D2E0 !important;
   padding: 3rem 0;
   position: relative;
   overflow: hidden;
@@ -6381,7 +6381,7 @@ body {
 
 /* Hero Section */
 .favorites-hero {
-  background: #BCD4E6 !important;
+  background: #A4D2E0 !important;
   position: relative;
   overflow: hidden;
 }
@@ -6425,7 +6425,7 @@ body {
 
 /* Hero Section */
 .member-guide-hero {
-  background: #BCD4E6 !important;
+  background: #A4D2E0 !important;
   position: relative;
   overflow: hidden;
   padding: 0.5rem 0 !important;
