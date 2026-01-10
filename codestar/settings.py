@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'askme',
     'ads',
     'related_links',
+    'accounts',
 ]
 
 SITE_ID = 1

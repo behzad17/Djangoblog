@@ -1,0 +1,92 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block title %}Send Email to Users | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:auth_user_changelist' %}">{% trans 'Users' %}</a>
+    &rsaquo; {% trans 'Send Email' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Send Email to Users</h1>
+
+<div class="module">
+    <h2>Selected Users ({{ user_count }})</h2>
+    <div style="margin: 10px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+        <ul style="margin: 0; padding-left: 20px;">
+            {% for user in users %}
+            <li>
+                <strong>{{ user.username }}</strong>
+                {% if user.email %}
+                    <span style="color: #666;">({{ user.email }})</span>
+                {% else %}
+                    <span style="color: #dc3545;">(no email address)</span>
+                {% endif %}
+                {% if user.first_name or user.last_name %}
+                    - {{ user.first_name }} {{ user.last_name }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    {% if not user_emails %}
+    <div style="margin: 10px 0; padding: 10px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404;">
+        <strong>Warning:</strong> None of the selected users have email addresses. Emails cannot be sent.
+    </div>
+    {% else %}
+    <div style="margin: 10px 0; padding: 10px; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 4px; color: #0c5460;">
+        <strong>Email addresses:</strong> {{ user_emails|join:", " }}
+    </div>
+    {% endif %}
+</div>
+
+<form method="post" id="send-email-form">
+    {% csrf_token %}
+    
+    <div class="module">
+        <h2>Email Content</h2>
+        
+        <fieldset class="module aligned">
+            <div class="form-row">
+                <div>
+                    <label for="id_subject" style="font-weight: bold;">Subject: <span style="color: red;">*</span></label>
+                    <input type="text" name="subject" id="id_subject" value="{{ subject }}" 
+                           style="width: 100%; max-width: 600px; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;"
+                           required>
+                    <p class="help" style="margin-top: 5px; color: #666;">Enter the email subject line.</p>
+                </div>
+            </div>
+            
+            <div class="form-row" style="margin-top: 20px;">
+                <div>
+                    <label for="id_message" style="font-weight: bold;">Message: <span style="color: red;">*</span></label>
+                    <textarea name="message" id="id_message" rows="15" 
+                              style="width: 100%; max-width: 800px; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;"
+                              required>{{ message }}</textarea>
+                    <p class="help" style="margin-top: 5px; color: #666;">Enter the email message. Plain text only.</p>
+                </div>
+            </div>
+        </fieldset>
+        
+        <div class="submit-row" style="margin-top: 20px;">
+            <input type="submit" value="Send Email" class="default" style="background-color: #417690; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+            <a href="{% url 'admin:auth_user_changelist' %}" class="button" style="padding: 10px 20px; margin-left: 10px; text-decoration: none; background-color: #ba2121; color: white; border-radius: 4px; display: inline-block;">Cancel</a>
+        </div>
+    </div>
+</form>
+
+{% if messages %}
+<ul class="messagelist">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
+
