@@ -24,13 +24,13 @@ body {
   font-family: Lato, sans-serif;
   font-size: 1.725rem; /* 15% bigger than 1.5rem (1.5 * 1.15 = 1.725) */
   font-weight: 700;
-  color: var(--pv-cta-services); /* Use CTA Services color token */
+  color: #FECC02 !important;
 }
 
 /* Brand Tagline - Small text under logo */
 .brand-tagline {
   font-size: 1.0164rem; /* 5% bigger than previous (0.968 * 1.05 = 1.0164) */
-  color: var(--pv-cta-services); /* Use CTA Services color token */
+  color: #FECC02 !important;
   font-weight: 500;
   margin-top: -2px;
   line-height: 1;
@@ -63,6 +63,16 @@ body {
   transition: all 0.3s ease;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+/* Home link (خانه) color */
+.navbar-nav .nav-item:first-child .nav-link {
+  color: #FECC02 !important;
+}
+
+.navbar-nav .nav-item:first-child .nav-link:hover,
+.navbar-nav .nav-item:first-child .nav-link.active {
+  color: #FECC02 !important;
 }
 
 .navbar-nav .nav-link:hover {
@@ -100,7 +110,7 @@ body {
   font-family: 'Shabnam', sans-serif;
   font-size: 2.07rem; /* 20% bigger than 1.725rem (1.725 * 1.20 = 2.07) */
   font-weight: 500; /* Shabnam Medium */
-  color: var(--pv-cta-services); /* Use CTA Services color token */
+  color: #FECC02 !important;
   margin-left: 0.2rem; /* Reduced spacing - closer to the line */
   display: inline-block;
 }
@@ -110,7 +120,7 @@ body {
   font-family: Lato, sans-serif;
   font-size: 1.5525rem; /* 10% smaller than base brand (1.725 * 0.9 = 1.5525) */
   font-weight: 700; /* Bold to match brand weight */
-  color: var(--pv-cta-services); /* Use CTA Services color token */
+  color: #FECC02 !important;
   margin-right: 0.5rem; /* Space between Persian and English */
   display: inline-block;
   letter-spacing: 0.05em; /* Slight letter spacing for elegance */
