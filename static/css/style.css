@@ -17,6 +17,7 @@
 
 body {
   background-color: var(--pv-bg-main); /* Use main background token */
+  padding-top: var(--navbar-height); /* Prevent content from going under fixed navbar */
 }
 
 .brand {
@@ -39,12 +40,15 @@ body {
 /* Navbar Background - Dark Blue */
 .navbar {
   background-color: #1B5583 !important;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 /* Navbar Links - Thin Styling */
 .navbar-nav .nav-item {
