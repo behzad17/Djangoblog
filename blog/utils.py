@@ -345,6 +345,66 @@ ALLOWED_PROTOCOLS = ['http', 'https', 'mailto']
 ALLOWED_STYLES = []  # No inline styles allowed for security
 
 
+def convert_plain_text_to_html(text):
+    """
+    Convert plain text with newlines to HTML paragraphs.
+    
+    This handles content stored as plain text (e.g., from Summernote
+    when it wasn't configured to submit HTML, or legacy posts).
+    
+    Security: This function does NOT escape content - bleach.clean() will handle
+    all XSS prevention when the HTML is sanitized.
+    
+    Args:
+        text: Plain text string with newline characters
+        
+    Returns:
+        HTML string with paragraphs wrapped in <p> tags, or original text if already HTML
+    """
+    if not text:
+        return ''
+    
+    # Check if content already contains HTML tags
+    # Look for common HTML tags: <p>, <div>, <br>, <strong>, <em>, <h1-h6>, <ul>, <ol>, <li>, etc.
+    # If HTML tags are found, assume content is already HTML and return as-is
+    html_tag_pattern = r'<[a-z]+[^>]*>|</[a-z]+>'
+    if re.search(html_tag_pattern, text, re.IGNORECASE):
+        return text
+    
+    # Content is plain text - convert to HTML
+    # Normalize line endings (handle \r\n, \r, \n)
+    text = re.sub(r'\r\n|\r', '\n', text)
+    
+    # Split by double newlines (paragraph breaks)
+    # This creates natural paragraph boundaries
+    paragraphs = re.split(r'\n\s*\n+', text)
+    
+    # Process each paragraph
+    html_paragraphs = []
+    for para in paragraphs:
+        para = para.strip()
+        if not para:
+            continue
+        
+        # Replace single newlines within paragraph with <br>
+        # This preserves intentional line breaks within paragraphs
+        para = para.replace('\n', '<br>')
+        
+        # Wrap in paragraph tag
+        # Note: We don't escape here - bleach.clean() will handle XSS prevention
+        html_paragraphs.append(f'<p>{para}</p>')
+    
+    # If no paragraphs were created (single line with no double newlines), wrap entire content
+    if not html_paragraphs:
+        text = text.strip()
+        if text:
+            # Replace newlines with <br> for single-line content
+            text = text.replace('\n', '<br>')
+            html_paragraphs.append(f'<p>{text}</p>')
+    
+    return '\n'.join(html_paragraphs)
+
+
 def sanitize_html(content):
     """
     Sanitize HTML content to prevent XSS attacks.
@@ -361,11 +421,16 @@ def sanitize_html(content):
     - Lists and headings
     
     Also normalizes HTML structure:
+    - Converts plain text to HTML paragraphs if content is plain text
     - Converts div tags containing text to p tags for better paragraph display
     - Ensures proper paragraph structure
     """
     if not content:
         return ''
+    
+    # CRITICAL FIX: Convert plain text to HTML if content has no HTML tags
+    # This handles legacy posts stored as plain text
+    content = convert_plain_text_to_html(content)
     
     # Sanitize HTML content
     cleaned = bleach.clean(
