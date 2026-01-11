@@ -389,6 +389,34 @@ CSP_BASE_URI = ("'self'",)
 CSP_OBJECT_SRC = ("'none'",)  # Disable plugins
 CSP_FORM_ACTION = ("'self'", "https://accounts.google.com")  # Allow Google OAuth form submissions
 
+# Summernote Configuration
+# Configure Summernote to work properly in admin panel
+SUMMERNOTE_CONFIG = {
+    # Don't use iframe mode - Django admin uses Bootstrap which works with Summernote
+    'iframe': False,
+    # Toolbar configuration
+    'toolbar': [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']],
+    ],
+    # Height of editor
+    'height': 500,
+    # Width of editor
+    'width': '100%',
+    # Additional settings for admin compatibility
+    'codemirror': {
+        'mode': 'htmlmixed',
+        'lineNumbers': 'true',
+        'theme': 'monokai',
+    },
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
