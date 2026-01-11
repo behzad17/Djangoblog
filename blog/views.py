@@ -163,27 +163,39 @@ class PostList(generic.ListView):
         # They reference the full queryset, not our reordered list
 
         # Categories and expert posts (replaces Popular Posts)
-        context['categories'] = Category.objects.all().order_by('name')
-        expert_users = User.objects.filter(
-            profile__can_publish_without_approval=True
-        )
-        expert_posts_qs = (
-            Post.objects.filter(
-                status=1,
-                author__in=expert_users,
-                is_deleted=False
-            )
-            .exclude(slug='').exclude(slug__isnull=True)
-            .select_related('category', 'author', 'author__profile')
-            .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
-            .order_by('-created_on')
-        )
-        context['popular_posts'] = expert_posts_qs[:10]
+        try:
+            context['categories'] = Category.objects.all().order_by('name')
+        except Exception:
+            context['categories'] = []
         
-        # Featured post for hero section (most recent post from experts content section)
-        # Filter out posts with empty/null slugs to prevent NoReverseMatch errors
-        featured_post = expert_posts_qs.exclude(slug='').exclude(slug__isnull=True).first()
-        context['featured_post'] = featured_post
+        try:
+            expert_users = User.objects.filter(
+                profile__can_publish_without_approval=True
+            )
+            expert_posts_qs = (
+                Post.objects.filter(
+                    status=1,
+                    author__in=expert_users,
+                    is_deleted=False
+                )
+                .exclude(slug='').exclude(slug__isnull=True)
+                .select_related('category', 'author', 'author__profile')
+                .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
+                .order_by('-created_on')
+            )
+            context['popular_posts'] = expert_posts_qs[:10]
+            
+            # Featured post for hero section (most recent post from experts content section)
+            # Filter out posts with empty/null slugs to prevent NoReverseMatch errors
+            featured_post = expert_posts_qs.exclude(slug='').exclude(slug__isnull=True).first()
+            context['featured_post'] = featured_post
+        except Exception as e:
+            # If there's an error, set defaults
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error fetching expert posts: {e}", exc_info=True)
+            context['popular_posts'] = []
+            context['featured_post'] = None
 
         return context
 
