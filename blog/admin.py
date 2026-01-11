@@ -23,13 +23,15 @@ class PostAdmin(SummernoteModelAdmin):
     search_fields = ['title', 'content', 'external_url']
     list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on',)
     prepopulated_fields = {'slug': ('title',)}
-    summernote_fields = ('content',)
+    # Enable Summernote for both content and excerpt fields
+    summernote_fields = ('content', 'excerpt')
     fieldsets = (
         ('Post Information', {
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
         }),
         ('Content', {
-            'fields': ('excerpt', 'content', 'featured_image')
+            'fields': ('content', 'excerpt', 'featured_image'),
+            'description': 'Main post content (required). Excerpt is optional summary.'
         }),
         ('External URL', {
             'fields': ('external_url', 'url_approved'),
