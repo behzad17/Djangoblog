@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from django.utils import timezone
-from .utils import generate_slug_from_persian
 
 
 # Create your models here.
@@ -182,6 +181,9 @@ class Post(models.Model):
         Override save to auto-generate slug from title if slug is empty or title changed.
         Handles Persian/Farsi titles properly.
         """
+        # Import here to avoid circular import (utils.py imports from models.py)
+        from .utils import generate_slug_from_persian
+        
         # Check if title changed (only for existing objects)
         title_changed = False
         if self.pk:
