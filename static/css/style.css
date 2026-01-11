@@ -4276,7 +4276,7 @@ body {
 
 /* Paragraph spacing - ensure paragraphs have proper spacing */
 .post-content-body p {
-  margin: 0 0 1rem !important;
+  margin: 0 0 1.2rem !important;
   display: block;
 }
 
@@ -4290,9 +4290,10 @@ body {
 
 /* Handle div tags that Summernote might use instead of p tags */
 .post-content-body > div {
-  margin-bottom: 1.2em !important;
+  margin-bottom: 1.2rem !important;
   margin-top: 0 !important;
   display: block;
+  text-align: justify;
 }
 
 .post-content-body > div:first-child {
@@ -4305,7 +4306,8 @@ body {
 
 /* Ensure divs containing only text are treated like paragraphs */
 .post-content-body div:not([class]):not([id]) {
-  margin-bottom: 1.2em !important;
+  margin-bottom: 1.2rem !important;
+  text-align: justify;
 }
 
 /* Handle br tags - convert them to paragraph breaks */
@@ -4518,6 +4520,25 @@ body {
 
 .post-content-body div:last-child {
   margin-bottom: 0;
+}
+
+/* Mobile: Disable justify alignment for better readability on small screens */
+@media (max-width: 768px) {
+  .post-content-body {
+    text-align: right;
+  }
+  
+  .post-content-body p {
+    text-align: right;
+  }
+  
+  .post-content-body > div {
+    text-align: right;
+  }
+  
+  .post-content-body div:not([class]):not([id]) {
+    text-align: right;
+  }
 }
 
 .comment-form-card {
