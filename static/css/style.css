@@ -4260,6 +4260,42 @@ body {
   border-radius: 12px;
 }
 
+/* Ensure post detail page content starts below fixed navbar */
+/* Body already has padding-top: var(--navbar-height), but add extra spacing */
+/* for visual separation and to handle any navbar height variations */
+body .container:first-of-type,
+body .container-fluid:first-of-type {
+  margin-top: 1rem;
+}
+
+/* Ensure breadcrumb container has proper top spacing */
+body .container nav[aria-label="breadcrumb"] {
+  padding-top: 1rem;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  body .container:first-of-type,
+  body .container-fluid:first-of-type {
+    margin-top: 0.75rem;
+  }
+  
+  body .container nav[aria-label="breadcrumb"] {
+    padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  body .container:first-of-type,
+  body .container-fluid:first-of-type {
+    margin-top: 0.5rem;
+  }
+  
+  body .container nav[aria-label="breadcrumb"] {
+    padding-top: 0.5rem;
+  }
+}
+
 /* Override Bootstrap card-text defaults for post content */
 .post-detail-card .card-text.post-content-body {
   margin-bottom: 0;
