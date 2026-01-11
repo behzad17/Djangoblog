@@ -392,7 +392,8 @@ CSP_FORM_ACTION = ("'self'", "https://accounts.google.com")  # Allow Google OAut
 # Summernote Configuration
 # Configure Summernote to work properly in admin panel
 SUMMERNOTE_CONFIG = {
-    # Don't use iframe mode - Django admin uses Bootstrap which works with Summernote
+    # Try without iframe first - Django admin Bootstrap should work
+    # If iframe is needed, it will be enabled automatically by Summernote
     'iframe': False,
     # Toolbar configuration
     'toolbar': [
@@ -409,12 +410,16 @@ SUMMERNOTE_CONFIG = {
     'height': 500,
     # Width of editor
     'width': '100%',
-    # Additional settings for admin compatibility
+    # CodeMirror for code view
     'codemirror': {
         'mode': 'htmlmixed',
         'lineNumbers': 'true',
         'theme': 'monokai',
     },
+    # Disable attachment feature
+    'attachment_filesize_limit': 1024 * 1024 * 5,  # 5MB
+    # Disable upload to avoid issues
+    'disable_upload': False,
 }
 
 # Default primary key field type
