@@ -4265,11 +4265,17 @@ body {
   margin-bottom: 0;
 }
 
+/* Override bidi.css .rtl .card-text rule for post content */
+.rtl .card-text.post-content-body,
+.card-text.post-content-body {
+  text-align: justify !important;
+}
+
 .post-content-body {
   font-size: 1rem;
   line-height: 1.9;
   direction: rtl;
-  text-align: justify;
+  text-align: justify !important;
   color: var(--pv-text-main, #333);
   white-space: normal; /* Preserve whitespace but allow wrapping */
 }
@@ -4278,6 +4284,7 @@ body {
 .post-content-body p {
   margin: 0 0 1.2rem !important;
   display: block;
+  text-align: justify !important;
 }
 
 .post-content-body p:first-child {
@@ -4293,7 +4300,7 @@ body {
   margin-bottom: 1.2rem !important;
   margin-top: 0 !important;
   display: block;
-  text-align: justify;
+  text-align: justify !important;
 }
 
 .post-content-body > div:first-child {
@@ -4307,7 +4314,7 @@ body {
 /* Ensure divs containing only text are treated like paragraphs */
 .post-content-body div:not([class]):not([id]) {
   margin-bottom: 1.2rem !important;
-  text-align: justify;
+  text-align: justify !important;
 }
 
 /* Handle br tags - convert them to paragraph breaks */
