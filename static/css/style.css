@@ -1737,6 +1737,11 @@ body {
   font-size: 2rem; /* 20% smaller: 2.5rem * 0.8 = 2rem */
 }
 
+/* Terms page - hero title 20% smaller */
+.terms-hero-section .hero-title {
+  font-size: 2rem; /* 20% smaller: 2.5rem * 0.8 = 2rem */
+}
+
 .hero-subtitle {
   font-size: 1.25rem;
   margin-bottom: 0.75rem; /* Minimized spacing */
@@ -2277,6 +2282,10 @@ body {
     font-size: 1.6rem; /* 20% smaller: 2rem * 0.8 = 1.6rem */
   }
   
+  .terms-hero-section .hero-title {
+    font-size: 1.6rem; /* 20% smaller: 2rem * 0.8 = 1.6rem */
+  }
+  
   .hero-subtitle {
     font-size: 1rem;
     margin-bottom: 0.6rem; /* Minimized spacing */
@@ -2341,6 +2350,10 @@ body {
   }
   
   .ads-category-hero-section .hero-title {
+    font-size: 1.4rem; /* 20% smaller: 1.75rem * 0.8 = 1.4rem */
+  }
+  
+  .terms-hero-section .hero-title {
     font-size: 1.4rem; /* 20% smaller: 1.75rem * 0.8 = 1.4rem */
   }
   
@@ -2431,6 +2444,10 @@ body {
   }
   
   .ads-category-hero-section .hero-title {
+    font-size: 1.2rem; /* 20% smaller: 1.5rem * 0.8 = 1.2rem */
+  }
+  
+  .terms-hero-section .hero-title {
     font-size: 1.2rem; /* 20% smaller: 1.5rem * 0.8 = 1.2rem */
   }
   
