@@ -178,40 +178,64 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         """
-        Override save to auto-generate slug from title if slug is empty or title changed.
+        Override save to auto-generate slug from title if slug is empty.
         Handles Persian/Farsi titles properly.
+        Note: We don't auto-update slug when title changes to preserve existing URLs.
         """
-        # Import here to avoid circular import (utils.py imports from models.py)
-        from .utils import generate_slug_from_persian
-        
-        # Check if title changed (only for existing objects)
-        title_changed = False
-        if self.pk:
+        # Only generate slug if it's empty (for new posts)
+        if not self.slug and self.title:
             try:
-                old_post = Post.objects.get(pk=self.pk)
-                title_changed = old_post.title != self.title
-            except Post.DoesNotExist:
-                title_changed = False
+                # Import here to avoid circular import (utils.py imports from models.py)
+                from .utils import generate_slug_from_persian
+                
+                # Generate base slug from title (handles Persian text)
+                base_slug = generate_slug_from_persian(self.title)
+                
+                # Ensure slug is never empty (fallback)
+                if not base_slug:
+                    base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                
+                # Set slug - let Django's unique constraint handle conflicts
+                # If there's a conflict, we'll catch it and add a counter
+                self.slug = base_slug
+            except Exception as e:
+                # If slug generation fails, use timestamp-based fallback
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Error generating slug for post '{self.title}': {e}", exc_info=True)
+                if not self.slug:
+                    self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
         
-        # Generate slug if it's empty or if title changed
-        if not self.slug or title_changed:
-            # Generate base slug from title (handles Persian text)
-            base_slug = generate_slug_from_persian(self.title)
-            
-            # Ensure slug is never empty (fallback)
-            if not base_slug:
-                base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-            
-            # Ensure uniqueness
-            slug = base_slug
-            counter = 1
-            while Post.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            
-            self.slug = slug
-        
-        super().save(*args, **kwargs)
+        # Save the object - catch IntegrityError for slug uniqueness
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            # If save fails due to slug uniqueness, try with a counter
+            if not self.slug or 'slug' in str(e).lower() or 'unique' in str(e).lower():
+                try:
+                    from django.utils.text import slugify as django_slugify
+                    base_slug = self.slug or django_slugify(self.title, allow_unicode=True) or f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                    counter = 1
+                    while counter < 1000:
+                        self.slug = f"{base_slug}-{counter}"
+                        try:
+                            super().save(*args, **kwargs)
+                            break
+                        except Exception:
+                            counter += 1
+                    if counter >= 1000:
+                        # Final fallback
+                        self.slug = f"{base_slug}-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                        super().save(*args, **kwargs)
+                except Exception as final_error:
+                    # Log and re-raise if we can't fix it
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.error(f"Error saving post '{self.title}': {final_error}", exc_info=True)
+                    raise
+            else:
+                # Re-raise if it's not a slug-related error
+                raise
 
     def favorite_count(self):
         """Returns the number of users who have favorited this post."""
