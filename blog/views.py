@@ -163,7 +163,9 @@ class PostList(generic.ListView):
         context['popular_posts'] = expert_posts_qs[:10]
         
         # Featured post for hero section (most recent post from experts content section)
-        context['featured_post'] = expert_posts_qs.first()
+        # Filter out posts with empty/null slugs to prevent NoReverseMatch errors
+        featured_post = expert_posts_qs.exclude(slug='').exclude(slug__isnull=True).first()
+        context['featured_post'] = featured_post
 
         return context
 
@@ -636,6 +638,9 @@ def create_post(request):
             post.author = request.user
             # Generate unique slug
             base_slug = slugify(post.title)
+            # Ensure slug is never empty (fallback to post ID or timestamp)
+            if not base_slug:
+                base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
             slug = base_slug
             counter = 1
             while Post.objects.filter(slug=slug).exists():
