@@ -32,7 +32,7 @@ def search_posts(request):
     page_number = request.GET.get('page', 1)
     
     # Start with published posts only (same filter as main listing)
-    queryset = Post.objects.filter(status=1, is_deleted=False).select_related('category', 'author')
+    queryset = Post.objects.filter(status=1, is_deleted=False).exclude(slug='').exclude(slug__isnull=True).select_related('category', 'author')
     
     # Apply search query
     if query:

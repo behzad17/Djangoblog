@@ -39,8 +39,9 @@ class PostList(generic.ListView):
         Returns a queryset of published posts with comment counts.
         Posts are ordered by creation date (newest first).
         Includes all posts (including pinned) for correct pagination count.
+        Excludes posts with empty/null slugs to prevent NoReverseMatch errors.
         """
-        return Post.objects.filter(status=1, is_deleted=False).select_related('category').annotate(
+        return Post.objects.filter(status=1, is_deleted=False).exclude(slug='').exclude(slug__isnull=True).select_related('category').annotate(
             comment_count=Count('comments', filter=Q(comments__approved=True))
         ).order_by('-created_on')
     
@@ -92,7 +93,7 @@ class PostList(generic.ListView):
         # Only process pinned posts on page 1
         if page_number == 1:
             # Fetch pinned posts and map to target rows (if specified)
-            pinned_qs = Post.objects.filter(status=1, pinned=True, is_deleted=False).select_related('category', 'author').annotate(
+            pinned_qs = Post.objects.filter(status=1, pinned=True, is_deleted=False).exclude(slug='').exclude(slug__isnull=True).select_related('category', 'author').annotate(
                 comment_count=Count('comments', filter=Q(comments__approved=True))
             ).order_by('-created_on')
             
@@ -156,6 +157,7 @@ class PostList(generic.ListView):
                 author__in=expert_users,
                 is_deleted=False
             )
+            .exclude(slug='').exclude(slug__isnull=True)
             .select_related('category', 'author', 'author__profile')
             .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
             .order_by('-created_on')
@@ -330,6 +332,7 @@ def post_detail(request, slug):
                 author__in=expert_users,
                 is_deleted=False
             )
+            .exclude(slug='').exclude(slug__isnull=True)
             .select_related('category', 'author')
             .order_by('-created_on')[:10]
         )
@@ -351,6 +354,7 @@ def post_detail(request, slug):
                 is_deleted=False
             )
             .exclude(id=post.id)
+            .exclude(slug='').exclude(slug__isnull=True)
             .select_related('category', 'author')
             .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
             .order_by('-created_on')[:3]
@@ -540,7 +544,7 @@ def favorite_posts(request):
     """
     # Get favorite posts
     favorites = Favorite.objects.filter(user=request.user).select_related('post', 'post__category', 'post__author')
-    favorite_posts = [favorite.post for favorite in favorites if favorite.post.status == 1 and not favorite.post.is_deleted]
+    favorite_posts = [favorite.post for favorite in favorites if favorite.post.status == 1 and not favorite.post.is_deleted and favorite.post.slug]
     
     # Annotate posts with comment count
     posts_with_counts = []
@@ -891,7 +895,7 @@ def category_posts(request, category_slug):
         category=category,
         status=1,
         is_deleted=False
-    ).select_related('category', 'author').annotate(
+    ).exclude(slug='').exclude(slug__isnull=True).select_related('category', 'author').annotate(
         comment_count=Count('comments', filter=Q(comments__approved=True))
     ).order_by('-created_on')
     

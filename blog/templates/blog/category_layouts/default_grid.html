@@ -43,9 +43,13 @@
                 <!-- Content on LEFT side (80% width) -->
                 <div class="postbox__content">
                   <!-- 1) Title -->
+                  {% if post.slug %}
                   <a href="{% url 'post_detail' post.slug %}" class="post-link">
                     <h2 class="card-title">{{ post.title }}</h2>
                   </a>
+                  {% else %}
+                  <h2 class="card-title">{{ post.title }}</h2>
+                  {% endif %}
                   <!-- 2) Category -->
                   {% if post.category %}
                   <div class="mb-2">

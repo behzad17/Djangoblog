@@ -36,9 +36,13 @@
             <!-- Event Content -->
             <div class="{% if post.event_start_date %}col-md-6{% else %}col-md-8{% endif %} event-card-content-wrapper">
               <div class="event-card-content">
+                {% if post.slug %}
                 <a href="{% url 'post_detail' post.slug %}" class="event-card-title-link">
                   <h2 class="event-card-title">{{ post.title }}</h2>
                 </a>
+                {% else %}
+                <h2 class="event-card-title">{{ post.title }}</h2>
+                {% endif %}
                 
                 <p class="event-card-description">
                   {% if post.excerpt %}
