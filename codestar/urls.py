@@ -37,39 +37,103 @@ def admin_index_with_stats(request, extra_context=None):
     """Admin index with pending content statistics."""
     extra_context = extra_context or {}
     
+    # Initialize default stats
+    stats = {
+        'pending_posts': 0,
+        'pending_ads': 0,
+        'pending_urls_ads': 0,
+        'pending_urls_posts': 0,
+        'pending_questions': 0,
+        'pending_comments': 0,
+        'recent_expert_posts': 0,
+        'pending_urls': 0,
+    }
+    
     try:
         from blog.models import Post, Comment
         from ads.models import Ad
         from askme.models import Question
         
-        stats = {
-            'pending_posts': Post.objects.filter(status=0).count(),
-            'pending_ads': Ad.objects.filter(is_approved=False).count(),
-            'pending_urls_ads': Ad.objects.filter(
+        # Get pending posts (draft status)
+        try:
+            stats['pending_posts'] = Post.objects.filter(status=0).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting pending posts: {e}", exc_info=True)
+        
+        # Get pending ads
+        try:
+            stats['pending_ads'] = Ad.objects.filter(is_approved=False).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting pending ads: {e}", exc_info=True)
+        
+        # Get pending URLs for ads
+        try:
+            stats['pending_urls_ads'] = Ad.objects.filter(
                 url_approved=False,
                 is_approved=True
-            ).count(),
-            'pending_urls_posts': Post.objects.filter(
+            ).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting pending URLs for ads: {e}", exc_info=True)
+        
+        # Get pending URLs for posts
+        try:
+            stats['pending_urls_posts'] = Post.objects.filter(
                 url_approved=False,
                 status=1,
                 external_url__isnull=False
-            ).count(),
-            'pending_questions': Question.objects.filter(answered=False).count(),
-            'pending_comments': Comment.objects.filter(approved=False).count(),
-            'recent_expert_posts': Post.objects.filter(
-                status=1,
-                author__profile__can_publish_without_approval=True,
-                created_on__gte=timezone.now() - timedelta(days=1)
-            ).exclude(slug='').exclude(slug__isnull=True).count(),
-        }
+            ).exclude(slug='').exclude(slug__isnull=True).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting pending URLs for posts: {e}", exc_info=True)
         
+        # Get pending questions
+        try:
+            stats['pending_questions'] = Question.objects.filter(answered=False).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting pending questions: {e}", exc_info=True)
+        
+        # Get pending comments
+        try:
+            stats['pending_comments'] = Comment.objects.filter(approved=False).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting pending comments: {e}", exc_info=True)
+        
+        # Get recent expert posts (with safe profile access)
+        try:
+            from django.contrib.auth.models import User
+            expert_users = User.objects.filter(
+                profile__can_publish_without_approval=True
+            ).values_list('id', flat=True)
+            stats['recent_expert_posts'] = Post.objects.filter(
+                status=1,
+                author_id__in=expert_users,
+                created_on__gte=timezone.now() - timedelta(days=1)
+            ).exclude(slug='').exclude(slug__isnull=True).count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error counting recent expert posts: {e}", exc_info=True)
+        
+        # Calculate total pending URLs
         stats['pending_urls'] = stats['pending_urls_ads'] + stats['pending_urls_posts']
-        extra_context.update(stats)
+        
     except Exception as e:
         import logging
         logger = logging.getLogger(__name__)
         logger.error(f"Error getting admin stats: {e}", exc_info=True)
     
+    extra_context.update(stats)
     return _original_index(request, extra_context)
 
 admin.site.index = admin_index_with_stats
