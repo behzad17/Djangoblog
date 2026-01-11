@@ -50,12 +50,28 @@ class PostList(generic.ListView):
         Add categories and popular posts to the context for display in template.
         Also reorders posts so pinned posts appear in the second slot of each row.
         """
-        # Ensure object_list is set before calling super()
-        if not hasattr(self, 'object_list'):
-            self.object_list = self.get_queryset()
-        # Base context (includes pagination from Django's ListView)
-        # This gives us page_obj with correct pagination info for ALL posts
-        context = super().get_context_data(**kwargs)
+        try:
+            # Ensure object_list is set before calling super()
+            if not hasattr(self, 'object_list'):
+                self.object_list = self.get_queryset()
+            # Base context (includes pagination from Django's ListView)
+            # This gives us page_obj with correct pagination info for ALL posts
+            context = super().get_context_data(**kwargs)
+        except Exception as e:
+            # If there's an error, log it and return minimal context
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error in PostList.get_context_data: {e}", exc_info=True)
+            # Return minimal context to prevent 500 error
+            context = {
+                'object_list': Post.objects.none(),
+                'page_obj': None,
+                'is_paginated': False,
+                'categories': Category.objects.all().order_by('name'),
+                'popular_posts': [],
+                'featured_post': None,
+            }
+            return context
 
         # Get the paginated page object from Django's ListView
         page_obj = context.get('page_obj')
