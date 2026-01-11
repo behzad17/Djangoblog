@@ -4260,11 +4260,37 @@ body {
   border-radius: 12px;
 }
 
+/* Ensure messages container appears below fixed navbar */
+/* Messages are displayed in base.html as first container and need proper top spacing */
+/* Body already has padding-top: var(--navbar-height), but messages need extra spacing */
+body > .container:first-of-type {
+  padding-top: 1.5rem;
+  margin-top: 0;
+}
+
+/* Ensure messages/alert boxes are fully visible and have proper spacing */
+body > .container:first-of-type .alert {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* Responsive adjustments for messages container */
+@media (max-width: 768px) {
+  body > .container:first-of-type {
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  body > .container:first-of-type {
+    padding-top: 1rem;
+  }
+}
+
 /* Ensure post detail page content starts below fixed navbar */
-/* Body already has padding-top: var(--navbar-height), but add extra spacing */
-/* for visual separation and to handle any navbar height variations */
-body .container:first-of-type,
-body .container-fluid:first-of-type {
+/* For containers that are not the first one (like breadcrumbs) */
+body .container:not(:first-of-type),
+body .container-fluid:not(:first-of-type) {
   margin-top: 1rem;
 }
 
