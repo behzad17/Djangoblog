@@ -510,7 +510,7 @@ body {
 }
 
 .post-hero-title {
-  font-size: 2rem;
+  font-size: 1.6rem; /* Reduced by 20% from 2rem */
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 0.75rem;
@@ -6509,7 +6509,7 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .photo-hero-title {
-  font-size: 2.5rem;
+  font-size: 2rem; /* Reduced by 20% from 2.5rem */
   font-weight: 700;
   margin-bottom: 1rem;
   color: #415a77 !important;
