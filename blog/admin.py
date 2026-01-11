@@ -22,7 +22,8 @@ class PostAdmin(SummernoteModelAdmin):
     list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'is_deleted', 'deleted_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
     list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on',)
-    prepopulated_fields = {'slug': ('title',)}
+    # Slug is auto-generated from title in Post.save() method
+    # prepopulated_fields removed - slug will be generated automatically for Persian titles
     # Enable Summernote for both content and excerpt fields
     summernote_fields = ('content', 'excerpt')
     fieldsets = (

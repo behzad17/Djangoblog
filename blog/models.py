@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from django.utils import timezone
+from .utils import generate_slug_from_persian
 
 
 # Create your models here.
@@ -175,6 +176,40 @@ class Post(models.Model):
     def __str__(self):
         """Returns a string representation of the post."""
         return self.title
+    
+    def save(self, *args, **kwargs):
+        """
+        Override save to auto-generate slug from title if slug is empty or title changed.
+        Handles Persian/Farsi titles properly.
+        """
+        # Check if title changed (only for existing objects)
+        title_changed = False
+        if self.pk:
+            try:
+                old_post = Post.objects.get(pk=self.pk)
+                title_changed = old_post.title != self.title
+            except Post.DoesNotExist:
+                title_changed = False
+        
+        # Generate slug if it's empty or if title changed
+        if not self.slug or title_changed:
+            # Generate base slug from title (handles Persian text)
+            base_slug = generate_slug_from_persian(self.title)
+            
+            # Ensure slug is never empty (fallback)
+            if not base_slug:
+                base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+            
+            # Ensure uniqueness
+            slug = base_slug
+            counter = 1
+            while Post.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            
+            self.slug = slug
+        
+        super().save(*args, **kwargs)
 
     def favorite_count(self):
         """Returns the number of users who have favorited this post."""

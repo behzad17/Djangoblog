@@ -19,6 +19,7 @@ import re
 from django.utils import timezone
 from django.core.cache import cache
 import bleach
+import unicodedata
 
 from .models import Post, Comment, Favorite, Category, Like, PageView
 
@@ -555,3 +556,42 @@ def determine_comment_approval(user, comment_body):
     
     # Step 3: Trusted user, no link - auto-approve
     return True, None
+
+
+def generate_slug_from_persian(text):
+    """
+    Generate a URL-friendly slug from Persian/Farsi text.
+    
+    This function handles Persian characters properly by using Django's slugify
+    with allow_unicode=True, which preserves Persian characters in the slug.
+    Falls back to transliteration or hash-based slug if needed.
+    
+    Args:
+        text: Text to convert to slug (can be Persian, English, or mixed)
+        
+    Returns:
+        str: URL-friendly slug
+    """
+    if not text:
+        return ''
+    
+    # First, try slugify with allow_unicode=True to preserve Persian characters
+    # This creates slugs like: "عنوان-پست" which works in modern browsers
+    slug = slugify(text, allow_unicode=True)
+    
+    # If slug is still empty (shouldn't happen with allow_unicode=True, but safety check)
+    if not slug:
+        # Fallback: create a simple slug by replacing spaces and special chars
+        slug = re.sub(r'[^\w\s-]', '', text)
+        slug = re.sub(r'[-\s]+', '-', slug)
+        slug = slug.strip('-')
+        
+        # If still empty, use hash-based fallback
+        if not slug:
+            slug = f'post-{abs(hash(text)) % 100000}'
+    
+    # Ensure slug doesn't exceed max length (200 chars for SlugField)
+    if len(slug) > 200:
+        slug = slug[:200].rstrip('-')
+    
+    return slug

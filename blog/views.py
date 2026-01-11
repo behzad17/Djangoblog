@@ -640,17 +640,8 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            # Generate unique slug
-            base_slug = slugify(post.title)
-            # Ensure slug is never empty (fallback to post ID or timestamp)
-            if not base_slug:
-                base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-            slug = base_slug
-            counter = 1
-            while Post.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            post.slug = slug
+            # Slug will be auto-generated in Post.save() method (handles Persian titles)
+            # No need to manually generate slug here
             
             # Check if user has expert access (can publish without approval)
             is_expert = (
@@ -763,17 +754,8 @@ def edit_post(request, slug):
                     pass
             # For staff, they can change status via admin, but this form doesn't include status
             
-            # Update slug if title changed
-            new_slug = slugify(post.title)
-            if new_slug != post.slug:
-                # Check for slug uniqueness
-                base_slug = new_slug
-                slug = base_slug
-                counter = 1
-                while Post.objects.filter(slug=slug).exclude(pk=post.pk).exists():
-                    slug = f"{base_slug}-{counter}"
-                    counter += 1
-                post.slug = slug
+            # Slug will be auto-updated in Post.save() method if title changed
+            # (handles Persian titles properly)
             
             post.save()
             
