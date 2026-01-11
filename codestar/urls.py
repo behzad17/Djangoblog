@@ -60,7 +60,7 @@ def admin_index_with_stats(request, extra_context=None):
                 status=1,
                 author__profile__can_publish_without_approval=True,
                 created_on__gte=timezone.now() - timedelta(days=1)
-            ).count(),
+            ).exclude(slug='').exclude(slug__isnull=True).count(),
         }
         
         stats['pending_urls'] = stats['pending_urls_ads'] + stats['pending_urls_posts']

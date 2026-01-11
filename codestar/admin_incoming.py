@@ -15,7 +15,7 @@ def admin_incoming_items(request):
     from askme.models import Question
     
     # Get all pending items (limited to 20 per section for performance)
-    pending_posts = Post.objects.filter(status=0).select_related(
+    pending_posts = Post.objects.filter(status=0).exclude(slug='').exclude(slug__isnull=True).select_related(
         'author', 'category'
     ).order_by('-created_on')[:20]
     
@@ -32,7 +32,7 @@ def admin_incoming_items(request):
         url_approved=False,
         status=1,  # Only show if post is published
         external_url__isnull=False
-    ).select_related('author', 'category')[:20]
+    ).exclude(slug='').exclude(slug__isnull=True).select_related('author', 'category')[:20]
     
     pending_questions = Question.objects.filter(
         answered=False
@@ -47,7 +47,7 @@ def admin_incoming_items(request):
         status=1,
         author__profile__can_publish_without_approval=True,
         created_on__gte=timezone.now() - timedelta(days=1)
-    ).select_related('author', 'category').order_by('-created_on')[:20]
+    ).exclude(slug='').exclude(slug__isnull=True).select_related('author', 'category').order_by('-created_on')[:20]
     
     # Statistics
     stats = {
