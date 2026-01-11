@@ -195,47 +195,14 @@ class Post(models.Model):
                 if not base_slug:
                     base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
                 
-                # Set slug - let Django's unique constraint handle conflicts
-                # If there's a conflict, we'll catch it and add a counter
                 self.slug = base_slug
-            except Exception as e:
+            except Exception:
                 # If slug generation fails, use timestamp-based fallback
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error(f"Error generating slug for post '{self.title}': {e}", exc_info=True)
                 if not self.slug:
                     self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
         
-        # Save the object - catch IntegrityError for slug uniqueness
-        try:
-            super().save(*args, **kwargs)
-        except Exception as e:
-            # If save fails due to slug uniqueness, try with a counter
-            if not self.slug or 'slug' in str(e).lower() or 'unique' in str(e).lower():
-                try:
-                    from django.utils.text import slugify as django_slugify
-                    base_slug = self.slug or django_slugify(self.title, allow_unicode=True) or f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-                    counter = 1
-                    while counter < 1000:
-                        self.slug = f"{base_slug}-{counter}"
-                        try:
-                            super().save(*args, **kwargs)
-                            break
-                        except Exception:
-                            counter += 1
-                    if counter >= 1000:
-                        # Final fallback
-                        self.slug = f"{base_slug}-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-                        super().save(*args, **kwargs)
-                except Exception as final_error:
-                    # Log and re-raise if we can't fix it
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.error(f"Error saving post '{self.title}': {final_error}", exc_info=True)
-                    raise
-            else:
-                # Re-raise if it's not a slug-related error
-                raise
+        # Save the object - let Django handle any errors naturally
+        super().save(*args, **kwargs)
 
     def favorite_count(self):
         """Returns the number of users who have favorited this post."""
