@@ -4260,22 +4260,64 @@ body {
   border-radius: 12px;
 }
 
+/* Override Bootstrap card-text defaults for post content */
+.post-detail-card .card-text.post-content-body {
+  margin-bottom: 0;
+}
+
 .post-content-body {
   font-size: 1rem;
   line-height: 1.7;
   direction: rtl;
   text-align: right;
   color: var(--pv-text-main, #333);
+  white-space: normal; /* Preserve whitespace but allow wrapping */
 }
 
-/* Paragraph spacing */
+/* Paragraph spacing - ensure paragraphs have proper spacing */
 .post-content-body p {
-  margin-bottom: 1.2em;
-  margin-top: 0;
+  margin-bottom: 1.2em !important;
+  margin-top: 0 !important;
+  display: block;
+}
+
+.post-content-body p:first-child {
+  margin-top: 0 !important;
 }
 
 .post-content-body p:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
+}
+
+/* Handle div tags that Summernote might use instead of p tags */
+.post-content-body > div {
+  margin-bottom: 1.2em !important;
+  margin-top: 0 !important;
+  display: block;
+}
+
+.post-content-body > div:first-child {
+  margin-top: 0 !important;
+}
+
+.post-content-body > div:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure divs containing only text are treated like paragraphs */
+.post-content-body div:not([class]):not([id]) {
+  margin-bottom: 1.2em !important;
+}
+
+/* Handle br tags - convert them to paragraph breaks */
+.post-content-body br {
+  display: block;
+  margin-bottom: 0.6em;
+  content: "";
+}
+
+.post-content-body br:last-child {
+  display: none;
 }
 
 /* Headings */

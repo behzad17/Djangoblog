@@ -359,6 +359,10 @@ def sanitize_html(content):
     - Basic formatting tags (p, strong, em, etc.)
     - Safe links (http/https/mailto)
     - Lists and headings
+    
+    Also normalizes HTML structure:
+    - Converts div tags containing text to p tags for better paragraph display
+    - Ensures proper paragraph structure
     """
     if not content:
         return ''
@@ -374,6 +378,37 @@ def sanitize_html(content):
     
     # Additional safety: Remove any remaining javascript: URLs
     cleaned = re.sub(r'javascript:', '', cleaned, flags=re.IGNORECASE)
+    
+    # Normalize HTML structure: Convert div tags to p tags for better paragraph display
+    # This handles cases where Summernote saves content with div tags instead of p tags
+    # Only convert divs that don't have specific classes (like those used for formatting)
+    # Pattern: <div>text content</div> -> <p>text content</p>
+    # But preserve divs with classes (they might be used for special formatting)
+    def normalize_div_to_p(match):
+        attrs = match.group(1) or ''
+        div_content = match.group(2) or ''
+        # Check if div has class attribute (might be used for formatting)
+        if attrs.strip() and 'class=' in attrs:
+            # Keep div if it has a class (might be intentional formatting)
+            return match.group(0)
+        # Convert simple divs to paragraphs
+        return f'<p>{div_content}</p>'
+    
+    # Convert <div>text</div> to <p>text</p> (but preserve divs with classes)
+    # Use DOTALL flag to match content across multiple lines
+    cleaned = re.sub(
+        r'<div([^>]*)>(.*?)</div>',
+        normalize_div_to_p,
+        cleaned,
+        flags=re.IGNORECASE | re.DOTALL
+    )
+    
+    # Remove empty divs
+    cleaned = re.sub(r'<div[^>]*>\s*</div>', '', cleaned, flags=re.IGNORECASE)
+    
+    # Normalize multiple consecutive <br> tags to paragraph breaks
+    # Replace <br><br> or <br/><br/> with paragraph breaks
+    cleaned = re.sub(r'(<br\s*/?>\s*){2,}', '</p><p>', cleaned, flags=re.IGNORECASE)
     
     return cleaned
 
