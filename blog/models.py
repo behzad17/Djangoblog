@@ -183,23 +183,30 @@ class Post(models.Model):
         Note: We don't auto-update slug when title changes to preserve existing URLs.
         """
         # Only generate slug if it's empty (for new posts)
-        if not self.slug and self.title:
-            try:
-                # Import here to avoid circular import (utils.py imports from models.py)
-                from .utils import generate_slug_from_persian
-                
-                # Generate base slug from title (handles Persian text)
-                base_slug = generate_slug_from_persian(self.title)
-                
-                # Ensure slug is never empty (fallback)
-                if not base_slug:
-                    base_slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-                
-                self.slug = base_slug
-            except Exception:
-                # If slug generation fails, use timestamp-based fallback
-                if not self.slug:
-                    self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+        # Wrap in try-except to ensure save() never fails
+        try:
+            if not self.slug and self.title:
+                try:
+                    # Import here to avoid circular import (utils.py imports from models.py)
+                    from .utils import generate_slug_from_persian
+                    
+                    # Generate base slug from title (handles Persian text)
+                    base_slug = generate_slug_from_persian(self.title)
+                    
+                    # Ensure slug is never empty (fallback)
+                    if not base_slug:
+                        from django.utils.text import slugify
+                        base_slug = slugify(self.title, allow_unicode=True) or f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                    
+                    self.slug = base_slug
+                except Exception:
+                    # If slug generation fails, use timestamp-based fallback
+                    if not self.slug:
+                        self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+        except Exception:
+            # If anything fails, ensure we have a slug before saving
+            if not self.slug:
+                self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
         
         # Save the object - let Django handle any errors naturally
         super().save(*args, **kwargs)
