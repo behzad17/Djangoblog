@@ -27,7 +27,7 @@ class UserAdmin(BaseUserAdmin):
             path(
                 'send-email/',
                 self.admin_site.admin_view(self.send_email_view),
-                name='accounts_user_send_email',
+                name='auth_user_send_email',
             ),
         ]
         return custom_urls + urls
@@ -38,9 +38,19 @@ class UserAdmin(BaseUserAdmin):
         user_ids = list(queryset.values_list('id', flat=True))
         request.session['email_user_ids'] = user_ids
         request.session['email_user_count'] = len(user_ids)
+        request.session.modified = True  # Ensure session is saved
         
         # Redirect to email form
-        return HttpResponseRedirect('../send-email/')
+        # Build URL: /admin/auth/user/send-email/
+        from django.urls import reverse
+        try:
+            # Try using reverse with the URL name
+            url = reverse('admin:auth_user_send_email')
+        except Exception:
+            # Fallback: construct URL manually
+            model_info = self.model._meta
+            url = f"/admin/{model_info.app_label}/{model_info.model_name}/send-email/"
+        return HttpResponseRedirect(url)
     
     send_email_action.short_description = '📧 Send email to selected users'
     
