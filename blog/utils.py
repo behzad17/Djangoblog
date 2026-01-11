@@ -320,7 +320,8 @@ def should_show_toc(content_html, toc_items, min_headings=3, min_words=600):
 ALLOWED_TAGS = [
     'p', 'br', 'strong', 'em', 'u', 'b', 'i', 's', 'strike',
     'ul', 'ol', 'li', 'a', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'div', 'span', 'pre', 'code', 'hr', 'sub', 'sup'
+    'div', 'span', 'pre', 'code', 'hr', 'sub', 'sup',
+    'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td'
 ]
 
 ALLOWED_ATTRIBUTES = {
@@ -330,6 +331,13 @@ ALLOWED_ATTRIBUTES = {
     'p': ['class'],
     'h1': ['class'], 'h2': ['class'], 'h3': ['class'],
     'h4': ['class'], 'h5': ['class'], 'h6': ['class'],
+    'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
+    'table': ['class', 'border', 'cellpadding', 'cellspacing'],
+    'thead': ['class'],
+    'tbody': ['class'],
+    'tr': ['class'],
+    'th': ['class', 'colspan', 'rowspan'],
+    'td': ['class', 'colspan', 'rowspan'],
 }
 
 ALLOWED_PROTOCOLS = ['http', 'https', 'mailto']

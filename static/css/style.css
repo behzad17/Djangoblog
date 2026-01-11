@@ -4263,6 +4263,222 @@ body {
 .post-content-body {
   font-size: 1rem;
   line-height: 1.7;
+  direction: rtl;
+  text-align: right;
+  color: var(--pv-text-main, #333);
+}
+
+/* Paragraph spacing */
+.post-content-body p {
+  margin-bottom: 1.2em;
+  margin-top: 0;
+}
+
+.post-content-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Headings */
+.post-content-body h1,
+.post-content-body h2,
+.post-content-body h3,
+.post-content-body h4,
+.post-content-body h5,
+.post-content-body h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  font-weight: bold;
+  line-height: 1.3;
+  color: var(--pv-text-main, #333);
+}
+
+.post-content-body h1:first-child,
+.post-content-body h2:first-child,
+.post-content-body h3:first-child,
+.post-content-body h4:first-child,
+.post-content-body h5:first-child,
+.post-content-body h6:first-child {
+  margin-top: 0;
+}
+
+.post-content-body h1 {
+  font-size: 2em;
+}
+
+.post-content-body h2 {
+  font-size: 1.75em;
+}
+
+.post-content-body h3 {
+  font-size: 1.5em;
+}
+
+.post-content-body h4 {
+  font-size: 1.25em;
+}
+
+.post-content-body h5 {
+  font-size: 1.1em;
+}
+
+.post-content-body h6 {
+  font-size: 1em;
+}
+
+/* Lists */
+.post-content-body ul,
+.post-content-body ol {
+  margin-bottom: 1.2em;
+  margin-top: 0;
+  padding-right: 2em;
+  padding-left: 0;
+}
+
+.post-content-body ul {
+  list-style-type: disc;
+}
+
+.post-content-body ol {
+  list-style-type: decimal;
+}
+
+.post-content-body li {
+  margin-bottom: 0.5em;
+  line-height: 1.6;
+}
+
+.post-content-body ul ul,
+.post-content-body ol ol,
+.post-content-body ul ol,
+.post-content-body ol ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Links */
+.post-content-body a {
+  color: var(--pv-cta-services, #007bff);
+  text-decoration: underline;
+  word-break: break-word;
+}
+
+.post-content-body a:hover {
+  color: var(--pv-cta-services, #0056b3);
+  text-decoration: underline;
+}
+
+/* Text formatting */
+.post-content-body strong,
+.post-content-body b {
+  font-weight: bold;
+}
+
+.post-content-body em,
+.post-content-body i {
+  font-style: italic;
+}
+
+.post-content-body u {
+  text-decoration: underline;
+}
+
+.post-content-body s,
+.post-content-body strike {
+  text-decoration: line-through;
+}
+
+/* Blockquotes */
+.post-content-body blockquote {
+  margin: 1.5em 0;
+  padding: 1em 1.5em;
+  border-right: 4px solid var(--pv-border-soft, #ddd);
+  background-color: var(--pv-bg-card, #f9f9f9);
+  font-style: italic;
+  border-radius: 4px;
+}
+
+/* Code */
+.post-content-body code {
+  background-color: var(--pv-bg-card, #f4f4f4);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.post-content-body pre {
+  background-color: var(--pv-bg-card, #f4f4f4);
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.2em 0;
+}
+
+.post-content-body pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Horizontal rule */
+.post-content-body hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 1px solid var(--pv-border-soft, #ddd);
+}
+
+/* Images */
+.post-content-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5em 0;
+  display: block;
+}
+
+/* Tables */
+.post-content-body table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  border: 1px solid var(--pv-border-soft, #ddd);
+}
+
+.post-content-body table th,
+.post-content-body table td {
+  padding: 0.75em;
+  border: 1px solid var(--pv-border-soft, #ddd);
+  text-align: right;
+}
+
+.post-content-body table th {
+  background-color: var(--pv-bg-card, #f9f9f9);
+  font-weight: bold;
+}
+
+/* Subscript and superscript */
+.post-content-body sub,
+.post-content-body sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.post-content-body sup {
+  top: -0.5em;
+}
+
+.post-content-body sub {
+  bottom: -0.25em;
+}
+
+/* Div and span */
+.post-content-body div {
+  margin-bottom: 0.5em;
+}
+
+.post-content-body div:last-child {
+  margin-bottom: 0;
 }
 
 .comment-form-card {
