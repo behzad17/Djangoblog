@@ -26,6 +26,13 @@ class PostAdmin(SummernoteModelAdmin):
     # prepopulated_fields removed - slug will be generated automatically for Persian titles
     # Enable Summernote for both content and excerpt fields
     summernote_fields = ('content', 'excerpt')
+    
+    class Media:
+        # Inject jQuery alias script BEFORE Summernote scripts load
+        # This ensures $ is defined when Summernote scripts execute
+        js = (
+            'admin/js/jquery_alias_fix.js',  # Custom script to define $ = django.jQuery
+        )
     fieldsets = (
         ('Post Information', {
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
