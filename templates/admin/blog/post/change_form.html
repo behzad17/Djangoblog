@@ -3,37 +3,79 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- CRITICAL: Set jQuery aliases IMMEDIATELY and SYNCHRONOUSLY -->
-<!-- This MUST run before ANY scripts, including Summernote dependencies -->
+<!-- CRITICAL: Set jQuery aliases using Object.defineProperty BEFORE scripts load -->
+<!-- This creates getters that return django.jQuery even if not loaded yet -->
 <script type="text/javascript">
-// Immediately define $ and jQuery as aliases for django.jQuery
-// This runs synchronously in the head, before any other scripts execute
+// Use Object.defineProperty to intercept ALL access to $ and jQuery
+// This works even if django.jQuery isn't loaded yet
 (function() {
     'use strict';
     
-    // Function to set aliases - must be synchronous
-    function setAliases() {
-        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
-            try {
-                window.$ = django.jQuery;
-                window.jQuery = django.jQuery;
-                return true;
-            } catch(e) {
-                // Ignore errors
-            }
+    // Define $ as a getter that returns django.jQuery
+    // This intercepts access even before django.jQuery is available
+    try {
+        var $getter = {
+            get: function() {
+                if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+                    return django.jQuery;
+                }
+                // Return undefined - scripts will need to wait
+                return undefined;
+            },
+            configurable: true,
+            enumerable: true
+        };
+        
+        // Only define if not already defined
+        if (!Object.getOwnPropertyDescriptor(window, '$')) {
+            Object.defineProperty(window, '$', $getter);
         }
-        return false;
+    } catch(e) {
+        // Fallback: direct assignment
+        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+            window.$ = django.jQuery;
+        }
     }
     
-    // Try immediately (synchronous)
-    setAliases();
+    // Define jQuery as a getter
+    try {
+        var jQueryGetter = {
+            get: function() {
+                if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+                    return django.jQuery;
+                }
+                return undefined;
+            },
+            configurable: true,
+            enumerable: true
+        };
+        
+        if (!Object.getOwnPropertyDescriptor(window, 'jQuery')) {
+            Object.defineProperty(window, 'jQuery', jQueryGetter);
+        }
+    } catch(e) {
+        // Fallback: direct assignment
+        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+            window.jQuery = django.jQuery;
+        }
+    }
     
-    // Also poll aggressively in case django.jQuery loads after this script
-    // But this script runs in head, so django.jQuery should be available
+    // Also poll to set direct values once available (better performance)
     var attempts = 0;
-    var maxAttempts = 1000; // 10 seconds - very aggressive
+    var maxAttempts = 1000;
     var pollInterval = setInterval(function() {
-        if (setAliases() || attempts++ >= maxAttempts) {
+        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+            try {
+                // Replace getters with direct values
+                delete window.$;
+                delete window.jQuery;
+                window.$ = window.jQuery = django.jQuery;
+                clearInterval(pollInterval);
+            } catch(e) {
+                // If deletion fails, getters will handle it
+            }
+        }
+        if (attempts++ >= maxAttempts) {
             clearInterval(pollInterval);
         }
     }, 10);
