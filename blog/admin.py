@@ -35,22 +35,20 @@ class PostAdmin(SummernoteModelAdmin):
             'admin/js/jquery_alias_fix.js',  # Must be first
         )
     
-    def _media(self):
+    def get_media(self):
         # Get parent Media (from SummernoteModelAdmin)
-        media = super(PostAdmin, self)._media()
+        media = super(PostAdmin, self).get_media()
         # Ensure our jQuery alias script loads FIRST
-        # Convert _js to list if it's a tuple, then reorder
-        js_list = list(media._js) if hasattr(media, '_js') else []
+        # Get current js files
+        js_files = list(media._js)
         # Remove our script if it exists
-        if 'admin/js/jquery_alias_fix.js' in js_list:
-            js_list.remove('admin/js/jquery_alias_fix.js')
+        if 'admin/js/jquery_alias_fix.js' in js_files:
+            js_files.remove('admin/js/jquery_alias_fix.js')
         # Insert at beginning
-        js_list.insert(0, 'admin/js/jquery_alias_fix.js')
+        js_files.insert(0, 'admin/js/jquery_alias_fix.js')
         # Create new Media object with reordered scripts
         from django.forms import Media
-        return Media(js=js_list, css=media._css if hasattr(media, '_css') else {})
-    
-    media = property(_media)
+        return Media(js=js_files, css=media._css)
     fieldsets = (
         ('Post Information', {
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
