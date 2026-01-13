@@ -3,49 +3,40 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- jQuery alias is handled by static/admin/js/jquery_alias_fix.js via Media class -->
-<!-- This ensures it loads before Summernote scripts -->
-{% endblock %}
-
-{% block extrahead %}
-{{ block.super }}
-<!-- Ensure jQuery aliases are set and wait for Summernote initialization -->
+<!-- CRITICAL: Set jQuery aliases IMMEDIATELY and SYNCHRONOUSLY -->
+<!-- This MUST run before ANY scripts, including Summernote dependencies -->
 <script type="text/javascript">
-// Backup: Ensure jQuery aliases are set after page load
+// Immediately define $ and jQuery as aliases for django.jQuery
+// This runs synchronously in the head, before any other scripts execute
 (function() {
     'use strict';
     
-    function ensureJQueryAliases() {
+    // Function to set aliases - must be synchronous
+    function setAliases() {
         if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
-            if (typeof window.$ === 'undefined' || window.$ !== django.jQuery) {
+            try {
                 window.$ = django.jQuery;
-            }
-            if (typeof window.jQuery === 'undefined' || window.jQuery !== django.jQuery) {
                 window.jQuery = django.jQuery;
+                return true;
+            } catch(e) {
+                // Ignore errors
             }
-            return true;
         }
         return false;
     }
     
-    // Try immediately
-    ensureJQueryAliases();
+    // Try immediately (synchronous)
+    setAliases();
     
-    // Also try on DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', ensureJQueryAliases);
-    } else {
-        ensureJQueryAliases();
-    }
-    
-    // Poll as backup
+    // Also poll aggressively in case django.jQuery loads after this script
+    // But this script runs in head, so django.jQuery should be available
     var attempts = 0;
-    var maxAttempts = 100;
+    var maxAttempts = 1000; // 10 seconds - very aggressive
     var pollInterval = setInterval(function() {
-        if (ensureJQueryAliases() || attempts++ >= maxAttempts) {
+        if (setAliases() || attempts++ >= maxAttempts) {
             clearInterval(pollInterval);
         }
-    }, 50);
+    }, 10);
 })();
 </script>
 {% endblock %}
