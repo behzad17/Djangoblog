@@ -356,6 +356,7 @@ CSP_STYLE_SRC = (
     "https://fonts.googleapis.com",
     "https://cdn.jsdelivr.net",
     "https://cdnjs.cloudflare.com",
+    "/summernote/",  # Summernote static files
 )
 CSP_FONT_SRC = (
     "'self'",
@@ -383,6 +384,7 @@ CSP_FRAME_SRC = (
     "'self'",
     "https://accounts.google.com",  # Google OAuth iframe
     "https://www.google.com",  # Google OAuth
+    "/summernote/",  # Summernote iframe
 )
 CSP_FRAME_ANCESTORS = ("'none'",)  # Prevent clickjacking (complements X-Frame-Options)
 CSP_BASE_URI = ("'self'",)
@@ -392,9 +394,10 @@ CSP_FORM_ACTION = ("'self'", "https://accounts.google.com")  # Allow Google OAut
 # Summernote Configuration
 # Configure Summernote to work properly in admin panel
 SUMMERNOTE_CONFIG = {
-    # Try without iframe first - Django admin Bootstrap should work
-    # If iframe is needed, it will be enabled automatically by Summernote
-    'iframe': False,
+    # Use iframe mode for admin to ensure proper jQuery loading
+    'iframe': True,
+    # URL prefix for Summernote static files
+    'url_prefix': '/summernote/',
     # Toolbar configuration
     'toolbar': [
         ['style', ['style']],
@@ -420,6 +423,8 @@ SUMMERNOTE_CONFIG = {
     'attachment_filesize_limit': 1024 * 1024 * 5,  # 5MB
     # Disable upload to avoid issues
     'disable_upload': False,
+    # Ensure jQuery is loaded (Summernote will include it)
+    'jquery': '$',
 }
 
 # Default primary key field type
