@@ -1,18 +1,30 @@
 {% extends "admin/change_form.html" %}
 {% load static %}
 
+{% block extrastyle %}
+{{ block.super }}
+<!-- Fix jQuery alias for Summernote in Django admin - must be in extrastyle to load early -->
+<script>
+    // Define $ as alias for django.jQuery IMMEDIATELY
+    // This must run before any Summernote scripts load
+    // This fixes "$ is not a function" errors in admin panel
+    (function() {
+        if (typeof django !== 'undefined' && django.jQuery) {
+            // Define $ and jQuery as aliases for django.jQuery
+            window.$ = window.jQuery = django.jQuery;
+        }
+    })();
+</script>
+{% endblock %}
+
 {% block extrahead %}
 {{ block.super }}
-<!-- Fix jQuery alias for Summernote in Django admin -->
+<!-- Ensure jQuery alias is still available after page load -->
 <script>
-    // Define $ as alias for django.jQuery before Summernote loads
-    // This fixes "$ is not a function" errors in admin panel
-    if (typeof django !== 'undefined' && django.jQuery && typeof $ === 'undefined') {
-        window.$ = django.jQuery;
-        // Also ensure jQuery is available
-        if (typeof jQuery === 'undefined') {
-            window.jQuery = django.jQuery;
-        }
+    // Re-define $ and jQuery after page load to ensure they're available
+    // This handles cases where scripts load asynchronously
+    if (typeof django !== 'undefined' && django.jQuery) {
+        window.$ = window.jQuery = django.jQuery;
     }
 </script>
 {% endblock %}
