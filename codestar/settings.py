@@ -356,7 +356,6 @@ CSP_STYLE_SRC = (
     "https://fonts.googleapis.com",
     "https://cdn.jsdelivr.net",
     "https://cdnjs.cloudflare.com",
-    "/summernote/",  # Summernote static files
 )
 CSP_FONT_SRC = (
     "'self'",
@@ -379,15 +378,15 @@ CSP_CONNECT_SRC = (
     "https://oauth2.googleapis.com",  # Google OAuth
     "https://www.googleapis.com",  # Google APIs
     "https://cdn.jsdelivr.net",  # Source maps and other requests
-    "/summernote/",  # Summernote AJAX requests
 )
 CSP_FRAME_SRC = (
     "'self'",
     "https://accounts.google.com",  # Google OAuth iframe
     "https://www.google.com",  # Google OAuth
-    "/summernote/",  # Summernote iframe
 )
-CSP_FRAME_ANCESTORS = ("'none'",)  # Prevent clickjacking (complements X-Frame-Options)
+# Allow same-origin framing for Summernote iframe in admin
+# frame-ancestors 'none' prevents the site from being embedded, but we need to allow same-origin for Summernote
+CSP_FRAME_ANCESTORS = ("'self'",)  # Allow same-origin framing for Summernote iframe
 CSP_BASE_URI = ("'self'",)
 CSP_OBJECT_SRC = ("'none'",)  # Disable plugins
 CSP_FORM_ACTION = ("'self'", "https://accounts.google.com")  # Allow Google OAuth form submissions
