@@ -3,42 +3,87 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- Fix jQuery alias for Summernote - must load before Summernote scripts -->
-<script>
-    // Immediately define $ and jQuery as aliases for django.jQuery
-    // This fixes "$ is not a function" errors in admin panel
-    // Must run synchronously before any async scripts load
-    (function() {
-        function setupAlias() {
-            if (typeof django !== 'undefined' && django.jQuery) {
-                window.$ = window.jQuery = django.jQuery;
-                return true;
-            }
-            return false;
+<!-- CRITICAL: Define jQuery aliases IMMEDIATELY and SYNCHRONOUSLY -->
+<!-- This MUST run before any Summernote scripts load -->
+<script type="text/javascript">
+// Immediately define $ and jQuery as aliases for django.jQuery
+// This script runs synchronously in the head, before any other scripts
+(function() {
+    'use strict';
+    
+    // Function to setup aliases - must be synchronous
+    function setupAlias() {
+        // Check if django.jQuery is available
+        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+            // Define both $ and jQuery as aliases
+            window.$ = window.jQuery = django.jQuery;
+            return true;
+        }
+        return false;
+    }
+    
+    // Try immediately (synchronous)
+    if (!setupAlias()) {
+        // If not available, use Object.defineProperty to intercept
+        // This ensures $ is defined as soon as django.jQuery becomes available
+        var $defined = false;
+        var jQueryDefined = false;
+        
+        // Define $ as a getter that returns django.jQuery
+        try {
+            Object.defineProperty(window, '$', {
+                get: function() {
+                    if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+                        return django.jQuery;
+                    }
+                    return undefined;
+                },
+                configurable: true
+            });
+            $defined = true;
+        } catch(e) {
+            // Fallback: poll until available
         }
         
-        // Try immediately
-        if (!setupAlias()) {
-            // If django.jQuery not ready, poll until it is
+        // Define jQuery as a getter that returns django.jQuery
+        try {
+            Object.defineProperty(window, 'jQuery', {
+                get: function() {
+                    if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+                        return django.jQuery;
+                    }
+                    return undefined;
+                },
+                configurable: true
+            });
+            jQueryDefined = true;
+        } catch(e) {
+            // Fallback: poll until available
+        }
+        
+        // If getters didn't work, poll until django.jQuery is available
+        if (!$defined || !jQueryDefined) {
             var attempts = 0;
-            var interval = setInterval(function() {
-                if (setupAlias() || attempts++ > 50) {
-                    clearInterval(interval);
+            var maxAttempts = 200; // 2 seconds
+            var pollInterval = setInterval(function() {
+                if (setupAlias() || attempts++ >= maxAttempts) {
+                    clearInterval(pollInterval);
                 }
             }, 10);
         }
-    })();
+    }
+})();
 </script>
 {% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
-<!-- Ensure jQuery alias is available after all scripts load -->
-<script>
-    // Re-define after page load to handle async script loading
-    if (typeof django !== 'undefined' && django.jQuery) {
-        window.$ = window.jQuery = django.jQuery;
-    }
+<!-- Backup: Ensure jQuery alias is available after page load -->
+<script type="text/javascript">
+// Re-define after page load to handle any edge cases
+if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+    window.$ = window.jQuery = django.jQuery;
+}
 </script>
 {% endblock %}
 

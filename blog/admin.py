@@ -27,12 +27,9 @@ class PostAdmin(SummernoteModelAdmin):
     # Enable Summernote for both content and excerpt fields
     summernote_fields = ('content', 'excerpt')
     
-    class Media:
-        # Inject jQuery alias script BEFORE Summernote scripts load
-        # This ensures $ is defined when Summernote scripts execute
-        js = (
-            'admin/js/jquery_alias_fix.js',  # Custom script to define $ = django.jQuery
-        )
+    # Note: jQuery alias is now handled in the template override
+    # (templates/admin/blog/post/change_form.html) to ensure it loads
+    # synchronously before any Summernote scripts
     fieldsets = (
         ('Post Information', {
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
