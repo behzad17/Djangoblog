@@ -419,9 +419,10 @@ SUMMERNOTE_CONFIG = {
     },
     # Attachment file size limit (5MB)
     'attachment_filesize_limit': 1024 * 1024 * 5,
-    # Don't specify jquery - let Summernote use Django admin's jQuery automatically
-    # Django admin already loads jQuery as django.jQuery
+    # Disable lazy loading to ensure scripts load in correct order
     'lazy': False,
+    # Don't include jQuery - Django admin already provides it as django.jQuery
+    # Our template will set $ and jQuery aliases before Summernote loads
 }
 
 # Default primary key field type

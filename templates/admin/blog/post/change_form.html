@@ -3,91 +3,40 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- CRITICAL: Define jQuery aliases using Object.defineProperty -->
-<!-- This intercepts ALL access to $ and jQuery, even before django.jQuery loads -->
+<!-- Simple jQuery alias: Wait for django.jQuery, then set $ and jQuery -->
 <script type="text/javascript">
+// Wait for django.jQuery to be available, then set aliases
+// This must run BEFORE any Summernote scripts load
 (function() {
     'use strict';
     
-    // Use Object.defineProperty to create getters that return django.jQuery
-    // This works even if django.jQuery isn't loaded yet - the getter will be called
-    // when Summernote scripts try to access $ or jQuery
-    
-    // Define $ as a getter
-    try {
-        Object.defineProperty(window, '$', {
-            get: function() {
-                // Return django.jQuery if available, otherwise return a proxy
-                if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-                    return django.jQuery;
-                }
-                // If not available yet, return a placeholder object that will be replaced
-                // This prevents "undefined" errors
-                if (!window._$placeholder) {
-                    window._$placeholder = function() {};
-                    window._$placeholder.ajaxTransport = function() {};
-                    window._$placeholder.support = {};
-                    window._$placeholder.fn = {};
-                    window._$placeholder.fn.extend = function() {};
-                }
-                return window._$placeholder;
-            },
-            configurable: true,
-            enumerable: true
-        });
-    } catch(e) {
-        // Fallback if defineProperty fails
-        console.warn('Could not define $ property:', e);
-    }
-    
-    // Define jQuery as a getter
-    try {
-        Object.defineProperty(window, 'jQuery', {
-            get: function() {
-                // Return django.jQuery if available
-                if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-                    return django.jQuery;
-                }
-                // Return same placeholder
-                return window.$;
-            },
-            configurable: true,
-            enumerable: true
-        });
-    } catch(e) {
-        // Fallback if defineProperty fails
-        console.warn('Could not define jQuery property:', e);
-    }
-    
-    // Also poll to set actual values once django.jQuery is available
-    var pollCount = 0;
-    var maxPolls = 500; // 5 seconds
-    var pollInterval = setInterval(function() {
+    function setupJQueryAlias() {
         if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-            // Once available, replace getters with actual values
-            try {
-                window.$ = window.jQuery = django.jQuery;
-                clearInterval(pollInterval);
-            } catch(e) {
-                // If we can't replace, the getters will handle it
+            // Set $ and jQuery as aliases for django.jQuery
+            // Only set if not already set to avoid conflicts
+            if (typeof window.$ === 'undefined') {
+                window.$ = django.jQuery;
             }
+            if (typeof window.jQuery === 'undefined') {
+                window.jQuery = django.jQuery;
+            }
+            return true;
         }
-        if (pollCount++ >= maxPolls) {
-            clearInterval(pollInterval);
-        }
-    }, 10);
+        return false;
+    }
+    
+    // Try immediately
+    if (!setupJQueryAlias()) {
+        // Poll until django.jQuery is available
+        var attempts = 0;
+        var maxAttempts = 300; // 3 seconds
+        var pollInterval = setInterval(function() {
+            if (setupJQueryAlias() || attempts++ >= maxAttempts) {
+                clearInterval(pollInterval);
+            }
+        }, 10);
+    }
 })();
-</script>
-{% endblock %}
-
-{% block extrahead %}
-{{ block.super }}
-<!-- Backup: Ensure jQuery alias is available after page load -->
-<script type="text/javascript">
-// Re-define after page load to handle any edge cases
-if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-    window.$ = window.jQuery = django.jQuery;
-}
 </script>
 {% endblock %}
 
