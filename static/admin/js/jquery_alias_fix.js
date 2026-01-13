@@ -1,11 +1,13 @@
 /**
- * jQuery Alias Fix and Summernote Initialization Delay
+ * jQuery Alias Fix - MUST load before any Summernote scripts
  * 
- * This script:
- * 1. Defines $ and jQuery as aliases for django.jQuery
- * 2. Intercepts Summernote initialization and delays it until jQuery is ready
+ * This script sets $ and jQuery as aliases for django.jQuery
+ * It runs immediately and polls until django.jQuery is available.
  * 
- * Must be loaded before django-summernote's scripts.
+ * CRITICAL: This must load BEFORE:
+ * - jquery.iframe-transport.js
+ * - jquery.fileupload.js  
+ * - summernote.min.js
  */
 (function() {
     'use strict';
@@ -13,83 +15,35 @@
     // Function to setup jQuery aliases
     function setupJQueryAlias() {
         if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
-            // Define $ and jQuery as aliases for django.jQuery
-            window.$ = window.jQuery = django.jQuery;
-            return true;
+            try {
+                // Set aliases - allow overwrite
+                window.$ = django.jQuery;
+                window.jQuery = django.jQuery;
+                return true;
+            } catch(e) {
+                // Ignore errors
+            }
         }
         return false;
     }
     
-    // Try to setup immediately
+    // Try immediately
     var jqueryReady = setupJQueryAlias();
     
-    // If not ready, poll until it is
+    // If not ready, poll aggressively until it is
+    // This is critical - scripts will load immediately after this
     if (!jqueryReady) {
         var attempts = 0;
-        var maxAttempts = 500; // 5 seconds
+        var maxAttempts = 1000; // 10 seconds - very aggressive
         var interval = setInterval(function() {
             if (setupJQueryAlias()) {
                 jqueryReady = true;
                 clearInterval(interval);
-                // Trigger any waiting Summernote initializations
-                if (window._summernoteQueue && window._summernoteQueue.length > 0) {
-                    window._summernoteQueue.forEach(function(fn) {
-                        try {
-                            fn();
-                        } catch(e) {
-                            console.error('Error initializing Summernote:', e);
-                        }
-                    });
-                    window._summernoteQueue = [];
-                }
             } else if (attempts++ >= maxAttempts) {
                 clearInterval(interval);
+                console.error('jQuery alias fix: django.jQuery not available after 10 seconds');
             }
         }, 10);
     }
-    
-    // Intercept Summernote initialization
-    // Store original summernote function if it exists
-    var originalSummernote = null;
-    var summernoteIntercepted = false;
-    
-    // Function to intercept Summernote when it loads
-    function interceptSummernote() {
-        if (summernoteIntercepted) return;
-        
-        // Wait for Summernote to be defined
-        if (typeof window.$ !== 'undefined' && window.$ && window.$.fn) {
-            // Check if summernote is already defined
-            if (window.$.fn.summernote) {
-                // Summernote already loaded, wrap it
-                originalSummernote = window.$.fn.summernote;
-                window.$.fn.summernote = function(options) {
-                    // Ensure jQuery is ready before initializing
-                    if (jqueryReady || setupJQueryAlias()) {
-                        return originalSummernote.call(this, options);
-                    } else {
-                        // Queue for later
-                        if (!window._summernoteQueue) {
-                            window._summernoteQueue = [];
-                        }
-                        var self = this;
-                        window._summernoteQueue.push(function() {
-                            originalSummernote.call(self, options);
-                        });
-                    }
-                };
-                summernoteIntercepted = true;
-            }
-        }
-    }
-    
-    // Poll to intercept Summernote when it loads
-    var interceptAttempts = 0;
-    var interceptInterval = setInterval(function() {
-        interceptSummernote();
-        if (summernoteIntercepted || interceptAttempts++ >= 200) {
-            clearInterval(interceptInterval);
-        }
-    }, 25);
 })();
 
