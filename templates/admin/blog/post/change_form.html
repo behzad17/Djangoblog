@@ -3,75 +3,79 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- CRITICAL: Define jQuery aliases IMMEDIATELY and SYNCHRONOUSLY -->
-<!-- This MUST run before any Summernote scripts load -->
+<!-- CRITICAL: Define jQuery aliases using Object.defineProperty -->
+<!-- This intercepts ALL access to $ and jQuery, even before django.jQuery loads -->
 <script type="text/javascript">
-// Immediately define $ and jQuery as aliases for django.jQuery
-// This script runs synchronously in the head, before any other scripts
 (function() {
     'use strict';
     
-    // Function to setup aliases - must be synchronous
-    function setupAlias() {
-        // Check if django.jQuery is available
-        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-            // Define both $ and jQuery as aliases
-            window.$ = window.jQuery = django.jQuery;
-            return true;
-        }
-        return false;
+    // Use Object.defineProperty to create getters that return django.jQuery
+    // This works even if django.jQuery isn't loaded yet - the getter will be called
+    // when Summernote scripts try to access $ or jQuery
+    
+    // Define $ as a getter
+    try {
+        Object.defineProperty(window, '$', {
+            get: function() {
+                // Return django.jQuery if available, otherwise return a proxy
+                if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+                    return django.jQuery;
+                }
+                // If not available yet, return a placeholder object that will be replaced
+                // This prevents "undefined" errors
+                if (!window._$placeholder) {
+                    window._$placeholder = function() {};
+                    window._$placeholder.ajaxTransport = function() {};
+                    window._$placeholder.support = {};
+                    window._$placeholder.fn = {};
+                    window._$placeholder.fn.extend = function() {};
+                }
+                return window._$placeholder;
+            },
+            configurable: true,
+            enumerable: true
+        });
+    } catch(e) {
+        // Fallback if defineProperty fails
+        console.warn('Could not define $ property:', e);
     }
     
-    // Try immediately (synchronous)
-    if (!setupAlias()) {
-        // If not available, use Object.defineProperty to intercept
-        // This ensures $ is defined as soon as django.jQuery becomes available
-        var $defined = false;
-        var jQueryDefined = false;
-        
-        // Define $ as a getter that returns django.jQuery
-        try {
-            Object.defineProperty(window, '$', {
-                get: function() {
-                    if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-                        return django.jQuery;
-                    }
-                    return undefined;
-                },
-                configurable: true
-            });
-            $defined = true;
-        } catch(e) {
-            // Fallback: poll until available
-        }
-        
-        // Define jQuery as a getter that returns django.jQuery
-        try {
-            Object.defineProperty(window, 'jQuery', {
-                get: function() {
-                    if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-                        return django.jQuery;
-                    }
-                    return undefined;
-                },
-                configurable: true
-            });
-            jQueryDefined = true;
-        } catch(e) {
-            // Fallback: poll until available
-        }
-        
-        // If getters didn't work, poll until django.jQuery is available
-        if (!$defined || !jQueryDefined) {
-            var attempts = 0;
-            var maxAttempts = 200; // 2 seconds
-            var pollInterval = setInterval(function() {
-                if (setupAlias() || attempts++ >= maxAttempts) {
-                    clearInterval(pollInterval);
+    // Define jQuery as a getter
+    try {
+        Object.defineProperty(window, 'jQuery', {
+            get: function() {
+                // Return django.jQuery if available
+                if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+                    return django.jQuery;
                 }
-            }, 10);
-        }
+                // Return same placeholder
+                return window.$;
+            },
+            configurable: true,
+            enumerable: true
+        });
+    } catch(e) {
+        // Fallback if defineProperty fails
+        console.warn('Could not define jQuery property:', e);
     }
+    
+    // Also poll to set actual values once django.jQuery is available
+    var pollCount = 0;
+    var maxPolls = 500; // 5 seconds
+    var pollInterval = setInterval(function() {
+        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
+            // Once available, replace getters with actual values
+            try {
+                window.$ = window.jQuery = django.jQuery;
+                clearInterval(pollInterval);
+            } catch(e) {
+                // If we can't replace, the getters will handle it
+            }
+        }
+        if (pollCount++ >= maxPolls) {
+            clearInterval(pollInterval);
+        }
+    }, 10);
 })();
 </script>
 {% endblock %}
