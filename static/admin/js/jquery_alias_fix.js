@@ -2,7 +2,7 @@
  * jQuery Alias Fix - MUST load before any Summernote scripts
  * 
  * This script sets $ and jQuery as aliases for django.jQuery
- * It uses synchronous blocking to ensure aliases are set before scripts execute.
+ * Uses Object.defineProperty to intercept access even before django.jQuery loads.
  * 
  * CRITICAL: This must load BEFORE:
  * - jquery.iframe-transport.js
@@ -12,47 +12,73 @@
 (function() {
     'use strict';
     
-    // Function to setup jQuery aliases
-    function setupJQueryAlias() {
+    // Use Object.defineProperty to create getters that return django.jQuery
+    // This intercepts ALL access to $ and jQuery, even if django.jQuery isn't loaded yet
+    // Once django.jQuery is available, we'll replace getters with direct values
+    
+    var jqueryAvailable = false;
+    
+    function checkJQuery() {
         if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+            jqueryAvailable = true;
             try {
-                // Set aliases - allow overwrite
-                window.$ = django.jQuery;
-                window.jQuery = django.jQuery;
+                // Replace getters with direct values for better performance
+                delete window.$;
+                delete window.jQuery;
+                window.$ = window.jQuery = django.jQuery;
                 return true;
             } catch(e) {
-                // Ignore errors
+                // If deletion fails, getters will handle it
             }
         }
         return false;
     }
     
     // Try immediately
-    if (!setupJQueryAlias()) {
-        // Block synchronously until django.jQuery is available
-        // This ensures aliases are set before any other scripts execute
-        var startTime = Date.now();
-        var maxWait = 5000; // 5 seconds max wait
-        
-        while (!setupJQueryAlias() && (Date.now() - startTime) < maxWait) {
-            // Synchronous blocking wait - check every 1ms
-            // This is a busy-wait, but necessary to ensure aliases are set
-            var checkTime = Date.now();
-            while (Date.now() - checkTime < 1) {
-                // Busy wait for 1ms
+    checkJQuery();
+    
+    // Define getters if jQuery not available yet
+    if (!jqueryAvailable) {
+        try {
+            // Define $ as a getter
+            if (!window.hasOwnProperty('$')) {
+                Object.defineProperty(window, '$', {
+                    get: function() {
+                        if (checkJQuery()) {
+                            return window.$;
+                        }
+                        return undefined;
+                    },
+                    configurable: true,
+                    enumerable: true
+                });
             }
-        }
-        
-        // If still not ready after blocking, fall back to async polling
-        if (!setupJQueryAlias()) {
-            var attempts = 0;
-            var maxAttempts = 500;
-            var interval = setInterval(function() {
-                if (setupJQueryAlias() || attempts++ >= maxAttempts) {
-                    clearInterval(interval);
-                }
-            }, 10);
+            
+            // Define jQuery as a getter
+            if (!window.hasOwnProperty('jQuery')) {
+                Object.defineProperty(window, 'jQuery', {
+                    get: function() {
+                        if (checkJQuery()) {
+                            return window.jQuery;
+                        }
+                        return undefined;
+                    },
+                    configurable: true,
+                    enumerable: true
+                });
+            }
+        } catch(e) {
+            // Fallback: direct assignment when available
         }
     }
+    
+    // Poll to replace getters with direct values once available
+    var attempts = 0;
+    var maxAttempts = 1000;
+    var pollInterval = setInterval(function() {
+        if (checkJQuery() || attempts++ >= maxAttempts) {
+            clearInterval(pollInterval);
+        }
+    }, 10);
 })();
 
