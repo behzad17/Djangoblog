@@ -417,16 +417,11 @@ SUMMERNOTE_CONFIG = {
         'lineNumbers': 'true',
         'theme': 'monokai',
     },
-    # Disable attachment feature
-    'attachment_filesize_limit': 1024 * 1024 * 5,  # 5MB
-    # Disable upload to avoid issues
-    'disable_upload': False,
-    # Use Django admin's jQuery (django.jQuery, not $)
-    'jquery': 'django.jQuery',
-    # Ensure Summernote uses Django admin's jQuery
+    # Attachment file size limit (5MB)
+    'attachment_filesize_limit': 1024 * 1024 * 5,
+    # Don't specify jquery - let Summernote use Django admin's jQuery automatically
+    # Django admin already loads jQuery as django.jQuery
     'lazy': False,
-    # Disable file upload to avoid jQuery conflicts
-    'disable_attachment': True,
 }
 
 # Default primary key field type
