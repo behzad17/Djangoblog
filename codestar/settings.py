@@ -379,6 +379,7 @@ CSP_CONNECT_SRC = (
     "https://oauth2.googleapis.com",  # Google OAuth
     "https://www.googleapis.com",  # Google APIs
     "https://cdn.jsdelivr.net",  # Source maps and other requests
+    "/summernote/",  # Summernote AJAX requests
 )
 CSP_FRAME_SRC = (
     "'self'",
