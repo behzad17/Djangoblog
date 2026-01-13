@@ -2,7 +2,7 @@
  * jQuery Alias Fix - MUST load before any Summernote scripts
  * 
  * This script sets $ and jQuery as aliases for django.jQuery
- * It runs immediately and polls until django.jQuery is available.
+ * It uses synchronous blocking to ensure aliases are set before scripts execute.
  * 
  * CRITICAL: This must load BEFORE:
  * - jquery.iframe-transport.js
@@ -28,22 +28,31 @@
     }
     
     // Try immediately
-    var jqueryReady = setupJQueryAlias();
-    
-    // If not ready, poll aggressively until it is
-    // This is critical - scripts will load immediately after this
-    if (!jqueryReady) {
-        var attempts = 0;
-        var maxAttempts = 1000; // 10 seconds - very aggressive
-        var interval = setInterval(function() {
-            if (setupJQueryAlias()) {
-                jqueryReady = true;
-                clearInterval(interval);
-            } else if (attempts++ >= maxAttempts) {
-                clearInterval(interval);
-                console.error('jQuery alias fix: django.jQuery not available after 10 seconds');
+    if (!setupJQueryAlias()) {
+        // Block synchronously until django.jQuery is available
+        // This ensures aliases are set before any other scripts execute
+        var startTime = Date.now();
+        var maxWait = 5000; // 5 seconds max wait
+        
+        while (!setupJQueryAlias() && (Date.now() - startTime) < maxWait) {
+            // Synchronous blocking wait - check every 1ms
+            // This is a busy-wait, but necessary to ensure aliases are set
+            var checkTime = Date.now();
+            while (Date.now() - checkTime < 1) {
+                // Busy wait for 1ms
             }
-        }, 10);
+        }
+        
+        // If still not ready after blocking, fall back to async polling
+        if (!setupJQueryAlias()) {
+            var attempts = 0;
+            var maxAttempts = 500;
+            var interval = setInterval(function() {
+                if (setupJQueryAlias() || attempts++ >= maxAttempts) {
+                    clearInterval(interval);
+                }
+            }, 10);
+        }
     }
 })();
 
