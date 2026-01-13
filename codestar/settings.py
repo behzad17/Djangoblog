@@ -419,10 +419,10 @@ SUMMERNOTE_CONFIG = {
     },
     # Attachment file size limit (5MB)
     'attachment_filesize_limit': 1024 * 1024 * 5,
-    # Disable lazy loading to ensure scripts load in correct order
-    'lazy': False,
+    # Enable lazy loading to delay Summernote initialization until jQuery is ready
+    'lazy': True,
     # Don't include jQuery - Django admin already provides it as django.jQuery
-    # Our template will set $ and jQuery aliases before Summernote loads
+    # Our template will set $ and jQuery aliases, and lazy loading will wait
 }
 
 # Default primary key field type
