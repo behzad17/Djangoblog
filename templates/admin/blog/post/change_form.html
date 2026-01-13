@@ -3,34 +3,78 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- CRITICAL: Set jQuery aliases - must run before ANY scripts -->
+<!-- CRITICAL: Set jQuery aliases using getters - runs before ANY scripts -->
 <script type="text/javascript">
-// Immediately set $ and jQuery aliases for django.jQuery
-// This runs synchronously in head, before any other scripts
+// Use Object.defineProperty to intercept ALL access to $ and jQuery
+// This ensures they're always defined, even if django.jQuery isn't loaded yet
 (function() {
     'use strict';
     
-    function setAliases() {
+    var jqueryAvailable = false;
+    
+    function checkJQuery() {
         if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+            jqueryAvailable = true;
             try {
-                window.$ = django.jQuery;
-                window.jQuery = django.jQuery;
+                // Replace getters with direct values
+                if (Object.getOwnPropertyDescriptor(window, '$')) {
+                    delete window.$;
+                }
+                if (Object.getOwnPropertyDescriptor(window, 'jQuery')) {
+                    delete window.jQuery;
+                }
+                window.$ = window.jQuery = django.jQuery;
                 return true;
             } catch(e) {
-                // Ignore
+                // If deletion fails, getters will handle it
             }
         }
         return false;
     }
     
     // Try immediately
-    setAliases();
+    checkJQuery();
     
-    // Poll aggressively
+    // Define getters if jQuery not available yet
+    if (!jqueryAvailable) {
+        try {
+            // Only define if not already defined
+            if (!window.hasOwnProperty('$') || !Object.getOwnPropertyDescriptor(window, '$')) {
+                Object.defineProperty(window, '$', {
+                    get: function() {
+                        if (checkJQuery()) {
+                            return window.$;
+                        }
+                        // Return undefined - scripts will need to handle this
+                        return undefined;
+                    },
+                    configurable: true,
+                    enumerable: true
+                });
+            }
+            
+            if (!window.hasOwnProperty('jQuery') || !Object.getOwnPropertyDescriptor(window, 'jQuery')) {
+                Object.defineProperty(window, 'jQuery', {
+                    get: function() {
+                        if (checkJQuery()) {
+                            return window.jQuery;
+                        }
+                        return undefined;
+                    },
+                    configurable: true,
+                    enumerable: true
+                });
+            }
+        } catch(e) {
+            // Fallback: will set directly when available
+        }
+    }
+    
+    // Poll to replace getters with direct values
     var attempts = 0;
     var maxAttempts = 1000;
     var pollInterval = setInterval(function() {
-        if (setAliases() || attempts++ >= maxAttempts) {
+        if (checkJQuery() || attempts++ >= maxAttempts) {
             clearInterval(pollInterval);
         }
     }, 10);
