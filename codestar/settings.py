@@ -394,10 +394,8 @@ CSP_FORM_ACTION = ("'self'", "https://accounts.google.com")  # Allow Google OAut
 # Summernote Configuration
 # Configure Summernote to work properly in admin panel
 SUMMERNOTE_CONFIG = {
-    # Use iframe mode for admin to ensure proper jQuery loading
-    'iframe': True,
-    # URL prefix for Summernote static files
-    'url_prefix': '/summernote/',
+    # Disable iframe mode - use inline mode which works better with Django admin
+    'iframe': False,
     # Toolbar configuration
     'toolbar': [
         ['style', ['style']],
@@ -423,8 +421,10 @@ SUMMERNOTE_CONFIG = {
     'attachment_filesize_limit': 1024 * 1024 * 5,  # 5MB
     # Disable upload to avoid issues
     'disable_upload': False,
-    # Ensure jQuery is loaded (Summernote will include it)
+    # Use Django's jQuery (already loaded in admin)
     'jquery': '$',
+    # Ensure Summernote uses Django admin's jQuery
+    'lazy': False,
 }
 
 # Default primary key field type
