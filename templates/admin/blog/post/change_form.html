@@ -3,39 +3,39 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<!-- Simple jQuery alias: Wait for django.jQuery, then set $ and jQuery -->
+<!-- CRITICAL: Set jQuery aliases immediately - must run before ANY scripts -->
 <script type="text/javascript">
-// Wait for django.jQuery to be available, then set aliases
-// This must run BEFORE any Summernote scripts load
+// Immediately check for django.jQuery and set aliases
+// This runs synchronously in the head, before any other scripts execute
 (function() {
     'use strict';
     
-    function setupJQueryAlias() {
-        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined') {
-            // Set $ and jQuery as aliases for django.jQuery
-            // Only set if not already set to avoid conflicts
-            if (typeof window.$ === 'undefined') {
+    // Function to set aliases - called immediately and on interval
+    function setAliases() {
+        if (typeof django !== 'undefined' && typeof django.jQuery !== 'undefined' && django.jQuery) {
+            // Set aliases - allow overwrite if needed
+            try {
                 window.$ = django.jQuery;
-            }
-            if (typeof window.jQuery === 'undefined') {
                 window.jQuery = django.jQuery;
+                return true;
+            } catch(e) {
+                console.warn('Could not set jQuery aliases:', e);
             }
-            return true;
         }
         return false;
     }
     
     // Try immediately
-    if (!setupJQueryAlias()) {
-        // Poll until django.jQuery is available
-        var attempts = 0;
-        var maxAttempts = 300; // 3 seconds
-        var pollInterval = setInterval(function() {
-            if (setupJQueryAlias() || attempts++ >= maxAttempts) {
-                clearInterval(pollInterval);
-            }
-        }, 10);
-    }
+    setAliases();
+    
+    // Also poll aggressively in case django.jQuery loads after this script
+    var attempts = 0;
+    var maxAttempts = 500; // 5 seconds
+    var pollInterval = setInterval(function() {
+        if (setAliases() || attempts++ >= maxAttempts) {
+            clearInterval(pollInterval);
+        }
+    }, 10);
 })();
 </script>
 {% endblock %}
