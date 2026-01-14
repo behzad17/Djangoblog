@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Post, Comment, Category, UserProfile, PageView, PostViewCount
-from django_summernote.admin import SummernoteModelAdmin
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -17,38 +16,15 @@ class CategoryAdmin(admin.ModelAdmin):
     post_count.short_description = 'Published Posts'
 
 @admin.register(Post)
-class PostAdmin(SummernoteModelAdmin):
+class PostAdmin(admin.ModelAdmin):
+    """Admin interface for Post model with plain textareas (no Summernote)."""
 
     list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'is_deleted', 'deleted_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
     list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on',)
     # Slug is auto-generated from title in Post.save() method
     # prepopulated_fields removed - slug will be generated automatically for Persian titles
-    # Enable Summernote for both content and excerpt fields
-    summernote_fields = ('content', 'excerpt')
-    
-    class Media:
-        # CRITICAL: Load jQuery alias script FIRST, before any Summernote scripts
-        # Django merges Media classes, so we need to ensure our script is first
-        # We'll override get_media() to control the order
-        js = (
-            'admin/js/jquery_alias_fix.js',  # Must be first
-        )
-    
-    def get_media(self):
-        # Get parent Media (from SummernoteModelAdmin)
-        media = super(PostAdmin, self).get_media()
-        # Ensure our jQuery alias script loads FIRST
-        # Get current js files
-        js_files = list(media._js)
-        # Remove our script if it exists
-        if 'admin/js/jquery_alias_fix.js' in js_files:
-            js_files.remove('admin/js/jquery_alias_fix.js')
-        # Insert at beginning
-        js_files.insert(0, 'admin/js/jquery_alias_fix.js')
-        # Create new Media object with reordered scripts
-        from django.forms import Media
-        return Media(js=js_files, css=media._css)
+    # Using plain textareas instead of Summernote for admin panel
     fieldsets = (
         ('Post Information', {
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
