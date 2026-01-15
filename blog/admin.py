@@ -255,11 +255,18 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(PostViewCount)
 class PostViewCountAdmin(admin.ModelAdmin):
     """Admin interface for PostViewCount model."""
-    list_display = ('post', 'total_views', 'last_viewed_at', 'updated_at')
+    list_display = ('post_title', 'total_views', 'last_viewed_at', 'updated_at')
     search_fields = ['post__title']
     list_filter = ('updated_at',)  # Only filter on non-nullable field
     readonly_fields = ('updated_at',)
     ordering = ['-total_views']
+    
+    def post_title(self, obj):
+        """Safely display post title."""
+        if obj.post:
+            return obj.post.title
+        return '(Post deleted)'
+    post_title.short_description = 'Post'
     
     fieldsets = (
         ('Post', {

@@ -178,11 +178,18 @@ class AdCommentAdmin(admin.ModelAdmin):
 @admin.register(AdsViewCount)
 class AdsViewCountAdmin(admin.ModelAdmin):
     """Admin interface for AdsViewCount model."""
-    list_display = ('ad', 'total_views', 'last_viewed_at', 'updated_at')
+    list_display = ('ad_title', 'total_views', 'last_viewed_at', 'updated_at')
     search_fields = ['ad__title']
     list_filter = ('updated_at',)  # Only filter on non-nullable field
     readonly_fields = ('updated_at',)
     ordering = ['-total_views']
+    
+    def ad_title(self, obj):
+        """Safely display ad title."""
+        if obj.ad:
+            return obj.ad.title
+        return '(Ad deleted)'
+    ad_title.short_description = 'Ad'
     
     fieldsets = (
         ('Ad', {
