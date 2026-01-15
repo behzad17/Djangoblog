@@ -55,7 +55,8 @@ if not DEBUG and not SECRET_KEY:
 
 _default_allowed_hosts = (
     '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net,'
-    '127.0.0.1,localhost,.herokuapp.com'
+    '127.0.0.1,localhost,.herokuapp.com,'
+    'peyvand.se,www.peyvand.se'
 )
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS", _default_allowed_hosts
@@ -186,7 +187,9 @@ if 'test' in sys.argv:
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.codeinstitute-ide.net/",
-    "https://*.herokuapp.com"
+    "https://*.herokuapp.com",
+    "https://peyvand.se",
+    "https://www.peyvand.se",
 ]
 _extra_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
 if _extra_csrf:
