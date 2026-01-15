@@ -180,7 +180,7 @@ class AdsViewCountAdmin(admin.ModelAdmin):
     """Admin interface for AdsViewCount model."""
     list_display = ('ad', 'total_views', 'last_viewed_at', 'updated_at')
     search_fields = ['ad__title']
-    list_filter = ('last_viewed_at', 'updated_at')
+    list_filter = ('updated_at',)  # Only filter on non-nullable field
     readonly_fields = ('updated_at',)
     ordering = ['-total_views']
     
