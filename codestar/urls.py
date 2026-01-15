@@ -25,18 +25,15 @@ from codestar.views_db_health import db_health_dashboard
 from codestar.admin_incoming import admin_incoming_items
 from codestar.views_analytics import analytics_dashboard
 
-# Temporarily disable admin index override to fix 500 error
-# The override will be re-enabled once the issue is resolved
-# Override admin site index to add statistics
+# Admin index override disabled - was causing 500 errors
+# The admin panel works fine with default Django admin index
+# Stats dashboard is still available at /admin/incoming/ if needed
+# 
+# To re-enable in the future, uncomment and fix the admin_index_with_stats function below
 # from django.contrib.admin.views.decorators import staff_member_required
-# from django.template.response import TemplateResponse
 # from django.utils import timezone
 # from datetime import timedelta
-
-# # Capture original admin index method safely
-# # admin.site.index is a bound method, so we need to call it correctly
 # _original_index = admin.site.index
-
 # @staff_member_required
 # def admin_index_with_stats(request, extra_context=None):
 #     """Admin index with pending content statistics."""
