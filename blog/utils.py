@@ -65,6 +65,98 @@ def is_bot(user_agent):
             return True
     return False
 
+def increment_post_view_count(request, post):
+    """
+    Increment aggregated post view count with session-based deduplication.
+    
+    Uses atomic F() updates for thread-safety. Only increments if user hasn't
+    viewed this post in the last 30 minutes (session-based).
+    
+    Args:
+        request: Django request object
+        post: Post instance to increment views for
+    
+    Returns:
+        bool: True if view was counted, False if skipped (dedupe)
+    """
+    from django.db.models import F
+    from django.utils import timezone
+    from datetime import timedelta
+    from .models import PostViewCount
+    
+    # Session-based deduplication (30 minutes)
+    session_key = f"viewed_post_{post.id}"
+    now = timezone.now()
+    
+    if request.session.get(session_key):
+        # Check if last view was more than 30 minutes ago
+        last_view_timestamp = request.session.get(session_key)
+        last_view_time = timezone.datetime.fromtimestamp(last_view_timestamp, tz=timezone.utc)
+        if now - last_view_time < timedelta(minutes=30):
+            return False  # Skip - viewed too recently
+    
+    # Ensure PostViewCount record exists
+    view_count, created = PostViewCount.objects.get_or_create(post=post)
+    
+    # Atomic increment
+    PostViewCount.objects.filter(pk=view_count.pk).update(
+        total_views=F("total_views") + 1,
+        last_viewed_at=now,
+    )
+    
+    # Update session to prevent duplicate views for 30 minutes
+    request.session[session_key] = now.timestamp()
+    request.session.modified = True
+    
+    return True
+
+
+def increment_ad_view_count(request, ad):
+    """
+    Increment aggregated ad view count with session-based deduplication.
+    
+    Uses atomic F() updates for thread-safety. Only increments if user hasn't
+    viewed this ad in the last 30 minutes (session-based).
+    
+    Args:
+        request: Django request object
+        ad: Ad instance to increment views for
+    
+    Returns:
+        bool: True if view was counted, False if skipped (dedupe)
+    """
+    from django.db.models import F
+    from django.utils import timezone
+    from datetime import timedelta, datetime
+    from ads.models import AdsViewCount
+    
+    # Session-based deduplication (30 minutes)
+    session_key = f"viewed_ad_{ad.id}"
+    now = timezone.now()
+    
+    if request.session.get(session_key):
+        # Check if last view was more than 30 minutes ago
+        last_view_timestamp = request.session.get(session_key)
+        last_view_time = datetime.fromtimestamp(last_view_timestamp, tz=timezone.utc)
+        if now - last_view_time < timedelta(minutes=30):
+            return False  # Skip - viewed too recently
+    
+    # Ensure AdsViewCount record exists
+    view_count, created = AdsViewCount.objects.get_or_create(ad=ad)
+    
+    # Atomic increment
+    AdsViewCount.objects.filter(pk=view_count.pk).update(
+        total_views=F("total_views") + 1,
+        last_viewed_at=now,
+    )
+    
+    # Update session to prevent duplicate views for 30 minutes
+    request.session[session_key] = now.timestamp()
+    request.session.modified = True
+    
+    return True
+
+
 def track_page_view(request, post=None, url_path=None):
     """
     Track a page view with privacy-compliant anonymization.

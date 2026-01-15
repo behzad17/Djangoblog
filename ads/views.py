@@ -206,6 +206,18 @@ def ad_detail(request, slug):
         slug=slug
     )
     
+    # Increment aggregated view count (only for GET requests)
+    # Wrap in try-except to prevent tracking errors from breaking the page
+    if request.method == 'GET':
+        try:
+            from blog.utils import increment_ad_view_count
+            increment_ad_view_count(request, ad)
+        except Exception as e:
+            # Log the error but don't break the page view
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error incrementing view count for ad {ad.slug}: {e}", exc_info=True)
+    
     # Determine if current user has already favorited this ad
     is_favorited = False
     if request.user.is_authenticated:

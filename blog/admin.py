@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Post, Comment, Category, UserProfile, PageView, PostViewCount
+from .models import Post, Comment, Category, UserProfile, PostViewCount
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -249,49 +249,16 @@ class CommentAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-@admin.register(PageView)
-class PageViewAdmin(admin.ModelAdmin):
-    """Admin interface for PageView model."""
-    list_display = ('post', 'user', 'viewed_at', 'ip_hash_short', 'is_bot', 'referer_short')
-    list_filter = ('is_bot', 'viewed_at', 'post')
-    search_fields = ['post__title', 'url_path', 'user__username']
-    readonly_fields = ('viewed_at', 'ip_hash', 'user_agent_hash')
-    date_hierarchy = 'viewed_at'
-    ordering = ['-viewed_at']
-    
-    fieldsets = (
-        ('View Information', {
-            'fields': ('post', 'url_path', 'user', 'viewed_at')
-        }),
-        ('Tracking Data', {
-            'fields': ('session_key', 'ip_hash', 'user_agent_hash', 'is_bot'),
-            'description': 'Anonymized tracking data for privacy compliance.'
-        }),
-        ('Referer', {
-            'fields': ('referer',),
-            'classes': ('collapse',)
-        }),
-    )
-    
-    def ip_hash_short(self, obj):
-        """Display shortened IP hash."""
-        return obj.ip_hash[:8] + '...' if obj.ip_hash else 'N/A'
-    ip_hash_short.short_description = 'IP Hash'
-    
-    def referer_short(self, obj):
-        """Display shortened referer."""
-        if obj.referer:
-            return obj.referer[:50] + '...' if len(obj.referer) > 50 else obj.referer
-        return '-'
-    referer_short.short_description = 'Referer'
-
+# PageView model removed from admin to keep admin fast
+# (model still exists in database, just not registered in admin)
 
 @admin.register(PostViewCount)
 class PostViewCountAdmin(admin.ModelAdmin):
     """Admin interface for PostViewCount model."""
-    list_display = ('post', 'total_views', 'unique_views', 'last_updated')
+    list_display = ('post', 'total_views', 'last_viewed_at', 'updated_at')
     search_fields = ['post__title']
-    readonly_fields = ('last_updated',)
+    list_filter = ('last_viewed_at', 'updated_at')
+    readonly_fields = ('updated_at',)
     ordering = ['-total_views']
     
     fieldsets = (
@@ -299,7 +266,7 @@ class PostViewCountAdmin(admin.ModelAdmin):
             'fields': ('post',)
         }),
         ('View Statistics', {
-            'fields': ('total_views', 'unique_views', 'last_updated'),
+            'fields': ('total_views', 'last_viewed_at', 'updated_at'),
             'description': 'Aggregated view counts. Updated automatically when views are tracked.'
         }),
     )

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import AdCategory, Ad, AdComment
+from .models import AdCategory, Ad, AdComment, AdsViewCount
 
 
 @admin.register(AdCategory)
@@ -175,4 +175,21 @@ class AdCommentAdmin(admin.ModelAdmin):
     body_preview.short_description = 'Comment'
 
 
-# Register your models here.
+@admin.register(AdsViewCount)
+class AdsViewCountAdmin(admin.ModelAdmin):
+    """Admin interface for AdsViewCount model."""
+    list_display = ('ad', 'total_views', 'last_viewed_at', 'updated_at')
+    search_fields = ['ad__title']
+    list_filter = ('last_viewed_at', 'updated_at')
+    readonly_fields = ('updated_at',)
+    ordering = ['-total_views']
+    
+    fieldsets = (
+        ('Ad', {
+            'fields': ('ad',)
+        }),
+        ('View Statistics', {
+            'fields': ('total_views', 'last_viewed_at', 'updated_at'),
+            'description': 'Aggregated view counts. Updated automatically when views are tracked.'
+        }),
+    )

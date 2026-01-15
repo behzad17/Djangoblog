@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Analytics Dashboard | Peyvand{% endblock title %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="mb-4">
+        <i class="fas fa-chart-bar ms-2"></i>Analytics Dashboard
+      </h1>
+      
+      <!-- Summary Statistics -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="fas fa-file-alt ms-2"></i>Post Views
+              </h5>
+              <h3 class="mb-0">{{ total_post_views|default:0|intcomma }}</h3>
+              <p class="text-muted mb-0">Total views across all posts</p>
+              <small class="text-muted">{{ posts_with_views|default:0 }} posts have views</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="fas fa-ad ms-2"></i>Ad Views
+              </h5>
+              <h3 class="mb-0">{{ total_ad_views|default:0|intcomma }}</h3>
+              <p class="text-muted mb-0">Total views across all ads</p>
+              <small class="text-muted">{{ ads_with_views|default:0 }} ads have views</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Top Posts -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-trophy ms-2"></i>Top 10 Posts by Views
+              </h5>
+            </div>
+            <div class="card-body">
+              {% if top_posts %}
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Post Title</th>
+                      <th>Total Views</th>
+                      <th>Last Viewed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for view_count in top_posts %}
+                    <tr>
+                      <td><strong>{{ forloop.counter }}</strong></td>
+                      <td>
+                        {% if view_count.post %}
+                        <a href="{% url 'post_detail' view_count.post.slug %}" target="_blank">
+                          {{ view_count.post.title|truncatewords:10 }}
+                        </a>
+                        {% else %}
+                        <em>Post deleted</em>
+                        {% endif %}
+                      </td>
+                      <td><strong>{{ view_count.total_views|intcomma }}</strong></td>
+                      <td>
+                        {% if view_count.last_viewed_at %}
+                        {{ view_count.last_viewed_at|date:"Y-m-d H:i" }}
+                        {% else %}
+                        <em>Never</em>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <p class="text-muted">No post views yet.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Top Ads -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-trophy ms-2"></i>Top 10 Ads by Views
+              </h5>
+            </div>
+            <div class="card-body">
+              {% if top_ads %}
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Ad Title</th>
+                      <th>Total Views</th>
+                      <th>Last Viewed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for view_count in top_ads %}
+                    <tr>
+                      <td><strong>{{ forloop.counter }}</strong></td>
+                      <td>
+                        {% if view_count.ad %}
+                        <a href="{% url 'ads:ad_detail' view_count.ad.slug %}" target="_blank">
+                          {{ view_count.ad.title|truncatewords:10 }}
+                        </a>
+                        {% else %}
+                        <em>Ad deleted</em>
+                        {% endif %}
+                      </td>
+                      <td><strong>{{ view_count.total_views|intcomma }}</strong></td>
+                      <td>
+                        {% if view_count.last_viewed_at %}
+                        {{ view_count.last_viewed_at|date:"Y-m-d H:i" }}
+                        {% else %}
+                        <em>Never</em>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <p class="text-muted">No ad views yet.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

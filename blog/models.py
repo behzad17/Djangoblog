@@ -429,25 +429,27 @@ class PageView(models.Model):
 
 class PostViewCount(models.Model):
     """
-    Aggregated view count cache for performance.
+    Aggregated view count for posts.
     
-    This model stores pre-calculated view counts to avoid expensive
-    queries when displaying view counts. Updated periodically or via signals.
+    Stores total view counts with atomic updates for performance.
+    Updated on each post detail view (with session-based deduplication).
     """
     post = models.OneToOneField(
         Post,
         on_delete=models.CASCADE,
-        related_name='view_count_cache'
+        related_name='view_count_cache',
+        unique=True
     )
     total_views = models.PositiveIntegerField(
         default=0,
-        help_text="Total number of views (excluding bots)"
+        help_text="Total number of views"
     )
-    unique_views = models.PositiveIntegerField(
-        default=0,
-        help_text="Approximate unique views (based on session/IP/UA combination)"
+    last_viewed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this post was last viewed"
     )
-    last_updated = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
         help_text="When the count was last updated"
     )
@@ -455,6 +457,7 @@ class PostViewCount(models.Model):
     class Meta:
         verbose_name = "Post View Count"
         verbose_name_plural = "Post View Counts"
+        ordering = ['-total_views']
     
     def __str__(self):
         return f"{self.post.title}: {self.total_views} views"

@@ -228,16 +228,17 @@ def post_detail(request, slug):
             {'post': post},
         )
     
-    # Track page view (only for GET requests)
+    # Increment aggregated view count (only for GET requests)
     # Wrap in try-except to prevent tracking errors from breaking the page
     if request.method == 'GET':
         try:
-            track_page_view(request, post=post)
+            from .utils import increment_post_view_count
+            increment_post_view_count(request, post)
         except Exception as e:
             # Log the error but don't break the page view
             import logging
             logger = logging.getLogger(__name__)
-            logger.error(f"Error tracking page view for post {post.slug}: {e}", exc_info=True)
+            logger.error(f"Error incrementing view count for post {post.slug}: {e}", exc_info=True)
     
     # Filter comments: show approved comments + user's own unapproved comments
     if request.user.is_authenticated:

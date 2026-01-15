@@ -23,6 +23,7 @@ from blog.sitemaps import PostSitemap, CategorySitemap
 from blog.views_robots import robots_txt
 from codestar.views_db_health import db_health_dashboard
 from codestar.admin_incoming import admin_incoming_items
+from codestar.views_analytics import analytics_dashboard
 
 # Override admin site index to add statistics
 from django.contrib.admin.views.decorators import staff_member_required
@@ -171,6 +172,8 @@ urlpatterns = [
     path("admin/db-health/", db_health_dashboard, name="db_health_dashboard"),
     # Admin: Incoming Items Page
     path("admin/incoming/", admin_incoming_items, name="admin_incoming_items"),
+    # Analytics Dashboard (staff-only)
+    path("dashboard/analytics/", analytics_dashboard, name="analytics_dashboard"),
     # Custom account URLs (must come before allauth.urls to avoid conflicts)
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("allauth.urls")),

@@ -263,4 +263,37 @@ class AdComment(models.Model):
         return f"Comment on {self.ad.title} by {self.author.username}"
 
 
-# Create your models here.
+class AdsViewCount(models.Model):
+    """
+    Aggregated view count for ads.
+    
+    Stores total view counts with atomic updates for performance.
+    Updated on each ad detail view (with session-based deduplication).
+    """
+    ad = models.OneToOneField(
+        Ad,
+        on_delete=models.CASCADE,
+        related_name='view_count_cache',
+        unique=True
+    )
+    total_views = models.PositiveIntegerField(
+        default=0,
+        help_text="Total number of views"
+    )
+    last_viewed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this ad was last viewed"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        help_text="When the count was last updated"
+    )
+    
+    class Meta:
+        verbose_name = "Ad View Count"
+        verbose_name_plural = "Ad View Counts"
+        ordering = ['-total_views']
+    
+    def __str__(self):
+        return f"{self.ad.title}: {self.total_views} views"
