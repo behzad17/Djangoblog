@@ -31,7 +31,14 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from datetime import timedelta
 
-_original_index = admin.site.index
+# Capture original admin index function safely
+try:
+    _original_index = admin.site.index
+except AttributeError:
+    # Fallback if admin.site.index doesn't exist
+    from django.contrib.admin.views.decorators import staff_member_required as _staff_required
+    from django.contrib.admin.sites import AdminSite
+    _original_index = AdminSite.index
 
 @staff_member_required
 def admin_index_with_stats(request, extra_context=None):
@@ -50,6 +57,7 @@ def admin_index_with_stats(request, extra_context=None):
         'pending_urls': 0,
     }
     
+    # Safely collect stats - all errors are caught and logged
     try:
         from blog.models import Post, Comment
         from ads.models import Ad
@@ -134,8 +142,25 @@ def admin_index_with_stats(request, extra_context=None):
         logger = logging.getLogger(__name__)
         logger.error(f"Error getting admin stats: {e}", exc_info=True)
     
-    extra_context.update(stats)
-    return _original_index(request, extra_context)
+    # Safely update context and call original index
+    try:
+        extra_context.update(stats)
+        # Call original index function safely
+        if callable(_original_index):
+            return _original_index(request, extra_context)
+        else:
+            # Fallback to default admin index
+            from django.contrib.admin.views.decorators import staff_member_required
+            from django.contrib.admin.sites import AdminSite
+            return AdminSite.index(admin.site, request, extra_context)
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error calling original admin index: {e}", exc_info=True)
+        # Last resort: return basic admin index without stats
+        from django.contrib.admin.views.decorators import staff_member_required
+        from django.contrib.admin.sites import AdminSite
+        return AdminSite.index(admin.site, request, {})
 
 admin.site.index = admin_index_with_stats
 
