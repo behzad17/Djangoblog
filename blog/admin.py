@@ -256,10 +256,15 @@ class CommentAdmin(admin.ModelAdmin):
 class PostViewCountAdmin(admin.ModelAdmin):
     """Admin interface for PostViewCount model."""
     list_display = ('post_title', 'total_views', 'last_viewed_at', 'updated_at')
-    search_fields = ['post__title']
+    search_fields = []  # Removed post__title to prevent 500 errors with orphaned records
     list_filter = ('updated_at',)  # Only filter on non-nullable field
     readonly_fields = ('updated_at',)
     ordering = ['-total_views']
+    
+    def get_queryset(self, request):
+        """Optimize queryset and filter out orphaned records."""
+        qs = super().get_queryset(request)
+        return qs.select_related('post').filter(post__isnull=False)
     
     def post_title(self, obj):
         """Safely display post title."""

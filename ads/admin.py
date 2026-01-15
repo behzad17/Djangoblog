@@ -179,10 +179,15 @@ class AdCommentAdmin(admin.ModelAdmin):
 class AdsViewCountAdmin(admin.ModelAdmin):
     """Admin interface for AdsViewCount model."""
     list_display = ('ad_title', 'total_views', 'last_viewed_at', 'updated_at')
-    search_fields = ['ad__title']
+    search_fields = []  # Removed ad__title to prevent 500 errors with orphaned records
     list_filter = ('updated_at',)  # Only filter on non-nullable field
     readonly_fields = ('updated_at',)
     ordering = ['-total_views']
+    
+    def get_queryset(self, request):
+        """Optimize queryset and filter out orphaned records."""
+        qs = super().get_queryset(request)
+        return qs.select_related('ad').filter(ad__isnull=False)
     
     def ad_title(self, obj):
         """Safely display ad title."""
