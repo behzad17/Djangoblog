@@ -69,13 +69,13 @@ def category_image(category):
         # Priority: exact slug > exact name > keyword match (specific)
         image_map = {
             # Exact slug matches (from database)
-            'vehicles': 'car-naghlie.jpg',
-            'housing': 'maskan-zendegi.jpg',
+            'economi': 'car-naghlie.jpg',
+            'social-zendegi': 'maskan-zendegi.jpg',
             'work-services': 'kar-herfeh.jpg',
             'leisure': 'oghate-feraghat.jpg',
             'food-restaurant': 'ghaza-farhang.jpg',
             'health-welfare': 'salamat-refah.jpg',
-            'home-appliances': 'khane-vasayel.jpg',
+            'beauty-appliances': 'khane-vasayel.jpg',
             'legal-financial': 'hoghooghi-mali.jpg',
             # آموزش، زبان و یادگیری
             'mozsh-zbn-o-dr': 'zaban-amozesh.jpg',
@@ -109,8 +109,8 @@ def category_image(category):
             # Vehicles
             'vehicles': 'car-naghlie.jpg',
             'نقلیه': 'car-naghlie.jpg',
-            # Housing
-            'housing': 'maskan-zendegi.jpg',
+            # Housing / social services
+            'social-zendegi': 'maskan-zendegi.jpg',
             'مسکن': 'maskan-zendegi.jpg',
             # Work
             'work-services': 'kar-herfeh.jpg',
@@ -127,8 +127,8 @@ def category_image(category):
             'health-welfare': 'salamat-refah.jpg',
             'health': 'salamat-refah.jpg',
             'سلامت': 'salamat-refah.jpg',
-            # Home
-            'home-appliances': 'khane-vasayel.jpg',
+            # Beauty / home
+            'beauty-appliances': 'khane-vasayel.jpg',
             'home': 'khane-vasayel.jpg',
             'خانه': 'khane-vasayel.jpg',
             # Legal

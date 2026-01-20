@@ -14,14 +14,16 @@ def create_slug_from_persian(text):
     """
     # Persian to English transliteration map
     transliteration_map = {
-        'وسایل نقلیه': 'vehicles',
-        'مسکن': 'housing',
-        'کار و خدمات': 'work-services',
-        'اوقات فراغت': 'leisure',
-        'غذا و رستوران': 'food-restaurant',
-        'سلامت و رفاه': 'health-welfare',
-        'وسایل منزل': 'home-appliances',
-        'حقوقی و مالی': 'legal-financial',
+        'خدمات مالی': 'economi',
+        'خدمات اداری و اجتماعی': 'social-zendegi',
+        'خدمات شغلی و حرفه‌ای': 'work-services',
+        'رفاه و سرگرمی': 'leisure',
+        'رستوران، کافه و مواد غذایی': 'food-restaurant',
+        'خدمات پزشکی و سلامت': 'health-welfare',
+        'بهداشت و زیبایی': 'beauty-appliances',
+        'خدمات حقوقی': 'legal-financial',
+        'خدمات آموزشی': 'mozsh-zbn-o-dr',
+        'فناوری و توسعه وب': 'fnor-o-khdmt-dgtl',
     }
     
     # Check if we have a direct mapping
