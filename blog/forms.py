@@ -73,7 +73,7 @@ class PostForm(forms.ModelForm):
             'title': 'عنوان پست خود را وارد کنید',
             'excerpt': 'خلاصه کوتاهی از پست (اختیاری)',
             'content': 'محتوا و متن کامل پست',
-            'featured_image': 'فرمت‌های مجاز: JPG، JPEG، PNG، WebP، GIF | اندازه توصیه‌شده: 1200x675 پیکسل (نسبت 16:9) یا تصاویر افقی | حداکثر حجم فایل: 5 مگابایت',
+            'featured_image': 'فرمت‌های مجاز: JPG، JPEG، PNG، WebP، GIF | اندازه توصیه‌شده: 1080x1080 پیکسل حداکثر حجم فایل: 5 مگابایت',
         }
     
     def clean(self):
