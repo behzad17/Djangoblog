@@ -57,7 +57,7 @@
   <div class="post-hero-card">
     <div class="row g-0">
       <!-- Content Area (Right on desktop, Top on mobile) -->
-      <div class="col-lg-6 col-md-12 post-hero-content order-2 order-lg-1">
+      <div class="col-lg-9 col-md-12 post-hero-content order-2 order-lg-1">
         <div class="post-hero-content-inner">
           <h1 class="post-hero-title">{{ post.title }}</h1>
           <p class="post-hero-meta">
@@ -160,7 +160,7 @@
       </div>
       
       <!-- Image Area (Left on desktop, Bottom on mobile) -->
-      <div class="col-lg-6 col-md-12 post-hero-image order-1 order-lg-2">
+      <div class="col-lg-3 col-md-12 post-hero-image order-1 order-lg-2">
         {% if post.featured_image %}
           {% if "placeholder" in post.featured_image.url|default:"" %}
           <img
