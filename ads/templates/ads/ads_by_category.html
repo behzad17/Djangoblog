@@ -39,7 +39,7 @@
 
   <div class="row">
     {% for ad in ads %}
-    <div class="col-md-4 mb-4">
+    <div class="col-md-3 mb-4">
       <div class="glass-morphism-card {% if ad.is_currently_featured %}ad-featured{% endif %}">
         <a
           href="{% url 'ads:ad_detail' ad.slug %}"
