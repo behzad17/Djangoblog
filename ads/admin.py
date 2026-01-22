@@ -46,7 +46,7 @@ class AdAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
     )
-    list_editable = ("is_approved", "is_featured", "featured_priority", "plan")
+    list_editable = ("is_approved", "is_featured", "featured_priority")
     search_fields = ("title", "target_url", "category__name", "city", "address", "phone")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on", "pro_requested_at")
