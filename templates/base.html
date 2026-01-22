@@ -162,16 +162,16 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
-                href="{{ ask_me_url|default:'/ask-me/' }}"
-                ><i class="fas fa-question-circle ms-1"></i>سؤال از متخصص</a
+                class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
+                href="{{ ads_home_url }}"
+                >نیازمندیها</a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
-                href="{{ ads_home_url }}"
-                >نیازمندیها</a
+                class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
+                href="{{ ask_me_url|default:'/ask-me/' }}"
+                ><i class="fas fa-question-circle ms-1"></i>سؤال از متخصص</a
               >
             </li>
             <li class="nav-item">
