@@ -2578,6 +2578,10 @@ body {
   text-align: right;
 }
 
+.footer-contact[dir="ltr"] {
+  text-align: left;
+}
+
 .footer-contact-item {
   display: flex;
   align-items: center;
@@ -4651,6 +4655,14 @@ body .container nav[aria-label="breadcrumb"] {
 .footer-social a {
   color: var(--pv-text-main) !important; /* Use main text color token */
   font-size: 1.4rem;
+}
+
+.footer-social[dir="ltr"] {
+  justify-content: flex-start;
+}
+
+.footer-social[dir="ltr"] + p[dir="ltr"] {
+  text-align: left;
 }
 
 .footer-social a:hover {
