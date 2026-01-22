@@ -25,6 +25,7 @@ class AdAdmin(admin.ModelAdmin):
         "is_approved",
         "is_featured",
         "featured_priority",
+        "plan",
         "pro_request_status",
         "url_status",
         "social_urls_status",
