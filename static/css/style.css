@@ -4080,6 +4080,23 @@ body {
   font-weight: 700;
 }
 
+.glass-card-badge-pro {
+  background: rgba(255, 193, 7, 0.95);
+  color: #000;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+  font-weight: 700;
+  left: 12px;
+  right: auto;
+}
+
+.glass-card-badge-free {
+  background: rgba(108, 117, 125, 0.9);
+  color: white;
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+  left: 12px;
+  right: auto;
+}
+
 /* Featured ad card styling */
 .ad-featured {
   border: 2px solid #ffc107;

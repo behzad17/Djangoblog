@@ -109,6 +109,15 @@
                 <i class="fas fa-star ms-1"></i>ویژه
               </span>
             {% endif %}
+            {% if ad.plan == 'pro' %}
+              <span class="glass-card-badge glass-card-badge-pro">
+                <i class="fas fa-crown ms-1"></i>Pro
+              </span>
+            {% else %}
+              <span class="glass-card-badge glass-card-badge-free">
+                <i class="fas fa-tag ms-1"></i>Free
+              </span>
+            {% endif %}
             {% if user.is_authenticated and ad.owner == user %}
             <span class="glass-card-badge glass-card-badge-owner">
               <i class="fas fa-user ms-1"></i>تبلیغ شما
