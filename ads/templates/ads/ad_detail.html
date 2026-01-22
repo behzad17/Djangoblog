@@ -282,8 +282,72 @@
             </a>
             {% endif %}
           </div>
+          
+          <!-- Pro Request Section -->
+          {% if user.is_authenticated and ad.owner == user and ad.plan == 'free' and not ad.pro_requested %}
+          <div class="mt-4 d-flex align-items-center justify-content-center">
+            <button 
+              type="button" 
+              class="btn btn-warning btn-lg" 
+              data-bs-toggle="modal" 
+              data-bs-target="#proRequestModal"
+            >
+              <i class="fas fa-crown ms-2"></i>می‌خواهم تبلیغ من Pro شود
+            </button>
+          </div>
+          {% elif user.is_authenticated and ad.owner == user and ad.pro_requested %}
+          <div class="mt-4">
+            <div class="alert alert-info text-center">
+              <i class="fas fa-clock ms-2"></i>
+              درخواست Pro شما ثبت شده است. به زودی با شما تماس می‌گیریم.
+            </div>
+          </div>
+          {% elif user.is_authenticated and ad.owner == user and ad.plan == 'pro' %}
+          <div class="mt-4">
+            <div class="alert alert-success text-center">
+              <i class="fas fa-crown ms-2"></i>
+              این تبلیغ شما Pro است.
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
+
+      <!-- Pro Request Modal -->
+      {% if user.is_authenticated and ad.owner == user and ad.plan == 'free' and not ad.pro_requested %}
+      <div class="modal fade" id="proRequestModal" tabindex="-1" aria-labelledby="proRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="proRequestModalLabel">
+                <i class="fas fa-crown ms-2"></i>درخواست ارتقا به Pro
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'ads:ad_detail' ad.slug %}">
+              {% csrf_token %}
+              <input type="hidden" name="pro_request" value="1">
+              <div class="modal-body">
+                <p class="mb-3">لطفاً شماره تماس خود را وارد کنید تا با شما تماس بگیریم:</p>
+                {{ pro_request_form.phone }}
+                {% if pro_request_form.phone.errors %}
+                  <div class="text-danger small mt-1">{{ pro_request_form.phone.errors }}</div>
+                {% endif %}
+                {% if pro_request_form.phone.help_text %}
+                  <div class="form-text">{{ pro_request_form.phone.help_text }}</div>
+                {% endif %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                <button type="submit" class="btn btn-warning">
+                  <i class="fas fa-paper-plane ms-2"></i>ارسال درخواست
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
 
       <!-- Comment Form Section -->
       <div class="card mb-3 shadow-sm border-0 comment-form-card">

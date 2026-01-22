@@ -161,6 +161,33 @@ class Ad(models.Model):
         help_text="Optional: Featured status expires after this date. Leave blank for permanent featured status.",
     )
 
+    # Ad Plan (Free/Pro)
+    plan = models.CharField(
+        max_length=10,
+        choices=[('free', 'Free'), ('pro', 'Pro')],
+        default='free',
+        help_text="Ad plan type: Free or Pro",
+    )
+
+    # Pro Request Fields
+    pro_requested = models.BooleanField(
+        default=False,
+        help_text="Whether the user has requested Pro upgrade",
+    )
+
+    pro_request_phone = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True,
+        help_text="Phone number provided when requesting Pro upgrade",
+    )
+
+    pro_requested_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When the Pro upgrade was requested",
+    )
+
     class Meta:
         ordering = ["-created_on"]
         indexes = [

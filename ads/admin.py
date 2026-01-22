@@ -25,6 +25,7 @@ class AdAdmin(admin.ModelAdmin):
         "is_approved",
         "is_featured",
         "featured_priority",
+        "pro_request_status",
         "url_status",
         "social_urls_status",
         "start_date",
@@ -37,15 +38,17 @@ class AdAdmin(admin.ModelAdmin):
         "is_active",
         "is_approved",
         "is_featured",
+        "plan",
+        "pro_requested",
         "url_approved",
         "social_urls_approved",
         "start_date",
         "end_date",
     )
-    list_editable = ("is_approved", "is_featured", "featured_priority")
+    list_editable = ("is_approved", "is_featured", "featured_priority", "plan")
     search_fields = ("title", "target_url", "category__name", "city", "address", "phone")
     prepopulated_fields = {"slug": ("title",)}
-    readonly_fields = ("created_on", "updated_on")
+    readonly_fields = ("created_on", "updated_on", "pro_requested_at")
 
     fieldsets = (
         (
@@ -102,6 +105,13 @@ class AdAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Ad Plan & Pro Request",
+            {
+                "fields": ("plan", "pro_requested", "pro_request_phone", "pro_requested_at"),
+                "description": "Ad plan type (Free/Pro). Users can request Pro upgrade. Admin can manually change plan from Free to Pro after reviewing the request.",
+            },
+        ),
+        (
             "Timestamps",
             {
                 "fields": ("created_on", "updated_on"),
@@ -130,6 +140,22 @@ class AdAdmin(admin.ModelAdmin):
         return format_html('<span style="color: orange;">⏳ Social URLs Pending</span>')
     
     social_urls_status.short_description = "Social URLs Status"
+    
+    def pro_request_status(self, obj):
+        """Display Pro request status."""
+        if obj.plan == 'pro':
+            return format_html('<span style="color: green;">✓ Pro</span>')
+        if obj.pro_requested:
+            return format_html(
+                '<span style="color: orange;">⏳ Pro Requested</span><br>'
+                '<small>Phone: {}</small><br>'
+                '<small>Date: {}</small>',
+                obj.pro_request_phone or 'N/A',
+                obj.pro_requested_at.strftime('%Y-%m-%d %H:%M') if obj.pro_requested_at else 'N/A'
+            )
+        return format_html('<span style="color: gray;">Free</span>')
+
+    pro_request_status.short_description = "Plan Status"
 
 
 @admin.register(AdComment)

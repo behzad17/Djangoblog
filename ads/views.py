@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
 from .models import AdCategory, Ad, FavoriteAd, AdComment
-from .forms import AdForm, AdCommentForm, AdFilterForm
+from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 
 
 def _visible_ads_queryset():
@@ -275,39 +275,78 @@ def ad_detail(request, slug):
     comments = ad.comments.filter(is_deleted=False).select_related('author').order_by('created_on')
     comment_count = comments.count()
     comment_form = AdCommentForm()
+    pro_request_form = ProRequestForm()
     
-    # Handle POST request for comment submission
+    # Determine if user can request Pro upgrade
+    can_request_pro = False
+    if request.user.is_authenticated and ad.owner == request.user:
+        if ad.plan == 'free' and not ad.pro_requested:
+            can_request_pro = True
+    
+    # Handle POST request
     if request.method == "POST":
         # Require authentication (already handled by @login_required, but defensive check)
         if not request.user.is_authenticated:
-            messages.error(request, 'لطفاً برای ثبت نظر وارد شوید.')
+            messages.error(request, 'لطفاً برای این عملیات وارد شوید.')
             return redirect('account_login')
         
-        # Require site verification for comments
-        # Ensure user has a profile (create if missing)
-        if not hasattr(request.user, 'profile'):
-            from blog.models import UserProfile
-            UserProfile.objects.get_or_create(user=request.user)
-        
-        # Check site verification
-        if not request.user.profile.is_site_verified:
-            messages.warning(request, 'لطفاً ابتدا تنظیمات حساب کاربری خود را تکمیل کنید.')
-            return redirect('complete_setup')
-        
-        # Process comment form
-        comment_form = AdCommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.ad = ad
-            # No approval needed - publish immediately
-            comment.save()
+        # Check if this is a Pro request or comment
+        if 'pro_request' in request.POST:
+            # Handle Pro request
+            # Check ownership
+            if ad.owner != request.user:
+                messages.error(request, 'شما اجازه درخواست Pro برای این تبلیغ را ندارید.')
+                return redirect('ads:ad_detail', slug=slug)
             
-            messages.success(request, 'نظر شما با موفقیت ثبت شد!')
-            return redirect('ads:ad_detail', slug=slug)
+            # Check if already Pro
+            if ad.plan == 'pro':
+                messages.info(request, 'این تبلیغ قبلاً Pro است.')
+                return redirect('ads:ad_detail', slug=slug)
+            
+            # Check if already requested
+            if ad.pro_requested:
+                messages.info(request, 'درخواست Pro شما قبلاً ثبت شده است.')
+                return redirect('ads:ad_detail', slug=slug)
+            
+            # Process Pro request form
+            pro_request_form = ProRequestForm(data=request.POST)
+            if pro_request_form.is_valid():
+                ad.pro_requested = True
+                ad.pro_request_phone = pro_request_form.cleaned_data['phone']
+                ad.pro_requested_at = timezone.now()
+                ad.save()
+                messages.success(request, 'درخواست شما ثبت شد، به زودی با شما تماس می‌گیریم.')
+                return redirect('ads:ad_detail', slug=slug)
+            else:
+                # Form has errors, will be displayed in template
+                messages.error(request, 'لطفاً خطاهای فرم را برطرف کنید.')
         else:
-            # Form has errors, will be displayed in template
-            messages.error(request, 'لطفاً خطاهای فرم را برطرف کنید.')
+            # Handle comment form submission
+            # Require site verification for comments
+            # Ensure user has a profile (create if missing)
+            if not hasattr(request.user, 'profile'):
+                from blog.models import UserProfile
+                UserProfile.objects.get_or_create(user=request.user)
+            
+            # Check site verification
+            if not request.user.profile.is_site_verified:
+                messages.warning(request, 'لطفاً ابتدا تنظیمات حساب کاربری خود را تکمیل کنید.')
+                return redirect('complete_setup')
+            
+            # Process comment form
+            comment_form = AdCommentForm(data=request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.author = request.user
+                comment.ad = ad
+                # No approval needed - publish immediately
+                comment.save()
+                
+                messages.success(request, 'نظر شما با موفقیت ثبت شد!')
+                return redirect('ads:ad_detail', slug=slug)
+            else:
+                # Form has errors, will be displayed in template
+                messages.error(request, 'لطفاً خطاهای فرم را برطرف کنید.')
     
     context = {
         "ad": ad,
@@ -315,6 +354,8 @@ def ad_detail(request, slug):
         "comments": comments,
         "comment_count": comment_count,
         "comment_form": comment_form,
+        "pro_request_form": pro_request_form,
+        "can_request_pro": can_request_pro,
     }
     return render(request, "ads/ad_detail.html", context)
 

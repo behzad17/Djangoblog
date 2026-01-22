@@ -60,6 +60,24 @@
             {% endif %}
           </div>
 
+          <!-- Plan Status -->
+          <div class="mb-2">
+            {% if ad.plan == 'pro' %}
+            <span class="badge bg-warning text-dark">
+              <i class="fas fa-crown ms-1"></i>Pro
+            </span>
+            {% else %}
+            <span class="badge bg-secondary">
+              <i class="fas fa-tag ms-1"></i>Free
+            </span>
+            {% endif %}
+            {% if ad.pro_requested %}
+            <span class="badge bg-info">
+              <i class="fas fa-clock ms-1"></i>درخواست Pro ثبت شده
+            </span>
+            {% endif %}
+          </div>
+
           <div class="mb-2">
             <small class="text-muted">
               <i class="far fa-calendar ms-1"></i>

@@ -323,3 +323,33 @@ class AdFilterForm(forms.Form):
         city_field_choices.extend([(city, city) for city in city_choices])
         self.fields['city'].choices = city_field_choices
 
+
+class ProRequestForm(forms.Form):
+    """
+    Form for requesting Pro upgrade for an ad.
+    Only requires phone number.
+    """
+    phone = forms.CharField(
+        max_length=30,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'شماره تماس',
+            'type': 'tel',
+        }),
+        label='شماره تماس',
+        help_text='شماره تماس خود را وارد کنید',
+    )
+    
+    def clean_phone(self):
+        """Validate and sanitize phone number."""
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            phone = phone.strip()
+            # Basic validation - ensure it's not empty after strip
+            if not phone:
+                raise ValidationError('شماره تماس نمی‌تواند خالی باشد.')
+            # Optional: Add format validation (e.g., digits, length)
+            # For now, keep it simple
+        return phone
+
