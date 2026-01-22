@@ -7040,6 +7040,41 @@ body .container nav[aria-label="breadcrumb"] {
   padding: 1rem 1rem 1.5rem 1rem;
 }
 
+/* Slower, smoother accordion animation for member guide page only */
+.guide-section .peyvand-faq__q {
+  transition: background-color 0.4s ease-in-out;
+}
+
+.guide-section .peyvand-faq-icon {
+  transition: transform 0.5s ease-in-out;
+}
+
+.guide-section .peyvand-faq__a {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 1rem;
+  transition: max-height 0.6s ease-in-out, 
+              opacity 0.5s ease-in-out, 
+              padding 0.6s ease-in-out;
+}
+
+/* Override hidden attribute to allow smooth transitions */
+.guide-section .peyvand-faq__a[hidden] {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  display: block !important;
+  visibility: hidden;
+  padding: 0 1rem !important;
+}
+
+.guide-section .peyvand-faq__item.is-open .peyvand-faq__a {
+  max-height: 2000px;
+  opacity: 1;
+  visibility: visible;
+  padding: 1rem 1rem 1.5rem 1rem;
+}
+
 .peyvand-faq__a p {
   margin: 0;
   line-height: 1.8;
