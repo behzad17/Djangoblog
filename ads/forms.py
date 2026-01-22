@@ -92,7 +92,7 @@ class AdForm(forms.ModelForm):
             'target_url': 'آدرس وب‌سایتی که با کلیک روی تبلیغ باز می‌شود',
             'extra_image_1': 'تصویر اضافی اول (اختیاری - حداکثر 5MB)',
             'extra_image_2': 'تصویر اضافی دوم (اختیاری - حداکثر 5MB)',
-            'address': 'آدرس کامل محل کسب‌وکار یا ارائه خدمات (اختیاری)',
+            'address': 'آدرس کامل محل کسب‌وکار یا ارائه خدمات',
             'phone': 'شماره تماس (اختیاری)',
             'instagram_url': 'لینک پروفایل یا صفحه اینستاگرام (اختیاری)',
             'telegram_url': 'لینک کانال یا گروه تلگرام (اختیاری)',
@@ -108,8 +108,7 @@ class AdForm(forms.ModelForm):
         # Make optional fields not required
         self.fields['start_date'].required = False
         self.fields['end_date'].required = False
-        self.fields['city'].required = False
-        self.fields['address'].required = False
+        # city and address are now required
         self.fields['phone'].required = False
         self.fields['instagram_url'].required = False
         self.fields['telegram_url'].required = False
