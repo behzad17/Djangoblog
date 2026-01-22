@@ -286,3 +286,40 @@ class AdCommentForm(forms.ModelForm):
         
         return body
 
+
+class AdFilterForm(forms.Form):
+    """
+    Form for filtering ads by city and sorting by date.
+    Used in ads category listing page.
+    """
+    city = forms.ChoiceField(
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-select',
+        }),
+        label='شهر',
+    )
+    
+    sort = forms.ChoiceField(
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-select',
+        }),
+        label='مرتب‌سازی',
+        choices=[
+            ('newest', 'جدیدترین'),
+            ('oldest', 'قدیمی‌ترین'),
+        ],
+        initial='newest',
+    )
+    
+    def __init__(self, *args, **kwargs):
+        """Initialize form with dynamic city choices."""
+        city_choices = kwargs.pop('city_choices', [])
+        super().__init__(*args, **kwargs)
+        
+        # Set city choices (empty option + available cities)
+        city_field_choices = [('', 'همه شهرها')]
+        city_field_choices.extend([(city, city) for city in city_choices])
+        self.fields['city'].choices = city_field_choices
+

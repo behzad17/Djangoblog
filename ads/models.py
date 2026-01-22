@@ -163,6 +163,10 @@ class Ad(models.Model):
 
     class Meta:
         ordering = ["-created_on"]
+        indexes = [
+            models.Index(fields=['city']),
+            models.Index(fields=['category', 'city']),
+        ]
 
     def __str__(self):
         return self.title

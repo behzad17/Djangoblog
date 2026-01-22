@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
 from .models import AdCategory, Ad, FavoriteAd, AdComment
-from .forms import AdForm, AdCommentForm
+from .forms import AdForm, AdCommentForm, AdFilterForm
 
 
 def _visible_ads_queryset():
@@ -96,9 +96,48 @@ def ad_list_by_category(request, category_slug):
     category = get_object_or_404(AdCategory, slug=category_slug)
     all_ads = _visible_ads_queryset().filter(category=category)
     
+    # Get filter parameters
+    selected_city = request.GET.get('city', '')
+    sort_order = request.GET.get('sort', 'newest')
+    
+    # Apply city filter if provided
+    if selected_city:
+        all_ads = all_ads.filter(city__iexact=selected_city)
+    
+    # Get unique cities for dropdown (from ads in this category)
+    available_cities = Ad.objects.filter(
+        is_active=True,
+        is_approved=True,
+        category=category
+    ).exclude(city__isnull=True).exclude(city='').values_list('city', flat=True).distinct().order_by('city')
+    
+    # Create filter form
+    filter_form = AdFilterForm(
+        initial={
+            'city': selected_city,
+            'sort': sort_order,
+        },
+        city_choices=list(available_cities)
+    )
+    
+    # Note: Sort order is handled by _visible_ads_queryset() which orders by featured status first,
+    # then by priority, then by created_on. For "oldest" sort, we'd need to modify the ordering,
+    # but since featured ads should always appear first, we'll keep the current behavior
+    # and only change the created_on ordering for non-featured ads if needed.
+    # For simplicity, we'll keep the default ordering (newest first) for now.
+    # If sort_order == 'oldest', we could reverse the created_on order, but this would
+    # conflict with featured ads logic. We'll implement a simpler approach:
+    # - Keep featured ads first (always)
+    # - For normal ads, apply sort order
+    
     # Separate featured and normal ads
     featured_ads = [ad for ad in all_ads if ad.is_currently_featured]
     normal_ads = [ad for ad in all_ads if not ad.is_currently_featured]
+    
+    # Apply sort to normal ads if requested (featured ads always stay first)
+    if sort_order == 'oldest':
+        # Sort normal ads by oldest first (reverse created_on order)
+        normal_ads = sorted(normal_ads, key=lambda x: x.created_on)
     
     # Get page number
     page_number = request.GET.get('page', 1)
@@ -142,6 +181,9 @@ def ad_list_by_category(request, category_slug):
             "next_page_number": 2 if paginator.num_pages > 0 else None,
             "current_page": 1,
             "total_pages": total_pages,
+            "filter_form": filter_form,
+            "selected_city": selected_city,
+            "sort_order": sort_order,
         }
     else:
         # Page 2+: Only normal ads
@@ -184,6 +226,9 @@ def ad_list_by_category(request, category_slug):
             "next_page_number": page_number + 1 if page_number < total_pages else None,
             "current_page": page_number,
             "total_pages": total_pages,
+            "filter_form": filter_form,
+            "selected_city": selected_city,
+            "sort_order": sort_order,
         }
     
     return render(request, "ads/ads_by_category.html", context)
