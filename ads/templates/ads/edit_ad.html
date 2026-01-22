@@ -60,6 +60,40 @@
             </div>
 
             <div class="mb-3">
+              <label for="{{ form.extra_image_1.id_for_label }}" class="form-label">
+                {{ form.extra_image_1.label }}
+              </label>
+              {% if ad.extra_image_1 %}
+              <div class="mb-2">
+                <img src="{{ ad.extra_image_1.url }}" alt="{{ ad.title }} - تصویر ۲" class="img-thumbnail" style="max-height: 200px;">
+                <p class="small text-muted mt-1">تصویر اضافی ۱ فعلی</p>
+              </div>
+              {% endif %}
+              {{ form.extra_image_1 }}
+              {% if form.extra_image_1.errors %}
+              <div class="text-danger small mt-1">{{ form.extra_image_1.errors }}</div>
+              {% endif %}
+              <div class="form-text">{{ form.extra_image_1.help_text }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.extra_image_2.id_for_label }}" class="form-label">
+                {{ form.extra_image_2.label }}
+              </label>
+              {% if ad.extra_image_2 %}
+              <div class="mb-2">
+                <img src="{{ ad.extra_image_2.url }}" alt="{{ ad.title }} - تصویر ۳" class="img-thumbnail" style="max-height: 200px;">
+                <p class="small text-muted mt-1">تصویر اضافی ۲ فعلی</p>
+              </div>
+              {% endif %}
+              {{ form.extra_image_2 }}
+              {% if form.extra_image_2.errors %}
+              <div class="text-danger small mt-1">{{ form.extra_image_2.errors }}</div>
+              {% endif %}
+              <div class="form-text">{{ form.extra_image_2.help_text }}</div>
+            </div>
+
+            <div class="mb-3">
               <label for="{{ form.target_url.id_for_label }}" class="form-label">
                 {{ form.target_url.label }}
                 <span class="text-danger">*</span>

@@ -54,6 +54,28 @@
             </div>
 
             <div class="mb-3">
+              <label for="{{ form.extra_image_1.id_for_label }}" class="form-label">
+                {{ form.extra_image_1.label }}
+              </label>
+              {{ form.extra_image_1 }}
+              {% if form.extra_image_1.errors %}
+              <div class="text-danger small mt-1">{{ form.extra_image_1.errors }}</div>
+              {% endif %}
+              <div class="form-text">{{ form.extra_image_1.help_text }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="{{ form.extra_image_2.id_for_label }}" class="form-label">
+                {{ form.extra_image_2.label }}
+              </label>
+              {{ form.extra_image_2 }}
+              {% if form.extra_image_2.errors %}
+              <div class="text-danger small mt-1">{{ form.extra_image_2.errors }}</div>
+              {% endif %}
+              <div class="form-text">{{ form.extra_image_2.help_text }}</div>
+            </div>
+
+            <div class="mb-3">
               <label for="{{ form.target_url.id_for_label }}" class="form-label">
                 {{ form.target_url.label }}
                 <span class="text-danger">*</span>

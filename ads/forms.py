@@ -10,7 +10,7 @@ class AdForm(forms.ModelForm):
     class Meta:
         model = Ad
         fields = [
-            'title', 'category', 'image', 'target_url', 'city', 'address', 'phone',
+            'title', 'category', 'image', 'extra_image_1', 'extra_image_2', 'target_url', 'city', 'address', 'phone',
             'instagram_url', 'telegram_url', 'website_url',
             'start_date', 'end_date'
         ]
@@ -23,6 +23,14 @@ class AdForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'extra_image_1': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'extra_image_2': forms.FileInput(attrs={
                 'class': 'form-control',
                 'accept': 'image/*'
             }),
@@ -68,6 +76,8 @@ class AdForm(forms.ModelForm):
             'title': 'عنوان تبلیغ',
             'category': 'دسته‌بندی',
             'image': 'تصویر تبلیغ',
+            'extra_image_1': 'تصویر اضافی ۱ (اختیاری)',
+            'extra_image_2': 'تصویر اضافی ۲ (اختیاری)',
             'target_url': 'لینک مقصد',
             'city': 'شهر',
             'address': 'آدرس کامل',
@@ -80,6 +90,8 @@ class AdForm(forms.ModelForm):
         }
         help_texts = {
             'target_url': 'آدرس وب‌سایتی که با کلیک روی تبلیغ باز می‌شود',
+            'extra_image_1': 'تصویر اضافی اول (اختیاری - حداکثر 5MB)',
+            'extra_image_2': 'تصویر اضافی دوم (اختیاری - حداکثر 5MB)',
             'address': 'آدرس کامل محل کسب‌وکار یا ارائه خدمات (اختیاری)',
             'phone': 'شماره تماس (اختیاری)',
             'instagram_url': 'لینک پروفایل یا صفحه اینستاگرام (اختیاری)',
@@ -102,6 +114,8 @@ class AdForm(forms.ModelForm):
         self.fields['instagram_url'].required = False
         self.fields['telegram_url'].required = False
         self.fields['website_url'].required = False
+        self.fields['extra_image_1'].required = False
+        self.fields['extra_image_2'].required = False
     
     def clean_image(self):
         """Validate uploaded image file size and type."""
@@ -126,6 +140,39 @@ class AdForm(forms.ModelForm):
                 raise ValidationError('Please upload a valid image file.')
         
         return image
+    
+    def _validate_image_file(self, image):
+        """Helper method to validate image file size and type."""
+        if image:
+            # Check file size (max 5MB)
+            max_size = 5 * 1024 * 1024  # 5MB in bytes
+            if hasattr(image, 'size') and image.size > max_size:
+                raise ValidationError('Image file size must be 5MB or less.')
+            
+            # Verify it's a valid image using Pillow
+            try:
+                image.seek(0)
+                img = Image.open(image)
+                img.verify()
+                # verify() closes the file, so reopen it for Django to use
+                image.seek(0)
+                img = Image.open(image)
+                img.load()
+                image.seek(0)
+            except Exception:
+                raise ValidationError('Please upload a valid image file.')
+        
+        return image
+    
+    def clean_extra_image_1(self):
+        """Validate uploaded extra image 1 file size and type."""
+        image = self.cleaned_data.get('extra_image_1')
+        return self._validate_image_file(image)
+    
+    def clean_extra_image_2(self):
+        """Validate uploaded extra image 2 file size and type."""
+        image = self.cleaned_data.get('extra_image_2')
+        return self._validate_image_file(image)
     
     def clean_address(self):
         """Sanitize address field by stripping whitespace."""

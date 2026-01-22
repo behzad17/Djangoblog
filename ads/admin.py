@@ -62,8 +62,8 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Media",
             {
-                "fields": ("image",),
-                "description": "Upload an image. It will be displayed at 250×500 in the front-end.",
+                "fields": ("image", "extra_image_1", "extra_image_2"),
+                "description": "Upload images. Main image is required. Extra images (up to 2) are optional and will be shown in a carousel on the ad detail page.",
             },
         ),
         (

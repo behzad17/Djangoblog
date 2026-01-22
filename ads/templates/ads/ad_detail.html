@@ -34,6 +34,101 @@
             <i class="fas fa-star ms-1"></i>ویژه
           </span>
           {% endif %}
+          
+          {% if ad.extra_image_1 or ad.extra_image_2 %}
+          <!-- Bootstrap Carousel for multiple images -->
+          <div id="adImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+            <div class="carousel-inner">
+              <!-- Main image always first -->
+              <div class="carousel-item active">
+                {% if ad.target_url and ad.url_approved %}
+                <a
+                  href="{{ ad.target_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ad-image-link"
+                >
+                  <img
+                    src="{{ ad.image.url }}"
+                    alt="{{ ad.title }}"
+                    class="d-block w-100 img-fluid ad-detail-image"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                </a>
+                {% else %}
+                <img
+                  src="{{ ad.image.url }}"
+                  alt="{{ ad.title }}"
+                  class="d-block w-100 img-fluid ad-detail-image"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+                {% endif %}
+              </div>
+              {% if ad.extra_image_1 %}
+              <div class="carousel-item">
+                {% if ad.target_url and ad.url_approved %}
+                <a
+                  href="{{ ad.target_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ad-image-link"
+                >
+                  <img
+                    src="{{ ad.extra_image_1.url }}"
+                    alt="{{ ad.title }} - تصویر ۲"
+                    class="d-block w-100 img-fluid ad-detail-image"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                </a>
+                {% else %}
+                <img
+                  src="{{ ad.extra_image_1.url }}"
+                  alt="{{ ad.title }} - تصویر ۲"
+                  class="d-block w-100 img-fluid ad-detail-image"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+                {% endif %}
+              </div>
+              {% endif %}
+              {% if ad.extra_image_2 %}
+              <div class="carousel-item">
+                {% if ad.target_url and ad.url_approved %}
+                <a
+                  href="{{ ad.target_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ad-image-link"
+                >
+                  <img
+                    src="{{ ad.extra_image_2.url }}"
+                    alt="{{ ad.title }} - تصویر ۳"
+                    class="d-block w-100 img-fluid ad-detail-image"
+                    onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                  />
+                </a>
+                {% else %}
+                <img
+                  src="{{ ad.extra_image_2.url }}"
+                  alt="{{ ad.title }} - تصویر ۳"
+                  class="d-block w-100 img-fluid ad-detail-image"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+            <!-- Navigation controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#adImageCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">قبلی</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#adImageCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">بعدی</span>
+            </button>
+          </div>
+          {% else %}
+          <!-- Fallback: Single image (current behavior) -->
           {% if ad.image %}
             {% if ad.target_url and ad.url_approved %}
             <a
@@ -63,6 +158,7 @@
             alt="{{ ad.title }}"
             class="img-fluid ad-detail-image"
           />
+          {% endif %}
           {% endif %}
           
           {% if ad.target_url and ad.url_approved %}

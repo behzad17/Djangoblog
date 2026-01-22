@@ -61,6 +61,20 @@ class Ad(models.Model):
         blank=False,
         help_text="Upload the main ad image (will be displayed at 250x500).",
     )
+    
+    extra_image_1 = CloudinaryField(
+        "ad_extra_image_1",
+        blank=True,
+        null=True,
+        help_text="Optional second image for the ad (will be shown in image carousel).",
+    )
+    
+    extra_image_2 = CloudinaryField(
+        "ad_extra_image_2",
+        blank=True,
+        null=True,
+        help_text="Optional third image for the ad (will be shown in image carousel).",
+    )
 
     target_url = models.URLField(
         max_length=500,
