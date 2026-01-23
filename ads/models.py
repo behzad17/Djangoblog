@@ -61,7 +61,7 @@ class Ad(models.Model):
         blank=False,
         help_text="Upload the main ad image (will be displayed at 250x500).",
     )
-    
+
     extra_image_1 = CloudinaryField(
         "ad_extra_image_1",
         blank=True,
