@@ -46,7 +46,7 @@
                 
                 <p class="event-card-description">
                   {% if post.excerpt %}
-                    {{ post.excerpt|truncatewords:20 }}
+                    {{ post.excerpt|striptags|truncatewords:20 }}
                   {% else %}
                     {{ post.content|striptags|truncatewords:20 }}
                   {% endif %}
