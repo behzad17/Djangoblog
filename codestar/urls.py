@@ -30,6 +30,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.admin.sites import AdminSite
 from codestar.admin_stats import get_admin_stats
 
+# Store original index method before overriding
 _original_index = admin.site.index
 
 @staff_member_required
@@ -38,18 +39,30 @@ def admin_index_with_stats(request, extra_context=None):
     extra_context = extra_context or {}
     
     # Get stats (all errors are caught inside the function)
-    stats = get_admin_stats()
-    extra_context.update(stats)
+    try:
+        stats = get_admin_stats()
+        extra_context.update(stats)
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error getting admin stats: {e}", exc_info=True)
+        # Continue with empty stats if there's an error
     
-    # Call original index method
+    # Call original index method (it's already bound to admin.site)
     try:
         return _original_index(request, extra_context)
     except Exception as e:
         import logging
         logger = logging.getLogger(__name__)
         logger.error(f"Error calling admin index: {e}", exc_info=True)
-        # Fallback to default admin index
-        return AdminSite.index(admin.site, request, extra_context)
+        # Fallback: use AdminSite.index class method directly
+        try:
+            return AdminSite.index(admin.site, request, extra_context)
+        except Exception as e2:
+            logger.error(f"Error in fallback admin index: {e2}", exc_info=True)
+            # Last resort: return a simple response
+            from django.http import HttpResponse
+            return HttpResponse("Admin index error. Please check logs.", status=500)
 
 admin.site.index = admin_index_with_stats
 
