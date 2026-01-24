@@ -25,137 +25,33 @@ from codestar.views_db_health import db_health_dashboard
 from codestar.admin_incoming import admin_incoming_items
 from codestar.views_analytics import analytics_dashboard
 
-# Admin index override disabled - was causing 500 errors
-# The admin panel works fine with default Django admin index
-# Stats dashboard is still available at /admin/incoming/ if needed
-# 
-# To re-enable in the future, uncomment and fix the admin_index_with_stats function below
-# from django.contrib.admin.views.decorators import staff_member_required
-# from django.utils import timezone
-# from datetime import timedelta
-# _original_index = admin.site.index
-# @staff_member_required
-# def admin_index_with_stats(request, extra_context=None):
-#     """Admin index with pending content statistics."""
-#     extra_context = extra_context or {}
-#     
-#     # Initialize default stats
-#     stats = {
-#         'pending_posts': 0,
-#         'pending_ads': 0,
-#         'pending_urls_ads': 0,
-#         'pending_urls_posts': 0,
-#         'pending_questions': 0,
-#         'pending_comments': 0,
-#         'recent_expert_posts': 0,
-#         'pending_urls': 0,
-#     }
-#     
-#     # Safely collect stats - all errors are caught and logged
-#     try:
-#         from blog.models import Post, Comment
-#         from ads.models import Ad
-#         from askme.models import Question
-#         
-#         # Get pending posts (draft status)
-#         try:
-#             stats['pending_posts'] = Post.objects.filter(status=0).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting pending posts: {e}", exc_info=True)
-#         
-#         # Get pending ads
-#         try:
-#             stats['pending_ads'] = Ad.objects.filter(is_approved=False).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting pending ads: {e}", exc_info=True)
-#         
-#         # Get pending URLs for ads
-#         try:
-#             stats['pending_urls_ads'] = Ad.objects.filter(
-#                 url_approved=False,
-#                 is_approved=True
-#             ).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting pending URLs for ads: {e}", exc_info=True)
-#         
-#         # Get pending URLs for posts
-#         try:
-#             stats['pending_urls_posts'] = Post.objects.filter(
-#                 url_approved=False,
-#                 status=1,
-#                 external_url__isnull=False
-#             ).exclude(slug='').exclude(slug__isnull=True).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting pending URLs for posts: {e}", exc_info=True)
-#         
-#         # Get pending questions
-#         try:
-#             stats['pending_questions'] = Question.objects.filter(answered=False).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting pending questions: {e}", exc_info=True)
-#         
-#         # Get pending comments
-#         try:
-#             stats['pending_comments'] = Comment.objects.filter(approved=False).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting pending comments: {e}", exc_info=True)
-#         
-#         # Get recent expert posts (with safe profile access)
-#         try:
-#             from django.contrib.auth.models import User
-#             expert_users = User.objects.filter(
-#                 profile__can_publish_without_approval=True
-#             ).values_list('id', flat=True)
-#             stats['recent_expert_posts'] = Post.objects.filter(
-#                 status=1,
-#                 author_id__in=expert_users,
-#                 created_on__gte=timezone.now() - timedelta(days=1)
-#             ).exclude(slug='').exclude(slug__isnull=True).count()
-#         except Exception as e:
-#             import logging
-#             logger = logging.getLogger(__name__)
-#             logger.error(f"Error counting recent expert posts: {e}", exc_info=True)
-#         
-#         # Calculate total pending URLs
-#         stats['pending_urls'] = stats['pending_urls_ads'] + stats['pending_urls_posts']
-#         
-#     except Exception as e:
-#         import logging
-#         logger = logging.getLogger(__name__)
-#         logger.error(f"Error getting admin stats: {e}", exc_info=True)
-#     
-#     # Safely update context and call original index
-#     try:
-#         extra_context.update(stats)
-#         # Call original index method (it's a bound method, so call it directly)
-#         return _original_index(request, extra_context)
-#     except Exception as e:
-#         import logging
-#         logger = logging.getLogger(__name__)
-#         logger.error(f"Error calling original admin index: {e}", exc_info=True)
-#         # Last resort: try calling AdminSite.index directly
-#         try:
-#             from django.contrib.admin.sites import AdminSite
-#             return AdminSite.index(admin.site, request, extra_context)
-#         except Exception as e2:
-#             logger.error(f"Error in fallback admin index: {e2}", exc_info=True)
-#             # Final fallback: return minimal response
-#             from django.http import HttpResponse
-#             return HttpResponse("Admin index error. Please check logs.", status=500)
+# Admin index override with stats
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.admin.sites import AdminSite
+from codestar.admin_stats import get_admin_stats
 
-# admin.site.index = admin_index_with_stats
+_original_index = admin.site.index
+
+@staff_member_required
+def admin_index_with_stats(request, extra_context=None):
+    """Admin index with pending content statistics including pro ad requests."""
+    extra_context = extra_context or {}
+    
+    # Get stats (all errors are caught inside the function)
+    stats = get_admin_stats()
+    extra_context.update(stats)
+    
+    # Call original index method
+    try:
+        return _original_index(request, extra_context)
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error calling admin index: {e}", exc_info=True)
+        # Fallback to default admin index
+        return AdminSite.index(admin.site, request, extra_context)
+
+admin.site.index = admin_index_with_stats
 
 # Sitemap configuration
 sitemaps = {

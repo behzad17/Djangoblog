@@ -90,6 +90,20 @@
       {% endif %}
     </div>
     
+    <!-- Pro Ad Requests -->
+    <div class="stat-card" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #666;">👑 Pro Ad Requests</h3>
+      <div style="font-size: 32px; font-weight: bold; color: {% if pending_pro_requests > 0 %}#ff9800{% else %}#4caf50{% endif %}; margin: 10px 0;">
+        {{ pending_pro_requests|default:0 }}
+      </div>
+      {% if pending_pro_requests > 0 %}
+      <a href="{% url 'admin:ads_ad_changelist' %}?plan__exact=free&pro_requested__exact=1" 
+         style="display: inline-block; margin-top: 10px; padding: 6px 12px; background: #417690; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">
+        Review
+      </a>
+      {% endif %}
+    </div>
+    
   </div>
 </div>
 
