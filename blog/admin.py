@@ -47,7 +47,7 @@ class PostAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    readonly_fields = ('created_on', 'updated_on', 'deleted_at', 'deleted_by')
+    readonly_fields = ('created_on', 'updated_on', 'deleted_at', 'deleted_by', 'slug')
     
     def url_status(self, obj):
         """Display URL approval status."""
