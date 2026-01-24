@@ -26,45 +26,25 @@ from codestar.admin_incoming import admin_incoming_items
 from codestar.views_analytics import analytics_dashboard
 
 # Admin index override with stats
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.admin.sites import AdminSite
-from codestar.admin_stats import get_admin_stats
-
-# Store original index method before overriding
-_original_index = admin.site.index
-
-@staff_member_required
-def admin_index_with_stats(request, extra_context=None):
-    """Admin index with pending content statistics including pro ad requests."""
-    extra_context = extra_context or {}
-    
-    # Get stats (all errors are caught inside the function)
-    try:
-        stats = get_admin_stats()
-        extra_context.update(stats)
-    except Exception as e:
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"Error getting admin stats: {e}", exc_info=True)
-        # Continue with empty stats if there's an error
-    
-    # Call original index method (it's already bound to admin.site)
-    try:
-        return _original_index(request, extra_context)
-    except Exception as e:
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"Error calling admin index: {e}", exc_info=True)
-        # Fallback: use AdminSite.index class method directly
-        try:
-            return AdminSite.index(admin.site, request, extra_context)
-        except Exception as e2:
-            logger.error(f"Error in fallback admin index: {e2}", exc_info=True)
-            # Last resort: return a simple response
-            from django.http import HttpResponse
-            return HttpResponse("Admin index error. Please check logs.", status=500)
-
-admin.site.index = admin_index_with_stats
+# Using Django's AppConfig ready() signal would be better, but for now using simple override
+# Temporarily disabled - if admin panel works without this, we'll use a context processor instead
+# from django.contrib.admin.views.decorators import staff_member_required
+# from django.contrib.admin.sites import AdminSite
+# from codestar.admin_stats import get_admin_stats
+# 
+# _original_index = admin.site.index
+# 
+# @staff_member_required  
+# def admin_index_with_stats(request, extra_context=None):
+#     extra_context = extra_context or {}
+#     try:
+#         stats = get_admin_stats()
+#         extra_context.update(stats)
+#     except Exception:
+#         pass  # Silently fail if stats can't be loaded
+#     return _original_index(request, extra_context)
+# 
+# admin.site.index = admin_index_with_stats
 
 # Sitemap configuration
 sitemaps = {
