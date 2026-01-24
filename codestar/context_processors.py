@@ -11,7 +11,19 @@ def admin_stats(request):
     """
     Context processor that adds admin statistics to template context.
     Only active when user is staff and on admin pages.
+    Always returns default_stats to ensure template variables exist.
     """
+    # Default stats - define first to ensure it's always available
+    default_stats = {
+        'pending_posts': 0,
+        'pending_ads': 0,
+        'pending_questions': 0,
+        'pending_comments': 0,
+        'pending_urls': 0,
+        'recent_expert_posts': 0,
+        'pending_pro_requests': 0,
+    }
+    
     # Only add stats for admin pages
     try:
         if not request.path.startswith('/admin/'):
@@ -31,17 +43,6 @@ def admin_stats(request):
     except Exception as e:
         logger.error(f"Error checking admin access: {e}", exc_info=True)
         return default_stats
-    
-    # Return default empty stats - will be populated if get_admin_stats works
-    default_stats = {
-        'pending_posts': 0,
-        'pending_ads': 0,
-        'pending_questions': 0,
-        'pending_comments': 0,
-        'pending_urls': 0,
-        'recent_expert_posts': 0,
-        'pending_pro_requests': 0,
-    }
     
     # Try to get actual stats, but return defaults if anything fails
     try:
