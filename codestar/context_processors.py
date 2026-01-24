@@ -24,9 +24,13 @@ def admin_stats(request):
         'pending_pro_requests': 0,
     }
     
-    # Only add stats for admin pages
+    # Only add stats for admin pages (but NOT login/logout pages)
     try:
         if not request.path.startswith('/admin/'):
+            return default_stats
+        
+        # Skip login, logout, and other auth pages
+        if request.path in ['/admin/login/', '/admin/logout/', '/admin/password_change/', '/admin/password_change/done/']:
             return default_stats
         
         # Check if user is authenticated and staff (safely)
@@ -38,6 +42,7 @@ def admin_stats(request):
         except (AttributeError, TypeError):
             is_staff = False
         
+        # Only run stats queries for authenticated staff users
         if not is_staff:
             return default_stats
     except Exception as e:
