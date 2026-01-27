@@ -505,3 +505,8 @@ LOGGING = {
         },
     },
 }
+
+# TEMP: Allow all hosts to debug Bad Request (400) behind Cloudflare
+# This is a temporary debug setting to eliminate 400 errors.
+# Will be tightened to specific domains after confirming root cause.
+ALLOWED_HOSTS = ["*"]
