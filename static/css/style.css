@@ -3958,8 +3958,8 @@ body {
 
 /* Ad Detail Page Styles */
 .ad-detail-image {
-  width: 550px;
-  height: 550px;
+  width: 650px;  /* Desktop / tablet fixed width */
+  height: 650px; /* Desktop / tablet fixed height */
   max-width: 100%;
   object-fit: cover;
   border-radius: 12px;
