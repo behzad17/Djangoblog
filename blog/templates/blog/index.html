@@ -67,7 +67,7 @@
               </h3>
               {% if featured_post.excerpt %}
               <p class="card-text featured-post-excerpt">
-                {{ featured_post.excerpt|truncatewords:20 }}
+                {{ featured_post.excerpt|striptags|truncatewords:20 }}
               </p>
               {% endif %}
               <div class="featured-post-meta">
