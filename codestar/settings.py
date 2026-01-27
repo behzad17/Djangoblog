@@ -53,14 +53,26 @@ if not DEBUG and not SECRET_KEY:
         "SECRET_KEY must be set in environment when DEBUG is False."
     )
 
-_default_allowed_hosts = (
-    '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net,'
-    '127.0.0.1,localhost,.herokuapp.com,'
-    'peyvand.se,www.peyvand.se'
-)
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", _default_allowed_hosts
-).split(",")
+# Default allowed hosts for development and production
+_default_allowed_hosts = [
+    '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net',
+    '127.0.0.1',
+    'localhost',
+    '.herokuapp.com',  # Matches all Heroku subdomains
+    'peyvand.se',
+    'www.peyvand.se',
+]
+
+# Get ALLOWED_HOSTS from environment or use defaults
+_allowed_hosts_env = os.environ.get("ALLOWED_HOSTS")
+if _allowed_hosts_env:
+    # If set via environment variable, split by comma and strip whitespace
+    ALLOWED_HOSTS = [
+        host.strip() for host in _allowed_hosts_env.split(",") if host.strip()
+    ]
+else:
+    # Use default list
+    ALLOWED_HOSTS = _default_allowed_hosts
 
 # Application definition
 INSTALLED_APPS = [
