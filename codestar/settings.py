@@ -58,7 +58,8 @@ _default_allowed_hosts = [
     '8000-behzad17-djangoblog-0n6g7bsl8tl.ws.codeinstitute-ide.net',
     '127.0.0.1',
     'localhost',
-    '.herokuapp.com',  # Matches all Heroku subdomains
+    'djangoblog17-173e7e5e5186.herokuapp.com',
+    '.herokuapp.com',  # Matches all Heroku subdomains (fallback)
     'peyvand.se',
     'www.peyvand.se',
 ]
@@ -346,16 +347,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Production security settings
 if not DEBUG:
-    # Disable SECURE_SSL_REDIRECT when behind Cloudflare Flexible SSL
-    # Cloudflare handles HTTPS redirects, so Django should not redirect
-    # to prevent redirect loops (ERR_TOO_MANY_REDIRECTS)
-    SECURE_SSL_REDIRECT = False
+    # Behind Cloudflare Full (strict) + Heroku ACM:
+    # - Cloudflare terminates HTTPS from the browser
+    # - Cloudflare connects to Heroku over HTTPS
+    # - Django must still enforce HTTPS and trust the X-Forwarded-Proto header
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    # Keep SECURE_PROXY_SSL_HEADER so Django recognizes HTTPS from Cloudflare
+    # Trust the scheme set by the Heroku / Cloudflare proxy
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Security Headers (applied in all environments)
