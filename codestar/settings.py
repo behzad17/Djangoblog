@@ -103,6 +103,18 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+# django-simple-captcha (signup CAPTCHA) tuning:
+# Make the captcha clearer by using only numbers, fewer characters, bigger font,
+# and minimal/no visual noise.
+CAPTCHA_LENGTH = 4
+CAPTCHA_CHALLENGE_FUNCT = "accounts.captcha.numeric_challenge"
+CAPTCHA_IMAGE_SIZE = (180, 60)
+CAPTCHA_FONT_SIZE = 36
+CAPTCHA_FOREGROUND_COLOR = "#1f2937"  # dark gray
+CAPTCHA_BACKGROUND_COLOR = "#ffffff"
+CAPTCHA_NOISE_FUNCTIONS = ()  # reduce noise/lines
+CAPTCHA_FILTER_FUNCTIONS = ()  # reduce distortion
+
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

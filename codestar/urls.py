@@ -34,7 +34,7 @@ from codestar.views_analytics import analytics_dashboard
 # 
 # _original_index = admin.site.index
 # 
-# @staff_member_required  
+# @staff_member_required
 # def admin_index_with_stats(request, extra_context=None):
 #     extra_context = extra_context or {}
 #     try:

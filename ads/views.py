@@ -327,12 +327,15 @@ def ad_detail(request, slug):
             if not hasattr(request.user, 'profile'):
                 from blog.models import UserProfile
                 UserProfile.objects.get_or_create(user=request.user)
-            
+
             # Check site verification
             if not request.user.profile.is_site_verified:
-                messages.warning(request, 'لطفاً ابتدا تنظیمات حساب کاربری خود را تکمیل کنید.')
+                messages.warning(
+                    request,
+                    'لطفاً ابتدا تنظیمات حساب کاربری خود را تکمیل کنید.'
+                )
                 return redirect('complete_setup')
-            
+
             # Process comment form
             comment_form = AdCommentForm(data=request.POST)
             if comment_form.is_valid():
@@ -341,7 +344,7 @@ def ad_detail(request, slug):
                 comment.ad = ad
                 # No approval needed - publish immediately
                 comment.save()
-                
+
                 messages.success(request, 'نظر شما با موفقیت ثبت شد!')
                 return redirect('ads:ad_detail', slug=slug)
             else:

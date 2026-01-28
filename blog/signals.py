@@ -93,7 +93,7 @@ def send_welcome_email(sender, instance, created, **kwargs):
             complete_setup_url = site_url + '/complete-setup/' if site_url else '/complete-setup/'
         
         # Email subject (Persian, RTL-friendly)
-        subject = "به پلتفرم پیوند، جامعه آنلاین ایرانیانِ مقیم سوئد خوش آمدید 🌿"
+        subject = "کاربر گرامی، به پلتفرم «پیوند» — جامعهٔ آنلاین ایرانیان ساکن سوئد — خوش آمدید."
         
         # Context for email templates
         context = {
