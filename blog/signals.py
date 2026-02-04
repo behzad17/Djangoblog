@@ -182,52 +182,58 @@ def handle_pre_social_login(request, sociallogin, **kwargs):
             try:
                 # Generate username from email (before @ symbol)
                 username_base = sociallogin.user.email.split('@')[0]
+                # Sanitize username: remove any invalid characters
+                username_base = ''.join(c for c in username_base if c.isalnum() or c in ['_', '-'])
                 # Limit username length to 150 characters (Django's max)
                 if len(username_base) > 150:
                     username_base = username_base[:150]
                 
-                # For new users (no pk), just set a simple username
-                # django-allauth will handle uniqueness when saving
+                # For new users (no pk), check uniqueness to avoid race conditions
+                # Use select_for_update if available, otherwise check before setting
                 if not sociallogin.user.pk:
-                    # Simple username generation for new users
-                    sociallogin.user.username = username_base
+                    # Check if username is available, add suffix if needed
+                    username = username_base
+                    counter = 1
+                    # Check uniqueness even for new users to prevent race conditions
+                    while User.objects.filter(username=username).exists():
+                        suffix = str(counter)
+                        max_base_len = 150 - len(suffix) - 1  # -1 for underscore
+                        if len(username_base) > max_base_len:
+                            username_base = username_base[:max_base_len]
+                        username = f"{username_base}_{suffix}"
+                        counter += 1
+                        # Safety limit to prevent infinite loop
+                        if counter > 1000:
+                            # Fallback: use timestamp-based username
+                            import time
+                            username = f"{username_base[:120]}_{int(time.time())}"
+                            break
+                    sociallogin.user.username = username
                 else:
                     # For existing users, ensure uniqueness
                     username = username_base
                     counter = 1
                     while User.objects.filter(username=username).exclude(pk=sociallogin.user.pk).exists():
                         suffix = str(counter)
-                        max_base_len = 150 - len(suffix)
+                        max_base_len = 150 - len(suffix) - 1  # -1 for underscore
                         if len(username_base) > max_base_len:
                             username_base = username_base[:max_base_len]
-                        username = f"{username_base}{suffix}"
+                        username = f"{username_base}_{suffix}"
                         counter += 1
+                        # Safety limit
+                        if counter > 1000:
+                            import time
+                            username = f"{username_base[:120]}_{int(time.time())}"
+                            break
                     sociallogin.user.username = username
             except Exception as e:
                 # Log error but don't block login - let django-allauth handle it
                 import logging
                 logger = logging.getLogger(__name__)
-                logger.error(f"Error setting username in pre_social_login: {e}")
+                logger.error(f"Error setting username in pre_social_login: {e}", exc_info=True)
         
-        # Mark email as verified (django-allauth will handle saving)
-        # Only set email address if user has a pk (is already saved)
-        if sociallogin.user.pk:
-            from allauth.account.models import EmailAddress
-            try:
-                email_address, created = EmailAddress.objects.get_or_create(
-                    user=sociallogin.user,
-                    email=sociallogin.user.email,
-                    defaults={'verified': True, 'primary': True}
-                )
-                if not created:
-                    email_address.verified = True
-                    email_address.primary = True
-                    email_address.save()
-            except Exception as e:
-                # Log error but don't block login
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error(f"Error setting email address in pre_social_login: {e}")
+        # Note: Email verification is handled in social_account_added signal
+        # because pre_social_login fires before user is saved to database
 
 
 @receiver(social_account_added)
@@ -257,6 +263,8 @@ def handle_social_account_added(request, sociallogin, **kwargs):
             try:
                 # Generate username from email (before @ symbol)
                 username_base = user.email.split('@')[0]
+                # Sanitize username: remove any invalid characters
+                username_base = ''.join(c for c in username_base if c.isalnum() or c in ['_', '-'])
                 # Limit to 150 characters
                 if len(username_base) > 150:
                     username_base = username_base[:150]
@@ -266,18 +274,23 @@ def handle_social_account_added(request, sociallogin, **kwargs):
                 counter = 1
                 while User.objects.filter(username=username).exclude(pk=user.pk).exists():
                     suffix = str(counter)
-                    max_base_len = 150 - len(suffix)
+                    max_base_len = 150 - len(suffix) - 1  # -1 for underscore
                     if len(username_base) > max_base_len:
                         username_base = username_base[:max_base_len]
-                    username = f"{username_base}{suffix}"
+                    username = f"{username_base}_{suffix}"
                     counter += 1
+                    # Safety limit to prevent infinite loop
+                    if counter > 1000:
+                        import time
+                        username = f"{username_base[:120]}_{int(time.time())}"
+                        break
                 user.username = username
-                user.save()
+                user.save(update_fields=['username'])
             except Exception as e:
                 # Log error but don't block signup
                 import logging
                 logger = logging.getLogger(__name__)
-                logger.error(f"Error setting username in social_account_added: {e}")
+                logger.error(f"Error setting username in social_account_added: {e}", exc_info=True)
         
         # Google emails are verified, so mark email as verified
         if user.email and user.pk:

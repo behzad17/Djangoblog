@@ -1,11 +1,50 @@
-{% extends "socialaccount/base.html" %}
-
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Social Network Login Failure" %}{% endblock head_title %}
 
 {% block content %}
-<h1>{% trans "Social Network Login Failure" %}</h1>
+<!-- Error Container -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <div class="card login-card mt-5 mb-5">
+        <div class="card-body p-4 text-center">
+          <h1 class="card-title mb-4">{% trans "خطا در ورود" %}</h1>
+          
+          <div class="alert alert-danger mb-4" role="alert">
+            <p class="mb-0">
+              {% trans "متأسفانه خطایی در هنگام ورود با حساب گوگل رخ داد." %}
+            </p>
+          </div>
 
-<p>{% trans "An error occurred while attempting to login via your social network account." %}</p>
+          <p class="mb-4">
+            {% blocktrans %}
+            لطفاً دوباره تلاش کنید یا از روش دیگری برای ورود استفاده کنید.
+            {% endblocktrans %}
+          </p>
+
+          <div class="d-grid gap-2">
+            <a href="{% url 'account_login' %}" class="btn btn-signup">
+              {% trans "بازگشت به صفحه ورود" %}
+            </a>
+            <a href="{% url 'account_signup' %}" class="btn btn-outline-secondary">
+              {% trans "ثبت‌نام" %}
+            </a>
+          </div>
+
+          {% if messages %}
+            <div class="mt-4">
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mt-2">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}

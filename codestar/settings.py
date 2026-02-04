@@ -305,11 +305,30 @@ ACCOUNT_FORMS = {
 }
 
 # Google SSO settings in django-allauth
+# Validate that Google OAuth credentials are set (warn in development, require in production)
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
+
+if not DEBUG:
+    # In production, require Google OAuth credentials
+    if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+        raise ImproperlyConfigured(
+            "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set in environment for Google OAuth."
+        )
+elif not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+    # In development, warn but don't fail
+    import warnings
+    warnings.warn(
+        "Google OAuth credentials (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET) not set. "
+        "Google login will not work until these are configured.",
+        UserWarning
+    )
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
-            "client_id": os.environ.get("GOOGLE_CLIENT_ID"),
-            "secret": os.environ.get("GOOGLE_CLIENT_SECRET"),
+            "client_id": GOOGLE_CLIENT_ID,
+            "secret": GOOGLE_CLIENT_SECRET,
             "key": "",
         }
     }
