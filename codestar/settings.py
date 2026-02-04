@@ -324,13 +324,31 @@ elif not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
         UserWarning
     )
 
+# Google OAuth Provider Configuration
+# django-allauth automatically generates redirect URIs based on the Site framework domain
+# Format: https://{SITE_DOMAIN}/accounts/google/login/callback/
+# Make sure to add all redirect URIs to Google Cloud Console:
+# - Production: https://peyvand.se/accounts/google/login/callback/
+# - Production: https://www.peyvand.se/accounts/google/login/callback/
+# - Production: https://djangoblog17-173e7e5e5186.herokuapp.com/accounts/google/login/callback/
+# - Development: http://localhost:8000/accounts/google/login/callback/
+# - Development: http://127.0.0.1:8000/accounts/google/login/callback/
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
             "client_id": GOOGLE_CLIENT_ID,
             "secret": GOOGLE_CLIENT_SECRET,
             "key": "",
-        }
+        },
+        # Request additional scopes if needed
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        # Use OAuth2 (not OpenID Connect)
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
     }
 }
 
