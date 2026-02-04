@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Verify Your Email Address" %}{% endblock head_title %}
+{% block head_title %}{% trans "تأیید آدرس ایمیل" %}{% endblock head_title %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -18,10 +18,10 @@
       <div class="col-lg-8">
         <h1 class="hero-title mb-3">
           <i class="fas fa-paper-plane me-2"></i>
-          {% trans "Verification Email Sent" %}
+          {% trans "ایمیل تأیید ارسال شد" %}
         </h1>
         <p class="hero-subtitle mb-0">
-          {% trans "Check your inbox to complete verification" %}
+          {% trans "صندوق ورودی خود را بررسی کنید تا تأیید را تکمیل کنید" %}
         </p>
       </div>
     </div>
@@ -38,19 +38,19 @@
             <div class="mb-3">
               <i class="fas fa-envelope-circle-check" style="font-size: 4rem; color: #188181;"></i>
             </div>
-            <h2 class="card-title mb-3">{% trans "Check Your Email" %}</h2>
+            <h2 class="card-title mb-3">{% trans "ایمیل خود را بررسی کنید" %}</h2>
           </div>
 
           <div class="alert alert-info" role="alert">
             <div class="d-flex align-items-start">
               <i class="fas fa-info-circle me-3 mt-1" style="font-size: 1.5rem;"></i>
               <div>
-                <strong>{% trans "Verification Email Sent" %}</strong>
+                <strong>{% trans "ایمیل تأیید ارسال شد" %}</strong>
                 <p class="mb-0 mt-2">
                   {% blocktrans %}
-                  We have sent an email to you for verification. Follow the link provided to finalize the signup process. 
-                  If you do not see the verification email in your main inbox, check your spam folder. 
-                  Please contact us if you do not receive the verification email within a few minutes.
+                  ما یک ایمیل تأیید برای شما ارسال کرده‌ایم. برای تکمیل فرآیند ثبت‌نام، روی لینک موجود در ایمیل کلیک کنید. 
+                  اگر ایمیل تأیید را در صندوق ورودی اصلی خود نمی‌بینید، پوشه هرزنامه (اسپم) خود را بررسی کنید. 
+                  در صورت عدم دریافت ایمیل تأیید در عرض چند دقیقه، لطفاً با ما تماس بگیرید.
                   {% endblocktrans %}
                 </p>
               </div>
@@ -63,8 +63,8 @@
                 <div class="d-flex align-items-center p-3 bg-light rounded">
                   <i class="fas fa-inbox me-3" style="font-size: 1.5rem; color: #188181;"></i>
                   <div>
-                    <strong>{% trans "Check Your Inbox" %}</strong>
-                    <p class="mb-0 text-muted small">{% trans "Look for an email from us" %}</p>
+                    <strong>{% trans "صندوق ورودی خود را بررسی کنید" %}</strong>
+                    <p class="mb-0 text-muted small">{% trans "به دنبال ایمیل از طرف ما باشید" %}</p>
                   </div>
                 </div>
               </div>
@@ -72,8 +72,8 @@
                 <div class="d-flex align-items-center p-3 bg-light rounded">
                   <i class="fas fa-spam me-3" style="font-size: 1.5rem; color: #188181;"></i>
                   <div>
-                    <strong>{% trans "Check Spam Folder" %}</strong>
-                    <p class="mb-0 text-muted small">{% trans "Sometimes emails end up in spam" %}</p>
+                    <strong>{% trans "پوشه هرزنامه را بررسی کنید" %}</strong>
+                    <p class="mb-0 text-muted small">{% trans "گاهی اوقات ایمیل‌ها در پوشه هرزنامه قرار می‌گیرند" %}</p>
                   </div>
                 </div>
               </div>
@@ -83,7 +83,7 @@
           <div class="text-center mt-4">
             <a href="{% url 'home' %}" class="btn btn-outline-primary">
               <i class="fas fa-home me-2"></i>
-              {% trans "Go to Homepage" %}
+              {% trans "رفتن به صفحه اصلی" %}
             </a>
           </div>
         </div>
