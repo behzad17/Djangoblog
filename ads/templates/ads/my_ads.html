@@ -26,6 +26,15 @@
             onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
           />
         </a>
+        {% else %}
+        <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
+          <img
+            src="{% static 'images/default.jpg' %}"
+            alt="{{ ad.title }}"
+            class="card-img-top ads-image-250x500"
+            style="object-fit: cover; height: 300px;"
+          />
+        </a>
         {% endif %}
         <div class="card-body">
           <h5 class="card-title">
@@ -35,7 +44,7 @@
           </h5>
           <p class="card-text">
             <small class="text-muted">
-              <i class="fas fa-tag ms-1"></i>{{ ad.category.name }}
+              <i class="fas fa-tag ms-1"></i>{% if ad.category %}{{ ad.category.name }}{% else %}بدون دسته‌بندی{% endif %}
             </small>
           </p>
           

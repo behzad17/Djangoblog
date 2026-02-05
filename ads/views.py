@@ -464,7 +464,8 @@ def my_ads(request):
     List all ads created by the current user.
     Shows approval status and allows edit/delete.
     """
-    ads = Ad.objects.filter(owner=request.user).order_by('-created_on')
+    # Use select_related to avoid N+1 queries and ensure category is loaded
+    ads = Ad.objects.filter(owner=request.user).select_related('category', 'owner').order_by('-created_on')
     return render(request, 'ads/my_ads.html', {'ads': ads})
 
 
