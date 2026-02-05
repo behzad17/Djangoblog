@@ -464,9 +464,27 @@ def my_ads(request):
     List all ads created by the current user.
     Shows approval status and allows edit/delete.
     """
-    # Use select_related to avoid N+1 queries and ensure category is loaded
-    ads = Ad.objects.filter(owner=request.user).select_related('category', 'owner').order_by('-created_on')
-    return render(request, 'ads/my_ads.html', {'ads': ads})
+    from django.contrib import messages
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    try:
+        # Use select_related to avoid N+1 queries and ensure related objects are loaded
+        ads = (
+            Ad.objects.filter(owner=request.user)
+            .select_related("category", "owner")
+            .order_by("-created_on")
+        )
+    except Exception as exc:  # Defensive: prevent unexpected DB errors from causing 500
+        logger.error("Error loading my_ads for user %s: %s", request.user.id, exc, exc_info=True)
+        messages.error(
+            request,
+            "در بارگذاری لیست تبلیغات شما خطایی رخ داد. لطفاً چند لحظه بعد دوباره تلاش کنید.",
+        )
+        ads = []
+
+    return render(request, "ads/my_ads.html", {"ads": ads})
 
 
 @login_required
