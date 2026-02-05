@@ -16,31 +16,41 @@
     {% for ad in ads %}
     <div class="col-md-6 col-lg-4 mb-4">
       <div class="card shadow-sm h-100">
-        {% if ad.image %}
-        <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
-          <img
-            src="{{ ad.image.url }}"
-            alt="{{ ad.title }}"
-            class="card-img-top ads-image-250x500"
-            style="object-fit: cover; height: 300px;"
-            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
-          />
-        </a>
+        {% if ad.slug %}
+          {% if ad.image %}
+          <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
+            <img
+              src="{{ ad.image.url }}"
+              alt="{{ ad.title }}"
+              class="card-img-top ads-image-250x500"
+              style="object-fit: cover; height: 300px;"
+              onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+            />
+          </a>
+          {% else %}
+          <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
+            <img
+              src="{% static 'images/default.jpg' %}"
+              alt="{{ ad.title }}"
+              class="card-img-top ads-image-250x500"
+              style="object-fit: cover; height: 300px;"
+            />
+          </a>
+          {% endif %}
         {% else %}
-        <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
-          <img
-            src="{% static 'images/default.jpg' %}"
-            alt="{{ ad.title }}"
-            class="card-img-top ads-image-250x500"
-            style="object-fit: cover; height: 300px;"
-          />
-        </a>
+          <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+            <span class="text-muted">بدون لینک</span>
+          </div>
         {% endif %}
         <div class="card-body">
           <h5 class="card-title">
+            {% if ad.slug %}
             <a href="{% url 'ads:ad_detail' ad.slug %}" class="text-decoration-none">
               {{ ad.title }}
             </a>
+            {% else %}
+            <span class="text-muted">{{ ad.title }} <small>(بدون لینک)</small></span>
+            {% endif %}
           </h5>
           <p class="card-text">
             <small class="text-muted">
@@ -96,12 +106,18 @@
         </div>
         <div class="card-footer bg-white">
           <div class="btn-group w-100" role="group">
+            {% if ad.slug %}
             <a href="{% url 'ads:edit_ad' ad.slug %}" class="btn btn-sm btn-warning">
               <i class="fas fa-edit ms-1"></i>ویرایش
             </a>
             <a href="{% url 'ads:delete_ad' ad.slug %}" class="btn btn-sm btn-danger">
               <i class="fas fa-trash ms-1"></i>حذف
             </a>
+            {% else %}
+            <span class="btn btn-sm btn-secondary disabled">
+              <i class="fas fa-exclamation-triangle ms-1"></i>تبلیغ بدون لینک معتبر
+            </span>
+            {% endif %}
           </div>
         </div>
       </div>

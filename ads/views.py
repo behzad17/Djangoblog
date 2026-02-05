@@ -471,8 +471,11 @@ def my_ads(request):
 
     try:
         # Use select_related to avoid N+1 queries and ensure related objects are loaded
+        # Filter out ads with empty or null slugs to prevent URL generation errors
         ads = (
             Ad.objects.filter(owner=request.user)
+            .exclude(slug__isnull=True)
+            .exclude(slug='')
             .select_related("category", "owner")
             .order_by("-created_on")
         )
