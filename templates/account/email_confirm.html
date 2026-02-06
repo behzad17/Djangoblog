@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}{% trans "Confirm Email Address" %}{% endblock head_title %}
+{% block head_title %}{% trans "تأیید آدرس ایمیل" %}{% endblock head_title %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -19,10 +19,10 @@
       <div class="col-lg-8">
         <h1 class="hero-title mb-3">
           <i class="fas fa-envelope-circle-check me-2"></i>
-          {% trans "Confirm Email Address" %}
+          {% trans "تأیید آدرس ایمیل" %}
         </h1>
         <p class="hero-subtitle mb-0">
-          {% trans "Verify your email to complete your account setup" %}
+          {% trans "برای تکمیل ساخت حساب کاربری، ایمیل خود را تأیید کنید" %}
         </p>
       </div>
     </div>
@@ -44,10 +44,10 @@
                 <div class="mb-3">
                   <i class="fas fa-envelope-open-text" style="font-size: 4rem; color: #188181;"></i>
                 </div>
-                <h2 class="card-title mb-3">{% trans "Email Confirmation" %}</h2>
+                <h2 class="card-title mb-3">{% trans "تأیید ایمیل" %}</h2>
                 <p class="text-muted mb-4">
                   {% blocktrans with confirmation.email_address.email as email %}
-                  Please confirm that <strong>{{ email }}</strong> is an email address for user <strong>{{ user_display }}</strong>.
+                  لطفاً تأیید کنید که آدرس ایمیل <strong>{{ email }}</strong> متعلق به کاربر <strong>{{ user_display }}</strong> است.
                   {% endblocktrans %}
                 </p>
               </div>
@@ -57,7 +57,7 @@
                 <div class="d-grid">
                   <button type="submit" class="btn btn-signup btn-lg">
                     <i class="fas fa-check-circle me-2"></i>
-                    {% trans 'Confirm Email' %}
+                    {% trans 'تأیید ایمیل' %}
                   </button>
                 </div>
               </form>
@@ -67,10 +67,10 @@
                 <div class="mb-3">
                   <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #ffc107;"></i>
                 </div>
-                <h2 class="card-title mb-3 text-warning">{% trans "Email Already Confirmed" %}</h2>
+                <h2 class="card-title mb-3 text-warning">{% trans "ایمیل قبلاً تأیید شده است" %}</h2>
                 <div class="alert alert-warning" role="alert">
                   <i class="fas fa-info-circle me-2"></i>
-                  {% blocktrans %}Unable to confirm this email because it is already confirmed by a different account.{% endblocktrans %}
+                  {% blocktrans %}امکان تأیید این ایمیل وجود ندارد، چون قبلاً توسط حساب کاربری دیگری تأیید شده است.{% endblocktrans %}
                 </div>
               </div>
             {% endif %}
@@ -81,20 +81,20 @@
               <div class="mb-3">
                 <i class="fas fa-link-slash" style="font-size: 4rem; color: #dc3545;"></i>
               </div>
-              <h2 class="card-title mb-3 text-danger">{% trans "Invalid Confirmation Link" %}</h2>
+              <h2 class="card-title mb-3 text-danger">{% trans "لینک تأیید نامعتبر است" %}</h2>
               <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation-circle me-2"></i>
                 {% url 'account_email' as email_url %}
                 {% blocktrans %}
-                This email confirmation link expired or is invalid. Please 
-                <a href="{{ email_url }}" class="alert-link">issue a new email confirmation request</a>.
+                لینک تأیید ایمیل منقضی شده یا نامعتبر است. لطفاً برای دریافت لینک جدید، 
+                <a href="{{ email_url }}" class="alert-link">درخواست تأیید ایمیل جدید</a> ارسال کنید.
                 {% endblocktrans %}
               </div>
               
               <div class="mt-4">
                 <a href="{% url 'account_email' %}" class="btn btn-outline-primary">
                   <i class="fas fa-envelope me-2"></i>
-                  {% trans "Go to Email Settings" %}
+                  {% trans "رفتن به تنظیمات ایمیل" %}
                 </a>
               </div>
             </div>
