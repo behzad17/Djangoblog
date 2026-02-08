@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
+from django.db.models import Q
 from django.utils.html import format_html
 from .models import Post, Comment, Category, UserProfile, PostViewCount
 
@@ -30,9 +31,17 @@ class ExpertAuthorFilter(SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == '1':
-            return queryset.filter(author__profile__can_publish_without_approval=True)
+            # Filter for expert authors - only users with profiles that have can_publish_without_approval=True
+            return queryset.filter(
+                author__profile__isnull=False,
+                author__profile__can_publish_without_approval=True
+            ).select_related('author', 'author__profile')
         elif self.value() == '0':
-            return queryset.filter(author__profile__can_publish_without_approval=False)
+            # Filter for non-expert authors - users without profiles or with can_publish_without_approval=False
+            return queryset.filter(
+                Q(author__profile__isnull=True) | 
+                Q(author__profile__can_publish_without_approval=False)
+            ).select_related('author', 'author__profile')
         return queryset
 
 
@@ -69,6 +78,24 @@ class PostAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = ('created_on', 'updated_on', 'deleted_at', 'deleted_by', 'slug')
+    
+    def get_queryset(self, request):
+        """Override queryset to handle expert_author filter parameter."""
+        qs = super().get_queryset(request)
+        # Handle expert_author filter from URL parameter
+        if request.GET.get('expert_author') == '1':
+            # Filter for expert authors - only users with profiles that have can_publish_without_approval=True
+            qs = qs.filter(
+                author__profile__isnull=False,
+                author__profile__can_publish_without_approval=True
+            ).select_related('author', 'author__profile')
+        elif request.GET.get('expert_author') == '0':
+            # Filter for non-expert authors - users without profiles or with can_publish_without_approval=False
+            qs = qs.filter(
+                Q(author__profile__isnull=True) | 
+                Q(author__profile__can_publish_without_approval=False)
+            ).select_related('author', 'author__profile')
+        return qs
     
     def url_status(self, obj):
         """Display URL approval status."""
