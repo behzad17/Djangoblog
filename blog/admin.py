@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django.utils.html import format_html
 from .models import Post, Comment, Category, UserProfile, PostViewCount
 
@@ -15,13 +16,33 @@ class CategoryAdmin(admin.ModelAdmin):
         return obj.posts.filter(status=1, is_deleted=False).count()
     post_count.short_description = 'Published Posts'
 
+
+class ExpertAuthorFilter(SimpleListFilter):
+    """Custom filter for posts by expert authors."""
+    title = 'Expert Author'
+    parameter_name = 'expert_author'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('1', 'Yes'),
+            ('0', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.filter(author__profile__can_publish_without_approval=True)
+        elif self.value() == '0':
+            return queryset.filter(author__profile__can_publish_without_approval=False)
+        return queryset
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     """Admin interface for Post model with plain textareas (no Summernote)."""
 
     list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'is_deleted', 'deleted_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
-    list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on',)
+    list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on', ExpertAuthorFilter,)
     # Slug is auto-generated from title in Post.save() method
     # prepopulated_fields removed - slug will be generated automatically for Persian titles
     # Using plain textareas instead of Summernote for admin panel
