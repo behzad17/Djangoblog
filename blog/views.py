@@ -1,4 +1,4 @@
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Case, When, IntegerField
 from django.shortcuts import (
     render,
     get_object_or_404,
@@ -37,13 +37,26 @@ class PostList(generic.ListView):
     def get_queryset(self):
         """
         Returns a queryset of published posts with comment counts.
-        Posts are ordered by creation date (newest first).
-        Includes all posts (including pinned) for correct pagination count.
+        Posts are ordered with pinned posts first, then by creation date (newest first).
         Excludes posts with empty/null slugs to prevent NoReverseMatch errors.
         """
-        return Post.objects.filter(status=1, is_deleted=False).exclude(slug='').exclude(slug__isnull=True).select_related('category').annotate(
-            comment_count=Count('comments', filter=Q(comments__approved=True))
-        ).order_by('-created_on')
+        return (
+            Post.objects.filter(status=1, is_deleted=False)
+            .exclude(slug='')
+            .exclude(slug__isnull=True)
+            .select_related('category')
+            .annotate(
+                comment_count=Count(
+                    'comments', filter=Q(comments__approved=True)
+                ),
+                pinned_order=Case(
+                    When(pinned=True, then=0),
+                    default=1,
+                    output_field=IntegerField(),
+                ),
+            )
+            .order_by('pinned_order', '-created_on')
+        )
     
     def get_context_data(self, **kwargs):
         """
