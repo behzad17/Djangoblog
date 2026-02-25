@@ -108,10 +108,11 @@ class PostList(generic.ListView):
         
         # Only process pinned posts on page 1
         if page_number == 1:
-            # Fetch pinned posts and map to target rows (if specified)
-            pinned_qs = Post.objects.filter(status=1, pinned=True, is_deleted=False).exclude(slug='').exclude(slug__isnull=True).select_related('category', 'author').annotate(
-                comment_count=Count('comments', filter=Q(comments__approved=True))
-            ).order_by('-created_on')
+            # IMPORTANT:
+            # Use ONLY pinned posts that are already in the current paginated page.
+            # This keeps pagination and displayed posts consistent and guarantees
+            # we don't "lose" any posts from the first page when inserting pinned ones.
+            pinned_qs = [p for p in page_posts if getattr(p, "pinned", False)]
             
             for p in pinned_qs:
                 if p.pinned_row and row_start <= p.pinned_row <= row_end and p.pinned_row not in pinned_by_row:
