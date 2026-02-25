@@ -115,13 +115,14 @@
 
 .related-link-image-wrapper {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  flex: 0 0 25%; /* Take 25% of box height */
   overflow: hidden;
   background-color: var(--pv-bg-main, #F5F7F6);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 1 / 1; /* Square images - width will match height */
 }
 
 .related-link-image {
@@ -249,7 +250,8 @@
   }
   
   .related-link-image-wrapper {
-    aspect-ratio: 16 / 9; /* Maintain aspect ratio on mobile too */
+    flex: 0 0 25%; /* Take 25% of box height */
+    aspect-ratio: 1 / 1; /* Square images on mobile too */
   }
   
   .related-link-button {
