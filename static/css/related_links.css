@@ -1,6 +1,6 @@
 /* Related Links Page - Scoped Styles */
 .related-links-page {
-  padding: 1rem 0;
+  padding: 1rem 0.75rem; /* Restore horizontal padding so cards don't touch edges */
 }
 
 /* Related Links Grid - 5 cards per row */
@@ -115,14 +115,14 @@
 
 .related-link-image-wrapper {
   width: 100%;
-  flex: 0 0 35%; /* Take 35% of box height */
+  flex: 0 0 auto; /* Let image height be defined by its aspect ratio */
   overflow: hidden;
   background-color: var(--pv-bg-main, #F5F7F6);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1; /* Square images - width will match height */
+  aspect-ratio: 4 / 3; /* Slightly shorter images for better card proportions */
 }
 
 .related-link-image {
