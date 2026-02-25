@@ -235,6 +235,13 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .related-link-card {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1.5rem;
+  }
+  
   .related-links-filters {
     gap: 0.5rem;
     padding: 0.75rem;
@@ -246,12 +253,12 @@
   }
   
   .related-link-content {
-    padding: 1.25rem;
+    padding: 1rem 1.25rem 1.25rem;
   }
   
   .related-link-image-wrapper {
-    flex: 0 0 35%; /* Take 35% of box height */
-    aspect-ratio: 1 / 1; /* Square images on mobile too */
+    flex: 0 0 auto;
+    aspect-ratio: 4 / 3; /* Slightly shorter images on mobile */
   }
   
   .related-link-button {
