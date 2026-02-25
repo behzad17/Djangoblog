@@ -116,7 +116,7 @@ CAPTCHA_BACKGROUND_COLOR = "#ffffff"
 CAPTCHA_NOISE_FUNCTIONS = ()  # reduce noise/lines
 CAPTCHA_FILTER_FUNCTIONS = ()  # reduce distortion
 
-SITE_ID = 1
+SITE_ID = 4
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
