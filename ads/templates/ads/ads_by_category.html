@@ -93,10 +93,14 @@
     {% for ad in ads %}
     <div class="col-md-3 mb-4">
       <div class="glass-morphism-card {% if ad.is_currently_featured %}ad-featured{% endif %}">
+        {% if ad.plan == 'pro' %}
         <a
           href="{% url 'ads:ad_detail' ad.slug %}"
           class="text-decoration-none glass-card-link"
         >
+        {% else %}
+        <div class="glass-card-link" style="cursor: default;">
+        {% endif %}
           <div class="glass-card-image-wrapper">
             {% if ad.image %}
             <img
@@ -138,13 +142,29 @@
           </div>
           <div class="glass-card-overlay">
             <h5 class="glass-card-title">{{ ad.title }}</h5>
-            {% if ad.target_url and ad.url_approved %}
-            <p class="glass-card-url">
-              <i class="fas fa-external-link-alt ms-1"></i>{{ ad.target_url|truncatechars:30 }}
-            </p>
+            {% if ad.plan == 'pro' %}
+              {% if ad.target_url and ad.url_approved %}
+              <p class="glass-card-url">
+                <i class="fas fa-external-link-alt ms-1"></i>{{ ad.target_url|truncatechars:30 }}
+              </p>
+              {% endif %}
+            {% else %}
+              {% if ad.target_url and ad.url_approved %}
+              <a href="{{ ad.target_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary w-100 mt-2">
+                <i class="fas fa-external-link-alt ms-1"></i>مشاهده وب‌سایت
+              </a>
+              {% else %}
+              <p class="text-muted small mb-0 mt-2">
+                <i class="fas fa-info-circle ms-1"></i>برای مشاهده جزئیات بیشتر، این تبلیغ را به Pro ارتقا دهید
+              </p>
+              {% endif %}
             {% endif %}
           </div>
+        {% if ad.plan == 'pro' %}
         </a>
+        {% else %}
+        </div>
+        {% endif %}
         {% if user.is_authenticated and ad.owner == user %}
         <div class="glass-card-actions">
           <div class="btn-group w-100" role="group">

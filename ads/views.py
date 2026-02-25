@@ -251,6 +251,11 @@ def ad_detail(request, slug):
         slug=slug
     )
     
+    # Only Pro ads can have detail pages - free ads are list-only (not clickable)
+    if ad.plan != 'pro':
+        from django.http import Http404
+        raise Http404("Free ads do not have detail pages. Only Pro ads can be viewed in detail.")
+    
     # Increment aggregated view count (only for GET requests)
     # Wrap in try-except to prevent tracking errors from breaking the page
     if request.method == 'GET':
