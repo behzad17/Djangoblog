@@ -115,7 +115,7 @@
 
 .related-link-image-wrapper {
   width: 100%;
-  flex: 0 0 25%; /* Take 25% of box height */
+  flex: 0 0 35%; /* Take 35% of box height */
   overflow: hidden;
   background-color: var(--pv-bg-main, #F5F7F6);
   position: relative;
@@ -250,7 +250,7 @@
   }
   
   .related-link-image-wrapper {
-    flex: 0 0 25%; /* Take 25% of box height */
+    flex: 0 0 35%; /* Take 35% of box height */
     aspect-ratio: 1 / 1; /* Square images on mobile too */
   }
   
