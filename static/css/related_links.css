@@ -196,7 +196,7 @@
   font-size: 0.9rem;
   color: var(--pv-text-main, #2C2C2C);
   line-height: 1.6;
-  margin-bottom: 0.5rem; /* Tighter spacing above the button */
+  margin-bottom: 0; /* Let the button's auto margin control spacing */
 }
 
 .related-link-button {
@@ -210,7 +210,8 @@
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.3s ease;
-  margin-top: 0.25rem; /* Small consistent gap below description */
+  margin-top: auto; /* Push button to bottom of card content */
+  margin-bottom: 10px; /* Fixed space from bottom edge of card */
   width: 100%;
   text-align: center;
 }
