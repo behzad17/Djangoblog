@@ -7500,7 +7500,7 @@ body .container nav[aria-label="breadcrumb"] {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 2rem;
+  margin-bottom: 1.6rem; /* compact: ~20% smaller spacing */
 }
 
 .event-card-row:hover {
@@ -7518,7 +7518,7 @@ body .container nav[aria-label="breadcrumb"] {
 .event-card-image {
   width: 100%;
   height: 100%;
-  min-height: 250px;
+  min-height: 200px; /* compact: ~20% shorter image */
   object-fit: cover;
   display: block;
   transition: transform 0.3s ease;
@@ -7538,7 +7538,7 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .event-card-content {
-  padding: 2rem;
+  padding: 1.6rem; /* compact: ~20% smaller padding */
   width: 100%;
   height: 100%;
   display: flex;
@@ -7549,15 +7549,15 @@ body .container nav[aria-label="breadcrumb"] {
 
 /* Event Card Title */
 .event-card-title {
-  font-size: 1.75rem;
+  font-size: 1.4rem; /* compact: ~20% smaller font */
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   color: #333;
   line-height: 1.3;
   background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
-  padding: 1rem 1.25rem;
+  padding: 0.8rem 1rem;
   border-radius: 8px;
-  border-left: 4px solid #0F766E;
+  border-left: 3px solid #0F766E;
   box-shadow: 0 2px 6px rgba(15, 118, 110, 0.35) !important;
 }
 
@@ -7585,12 +7585,12 @@ body .container nav[aria-label="breadcrumb"] {
   color: #555;
   line-height: 1.7;
   margin-bottom: 0;
-  font-size: 1rem;
+  font-size: 0.8rem; /* compact body text */
   flex-grow: 1;
   background: #f8f9fa;
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.2rem;
   border-radius: 8px;
-  border-left: 3px solid #dee2e6;
+  border-left: 2px solid #dee2e6;
 }
 
 /* Event Content Separator (Dots) */
@@ -7626,13 +7626,13 @@ body .container nav[aria-label="breadcrumb"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.5rem;
+  padding: 1.6rem 1.2rem;
   text-align: center;
   min-height: 100%;
 }
 
 .event-date-month {
-  font-size: 0.9rem;
+  font-size: 0.72rem;
   font-weight: 500;
   color: #666;
   text-transform: uppercase;
@@ -7642,7 +7642,7 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .event-date-day {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #333;
   line-height: 1;
@@ -7650,14 +7650,14 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .event-date-year {
-  font-size: 0.85rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: #666;
   margin-bottom: 0.75rem;
 }
 
 .event-date-separator {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 300;
   color: #999;
   margin: 0.5rem 0;
@@ -7673,93 +7673,93 @@ body .container nav[aria-label="breadcrumb"] {
 /* Responsive Adjustments for Events Grid */
 @media (max-width: 992px) {
   .event-card-content {
-    padding: 1.5rem;
+    padding: 1.2rem;
   }
   
   .event-card-title {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
   
   .event-card-description {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 768px) {
   .event-card-row {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
   }
   
   .event-card-image {
-    min-height: 200px;
+    min-height: 160px;
   }
   
   .event-card-content {
-    padding: 1.25rem;
+    padding: 1rem;
   }
   
   .event-card-title {
-    font-size: 1.35rem;
+    font-size: 1.1rem;
     margin-bottom: 0.75rem;
-    padding: 0.875rem 1rem;
+    padding: 0.7rem 0.8rem;
   }
   
   .event-card-description {
-    font-size: 0.9rem;
-    padding: 1rem 1.25rem;
+    font-size: 0.75rem;
+    padding: 0.8rem 1rem;
   }
   
   .event-card-date-section {
-    padding: 1.5rem 1rem;
+    padding: 1.2rem 0.8rem;
   }
   
   .event-date-day {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
   
   .event-date-month {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
   }
   
   .event-date-year {
-    font-size: 0.75rem;
+    font-size: 0.6rem;
   }
 }
 
 @media (max-width: 576px) {
   .event-card-image {
-    min-height: 180px;
+    min-height: 144px;
   }
   
   .event-card-content {
-    padding: 1rem;
+    padding: 0.8rem;
   }
   
   .event-card-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-bottom: 0.75rem;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.8rem;
   }
   
   .event-card-description {
-    font-size: 0.85rem;
-    padding: 1rem;
+    font-size: 0.7rem;
+    padding: 0.8rem;
   }
   
   .event-card-date-section {
-    padding: 1.25rem 0.75rem;
+    padding: 1rem 0.6rem;
   }
   
   .event-date-day {
-    font-size: 1.75rem;
+    font-size: 1.4rem;
   }
   
   .event-date-month {
-    font-size: 0.75rem;
+    font-size: 0.6rem;
   }
   
   .event-date-year {
-    font-size: 0.7rem;
+    font-size: 0.56rem;
   }
 }
 
