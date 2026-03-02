@@ -22,6 +22,7 @@
             <div id="event-fields-container" style="display: none">
               {{ form.event_start_date|as_crispy_field }}
               {{ form.event_end_date|as_crispy_field }}
+              {{ form.event_location|as_crispy_field }}
             </div>
 
             <div class="text-center mt-4">
@@ -97,6 +98,7 @@
     );
     const startDateField = document.getElementById("id_event_start_date");
     const endDateField = document.getElementById("id_event_end_date");
+    const locationField = document.getElementById("id_event_location");
 
     if (!categorySelect || !eventFieldsContainer) {
       return;
@@ -126,6 +128,7 @@
 
         if (startDateField) startDateField.setAttribute("required", "required");
         if (endDateField) endDateField.setAttribute("required", "required");
+        if (locationField) locationField.setAttribute("required", "required");
       } else {
         // Hide event fields
         eventFieldsContainer.style.transition = "opacity 0.3s ease";
@@ -142,12 +145,17 @@
           endDateField.removeAttribute("required");
           endDateField.value = "";
         }
+        if (locationField) {
+          locationField.removeAttribute("required");
+          locationField.value = "";
+        }
       }
     } else {
       // No category selected
       eventFieldsContainer.style.display = "none";
       if (startDateField) startDateField.removeAttribute("required");
       if (endDateField) endDateField.removeAttribute("required");
+      if (locationField) locationField.removeAttribute("required");
     }
   }
 
