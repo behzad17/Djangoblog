@@ -7627,7 +7627,7 @@ body .container nav[aria-label="breadcrumb"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.2rem 1.1rem; /* reduce vertical padding around date */
+  padding: 0.9rem 1rem; /* tighter vertical padding around date */
   text-align: center;
   min-height: 100%;
 }
@@ -7637,7 +7637,7 @@ body .container nav[aria-label="breadcrumb"] {
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  margin-top: 0.35rem; /* just under the date block */
+  margin-top: 0.25rem; /* closer to the date block */
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   background-color: #ecfdf5;
@@ -7650,35 +7650,35 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .event-date-month {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 500;
   color: #666;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
   font-style: italic;
 }
 
 .event-date-day {
-  font-size: 1.7rem; /* smaller day number */
+  font-size: 1.6rem; /* more compact day number */
   font-weight: 700;
   color: #333;
   line-height: 1;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
 .event-date-year {
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 500;
   color: #666;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .event-date-separator {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 300;
   color: #999;
-  margin: 0.5rem 0;
+  margin: 0.3rem 0;
 }
 
 /* Date Range - Second Date */
