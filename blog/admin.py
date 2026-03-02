@@ -63,6 +63,11 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('content', 'excerpt', 'featured_image'),
             'description': 'Main post content (required). Excerpt is optional summary.'
         }),
+        ('Event Details', {
+            'fields': ('event_start_date', 'event_end_date', 'event_location'),
+            'description': 'Use these fields for posts in the Events category (رویدادها).',
+            'classes': ('collapse',),
+        }),
         ('External URL', {
             'fields': ('external_url', 'url_approved'),
             'description': 'Users can add an external URL. Admin must approve it before it will be displayed.'

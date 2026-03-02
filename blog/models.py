@@ -148,6 +148,11 @@ class Post(models.Model):
         blank=True,
         help_text="End date for Events category posts only"
     )
+    event_location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Optional location for Events category posts (city, venue, or online)."
+    )
     
     # Soft delete fields
     is_deleted = models.BooleanField(

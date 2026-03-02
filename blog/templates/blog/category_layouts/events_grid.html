@@ -71,6 +71,11 @@
                 <div class="event-date-year">{{ post.event_end_date|date:"Y" }}</div>
                 {% endif %}
               </div>
+              {% if post.event_location %}
+              <div class="event-location-badge">
+                <i class="fas fa-map-marker-alt ms-1"></i>{{ post.event_location }}
+              </div>
+              {% endif %}
             </div>
             {% endif %}
           </div>

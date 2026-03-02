@@ -53,11 +53,30 @@ class PostForm(forms.ModelForm):
         label='تاریخ پایان رویداد',
         help_text='برای دسته‌بندی رویدادها الزامی است'
     )
+    event_location = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'مثال: استکهلم، گوتنبرگ، آنلاین'
+        }),
+        label='محل برگزاری رویداد',
+        help_text='برای دسته‌بندی رویدادها توصیه و در صورت امکان الزامی است (شهر، محل یا آنلاین)'
+    )
     
     class Meta:
         """Meta options for PostForm."""
         model = Post
-        fields = ('title', 'excerpt', 'content', 'featured_image', 'category', 'external_url', 'event_start_date', 'event_end_date')
+        fields = (
+            'title',
+            'excerpt',
+            'content',
+            'featured_image',
+            'category',
+            'external_url',
+            'event_start_date',
+            'event_end_date',
+            'event_location',
+        )
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'عنوان پست'}),
             'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'خلاصه پست (اختیاری)'}),
@@ -82,8 +101,9 @@ class PostForm(forms.ModelForm):
         category = cleaned_data.get('category')
         event_start_date = cleaned_data.get('event_start_date')
         event_end_date = cleaned_data.get('event_end_date')
+        event_location = cleaned_data.get('event_location')
         
-        # Validate dates are required for Events category
+        # Validate dates (and location) are required for Events category
         if category and category.slug == 'events-announcements':
             if not event_start_date:
                 raise ValidationError({
@@ -92,6 +112,10 @@ class PostForm(forms.ModelForm):
             if not event_end_date:
                 raise ValidationError({
                     'event_end_date': 'End date is required for Events category.'
+                })
+            if not event_location:
+                raise ValidationError({
+                    'event_location': 'Location is required for Events category (city, venue, or online).'
                 })
             # Validate end date is after or equal to start date
             if event_start_date and event_end_date:
