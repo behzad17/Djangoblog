@@ -7616,8 +7616,8 @@ body .container nav[aria-label="breadcrumb"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 0;
+  justify-content: flex-start; /* keep date + location higher in the column */
+  padding: 0.5rem 0 0.5rem 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-left: 1px solid #e9ecef;
 }
@@ -7627,7 +7627,7 @@ body .container nav[aria-label="breadcrumb"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.6rem 1.2rem;
+  padding: 1.2rem 1.2rem;
   text-align: center;
   min-height: 100%;
 }
@@ -7637,7 +7637,7 @@ body .container nav[aria-label="breadcrumb"] {
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  margin-top: 0.4rem;
+  margin-top: 0.2rem; /* sit closer to the date block */
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   background-color: #ecfdf5;
