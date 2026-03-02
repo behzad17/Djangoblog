@@ -7518,7 +7518,7 @@ body .container nav[aria-label="breadcrumb"] {
 .event-card-image {
   width: 100%;
   height: 100%;
-  min-height: 200px; /* compact: ~20% shorter image */
+  min-height: 170px; /* further reduce image height */
   object-fit: cover;
   display: block;
   transition: transform 0.3s ease;
@@ -7538,7 +7538,7 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .event-card-content {
-  padding: 1.6rem; /* compact: ~20% smaller padding */
+  padding: 1.3rem; /* slightly tighter padding */
   width: 100%;
   height: 100%;
   display: flex;
@@ -7549,13 +7549,13 @@ body .container nav[aria-label="breadcrumb"] {
 
 /* Event Card Title */
 .event-card-title {
-  font-size: 1.4rem; /* compact: ~20% smaller font */
+  font-size: 1.25rem; /* smaller title font */
   font-weight: 700;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   color: #333;
   line-height: 1.3;
   background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
-  padding: 0.8rem 1rem;
+  padding: 0.6rem 0.9rem;
   border-radius: 8px;
   border-left: 3px solid #0F766E;
   box-shadow: 0 2px 6px rgba(15, 118, 110, 0.35) !important;
@@ -7585,10 +7585,10 @@ body .container nav[aria-label="breadcrumb"] {
   color: #555;
   line-height: 1.7;
   margin-bottom: 0;
-  font-size: 0.8rem; /* compact body text */
+  font-size: 0.78rem; /* slightly smaller body text */
   flex-grow: 1;
   background: #f8f9fa;
-  padding: 1rem 1.2rem;
+  padding: 0.9rem 1.1rem;
   border-radius: 8px;
   border-left: 2px solid #dee2e6;
 }
@@ -7627,7 +7627,7 @@ body .container nav[aria-label="breadcrumb"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.6rem 1.2rem;
+  padding: 1.2rem 1.1rem; /* reduce vertical padding around date */
   text-align: center;
   min-height: 100%;
 }
@@ -7660,7 +7660,7 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .event-date-day {
-  font-size: 2rem;
+  font-size: 1.7rem; /* smaller day number */
   font-weight: 700;
   color: #333;
   line-height: 1;
