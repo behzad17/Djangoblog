@@ -2301,7 +2301,7 @@ body {
   }
   
   .terms-hero-section .hero-title {
-    font-size: 1.6rem; /* 20% smaller: 2rem * 0.8 = 1.6rem */
+    font-size: 1.2rem; /* ~40% smaller vs 2rem base */
   }
   
   .hero-subtitle {
@@ -2372,7 +2372,7 @@ body {
   }
   
   .terms-hero-section .hero-title {
-    font-size: 1.4rem; /* 20% smaller: 1.75rem * 0.8 = 1.4rem */
+    font-size: 1.05rem; /* ~40% smaller vs 1.75rem base */
   }
   
   .hero-subtitle {
@@ -2466,7 +2466,7 @@ body {
   }
   
   .terms-hero-section .hero-title {
-    font-size: 1.2rem; /* 20% smaller: 1.5rem * 0.8 = 1.2rem */
+    font-size: 0.9rem; /* ~40% smaller vs 1.5rem base */
   }
   
   .hero-subtitle {
@@ -6931,6 +6931,7 @@ body .container nav[aria-label="breadcrumb"] {
 .member-guide-hero .display-4,
 .member-guide-hero h1 {
   margin-bottom: 0.25rem !important;
+  font-size: 2rem; /* ~40% smaller than default hero title */
 }
 
 .member-guide-hero .lead,
