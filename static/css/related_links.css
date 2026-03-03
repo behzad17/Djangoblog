@@ -122,7 +122,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 4 / 3; /* Slightly shorter images for better card proportions */
+  aspect-ratio: 16 / 9; /* 20% shorter images for more compact cards */
 }
 
 .related-link-image {
@@ -150,7 +150,7 @@
 }
 
 .related-link-content {
-  padding: 1.5rem;
+  padding: 1.2rem; /* ~20% smaller padding for more compact cards */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -159,11 +159,11 @@
 
 .related-link-badge {
   display: inline-block;
-  padding: 0.35rem 0.85rem;
+  padding: 0.3rem 0.7rem;
   background: linear-gradient(135deg, var(--pv-bg-highlight, #ECFDF5) 0%, rgba(236, 253, 245, 0.8) 100%);
   color: var(--pv-color-secondary, #1F8A70);
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
   width: fit-content;
@@ -172,12 +172,12 @@
 }
 
 .related-link-title {
-  font-size: 1.15rem;
+  font-size: 0.95rem; /* ~20% smaller title */
   font-weight: 600;
   color: var(--pv-text-main, #2C2C2C);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   line-height: 1.4;
-  min-height: 3.2em; /* Ensure consistent height for 2-line titles */
+  min-height: 2.6em; /* Slightly less reserved height for 2-line titles */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -185,15 +185,15 @@
 }
 
 .related-link-source {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--pv-text-muted, #6B7280);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
   display: flex;
   align-items: center;
 }
 
 .related-link-description {
-  font-size: 0.9rem;
+  font-size: 0.75rem; /* smaller description text */
   color: var(--pv-text-main, #2C2C2C);
   line-height: 1.6;
   margin-bottom: 0; /* Let the button's auto margin control spacing */
@@ -203,22 +203,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--pv-color-secondary, #1F8A70);
+  padding: 0.6rem 1.2rem;
+  background-color: #1B5583; /* Match main navbar blue */
   color: white;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.3s ease;
   margin-top: auto; /* Push button to bottom of card content */
-  margin-bottom: 10px; /* Fixed space from bottom edge of card */
+  margin-bottom: 8px; /* Slightly smaller bottom gap */
   width: 100%;
   text-align: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .related-link-button:hover {
-    background-color: var(--pv-color-primary, #6EDFB2);
+    background-color: #234f74; /* darker hover state for navbar blue */
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--pv-shadow-medium, rgba(0, 0, 0, 0.15));
   }
@@ -236,7 +236,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .related-link-card {
-    max-width: 420px;
+    max-width: 360px; /* 20% smaller max width on mobile */
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 1.5rem;
@@ -253,7 +253,7 @@
   }
   
   .related-link-content {
-    padding: 1rem 1.25rem 1.25rem;
+    padding: 0.8rem 1rem 1rem;
   }
   
   .related-link-image-wrapper {
@@ -262,8 +262,8 @@
   }
   
   .related-link-button {
-    padding: 0.65rem 1.25rem;
-    font-size: 0.9rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.8rem;
   }
 }
 
