@@ -1804,6 +1804,15 @@ body {
   font-size: 1rem; /* 20% smaller vs base hero-subtitle */
 }
 
+/* Photo gallery category hero - 15% larger title and description */
+.photo-gallery-hero-section .category-hero-title {
+  font-size: 2.19rem; /* ~15% bigger than base 1.9rem */
+}
+
+.photo-gallery-hero-section .category-hero-description {
+  font-size: 1.09rem; /* ~15% bigger than base 0.95rem */
+}
+
 /* Ads page hero section - wider text area and justified text for desktop/tablet */
 @media (min-width: 768px) {
   .ads-hero-section .ads-hero-column {

@@ -4,7 +4,7 @@
 {% block meta_description %}{% if category.description %}{{ category.description|truncatewords:25 }}{% else %}مطالب و پست‌های دسته‌بندی {{ category.name }}{% endif %}{% endblock meta_description %}
 {% block content %}
 <!-- Category Hero Section -->
-<section class="category-hero-section text-white{% if category.slug == 'events-announcements' %} events-hero-section{% endif %}">
+<section class="category-hero-section text-white{% if category.slug == 'events-announcements' %} events-hero-section{% endif %}{% if category.slug == 'photo-gallery' %} photo-gallery-hero-section{% endif %}">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-12">
