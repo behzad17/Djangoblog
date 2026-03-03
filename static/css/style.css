@@ -3360,13 +3360,13 @@ body {
   font-weight: 400;
 }
 
-/* Events category hero (رویدادها) - title and description 10% bigger */
+/* Events category hero (رویدادها) - title and description 7% bigger */
 .events-hero-section .category-hero-title {
-  font-size: 1.68rem; /* 10% bigger than 1.53rem */
+  font-size: 1.8rem; /* ~7% bigger than 1.68rem */
 }
 
 .events-hero-section .category-hero-description {
-  font-size: 0.825rem; /* 10% bigger than 0.75rem */
+  font-size: 0.88rem; /* ~7% bigger than 0.825rem */
 }
 
 .category-hero-stats {
