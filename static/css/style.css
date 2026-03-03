@@ -6629,6 +6629,8 @@ body .container nav[aria-label="breadcrumb"] {
   object-fit: contain; /* Changed from cover to preserve full image, no cropping */
   object-position: center;
   display: block;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 /* Photo Hero Overlay - Title and Metadata */
@@ -6681,6 +6683,12 @@ body .container nav[aria-label="breadcrumb"] {
   font-size: 0.69rem; /* ~15% bigger than previous 0.6rem */
   gap: 0.75rem;
   margin-bottom: 0.75rem;
+}
+
+/* Extra images in photo gallery detail */
+.photo-extra-image {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .photo-meta-card .photo-meta-item i {
