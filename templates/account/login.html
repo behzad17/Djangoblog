@@ -9,13 +9,7 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section
-  class="hero-section hero-section-login text-white mb-4"
-  style="
-    background: #76DFB1;
-    padding: 2rem 0;
-  "
->
+<section class="hero-section hero-section-login text-white mb-4">
   <div class="container">
     <div class="row justify-content-center text-center">
       <div class="col-lg-8">
@@ -33,17 +27,20 @@
 <!-- Login Container -->
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-lg-5 col-md-7 col-sm-9">
+    <div class="col-lg-5 col-md-7 col-sm-10">
       <!-- Login Card -->
       <div class="card login-card login-ltr mt-4 mb-5">
-        <div class="card-body p-4">
+        <div class="card-body">
           <!-- Login Header -->
-          <div class="text-center mb-4" style="text-align: center;">
-            <h2 class="card-title mb-2">{% trans "ورود" %}</h2>
+          <div class="login-card-header text-center mb-3">
+            <div class="login-card-icon mb-2">
+              <i class="fas fa-user-circle" aria-hidden="true"></i>
+            </div>
+            <h2 class="card-title mb-0">{% trans "ورود" %}</h2>
           </div>
 
           <!-- Google Sign In Button (Prominent) -->
-          <div class="mb-4">
+          <div class="mb-3">
             <a
               class="btn btn-google w-100 d-flex align-items-center justify-content-center"
               href="{% provider_login_url 'google' process='login' %}"
@@ -62,7 +59,7 @@
           </div>
 
           <!-- Divider -->
-          <div class="divider-wrapper mb-4">
+          <div class="divider-wrapper mb-3">
             <div class="divider-line"></div>
             <span class="divider-text">{% trans "یا" %}</span>
             <div class="divider-line"></div>
