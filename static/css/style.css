@@ -6617,7 +6617,7 @@ body .container nav[aria-label="breadcrumb"] {
   min-height: 400px;
   position: relative;
   overflow: visible;
-  background: #ADD8E6;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
