@@ -3597,6 +3597,11 @@ body {
   margin-top: 2px;
 }
 
+/* Search page - search form card */
+.search-form-card {
+  background-color: #ADD8E6;
+}
+
 .popular-post-author i {
   font-size: 0.7rem;
   color: #999;
