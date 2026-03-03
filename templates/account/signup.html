@@ -83,7 +83,17 @@
               {% if field.name != 'captcha' %}
               <div class="mb-3">
                 <label for="{{ field.id_for_label }}" class="form-label text-center d-block">
-                  {{ field.label }}
+                  {% if field.name == 'email' %}
+                    {% trans "ایمیل" %}
+                  {% elif field.name == 'username' %}
+                    {% trans "نام کاربری" %}
+                  {% elif field.name == 'password1' %}
+                    {% trans "رمز ورود" %}
+                  {% elif field.name == 'password2' %}
+                    {% trans "تکرار رمز عبور" %}
+                  {% else %}
+                    {{ field.label }}
+                  {% endif %}
                   {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
                 </label>
                 {{ field }}
