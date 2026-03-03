@@ -5123,14 +5123,14 @@ body .container nav[aria-label="breadcrumb"] {
   border: 1px solid var(--pv-border-soft);
   border-radius: 16px;
   box-shadow: 0 4px 12px var(--pv-shadow-soft);
-  background-color: var(--pv-bg-card);
-  max-width: 460px;
+  background-color: #ADD8E6;
+  max-width: 370px;
   margin: 0 auto 2.5rem;
 }
 
 /* LTR (Left-to-Right) styling for login page - English page */
 .login-card .card-body {
-  padding: 1.75rem 1.5rem;
+  padding: 1.4rem 1.2rem;
 }
 
 .login-card.login-ltr {
