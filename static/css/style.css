@@ -6919,10 +6919,10 @@ body .container nav[aria-label="breadcrumb"] {
 
 @media (max-width: 768px) {
   .photo-detail-hero {
-    height: 50vh;
-    max-height: 500px;
-    min-height: 300px;
-    margin-bottom: 1.5rem; /* Ensure info card starts below hero on mobile */
+    height: auto;          /* Let hero grow to fit images on mobile */
+    max-height: none;
+    min-height: 0;
+    margin-bottom: 3.5rem; /* Larger gap so info card clearly starts after hero */
   }
   
   .photo-hero-title {
