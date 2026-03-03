@@ -6630,7 +6630,7 @@ body .container nav[aria-label="breadcrumb"] {
   object-position: center;
   display: block;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 /* Photo Hero Overlay - Title and Metadata */
@@ -6688,7 +6688,7 @@ body .container nav[aria-label="breadcrumb"] {
 /* Extra images in photo gallery detail */
 .photo-extra-image {
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .photo-meta-card .photo-meta-item i {
