@@ -1682,6 +1682,39 @@ body {
   }
 }
 
+/* Ensure all hero sections align to navbar width on mobile (95%) */
+@media (max-width: 768px) {
+  .category-hero-section,
+  .ads-hero-section,
+  .askme-hero-section,
+  .related-links-hero-section,
+  .favorites-hero,
+  .member-guide-hero,
+  .terms-hero-section,
+  .ads-category-hero-section,
+  .photo-detail-hero {
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .category-hero-section,
+  .ads-hero-section,
+  .askme-hero-section,
+  .related-links-hero-section,
+  .favorites-hero,
+  .member-guide-hero,
+  .terms-hero-section,
+  .ads-category-hero-section,
+  .photo-detail-hero {
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
 @media (max-width: 576px) {
   .hero-image-mobile-wrapper {
     width: 95% !important;
