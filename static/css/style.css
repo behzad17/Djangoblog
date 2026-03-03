@@ -1733,15 +1733,6 @@ body {
 }
 
 /* Ads category pages - hero title 20% smaller */
-.ads-category-hero-section .hero-title {
-  font-size: 2rem; /* 20% smaller: 2.5rem * 0.8 = 2rem */
-}
-
-/* Terms page - hero title 20% smaller */
-.terms-hero-section .hero-title {
-  font-size: 2rem; /* 20% smaller: 2.5rem * 0.8 = 2rem */
-}
-
 .hero-subtitle {
   font-size: 1.25rem;
   margin-bottom: 0.75rem; /* Minimized spacing */
@@ -1751,6 +1742,15 @@ body {
   text-align: center;
   margin-right: 4rem;
   max-width: 90%;
+}
+
+/* Ads page hero - 20% smaller title and subtitle */
+.ads-hero-section .hero-title {
+  font-size: 2rem; /* 20% smaller vs default hero title */
+}
+
+.ads-hero-section .hero-subtitle {
+  font-size: 1rem; /* 20% smaller vs base hero-subtitle */
 }
 
 /* Ads page hero section - wider text area and justified text for desktop/tablet */
