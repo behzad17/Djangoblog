@@ -6889,6 +6889,10 @@ body .container nav[aria-label="breadcrumb"] {
   color: #415a77 !important;
 }
 
+.favorites-hero .display-4 {
+  font-size: 2rem; /* ~40% smaller than default hero title */
+}
+
 .favorites-hero .hero-icon {
   animation: fadeInDown 0.8s ease;
 }
@@ -7543,7 +7547,7 @@ body .container nav[aria-label="breadcrumb"] {
   }
   
   .favorites-hero .display-4 {
-    font-size: 1.75rem;
+    font-size: 1.3rem; /* more compact on small screens */
   }
   
   .favorites-hero .lead {
