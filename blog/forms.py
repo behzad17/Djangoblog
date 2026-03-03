@@ -71,6 +71,8 @@ class PostForm(forms.ModelForm):
             'excerpt',
             'content',
             'featured_image',
+            'extra_image_1',
+            'extra_image_2',
             'category',
             'external_url',
             'event_start_date',
@@ -87,12 +89,16 @@ class PostForm(forms.ModelForm):
             'excerpt': 'خلاصه',
             'content': 'محتوا',
             'featured_image': 'تصویر شاخص',
+            'extra_image_1': 'تصویر اضافی ۱ (اختیاری)',
+            'extra_image_2': 'تصویر اضافی ۲ (اختیاری)',
         }
         help_texts = {
             'title': 'عنوان پست خود را وارد کنید',
             'excerpt': 'خلاصه کوتاهی از پست (اختیاری)',
             'content': 'محتوا و متن کامل پست',
             'featured_image': 'فرمت‌های مجاز: JPG، JPEG، PNG، WebP، GIF | اندازه توصیه‌شده: 1080x1080 پیکسل حداکثر حجم فایل: 5 مگابایت',
+            'extra_image_1': 'اختیاری: تصویر دوم برای پست (فقط برای گالری عکس در صورت نیاز).',
+            'extra_image_2': 'اختیاری: تصویر سوم برای پست (فقط برای گالری عکس در صورت نیاز).',
         }
     
     def clean(self):

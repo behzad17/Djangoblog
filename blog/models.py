@@ -153,6 +153,9 @@ class Post(models.Model):
         blank=True,
         help_text="Optional location for Events category posts (city, venue, or online)."
     )
+    # Optional extra images (used primarily for photo-gallery category)
+    extra_image_1 = CloudinaryField('image', blank=True, null=True)
+    extra_image_2 = CloudinaryField('image', blank=True, null=True)
     
     # Soft delete fields
     is_deleted = models.BooleanField(

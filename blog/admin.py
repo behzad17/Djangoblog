@@ -60,7 +60,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
         }),
         ('Content', {
-            'fields': ('content', 'excerpt', 'featured_image'),
+            'fields': ('content', 'excerpt', 'featured_image', 'extra_image_1', 'extra_image_2'),
             'description': 'Main post content (required). Excerpt is optional summary.'
         }),
         ('Event Details', {

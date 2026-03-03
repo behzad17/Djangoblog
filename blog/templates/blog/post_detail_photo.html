@@ -115,6 +115,40 @@
 <div class="container-fluid mt-4 mb-5">
   <div class="row g-4">
     <div class="col-lg-10 col-md-12 mx-auto">
+      <!-- Extra Images Gallery (only if any extra images exist) -->
+      {% if post.extra_image_1 or post.extra_image_2 %}
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body">
+          <div class="row g-3 justify-content-center">
+            {% if post.extra_image_1 %}
+            <div class="col-md-6 col-sm-12">
+              <div class="photo-extra-image-wrapper">
+                <img
+                  src="{{ post.extra_image_1.url }}"
+                  class="img-fluid rounded photo-extra-image"
+                  alt="{{ post.title }} - تصویر ۱"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+              </div>
+            </div>
+            {% endif %}
+            {% if post.extra_image_2 %}
+            <div class="col-md-6 col-sm-12">
+              <div class="photo-extra-image-wrapper">
+                <img
+                  src="{{ post.extra_image_2.url }}"
+                  class="img-fluid rounded photo-extra-image"
+                  alt="{{ post.title }} - تصویر ۲"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
       <!-- Post Content Card -->
       <div class="card mb-4 shadow-sm border-0 post-detail-card">
         <div class="card-body">
