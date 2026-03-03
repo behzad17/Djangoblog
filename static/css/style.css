@@ -6957,9 +6957,10 @@ body .container nav[aria-label="breadcrumb"] {
 
 @media (max-width: 576px) {
   .photo-detail-hero {
-    height: 40vh;
-    max-height: 400px;
-    min-height: 250px;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    margin-bottom: 3.5rem;
   }
   
   .photo-hero-title {
