@@ -24,87 +24,89 @@
   <img
     src="{% static 'images/default.jpg' %}"
     class="photo-hero-image"
-    alt="{{ post.title }}"
+    alt "{{ post.title }}"
   />
   {% endif %}
-  <div class="photo-hero-overlay">
-    <div class="container">
-      <div class="photo-hero-content">
-        <h1 class="photo-hero-title">{{ post.title }}</h1>
-        <div class="photo-hero-meta">
-          <span class="photo-meta-item">
-            <i class="fas fa-user me-1"></i>{{ post.author }}
-          </span>
-          <span class="photo-meta-item">
-            <i class="far fa-calendar me-1"></i>{{ post.created_on }}
-          </span>
-          {% if post.category %}
-          <a href="{% url 'category_posts' post.category.slug %}" class="photo-category-badge">
-            <i class="fas fa-tag me-1"></i>{{ post.category.name }}
-          </a>
+</div>
+
+<!-- Meta / Actions Section (below main image) -->
+<div class="container mt-4 mb-3">
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h1 class="photo-hero-title mb-3">{{ post.title }}</h1>
+      <div class="photo-hero-meta mb-3">
+        <span class="photo-meta-item">
+          <i class="fas fa-user me-1"></i>{{ post.author }}
+        </span>
+        <span class="photo-meta-item">
+          <i class="far fa-calendar me-1"></i>{{ post.created_on }}
+        </span>
+        {% if post.category %}
+        <a href="{% url 'category_posts' post.category.slug %}" class="photo-category-badge">
+          <i class="fas fa-tag me-1"></i>{{ post.category.name }}
+        </a>
+        {% endif %}
+      </div>
+      <div class="photo-hero-actions">
+        {% if user.is_authenticated and user == post.author %}
+        <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary me-2">
+          <i class="fas fa-edit me-1"></i> Edit
+        </a>
+        <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger me-2">
+          <i class="fas fa-trash me-1"></i> Delete
+        </a>
+        {% endif %}
+        <!-- Favorite Button -->
+        {% if user.is_authenticated %}
+        <form
+          action="{% url 'add_to_favorites' post.id %}"
+          method="POST"
+          class="d-inline ms-2"
+        >
+          {% csrf_token %}
+          {% if not is_favorited %}
+          <button type="submit" class="btn btn-sm btn-success">
+            <i class="far fa-heart me-1"></i> افزودن به علاقه‌مندی‌ها
+          </button>
+          {% else %}
+          <button type="button" class="btn btn-sm btn-secondary" disabled>
+            <i class="fas fa-heart me-1"></i> افزوده شده
+          </button>
           {% endif %}
-        </div>
-        <div class="photo-hero-actions">
-          {% if user.is_authenticated and user == post.author %}
-          <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-light me-2">
-            <i class="fas fa-edit me-1"></i> Edit
-          </a>
-          <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-light">
-            <i class="fas fa-trash me-1"></i> Delete
-          </a>
-          {% endif %}
-          <!-- Favorite Button -->
+        </form>
+        {% else %}
+        <a href="{% url 'account_login' %}" class="btn btn-sm btn-primary ms-2">
+          <i class="far fa-heart me-1"></i> ورود برای علاقه‌مندی
+        </a>
+        {% endif %}
+        <span class="photo-meta-item ms-2">
+          <i class="fas fa-heart me-1"></i>{{ post.favorite_count }}
+        </span>
+        
+        <!-- Like Button -->
+        <div class="like-section d-inline ms-2">
           {% if user.is_authenticated %}
           <form
-            action="{% url 'add_to_favorites' post.id %}"
+            action="{% url 'like_post' post.id %}"
             method="POST"
-            class="d-inline ms-2"
+            class="d-inline"
           >
             {% csrf_token %}
-            {% if not is_favorited %}
-            <button type="submit" class="btn btn-sm btn-light">
-              <i class="far fa-heart me-1"></i> Favorite
+            <button 
+              type="submit" 
+              class="btn-like-photo {% if is_liked %}liked{% endif %}"
+              title="{% if is_liked %}حذف لایک{% else %}لایک{% endif %} این پست"
+            >
+              <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+              <span class="like-count">{{ post.like_count }}</span>
             </button>
-            {% else %}
-            <button type="button" class="btn btn-sm btn-secondary" disabled>
-              <i class="fas fa-heart me-1"></i> Favorited
-            </button>
-            {% endif %}
           </form>
           {% else %}
-          <a href="{% url 'account_login' %}" class="btn btn-sm btn-light ms-2">
-            <i class="far fa-heart me-1"></i> Login to Favorite
+          <a href="{% url 'account_login' %}" class="btn-like-photo" title="ورود برای لایک">
+            <i class="far fa-heart"></i>
+            <span class="like-count">{{ post.like_count }}</span>
           </a>
           {% endif %}
-          <span class="photo-meta-item ms-2">
-            <i class="fas fa-heart me-1"></i>{{ post.favorite_count }}
-          </span>
-          
-          <!-- Like Button -->
-          <div class="like-section d-inline ms-2">
-            {% if user.is_authenticated %}
-            <form
-              action="{% url 'like_post' post.id %}"
-              method="POST"
-              class="d-inline"
-            >
-              {% csrf_token %}
-              <button 
-                type="submit" 
-                class="btn-like-photo {% if is_liked %}liked{% endif %}"
-                title="{% if is_liked %}Unlike{% else %}Like{% endif %} this post"
-              >
-                <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
-                <span class="like-count">{{ post.like_count }}</span>
-              </button>
-            </form>
-            {% else %}
-            <a href="{% url 'account_login' %}" class="btn-like-photo" title="Login to like">
-              <i class="far fa-heart"></i>
-              <span class="like-count">{{ post.like_count }}</span>
-            </a>
-            {% endif %}
-          </div>
         </div>
       </div>
     </div>
