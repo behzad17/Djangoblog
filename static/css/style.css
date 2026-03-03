@@ -6640,7 +6640,7 @@ body .container nav[aria-label="breadcrumb"] {
 
 .photo-hero-gallery .photo-hero-image,
 .photo-hero-gallery .photo-extra-image {
-  width: 100%;
+  width: 85%;
   height: auto;
 }
 
