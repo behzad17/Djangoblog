@@ -3360,13 +3360,13 @@ body {
   font-weight: 400;
 }
 
-/* Events category hero (رویدادها) - 25% smaller than previous override */
+/* Events category hero (رویدادها) - title and description 10% bigger */
 .events-hero-section .category-hero-title {
-  font-size: 1.53rem; /* 25% smaller than previous 2.04rem */
+  font-size: 1.68rem; /* 10% bigger than 1.53rem */
 }
 
 .events-hero-section .category-hero-description {
-  font-size: 0.75rem; /* 25% smaller than previous 1rem */
+  font-size: 0.825rem; /* 10% bigger than 0.75rem */
 }
 
 .category-hero-stats {
