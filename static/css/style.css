@@ -5,13 +5,13 @@
 
 @media (max-width: 768px) {
   :root {
-    --navbar-height: 80px;
+    --navbar-height: 68px;
   }
 }
 
 @media (max-width: 576px) {
   :root {
-    --navbar-height: 90px;
+    --navbar-height: 72px;
   }
 }
 
