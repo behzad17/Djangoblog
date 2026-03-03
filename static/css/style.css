@@ -6657,6 +6657,12 @@ body .container nav[aria-label="breadcrumb"] {
   gap: 0.4rem;
 }
 
+/* Neutralize strong left-only margins inside the centered actions row */
+.photo-meta-card .photo-hero-actions .ms-2 {
+  margin-left: 0.25rem !important;
+  margin-right: 0.25rem !important;
+}
+
 .photo-meta-card .photo-hero-actions .btn,
 .photo-meta-card .btn-like-photo {
   font-size: 0.7rem; /* smaller buttons and icons */
