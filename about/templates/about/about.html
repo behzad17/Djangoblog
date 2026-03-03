@@ -144,7 +144,7 @@
           </div>
 
           <!-- Collaboration Form -->
-          <form method="post" class="collaboration-form" style="text-align: left; direction: ltr;">
+          <form method="post" class="collaboration-form" style="text-align: right; direction: rtl;">
             {% csrf_token %}
 
             <div class="mb-3">
@@ -152,7 +152,7 @@
                 for="{{ collaborate_form.name.id_for_label }}"
                 class="form-label"
               >
-                {{ collaborate_form.name.label }}
+                نام
                 <span class="text-danger">*</span>
               </label>
               {{ collaborate_form.name }} {% if collaborate_form.name.errors %}
@@ -167,7 +167,7 @@
                 for="{{ collaborate_form.email.id_for_label }}"
                 class="form-label"
               >
-                {{ collaborate_form.email.label }}
+                ایمیل
                 <span class="text-danger">*</span>
               </label>
               {{ collaborate_form.email }}
@@ -183,7 +183,7 @@
                 for="{{ collaborate_form.message.id_for_label }}"
                 class="form-label"
               >
-                {{ collaborate_form.message.label }}
+                متن پیام
                 <span class="text-danger">*</span>
               </label>
               {{ collaborate_form.message }}
@@ -383,12 +383,12 @@
 .collaboration-card {
   border: none;
   border-radius: 12px;
-  background: #058073;
+  background: #4682B4;
   color: white;
 }
 
 .collaboration-card:hover {
-  background: #058073 !important;
+  background: #4682B4 !important;
   color: white !important;
 }
 
