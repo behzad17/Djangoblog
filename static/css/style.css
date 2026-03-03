@@ -6629,6 +6629,8 @@ body .container nav[aria-label="breadcrumb"] {
   object-fit: contain; /* Changed from cover to preserve full image, no cropping */
   object-position: center;
   display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
