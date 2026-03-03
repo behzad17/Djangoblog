@@ -6922,6 +6922,7 @@ body .container nav[aria-label="breadcrumb"] {
     height: 50vh;
     max-height: 500px;
     min-height: 300px;
+    margin-bottom: 1.5rem; /* Ensure info card starts below hero on mobile */
   }
   
   .photo-hero-title {
