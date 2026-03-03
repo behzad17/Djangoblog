@@ -6651,9 +6651,10 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 .photo-meta-card .photo-hero-actions {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 0.4rem;
 }
 
@@ -6667,6 +6668,12 @@ body .container nav[aria-label="breadcrumb"] {
 .photo-meta-card .btn-like-photo {
   font-size: 0.7rem; /* smaller buttons and icons */
   padding: 0.25rem 0.6rem;
+}
+
+.photo-meta-card .photo-hero-actions .d-inline,
+.photo-meta-card .photo-hero-actions .like-section {
+  display: inline-flex;
+  align-items: center;
 }
 
 .photo-meta-card .like-count {
