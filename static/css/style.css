@@ -1753,6 +1753,15 @@ body {
   font-size: 1rem; /* 20% smaller vs base hero-subtitle */
 }
 
+/* Ask-me page hero - 20% smaller title and subtitle */
+.askme-hero-section .hero-title {
+  font-size: 2rem; /* 20% smaller vs default hero title */
+}
+
+.askme-hero-section .hero-subtitle {
+  font-size: 1rem; /* 20% smaller vs base hero-subtitle */
+}
+
 /* Ads page hero section - wider text area and justified text for desktop/tablet */
 @media (min-width: 768px) {
   .ads-hero-section .ads-hero-column {
