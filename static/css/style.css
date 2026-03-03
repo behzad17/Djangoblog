@@ -3300,6 +3300,15 @@ body {
   font-weight: 400;
 }
 
+/* Events category hero (رویدادها) - 20% smaller title & description */
+.events-hero-section .category-hero-title {
+  font-size: 2.04rem; /* 20% smaller than 2.55rem */
+}
+
+.events-hero-section .category-hero-description {
+  font-size: 1rem; /* 20% smaller than 1.25rem */
+}
+
 .category-hero-stats {
   margin-top: 2rem;
 }
