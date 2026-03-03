@@ -2297,7 +2297,7 @@ body {
   }
   
   .ads-category-hero-section .hero-title {
-    font-size: 1.6rem; /* 20% smaller: 2rem * 0.8 = 1.6rem */
+    font-size: 1.2rem; /* 25% smaller than previous 1.6rem */
   }
   
   .terms-hero-section .hero-title {
@@ -2368,7 +2368,7 @@ body {
   }
   
   .ads-category-hero-section .hero-title {
-    font-size: 1.4rem; /* 20% smaller: 1.75rem * 0.8 = 1.4rem */
+    font-size: 1.05rem; /* 25% smaller than previous 1.4rem */
   }
   
   .terms-hero-section .hero-title {
@@ -2462,7 +2462,7 @@ body {
   }
   
   .ads-category-hero-section .hero-title {
-    font-size: 1.2rem; /* 20% smaller: 1.5rem * 0.8 = 1.2rem */
+    font-size: 0.9rem; /* 25% smaller than previous 1.2rem */
   }
   
   .terms-hero-section .hero-title {
@@ -3302,7 +3302,7 @@ body {
 }
 
 .category-hero-title {
-  font-size: 2.55rem; /* 15% smaller: 3rem * 0.85 = 2.55rem */
+  font-size: 1.9rem; /* 25% smaller than previous 2.55rem */
   font-weight: 700;
   color: #415a77 !important;
   text-shadow: none;
@@ -3310,7 +3310,7 @@ body {
 }
 
 .category-hero-description {
-  font-size: 1.25rem;
+  font-size: 0.95rem; /* 25% smaller than previous 1.25rem */
   color: #415a77 !important;
   line-height: 1.6;
   max-width: 800px;
@@ -3318,13 +3318,13 @@ body {
   font-weight: 400;
 }
 
-/* Events category hero (رویدادها) - 20% smaller title & description */
+/* Events category hero (رویدادها) - 25% smaller than previous override */
 .events-hero-section .category-hero-title {
-  font-size: 2.04rem; /* 20% smaller than 2.55rem */
+  font-size: 1.53rem; /* 25% smaller than previous 2.04rem */
 }
 
 .events-hero-section .category-hero-description {
-  font-size: 1rem; /* 20% smaller than 1.25rem */
+  font-size: 0.75rem; /* 25% smaller than previous 1rem */
 }
 
 .category-hero-stats {
@@ -3424,11 +3424,11 @@ body {
   }
   
   .category-hero-title {
-    font-size: 1.91rem; /* 15% smaller: 2.25rem * 0.85 = 1.9125rem */
+    font-size: 1.43rem; /* 25% smaller than previous 1.91rem */
   }
   
   .category-hero-description {
-    font-size: 1.1rem;
+    font-size: 0.83rem; /* 25% smaller than previous 1.1rem */
   }
   
   .category-hero-stats {
@@ -3480,11 +3480,11 @@ body {
   }
   
   .category-hero-title {
-    font-size: 1.49rem; /* 15% smaller: 1.75rem * 0.85 = 1.4875rem */
+    font-size: 1.12rem; /* 25% smaller than previous 1.49rem */
   }
   
   .category-hero-description {
-    font-size: 1rem;
+    font-size: 0.75rem; /* 25% smaller than previous 1rem */
   }
   
   .stat-item {
