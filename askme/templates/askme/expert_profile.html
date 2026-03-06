@@ -176,7 +176,7 @@
       </div>
 
       <!-- Contact & Social Links -->
-      {% if moderator.website_url or moderator.instagram_url or moderator.linkedin_url %}
+      {% if moderator.website_url or moderator.instagram_url or moderator.linkedin_url or moderator.whatsapp_url %}
       <div class="card shadow-sm mt-4">
         <div class="card-header bg-light">
           <h4 class="mb-0">
@@ -213,6 +213,16 @@
               class="btn btn-outline-primary mb-2 w-100"
             >
               <i class="fab fa-linkedin ms-2"></i>لینکدین
+            </a>
+            {% endif %}
+            {% if moderator.whatsapp_url %}
+            <a 
+              href="{{ moderator.whatsapp_url }}" 
+              target="_blank" 
+              rel="noopener noreferrer nofollow"
+              class="btn btn-outline-success mb-2 w-100"
+            >
+              <i class="fab fa-whatsapp ms-2"></i>واتساپ
             </a>
             {% endif %}
           </div>

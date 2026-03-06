@@ -66,6 +66,12 @@ class Moderator(models.Model):
         help_text="LinkedIn profile URL (https:// or http://)",
         verbose_name="لینکدین"
     )
+    whatsapp_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text="WhatsApp link (e.g. https://wa.me/46701234567)",
+        verbose_name="واتساپ"
+    )
     slug = models.SlugField(
         max_length=200,
         unique=True,

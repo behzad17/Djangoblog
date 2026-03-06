@@ -37,8 +37,8 @@ class ModeratorAdmin(admin.ModelAdmin):
             'description': 'Profile page settings. Slug is auto-generated if left blank. Disclaimer is shown on the expert profile page.'
         }),
         ('Contact & Social Links', {
-            'fields': ('website_url', 'instagram_url', 'linkedin_url'),
-            'description': 'Optional contact and social media links (displayed on expert profile page). URLs must start with https:// or http://'
+            'fields': ('website_url', 'instagram_url', 'linkedin_url', 'whatsapp_url'),
+            'description': 'Optional contact and social media links (displayed on expert profile page). URLs must start with https:// or http:// (e.g. https://wa.me/46701234567 for WhatsApp)'
         }),
         ('Timestamps', {
             'fields': ('created_on', 'updated_on'),
