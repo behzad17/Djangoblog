@@ -16,8 +16,10 @@
             {{ form.excerpt|as_crispy_field }}
             {{ form.featured_image|as_crispy_field }}
             {% if 'extra_image_1' in form.fields %}
-            {{ form.extra_image_1|as_crispy_field }}
-            {{ form.extra_image_2|as_crispy_field }}
+            <div id="extra-images-container" style="display: none;">
+              {{ form.extra_image_1|as_crispy_field }}
+              {{ form.extra_image_2|as_crispy_field }}
+            </div>
             {% endif %}
             {{ form.content|as_crispy_field }}
             {{ form.external_url|as_crispy_field }}
@@ -181,6 +183,31 @@
   } else {
     // DOM already loaded
     initEventFields();
+  }
+
+  // Show/hide extra image fields (Photo Gallery only)
+  function toggleExtraImagesFields() {
+    const categorySelect = document.getElementById("id_category");
+    const extraImagesContainer = document.getElementById("extra-images-container");
+    if (!categorySelect || !extraImagesContainer) return;
+    const photoGalleryId = "{{ photo_gallery_category_id|default:'' }}";
+    if (categorySelect.value === photoGalleryId && photoGalleryId) {
+      extraImagesContainer.style.display = "block";
+    } else {
+      extraImagesContainer.style.display = "none";
+    }
+  }
+  function initExtraImagesFields() {
+    toggleExtraImagesFields();
+    const categorySelect = document.getElementById("id_category");
+    if (categorySelect) {
+      categorySelect.addEventListener("change", toggleExtraImagesFields);
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initExtraImagesFields);
+  } else {
+    initExtraImagesFields();
   }
 </script>
 {% endblock extras %}

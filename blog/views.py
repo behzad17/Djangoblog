@@ -683,6 +683,10 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            # Clear extra images when category is not Photo Gallery (so they are only stored for photo-gallery)
+            if post.category and getattr(post.category, 'slug', None) != 'photo-gallery':
+                post.extra_image_1 = None
+                post.extra_image_2 = None
             # Slug will be auto-generated in Post.save() method (handles Persian titles)
             # No need to manually generate slug here
             
@@ -733,10 +737,19 @@ def create_post(request):
     else:
         form = PostForm()
 
+    # Photo Gallery category pk for showing extra image fields only when that category is selected
+    photo_gallery_category_id = None
+    try:
+        pg = Category.objects.filter(slug='photo-gallery').values_list('pk', flat=True).first()
+        if pg is not None:
+            photo_gallery_category_id = str(pg)
+    except Exception:
+        pass
+
     return render(
         request,
         'blog/create_post.html',
-        {'form': form},
+        {'form': form, 'photo_gallery_category_id': photo_gallery_category_id},
     )
 
 
