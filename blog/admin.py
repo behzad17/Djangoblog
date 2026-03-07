@@ -83,6 +83,17 @@ class PostAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = ('created_on', 'updated_on', 'deleted_at', 'deleted_by', 'slug')
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super().get_fieldsets(request, obj))
+        show_extra_images = obj and getattr(obj, 'category', None) and getattr(obj.category, 'slug', None) == 'photo-gallery'
+        if not show_extra_images:
+            for i, (name, options) in enumerate(fieldsets):
+                if name == 'Content':
+                    fields_list = [f for f in options['fields'] if f not in ('extra_image_1', 'extra_image_2')]
+                    fieldsets[i] = (name, {**options, 'fields': tuple(fields_list)})
+                    break
+        return fieldsets
     
     def get_queryset(self, request):
         """Override queryset to handle expert_author filter parameter."""

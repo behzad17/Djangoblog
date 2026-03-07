@@ -62,6 +62,23 @@ class PostForm(forms.ModelForm):
         label='محل برگزاری رویداد',
         help_text='برای دسته‌بندی رویدادها توصیه و در صورت امکان الزامی است (شهر، محل یا آنلاین)'
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Show extra_image_1 and extra_image_2 only for Photo Gallery category
+        category = None
+        if self.instance and self.instance.pk:
+            category = getattr(self.instance, 'category', None)
+        else:
+            cat_id = self.initial.get('category') or (self.data.get('category') if self.data else None)
+            if cat_id is not None:
+                try:
+                    category = Category.objects.get(pk=cat_id)
+                except (Category.DoesNotExist, TypeError, ValueError):
+                    category = None
+        if not (category and getattr(category, 'slug', None) == 'photo-gallery'):
+            self.fields.pop('extra_image_1', None)
+            self.fields.pop('extra_image_2', None)
     
     class Meta:
         """Meta options for PostForm."""
