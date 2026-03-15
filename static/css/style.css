@@ -1495,6 +1495,13 @@ body {
     border-radius: 5px; /* Match related posts image border-radius */
   }
   
+  /* Override base .image-container img (height: 150px) so non-pinned cards use square image */
+  .postbox__media .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
   .postbox__content {
     width: 100%;
     height: auto;
