@@ -1476,17 +1476,22 @@ body {
   
   .postbox__media {
     width: 100%;
-    height: 200px; /* Match related posts image height */
+    height: auto;
+    aspect-ratio: 1 / 1;
     min-width: 0;
     order: -1; /* Image appears first (on top) */
   }
   
   .postbox__media .image-container {
+    height: 100%;
     border-radius: 5px; /* Match related posts image border-radius */
     overflow: hidden;
   }
   
   .postbox__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 5px; /* Match related posts image border-radius */
   }
   
