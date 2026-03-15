@@ -1482,7 +1482,9 @@ body {
   }
   
   .postbox__media {
-    width: 100%;
+    width: 90%; /* 10% smaller than full width */
+    margin-left: auto;
+    margin-right: auto;
     height: auto;
     aspect-ratio: 1 / 1;
     min-width: 0;
