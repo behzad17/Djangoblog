@@ -2353,13 +2353,13 @@ body {
   .featured-post-card-link {
     max-width: 228px; /* 60% of 380px = 40% smaller */
     margin-left: auto;
-    margin-right: auto;
+    margin-right: 1.5rem; /* Shift card a little to the right for better balance */
   }
 
   .featured-post-card {
     max-width: 228px;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: 1.5rem;
   }
 
   .featured-post-image {
