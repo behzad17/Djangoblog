@@ -2348,6 +2348,40 @@ body {
   border: 2px dashed rgba(255, 255, 255, 0.3);
 }
 
+/* Desktop only: featured post card 40% smaller in width, square image */
+@media (min-width: 992px) {
+  .featured-post-card-link {
+    max-width: 228px; /* 60% of 380px = 40% smaller */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .featured-post-card {
+    max-width: 228px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .featured-post-image {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .featured-post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .featured-post-image-placeholder {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+  }
+}
+
 /* Responsive Hero Section */
 @media (max-width: 992px) and (min-width: 769px) {
   .hero-section {
