@@ -2334,13 +2334,24 @@ body {
 
 .featured-post-meta {
   margin-top: auto;
-  padding-top: 0.5rem; /* Reduced from 0.75rem */
+  padding-top: 0.625rem;
   border-top: 1px solid #e9ecef;
-  font-size: 0.75rem; /* Smaller meta text */
+  font-size: 0.75rem;
 }
 
 .featured-post-meta small {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
   font-size: 0.75rem;
+  line-height: 1.4;
+  color: #6c757d;
+}
+
+.featured-post-meta small i {
+  flex-shrink: 0;
+  opacity: 0.85;
 }
 
 .featured-post-empty {
