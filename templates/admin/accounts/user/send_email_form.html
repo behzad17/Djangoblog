@@ -3,6 +3,57 @@
 
 {% block title %}Send Email to Users | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .admin-email-compose-rtl {
+        direction: rtl;
+        text-align: right;
+        font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+        line-height: 1.7;
+    }
+    .admin-email-compose-rtl::placeholder {
+        text-align: right;
+    }
+    #send-email-form.is-sending .submit-row input[type="submit"] {
+        opacity: 0.75;
+        cursor: wait;
+        pointer-events: none;
+    }
+    #send-email-form.is-sending .submit-row .cancel-link {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+    .send-email-status {
+        display: none;
+        margin-top: 12px;
+        padding: 10px 14px;
+        background: #e8f4f8;
+        border: 1px solid #bee5eb;
+        border-radius: 4px;
+        color: #0c5460;
+        font-size: 13px;
+    }
+    #send-email-form.is-sending .send-email-status {
+        display: block;
+    }
+    .send-email-status .spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        margin-left: 8px;
+        vertical-align: middle;
+        border: 2px solid #bee5eb;
+        border-top-color: #417690;
+        border-radius: 50%;
+        animation: admin-email-spin 0.7s linear infinite;
+    }
+    @keyframes admin-email-spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
 {% block breadcrumbs %}
 <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
@@ -17,7 +68,7 @@
 <div class="module">
     <h2>Selected Users ({{ user_count }})</h2>
     <div style="margin: 10px 0; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
-        <ul style="margin: 0; padding-left: 20px;">
+        <ul style="margin: 0; padding-right: 20px; direction: rtl; text-align: right;">
             {% for user in users %}
             <li>
                 <strong>{{ user.username }}</strong>
@@ -33,49 +84,60 @@
             {% endfor %}
         </ul>
     </div>
-    
+
     {% if not user_emails %}
     <div style="margin: 10px 0; padding: 10px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404;">
         <strong>Warning:</strong> None of the selected users have email addresses. Emails cannot be sent.
     </div>
     {% else %}
-    <div style="margin: 10px 0; padding: 10px; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 4px; color: #0c5460;">
+    <div style="margin: 10px 0; padding: 10px; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 4px; color: #0c5460; direction: rtl; text-align: right;">
         <strong>Email addresses:</strong> {{ user_emails|join:", " }}
     </div>
     {% endif %}
 </div>
 
-<form method="post" id="send-email-form">
+<form method="post" id="send-email-form" novalidate>
     {% csrf_token %}
-    
+    <input type="hidden" name="send_nonce" value="{{ send_nonce }}">
+
     <div class="module">
         <h2>Email Content</h2>
-        
+
         <fieldset class="module aligned">
             <div class="form-row">
                 <div>
                     <label for="id_subject" style="font-weight: bold;">Subject: <span style="color: red;">*</span></label>
-                    <input type="text" name="subject" id="id_subject" value="{{ subject }}" 
+                    <input type="text" name="subject" id="id_subject" value="{{ subject }}"
+                           class="admin-email-compose-rtl"
                            style="width: 100%; max-width: 600px; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;"
-                           required>
-                    <p class="help" style="margin-top: 5px; color: #666;">Enter the email subject line.</p>
+                           required dir="rtl">
+                    <p class="help" style="margin-top: 5px; color: #666;">Enter the email subject line (Persian/RTL supported).</p>
                 </div>
             </div>
-            
+
             <div class="form-row" style="margin-top: 20px;">
                 <div>
                     <label for="id_message" style="font-weight: bold;">Message: <span style="color: red;">*</span></label>
-                    <textarea name="message" id="id_message" rows="15" 
-                              style="width: 100%; max-width: 800px; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;"
-                              required>{{ message }}</textarea>
-                    <p class="help" style="margin-top: 5px; color: #666;">Enter the email message. Plain text only.</p>
+                    <textarea name="message" id="id_message" rows="15"
+                              class="admin-email-compose-rtl"
+                              style="width: 100%; max-width: 800px; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;"
+                              required dir="rtl">{{ message }}</textarea>
+                    <p class="help" style="margin-top: 5px; color: #666;">
+                        Enter the message body. Recipients receive a professional RTL HTML email with plain-text fallback.
+                    </p>
                 </div>
             </div>
         </fieldset>
-        
+
         <div class="submit-row" style="margin-top: 20px;">
-            <input type="submit" value="Send Email" class="default" style="background-color: #417690; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
-            <a href="{% url 'admin:auth_user_changelist' %}" class="button" style="padding: 10px 20px; margin-left: 10px; text-decoration: none; background-color: #ba2121; color: white; border-radius: 4px; display: inline-block;">Cancel</a>
+            <input type="submit" id="send-email-submit" value="Send Email" class="default"
+                   style="background-color: #417690; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+            <a href="{% url 'admin:auth_user_changelist' %}" class="button cancel-link"
+               style="padding: 10px 20px; margin-left: 10px; text-decoration: none; background-color: #ba2121; color: white; border-radius: 4px; display: inline-block;">Cancel</a>
+        </div>
+        <div class="send-email-status" dir="rtl" style="direction: rtl; text-align: right;">
+            <span class="spinner" aria-hidden="true"></span>
+            در حال ارسال ایمیل‌ها… لطفاً این صفحه را نبندید.
         </div>
     </div>
 </form>
@@ -88,5 +150,24 @@
 </ul>
 {% endif %}
 
+<script>
+(function () {
+    var form = document.getElementById('send-email-form');
+    var submitBtn = document.getElementById('send-email-submit');
+    if (!form || !submitBtn) {
+        return;
+    }
+    var submitting = false;
+    form.addEventListener('submit', function (event) {
+        if (submitting) {
+            event.preventDefault();
+            return false;
+        }
+        submitting = true;
+        form.classList.add('is-sending');
+        submitBtn.disabled = true;
+        submitBtn.value = 'Sending…';
+    });
+})();
+</script>
 {% endblock %}
-

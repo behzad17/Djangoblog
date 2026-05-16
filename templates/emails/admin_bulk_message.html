@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+    <style>
+        body {
+            font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            line-height: 1.75;
+            -webkit-text-size-adjust: 100%;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #00A693 0%, #058073 100%);
+            color: #ffffff;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .email-body {
+            padding: 28px 24px;
+            color: #333333;
+            direction: rtl;
+            text-align: right;
+        }
+        .message-content {
+            font-size: 15px;
+            color: #444444;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .message-content p {
+            margin: 0 0 1em 0;
+        }
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 16px 20px;
+            text-align: center;
+            color: #888888;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body dir="rtl" style="direction: rtl; text-align: right; margin: 0; padding: 0;">
+    <div class="email-container" dir="rtl" style="direction: rtl; text-align: right;">
+        <div class="email-header">
+            <h1>{{ site_name }}</h1>
+        </div>
+        <div class="email-body" dir="rtl" style="direction: rtl; text-align: right;">
+            <div class="message-content" dir="rtl" style="direction: rtl; text-align: right;">
+                {{ message|linebreaksbr }}
+            </div>
+        </div>
+        <div class="footer" dir="rtl">
+            این پیام از طرف {{ site_name }} ارسال شده است.
+        </div>
+    </div>
+</body>
+</html>
