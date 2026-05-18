@@ -35,69 +35,69 @@ def create_user_profile(sender, instance, created, **kwargs):
             logger.error(f"Error creating user profile: {e}")
 
 
-@receiver(post_save, sender=User)
-def send_welcome_email(sender, instance, created, **kwargs):
+def send_welcome_email_to_user(user):
     """
-    Send welcome email to new users after successful signup.
-    Only sends once per user (on creation) and only if user has an email.
+    Send welcome email once after the user's email is verified.
+    Used for email/password signup (via email_confirmed) and new Google signups.
     """
-    if not created:
-        return  # Only send on user creation, not updates
-    
-    # Only send if user has an email address
-    if not instance.email:
-        logger.info(f"Skipping welcome email for user {instance.username}: no email address")
+    if not user.email:
+        logger.info(
+            "Skipping welcome email for user %s: no email address",
+            user.username,
+        )
         return
-    
-    # Ensure UserProfile exists (it should be created by create_user_profile signal)
+
     try:
-        profile, _ = UserProfile.objects.get_or_create(user=instance)
-        
-        # Prevent duplicate emails: check if welcome email was already sent
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+
         if profile.welcome_email_sent:
-            logger.info(f"Welcome email already sent to {instance.email}, skipping")
+            logger.info(
+                "Welcome email already sent to %s, skipping",
+                user.email,
+            )
             return
-        
-        # Get site domain for absolute URLs
+
         try:
             site = Site.objects.get_current()
             site_domain = site.domain
-            # Ensure protocol (http/https)
             if not site_domain.startswith('http'):
-                # Use https in production, http in development
                 protocol = 'https' if not settings.DEBUG else 'http'
                 site_url = f"{protocol}://{site_domain}"
             else:
                 site_url = site_domain
         except Exception as e:
             logger.warning(f"Error getting site domain: {e}, using relative URLs")
-            site_url = ''  # Will use relative URLs as fallback
-        
-        # Get user's display name (first_name, or username, or email)
-        user_display_name = instance.first_name or instance.username or instance.email.split('@')[0]
-        
-        # Build absolute URLs for links
+            site_url = ''
+
+        user_display_name = user.first_name or user.username or user.email.split('@')[0]
+
         try:
             home_url = f"{site_url}{reverse('home')}" if site_url else reverse('home')
         except Exception:
             home_url = site_url if site_url else '/'
-        
+
         try:
-            member_guide_url = f"{site_url}{reverse('member_guide')}" if site_url else reverse('member_guide')
+            member_guide_url = (
+                f"{site_url}{reverse('member_guide')}" if site_url else reverse('member_guide')
+            )
         except Exception:
             member_guide_url = site_url + '/member-guide/' if site_url else '/member-guide/'
-        
+
         try:
-            complete_setup_url = f"{site_url}{reverse('complete_setup')}" if site_url else reverse('complete_setup')
+            complete_setup_url = (
+                f"{site_url}{reverse('complete_setup')}"
+                if site_url
+                else reverse('complete_setup')
+            )
         except Exception:
             complete_setup_url = site_url + '/complete-setup/' if site_url else '/complete-setup/'
-        
-        # Email subject (Persian, RTL-friendly)
-        subject = "کاربر گرامی، به پلتفرم «پیوند» — جامعهٔ آنلاین ایرانیان ساکن سوئد — خوش آمدید."
-        
-        # Context for email templates
+
+        subject = (
+            "کاربر گرامی، به پلتفرم «پیوند» — "
+            "جامعهٔ آنلاین ایرانیان ساکن سوئد — خوش آمدید."
+        )
         context = {
-            'user': instance,
+            'user': user,
             'user_display_name': user_display_name,
             'site_name': 'پیوند | Peyvand',
             'home_url': home_url,
@@ -105,45 +105,43 @@ def send_welcome_email(sender, instance, created, **kwargs):
             'complete_setup_url': complete_setup_url,
             'site_url': site_url,
         }
-        
-        # Render email templates
+
         try:
             text_content = render_to_string('emails/welcome_email.txt', context)
             html_content = render_to_string('emails/welcome_email.html', context)
         except Exception as e:
             logger.error(f"Error rendering welcome email templates: {e}")
-            return  # Don't send if templates can't be rendered
-        
-        # Send email
+            return
+
         try:
-            from_email = settings.DEFAULT_FROM_EMAIL
             msg = EmailMultiAlternatives(
                 subject=subject,
                 body=text_content,
-                from_email=from_email,
-                to=[instance.email]
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email],
             )
             msg.attach_alternative(html_content, "text/html")
             msg.send()
-            
-            # Mark welcome email as sent
+
             profile.welcome_email_sent = True
             profile.save(update_fields=['welcome_email_sent'])
-            
-            logger.info(f"Welcome email sent successfully to {instance.email}")
-            
-            # In DEBUG mode, also log to console
+
+            logger.info(f"Welcome email sent successfully to {user.email}")
+
             if settings.DEBUG:
-                print(f"[DEBUG] Welcome email sent to: {instance.email}")
-                
+                print(f"[DEBUG] Welcome email sent to: {user.email}")
+
         except Exception as e:
-            # Log error but don't crash the request
-            logger.error(f"Error sending welcome email to {instance.email}: {e}", exc_info=True)
-            # Don't mark as sent if email failed, so it can be retried if needed
-    
+            logger.error(
+                f"Error sending welcome email to {user.email}: {e}",
+                exc_info=True,
+            )
+
     except Exception as e:
-        # Log error but don't block user creation
-        logger.error(f"Error in send_welcome_email for user {instance.username}: {e}", exc_info=True)
+        logger.error(
+            f"Error in send_welcome_email_to_user for {user.username}: {e}",
+            exc_info=True,
+        )
 
 
 @receiver(email_confirmed)
@@ -154,17 +152,15 @@ def handle_email_confirmed(request, email_address, **kwargs):
     """
     user = email_address.user
     try:
-        # Ensure UserProfile exists (create if it doesn't)
         profile, _ = UserProfile.objects.get_or_create(user=user)
         if not profile.is_site_verified:
             profile.is_site_verified = True
             profile.site_verified_at = timezone.now()
             profile.save()
     except Exception as e:
-        # Log error but don't block email confirmation
-        import logging
-        logger = logging.getLogger(__name__)
         logger.error(f"Error updating profile on email confirmation: {e}")
+
+    send_welcome_email_to_user(user)
 
 
 @receiver(pre_social_login)
@@ -331,6 +327,10 @@ def handle_social_account_added(request, sociallogin, **kwargs):
                 import logging
                 logger = logging.getLogger(__name__)
                 logger.error(f"Error creating/updating profile for social login: {e}")
+
+            # New Google signups: email is provider-verified; send welcome once here.
+            if user.pk and not sociallogin.is_existing:
+                send_welcome_email_to_user(user)
 
 
 # Admin Notification Signals
