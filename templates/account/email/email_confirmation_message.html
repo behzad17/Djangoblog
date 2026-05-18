@@ -1,0 +1,146 @@
+{% load account %}
+{% user_display user as user_display %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأیید آدرس ایمیل — پیوند</title>
+    <style>
+        body {
+            font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            line-height: 1.75;
+            -webkit-text-size-adjust: 100%;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #00A693 0%, #058073 100%);
+            color: #ffffff;
+            padding: 28px 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .email-header p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        .email-body {
+            padding: 28px 24px;
+            color: #333333;
+            direction: rtl;
+            text-align: right;
+        }
+        .greeting {
+            font-size: 17px;
+            font-weight: bold;
+            color: #058073;
+            margin: 0 0 16px 0;
+        }
+        .content p {
+            margin: 0 0 14px 0;
+            font-size: 15px;
+            color: #444444;
+            line-height: 1.8;
+        }
+        .info-box {
+            background-color: #f0faf8;
+            border-right: 4px solid #00A693;
+            padding: 14px 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #355e5a;
+        }
+        .cta-wrap {
+            text-align: center;
+            margin: 28px 0 24px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00A693 0%, #058073 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px 32px;
+            border-radius: 6px;
+        }
+        .link-fallback {
+            font-size: 13px;
+            color: #666666;
+            word-break: break-all;
+            margin-top: 16px;
+        }
+        .link-fallback a {
+            color: #00A693;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 18px 20px;
+            text-align: center;
+            color: #888888;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body dir="rtl" style="direction: rtl; text-align: right; margin: 0; padding: 0; background-color: #f5f5f5;">
+    <div class="email-container" dir="rtl" style="direction: rtl; text-align: right; max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px;">
+        <div class="email-header" style="background: linear-gradient(135deg, #00A693 0%, #058073 100%); color: #ffffff; padding: 28px 20px; text-align: center;">
+            <h1 style="margin: 0 0 8px 0; font-size: 22px;">پیوند | Peyvand</h1>
+            <p style="margin: 0; font-size: 14px;">تأیید آدرس ایمیل</p>
+        </div>
+        <div class="email-body" dir="rtl" style="direction: rtl; text-align: right; padding: 28px 24px;">
+            <p class="greeting" style="font-size: 17px; font-weight: bold; color: #058073;">سلام،</p>
+            <div class="content">
+                <p>
+                    شما (یا شخصی با دسترسی به این آدرس ایمیل) برای ایجاد حساب کاربری در پلتفرم
+                    <strong>پیوند</strong> — جامعهٔ آنلاین ایرانیان ساکن سوئد — از آدرس
+                    <strong>{{ user_display }}</strong> استفاده کرده‌اید.
+                </p>
+                <p>
+                    برای تکمیل ثبت‌نام و فعال‌سازی حساب، لطفاً با کلیک روی دکمهٔ زیر آدرس ایمیل خود را تأیید کنید.
+                </p>
+            </div>
+            <div class="cta-wrap" style="text-align: center; margin: 28px 0 24px 0;">
+                <a href="{{ activate_url }}" class="cta-button" style="display: inline-block; background-color: #00A693; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: bold; padding: 14px 32px; border-radius: 6px;">
+                    تأیید آدرس ایمیل
+                </a>
+            </div>
+            <div class="info-box" style="background-color: #f0faf8; border-right: 4px solid #00A693; padding: 14px 16px; margin: 20px 0;">
+                <strong>چرا تأیید ایمیل لازم است؟</strong><br>
+                تأیید ایمیل به امنیت حساب شما کمک می‌کند و اطمینان می‌دهد که فقط شما به این حساب دسترسی دارید.
+            </div>
+            <p style="font-size: 14px; color: #666666;">
+                اگر شما این حساب را ایجاد نکرده‌اید، نیازی به انجام کاری نیست — می‌توانید این ایمیل را نادیده بگیرید.
+            </p>
+            <p class="link-fallback" style="font-size: 13px; color: #666666; word-break: break-all;">
+                اگر دکمه کار نمی‌کند، این لینک را در مرورگر خود باز کنید:<br>
+                <a href="{{ activate_url }}" style="color: #00A693;">{{ activate_url }}</a>
+            </p>
+        </div>
+        <div class="footer" dir="rtl" style="background-color: #f9f9f9; padding: 18px 20px; text-align: center; color: #888888; font-size: 12px; border-top: 1px solid #e0e0e0;">
+            این پیام به‌صورت خودکار از {{ current_site.domain }} ارسال شده است.<br>
+            لطفاً به این ایمیل پاسخ ندهید.
+        </div>
+    </div>
+</body>
+</html>

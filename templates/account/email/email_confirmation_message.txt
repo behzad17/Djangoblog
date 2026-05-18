@@ -1,7 +1,20 @@
-{% extends "account/email/base_message.txt" %}
 {% load account %}
-{% load i18n %}
+{% autoescape off %}
+{% user_display user as user_display %}
+سلام،
 
-{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}You're receiving this email because user {{ user_display }} has given your email address to register an account on {{ site_domain }}.
+شما (یا شخصی با دسترسی به این آدرس ایمیل) برای ایجاد حساب کاربری در پلتفرم «پیوند» — جامعهٔ آنلاین ایرانیان ساکن سوئد — از آدرس «{{ user_display }}» استفاده کرده‌اید.
 
-To confirm this is correct, go to {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock content %}
+برای تکمیل ثبت‌نام و فعال‌سازی حساب، لطفاً آدرس ایمیل خود را تأیید کنید. روی لینک زیر کلیک کنید:
+
+{{ activate_url }}
+
+چرا تأیید ایمیل لازم است؟
+تأیید ایمیل به امنیت حساب شما کمک می‌کند و اطمینان می‌دهد که فقط شما به این حساب دسترسی دارید.
+
+اگر شما این حساب را ایجاد نکرده‌اید، نیازی به انجام کاری نیست — می‌توانید این ایمیل را نادیده بگیرید.
+
+با احترام،
+تیم پیوند | Peyvand
+{{ current_site.domain }}
+{% endautoescape %}
