@@ -25,6 +25,9 @@ SESSION_SEND_LOCK = 'email_send_lock'
 class UserAdmin(BaseUserAdmin):
     """Extended User admin with email sending action."""
 
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'date_joined')
+    ordering = ('-date_joined',)
+    date_hierarchy = 'date_joined'
     actions = ['send_email_action']
 
     def get_urls(self):
