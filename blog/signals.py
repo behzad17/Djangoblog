@@ -147,16 +147,15 @@ def send_welcome_email_to_user(user):
 @receiver(email_confirmed)
 def handle_email_confirmed(request, email_address, **kwargs):
     """
-    When email is confirmed via email/password signup, mark as site verified.
-    For email/password signups, email verification IS the site verification.
+    When email is confirmed via email/password signup, treat this as identity
+    verification only.
+
+    Site verification (onboarding/terms acceptance) is handled separately via
+    the /complete-setup/ flow.
     """
     user = email_address.user
     try:
-        profile, _ = UserProfile.objects.get_or_create(user=user)
-        if not profile.is_site_verified:
-            profile.is_site_verified = True
-            profile.site_verified_at = timezone.now()
-            profile.save()
+        UserProfile.objects.get_or_create(user=user)
     except Exception as e:
         logger.error(f"Error updating profile on email confirmation: {e}")
 
