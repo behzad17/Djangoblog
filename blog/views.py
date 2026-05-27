@@ -887,6 +887,13 @@ def complete_setup(request):
     Users can accept terms and complete their profile to enable write actions.
     """
     if request.method == 'POST':
+        if not request.POST.get('accept_terms'):
+            messages.error(
+                request,
+                'لطفاً شرایط و قوانین استفاده از سایت را بپذیرید.',
+            )
+            return render(request, 'blog/complete_setup.html')
+
         # User accepts terms and completes setup
         if hasattr(request.user, 'profile'):
             if not request.user.profile.is_site_verified:
