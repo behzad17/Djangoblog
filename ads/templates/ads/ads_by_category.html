@@ -153,7 +153,7 @@
               <a href="{{ ad.target_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary w-100 mt-2">
                 <i class="fas fa-external-link-alt ms-1"></i>مشاهده وب‌سایت
               </a>
-              {% else %}
+              {% elif user.is_authenticated and ad.owner == user %}
               <p class="text-muted small mb-0 mt-2">
                 <i class="fas fa-info-circle ms-1"></i>برای مشاهده جزئیات بیشتر، این تبلیغ را به Pro ارتقا دهید
               </p>
