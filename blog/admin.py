@@ -7,10 +7,12 @@ from .models import Post, Comment, Category, UserProfile, PostViewCount
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """Admin interface for Category model."""
-    list_display = ('name', 'slug', 'post_count', 'created_on')
+    list_display = ('display_order', 'name', 'slug', 'post_count', 'created_on')
+    list_display_links = ('name',)
+    list_editable = ('display_order',)
     search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
-    ordering = ['name']
+    ordering = ['display_order', 'name']
     
     def post_count(self, obj):
         """Returns the number of published posts in this category."""

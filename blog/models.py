@@ -73,6 +73,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True)
+    display_order = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     
     class Meta:

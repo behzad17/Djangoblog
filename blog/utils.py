@@ -712,7 +712,7 @@ def get_category_overview_rows():
 
     categories = Category.objects.annotate(
         latest_post_id=Subquery(latest_post_subquery)
-    ).order_by('created_on', 'id')
+    ).order_by('display_order', 'name')
 
     post_ids = [
         category.latest_post_id
