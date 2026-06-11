@@ -16,88 +16,16 @@
 <section class="hero-section text-white">
   <div class="container">
     <div class="row align-items-center g-2">
-      <!-- Left Column: Content -->
-      <div class="col-12 col-lg-6 order-lg-2">
+      <div class="col-12">
         <div class="hero-content text-center">
-          <p class="hero-intro-text mt-3">
-            پیوند یک پلتفرم و جامعه آنلاین برای ایرانیان ساکن سوئد است؛ جایی برای نوشتن، خواندن، به اشتراک گذاشتن تجربه‌ها و دانش، پرسیدن و ارتباط مستقیم با متخصصان ایرانی، اطلاع از رویدادها و معرفی مشاغل و خدمات از سراسر سوئد. با پیوند مهاجرت را تنها زندگی نکنیم .
+          <h1 class="hero-title mt-3">
+            پیوند، پلتفرم و جامعه آنلاین برای ایرانیان ساکن سوئد
+          </h1>
+          <p class="hero-intro-text">
+            جایی برای نوشتن، خواندن، به اشتراک گذاشتن تجربه‌ها و دانش، پرسیدن و ارتباط مستقیم با متخصصان ایرانی، اطلاع از رویدادها و معرفی مشاغل و خدمات از سراسر سوئد. با پیوند مهاجرت را تنها زندگی نکنیم
           </p>
           {% include 'includes/hero_cta_cards.html' %}
         </div>
-      </div>
-
-      <!-- Right Column: Featured Post Card (Desktop/Tablet Only) -->
-      <div class="col-12 col-lg-6 order-lg-1 d-none d-lg-block">
-        {% if featured_post and featured_post.slug %}
-        <a
-          href="{% url 'post_detail' featured_post.slug %}"
-          class="text-decoration-none featured-post-card-link"
-        >
-          <div class="card featured-post-card h-100">
-            {% if featured_post.featured_image %}
-            <div class="featured-post-image">
-              {% if "placeholder" in featured_post.featured_image.url|default:"" %}
-              <img
-                src="{% static 'images/default.jpg' %}"
-                class="card-img-top"
-                alt="{{ featured_post.title }}"
-              />
-              {% else %}
-              <img
-                src="{{ featured_post.featured_image.url }}"
-                class="card-img-top"
-                alt="{{ featured_post.title }}"
-                data-fallback="{% static 'images/default.jpg' %}"
-                onerror="this.onerror=null; this.src=this.dataset.fallback;"
-              />
-              {% endif %}
-            </div>
-            {% else %}
-            <div class="featured-post-image-placeholder">
-              <i class="fas fa-image"></i>
-            </div>
-            {% endif %}
-            <div class="card-body">
-              <h3 class="card-title featured-post-title">
-                {{ featured_post.title }}
-              </h3>
-              {% if featured_post.excerpt %}
-              <p class="card-text featured-post-excerpt">
-                {{ featured_post.excerpt|striptags|truncatewords:20 }}
-              </p>
-              {% endif %}
-              <div class="featured-post-meta">
-                <small class="text-muted">
-                  <i class="fas fa-user ms-1"></i>{{ featured_post.author }}
-                  <span class="me-3"><i class="far fa-calendar ms-1"></i>{{ featured_post.created_on|date:"M d, Y" }}</span>
-                </small>
-              </div>
-            </div>
-          </div>
-        </a>
-        {% else %}
-        <div class="card featured-post-card h-100 featured-post-empty">
-          <div
-            class="card-body d-flex align-items-center justify-content-center"
-            style="min-height: 300px"
-          >
-            <div class="text-center">
-              <i class="fas fa-newspaper fa-3x mb-3 opacity-50"></i>
-              <p class="mb-0 text-muted">
-                هنوز پستی وجود ندارد — اولین پست را ایجاد کنید
-              </p>
-              {% if user.is_authenticated %}
-              <a
-                href="{% url 'create_post' %}"
-                class="btn btn-light btn-sm mt-3"
-              >
-                <i class="fas fa-plus ms-1"></i>ایجاد پست
-              </a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-        {% endif %}
       </div>
     </div>
   </div>
