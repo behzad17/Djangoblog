@@ -687,3 +687,45 @@ def generate_slug_from_persian(text):
         slug = slug[:200].rstrip('-')
     
     return slug
+
+
+def get_category_overview_rows():
+    """
+    Return (category, latest_post) pairs for the homepage category overview.
+
+    Uses a correlated subquery to fetch each category's latest published post ID
+    in a single query, then loads those posts in one follow-up query.
+    """
+    from django.db.models import OuterRef, Subquery
+
+    latest_post_subquery = (
+        Post.objects.filter(
+            category_id=OuterRef('pk'),
+            status=1,
+            is_deleted=False,
+        )
+        .exclude(slug='')
+        .exclude(slug__isnull=True)
+        .order_by('-created_on')
+        .values('id')[:1]
+    )
+
+    categories = Category.objects.annotate(
+        latest_post_id=Subquery(latest_post_subquery)
+    ).order_by('created_on', 'id')
+
+    post_ids = [
+        category.latest_post_id
+        for category in categories
+        if category.latest_post_id
+    ]
+
+    posts_by_id = {
+        post.id: post
+        for post in Post.objects.filter(id__in=post_ids).select_related('author')
+    }
+
+    return [
+        (category, posts_by_id.get(category.latest_post_id))
+        for category in categories
+    ]

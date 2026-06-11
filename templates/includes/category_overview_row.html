@@ -1,0 +1,18 @@
+<div class="category-overview-row row align-items-stretch g-3 mb-3">
+  <div class="col-12 col-lg-3 category-overview-col category-overview-col--category">
+    {% include 'includes/category_icon_card.html' with category=category %}
+  </div>
+  <div class="col-12 col-lg-6 category-overview-col category-overview-col--post">
+    {% if latest_post %}
+      {% include 'includes/category_latest_post_card.html' with post=latest_post %}
+    {% else %}
+      <p class="category-overview-empty text-muted small mb-0">
+        هنوز مطلبی در این دسته منتشر نشده است.
+      </p>
+    {% endif %}
+  </div>
+  <div
+    class="col-lg-3 d-none d-lg-block category-overview-col category-overview-col--spacer"
+    aria-hidden="true"
+  ></div>
+</div>

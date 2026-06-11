@@ -1,0 +1,13 @@
+{% load category_extras %}
+<a
+  href="{% url 'category_posts' category.slug %}"
+  class="category-overview-card"
+  style="--cat-bg: {{ category|category_bg }}; --cat-accent: {{ category|category_accent }};"
+  title="{{ category.name }}"
+  aria-label="{{ category.name }}"
+>
+  <div class="category-overview-card-icon">
+    <i class="{{ category|category_icon }}" aria-hidden="true"></i>
+  </div>
+  <div class="category-overview-card-name">{{ category.name }}</div>
+</a>

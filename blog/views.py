@@ -17,7 +17,7 @@ import json
 
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
-from .utils import track_page_view, determine_comment_approval
+from .utils import track_page_view, determine_comment_approval, get_category_overview_rows
 from .decorators import site_verified_required
 from ads.models import FavoriteAd
 from django.utils import timezone
@@ -176,11 +176,11 @@ class PostList(generic.ListView):
         # page_obj and is_paginated are already set correctly by Django's ListView
         # They reference the full queryset, not our reordered list
 
-        # Categories and expert posts (replaces Popular Posts)
+        # Category overview rows and expert posts
         try:
-            context['categories'] = Category.objects.all().order_by('name')
+            context['category_overview_rows'] = get_category_overview_rows()
         except Exception:
-            context['categories'] = []
+            context['category_overview_rows'] = []
         
         try:
             expert_users = User.objects.filter(
