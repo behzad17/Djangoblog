@@ -33,14 +33,7 @@
 
 <!-- index.html content starts here -->
 <div class="container-fluid">
-  <!-- Category Overview Section -->
-  <div class="row mt-2 mb-2" id="category-filter-section">
-    <div class="col-12">
-      {% include 'includes/category_overview_section.html' with category_overview_rows=category_overview_rows %}
-    </div>
-  </div>
-
-  <!-- Main Ad (Mobile only: appears right after categories, Desktop: hidden - shown in sidebar) -->
+  <!-- Main Ad (Mobile only: appears after hero, Desktop: hidden - shown in sidebar) -->
   <div class="row d-lg-none mt-2">
     <div class="col-12">
       <div class="ad-placeholder ad-placeholder-top">
@@ -127,147 +120,13 @@
   </div>
 
   <div class="row">
-    <!-- Blog Entries Column (Mobile: order-6, Desktop: order-lg-1) -->
-    <div class="col-lg-9 col-md-12 mt-2 left order-6 order-lg-1">
-      <div class="row blog-post-row g-3">
-        {% for post in post_list %}
-        <div class="col-md-6 col-sm-12">
-          <div class="card post-card mb-4">
-            <div class="card-body p-0">
-              <div class="postbox">
-                <!-- Image on RIGHT side (20% width) -->
-                <div class="postbox__media {% if post.pinned %}postbox__media--pinned{% endif %}">
-                  <div class="image-container">
-                    {% if post.featured_image %} {% if "placeholder" in post.featured_image.url|default:"" %}
-                    <img
-                      class="postbox__img"
-                      src="{% static 'images/default.jpg' %}"
-                      alt="تصویر پیش‌فرض برای {{ post.title }}"
-                      loading="lazy"
-                    />
-                    {% else %}
-                    <img
-                      class="postbox__img"
-                      src="{{ post.featured_image.url }}"
-                      alt="{{ post.title }}"
-                      loading="lazy"
-                      data-fallback="{% static 'images/default.jpg' %}"
-                      onerror="this.onerror=null; this.src=this.dataset.fallback;"
-                    />
-                    {% endif %} {% else %}
-                    <img
-                      class="postbox__img"
-                      src="{% static 'images/default.jpg' %}"
-                      alt="تصویر پیش‌فرض برای {{ post.title }}"
-                      loading="lazy"
-                    />
-                    {% endif %}
-                  </div>
-                </div>
-                <!-- Content on LEFT side (80% width) -->
-                <div class="postbox__content">
-                  <!-- 1) Title -->
-                  <a href="{% url 'post_detail' post.slug %}" class="post-link">
-                    <h2 class="card-title">{{ post.title }}</h2>
-                  </a>
-                  <!-- 2) Category -->
-                  {% if post.category %}
-                  <div class="mb-2">
-                    <a
-                      href="{% url 'category_posts' post.category.slug %}"
-                      class="category-badge"
-                    >
-                      <i class="fas fa-tag ms-1"></i>{{ post.category.name }}
-                    </a>
-                  </div>
-                  {% endif %}
-                  <!-- 3) Author -->
-                  <p class="post-author-inline">نویسنده: {{ post.author }}</p>
-                  <!-- 4) Date & time -->
-                  <!-- 5) Comment icon + count -->
-                  <div class="postbox__bottom">
-                    <p class="card-text text-muted h6">
-                      {{ post.created_on }} | <i class="far fa-comments"></i>
-                      {{ post.comment_count }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <!-- Category Overview Column (Desktop: order-lg-1) -->
+    <div class="col-lg-9 col-md-12 mt-2">
+      <div class="row mt-2 mb-2" id="category-filter-section">
+        <div class="col-12">
+          {% include 'includes/category_overview_section.html' with category_overview_rows=category_overview_rows %}
         </div>
-
-        <!-- Insert ad after every 4 posts on mobile only -->
-        {% if forloop.counter|divisibleby:4 %}
-          <!-- Calculate which ad: ad_index = ((counter // 4) - 1) % 5 -->
-          <!-- Pattern: 4->ad-1, 8->ad-2, 12->ad-3, 16->ad-4, 20->ad-5, 24->ad-1, etc. -->
-          {% if forloop.counter == 4 or forloop.counter == 24 or forloop.counter == 44 or forloop.counter == 64 or forloop.counter == 84 or forloop.counter == 104 or forloop.counter == 124 or forloop.counter == 144 or forloop.counter == 164 or forloop.counter == 184 %}
-            <!-- ad-1 -->
-            <div class="col-12 d-md-none mt-3 mb-3">
-              <div class="ad-placeholder ad-placeholder-bottom">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-                  <img src="{% static 'images/ad-1.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
-                </a>
-              </div>
-            </div>
-          {% elif forloop.counter == 8 or forloop.counter == 28 or forloop.counter == 48 or forloop.counter == 68 or forloop.counter == 88 or forloop.counter == 108 or forloop.counter == 128 or forloop.counter == 148 or forloop.counter == 168 or forloop.counter == 188 %}
-            <!-- ad-2 -->
-            <div class="col-12 d-md-none mt-3 mb-3">
-              <div class="ad-placeholder ad-placeholder-bottom">
-                <a href="https://www.nordicphoenix.se" target="_blank" rel="noopener noreferrer" class="ad-link">
-                  <img src="{% static 'images/ad-2.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
-                </a>
-              </div>
-            </div>
-          {% elif forloop.counter == 12 or forloop.counter == 32 or forloop.counter == 52 or forloop.counter == 72 or forloop.counter == 92 or forloop.counter == 112 or forloop.counter == 132 or forloop.counter == 152 or forloop.counter == 172 or forloop.counter == 192 %}
-            <!-- ad-3 -->
-            <div class="col-12 d-md-none mt-3 mb-3">
-              <div class="ad-placeholder ad-placeholder-bottom">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-                  <img src="{% static 'images/ad-3.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
-                </a>
-              </div>
-            </div>
-          {% elif forloop.counter == 16 or forloop.counter == 36 or forloop.counter == 56 or forloop.counter == 76 or forloop.counter == 96 or forloop.counter == 116 or forloop.counter == 136 or forloop.counter == 156 or forloop.counter == 176 or forloop.counter == 196 %}
-            <!-- ad-4 -->
-            <div class="col-12 d-md-none mt-3 mb-3">
-              <div class="ad-placeholder ad-placeholder-bottom">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-                  <img src="{% static 'images/ad-4.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
-                </a>
-              </div>
-            </div>
-          {% elif forloop.counter|divisibleby:20 %}
-            <!-- ad-5: positions 20, 40, 60, 80, 100, 120, 140, 160, 180, 200... -->
-            <div class="col-12 d-md-none mt-3 mb-3">
-              <div class="ad-placeholder ad-placeholder-bottom">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-                  <img src="{% static 'images/ad-5.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
-                </a>
-              </div>
-            </div>
-          {% else %}
-            <!-- Fallback: use ad-1 for any unhandled cases -->
-            <div class="col-12 d-md-none mt-3 mb-3">
-              <div class="ad-placeholder ad-placeholder-bottom">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-                  <img src="{% static 'images/ad-1.jpg' %}" alt="تبلیغات" class="ad-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                  <div class="ad-content" style="display: none"><i class="fas fa-ad"></i><p class="ad-text">Your Ads Here!</p></div>
-                </a>
-              </div>
-            </div>
-          {% endif %}
-        {% endif %}
-
-        <!--   divisibleby:2 for 2 columns per row -->
-        {% if forloop.counter|divisibleby:2 %}
       </div>
-      <div class="row blog-post-row">{% endif %} {% endfor %}</div>
     </div>
 
     <!-- Popular Posts Sidebar (Desktop only: order-lg-2, Mobile: shown above in separate row) -->
@@ -429,28 +288,6 @@
       </div>
     </div>
   </div>
-
-  {% if is_paginated %}
-  <div class="pagination-container">
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-          <a href="?page={{ page_obj.previous_page_number }}" class="page-link"
-            ><i class="fas fa-chevron-right"></i> قبلی</a
-          >
-        </li>
-        {% endif %} {% if page_obj.has_next %}
-        <li class="page-item">
-          <a href="?page={{ page_obj.next_page_number }}" class="page-link"
-            >بعدی <i class="fas fa-chevron-left"></i
-          ></a>
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
-  {% endif %}
 </div>
 
 <!-- index.html content ends here -->
