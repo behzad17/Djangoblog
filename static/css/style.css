@@ -3927,15 +3927,18 @@ body {
 
   .category-overview-section .category-section-title {
     grid-column: 1;
+    grid-row: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-self: stretch;
+    align-self: end;
     width: auto;
     margin: 0 0 0.5rem;
-    margin-inline-end: 24px;
+    margin-inline-end: var(--co-icon-gap);
     text-align: center;
     font-size: 0.72rem;
+    font-weight: 600;
     line-height: 1.3;
   }
 
@@ -3945,11 +3948,17 @@ body {
   }
 
   .category-overview-latest-posts-title {
-    grid-column: 1 / -1;
-    margin: 0 0 0.75rem;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    align-self: end;
+    width: 100%;
+    max-width: var(--co-post-max);
+    margin: 0 0 0.5rem;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: 0.72rem;
     font-weight: 600;
+    line-height: 1.3;
     color: #333;
   }
 
