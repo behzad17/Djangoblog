@@ -4224,6 +4224,11 @@ body {
     flex: 1 1 0;
     width: auto;
     min-width: 0;
+    height: 65px;
+    min-height: 65px;
+    max-height: 65px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 }
 
