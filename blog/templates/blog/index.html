@@ -54,9 +54,18 @@
     </div>
   </div>
 
-  <!-- Expert Contents (Mobile only: appears right after main ad, Desktop: in sidebar) -->
-  <div class="row d-lg-none mt-2">
-    <div class="col-12 sidebar-wrapper">
+  <div class="row">
+    <!-- Category Overview Column (Desktop: order-lg-1) -->
+    <div class="col-lg-9 col-md-12 mt-2">
+      <div class="row mt-2 mb-2" id="category-filter-section">
+        <div class="col-12">
+          {% include 'includes/category_overview_section.html' with category_overview_rows=category_overview_rows %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Expert Contents (Mobile only: after category overview, Desktop: in sidebar) -->
+    <div class="col-12 d-lg-none mt-2 sidebar-wrapper">
       <div class="popular-posts-sidebar">
         <h4 class="sidebar-title">
           <i class="fas fa-star ms-2"></i>مطالب تخصصی
@@ -115,17 +124,6 @@
         {% else %}
         <p class="text-muted small">هنوز مطالب تخصصی در دسترس نیست.</p>
         {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <!-- Category Overview Column (Desktop: order-lg-1) -->
-    <div class="col-lg-9 col-md-12 mt-2">
-      <div class="row mt-2 mb-2" id="category-filter-section">
-        <div class="col-12">
-          {% include 'includes/category_overview_section.html' with category_overview_rows=category_overview_rows %}
-        </div>
       </div>
     </div>
 
