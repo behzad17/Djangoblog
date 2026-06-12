@@ -3751,13 +3751,20 @@ body {
 
 .category-overview-col--category {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
 }
 
 .category-overview-col--post {
   display: flex;
+  align-items: stretch;
+}
+
+.category-overview-col--ad {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  min-height: 0;
 }
 
 .category-overview-empty {
@@ -3775,8 +3782,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 88px;
-  height: 88px;
+  width: 100%;
+  max-width: 96px;
+  min-height: 88px;
+  height: 100%;
   flex-shrink: 0;
   margin-inline: auto;
   padding: 0.4rem 0.35rem;
@@ -3825,7 +3834,8 @@ body {
   align-items: flex-start;
   gap: 12px;
   width: 100%;
-  min-height: 72px;
+  min-height: 88px;
+  height: 100%;
   padding: 0.75rem 1rem;
   border-radius: 10px;
   background: #fff;
@@ -3888,6 +3898,30 @@ body {
   align-items: center;
 }
 
+.ad-placeholder-category-row {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 2 / 1;
+  min-height: 120px;
+  margin-bottom: 0;
+}
+
+.ad-placeholder-category-row--desktop {
+  margin-inline: auto;
+}
+
+.category-overview-mobile-ad {
+  margin-bottom: 0.5rem;
+}
+
+.ad-placeholder-category-row--mobile {
+  width: 100%;
+  max-width: none;
+  aspect-ratio: 2 / 1;
+  min-height: 0;
+  margin-bottom: 0.25rem;
+}
+
 @media (min-width: 992px) {
   .category-overview-col--category {
     justify-content: center;
@@ -3898,8 +3932,8 @@ body {
   }
 
   .category-overview-card {
-    width: 96px;
-    height: 96px;
+    max-width: 96px;
+    min-height: 96px;
     padding: 0.45rem 0.4rem;
   }
 
@@ -3920,6 +3954,7 @@ body {
 
   .category-latest-post-content {
     max-width: 560px;
+    min-height: 96px;
     padding: 0.75rem 1rem;
   }
 
@@ -3928,8 +3963,8 @@ body {
     height: 80px;
   }
 
-  .category-latest-post-content {
-    min-height: 96px;
+  .category-overview-row {
+    margin-bottom: 0.35rem !important;
   }
 
   .category-latest-post-link {
@@ -3940,7 +3975,7 @@ body {
 @media (max-width: 991.98px) {
   .category-overview-row {
     --bs-gutter-y: 0.125rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
   }
 
   .category-overview-col--category {

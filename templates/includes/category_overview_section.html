@@ -1,3 +1,4 @@
+{% load category_extras %}
 <div class="category-overview-section">
   <h3 class="category-section-title mb-3">
     <i class="fas fa-tags ms-2"></i>دسته بندی محتوا
@@ -5,7 +6,13 @@
 
   {% if category_overview_rows %}
     {% for category, latest_post in category_overview_rows %}
-      {% include 'includes/category_overview_row.html' with category=category latest_post=latest_post %}
+      {% include 'includes/category_overview_row.html' with category=category latest_post=latest_post row_index=forloop.counter %}
+      {% homepage_mobile_row_ad forloop.counter as mobile_ad %}
+      {% if mobile_ad %}
+        <div class="category-overview-mobile-ad d-lg-none">
+          {% include 'includes/homepage_static_ad.html' with ad_stem=mobile_ad ad_url=mobile_ad|homepage_static_ad_url extra_class='ad-placeholder-category-row--mobile' %}
+        </div>
+      {% endif %}
     {% endfor %}
   {% else %}
     <p class="text-muted text-center mb-0">هنوز دسته‌بندی‌ای در دسترس نیست.</p>

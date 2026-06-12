@@ -1,0 +1,23 @@
+{% load static %}
+{% with ad_file='images/'|add:ad_stem|add:'.jpg' %}
+<div class="ad-placeholder ad-placeholder-category-row {{ extra_class|default:'' }}">
+  <a
+    href="{{ ad_url }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="ad-link"
+  >
+    <img
+      src="{% static ad_file %}"
+      alt="تبلیغات"
+      class="ad-image"
+      loading="lazy"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    />
+    <div class="ad-content" style="display: none">
+      <i class="fas fa-ad"></i>
+      <p class="ad-text">Your Ads Here!</p>
+    </div>
+  </a>
+</div>
+{% endwith %}

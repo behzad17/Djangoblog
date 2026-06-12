@@ -138,3 +138,50 @@ def category_color_index(category):
     
     return hash_value % 12
 
+
+HOMEPAGE_CATEGORY_ROW_ADS = (
+    'ad-1',
+    'ad-2',
+    'ad-3',
+    'ad-4',
+    'ad-5',
+    'ad-1',
+)
+
+DESKTOP_CATEGORY_ROW_AD_INDICES = frozenset({1, 3, 5, 7, 9, 11})
+
+
+@register.simple_tag
+def homepage_desktop_row_ad(row_index):
+    """
+    Return static ad image stem for desktop category-row left column, or None.
+    Rows 1, 3, 5, 7, 9, 11 show ad-1..ad-5, ad-1.
+    """
+    if row_index not in DESKTOP_CATEGORY_ROW_AD_INDICES:
+        return None
+    ad_index = (row_index - 1) // 2
+    if ad_index < len(HOMEPAGE_CATEGORY_ROW_ADS):
+        return HOMEPAGE_CATEGORY_ROW_ADS[ad_index]
+    return None
+
+
+@register.simple_tag
+def homepage_mobile_row_ad(row_index):
+    """
+    Return static ad image stem after every 2 category rows on mobile, max 6.
+    """
+    if row_index % 2 != 0 or row_index > 12:
+        return None
+    ad_index = (row_index // 2) - 1
+    if ad_index < len(HOMEPAGE_CATEGORY_ROW_ADS):
+        return HOMEPAGE_CATEGORY_ROW_ADS[ad_index]
+    return None
+
+
+@register.filter
+def homepage_static_ad_url(ad_image):
+    """Preserve existing static ad link mapping."""
+    if ad_image == 'ad-2':
+        return 'https://www.nordicphoenix.se'
+    return '#'
+

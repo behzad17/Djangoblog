@@ -1,4 +1,6 @@
-<div class="category-overview-row row align-items-center g-2 mb-2">
+{% load category_extras %}
+{% homepage_desktop_row_ad row_index as desktop_ad %}
+<div class="category-overview-row row align-items-stretch g-2 mb-lg-1 mb-2">
   <div class="col-12 col-lg-3 category-overview-col category-overview-col--category">
     {% include 'includes/category_icon_card.html' with category=category %}
   </div>
@@ -12,7 +14,11 @@
     {% endif %}
   </div>
   <div
-    class="col-lg-3 d-none d-lg-block category-overview-col category-overview-col--spacer"
-    aria-hidden="true"
-  ></div>
+    class="col-lg-3 d-none d-lg-flex category-overview-col category-overview-col--ad"
+    {% if not desktop_ad %}aria-hidden="true"{% endif %}
+  >
+    {% if desktop_ad %}
+      {% include 'includes/homepage_static_ad.html' with ad_stem=desktop_ad ad_url=desktop_ad|homepage_static_ad_url extra_class='ad-placeholder-category-row--desktop' %}
+    {% endif %}
+  </div>
 </div>
