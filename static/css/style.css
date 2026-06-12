@@ -3760,13 +3760,6 @@ body {
   align-items: stretch;
 }
 
-.category-overview-col--ad {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-}
-
 .category-overview-empty {
   width: 100%;
   min-height: 88px;
@@ -3898,46 +3891,37 @@ body {
   align-items: center;
 }
 
-.ad-placeholder-category-row {
+.category-overview-section-ad {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 400px;
-  aspect-ratio: 2 / 1;
-  min-height: 120px;
+  margin-block: 1rem;
+}
+
+.ad-placeholder-category-section {
+  width: 750px;
+  max-width: 100%;
+  height: 200px;
   margin-bottom: 0;
+  overflow: hidden;
 }
 
-.ad-placeholder-category-row--desktop {
-  margin-inline: auto;
-}
-
-.category-overview-mobile-ad {
-  margin-bottom: 0.5rem;
-}
-
-.ad-placeholder-category-row--mobile {
+.ad-placeholder-category-section .ad-image {
   width: 100%;
-  max-width: none;
-  aspect-ratio: 2 / 1;
-  min-height: 0;
-  margin-bottom: 0.25rem;
+  height: 100%;
+  object-fit: cover;
 }
 
 @media (min-width: 992px) {
   .category-overview-row {
     display: grid;
+    grid-template-columns: 96px minmax(560px, 1fr);
     column-gap: 0.5rem;
     row-gap: 0;
     direction: rtl;
+    align-items: start;
     --bs-gutter-x: 0;
     margin-bottom: 0.35rem !important;
-  }
-
-  .category-overview-row--with-ad {
-    grid-template-columns: 96px 560px minmax(0, 1fr);
-  }
-
-  .category-overview-row--no-ad {
-    grid-template-columns: 96px minmax(560px, 1fr);
   }
 
   .category-overview-row > [class*="col"] {
@@ -3952,10 +3936,6 @@ body {
 
   .category-overview-col--post {
     justify-content: flex-start;
-  }
-
-  .category-overview-col--ad {
-    justify-content: flex-end;
   }
 
   .category-overview-card {
@@ -3993,16 +3973,6 @@ body {
     height: 80px;
   }
 
-  .ad-placeholder-category-row--desktop {
-    width: 300px;
-    max-width: 300px;
-    height: 150px;
-    min-height: 150px;
-    aspect-ratio: 2 / 1;
-    margin-inline: 0;
-    flex-shrink: 0;
-  }
-
   .sidebar-wrapper .ad-placeholder-bottom,
   .ads-container-bottom-static .ad-placeholder-bottom {
     width: 300px !important;
@@ -4018,6 +3988,17 @@ body {
 }
 
 @media (max-width: 991.98px) {
+  .category-overview-section-ad {
+    margin-block: 0.75rem;
+  }
+
+  .ad-placeholder-category-section {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 15 / 4;
+    min-height: 0;
+  }
+
   .category-overview-row {
     --bs-gutter-y: 0.125rem;
     margin-bottom: 0.35rem;

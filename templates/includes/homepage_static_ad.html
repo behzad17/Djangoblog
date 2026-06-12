@@ -1,6 +1,6 @@
 {% load static %}
 {% with ad_file='images/'|add:ad_stem|add:'.jpg' %}
-<div class="ad-placeholder ad-placeholder-category-row {{ extra_class|default:'' }}">
+<div class="ad-placeholder {{ extra_class|default:'' }}">
   <a
     href="{{ ad_url }}"
     target="_blank"
