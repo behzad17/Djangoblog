@@ -3944,6 +3944,15 @@ body {
     font-size: 1rem;
   }
 
+  .category-overview-latest-posts-title {
+    grid-column: 1 / -1;
+    margin: 0 0 0.75rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+  }
+
   .category-overview-row {
     grid-column: 1 / -1;
     display: grid;
