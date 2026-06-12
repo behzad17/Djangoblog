@@ -3994,8 +3994,22 @@ body {
   }
 
   .ad-placeholder-category-row--desktop {
+    width: 300px;
+    max-width: 300px;
+    height: 150px;
+    min-height: 150px;
+    aspect-ratio: 2 / 1;
     margin-inline: 0;
     flex-shrink: 0;
+  }
+
+  .sidebar-wrapper .ad-placeholder-bottom,
+  .ads-container-bottom-static .ad-placeholder-bottom {
+    width: 300px !important;
+    max-width: 300px;
+    height: 150px !important;
+    min-height: 150px !important;
+    aspect-ratio: 2 / 1;
   }
 
   .category-latest-post-link {
