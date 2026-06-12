@@ -3795,7 +3795,7 @@ body {
     rgba(255, 255, 255, 0.85) 100%
   );
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--cat-accent, var(--cat-accent-fallback, #64748b)) 18%, transparent);
+  border: 2px solid color-mix(in srgb, var(--cat-accent, var(--cat-accent-fallback, #64748b)) 18%, transparent);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06),
     0 0 0 1px rgba(255, 255, 255, 0.5);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
