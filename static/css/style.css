@@ -3953,7 +3953,7 @@ body {
     direction: rtl;
     align-items: start;
     --bs-gutter-x: 0;
-    margin-bottom: 0.35rem !important;
+    margin-bottom: 0.75rem !important;
   }
 
   .category-overview-row > [class*="col"] {
