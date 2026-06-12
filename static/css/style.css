@@ -3916,7 +3916,7 @@ body {
   .category-overview-row {
     display: grid;
     grid-template-columns: 96px minmax(560px, 1fr);
-    column-gap: 0.5rem;
+    column-gap: 0;
     row-gap: 0;
     direction: rtl;
     align-items: start;
@@ -3942,7 +3942,8 @@ body {
     max-width: 96px;
     min-height: 96px;
     padding: 0.45rem 0.4rem;
-    margin-inline: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 24px;
   }
 
   .category-overview-card-icon {
