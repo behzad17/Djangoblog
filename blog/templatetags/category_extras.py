@@ -1,4 +1,7 @@
 from django import template
+from django.conf import settings
+from django.templatetags.static import static
+import os
 
 register = template.Library()
 
@@ -145,4 +148,17 @@ def homepage_static_ad_url(ad_image):
     if ad_image == 'ad-2':
         return 'https://www.nordicphoenix.se'
     return '#'
+
+
+@register.simple_tag
+def homepage_static_ad_src(ad_stem):
+    """Return static ad image URL with a cache-busting version query."""
+    relative_path = f'images/{ad_stem}.jpg'
+    absolute_path = os.path.join(settings.BASE_DIR, 'static', relative_path)
+    url = static(relative_path)
+    try:
+        version = int(os.path.getmtime(absolute_path))
+    except OSError:
+        return url
+    return f'{url}?v={version}'
 

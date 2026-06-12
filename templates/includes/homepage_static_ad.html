@@ -1,5 +1,4 @@
-{% load static %}
-{% with ad_file='images/'|add:ad_stem|add:'.jpg' %}
+{% load category_extras %}
 <div class="ad-placeholder {{ extra_class|default:'' }}">
   <a
     href="{{ ad_url }}"
@@ -8,10 +7,10 @@
     class="ad-link"
   >
     <img
-      src="{% static ad_file %}"
+      src="{% homepage_static_ad_src ad_stem %}"
       alt="تبلیغات"
       class="ad-image"
-      loading="lazy"
+      loading="eager"
       onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
     />
     <div class="ad-content" style="display: none">
@@ -20,4 +19,3 @@
     </div>
   </a>
 </div>
-{% endwith %}
