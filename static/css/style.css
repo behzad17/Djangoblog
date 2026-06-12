@@ -3913,6 +3913,10 @@ body {
 }
 
 @media (min-width: 992px) {
+  .category-overview-section {
+    padding-right: 32px;
+  }
+
   .category-overview-row {
     display: grid;
     grid-template-columns: 96px minmax(560px, 1fr);
