@@ -133,6 +133,17 @@
   z-index: 10;
 }
 
+/* Desktop/tablet: stable row alignment and no vertical lift on active card */
+@media (min-width: 768px) {
+  .ads-category-slider .ads-slider-track {
+    justify-content: flex-start;
+  }
+
+  .ads-category-slider .ads-project-card[active] {
+    transform: none;
+  }
+}
+
 /* ========================================
    BACKGROUND IMAGE
    ======================================== */

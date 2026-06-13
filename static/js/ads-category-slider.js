@@ -98,16 +98,28 @@
      */
     center(i) {
       if (i < 0 || i >= this.cards.length) return;
-      
+
       const card = this.cards[i];
-      const axis = this.isMobile() ? 'top' : 'left';
-      const size = this.isMobile() ? 'clientHeight' : 'clientWidth';
-      const start = this.isMobile() ? card.offsetTop : card.offsetLeft;
-      
-      const scrollTarget = start - (this.wrap[size] / 2 - card[size] / 2);
-      
-      this.wrap.scrollTo({
-        [axis]: scrollTarget,
+      const scrollContainer = this.track;
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      if (this.isMobile()) {
+        const scrollTarget = scrollContainer.scrollTop
+          + (cardRect.top + cardRect.height / 2)
+          - (containerRect.top + containerRect.height / 2);
+        scrollContainer.scrollTo({
+          top: scrollTarget,
+          behavior: 'smooth'
+        });
+        return;
+      }
+
+      const scrollTarget = scrollContainer.scrollLeft
+        + (cardRect.left + cardRect.width / 2)
+        - (containerRect.left + containerRect.width / 2);
+      scrollContainer.scrollTo({
+        left: scrollTarget,
         behavior: 'smooth'
       });
     }
@@ -284,7 +296,7 @@
      * Update active card from scroll position
      */
     updateActiveFromScroll() {
-      const trackRect = this.wrap.getBoundingClientRect();
+      const trackRect = this.track.getBoundingClientRect();
       const trackCenter = this.isMobile() 
         ? trackRect.top + trackRect.height / 2
         : trackRect.left + trackRect.width / 2;
