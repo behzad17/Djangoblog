@@ -66,7 +66,7 @@ def ad_category_list(request):
     """
     Dedicated advertisements landing page showing all ad categories and counts.
     """
-    categories = AdCategory.objects.all().order_by("name")
+    categories = AdCategory.objects.all().order_by("display_order", "name")
     # Prefetch visible ads to show counts efficiently
     visible_ads = _visible_ads_queryset()
     counts = {cat.id: 0 for cat in categories}

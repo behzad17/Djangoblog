@@ -7,10 +7,12 @@ from .models import AdCategory, Ad, AdComment, AdsViewCount
 class AdCategoryAdmin(admin.ModelAdmin):
     """Admin interface for advertisement categories."""
 
-    list_display = ("name", "slug", "ad_count", "created_on")
+    list_display = ("display_order", "name", "slug", "ad_count", "created_on")
+    list_display_links = ("name",)
+    list_editable = ("display_order",)
     search_fields = ("name", "description")
     prepopulated_fields = {"slug": ("name",)}
-    ordering = ("name",)
+    ordering = ("display_order", "name")
 
 
 @admin.register(Ad)

@@ -104,7 +104,9 @@ class AdForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Ensure all categories are available
-        self.fields['category'].queryset = AdCategory.objects.all().order_by('name')
+        self.fields['category'].queryset = AdCategory.objects.all().order_by(
+            'display_order', 'name'
+        )
         # Make optional fields not required
         self.fields['start_date'].required = False
         self.fields['end_date'].required = False

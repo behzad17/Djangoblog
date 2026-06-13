@@ -14,12 +14,17 @@ class AdCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True)
+    display_order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Display Order",
+        help_text="Lower numbers appear first.",
+    )
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Advertisement Category"
         verbose_name_plural = "Advertisement Categories"
-        ordering = ["name"]
+        ordering = ["display_order", "name"]
 
     def __str__(self):
         return self.name
