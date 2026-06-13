@@ -4057,6 +4057,7 @@ body {
     width: var(--co-content-width);
     max-width: var(--co-content-width);
     margin-inline-start: calc(-1 * (var(--co-icon-gap) + var(--co-category-col)));
+    aspect-ratio: 15 / 5;
   }
 }
 
