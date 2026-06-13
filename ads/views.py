@@ -9,6 +9,9 @@ from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
 from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
+from .signals import notify_admin_pro_request
+
+SOCIAL_URL_FIELDS = ('instagram_url', 'telegram_url', 'website_url')
 
 
 def _visible_ads_queryset():
@@ -325,6 +328,7 @@ def ad_detail(request, slug):
                 ad.pro_request_phone = pro_request_form.cleaned_data['phone']
                 ad.pro_requested_at = timezone.now()
                 ad.save()
+                notify_admin_pro_request(ad)
                 messages.success(request, 'درخواست شما ثبت شد، به زودی با شما تماس می‌گیریم.')
                 return redirect('ads:ad_detail', slug=slug)
             else:
@@ -426,9 +430,18 @@ def edit_ad(request, slug):
         return redirect('ads:ads_home')
     
     if request.method == 'POST':
+        original_social_urls = {
+            field: getattr(ad, field) for field in SOCIAL_URL_FIELDS
+        }
         form = AdForm(request.POST, request.FILES, instance=ad)
         if form.is_valid():
             ad = form.save(commit=False)
+            social_urls_changed = any(
+                getattr(ad, field) != original_social_urls[field]
+                for field in SOCIAL_URL_FIELDS
+            )
+            if social_urls_changed:
+                ad.social_urls_approved = False
             # Reset approval if content changed (admin needs to review again)
             if ad.is_approved:
                 ad.is_approved = False
@@ -549,7 +562,20 @@ def delete_ad_comment(request, slug, comment_id):
     Only the comment author can delete their own comments.
     Uses soft delete (is_deleted=True) instead of hard delete.
     """
-    ad = get_object_or_404(_visible_ads_queryset(), slug=slug)
+    ad = get_object_or_404(
+        Ad.objects.select_related('category', 'owner'),
+        slug=slug,
+    )
+
+    is_owner = ad.owner_id == request.user.id
+    if not is_owner:
+        if ad.plan != 'pro':
+            raise Http404(
+                "Free ads do not have detail pages. Only Pro ads can be viewed in detail."
+            )
+        if not _visible_ads_queryset().filter(pk=ad.pk).exists():
+            raise Http404("Ad is not currently visible.")
+
     comment = get_object_or_404(AdComment, id=comment_id, ad=ad)
     
     # Permission check - only author can delete
