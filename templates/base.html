@@ -125,7 +125,6 @@
           <div class="d-flex flex-column">
             <span class="brand">
               <span class="brand-persian">پیوند</span>
-              <span class="brand-english">PEYVAND</span>
             </span>
             <span class="brand-tagline">جامعه آنلاین ایرانیانِ ساکن سوئد</span>
           </div>
@@ -164,21 +163,21 @@
               <a
                 class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
                 href="{{ ads_home_url }}"
-                >نیازمندیها</a
+                >بانک مشاغل</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
                 href="{{ ask_me_url|default:'/ask-me/' }}"
-                ><i class="fas fa-question-circle ms-1"></i>سؤال از متخصص</a
+                >سؤال از متخصص</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path|slice:':14' == '/related-links' %}active{% endif %}"
                 href="{{ related_links_url }}"
-                >لینک‌های مرتبط</a
+                >لینک‌ها</a
               >
             </li>
             <li class="nav-item">
