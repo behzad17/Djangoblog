@@ -1,6 +1,9 @@
 from django import template
+from django.templatetags.static import static
 
 register = template.Library()
+
+DEFAULT_CATEGORY_IMAGE = "images/ads-categories/car-naghlie.jpg"
 
 
 @register.filter
@@ -38,6 +41,29 @@ def category_icon(category_name):
         return icon_map.get(category_str, "fas fa-tag")
     except Exception:
         return "fas fa-tag"
+
+
+@register.filter
+def category_slider_image_src(category):
+    """
+    Resolve the category slider image URL with priority:
+    1. category.image (Cloudinary upload)
+    2. category_image_path static mapping
+    3. default static image
+    """
+    try:
+        if category and getattr(category, "image", None):
+            url = category.image.url
+            if url:
+                return url
+    except Exception:
+        pass
+
+    image_path = category_image_path(category)
+    if image_path:
+        return static(image_path)
+
+    return static(DEFAULT_CATEGORY_IMAGE)
 
 
 @register.filter

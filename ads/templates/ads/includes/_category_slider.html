@@ -47,8 +47,8 @@
       
       {% for category in categories %}
         {% with ad_count=ad_counts|get_item:category.id|default:0 %}
-          {% with image_path=category|category_image_path %}
-            {% if image_path %}
+          {% with image_src=category|category_slider_image_src %}
+            {% if image_src %}
               <article class="ads-project-card"
                        data-ads-card
                        data-ads-card-index="{{ forloop.counter0 }}"
@@ -57,7 +57,7 @@
                 
                 <!-- Background Image -->
                 <img class="ads-project-card__bg" 
-                     src="{% static image_path %}" 
+                     src="{{ image_src }}" 
                      alt="{{ category.name }}"
                      loading="lazy">
                 

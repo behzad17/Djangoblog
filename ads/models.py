@@ -19,6 +19,12 @@ class AdCategory(models.Model):
         verbose_name="Display Order",
         help_text="Lower numbers appear first.",
     )
+    image = CloudinaryField(
+        "category_image",
+        blank=True,
+        null=True,
+        help_text="Optional image for the category slider. Falls back to default mapping if not set.",
+    )
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:

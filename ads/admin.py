@@ -7,12 +7,62 @@ from .models import AdCategory, Ad, AdComment, AdsViewCount
 class AdCategoryAdmin(admin.ModelAdmin):
     """Admin interface for advertisement categories."""
 
-    list_display = ("display_order", "name", "slug", "ad_count", "created_on")
+    list_display = (
+        "display_order",
+        "name",
+        "slug",
+        "image_preview",
+        "ad_count",
+        "created_on",
+    )
     list_display_links = ("name",)
     list_editable = ("display_order",)
     search_fields = ("name", "description")
     prepopulated_fields = {"slug": ("name",)}
     ordering = ("display_order", "name")
+    readonly_fields = ("image_preview", "created_on")
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "slug",
+                    "description",
+                    "display_order",
+                )
+            },
+        ),
+        (
+            "Category Image",
+            {
+                "fields": ("image", "image_preview"),
+                "description": (
+                    "Upload a slider image for this category. "
+                    "If empty, the site uses the existing static image mapping."
+                ),
+            },
+        ),
+        (
+            "Timestamps",
+            {
+                "fields": ("created_on",),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
+    def image_preview(self, obj):
+        """Show a thumbnail preview of the uploaded category image."""
+        if obj and obj.image:
+            return format_html(
+                '<img src="{}" style="max-height: 120px; max-width: 120px; '
+                'object-fit: cover; border-radius: 4px;" alt="">',
+                obj.image.url,
+            )
+        return "-"
+
+    image_preview.short_description = "Image Preview"
 
 
 @admin.register(Ad)
