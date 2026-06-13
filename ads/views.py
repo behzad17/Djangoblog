@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import Http404
 from django.utils import timezone
 from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -240,21 +241,25 @@ def ad_detail(request, slug):
     """
     Detail page for a single ad.
 
-    Each ad has its own slug-based URL. Only visible if the ad is currently
-    active, approved, and within its date range.
+    Public users may view only visible Pro ads. Owners may view their own ads
+    regardless of plan, approval, active status, or date window (e.g. Pro request).
     
     Handles both GET (display) and POST (comment submission) requests.
     Comments are published immediately (no moderation).
     """
     ad = get_object_or_404(
-        _visible_ads_queryset().select_related('category', 'owner'),
-        slug=slug
+        Ad.objects.select_related('category', 'owner'),
+        slug=slug,
     )
-    
-    # Only Pro ads can have detail pages - free ads are list-only (not clickable)
-    if ad.plan != 'pro':
-        from django.http import Http404
-        raise Http404("Free ads do not have detail pages. Only Pro ads can be viewed in detail.")
+
+    is_owner = ad.owner_id == request.user.id
+    if not is_owner:
+        if ad.plan != 'pro':
+            raise Http404(
+                "Free ads do not have detail pages. Only Pro ads can be viewed in detail."
+            )
+        if not _visible_ads_queryset().filter(pk=ad.pk).exists():
+            raise Http404("Ad is not currently visible.")
     
     # Increment aggregated view count (only for GET requests)
     # Wrap in try-except to prevent tracking errors from breaking the page
