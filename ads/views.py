@@ -239,15 +239,16 @@ def ad_list_by_category(request, category_slug):
 
 
 @ratelimit(key='ip', rate='20/m', method='POST', block=True)
-@login_required
 def ad_detail(request, slug):
     """
     Detail page for a single ad.
 
-    Public users may view only visible Pro ads. Owners may view their own ads
-    regardless of plan, approval, active status, or date window (e.g. Pro request).
+    Public users (including anonymous visitors) may view visible Pro ads.
+    Owners may view their own ads regardless of plan, approval, active status,
+    or date window (e.g. Pro request).
     
     Handles both GET (display) and POST (comment submission) requests.
+    POST actions require authentication.
     Comments are published immediately (no moderation).
     """
     ad = get_object_or_404(

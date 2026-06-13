@@ -138,6 +138,34 @@ class AdDetailAccessTests(AdsTestMixin, TestCase):
         response = self.client.get(self._detail_url(ad.slug))
         self.assertEqual(response.status_code, 200)
 
+    def test_anonymous_user_can_view_pro_ad_detail(self):
+        ad = self._create_ad("anon-pro", plan="pro")
+        response = self.client.get(self._detail_url(ad.slug))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, ad.title)
+
+    def test_anonymous_user_gets_404_for_free_ad(self):
+        ad = self._create_ad("anon-free", plan="free")
+        response = self.client.get(self._detail_url(ad.slug))
+        self.assertEqual(response.status_code, 404)
+
+    def test_anonymous_post_comment_redirects_to_login(self):
+        ad = self._create_ad("anon-comment-pro", plan="pro")
+        response = self.client.post(
+            self._detail_url(ad.slug),
+            {"body": "Anonymous comment attempt"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("account_login"))
+
+    def test_anonymous_add_to_favorites_redirects_to_login(self):
+        ad = self._create_ad("anon-fav-pro", plan="pro")
+        response = self.client.post(
+            reverse("ads:add_ad_to_favorites", args=[ad.id]),
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("account_login"), response.url)
+
 
 @override_settings(
     ADMIN_EMAIL="admin@test.com",
