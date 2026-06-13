@@ -11,6 +11,11 @@ def drop_existing_indexes(apps, schema_editor):
         cursor.execute("DROP INDEX IF EXISTS askme_moderator_slug_9dcc5146_like;")
         cursor.execute("DROP INDEX IF EXISTS askme_moderator_slug_idx;")
         cursor.execute("DROP INDEX IF EXISTS askme_moderator_slug_unique;")
+
+        # pg_indexes is PostgreSQL-only; skip dynamic index discovery on other backends.
+        if schema_editor.connection.vendor != "postgresql":
+            return
+
         # Also check for any other slug-related indexes
         cursor.execute("""
             SELECT indexname FROM pg_indexes 
