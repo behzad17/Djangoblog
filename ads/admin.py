@@ -21,6 +21,7 @@ class AdAdmin(admin.ModelAdmin):
         "title",
         "category",
         "owner",
+        "phone_display",
         "is_active",
         "is_approved",
         "is_featured",
@@ -130,6 +131,22 @@ class AdAdmin(admin.ModelAdmin):
         return format_html('<span style="color: orange;">⏳ URL Pending</span>')
 
     url_status.short_description = "URL Status"
+
+    def phone_display(self, obj):
+        """Display ad phone number, compact in list view."""
+        phone = (obj.phone or "").strip()
+        if not phone:
+            return "-"
+        if len(phone) > 18:
+            return format_html(
+                '<span title="{}" style="white-space: nowrap;">{}…</span>',
+                phone,
+                phone[:18],
+            )
+        return format_html('<span style="white-space: nowrap;">{}</span>', phone)
+
+    phone_display.short_description = "Phone"
+    phone_display.admin_order_field = "phone"
     
     def social_urls_status(self, obj):
         """Display social URLs approval status."""
