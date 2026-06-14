@@ -2069,7 +2069,7 @@ body {
 /* Reduce hero cards width by 15% on desktop/tablet */
 @media (min-width: 769px) {
   .hero-cta-cards-container {
-    max-width: 425px; /* 15% smaller: 500px * 0.85 = 425px */
+    max-width: 361px; /* 15% narrower than prior 425px desktop/tablet stack width */
   }
 }
 
@@ -4271,7 +4271,7 @@ body {
   .hero-cta-cards-container {
     flex-direction: row;
     align-items: stretch;
-    max-width: 100%;
+    max-width: 85%;
     gap: 1rem;
     margin-top: 1.25rem;
   }
