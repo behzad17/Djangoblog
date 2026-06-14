@@ -306,12 +306,6 @@ function initNavbarHeightSync() {
     document.fonts.ready.then(syncNavbarHeight);
   }
 
-  var collapse = document.getElementById("navbarText");
-  if (collapse) {
-    collapse.addEventListener("shown.bs.collapse", syncNavbarHeight);
-    collapse.addEventListener("hidden.bs.collapse", syncNavbarHeight);
-  }
-
   if (typeof ResizeObserver !== "undefined") {
     var nav = document.querySelector("nav.navbar");
     if (nav) {

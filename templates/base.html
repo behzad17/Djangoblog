@@ -129,20 +129,19 @@
             <span class="brand-tagline">جامعه آنلاین ایرانیانِ ساکن سوئد</span>
           </div>
         </a>
-        <!-- Mobile Navigation Toggle Button -->
+        <!-- Mobile Navigation Toggle Button (offcanvas drawer below lg) -->
         <button
           class="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#mobileNavDrawer"
+          aria-controls="mobileNavDrawer"
           aria-label="نمایش منو"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- Navigation Menu -->
-        <div class="collapse navbar-collapse" id="navbarText">
+        <!-- Desktop Navigation Menu (lg and up only) -->
+        <div class="navbar-collapse d-none d-lg-flex" id="navbarText">
           <!-- Center Navigation Links -->
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -243,6 +242,122 @@
         </div>
       </div>
     </nav>
+
+    <!-- Mobile Offcanvas Navigation Drawer (below lg only) -->
+    <div
+      class="offcanvas offcanvas-end mobile-nav-drawer d-lg-none"
+      tabindex="-1"
+      id="mobileNavDrawer"
+      aria-labelledby="mobileNavDrawerLabel"
+    >
+      <div class="offcanvas-header mobile-nav-drawer__header">
+        <h2 class="offcanvas-title mobile-nav-drawer__title" id="mobileNavDrawerLabel">
+          منو
+        </h2>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="بستن منو"
+        ></button>
+      </div>
+      <div class="offcanvas-body mobile-nav-drawer__body">
+        <div class="mobile-nav-drawer-cta" role="group" aria-label="اقدامات سریع">
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'account_settings' %}"
+            class="mobile-nav-drawer-cta__btn"
+            data-bs-dismiss="offcanvas"
+            >پروفایل</a
+          >
+          <a
+            href="{{ create_post_url }}"
+            class="mobile-nav-drawer-cta__btn mobile-nav-drawer-cta__btn--primary"
+            data-bs-dismiss="offcanvas"
+            >انتشار پست</a
+          >
+          <a
+            href="{{ logout_url }}"
+            class="mobile-nav-drawer-cta__btn mobile-nav-drawer-cta__btn--outline"
+            data-bs-dismiss="offcanvas"
+            >خروج</a
+          >
+          {% else %}
+          <a
+            href="{{ signup_url }}"
+            class="mobile-nav-drawer-cta__btn mobile-nav-drawer-cta__btn--primary"
+            data-bs-dismiss="offcanvas"
+            >ثبت‌نام</a
+          >
+          <a
+            href="{{ login_url }}"
+            class="mobile-nav-drawer-cta__btn"
+            data-bs-dismiss="offcanvas"
+            >ورود</a
+          >
+          <a
+            href="{{ member_guide_url }}"
+            class="mobile-nav-drawer-cta__btn mobile-nav-drawer-cta__btn--outline"
+            data-bs-dismiss="offcanvas"
+            >انتشار محتوا</a
+          >
+          {% endif %}
+        </div>
+
+        <hr class="mobile-nav-drawer-divider" />
+
+        <ul class="navbar-nav mobile-nav-drawer-links">
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == home_url %}active{% endif %}"
+              href="{{ home_url }}"
+              data-bs-dismiss="offcanvas"
+              >خانه</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == events_url %}active{% endif %}"
+              href="{{ events_url }}"
+              data-bs-dismiss="offcanvas"
+              >رویدادها</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
+              href="{{ ads_home_url }}"
+              data-bs-dismiss="offcanvas"
+              >بانک مشاغل</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
+              href="{{ ask_me_url|default:'/ask-me/' }}"
+              data-bs-dismiss="offcanvas"
+              >سؤال از متخصص</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path|slice:':14' == '/related-links' %}active{% endif %}"
+              href="{{ related_links_url }}"
+              data-bs-dismiss="offcanvas"
+              >لینک‌ها</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == search_url %}active{% endif %}"
+              href="{{ search_url }}"
+              data-bs-dismiss="offcanvas"
+              ><i class="fas fa-search ms-1"></i>جستجو</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
 
     <script>
       (function () {

@@ -54,6 +54,30 @@
   margin-left: 0 !important;
 }
 
+/* Mobile offcanvas drawer RTL adjustments */
+@media (max-width: 991.98px) {
+  .rtl .mobile-nav-drawer.offcanvas-end {
+    right: 0;
+    left: auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 0;
+    border-radius: 16px 0 0 16px;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.28);
+  }
+
+  .rtl .mobile-nav-drawer__header,
+  .rtl .mobile-nav-drawer__body,
+  .rtl .mobile-nav-drawer-links {
+    text-align: right;
+    direction: rtl;
+  }
+
+  .rtl .mobile-nav-drawer-links .nav-link i.ms-1 {
+    margin-left: 0.25rem;
+    margin-right: 0;
+  }
+}
+
 /* Navbar icon spacing in RTL - icons should be on left side of text */
 .rtl .nav-link i.me-1,
 .rtl .nav-link i.me-2 {
