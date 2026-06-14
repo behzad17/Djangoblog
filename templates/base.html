@@ -244,6 +244,26 @@
       </div>
     </nav>
 
+    <script>
+      (function () {
+        function syncNavbarHeight() {
+          var nav = document.querySelector("nav.navbar");
+          if (!nav) {
+            return;
+          }
+          var height = nav.offsetHeight;
+          if (height > 0) {
+            document.documentElement.style.setProperty(
+              "--navbar-height",
+              height + "px"
+            );
+          }
+        }
+        syncNavbarHeight();
+        window.syncNavbarHeight = syncNavbarHeight;
+      })();
+    </script>
+
     <!-- Dismissible Ad Banner - Only show to unauthenticated users -->
     {% if not user.is_authenticated %}
     <script>

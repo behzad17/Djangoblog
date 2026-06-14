@@ -276,6 +276,56 @@ document.addEventListener("DOMContentLoaded", function () {
   // Questions are now submitted directly on the expert profile page
 });
 
+// Keep body padding-top aligned with the rendered fixed navbar height
+function initNavbarHeightSync() {
+  var syncNavbarHeight =
+    window.syncNavbarHeight ||
+    function () {
+      var nav = document.querySelector("nav.navbar");
+      if (!nav) {
+        return;
+      }
+      var height = nav.offsetHeight;
+      if (height > 0) {
+        document.documentElement.style.setProperty(
+          "--navbar-height",
+          height + "px"
+        );
+      }
+    };
+
+  syncNavbarHeight();
+
+  var resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncNavbarHeight, 100);
+  });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(syncNavbarHeight);
+  }
+
+  var collapse = document.getElementById("navbarText");
+  if (collapse) {
+    collapse.addEventListener("shown.bs.collapse", syncNavbarHeight);
+    collapse.addEventListener("hidden.bs.collapse", syncNavbarHeight);
+  }
+
+  if (typeof ResizeObserver !== "undefined") {
+    var nav = document.querySelector("nav.navbar");
+    if (nav) {
+      new ResizeObserver(syncNavbarHeight).observe(nav);
+    }
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initNavbarHeightSync);
+} else {
+  initNavbarHeightSync();
+}
+
 // Ad Banner Dismissal Functionality
 // Banner only shows to unauthenticated users (controlled by template)
 var ANONYMOUS_BANNER_DISMISS_KEY = 'anonymousBannerDismissed';

@@ -1,4 +1,5 @@
 /* CSS Variables for Navbar Height */
+/* Fallback values only; syncNavbarHeight() sets the rendered height at runtime. */
 :root {
   --navbar-height: 65px;
 }
