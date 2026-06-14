@@ -7,7 +7,7 @@
       <div class="row blog-post-row g-3">
         {% for post in post_list %}
         <div class="col-md-6 col-sm-12">
-          {% include 'includes/post_card.html' with post=post show_category=False show_meta=False title_words=10 %}
+          {% include 'includes/post_card.html' with post=post show_category=False show_meta=False %}
         </div>
 
         {% if forloop.counter|divisibleby:2 %}
