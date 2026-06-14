@@ -1740,7 +1740,8 @@ body {
 }
 
 .hero-mobile-img {
-  width: 56% !important; /* 20% smaller than current 70% (70% * 0.8 = 56%) - override Bootstrap w-100 */
+  width: 50% !important;
+  max-width: 360px;
   height: auto;
   display: block;
   border-radius: 0;
