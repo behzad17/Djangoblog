@@ -68,6 +68,7 @@ body {
 /* Home link (خانه) color */
 .navbar-nav .nav-item:first-child .nav-link {
   color: #FECC02 !important;
+  font-size: 1.109rem; /* 10% larger than base nav-link 1.008rem */
 }
 
 .navbar-nav .nav-item:first-child .nav-link:hover,
