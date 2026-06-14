@@ -175,25 +175,23 @@
   margin-right: 0;
 }
 
-/* Post boxes (post cards) RTL adjustments */
+/* Post cards RTL adjustments */
 .rtl .post-card {
   text-align: right;
+  direction: rtl;
 }
 
-.rtl .post-card .card-body {
+.rtl .post-card__content {
   text-align: right;
 }
 
-.rtl .post-card .category-badge i.me-1 {
+.rtl .post-card__badge.category-badge i.me-1 {
   margin-left: 0.25rem;
   margin-right: 0;
 }
 
-.rtl .post-author-inline {
-  text-align: right;
-}
-
-.rtl .post-card .card-text {
+.rtl .post-card__author,
+.rtl .post-card__meta {
   text-align: right;
 }
 

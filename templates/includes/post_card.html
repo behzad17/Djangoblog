@@ -1,0 +1,70 @@
+{% load static %}
+<article class="post-card{% if extra_class %} {{ extra_class }}{% endif %}">
+  <a
+    href="{% url 'post_detail' post.slug %}"
+    class="post-card__image"
+    title="{{ post.title }}"
+  >
+    {% if post.featured_image and post.featured_image.public_id != "placeholder" %}
+      <img
+        src="{{ post.featured_image.url }}"
+        alt="{{ post.title }}"
+        class="post-card__image-el{% if post.pinned %} post-card__image-el--pinned{% endif %}"
+        loading="lazy"
+        data-fallback="{% static 'images/default.jpg' %}"
+        onerror="this.onerror=null; this.src=this.dataset.fallback;"
+      />
+    {% else %}
+      <img
+        src="{% static 'images/default.jpg' %}"
+        alt="{{ post.title }}"
+        class="post-card__image-el{% if post.pinned %} post-card__image-el--pinned{% endif %}"
+        loading="lazy"
+      />
+    {% endif %}
+  </a>
+  <div class="post-card__content">
+    <a
+      href="{% url 'post_detail' post.slug %}"
+      class="post-card__title"
+      title="{{ post.title }}"
+    >
+      {% if title_words %}
+        {{ post.title|truncatewords:title_words }}
+      {% else %}
+        {{ post.title }}
+      {% endif %}
+    </a>
+    {% if show_category|default:True and post.category %}
+      <a
+        href="{% url 'category_posts' post.category.slug %}"
+        class="post-card__badge category-badge"
+      >
+        <i class="fas fa-tag me-1"></i>{{ post.category.name }}
+      </a>
+    {% endif %}
+    <div class="post-card__author">
+      <i class="fas fa-user me-1"></i>{{ post.author.username }}
+    </div>
+    {% if show_meta|default:True %}
+      <div class="post-card__meta">
+        <span class="post-card__meta-date">
+          <i class="far fa-calendar me-1"></i>{{ post.created_on|date:"Y/m/d" }}
+        </span>
+        <span class="post-card__meta-separator">|</span>
+        <span class="post-card__meta-comments">
+          <i class="far fa-comments me-1"></i>{{ post.comment_count|default:0 }}
+        </span>
+        {% if show_likes and post.like_count > 0 %}
+          <span class="post-card__meta-separator">|</span>
+          <span class="post-card__meta-likes">
+            <i class="fas fa-heart me-1 text-danger"></i>{{ post.like_count }}
+          </span>
+        {% endif %}
+      </div>
+    {% endif %}
+    {% if show_excerpt and post.excerpt %}
+      <p class="post-card__excerpt">{{ post.excerpt|truncatewords:15 }}</p>
+    {% endif %}
+  </div>
+</article>
