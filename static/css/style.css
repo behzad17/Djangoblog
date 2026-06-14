@@ -4922,13 +4922,6 @@ body {
   object-fit: cover;
 }
 
-@media (min-width: 992px) {
-  .post-detail-banner-sidebar .post-detail-banner-strips .ad-placeholder-sidebar-strip:nth-child(n + 2) {
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
-}
-
 @media (max-width: 991.98px) {
   .post-detail-layout {
     display: flex;
