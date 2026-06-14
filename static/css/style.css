@@ -1740,8 +1740,6 @@ body {
 }
 
 .hero-mobile-img {
-  width: 42% !important;
-  max-width: 320px;
   height: auto;
   display: block;
   border-radius: 0;
@@ -1751,14 +1749,31 @@ body {
   object-fit: contain; /* Maintain aspect ratio without deformation */
 }
 
+@media (max-width: 991.98px) {
+  .hero-mobile-img {
+    width: 40% !important;
+    max-width: 300px;
+  }
+
+  .hero-image-mobile-wrapper {
+    padding-top: 10px;
+    margin-bottom: 14px;
+  }
+
+  .hero-section .hero-title.mt-3,
+  .hero-section .hero-title {
+    margin-top: 0 !important;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-image-mobile-wrapper {
     width: 95% !important;
-    margin-top: 0 !important; /* Remove gap A: no margin between navbar and hero image */
-    margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-top: 4px !important; /* Minimal buffer below announcement banner */
+    padding-top: 10px !important;
   }
   
   .hero-mobile-img {
@@ -1791,18 +1806,13 @@ body {
   .hero-section .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
-    margin-top: 0 !important; /* Remove any top margin that could create gap B */
+    margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
   
   .hero-content {
-    margin-top: 0 !important; /* Remove any top margin from content wrapper */
+    margin-top: 0 !important;
     margin-bottom: 0 !important;
-  }
-
-  .hero-section .hero-title.mt-3,
-  .hero-section .hero-title {
-    margin-top: 0.5rem !important; /* Reduced from Bootstrap mt-3 (1rem) on mobile */
   }
 }
 
@@ -1842,11 +1852,11 @@ body {
 @media (max-width: 576px) {
   .hero-image-mobile-wrapper {
     width: 95% !important;
-    margin-top: 0 !important; /* Remove gap A: no margin between navbar and hero image */
-    margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-top: 4px !important; /* Minimal buffer below announcement banner */
+    padding-top: 10px !important;
   }
   
   .hero-mobile-img {
