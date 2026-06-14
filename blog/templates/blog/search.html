@@ -95,7 +95,7 @@
           <div class="row blog-post-row g-3">
             {% for post in page_obj.object_list %}
             <div class="col-md-6 col-sm-12">
-              {% include 'includes/post_card.html' with post=post show_excerpt=True %}
+              {% include 'includes/post_card.html' with post=post show_category=True show_meta=True show_excerpt=True %}
             </div>
             
             {% if forloop.counter|divisibleby:2 %}

@@ -346,7 +346,7 @@
           <div class="row blog-post-row g-3">
             {% for related_post in related_posts %}
             <div class="col-md-6 col-sm-12">
-              {% include 'includes/post_card.html' with post=related_post %}
+              {% include 'includes/post_card.html' with post=related_post show_category=True show_meta=True %}
             </div>
             {% endfor %}
           </div>

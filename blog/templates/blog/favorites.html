@@ -48,7 +48,7 @@
           <i class="fas fa-times"></i>
         </button>
       </form>
-      {% include 'includes/post_card.html' with post=post show_likes=True %}
+      {% include 'includes/post_card.html' with post=post show_category=True show_meta=True show_likes=True %}
     </div>
 
     {% if forloop.counter|divisibleby:2 %}

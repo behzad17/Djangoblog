@@ -35,7 +35,7 @@
         {{ post.title }}
       {% endif %}
     </a>
-    {% if show_category|default:True and post.category %}
+    {% if show_category == True and post.category %}
       <a
         href="{% url 'category_posts' post.category.slug %}"
         class="post-card__badge category-badge"
@@ -46,7 +46,7 @@
     <div class="post-card__author">
       <i class="fas fa-user me-1"></i>{{ post.author.username }}
     </div>
-    {% if show_meta|default:True %}
+    {% if show_meta == True %}
       <div class="post-card__meta">
         <span class="post-card__meta-date">
           <i class="far fa-calendar me-1"></i>{{ post.created_on|date:"Y/m/d" }}
@@ -63,7 +63,7 @@
         {% endif %}
       </div>
     {% endif %}
-    {% if show_excerpt and post.excerpt %}
+    {% if show_excerpt == True and post.excerpt %}
       <p class="post-card__excerpt">{{ post.excerpt|truncatewords:15 }}</p>
     {% endif %}
   </div>
