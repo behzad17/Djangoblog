@@ -1740,8 +1740,8 @@ body {
 }
 
 .hero-mobile-img {
-  width: 50% !important;
-  max-width: 360px;
+  width: 42% !important;
+  max-width: 320px;
   height: auto;
   display: block;
   border-radius: 0;
