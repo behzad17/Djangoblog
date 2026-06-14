@@ -1717,9 +1717,9 @@ body {
 @media (max-width: 768px) {
   .hero-section {
     padding: 0 !important; /* Remove all padding on mobile */
-    width: 95% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 
@@ -1756,24 +1756,24 @@ body {
   }
 
   .hero-image-mobile-wrapper {
+    width: 100% !important;
+    margin: 0 !important;
     padding-top: 10px;
-    margin-bottom: 14px;
+    padding-bottom: 8px;
   }
 
   .hero-section .hero-title.mt-3,
   .hero-section .hero-title {
-    margin-top: 0 !important;
+    margin-top: 0.75rem !important;
   }
 }
 
 @media (max-width: 768px) {
   .hero-image-mobile-wrapper {
-    width: 95% !important;
-    margin-top: 0 !important;
-    margin-bottom: 14px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
     padding-top: 10px !important;
+    padding-bottom: 8px !important;
   }
   
   .hero-mobile-img {
@@ -1783,9 +1783,9 @@ body {
   
   .hero-section {
     padding: 0 !important; /* Force remove padding on mobile */
-    width: 95% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
   
   .hero-section .container {
@@ -1851,12 +1851,10 @@ body {
 
 @media (max-width: 576px) {
   .hero-image-mobile-wrapper {
-    width: 95% !important;
-    margin-top: 0 !important;
-    margin-bottom: 14px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
     padding-top: 10px !important;
+    padding-bottom: 8px !important;
   }
   
   .hero-mobile-img {
@@ -1876,9 +1874,9 @@ body {
   
   .hero-section {
     padding: 0 !important; /* Force remove padding on small mobile */
-    width: 95% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
   
   .hero-section .container {
