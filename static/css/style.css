@@ -4947,6 +4947,11 @@ body {
   .post-detail-related {
     order: 4;
   }
+
+  .post-detail-banner-sidebar .ad-placeholder-top {
+    margin-top: 15px;
+    margin-bottom: 15px !important;
+  }
 }
 
 /* Ensure messages container appears below fixed navbar */
