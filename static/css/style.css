@@ -1757,12 +1757,12 @@ body {
     margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-top: 10px !important; /* Add 10px top padding for mobile devices */
+    padding-top: 4px !important; /* Minimal buffer below announcement banner */
   }
   
   .hero-mobile-img {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   
   .hero-section {
@@ -1777,6 +1777,7 @@ body {
     padding-right: 0 !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+    margin-top: 0 !important;
   }
   
   .hero-section .container-fluid {
@@ -1796,6 +1797,11 @@ body {
   .hero-content {
     margin-top: 0 !important; /* Remove any top margin from content wrapper */
     margin-bottom: 0 !important;
+  }
+
+  .hero-section .hero-title.mt-3,
+  .hero-section .hero-title {
+    margin-top: 0.5rem !important; /* Reduced from Bootstrap mt-3 (1rem) on mobile */
   }
 }
 
@@ -1839,12 +1845,12 @@ body {
     margin-bottom: 0 !important; /* Remove gap B: no margin between hero image and cards */
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-top: 10px !important; /* Add 10px top padding for mobile devices */
+    padding-top: 4px !important; /* Minimal buffer below announcement banner */
   }
   
   .hero-mobile-img {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   
   /* Remove top margin from first hero card to eliminate gap B */
