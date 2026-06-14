@@ -3909,7 +3909,7 @@ body {
 }
 
 .category-overview-card-name {
-  font-size: 0.68rem;
+  font-size: 0.748rem; /* 10% larger than prior 0.68rem */
   font-weight: 600;
   color: #334155;
   text-align: center;
@@ -4047,7 +4047,7 @@ body {
   }
 
   .category-overview-card-name {
-    font-size: 0.72rem;
+    font-size: 0.792rem; /* 10% larger than prior 0.72rem */
   }
 
   .category-overview-empty {
@@ -4196,7 +4196,7 @@ body {
   .category-overview-card-name {
     flex: 1;
     min-width: 0;
-    font-size: 0.95rem;
+    font-size: 1.045rem; /* 10% larger than prior 0.95rem */
     text-align: start;
     line-height: 1.35;
   }
