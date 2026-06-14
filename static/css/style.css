@@ -4922,6 +4922,33 @@ body {
   object-fit: cover;
 }
 
+@media (max-width: 991.98px) {
+  .post-detail-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-detail-layout > .post-detail-main {
+    display: contents;
+  }
+
+  .post-detail-article {
+    order: 1;
+  }
+
+  .post-detail-comments {
+    order: 2;
+  }
+
+  .post-detail-layout > .post-detail-sidebar {
+    order: 3;
+  }
+
+  .post-detail-related {
+    order: 4;
+  }
+}
+
 /* Ensure messages container appears below fixed navbar */
 /* Messages are displayed in base.html as first container and need proper top spacing */
 /* Body already has padding-top: var(--navbar-height), but messages need extra spacing */

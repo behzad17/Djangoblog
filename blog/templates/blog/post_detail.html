@@ -189,8 +189,9 @@
 </div>
 
 <div class="container-fluid mt-4 mb-5">
-  <div class="row g-4">
-    <div class="col-lg-9 col-md-12">
+  <div class="row g-4 post-detail-layout">
+    <div class="col-lg-9 col-md-12 post-detail-main">
+      <div class="post-detail-article">
       <!-- Post Content Card -->
       <div class="card mb-4 shadow-sm border-0 post-detail-card">
         <div class="card-body">
@@ -265,7 +266,9 @@
           {% endif %}
         </div>
       </div>
+      </div>
 
+      <div class="post-detail-comments">
       <!-- Comment Form (now above comments) -->
       <div class="card mb-3 shadow-sm border-0 comment-form-card">
         <div class="card-body">
@@ -335,9 +338,11 @@
           {% endfor %}
         </div>
       </div>
+      </div>
 
-      <!-- Related Posts Section -->
       {% if related_posts %}
+      <div class="post-detail-related">
+      <!-- Related Posts Section -->
       <div class="card mb-4 shadow-sm border-0">
         <div class="card-body">
           <h5 class="card-title mb-3">
@@ -352,11 +357,12 @@
           </div>
         </div>
       </div>
+      </div>
       {% endif %}
     </div>
 
     <!-- Sidebar -->
-    <div class="col-lg-3 col-md-12 sidebar-wrapper">
+    <div class="col-lg-3 col-md-12 sidebar-wrapper post-detail-sidebar">
       {% include 'includes/post_detail_banner_sidebar.html' %}
     </div>
   </div>
