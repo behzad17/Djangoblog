@@ -1,0 +1,21 @@
+{% load category_extras %}
+<div class="ad-placeholder{% if extra_class %} {{ extra_class }}{% endif %}{% if visibility_class %} {{ visibility_class }}{% endif %}">
+  <a
+    href="{% static_banner_url slot_id %}"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="ad-link"
+  >
+    <img
+      src="{% static_banner_src slot_id %}"
+      alt="تبلیغات"
+      class="ad-image"
+      loading="{{ loading|default:'eager' }}"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    />
+    <div class="ad-content" style="display: none">
+      <i class="fas fa-ad"></i>
+      <p class="ad-text">Your Ads Here!</p>
+    </div>
+  </a>
+</div>

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% load static %}
+{% extends "base.html" %} {% load static category_extras %}
 {% block title %}جامعه آنلاین ایرانیانِ مقیم سوئد | Peyvand{% endblock title %}
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block content %}
@@ -109,21 +109,7 @@
     <!-- Popular Posts Sidebar (Desktop only: order-lg-2, Mobile: shown above in separate row) -->
     <div class="col-lg-3 col-md-12 mt-3 d-none d-lg-block order-lg-2 sidebar-wrapper">
       <!-- Ad Above Popular Posts (Desktop only - hidden on mobile) -->
-      <div class="ad-placeholder ad-placeholder-top d-none d-lg-block">
-        <a href="#" target="_blank" rel="noopener noreferrer" class="ad-link">
-          <img
-            src="{% static 'images/ad-top.jpg' %}"
-            alt="تبلیغات"
-            class="ad-image"
-            loading="lazy"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-          />
-          <div class="ad-content" style="display: none">
-            <i class="fas fa-ad"></i>
-            <p class="ad-text">Your Ads Here!</p>
-          </div>
-        </a>
-      </div>
+      {% include 'includes/static_banner.html' with slot_id='ad-top' extra_class='ad-placeholder-top' visibility_class='d-none d-lg-block' loading='lazy' %}
 
       <div class="popular-posts-sidebar">
         <h4 class="sidebar-title">

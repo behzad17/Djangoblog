@@ -1,6 +1,6 @@
 {% load category_extras %}
 <div class="category-overview-row category-overview-row--ad row align-items-stretch g-2">
   <div class="col-12 category-overview-col category-overview-col--ad">
-    {% include 'includes/homepage_static_ad.html' with ad_stem=ad_stem ad_url=ad_stem|homepage_static_ad_url extra_class='ad-placeholder-category-section' %}
+    {% include 'includes/static_banner.html' with slot_id=ad_stem extra_class='ad-placeholder-category-section' loading='eager' %}
   </div>
 </div>

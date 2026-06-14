@@ -360,33 +360,6 @@ def post_detail(request, slug):
                     )
             return redirect('post_detail', slug=post.slug)
 
-    # Get expert posts for sidebar (replaces Popular Posts)
-    # Filter users with profiles that have can_publish_without_approval=True
-    # Use profile__isnull=False to ensure we only get users with profiles
-    try:
-        expert_users = User.objects.filter(
-            profile__isnull=False,
-            profile__can_publish_without_approval=True
-        ).select_related('profile')
-        
-        expert_posts = (
-            Post.objects.filter(
-                status=1,
-                author__in=expert_users,
-                is_deleted=False
-            )
-            .exclude(slug='').exclude(slug__isnull=True)
-            .select_related('category', 'author')
-            .order_by('-created_on')[:10]
-        )
-    except Exception as e:
-        # If there's any error (database connection, missing profile, etc.),
-        # fall back to empty queryset to prevent 500 error
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"Error fetching expert posts: {e}", exc_info=True)
-        expert_posts = Post.objects.none()
-
     # Get related posts (3 max) from the same category, excluding current post
     related_posts = []
     if post.category:
@@ -447,7 +420,6 @@ def post_detail(request, slug):
             "related_posts": related_posts,
             "is_favorited": is_favorited,
             "is_liked": is_liked,
-            "popular_posts": expert_posts,
             "hide_pending_messages": hide_pending_messages,
             "reading_time_minutes": reading_time_minutes,
             "toc_items": toc_items if show_toc else [],

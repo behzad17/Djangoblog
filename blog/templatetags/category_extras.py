@@ -3,6 +3,8 @@ from django.conf import settings
 from django.templatetags.static import static
 import os
 
+from blog.banner_config import get_static_banner_image_stem, get_static_banner_url
+
 register = template.Library()
 
 
@@ -142,16 +144,7 @@ def category_color_index(category):
     return hash_value % 12
 
 
-@register.filter
-def homepage_static_ad_url(ad_image):
-    """Preserve existing static ad link mapping."""
-    if ad_image == 'ad-2':
-        return 'https://www.nordicphoenix.se'
-    return '#'
-
-
-@register.simple_tag
-def homepage_static_ad_src(ad_stem):
+def _static_banner_src_for_stem(ad_stem):
     """Return static ad image URL with a cache-busting version query."""
     relative_path = f'images/{ad_stem}.jpg'
     absolute_path = os.path.join(settings.BASE_DIR, 'static', relative_path)
@@ -161,4 +154,29 @@ def homepage_static_ad_src(ad_stem):
     except OSError:
         return url
     return f'{url}?v={version}'
+
+
+@register.simple_tag
+def static_banner_url(slot_id):
+    """Return outbound URL for a static banner slot."""
+    return get_static_banner_url(slot_id)
+
+
+@register.simple_tag
+def static_banner_src(slot_id):
+    """Return image src for a static banner slot."""
+    ad_stem = get_static_banner_image_stem(slot_id)
+    return _static_banner_src_for_stem(ad_stem)
+
+
+@register.filter
+def homepage_static_ad_url(ad_image):
+    """Preserve existing static ad link mapping."""
+    return get_static_banner_url(ad_image)
+
+
+@register.simple_tag
+def homepage_static_ad_src(ad_stem):
+    """Return static ad image URL with a cache-busting version query."""
+    return _static_banner_src_for_stem(ad_stem)
 

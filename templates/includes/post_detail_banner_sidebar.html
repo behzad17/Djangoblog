@@ -1,0 +1,8 @@
+<div class="post-detail-banner-sidebar">
+  {% include 'includes/static_banner.html' with slot_id='ad-top' extra_class='ad-placeholder-top mb-3' loading='lazy' %}
+  <div class="post-detail-banner-strips">
+    {% include 'includes/static_banner.html' with slot_id='ad-1' extra_class='ad-placeholder-sidebar-strip' loading='eager' %}
+    {% include 'includes/static_banner.html' with slot_id='ad-2' extra_class='ad-placeholder-sidebar-strip' loading='eager' %}
+    {% include 'includes/static_banner.html' with slot_id='ad-3' extra_class='ad-placeholder-sidebar-strip' loading='eager' %}
+  </div>
+</div>

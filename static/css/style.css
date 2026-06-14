@@ -4068,15 +4068,6 @@ body {
     height: 80px;
   }
 
-  .sidebar-wrapper .ad-placeholder-bottom,
-  .ads-container-bottom-static .ad-placeholder-bottom {
-    width: 300px !important;
-    max-width: 300px;
-    height: 150px !important;
-    min-height: 150px !important;
-    aspect-ratio: 2 / 1;
-  }
-
   .category-overview-col--post .post-card__title {
     font-size: 1rem;
   }
@@ -4878,74 +4869,6 @@ body {
   margin-top: 7%;
 }
 
-/* Ads Below Popular Posts - Height = Width * 50% */
-.ads-container-bottom {
-  display: flex !important;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  visibility: visible !important;
-  opacity: 1 !important;
-  position: relative;
-  z-index: 10;
-  clear: both;
-}
-
-/* Static ads container for desktop/tablet - no sticky/fixed positioning */
-.ads-container-bottom-static {
-  display: flex !important;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  position: static !important;
-  z-index: 1;
-  clear: both;
-}
-
-/* Ensure no sticky/fixed behavior on desktop/tablet - ads stay in normal flow */
-@media (min-width: 768px) {
-  .sidebar-wrapper .ads-container-bottom-static {
-    position: static !important;
-    top: auto !important;
-    transform: none !important;
-    overflow: visible !important;
-    align-self: stretch;
-  }
-}
-
-.ad-placeholder-bottom {
-  width: 100% !important;
-  aspect-ratio: 2 / 1; /* width:height = 1:0.5 */
-  min-height: 120px !important;
-  height: auto !important;
-  margin-bottom: 0;
-  flex-shrink: 0;
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  position: relative;
-  background: #f8f9fa !important;
-  border: none !important;
-  z-index: 10;
-}
-
-.ad-placeholder-bottom .ad-content {
-  padding: 15px;
-}
-
-.ad-placeholder-bottom .ad-content i {
-  font-size: 1.5rem;
-  margin-bottom: 5px;
-}
-
-.ad-placeholder-bottom .ad-text {
-  font-size: 0.8rem;
-}
-
 .pinned-badge {
   display: inline-block;
   padding: 0;
@@ -4964,6 +4887,39 @@ body {
 .post-detail-card {
   border: 1px solid #e9ecef;
   border-radius: 12px;
+}
+
+.post-detail-banner-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.post-detail-banner-sidebar .ad-placeholder-top {
+  margin-top: 0;
+}
+
+.post-detail-banner-strips {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.post-detail-banner-sidebar .ad-placeholder-sidebar-strip {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 15 / 5;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.post-detail-banner-sidebar .ad-placeholder-sidebar-strip .ad-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Ensure messages container appears below fixed navbar */
@@ -5782,10 +5738,6 @@ body .container nav[aria-label="breadcrumb"] {
   
   .ad-placeholder-top {
     margin-bottom: 20px;
-  }
-  
-  .ads-container-bottom {
-    margin-top: 20px;
   }
 }
 
