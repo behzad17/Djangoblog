@@ -246,29 +246,32 @@
 
     <!-- Dismissible Ad Banner - Only show to unauthenticated users -->
     {% if not user.is_authenticated %}
-    <div id="adBanner" class="ad-banner" role="banner" aria-live="polite" style="background-image: url('{% static 'images/my-banner.jpg' %}');">
+    <script>
+      try {
+        if (localStorage.getItem('anonymousBannerDismissed') === '1') {
+          document.documentElement.classList.add('anonymous-banner-dismissed');
+        }
+      } catch (e) {}
+    </script>
+    <div id="adBanner" class="ad-banner" role="banner" aria-live="polite">
       <div class="ad-banner-content">
-        <div class="ad-banner-message">
-          <a
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="ad-banner-link"
-          >
+        <a
+          href="{{ signup_url }}"
+          class="ad-banner-link"
+        >
+          <picture class="ad-banner-picture">
+            <source
+              media="(min-width: 769px)"
+              srcset="{% static 'images/banners/desktop-banner.jpg' %}"
+            />
             <img
-              src="{% static 'images/my-banner.jpg' %}"
+              src="{% static 'images/banners/mobile-banner.jpg' %}"
               alt="تبلیغات"
               class="ad-banner-image"
               loading="lazy"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
-            <div class="ad-banner-fallback" style="display: none">
-              <i class="fas fa-bullhorn me-2"></i>
-              <span class="sr-only">Announcement: </span>
-              Promotional banner / important info
-            </div>
-          </a>
-        </div>
+          </picture>
+        </a>
         <button
           type="button"
           class="ad-banner-close"

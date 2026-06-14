@@ -6831,107 +6831,84 @@ body .container nav[aria-label="breadcrumb"] {
 
 /* Ad Banner Styles */
 .ad-banner {
-  /* Overlay positioning - 20% overlaps navbar, 80% overlaps hero section */
-  position: fixed;
-  top: 70px; /* Desktop: Banner 60px tall. Positioned lower for more hero overlap. Banner spans 70-130px: 5px (10%) overlaps navbar if navbar is 65px, 55px (90%) on hero */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80vw; /* Desktop / tablet: 80% of viewport width */
-  max-width: 900px;
-  min-width: 300px;
-  height: 50px; /* Desktop / large tablet height */
-  /* Background image set via inline style in template for Django static path resolution */
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  /* Fallback gradient background (shown if image fails to load) */
+  width: 100%;
+  height: 50px;
+  min-height: 50px;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  position: relative;
+  overflow: hidden;
   background-color: #ff6b6b;
-  color: white;
-  /* Visible by default - banner shows on first visit */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* Higher than navbar and hero section */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
-  border-radius: 15px;
-  visibility: visible;
   opacity: 1;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
-/* Hidden modifier class - applied when banner is dismissed */
-.ad-banner.is-hidden {
+.ad-banner.is-hidden,
+html.anonymous-banner-dismissed .ad-banner {
   display: none;
 }
 
 .ad-banner-content {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
   position: relative;
-  z-index: 2; /* Ensure content is above background */
-  border-radius: 15px;
-  overflow: visible; /* Changed from hidden to visible so close button isn't clipped */
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.ad-banner-message {
-  flex: 1;
-  text-align: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Ad Banner Image Styles */
 .ad-banner-link {
   display: block;
   width: 100%;
   height: 100%;
+  line-height: 0;
   text-decoration: none;
-  color: inherit;
 }
 
-/* Hide img tag - using CSS background-image instead */
-.ad-banner-image {
-  display: none !important;
-}
-
-.ad-banner-fallback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.ad-banner-picture {
+  display: block;
   width: 100%;
-  color: white;
+  height: 100%;
+}
+
+.ad-banner-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Banner sits between navbar and hero; remove flash-container top spacing */
+body .ad-banner + .container {
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .ad-banner-close {
-  background: rgba(0, 0, 0, 0.3); /* Semi-transparent dark background for visibility */
+  background: rgba(0, 0, 0, 0.3);
   border: none;
   color: white;
-  font-size: 1.38rem; /* 15% bigger: 1.2rem * 1.15 = 1.38rem */
+  font-size: 1.38rem;
   cursor: pointer;
-  padding: 0.2rem 0.4rem; /* Reduced padding to make box smaller */
+  padding: 0.2rem 0.4rem;
   border-radius: 4px;
   transition: background-color 0.2s ease;
   position: absolute;
   right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  min-width: 37px; /* 15% smaller: 44px * 0.85 = 37.4px */
-  min-height: 37px; /* 15% smaller: 44px * 0.85 = 37.4px */
-  width: 37px; /* Fixed width for consistent size */
-  height: 37px; /* Fixed height for consistent size */
+  min-width: 37px;
+  min-height: 37px;
+  width: 37px;
+  height: 37px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10001; /* Higher than ad link and content to ensure visibility */
-  pointer-events: auto; /* Ensure button is clickable */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+  z-index: 2;
+  pointer-events: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .ad-banner-close:hover {
@@ -6943,81 +6920,26 @@ body .container nav[aria-label="breadcrumb"] {
   outline-offset: 2px;
 }
 
-/* Screen reader only text */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* Responsive adjustments for ad banner */
 @media (max-width: 768px) {
   .ad-banner {
-    width: 70vw;
-    max-width: none;
-    min-width: 280px;
-    top: 66px; /* Tablet: Banner 45px tall. Positioned lower for more hero overlap. Banner spans 66-111px: 6px (13%) overlaps navbar if navbar is 60px, 39px (87%) on hero */
-    height: 45px; /* Tablet height */
-    border-radius: 12px;
+    height: 65px;
+    min-height: 65px;
   }
-  
-  .ad-banner-content {
-    padding: 0 0.75rem;
-    border-radius: 12px;
-  }
-  
-  .ad-banner-message {
-    font-size: 0.85rem;
-    padding-right: 2.5rem; /* Space for close button */
-  }
-  
+
   .ad-banner-close {
     right: 0.5rem;
-    font-size: 1.265rem; /* 15% bigger: 1.1rem * 1.15 = 1.265rem */
-    min-width: 37px; /* 15% smaller box */
-    min-height: 37px;
-    width: 37px;
-    height: 37px;
-    padding: 0.2rem 0.4rem; /* Reduced padding */
+    font-size: 1.265rem;
   }
-  
-  /* Image hidden - using CSS background-image instead */
 }
 
 @media (max-width: 576px) {
-  .ad-banner {
-    width: 95vw;
-    top: 80px; /* Mobile: Banner 35px tall. Positioned lower in hero section. Banner spans 80-115px, completely below navbar (navbar ends at 55px), fully in hero section */
-    height: 35px; /* Mobile height */
-    border-radius: 10px;
-  }
-  
-  .ad-banner-content {
-    padding: 0 0.5rem;
-    border-radius: 10px;
-  }
-  
-  .ad-banner-message {
-    font-size: 0.75rem;
-    padding-right: 2rem;
-  }
-  
   .ad-banner-close {
-    min-width: 33px; /* 10% smaller than 37px: 37px * 0.9 = 33.3px */
+    min-width: 33px;
     min-height: 33px;
     width: 33px;
     height: 33px;
-    padding: 0.15rem 0.3rem; /* Reduced padding for smaller box */
-    font-size: 1.242rem; /* Keep icon size proportional: 1.38rem * 0.9 = 1.242rem */
+    font-size: 1.242rem;
   }
-  
-  /* Image hidden - using CSS background-image instead */
 }
 
 /* ============================================

@@ -278,63 +278,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Ad Banner Dismissal Functionality
 // Banner only shows to unauthenticated users (controlled by template)
-// Close button hides banner for current session only (no localStorage persistence)
-// Function to initialize banner
+var ANONYMOUS_BANNER_DISMISS_KEY = 'anonymousBannerDismissed';
+
 function initAdBanner() {
   const adBanner = document.getElementById('adBanner');
   const closeButton = document.getElementById('closeBanner');
-  
+
   if (!adBanner) {
-    // Banner not found - either user is authenticated (banner not rendered) or DOM not ready
     return;
   }
-  
-  // Ensure banner is visible (for unauthenticated users)
+
+  try {
+    if (localStorage.getItem(ANONYMOUS_BANNER_DISMISS_KEY) === '1') {
+      adBanner.classList.add('is-hidden');
+      return;
+    }
+  } catch (e) {}
+
   adBanner.classList.remove('is-hidden');
-  
-  // Handle close button click - hide only for current session/page
-  if (closeButton) {
-    closeButton.addEventListener('click', function(e) {
-      // Prevent event from bubbling to ad link
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Hide banner with smooth animation (session-only, no localStorage)
-      if (adBanner) {
-        // Add smooth transition
-        adBanner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        adBanner.style.opacity = '0';
-        adBanner.style.transform = 'translateX(-50%) translateY(-10px)';
-        
-        // Add is-hidden class after animation completes
-        setTimeout(function() {
-          if (adBanner) {
-            adBanner.classList.add('is-hidden');
-          }
-        }, 300);
-      }
-    });
-    
-    // Handle keyboard navigation (Enter and Space keys)
-    closeButton.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        e.stopPropagation();
-        closeButton.click();
-      }
-    });
+
+  if (!closeButton) {
+    return;
   }
+
+  function dismissBanner(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    adBanner.style.transition = 'opacity 0.3s ease';
+    adBanner.style.opacity = '0';
+
+    setTimeout(function() {
+      adBanner.classList.add('is-hidden');
+      document.documentElement.classList.add('anonymous-banner-dismissed');
+      try {
+        localStorage.setItem(ANONYMOUS_BANNER_DISMISS_KEY, '1');
+      } catch (err) {}
+    }, 300);
+  }
+
+  closeButton.addEventListener('click', dismissBanner);
+  closeButton.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      dismissBanner(e);
+    }
+  });
 }
 
-// Run on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', initAdBanner);
-
-// Also try immediately in case DOM is already ready
 if (document.readyState === 'loading') {
-  // DOM is still loading, wait for DOMContentLoaded
   document.addEventListener('DOMContentLoaded', initAdBanner);
 } else {
-  // DOM is already ready, run immediately
   initAdBanner();
 }
 
