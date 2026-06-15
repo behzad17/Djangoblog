@@ -2395,9 +2395,19 @@ body {
 }
 
 /* Responsive Hero Section */
-@media (max-width: 992px) and (min-width: 769px) {
+@media (max-width: 991.98px) and (min-width: 768px) {
   .hero-section {
     padding: 0.75rem 0; /* Minimized padding - only for tablet, not mobile */
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) {
+    display: flex;
+    align-items: center;
+    min-height: 23rem;
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) > .container {
+    width: 100%;
   }
   
   .hero-title {
@@ -4172,6 +4182,16 @@ body {
     padding: 1.5rem 0;
   }
 
+  main .hero-section:has(.hero-cta-cards-container) {
+    display: flex;
+    align-items: center;
+    min-height: 24rem;
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) > .container {
+    width: 100%;
+  }
+
   .hero-content {
     max-width: 1100px;
     margin-left: auto;
@@ -4895,10 +4915,15 @@ body {
 }
 
 /* Ensure messages container appears below fixed navbar */
-/* Messages are displayed in base.html as first container and need proper top spacing */
-/* Body already has padding-top: var(--navbar-height), but messages need extra spacing */
-body > .container:first-of-type {
+/* Only add top spacing when flash alerts are present */
+body > .container:first-of-type:has(.alert) {
   padding-top: 1.5rem;
+  margin-top: 0;
+}
+
+body > .container:first-of-type:not(:has(.alert)),
+body .ad-banner + .container {
+  padding-top: 0;
   margin-top: 0;
 }
 
@@ -4910,13 +4935,13 @@ body > .container:first-of-type .alert {
 
 /* Responsive adjustments for messages container */
 @media (max-width: 768px) {
-  body > .container:first-of-type {
+  body > .container:first-of-type:has(.alert) {
     padding-top: 1.25rem;
   }
 }
 
 @media (max-width: 576px) {
-  body > .container:first-of-type {
+  body > .container:first-of-type:has(.alert) {
     padding-top: 1rem;
   }
 }
@@ -4935,8 +4960,8 @@ body .container nav[aria-label="breadcrumb"] {
 
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
-  body .container:first-of-type,
-  body .container-fluid:first-of-type {
+  body .container:first-of-type:has(.alert),
+  body .container-fluid:first-of-type:has(.alert) {
     margin-top: 0.75rem;
   }
   
@@ -4946,8 +4971,8 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 @media (max-width: 576px) {
-  body .container:first-of-type,
-  body .container-fluid:first-of-type {
+  body .container:first-of-type:has(.alert),
+  body .container-fluid:first-of-type:has(.alert) {
     margin-top: 0.5rem;
   }
   
