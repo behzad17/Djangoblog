@@ -1,87 +1,54 @@
-{% load static %}
+{% url 'home' as home_url %}
 {% url 'create_post' as create_post_url %}
 {% url 'ask_me' as ask_me_url %}
-{% url 'ads:ads_home' as guide_url %}
+{% url 'ads:ads_home' as ads_home_url %}
 {% url 'account_login' as login_url %}
+{% url 'category_posts' 'events-announcements' as events_url %}
+{% url 'related_links:links_list' as related_links_url %}
 
 <!-- Hero CTA Feature Cards -->
 <div class="hero-cta-cards-container">
-  {% if user.is_authenticated %}
-  <!-- Card 1: Create Post (Orange Gradient) -->
-  <a href="{{ create_post_url }}" class="hero-cta-card hero-cta-card-orange">
-    <div class="hero-cta-card-icon">
-      <i class="fas fa-plus-circle"></i>
+  <a href="{{ home_url }}#category-filter-section" class="hero-cta-card hero-cta-card-categories">
+    <div class="hero-cta-card-content">
+      <h3 class="hero-cta-card-title">دسته بندی ها</h3>
     </div>
+  </a>
+
+  {% if user.is_authenticated %}
+  <a href="{{ create_post_url }}" class="hero-cta-card hero-cta-card-orange">
     <div class="hero-cta-card-content">
       <h3 class="hero-cta-card-title">ایجاد پست جدید</h3>
     </div>
-    <div class="hero-cta-card-arrow">
-      <i class="fas fa-arrow-left"></i>
-    </div>
-  </a>
-
-  <!-- Card 2: Ask Me (Blue Gradient) -->
-  <a href="{{ ask_me_url }}" class="hero-cta-card hero-cta-card-blue">
-    <div class="hero-cta-card-icon">
-      <i class="fas fa-question-circle"></i>
-    </div>
-    <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">پرسش از متخصص</h3>
-    </div>
-    <div class="hero-cta-card-arrow">
-      <i class="fas fa-arrow-left"></i>
-    </div>
-  </a>
-
-  <!-- Card 3: Guide (Purple Gradient) -->
-  <a href="{{ guide_url }}" class="hero-cta-card hero-cta-card-purple">
-    <div class="hero-cta-card-icon">
-      <i class="fas fa-compass"></i>
-    </div>
-    <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">بانک مشاغل</h3>
-    </div>
-    <div class="hero-cta-card-arrow">
-      <i class="fas fa-arrow-left"></i>
-    </div>
   </a>
   {% else %}
-  <!-- For non-authenticated users: Show different CTAs -->
   <a href="{{ login_url }}" class="hero-cta-card hero-cta-card-orange">
-    <div class="hero-cta-card-icon">
-      <i class="fas fa-sign-in-alt"></i>
-    </div>
     <div class="hero-cta-card-content">
       <h3 class="hero-cta-card-title">ورود برای ایجاد پست</h3>
     </div>
-    <div class="hero-cta-card-arrow">
-      <i class="fas fa-arrow-left"></i>
-    </div>
   </a>
+  {% endif %}
 
   <a href="{{ ask_me_url }}" class="hero-cta-card hero-cta-card-blue">
-    <div class="hero-cta-card-icon">
-      <i class="fas fa-tags"></i>
-    </div>
     <div class="hero-cta-card-content">
       <h3 class="hero-cta-card-title">سوال از متخصص</h3>
     </div>
-    <div class="hero-cta-card-arrow">
-      <i class="fas fa-arrow-left"></i>
-    </div>
   </a>
 
-  <a href="{{ guide_url }}" class="hero-cta-card hero-cta-card-purple">
-    <div class="hero-cta-card-icon">
-      <i class="fas fa-compass"></i>
-    </div>
+  <a href="{{ ads_home_url }}" class="hero-cta-card hero-cta-card-purple">
     <div class="hero-cta-card-content">
       <h3 class="hero-cta-card-title">بانک مشاغل</h3>
     </div>
-    <div class="hero-cta-card-arrow">
-      <i class="fas fa-arrow-left"></i>
+  </a>
+
+  <a href="{{ events_url }}" class="hero-cta-card hero-cta-card-events">
+    <div class="hero-cta-card-content">
+      <h3 class="hero-cta-card-title">رویدادها</h3>
     </div>
   </a>
-  {% endif %}
-</div>
 
+  <a href="{{ related_links_url }}" class="hero-cta-card hero-cta-card-links">
+    <div class="hero-cta-card-content">
+      <h3 class="hero-cta-card-title">لینک ها</h3>
+    </div>
+  </a>
+</div>
