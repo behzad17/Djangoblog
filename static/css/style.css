@@ -2089,7 +2089,9 @@ body {
 @media (max-width: 768px) {
   .hero-cta-cards-container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
     margin-top: 0 !important;
+    margin-bottom: 15px;
     padding-top: 10px;
     max-width: 100%;
     padding-left: 1rem;
@@ -2214,13 +2216,17 @@ body {
   }
 
   .hero-cta-cards-container .hero-cta-card:last-child {
-    margin-bottom: 15px;
+    margin-bottom: 0;
   }
 
   .hero-cta-card {
     padding: 0.8rem 1rem;
     padding-top: calc(0.8rem + 10px) !important;
+    padding-bottom: 0.8rem !important;
+    height: 68px;
     min-height: 68px;
+    max-height: 68px;
+    box-sizing: border-box;
     border-radius: 22px;
     width: 100% !important;
   }
@@ -2240,7 +2246,11 @@ body {
   .hero-cta-card {
     padding: 0.7rem 0.8rem;
     padding-top: calc(0.7rem + 10px) !important;
+    padding-bottom: 0.7rem !important;
+    height: 64px;
     min-height: 64px;
+    max-height: 64px;
+    box-sizing: border-box;
     border-radius: 19px;
     width: 100% !important;
   }
