@@ -2107,26 +2107,34 @@ body {
   padding: 1rem 1.2rem;
   border-radius: 24px;
   text-decoration: none;
-  color: #1b5583;
+  color: #ffffff;
+  background: var(--pv-cta-ask);
   width: 100%;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  box-shadow:
-    0 3px 6px rgba(27, 85, 131, 0.1),
-    0 10px 24px rgba(184, 134, 0, 0.28);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   min-height: 72px;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .hero-cta-card:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      0 5px 10px rgba(27, 85, 131, 0.12),
-      0 14px 32px rgba(184, 134, 0, 0.38);
-    text-decoration: none;
-    color: #1b5583;
-  }
+.hero-cta-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  color: #ffffff;
+  background: var(--pv-cta-ask-hover);
+}
+
+.hero-cta-card:focus {
+  background: var(--pv-cta-ask-hover);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+.hero-cta-card:active {
+  background: var(--pv-cta-ask-hover);
+  color: #ffffff;
+  transform: translateY(1px);
 }
 
 .hero-cta-card-content {
@@ -2139,7 +2147,7 @@ body {
   font-size: 1.12rem;
   font-weight: 700;
   margin: 0;
-  color: #1b5583;
+  color: #ffffff;
   line-height: 1.3;
   text-align: center;
 }
@@ -2148,66 +2156,9 @@ body {
   font-size: 0.8rem;
   font-weight: 400;
   margin: 0;
-  color: rgba(27, 85, 131, 0.9);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.4;
   text-align: center;
-}
-
-/* Hero CTA gold palette — tonal variations for hierarchy */
-.hero-cta-card-categories {
-  background: #ffbf00 !important;
-}
-
-.hero-cta-card-categories:hover {
-  background: #e6ac00 !important;
-}
-
-.hero-cta-card-orange {
-  background: #ffc933 !important;
-}
-
-.hero-cta-card-orange:hover {
-  background: #ffbf00 !important;
-}
-
-.hero-cta-card-blue {
-  background: #e6ac00 !important;
-}
-
-.hero-cta-card-blue:hover {
-  background: #d9a300 !important;
-}
-
-.hero-cta-card-purple {
-  background: #ffd54a !important;
-}
-
-.hero-cta-card-purple:hover {
-  background: #ffc933 !important;
-}
-
-.hero-cta-card-purple .hero-cta-card-title {
-  color: #1b5583 !important;
-}
-
-.hero-cta-card-purple .hero-cta-card-subtitle {
-  color: rgba(27, 85, 131, 0.9) !important;
-}
-
-.hero-cta-card-events {
-  background: #ffbf00 !important;
-}
-
-.hero-cta-card-events:hover {
-  background: #e6ac00 !important;
-}
-
-.hero-cta-card-links {
-  background: #ffc933 !important;
-}
-
-.hero-cta-card-links:hover {
-  background: #ffbf00 !important;
 }
 
 /* Responsive Design */
@@ -2230,18 +2181,6 @@ body {
     box-sizing: border-box;
     border-radius: 22px;
     width: 100% !important;
-    transform: none;
-    box-shadow:
-      0 3px 5px rgba(27, 85, 131, 0.1),
-      0 8px 20px rgba(184, 134, 0, 0.26);
-  }
-
-  .hero-cta-card:hover,
-  .hero-cta-card:active {
-    transform: none;
-    box-shadow:
-      0 3px 5px rgba(27, 85, 131, 0.1),
-      0 8px 20px rgba(184, 134, 0, 0.26);
   }
 
   .hero-cta-card-title {
@@ -2266,18 +2205,6 @@ body {
     box-sizing: border-box;
     border-radius: 19px;
     width: 100% !important;
-    transform: none;
-    box-shadow:
-      0 2px 4px rgba(27, 85, 131, 0.1),
-      0 7px 18px rgba(184, 134, 0, 0.24);
-  }
-
-  .hero-cta-card:hover,
-  .hero-cta-card:active {
-    transform: none;
-    box-shadow:
-      0 2px 4px rgba(27, 85, 131, 0.1),
-      0 7px 18px rgba(184, 134, 0, 0.24);
   }
 
   .hero-cta-card-title {
