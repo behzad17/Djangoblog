@@ -4914,42 +4914,48 @@ body {
   }
 }
 
-/* Ensure messages container appears below fixed navbar */
-/* Only add top spacing when flash alerts are present */
-body > .container:first-of-type:has(.alert) {
-  padding-top: 1.5rem;
+/* Flash messages sit below the fixed navbar; only reserve space when alerts exist */
+body > .flash-messages-container {
   margin-top: 0;
 }
 
-body > .container:first-of-type:not(:has(.alert)),
-body .ad-banner + .container {
-  padding-top: 0;
+body > .flash-messages-container:has(.alert) {
+  padding-top: 1.5rem;
+}
+
+body > .flash-messages-container:not(:has(.alert)) {
+  display: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Homepage/main content starts flush below the fixed navbar */
+body > main {
   margin-top: 0;
 }
 
 /* Ensure messages/alert boxes are fully visible and have proper spacing */
-body > .container:first-of-type .alert {
+body > .flash-messages-container .alert {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
 /* Responsive adjustments for messages container */
 @media (max-width: 768px) {
-  body > .container:first-of-type:has(.alert) {
+  body > .flash-messages-container:has(.alert) {
     padding-top: 1.25rem;
   }
 }
 
 @media (max-width: 576px) {
-  body > .container:first-of-type:has(.alert) {
+  body > .flash-messages-container:has(.alert) {
     padding-top: 1rem;
   }
 }
 
-/* Ensure post detail page content starts below fixed navbar */
-/* For containers that are not the first one (like breadcrumbs) */
-body .container:not(:first-of-type),
-body .container-fluid:not(:first-of-type) {
+/* Spacing between stacked content containers inside main (not body-level chrome) */
+main .container:not(:first-of-type),
+main .container-fluid:not(:first-of-type) {
   margin-top: 1rem;
 }
 
@@ -4960,7 +4966,7 @@ body .container nav[aria-label="breadcrumb"] {
 
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
-  body .container:first-of-type:has(.alert),
+  body > .flash-messages-container:has(.alert),
   body .container-fluid:first-of-type:has(.alert) {
     margin-top: 0.75rem;
   }
@@ -4971,7 +4977,7 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 @media (max-width: 576px) {
-  body .container:first-of-type:has(.alert),
+  body > .flash-messages-container:has(.alert),
   body .container-fluid:first-of-type:has(.alert) {
     margin-top: 0.5rem;
   }
@@ -6953,7 +6959,7 @@ html.anonymous-banner-dismissed .ad-banner {
 }
 
 /* Banner sits between navbar and hero; remove flash-container top spacing */
-body .ad-banner + .container {
+body .ad-banner + .flash-messages-container:has(.alert) {
   padding-top: 0;
   margin-top: 0;
 }

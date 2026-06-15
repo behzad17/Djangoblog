@@ -421,7 +421,8 @@
     {% endif %}
 
     <!-- Flash Messages Container -->
-    <div class="container">
+    {% if messages %}
+    <div class="container flash-messages-container">
       <div class="row">
         <div class="col-md-8 offset-md-2">
           {% for message in messages %}
@@ -451,6 +452,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
 
     <!-- Main Content Area -->
     <main class="flex-shrink-0 main-bg">
