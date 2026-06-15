@@ -4261,6 +4261,14 @@ body {
   color: #415a77;
 }
 
+@media (max-width: 767.98px) {
+  .hero-section .hero-content,
+  .hero-section .hero-title,
+  .hero-section .hero-intro-text {
+    text-align: center !important;
+  }
+}
+
 @media (min-width: 768px) {
   .hero-intro-text {
     margin-top: 0.5rem !important;
