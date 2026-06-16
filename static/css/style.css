@@ -1727,7 +1727,7 @@ body {
   max-width: 100%;
 }
 
-/* Mobile Hero Image Wrapper - Full Width */
+/* Mobile Hero Image Wrapper - Tablet only (768px–991px) */
 .hero-image-mobile-wrapper {
   width: 100%;
   margin: 0;
@@ -1737,6 +1737,27 @@ body {
   align-items: center;
   background: #A4D2E0 !important; /* Match homepage hero section background */
   line-height: 0; /* Remove white space from inline image */
+}
+
+/* Mobile homepage hero banner (< 768px) — replaces logo, title, and intro text */
+.hero-banner-mobile {
+  width: 100%;
+  margin: 0;
+  padding: 0.625rem 1.5rem 0;
+  box-sizing: border-box;
+  background: #A4D2E0 !important;
+  line-height: 0;
+}
+
+.hero-banner-mobile__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  object-fit: contain;
+  aspect-ratio: 15 / 8;
 }
 
 .hero-mobile-img {
@@ -1768,19 +1789,16 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .hero-image-mobile-wrapper {
-    width: 100% !important;
-    margin: 0 !important;
-    padding-top: 10px !important;
-    padding-bottom: 8px !important;
+    display: none !important;
   }
-  
-  .hero-mobile-img {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+
+  .hero-banner-mobile {
+    padding-top: 0.625rem;
+    padding-bottom: 0;
   }
-  
+
   .hero-section {
     padding: 0 !important; /* Force remove padding on mobile */
     width: 100% !important;

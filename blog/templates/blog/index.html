@@ -2,13 +2,31 @@
 {% block title %}جامعه آنلاین ایرانیانِ مقیم سوئد | Peyvand{% endblock title %}
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block content %}
-<!-- Hero Image (Mobile Only - Full Width) -->
-<div class="d-lg-none hero-image-mobile-wrapper">
+<!-- Tablet Hero Image (768px–991px only — unchanged) -->
+<div class="d-none d-md-block d-lg-none hero-image-mobile-wrapper">
   <img 
     src="{% static 'images/hero-mobile.png' %}" 
     alt="جامعه آنلاین ایرانیانِ مقیم سوئد - پلتفرم پیوند" 
     class="img-fluid w-100 hero-mobile-img"
+    width="791"
+    height="500"
+    decoding="async"
     onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+  />
+</div>
+
+<!-- Mobile Hero Banner (< 768px only) -->
+<div class="d-md-none hero-banner-mobile">
+  <img
+    src="{% static 'images/hero1.jpg' %}"
+    alt="پلتفرم ایرانیان مهاجر در سوئد - پیوند"
+    class="hero-banner-mobile__img"
+    width="1500"
+    height="800"
+    decoding="async"
+    fetchpriority="high"
+    loading="eager"
+    onerror="this.onerror=null; this.src='{% static 'images/hero-mobile.png' %}';"
   />
 </div>
 
@@ -18,17 +36,11 @@
     <div class="row align-items-center g-2">
       <div class="col-12">
         <div class="hero-content text-center">
-          <h1 class="hero-title mt-3">
+          <h1 class="hero-title mt-3 d-none d-md-block">
             پلتفرم ایرانیان مهاجر در سوئد
           </h1>
           <p class="hero-intro-text d-none d-md-block">
             تجربه‌ها و دانش خود را به اشتراک بگذارید، سوالات خود را از متخصصین بپرسید، خدمات مورد نیاز خود را پیدا کنید و رویدادها را دنبال کنید
-          </p>
-          <p class="hero-intro-text d-md-none">
-            تجربه‌ها و دانش خود را به اشتراک بگذارید<br>
-            سوالات خود را از متخصصین بپرسید<br>
-            خدمات مورد نیاز خود را پیدا کنید<br>
-            و رویدادها را دنبال کنید
           </p>
           {% include 'includes/hero_cta_cards.html' %}
         </div>
