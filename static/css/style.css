@@ -1798,6 +1798,7 @@ body {
   .hero-banner-mobile {
     padding-top: 0.625rem;
     padding-bottom: 0;
+    background: transparent !important;
   }
 
   .hero-section {
@@ -1805,6 +1806,7 @@ body {
     width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    background: transparent !important;
   }
   
   .hero-section .container {
