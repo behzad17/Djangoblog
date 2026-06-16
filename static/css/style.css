@@ -2175,12 +2175,13 @@ body {
     align-items: stretch;
     margin-top: 0 !important;
     margin-bottom: 1rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0.64rem 1rem 0;
-    max-width: 85%;
-    width: 85%;
-    gap: 0.55rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.75rem calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5) 0;
+    max-width: 100%;
+    width: 100%;
+    column-gap: 0.72rem;
+    row-gap: 0.88rem;
   }
 
   .hero-cta-cards-container .hero-cta-card:first-child {
@@ -2265,9 +2266,10 @@ body {
 
 @media (max-width: 360px) {
   .hero-cta-cards-container {
-    gap: 0.43rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    column-gap: 0.62rem;
+    row-gap: 0.78rem;
+    padding-left: calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
+    padding-right: calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
   }
 
   .hero-cta-card {
