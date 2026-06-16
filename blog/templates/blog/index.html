@@ -16,18 +16,26 @@
 </div>
 
 <!-- Mobile Hero Banner (< 768px only) -->
-<div class="d-md-none hero-banner-mobile">
-  <img
-    src="{% static 'images/hero1.jpg' %}"
-    alt="پلتفرم ایرانیان مهاجر در سوئد - پیوند"
-    class="hero-banner-mobile__img"
-    width="1500"
-    height="800"
-    decoding="async"
-    fetchpriority="high"
-    loading="eager"
-    onerror="this.onerror=null; this.src='{% static 'images/hero-mobile.png' %}';"
-  />
+<div class="d-md-none">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-9 col-md-12">
+        <div class="hero-banner-mobile">
+          <img
+            src="{% static 'images/hero1.jpg' %}"
+            alt="پلتفرم ایرانیان مهاجر در سوئد - پیوند"
+            class="hero-banner-mobile__img"
+            width="1500"
+            height="800"
+            decoding="async"
+            fetchpriority="high"
+            loading="eager"
+            onerror="this.onerror=null; this.src='{% static 'images/hero-mobile.png' %}';"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Hero section -->

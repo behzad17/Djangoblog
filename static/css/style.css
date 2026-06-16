@@ -1743,7 +1743,7 @@ body {
 .hero-banner-mobile {
   width: 100%;
   margin: 0;
-  padding: 0.625rem 1.5rem 0;
+  padding: 0.625rem 0 0;
   box-sizing: border-box;
   background: #A4D2E0 !important;
   line-height: 0;
