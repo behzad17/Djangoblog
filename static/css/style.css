@@ -1801,6 +1801,12 @@ body {
     background: transparent !important;
   }
 
+  .hero-banner-mobile--secondary {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background: transparent !important;
+  }
+
   .hero-section {
     padding: 0 !important; /* Force remove padding on mobile */
     width: 100% !important;
