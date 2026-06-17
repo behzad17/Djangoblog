@@ -2180,8 +2180,8 @@ body {
     padding: 0.75rem calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5) 0;
     max-width: 100%;
     width: 100%;
-    column-gap: 0.72rem;
-    row-gap: 0.88rem;
+    column-gap: 0.86rem;
+    row-gap: 1.04rem;
   }
 
   .hero-cta-cards-container .hero-cta-card:first-child {
@@ -2198,7 +2198,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.34rem;
-    width: 100% !important;
+    width: 91% !important;
+    justify-self: center;
     aspect-ratio: 1 / 1;
     min-height: 0;
     height: auto;
@@ -2266,8 +2267,8 @@ body {
 
 @media (max-width: 360px) {
   .hero-cta-cards-container {
-    column-gap: 0.62rem;
-    row-gap: 0.78rem;
+    column-gap: 0.74rem;
+    row-gap: 0.94rem;
     padding-left: calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
     padding-right: calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
   }
