@@ -10,19 +10,6 @@
         <div class="category-overview-mobile-item{% if forloop.last and forloop.counter|divisibleby:2 == False %} category-overview-mobile-item--solo{% endif %}">
           {% include 'includes/category_icon_card.html' with category=category %}
         </div>
-        {% if forloop.counter == 6 %}
-          <div class="category-overview-mobile-ad">
-            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
-          </div>
-        {% endif %}
-        {% if forloop.counter == 13 %}
-          <div class="category-overview-mobile-ad">
-            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
-          </div>
-          <div class="category-overview-mobile-ad">
-            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
-          </div>
-        {% endif %}
       {% endfor %}
     </div>
 
