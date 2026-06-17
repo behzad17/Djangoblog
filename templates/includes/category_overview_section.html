@@ -5,16 +5,39 @@
   <h3 class="category-overview-latest-posts-title d-none d-lg-block">جدیدترین پستها</h3>
 
   {% if category_overview_rows %}
-    {% for category, latest_post in category_overview_rows %}
-      {% include 'includes/category_overview_row.html' with category=category latest_post=latest_post %}
-      {% if forloop.counter == 6 %}
-        {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
-      {% endif %}
-      {% if forloop.counter == 13 %}
-        {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
-        {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
-      {% endif %}
-    {% endfor %}
+    <div class="category-overview-mobile-grid d-md-none">
+      {% for category, latest_post in category_overview_rows %}
+        <div class="category-overview-mobile-item{% if forloop.last and forloop.counter|divisibleby:2 == False %} category-overview-mobile-item--solo{% endif %}">
+          {% include 'includes/category_icon_card.html' with category=category %}
+        </div>
+        {% if forloop.counter == 6 %}
+          <div class="category-overview-mobile-ad">
+            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
+          </div>
+        {% endif %}
+        {% if forloop.counter == 13 %}
+          <div class="category-overview-mobile-ad">
+            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
+          </div>
+          <div class="category-overview-mobile-ad">
+            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="category-overview-rows d-none d-md-block">
+      {% for category, latest_post in category_overview_rows %}
+        {% include 'includes/category_overview_row.html' with category=category latest_post=latest_post %}
+        {% if forloop.counter == 6 %}
+          {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
+        {% endif %}
+        {% if forloop.counter == 13 %}
+          {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
+          {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
+        {% endif %}
+      {% endfor %}
+    </div>
   {% else %}
     <p class="text-muted text-center mb-0">هنوز دسته‌بندی‌ای در دسترس نیست.</p>
   {% endif %}
