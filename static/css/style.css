@@ -4297,9 +4297,9 @@ body {
     max-width: none !important;
     min-height: 0 !important;
     height: auto !important;
-    aspect-ratio: 2.2 / 1 !important;
+    aspect-ratio: 2.44 / 1 !important;
     margin-inline: 0;
-    padding: 0.5rem 0.65rem;
+    padding: 0.4rem 0.65rem;
     border-radius: 18px;
     border: none;
     direction: ltr;
@@ -4343,11 +4343,13 @@ body {
     flex: 1;
     min-width: 0;
     margin: 0;
+    padding-inline-end: 0.1rem;
     font-size: clamp(0.68rem, 2.9vw, 0.82rem);
     font-weight: 600;
     color: #ffffff !important;
-    text-align: left;
+    text-align: right;
     direction: rtl;
+    unicode-bidi: plaintext;
     line-height: 1.2;
     overflow: hidden;
     display: -webkit-box;
