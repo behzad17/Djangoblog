@@ -4218,8 +4218,12 @@ body {
   }
 }
 
-/* Mobile homepage category overview — app-directory 2-column cards */
+/* Mobile homepage category overview — horizontal 2-column cards */
 @media (max-width: 767.98px) {
+  #category-filter-section > .col-12 {
+    padding-inline: 12px;
+  }
+
   .category-overview-section {
     padding-inline: 0;
   }
@@ -4239,8 +4243,8 @@ body {
   .category-overview-mobile-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 0.65rem;
-    row-gap: 0.65rem;
+    column-gap: 12px;
+    row-gap: 12px;
     width: 100%;
   }
 
@@ -4251,7 +4255,7 @@ body {
   .category-overview-mobile-item--solo {
     grid-column: 1 / -1;
     justify-self: center;
-    width: calc(50% - 0.325rem);
+    width: calc(50% - 6px);
   }
 
   .category-overview-mobile-ad {
@@ -4278,19 +4282,20 @@ body {
 
   .category-overview-mobile-grid .category-overview-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
+    justify-content: flex-start;
+    gap: 0.5rem;
     width: 100%;
     max-width: none;
     min-height: 0;
     height: auto;
-    aspect-ratio: 5 / 3;
+    aspect-ratio: 2.2 / 1;
     margin-inline: 0;
-    padding: 0.5rem 0.45rem;
+    padding: 0.5rem 0.65rem;
     border-radius: 18px;
     border: none;
+    direction: ltr;
     background: linear-gradient(
       145deg,
       var(--cat-accent, #2f80ed) 0%,
@@ -4318,20 +4323,22 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    width: auto;
     margin: 0;
-    font-size: 1.55rem;
+    font-size: 1.95rem;
     line-height: 1;
     color: #ffffff;
   }
 
   .category-overview-mobile-grid .category-overview-card-name {
-    flex: 0 1 auto;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     margin: 0;
-    font-size: clamp(0.72rem, 3.1vw, 0.84rem);
+    font-size: clamp(0.68rem, 2.9vw, 0.82rem);
     font-weight: 600;
     color: #ffffff;
-    text-align: center;
+    text-align: left;
+    direction: rtl;
     line-height: 1.25;
     overflow: hidden;
     display: -webkit-box;
