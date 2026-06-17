@@ -4344,7 +4344,7 @@ body {
     min-width: 0;
     margin: 0;
     padding-inline-end: 0.1rem;
-    font-size: clamp(0.68rem, 2.9vw, 0.82rem);
+    font-size: clamp(0.75rem, 3.19vw, 0.9rem);
     font-weight: 600;
     color: #ffffff !important;
     text-align: right;
