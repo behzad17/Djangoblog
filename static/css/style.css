@@ -6085,13 +6085,6 @@ body .container nav[aria-label="breadcrumb"] {
     margin-bottom: 1.25rem;
   }
 
-  .footer-mobile-brand-logo {
-    width: 72px;
-    height: 72px;
-    object-fit: contain;
-    margin-bottom: 0.5rem;
-  }
-
   .footer-mobile-brand-name {
     font-family: Lato, sans-serif;
     font-size: 1.25rem;
