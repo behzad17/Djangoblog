@@ -1,0 +1,104 @@
+{% load static %}
+<div class="footer-wide d-none d-md-block">
+  <div class="footer-wide-brand text-center">
+    <a href="{{ home_url }}" class="footer-wide-brand-logo" aria-label="پیوند — PEYVAND">
+      <span class="footer-wide-brand-emblem" aria-hidden="true">
+        <i class="fas fa-link"></i>
+      </span>
+    </a>
+    <div class="footer-mobile-brand-name">PEYVAND</div>
+    <div class="footer-mobile-brand-tagline">جامعه ایرانیان سوئد</div>
+  </div>
+
+  <div class="footer-wide-cards-grid">
+    <div class="footer-mobile-card footer-wide-card">
+      <h2 class="footer-mobile-card-title">لینک‌های سریع</h2>
+      <ul class="list-unstyled footer-mobile-links mb-0">
+        <li><a href="{{ about_url }}">درباره ما</a></li>
+        <li><a href="{{ terms_url }}">شرایط و قوانین</a></li>
+        <li><a href="{{ member_guide_url }}">انتشار پست</a></li>
+        <li><a href="{% url 'about' %}#contact">گزارش مشکل</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-mobile-card footer-wide-card">
+      <h2 class="footer-mobile-card-title">ارتباط با ما</h2>
+      <div class="footer-mobile-contact-list">
+        <a class="footer-mobile-contact-row" href="mailto:info@bjcode.se">
+          <span class="footer-mobile-contact-icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+          <span class="footer-mobile-contact-text" dir="ltr">info@bjcode.se</span>
+        </a>
+        <a
+          class="footer-mobile-contact-row"
+          href="https://www.bjcode.se"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="footer-mobile-contact-icon" aria-hidden="true"><i class="fas fa-globe"></i></span>
+          <span class="footer-mobile-contact-text" dir="ltr">www.bjcode.se</span>
+        </a>
+        <div class="footer-mobile-contact-row footer-mobile-contact-row--static">
+          <span class="footer-mobile-contact-icon" aria-hidden="true"><i class="fas fa-university"></i></span>
+          <span class="footer-mobile-contact-text" dir="ltr">Bankgironr 5046-0641</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-mobile-card footer-mobile-card--social footer-wide-card">
+      <h2 class="footer-mobile-card-title">ما را دنبال کنید</h2>
+      <div class="footer-mobile-social">
+        <a
+          href="https://www.linkedin.com/in/behzad-javadian-0b6582a0/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-mobile-social-btn"
+          aria-label="LinkedIn"
+        >
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a
+          href="https://www.instagram.com/peyvand.se/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-mobile-social-btn"
+          aria-label="Instagram"
+        >
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-mobile-card footer-wide-card footer-wide-card--about">
+      <h2 class="footer-mobile-card-title">درباره پیوند</h2>
+      <p class="footer-wide-about-text mb-2">
+        پیوند یک پلتفرم کاربر محور است و مطالب صرفا منعکس کننده نظرات نویسندگان آن است
+      </p>
+      <a href="{{ about_url }}" class="footer-wide-about-link">درباره ما</a>
+    </div>
+  </div>
+
+  <div class="footer-mobile-card footer-mobile-card--legal footer-wide-legal-card">
+    <p class="footer-mobile-legal-text mb-2">
+      پیوند یک پلتفرم کاربر محور است و مطالب صرفا منعکس کننده نظرات نویسندگان آن است
+    </p>
+    <p class="footer-mobile-legal-text mb-2">
+      استفاده از این پلتفرم به معنای پذیرش
+      <a href="{% url 'terms' %}" class="footer-mobile-legal-link">شرایط و قوانین</a>
+      و
+      <a href="{% url 'integritetspolicy' %}" class="footer-mobile-legal-link">سیاست حفظ حریم خصوصی</a>
+      است
+    </p>
+    <p class="footer-mobile-legal-text mb-0">
+      Genom att använda denna plattform godkänner du våra
+      <a href="{% url 'terms' %}" class="footer-mobile-legal-link">Användarvillkor</a>
+      och vår
+      <a href="{% url 'integritetspolicy' %}" class="footer-mobile-legal-link">Integritetspolicy</a>
+    </p>
+  </div>
+
+  <div class="footer-wide-logo-loop">
+    {% include 'includes/footer_logo_loop.html' %}
+  </div>
+
+  <p class="footer-mobile-copyright mb-0" dir="ltr">© 2026 PEYVAND</p>
+</div>
