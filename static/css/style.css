@@ -4021,8 +4021,17 @@ body {
   }
 
   .category-overview-section:has(.category-overview-rows) .category-section-title {
+    display: block;
+    width: 100%;
     margin-top: 0 !important;
     margin-bottom: 1.1875rem !important;
+    text-align: center !important;
+  }
+
+  .category-overview-section .category-section-title__tablet-desktop {
+    display: inline-block;
+    text-align: center;
+    line-height: 1.35;
   }
 }
 
@@ -4168,20 +4177,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-self: stretch;
+    justify-content: flex-end;
+    justify-self: end;
     align-self: end;
-    width: auto;
-    margin: 0 0 0.5rem !important;
-    margin-inline-end: var(--co-icon-gap);
+    width: var(--co-category-col);
+    margin: 0 var(--co-icon-gap) 0.5rem 0 !important;
+    padding-inline: 0;
     text-align: center;
     font-size: 0.72rem;
     font-weight: 600;
     line-height: 1.3;
   }
 
-  .category-overview-section .category-section-title .fa-tags {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
+  .category-overview-section .category-section-title__tablet-desktop {
+    text-align: center;
+    line-height: 1.35;
   }
 
   .category-overview-latest-posts-title {
