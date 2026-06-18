@@ -2383,17 +2383,17 @@ body {
     padding: 0.47rem 0.3rem;
     border-radius: 17px;
     background: #1B5583 !important;
-    box-shadow: 0 14px 32px rgba(11, 45, 74, 0.22);
+    box-shadow: 0 18px 42px rgba(11, 45, 74, 0.28);
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+    transition: transform 0.24s ease, box-shadow 0.24s ease, background-color 0.24s ease;
   }
 
   .hero-cta-card:hover,
   .hero-cta-card:focus,
   .hero-cta-card:focus-visible {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(11, 45, 74, 0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 24px 52px rgba(11, 45, 74, 0.38);
     background: #1B5583 !important;
     color: #ffffff;
     outline: none;
@@ -2405,8 +2405,8 @@ body {
   }
 
   .hero-cta-card:active {
-    transform: translateY(-1px) scale(0.98);
-    box-shadow: 0 10px 22px rgba(11, 45, 74, 0.2);
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 12px 28px rgba(11, 45, 74, 0.24);
     background: #164a72 !important;
   }
 
