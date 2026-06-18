@@ -465,6 +465,9 @@
     <!-- Footer Section -->
     <footer class="footer mt-auto py-4 dark-bg footer-enhanced">
       <div class="container">
+        {% include 'includes/footer_mobile.html' %}
+
+        <div class="footer-desktop d-none d-lg-block">
         <div class="row gy-3 align-items-start">
           <!-- Quick links (right side in RTL) -->
           <div class="col-md-4">
@@ -653,6 +656,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </footer>
