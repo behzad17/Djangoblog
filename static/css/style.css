@@ -1886,7 +1886,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: clamp(0.72rem, 1.1vw, 0.88rem);
+    font-size: clamp(0.828rem, 1.265vw, 1.012rem);
     line-height: 1;
     color: #1B5583;
     opacity: 0.92;
@@ -1894,7 +1894,7 @@ body {
 
   .hero-info-card__title {
     margin: 0;
-    font-size: clamp(0.52rem, 0.78vw, 0.7rem);
+    font-size: clamp(0.598rem, 0.897vw, 0.805rem);
     font-weight: 600;
     line-height: 1.35;
     color: #415a77;
@@ -2322,7 +2322,7 @@ body {
     flex-shrink: 0;
     width: auto;
     margin: 0;
-    font-size: 1.15rem;
+    font-size: 1.3225rem;
     line-height: 1;
     color: #ffffff;
     opacity: 1;
@@ -2339,7 +2339,7 @@ body {
   }
 
   .hero-cta-card-title {
-    font-size: clamp(0.59rem, 2.44vw, 0.72rem);
+    font-size: clamp(0.6785rem, 2.806vw, 0.828rem);
     font-weight: 600;
     line-height: 1.3;
     text-align: center;
@@ -2417,7 +2417,7 @@ body {
     flex-shrink: 0;
     width: auto;
     margin: 0;
-    font-size: 1.15rem;
+    font-size: 1.3225rem;
     line-height: 1;
     color: #ffffff;
     opacity: 1;
@@ -2434,7 +2434,7 @@ body {
   }
 
   .hero-cta-card-title {
-    font-size: clamp(0.62rem, 0.95vw, 0.82rem);
+    font-size: clamp(0.713rem, 1.0925vw, 0.943rem);
     font-weight: 600;
     line-height: 1.3;
     text-align: center;
@@ -2456,7 +2456,7 @@ body {
   }
 
   .hero-cta-card-icon {
-    font-size: 0.98rem;
+    font-size: 1.127rem;
   }
 }
 
