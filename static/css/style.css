@@ -2294,8 +2294,8 @@ body {
   }
 
   .hero-cta-cards-container .hero-cta-card {
-    width: 100% !important;
-    justify-self: stretch;
+    width: 85% !important;
+    justify-self: center;
   }
 
   .hero-cta-card {
