@@ -2206,7 +2206,7 @@ body {
     max-height: none;
     padding: 0.47rem 0.3rem;
     border-radius: 17px;
-    background: #1f60ad !important;
+    background: #1B5583 !important;
     box-shadow: 0 9px 20px rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -2217,7 +2217,7 @@ body {
   .hero-cta-card:focus-visible {
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-    background: #1f60ad !important;
+    background: #1B5583 !important;
     color: #ffffff;
     outline: none;
   }
@@ -2230,7 +2230,7 @@ body {
   .hero-cta-card:active {
     transform: scale(0.96);
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
-    background: #1a5296 !important;
+    background: #164a72 !important;
   }
 
   .hero-cta-card-icon {
