@@ -2275,6 +2275,100 @@ body {
   }
 }
 
+/* Tablet + Desktop homepage CTA — mobile card design, 6 cards in one row */
+@media (min-width: 768px) {
+  .hero-cta-cards-container {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    align-items: stretch;
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    max-width: 100%;
+    width: 100%;
+    column-gap: 0.86rem;
+    row-gap: 0;
+  }
+
+  .hero-cta-cards-container .hero-cta-card {
+    width: 100% !important;
+    justify-self: stretch;
+  }
+
+  .hero-cta-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.34rem;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    padding: 0.47rem 0.3rem;
+    border-radius: 17px;
+    background: #1B5583 !important;
+    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hero-cta-card:hover,
+  .hero-cta-card:focus,
+  .hero-cta-card:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+    background: #1B5583 !important;
+    color: #ffffff;
+    outline: none;
+  }
+
+  .hero-cta-card:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.85);
+    outline-offset: 2px;
+  }
+
+  .hero-cta-card:active {
+    transform: scale(0.96);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+    background: #164a72 !important;
+  }
+
+  .hero-cta-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: auto;
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: #ffffff;
+    opacity: 1;
+  }
+
+  .hero-cta-card-content {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    direction: rtl;
+  }
+
+  .hero-cta-card-title {
+    font-size: clamp(0.62rem, 0.95vw, 0.82rem);
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    color: #ffffff;
+  }
+}
+
 @media (max-width: 360px) {
   .hero-cta-cards-container {
     column-gap: 0.74rem;
@@ -3839,6 +3933,18 @@ body {
   margin-bottom: 0.75rem;
 }
 
+/* Balance homepage category section title vertical spacing (tablet) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .category-overview-section:has(.category-overview-rows) {
+    margin-top: -0.8125rem; /* -13px: equalize gap above/below title */
+  }
+
+  .category-overview-section:has(.category-overview-rows) .category-section-title {
+    margin-top: 0 !important;
+    margin-bottom: 1.1875rem !important;
+  }
+}
+
 .category-overview-row {
   margin-inline: 0;
 }
@@ -3962,12 +4068,17 @@ body {
 }
 
 @media (min-width: 992px) {
+  .category-overview-section:has(.category-overview-rows) {
+    margin-top: -0.8125rem; /* -13px: balance title above first category row */
+  }
+
   .category-overview-section {
     padding-right: 150px;
     display: grid;
     grid-template-columns: var(--co-category-col) minmax(var(--co-post-max), 1fr);
     direction: rtl;
     column-gap: 0;
+    row-gap: 0.5rem;
   }
 
   .category-overview-section .category-section-title {
@@ -3979,7 +4090,7 @@ body {
     justify-self: stretch;
     align-self: end;
     width: auto;
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.5rem !important;
     margin-inline-end: var(--co-icon-gap);
     text-align: center;
     font-size: 0.72rem;
@@ -4243,11 +4354,12 @@ body {
 
   .category-overview-section {
     padding-inline: 0;
+    margin-top: -0.6875rem; /* -11px: balance title between hero2 and first cards */
   }
 
   .category-overview-section .category-section-title {
-    margin-top: 0.25rem;
-    margin-bottom: 0.4rem;
+    margin-top: 0.25rem !important;
+    margin-bottom: 1.1875rem !important; /* 19px: match visual gap above title */
     text-align: center;
     font-size: 1rem;
     font-weight: 700;
@@ -4436,21 +4548,6 @@ body {
     margin-right: auto !important;
     text-align: center;
     line-height: 1.8;
-  }
-
-  .hero-cta-cards-container {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    max-width: 85%;
-    gap: 1rem;
-    margin-top: 1.25rem;
-  }
-
-  .hero-cta-cards-container .hero-cta-card {
-    width: 100%;
-    min-height: 65px;
-    max-height: 65px;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
   }
 }
 
