@@ -57,20 +57,10 @@
   </div>
 </section>
 
-<!-- Desktop/Tablet Information Panel (≥768px) -->
-<div class="d-none d-md-block hero-info-panel-section">
+<!-- Desktop/Tablet Information Cards (≥768px) -->
+<div class="d-none d-md-block hero-info-cards-section">
   <div class="container">
-    <div class="hero-info-panel">
-      <img
-        src="{% static 'images/hero2.jpg' %}"
-        alt="پیوند؛ همراه زندگی ایرانیان در سوئد — تجربه‌ها و دانش خود را به اشتراک بگذارید، سوالات خود را از متخصصین بپرسید، خدمات مورد نیاز خود را پیدا کنید و رویدادها را دنبال کنید"
-        class="hero-info-panel__img"
-        width="1500"
-        height="800"
-        decoding="async"
-        loading="lazy"
-      />
-    </div>
+    {% include 'includes/hero_info_cards.html' %}
   </div>
 </div>
 

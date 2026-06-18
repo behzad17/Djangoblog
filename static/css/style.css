@@ -1843,39 +1843,75 @@ body {
   }
 }
 
-/* Desktop/Tablet homepage information panel (hero2) — ≥768px */
+/* Desktop/Tablet homepage informational cards — ≥768px */
 @media (min-width: 768px) {
-  .hero-info-panel-section {
+  .hero-info-cards-section {
     background: #A4D2E0 !important;
-    padding: 0.5rem 0 1rem;
-    line-height: 0;
+    padding: 0.65rem 0 1.15rem;
   }
 
-  .hero-info-panel {
+  .hero-info-cards-section .container {
+    max-width: 1140px;
+  }
+
+  .hero-info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.72rem;
     width: 100%;
     margin: 0 auto;
   }
 
-  .hero-info-panel__img {
-    width: 100%;
-    height: auto;
-    display: block;
+  .hero-info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.32rem;
+    min-height: clamp(72px, 8.5vw, 110px);
+    max-height: clamp(72px, 8.5vw, 110px);
+    height: clamp(72px, 8.5vw, 110px);
+    padding: 0.5rem 0.4rem;
+    border-radius: 19px;
+    background: #ffffff;
+    border: 1px solid rgba(27, 85, 131, 0.1);
+    box-shadow: 0 3px 10px rgba(27, 85, 131, 0.08);
+    text-align: center;
+    direction: rtl;
+    box-sizing: border-box;
+  }
+
+  .hero-info-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: clamp(0.72rem, 1.1vw, 0.88rem);
+    line-height: 1;
+    color: #1B5583;
+    opacity: 0.92;
+  }
+
+  .hero-info-card__title {
     margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 12px;
-    object-fit: contain;
-    aspect-ratio: 15 / 8;
+    font-size: clamp(0.52rem, 0.78vw, 0.7rem);
+    font-weight: 600;
+    line-height: 1.35;
+    color: #415a77;
   }
 }
 
 @media (min-width: 992px) {
-  .hero-info-panel-section {
+  .hero-info-cards-section {
     padding: 0.75rem 0 1.25rem;
   }
 
-  .hero-info-panel-section .container {
+  .hero-info-cards-section .container {
     max-width: 1100px;
+  }
+
+  .hero-info-cards-grid {
+    gap: 0.86rem;
   }
 }
 
