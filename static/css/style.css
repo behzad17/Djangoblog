@@ -2383,16 +2383,17 @@ body {
     padding: 0.47rem 0.3rem;
     border-radius: 17px;
     background: #1B5583 !important;
-    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 14px 32px rgba(11, 45, 74, 0.22);
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
   }
 
   .hero-cta-card:hover,
   .hero-cta-card:focus,
   .hero-cta-card:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(11, 45, 74, 0.3);
     background: #1B5583 !important;
     color: #ffffff;
     outline: none;
@@ -2404,8 +2405,8 @@ body {
   }
 
   .hero-cta-card:active {
-    transform: scale(0.96);
-    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 10px 22px rgba(11, 45, 74, 0.2);
     background: #164a72 !important;
   }
 
