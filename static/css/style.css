@@ -1843,6 +1843,42 @@ body {
   }
 }
 
+/* Desktop/Tablet homepage information panel (hero2) — ≥768px */
+@media (min-width: 768px) {
+  .hero-info-panel-section {
+    background: #A4D2E0 !important;
+    padding: 0.5rem 0 1rem;
+    line-height: 0;
+  }
+
+  .hero-info-panel {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero-info-panel__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    object-fit: contain;
+    aspect-ratio: 15 / 8;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-info-panel-section {
+    padding: 0.75rem 0 1.25rem;
+  }
+
+  .hero-info-panel-section .container {
+    max-width: 1100px;
+  }
+}
+
 /* Ensure all hero sections align to navbar width on mobile (95%) */
 @media (max-width: 768px) {
   .category-hero-section,
