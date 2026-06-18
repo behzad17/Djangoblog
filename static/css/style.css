@@ -6395,10 +6395,15 @@ body .container nav[aria-label="breadcrumb"] {
 .footer .footer-mobile .footer-mobile-legal-text,
 .footer .footer-wide .footer-mobile-legal-text {
   margin: 0;
-  color: rgba(255, 255, 255, 0.92) !important;
+  color: #ffffff !important;
   font-size: 0.8rem;
   line-height: 1.7;
   text-align: center;
+}
+
+.footer .footer-mobile p.footer-wide-about-text,
+.footer .footer-wide p.footer-wide-about-text {
+  color: #ffffff !important;
 }
 
 .footer .footer-mobile .footer-mobile-card--legal .footer-mobile-legal-link,
@@ -6571,7 +6576,7 @@ body .container nav[aria-label="breadcrumb"] {
 
   .footer-wide-about-text {
     margin: 0;
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: #ffffff !important;
     font-size: 0.82rem;
     line-height: 1.65;
     text-align: center;
