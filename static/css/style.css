@@ -1847,7 +1847,7 @@ body {
 @media (min-width: 768px) {
   .hero-info-cards-section {
     background: #A4D2E0 !important;
-    padding: 0.55rem 0 1rem;
+    padding: 0.85rem 0 1rem;
   }
 
   .hero-info-cards-section .container {
@@ -1903,7 +1903,7 @@ body {
 
 @media (min-width: 992px) {
   .hero-info-cards-section {
-    padding: 0.65rem 0 1.1rem;
+    padding: 1rem 0 1.1rem;
   }
 
   .hero-info-cards-section .container {
