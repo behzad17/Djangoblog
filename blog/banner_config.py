@@ -19,7 +19,7 @@ STATIC_BANNERS = {
     },
     'ad-3': {
         'image': 'ad-3',
-        'url': '#',
+        'url': 'https://www.bokadirekt.se/places/holistic-touch-135389?utm_source=ig&utm_medium=social&utm_content=link_in_bio',
     },
 }
 
