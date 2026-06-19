@@ -1,0 +1,40 @@
+{% if community_stats %}
+<section class="community-stats-section" aria-label="آمار جامعه پیوند">
+  <div class="container">
+    <ul class="community-stats-list">
+      <li class="community-stats-item">
+        <span class="community-stats-icon" aria-hidden="true">📚</span>
+        <span class="community-stats-text">
+          <span class="community-stats-value">{{ community_stats.published_posts }}</span>
+          <span class="community-stats-label d-none d-md-inline">مطلب منتشر شده</span>
+          <span class="community-stats-label d-md-none">مطلب</span>
+        </span>
+      </li>
+      <li class="community-stats-item">
+        <span class="community-stats-icon" aria-hidden="true">💼</span>
+        <span class="community-stats-text">
+          <span class="community-stats-value">{{ community_stats.visible_businesses }}</span>
+          <span class="community-stats-label d-none d-md-inline">کسب‌وکار ثبت شده</span>
+          <span class="community-stats-label d-md-none">کسب‌وکار</span>
+        </span>
+      </li>
+      <li class="community-stats-item">
+        <span class="community-stats-icon" aria-hidden="true">🎓</span>
+        <span class="community-stats-text">
+          <span class="community-stats-value">{{ community_stats.active_experts }}</span>
+          <span class="community-stats-label d-none d-md-inline">متخصص فعال</span>
+          <span class="community-stats-label d-md-none">متخصص</span>
+        </span>
+      </li>
+      <li class="community-stats-item">
+        <span class="community-stats-icon" aria-hidden="true">📅</span>
+        <span class="community-stats-text">
+          <span class="community-stats-value">{{ community_stats.published_events }}</span>
+          <span class="community-stats-label d-none d-md-inline">رویداد ثبت شده</span>
+          <span class="community-stats-label d-md-none">رویداد</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</section>
+{% endif %}

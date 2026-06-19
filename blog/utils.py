@@ -729,3 +729,49 @@ def get_category_overview_rows():
         (category, posts_by_id.get(category.latest_post_id))
         for category in categories
     ]
+
+
+def get_community_statistics():
+    """
+    Live homepage community counts using the same visibility rules as public pages.
+    """
+    from ads.views import _visible_ads_queryset
+    from askme.models import Moderator
+
+    published_posts = (
+        Post.objects.filter(status=1, is_deleted=False)
+        .exclude(slug='')
+        .exclude(slug__isnull=True)
+        .count()
+    )
+
+    visible_businesses = _visible_ads_queryset().count()
+
+    active_experts = (
+        Moderator.objects.filter(is_active=True)
+        .exclude(profile_image='placeholder')
+        .exclude(profile_image='')
+        .exclude(profile_image__isnull=True)
+        .exclude(complete_name='')
+        .exclude(complete_name='نام متخصص')
+        .exclude(complete_name__isnull=True)
+        .count()
+    )
+
+    published_events = (
+        Post.objects.filter(
+            status=1,
+            is_deleted=False,
+            category__slug='events-announcements',
+        )
+        .exclude(slug='')
+        .exclude(slug__isnull=True)
+        .count()
+    )
+
+    return {
+        'published_posts': published_posts,
+        'visible_businesses': visible_businesses,
+        'active_experts': active_experts,
+        'published_events': published_events,
+    }

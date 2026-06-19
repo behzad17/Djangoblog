@@ -17,7 +17,12 @@ import json
 
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
-from .utils import track_page_view, determine_comment_approval, get_category_overview_rows
+from .utils import (
+    track_page_view,
+    determine_comment_approval,
+    get_category_overview_rows,
+    get_community_statistics,
+)
 from .decorators import site_verified_required
 from ads.models import FavoriteAd
 from django.utils import timezone
@@ -181,7 +186,17 @@ class PostList(generic.ListView):
             context['category_overview_rows'] = get_category_overview_rows()
         except Exception:
             context['category_overview_rows'] = []
-        
+
+        try:
+            context['community_stats'] = get_community_statistics()
+        except Exception:
+            context['community_stats'] = {
+                'published_posts': 0,
+                'visible_businesses': 0,
+                'active_experts': 0,
+                'published_events': 0,
+            }
+
         try:
             expert_users = User.objects.filter(
                 profile__can_publish_without_approval=True
