@@ -4500,11 +4500,158 @@ body {
   }
 }
 
+/* Homepage Phase 3 — latest posts prominence, card polish, layout balance */
+@media (min-width: 768px) {
+  #category-filter-section {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .hero-info-cards-section {
+    padding-bottom: 0.65rem;
+  }
+
+  .category-overview-col--post .post-card {
+    cursor: pointer;
+    gap: 14px;
+    transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
+  }
+
+  .category-overview-col--post .post-card__content {
+    gap: 5px;
+  }
+
+  .category-overview-col--post .post-card__title {
+    font-weight: 600;
+    line-height: 1.42;
+    color: #1e293b;
+  }
+
+  .category-overview-col--post .post-card__title:hover {
+    color: var(--pv-color-secondary, #415a77);
+  }
+
+  .category-overview-col--post .post-card__author {
+    font-size: 0.78rem;
+    color: #64748b;
+    letter-spacing: 0.01em;
+    margin-top: 1px;
+  }
+
+  .category-overview-col--post .post-card__author i {
+    font-size: 0.72rem;
+    opacity: 0.8;
+  }
+
+  .category-overview-row:not(.category-overview-row--ad) {
+    margin-bottom: 0.875rem !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .category-overview-section:has(.category-overview-rows) .category-section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #334155;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid rgba(27, 85, 131, 0.12);
+    margin-bottom: 1rem !important;
+  }
+
+  .category-overview-col--post .post-card {
+    padding: 0.72rem 0.95rem;
+    box-shadow: 0 3px 12px rgba(11, 45, 74, 0.06);
+  }
+
+  .category-overview-col--post .post-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(11, 45, 74, 0.09);
+    background: #fff;
+  }
+
+  .category-overview-col--post .post-card__image {
+    border-radius: 9px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.07);
+  }
+
+  .category-overview-col--post .post-card__title {
+    font-size: 0.98rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-info-cards-section {
+    padding-top: 0.75rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .category-overview-section:has(.category-overview-rows) {
+    margin-top: -0.5rem;
+  }
+
+  .category-overview-section .category-section-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #415a77;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(27, 85, 131, 0.12);
+    margin: 0 var(--co-icon-gap) 0.65rem 0 !important;
+  }
+
+  .category-overview-latest-posts-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #334155;
+    margin: 0 0 0.65rem;
+    padding: 0.35rem 0 0.5rem;
+    border-bottom: 2px solid rgba(27, 85, 131, 0.14);
+    background: linear-gradient(180deg, rgba(164, 210, 224, 0.14) 0%, transparent 100%);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .category-overview-col--post .post-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0.85rem 1.05rem;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 3px 14px rgba(11, 45, 74, 0.07);
+  }
+
+  .category-overview-col--post .post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--post-card-accent, #91c4e8);
+    border-radius: 12px 12px 0 0;
+    z-index: 1;
+  }
+
+  .category-overview-col--post .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(11, 45, 74, 0.11);
+    border-color: rgba(27, 85, 131, 0.2);
+    background: #fff;
+  }
+
+  .category-overview-col--post .post-card__image {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  }
+
+  .category-overview-col--post .post-card__title {
+    font-size: 1.03rem;
+  }
+}
+
 /* Mobile homepage category overview — horizontal 2-column cards */
 @media (max-width: 767.98px) {
   #category-filter-section {
-    margin-top: 0.35rem !important;
-    margin-bottom: 0.35rem !important;
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.3rem !important;
     margin-inline: calc(-0.5 * var(--bs-gutter-x, 1.5rem));
     padding-inline: 12px;
   }
@@ -4515,14 +4662,16 @@ body {
 
   .category-overview-section {
     padding-inline: 0;
-    margin-top: -0.6875rem; /* -11px: balance title between hero2 and first cards */
+    margin-top: -0.75rem;
   }
 
   .category-overview-section .category-section-title {
     margin-top: 0.25rem !important;
-    margin-bottom: 1.1875rem !important; /* 19px: match visual gap above title */
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid rgba(27, 85, 131, 0.12);
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #334155;
   }
