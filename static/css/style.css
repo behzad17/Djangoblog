@@ -2735,6 +2735,7 @@ body {
 
   main .hero-section:has(.hero-cta-cards-container) .hero-cta-cards-container {
     margin-top: 0.85rem;
+    margin-bottom: 3.25rem;
   }
   
   .hero-section {
@@ -4969,6 +4970,7 @@ body {
 
   main .hero-section:has(.hero-cta-cards-container) .hero-cta-cards-container {
     margin-top: 0.85rem;
+    margin-bottom: 3.25rem;
   }
 
   .hero-intro-text {
