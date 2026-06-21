@@ -4711,8 +4711,7 @@ body {
   }
 
   .hero-info-cards-section {
-    padding-bottom: 0.65rem;
-    margin-bottom: 20px;
+    padding-bottom: calc(0.65rem + 1rem);
   }
 
   .category-overview-col--post .post-card {
@@ -4786,7 +4785,7 @@ body {
 @media (min-width: 992px) {
   .hero-info-cards-section {
     padding-top: 0.75rem;
-    padding-bottom: 0.55rem;
+    padding-bottom: calc(0.55rem + 1.25rem);
   }
 
   .category-overview-section:has(.category-overview-rows) {
