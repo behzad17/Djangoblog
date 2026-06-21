@@ -1873,12 +1873,27 @@ body {
     height: clamp(58px, 6.8vw, 88px);
     padding: 0.38rem 0.4rem;
     border-radius: 19px;
-    background: #ffffff;
-    border: 1px solid rgba(27, 85, 131, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     box-shadow: 0 2px 7px rgba(27, 85, 131, 0.06);
     text-align: center;
     direction: rtl;
     box-sizing: border-box;
+  }
+
+  .hero-info-card--events {
+    background: linear-gradient(135deg, #FFA64D, #FF8A3D);
+  }
+
+  .hero-info-card--services {
+    background: linear-gradient(135deg, #69C9FF, #54B8FF);
+  }
+
+  .hero-info-card--ask {
+    background: linear-gradient(135deg, #8E7BFF, #7562F5);
+  }
+
+  .hero-info-card--share {
+    background: linear-gradient(135deg, #74D87A, #5BC764);
   }
 
   .hero-info-card__icon {
@@ -1888,8 +1903,9 @@ body {
     flex-shrink: 0;
     font-size: clamp(0.828rem, 1.265vw, 1.012rem);
     line-height: 1;
-    color: #1B5583;
-    opacity: 0.92;
+    color: #FFFFFF;
+    opacity: 1;
+    text-shadow: 0 1px 2px rgba(27, 85, 131, 0.16);
   }
 
   .hero-info-card__title {
@@ -1897,7 +1913,8 @@ body {
     font-size: clamp(0.598rem, 0.897vw, 0.805rem);
     font-weight: 600;
     line-height: 1.35;
-    color: #415a77;
+    color: #FFFFFF;
+    text-shadow: 0 1px 2px rgba(27, 85, 131, 0.16);
   }
 }
 
