@@ -4673,6 +4673,7 @@ body {
 @media (min-width: 768px) {
   .community-stats-section {
     padding: 0.35rem 0 0.45rem;
+    margin-top: 20px;
   }
 
   .community-stats-list {
@@ -4710,7 +4711,8 @@ body {
   }
 
   .hero-info-cards-section {
-    padding-bottom: calc(0.65rem + 1rem);
+    padding-bottom: 0.65rem;
+    margin-bottom: 20px;
   }
 
   .category-overview-col--post .post-card {
@@ -4784,7 +4786,7 @@ body {
 @media (min-width: 992px) {
   .hero-info-cards-section {
     padding-top: 0.75rem;
-    padding-bottom: calc(0.55rem + 1.25rem);
+    padding-bottom: 0.55rem;
   }
 
   .category-overview-section:has(.category-overview-rows) {
