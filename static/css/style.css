@@ -2433,11 +2433,34 @@ body {
     max-height: none;
     padding: 0.4rem 0.3rem;
     border-radius: 17px;
-    background: #1B5583 !important;
     box-shadow: 0 18px 42px rgba(11, 45, 74, 0.28);
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.24s ease, box-shadow 0.24s ease, background-color 0.24s ease;
+    transition: transform 0.24s ease, box-shadow 0.24s ease;
+  }
+
+  .hero-cta-card-categories {
+    background: linear-gradient(135deg, #4fc3f7, #81d4fa) !important;
+  }
+
+  .hero-cta-card-orange {
+    background: linear-gradient(135deg, #29b6f6, #26c6da) !important;
+  }
+
+  .hero-cta-card-blue {
+    background: linear-gradient(135deg, #1e88e5, #42a5f5) !important;
+  }
+
+  .hero-cta-card-purple {
+    background: linear-gradient(135deg, #0288d1, #26a69a) !important;
+  }
+
+  .hero-cta-card-events {
+    background: linear-gradient(135deg, #1565c0, #1e88e5) !important;
+  }
+
+  .hero-cta-card-links {
+    background: linear-gradient(135deg, #0d47a1, #1565c0) !important;
   }
 
   .hero-cta-card:hover,
@@ -2445,9 +2468,50 @@ body {
   .hero-cta-card:focus-visible {
     transform: translateY(-8px);
     box-shadow: 0 24px 52px rgba(11, 45, 74, 0.38);
-    background: #1B5583 !important;
     color: #ffffff;
     outline: none;
+  }
+
+  .hero-cta-card-categories:hover,
+  .hero-cta-card-categories:focus,
+  .hero-cta-card-categories:focus-visible,
+  .hero-cta-card-categories:active {
+    background: linear-gradient(135deg, #4fc3f7, #81d4fa) !important;
+  }
+
+  .hero-cta-card-orange:hover,
+  .hero-cta-card-orange:focus,
+  .hero-cta-card-orange:focus-visible,
+  .hero-cta-card-orange:active {
+    background: linear-gradient(135deg, #29b6f6, #26c6da) !important;
+  }
+
+  .hero-cta-card-blue:hover,
+  .hero-cta-card-blue:focus,
+  .hero-cta-card-blue:focus-visible,
+  .hero-cta-card-blue:active {
+    background: linear-gradient(135deg, #1e88e5, #42a5f5) !important;
+  }
+
+  .hero-cta-card-purple:hover,
+  .hero-cta-card-purple:focus,
+  .hero-cta-card-purple:focus-visible,
+  .hero-cta-card-purple:active {
+    background: linear-gradient(135deg, #0288d1, #26a69a) !important;
+  }
+
+  .hero-cta-card-events:hover,
+  .hero-cta-card-events:focus,
+  .hero-cta-card-events:focus-visible,
+  .hero-cta-card-events:active {
+    background: linear-gradient(135deg, #1565c0, #1e88e5) !important;
+  }
+
+  .hero-cta-card-links:hover,
+  .hero-cta-card-links:focus,
+  .hero-cta-card-links:focus-visible,
+  .hero-cta-card-links:active {
+    background: linear-gradient(135deg, #0d47a1, #1565c0) !important;
   }
 
   .hero-cta-card:focus-visible {
@@ -2458,7 +2522,6 @@ body {
   .hero-cta-card:active {
     transform: translateY(-2px) scale(0.98);
     box-shadow: 0 12px 28px rgba(11, 45, 74, 0.24);
-    background: #164a72 !important;
   }
 
   .hero-cta-card-icon {
@@ -2466,10 +2529,10 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 1.35rem;
-    height: 1.35rem;
-    margin: 0;
-    font-size: 1.3225rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0 0 0.625rem;
+    font-size: 2.5rem;
     line-height: 1;
     color: #ffffff;
     opacity: 1;
@@ -2524,6 +2587,23 @@ body {
   .hero-cta-card-primary:focus-visible {
     transform: translateY(-10px);
     box-shadow: 0 28px 58px rgba(11, 45, 74, 0.42);
+  }
+}
+
+/* Desktop homepage CTA — refined hover lift */
+@media (min-width: 992px) {
+  .hero-cta-card:hover,
+  .hero-cta-card:focus,
+  .hero-cta-card:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 56px rgba(11, 45, 74, 0.42);
+  }
+
+  .hero-cta-card-primary:hover,
+  .hero-cta-card-primary:focus,
+  .hero-cta-card-primary:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 64px rgba(11, 45, 74, 0.46);
   }
 }
 
