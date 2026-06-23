@@ -302,6 +302,7 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION = True  # Enable email-based authentication f
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True  # Automatically connect social account if email matches existing verified user
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CaptchaSignupForm",
+    "reset_password": "accounts.forms.PeyvandResetPasswordForm",
 }
 
 # Google SSO settings in django-allauth
