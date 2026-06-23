@@ -2,7 +2,7 @@
 {% url 'create_post' as create_post_url %}
 {% url 'ask_me' as ask_me_url %}
 {% url 'ads:ads_home' as ads_home_url %}
-{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
 {% url 'category_posts' 'events-announcements' as events_url %}
 {% url 'related_links:links_list' as related_links_url %}
 
@@ -14,7 +14,7 @@
       <i class="fas fa-th"></i>
     </span>
     <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">دسته بندی ها</h3>
+      <h3 class="hero-cta-card-title">مطالب کاربران</h3>
     </div>
   </a>
 
@@ -24,16 +24,16 @@
       <i class="fas fa-edit"></i>
     </span>
     <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">ایجاد پست جدید</h3>
+      <h3 class="hero-cta-card-title">انتشار پست</h3>
     </div>
   </a>
   {% else %}
-  <a href="{{ login_url }}" class="hero-cta-card hero-cta-card-orange">
+  <a href="{{ signup_url }}" class="hero-cta-card hero-cta-card-orange">
     <span class="hero-cta-card-icon" aria-hidden="true">
       <i class="fas fa-edit"></i>
     </span>
     <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">ورود برای ایجاد پست</h3>
+      <h3 class="hero-cta-card-title">ثبت نام برای انتشار پست</h3>
     </div>
   </a>
   {% endif %}
@@ -53,7 +53,7 @@
       <i class="fas fa-briefcase"></i>
     </span>
     <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">بانک مشاغل</h3>
+      <h3 class="hero-cta-card-title">مشاغل و خدمات</h3>
       <p class="hero-cta-card-subtitle">(آگهی ها)</p>
     </div>
   </a>
@@ -63,7 +63,7 @@
       <i class="fas fa-calendar-alt"></i>
     </span>
     <div class="hero-cta-card-content">
-      <h3 class="hero-cta-card-title">رویدادها</h3>
+      <h3 class="hero-cta-card-title">رویدادها و برنامه ها</h3>
     </div>
   </a>
 
