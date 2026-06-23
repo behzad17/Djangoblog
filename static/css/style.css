@@ -2457,7 +2457,7 @@ body {
   }
 
   .hero-cta-card-categories {
-    background: linear-gradient(135deg, #4fc3f7, #81d4fa) !important;
+    background: linear-gradient(135deg, #00695c, #00897b) !important;
   }
 
   .hero-cta-card-orange {
@@ -2493,7 +2493,7 @@ body {
   .hero-cta-card-categories:focus,
   .hero-cta-card-categories:focus-visible,
   .hero-cta-card-categories:active {
-    background: linear-gradient(135deg, #4fc3f7, #81d4fa) !important;
+    background: linear-gradient(135deg, #00796b, #009688) !important;
   }
 
   .hero-cta-card-orange:hover,
