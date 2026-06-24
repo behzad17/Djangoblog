@@ -1,0 +1,41 @@
+{% url 'category_posts' 'events-announcements' as events_category_url %}
+
+{% if upcoming_events %}
+<section class="upcoming-events-section" aria-labelledby="upcoming-events-heading">
+  <div class="upcoming-events-header">
+    <h3 class="upcoming-events-title" id="upcoming-events-heading">
+      <i class="bi bi-calendar-event ms-2" aria-hidden="true"></i>
+      رویدادهای پیش رو
+    </h3>
+    <a href="{{ events_category_url }}" class="upcoming-events-view-all">
+      مشاهده همه رویدادها
+      <i class="fas fa-chevron-left me-1" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <div class="upcoming-events-scroll" role="list">
+    {% for post in upcoming_events %}
+    <a
+      href="{% url 'post_detail' post.slug %}"
+      class="upcoming-event-card"
+      role="listitem"
+      title="{{ post.title }}"
+    >
+      <div class="upcoming-event-card__date" aria-hidden="true">
+        <span class="upcoming-event-card__day">{{ post.event_start_date|date:"d" }}</span>
+        <span class="upcoming-event-card__month">{{ post.event_start_date|date:"M" }}</span>
+      </div>
+      <div class="upcoming-event-card__body">
+        <h4 class="upcoming-event-card__title">{{ post.title }}</h4>
+        {% if post.event_location %}
+        <p class="upcoming-event-card__location">
+          <i class="fas fa-map-marker-alt ms-1" aria-hidden="true"></i>
+          {{ post.event_location }}
+        </p>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

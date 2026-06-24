@@ -775,3 +775,24 @@ def get_community_statistics():
         'active_experts': active_experts,
         'published_events': published_events,
     }
+
+
+def get_upcoming_events(limit=5):
+    """
+    Return the next published events with event_start_date on or after today,
+    ordered soonest first.
+    """
+    today = timezone.localdate()
+    return list(
+        Post.objects.filter(
+            status=1,
+            is_deleted=False,
+            category__slug='events-announcements',
+            event_start_date__isnull=False,
+            event_start_date__gte=today,
+        )
+        .exclude(slug='')
+        .exclude(slug__isnull=True)
+        .select_related('category')
+        .order_by('event_start_date')[:limit]
+    )

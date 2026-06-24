@@ -22,6 +22,7 @@ from .utils import (
     determine_comment_approval,
     get_category_overview_rows,
     get_community_statistics,
+    get_upcoming_events,
 )
 from .decorators import site_verified_required
 from ads.models import FavoriteAd
@@ -88,6 +89,7 @@ class PostList(generic.ListView):
                 'categories': Category.objects.all().order_by('name'),
                 'popular_posts': [],
                 'featured_post': None,
+                'upcoming_events': [],
             }
             return context
 
@@ -196,6 +198,11 @@ class PostList(generic.ListView):
                 'active_experts': 0,
                 'published_events': 0,
             }
+
+        try:
+            context['upcoming_events'] = get_upcoming_events()
+        except Exception:
+            context['upcoming_events'] = []
 
         try:
             expert_users = User.objects.filter(

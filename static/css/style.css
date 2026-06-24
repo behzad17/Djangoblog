@@ -4720,6 +4720,226 @@ body {
   }
 }
 
+/* Homepage upcoming events — compact discovery row */
+.upcoming-events-section {
+  margin-bottom: 0.65rem;
+  padding: 0 0 0.15rem;
+  direction: rtl;
+}
+
+.upcoming-events-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.upcoming-events-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #334155;
+}
+
+.upcoming-events-title .bi {
+  color: #eb5757;
+  font-size: 1.05em;
+  vertical-align: -0.1em;
+}
+
+.upcoming-events-view-all {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1b5583;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.upcoming-events-view-all:hover,
+.upcoming-events-view-all:focus-visible {
+  color: #164a72;
+  text-decoration: underline;
+}
+
+.upcoming-events-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.65rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  padding-bottom: 0.15rem;
+}
+
+.upcoming-events-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.upcoming-events-scroll::-webkit-scrollbar-thumb {
+  background: rgba(27, 85, 131, 0.22);
+  border-radius: 999px;
+}
+
+.upcoming-event-card {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  gap: 0.55rem;
+  width: min(11.5rem, 44vw);
+  min-height: 4.35rem;
+  padding: 0.55rem 0.6rem;
+  text-decoration: none;
+  background: linear-gradient(135deg, #ffe2dd 0%, rgba(255, 255, 255, 0.92) 100%);
+  border: 2px solid rgba(235, 87, 87, 0.16);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.5);
+  scroll-snap-align: start;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.upcoming-event-card:hover,
+.upcoming-event-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(235, 87, 87, 0.28);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  outline: none;
+}
+
+.upcoming-event-card__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 2.65rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(235, 87, 87, 0.14);
+  text-align: center;
+  line-height: 1.05;
+}
+
+.upcoming-event-card__day {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.upcoming-event-card__month {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #eb5757;
+}
+
+.upcoming-event-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.upcoming-event-card__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #334155;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.upcoming-event-card:hover .upcoming-event-card__title,
+.upcoming-event-card:focus-visible .upcoming-event-card__title {
+  color: #1b5583;
+}
+
+.upcoming-event-card__location {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upcoming-event-card__location i {
+  font-size: 0.62rem;
+  opacity: 0.85;
+}
+
+@media (min-width: 768px) {
+  .upcoming-events-section {
+    margin-bottom: 0.75rem;
+  }
+
+  .upcoming-events-title {
+    font-size: 1.08rem;
+  }
+
+  .upcoming-events-view-all {
+    font-size: 0.82rem;
+  }
+
+  .upcoming-events-scroll {
+    gap: 0.75rem;
+  }
+
+  .upcoming-event-card {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 9.5rem;
+    max-width: none;
+    min-height: 4.6rem;
+    padding: 0.6rem 0.65rem;
+    border-radius: 12px;
+  }
+
+  .upcoming-event-card__day {
+    font-size: 1.45rem;
+  }
+
+  .upcoming-event-card__month {
+    font-size: 0.66rem;
+  }
+
+  .upcoming-event-card__title {
+    font-size: 0.82rem;
+  }
+
+  .upcoming-event-card__location {
+    font-size: 0.72rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .upcoming-events-scroll {
+    overflow-x: visible;
+  }
+
+  .upcoming-event-card {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
 /* Homepage Phase 3 — latest posts prominence, card polish, layout balance */
 @media (min-width: 768px) {
   #category-filter-section {
