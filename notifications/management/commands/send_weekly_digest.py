@@ -24,6 +24,16 @@ class Command(BaseCommand):
         user_id = options['user_id']
 
         summary = send_weekly_digest(dry_run=dry_run, user_id=user_id)
+
+        if summary.get('skipped_weekday'):
+            self.stdout.write(
+                self.style.WARNING(
+                    f'Weekly digest skipped: today is {summary["weekday"]}; '
+                    'digest sends on Friday only.'
+                )
+            )
+            return
+
         stats = summary['stats']
 
         if user_id is not None and summary['recipients'] == 0:

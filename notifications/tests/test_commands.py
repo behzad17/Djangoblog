@@ -1,5 +1,6 @@
-from datetime import timedelta
+from datetime import date, timedelta
 from io import StringIO
+from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -21,6 +22,9 @@ from notifications.tasks import (
     send_expiring_ad_notifications,
     send_weekly_digest,
 )
+
+FRIDAY = date(2024, 1, 5)
+NON_FRIDAY = date(2024, 1, 6)
 
 
 @override_settings(
@@ -210,9 +214,20 @@ class WeeklyDigestCommandTests(TestCase):
         self.assertGreaterEqual(stats['new_businesses'], 1)
         self.assertGreaterEqual(stats['new_pro_ads'], 1)
 
-    def test_send_weekly_digest_emails_opted_in_users_only(self):
+    def test_send_weekly_digest_skips_on_non_friday(self):
+        with patch('notifications.tasks.timezone.localdate', return_value=NON_FRIDAY):
+            summary = send_weekly_digest(dry_run=False)
+
+        self.assertTrue(summary['skipped_weekday'])
+        self.assertEqual(summary['sent'], 0)
+        self.assertEqual(summary['recipients'], 0)
+        self.assertEqual(len(mail.outbox), 0)
+
+    @patch('notifications.tasks.timezone.localdate', return_value=FRIDAY)
+    def test_send_weekly_digest_emails_opted_in_users_only(self, _mock_localdate):
         summary = send_weekly_digest(dry_run=False)
 
+        self.assertFalse(summary['skipped_weekday'])
         self.assertEqual(summary['recipients'], 1)
         self.assertEqual(summary['sent'], 1)
         self.assertEqual(Notification.objects.count(), 0)
@@ -220,23 +235,44 @@ class WeeklyDigestCommandTests(TestCase):
         self.assertEqual(mail.outbox[0].to, ['digest@test.com'])
         self.assertIn('آنچه این هفته در پیوند اتفاق افتاد', mail.outbox[0].subject)
 
-    def test_send_weekly_digest_dry_run_sends_nothing(self):
+    @patch('notifications.tasks.timezone.localdate', return_value=FRIDAY)
+    def test_send_weekly_digest_dry_run_sends_nothing(self, _mock_localdate):
         summary = send_weekly_digest(dry_run=True)
 
+        self.assertFalse(summary['skipped_weekday'])
         self.assertEqual(summary['recipients'], 1)
         self.assertEqual(summary['sent'], 1)
         self.assertEqual(len(mail.outbox), 0)
 
-    def test_send_weekly_digest_respects_user_id_filter(self):
+    def test_send_weekly_digest_dry_run_skips_on_non_friday(self):
+        with patch('notifications.tasks.timezone.localdate', return_value=NON_FRIDAY):
+            summary = send_weekly_digest(dry_run=True)
+
+        self.assertTrue(summary['skipped_weekday'])
+        self.assertEqual(summary['sent'], 0)
+        self.assertEqual(len(mail.outbox), 0)
+
+    @patch('notifications.tasks.timezone.localdate', return_value=FRIDAY)
+    def test_send_weekly_digest_respects_user_id_filter(self, _mock_localdate):
         summary = send_weekly_digest(dry_run=False, user_id=self.subscriber.id)
 
         self.assertEqual(summary['recipients'], 1)
         self.assertEqual(summary['sent'], 1)
 
-    def test_management_command_dry_run(self):
+    @patch('notifications.tasks.timezone.localdate', return_value=FRIDAY)
+    def test_management_command_dry_run(self, _mock_localdate):
         stdout = StringIO()
         call_command('send_weekly_digest', '--dry-run', stdout=stdout)
 
         self.assertIn('DRY RUN', stdout.getvalue())
         self.assertIn('articles=', stdout.getvalue())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_management_command_skips_on_non_friday(self):
+        stdout = StringIO()
+        with patch('notifications.tasks.timezone.localdate', return_value=NON_FRIDAY):
+            call_command('send_weekly_digest', stdout=stdout)
+
+        self.assertIn('skipped', stdout.getvalue())
+        self.assertIn('Friday', stdout.getvalue())
         self.assertEqual(len(mail.outbox), 0)

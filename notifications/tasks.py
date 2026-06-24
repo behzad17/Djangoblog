@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import logging
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -15,6 +16,7 @@ from .services import NotificationService
 
 User = get_user_model()
 EVENTS_CATEGORY_SLUG = 'events-announcements'
+logger = logging.getLogger(__name__)
 
 
 def get_expiring_ads(days=7):
@@ -133,17 +135,45 @@ def get_weekly_digest_recipients(user_id=None):
     return queryset.select_related('notification_preferences').order_by('id')
 
 
+def is_weekly_digest_send_day(for_date=None):
+    """Return True when the weekly digest is allowed to send (Friday, local time)."""
+    target_date = for_date or timezone.localdate()
+    return target_date.weekday() == 4
+
+
 def send_weekly_digest(*, dry_run=False, user_id=None):
     """
     Send the weekly digest email to opted-in users.
 
     Email-only: no in-app Notification rows are created.
+    Sends on Friday only (local timezone); other days exit without sending.
     """
+    today = timezone.localdate()
+    if not is_weekly_digest_send_day(today):
+        logger.info(
+            'Skipping weekly digest: today is %s (%s); digest sends on Friday only.',
+            today.isoformat(),
+            today.strftime('%A'),
+        )
+        return {
+            'skipped_weekday': True,
+            'weekday': today.strftime('%A'),
+            'period_start': None,
+            'period_end': None,
+            'recipients': 0,
+            'sent': 0,
+            'skipped_preference': 0,
+            'dry_run': dry_run,
+            'stats': None,
+        }
+
     period_start, period_end = get_weekly_digest_period()
     stats = build_weekly_digest_stats(period_start, period_end)
     recipients = list(get_weekly_digest_recipients(user_id=user_id))
 
     summary = {
+        'skipped_weekday': False,
+        'weekday': today.strftime('%A'),
         'period_start': period_start.isoformat(),
         'period_end': period_end.isoformat(),
         'recipients': len(recipients),
