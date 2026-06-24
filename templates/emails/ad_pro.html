@@ -1,0 +1,11 @@
+{% extends "emails/base_email_content.html" %}
+
+{% block email_title %}آگهی شما به Pro ارتقا یافت{% endblock %}
+{% block header_title %}تبریک! آگهی شما Pro شد{% endblock %}
+
+{% block email_content %}
+<p>درخواست ارتقای آگهی شما تایید شد.</p>
+<p>از این پس آگهی:</p>
+<p class="highlight">"{{ ad_title }}"</p>
+<p>با امکانات ویژه Pro نمایش داده خواهد شد.</p>
+{% endblock %}

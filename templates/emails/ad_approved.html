@@ -1,0 +1,11 @@
+{% extends "emails/base_email_content.html" %}
+
+{% block email_title %}آگهی شما در پیوند تایید شد{% endblock %}
+{% block header_title %}آگهی شما منتشر شد{% endblock %}
+
+{% block email_content %}
+<p>آگهی شما با عنوان:</p>
+<p class="highlight">"{{ ad_title }}"</p>
+<p>توسط تیم پیوند تایید و منتشر شد.</p>
+<p>اکنون کاربران می‌توانند آگهی شما را مشاهده کنند.</p>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "emails/base_email_content.html" %}
+
+{% block email_title %}نیاز به بازبینی آگهی شما{% endblock %}
+{% block header_title %}آگهی شما تایید نشد{% endblock %}
+
+{% block email_content %}
+<p>آگهی شما با عنوان:</p>
+<p class="highlight">"{{ ad_title }}"</p>
+<p>در وضعیت فعلی قابل انتشار نیست.</p>
+<p>لطفاً توضیحات و محتوای آگهی را بازبینی کرده و مجدداً ارسال کنید.</p>
+{% endblock %}

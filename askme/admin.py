@@ -185,7 +185,14 @@ class QuestionAdmin(admin.ModelAdmin):
     
     def mark_as_answered(self, request, queryset):
         """Bulk action to mark questions as answered (metadata only)."""
-        updated = queryset.update(answered=True, answered_on=timezone.now())
+        updated = 0
+        for question in queryset:
+            if question.answered:
+                continue
+            question.answered = True
+            question.answered_on = timezone.now()
+            question.save(update_fields=['answered', 'answered_on'])
+            updated += 1
         self.message_user(request, f"{updated} question(s) marked as answered.")
     mark_as_answered.short_description = 'Mark selected as answered'
     

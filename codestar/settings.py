@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     'ads',
     'related_links',
     'accounts',
+    'notifications',
 ]
 
 # django-simple-captcha (signup CAPTCHA) tuning:
@@ -151,6 +152,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'codestar.context_processors.admin_stats',  # Admin stats
+                'notifications.context_processors.notification_counts',
             ],
         },
     },

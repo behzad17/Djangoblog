@@ -1,5 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
+
+from notifications.dispatchers import notify_ad_rejected
+
 from .models import AdCategory, Ad, AdComment, AdsViewCount
 
 
@@ -100,6 +103,7 @@ class AdAdmin(admin.ModelAdmin):
         "end_date",
     )
     list_editable = ("is_approved", "is_featured", "featured_priority")
+    actions = ("reject_selected_ads",)
     search_fields = ("title", "target_url", "category__name", "city", "address", "phone")
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_on", "updated_on", "pro_requested_at")
@@ -226,6 +230,19 @@ class AdAdmin(admin.ModelAdmin):
         return format_html('<span style="color: gray;">Free</span>')
 
     pro_request_status.short_description = "Plan Status"
+
+    def reject_selected_ads(self, request, queryset):
+        """Reject selected ads and notify owners explicitly."""
+        rejected = 0
+        for ad in queryset:
+            ad.is_approved = False
+            ad.is_active = False
+            ad.save(update_fields=['is_approved', 'is_active'])
+            notify_ad_rejected(ad)
+            rejected += 1
+        self.message_user(request, f"{rejected} ad(s) rejected and owners notified.")
+
+    reject_selected_ads.short_description = "Reject selected ads and notify owner"
 
 
 @admin.register(AdComment)

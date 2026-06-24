@@ -1,0 +1,59 @@
+<div class="notification-dropdown" data-unread-count="{{ unread_count }}">
+  <div class="notification-dropdown__header">
+    <div class="notification-dropdown__heading">
+      <h2 class="notification-dropdown__title">اعلان‌ها</h2>
+      {% if unread_count %}
+      <p class="notification-dropdown__subtitle">
+        <span id="notificationDropdownUnreadCount">{{ unread_count }}</span>
+        خوانده نشده
+      </p>
+      {% else %}
+      <p class="notification-dropdown__subtitle notification-dropdown__subtitle--muted">
+        همه اعلان‌ها خوانده شده‌اند
+      </p>
+      {% endif %}
+    </div>
+    {% if unread_count %}
+    <button
+      type="button"
+      class="notification-dropdown__mark-all"
+      data-notification-mark-all
+    >
+      خواندن همه
+    </button>
+    {% endif %}
+  </div>
+
+  <div class="notification-dropdown__list" role="list">
+    {% if notifications %}
+      {% for notification in notifications %}
+      <a
+        href="{{ notification.url|default:'#' }}"
+        class="notification-dropdown__item{% if not notification.is_read %} is-unread{% endif %}"
+        role="listitem"
+        data-notification-id="{{ notification.id }}"
+        data-notification-url="{{ notification.url }}"
+        {% if not notification.url %}data-notification-no-url="true"{% endif %}
+      >
+        <span class="notification-dropdown__item-dot" aria-hidden="true"></span>
+        <span class="notification-dropdown__item-body">
+          <span class="notification-dropdown__item-title">{{ notification.title }}</span>
+          <span class="notification-dropdown__item-message">{{ notification.message }}</span>
+          <span class="notification-dropdown__item-time">{{ notification.created_at|date:"Y/n/j H:i" }}</span>
+        </span>
+      </a>
+      {% endfor %}
+    {% else %}
+      <div class="notification-dropdown__empty">
+        <p>اعلانی ندارید</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="notification-dropdown__footer">
+    <a href="{% url 'notifications:list' %}" class="notification-dropdown__view-all">
+      مشاهده همه اعلان‌ها
+      <i class="fas fa-chevron-left ms-1" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>

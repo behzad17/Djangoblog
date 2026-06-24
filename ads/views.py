@@ -7,6 +7,8 @@ from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
+from notifications.dispatchers import notify_ad_favorited
+
 from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 from .signals import notify_admin_pro_request
@@ -528,7 +530,9 @@ def add_ad_to_favorites(request, ad_id):
         user=request.user, ad=ad
     )
 
-    if not created:
+    if created:
+        notify_ad_favorited(ad, request.user)
+    else:
         favorite.delete()  # delete if an ad is saved before
 
     return redirect(

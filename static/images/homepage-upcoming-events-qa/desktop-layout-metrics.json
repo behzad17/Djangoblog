@@ -1,0 +1,95 @@
+{
+  "4": {
+    "scrollDisplay": "flex",
+    "flexWrap": "nowrap",
+    "overflowX": "auto",
+    "gap": "12px",
+    "scrollWidth": 1056,
+    "clientWidth": 1056,
+    "cardFlex": "1 1 0px",
+    "cardMinWidth": "0px",
+    "cardWidth": "255px",
+    "rowCount": 1,
+    "cardsPerRow": [
+      4
+    ],
+    "layoutByRowLeftToRight": [
+      [
+        3,
+        2,
+        1,
+        0
+      ]
+    ],
+    "cardWidths": [
+      255,
+      255,
+      255,
+      255
+    ]
+  },
+  "5": {
+    "scrollDisplay": "flex",
+    "flexWrap": "nowrap",
+    "overflowX": "auto",
+    "gap": "12px",
+    "scrollWidth": 1056,
+    "clientWidth": 1056,
+    "cardFlex": "1 1 0px",
+    "cardMinWidth": "0px",
+    "cardWidth": "201.594px",
+    "rowCount": 1,
+    "cardsPerRow": [
+      5
+    ],
+    "layoutByRowLeftToRight": [
+      [
+        4,
+        3,
+        2,
+        1,
+        0
+      ]
+    ],
+    "cardWidths": [
+      202,
+      202,
+      202,
+      202,
+      202
+    ]
+  },
+  "6": {
+    "scrollDisplay": "flex",
+    "flexWrap": "nowrap",
+    "overflowX": "auto",
+    "gap": "12px",
+    "scrollWidth": 1056,
+    "clientWidth": 1056,
+    "cardFlex": "1 1 0px",
+    "cardMinWidth": "0px",
+    "cardWidth": "166px",
+    "rowCount": 1,
+    "cardsPerRow": [
+      6
+    ],
+    "layoutByRowLeftToRight": [
+      [
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ]
+    ],
+    "cardWidths": [
+      166,
+      166,
+      166,
+      166,
+      166,
+      166
+    ]
+  }
+}

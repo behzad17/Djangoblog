@@ -1,0 +1,11 @@
+{% extends "emails/base_email_content.html" %}
+
+{% block email_title %}فقط ۷ روز تا پایان نمایش آگهی شما باقی مانده است{% endblock %}
+{% block header_title %}آگهی شما به زودی منقضی می‌شود{% endblock %}
+
+{% block email_content %}
+<p>آگهی:</p>
+<p class="highlight">"{{ ad_title }}"</p>
+<p>تنها ۷ روز دیگر فعال خواهد بود.</p>
+<p>برای حفظ نمایش آگهی، لطفاً وضعیت آن را بررسی کنید.</p>
+{% endblock %}

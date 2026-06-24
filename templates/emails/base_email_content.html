@@ -1,0 +1,17 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_title %}{{ email_title|default:"پیوند" }}{% endblock %}
+
+{% block header_title %}{{ header_title|default:"پیوند" }}{% endblock %}
+
+{% block email_body %}
+<div class="greeting">سلام {{ user_name }}</div>
+<div class="content">
+{% block email_content %}{% endblock %}
+</div>
+{% if cta_url and cta_text %}
+<div class="cta-wrap">
+    <a href="{{ cta_url }}" class="cta-button">{{ cta_text }}</a>
+</div>
+{% endif %}
+{% endblock %}

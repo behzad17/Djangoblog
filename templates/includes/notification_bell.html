@@ -1,0 +1,36 @@
+{% load static %}
+<div class="notification-bell" id="notificationBellRoot">
+  <button
+    type="button"
+    class="notification-bell__trigger"
+    id="notificationBellButton"
+    aria-label="اعلان‌ها"
+    aria-expanded="false"
+    aria-controls="notificationBellPanel"
+    data-dropdown-url="{% url 'notifications:dropdown' %}"
+    data-mark-all-url="{% url 'notifications:mark_all_read' %}"
+    data-list-url="{% url 'notifications:list' %}"
+  >
+    <i class="fas fa-bell" aria-hidden="true"></i>
+    <span
+      class="notification-bell__badge{% if not unread_notification_count %} d-none{% endif %}"
+      id="notificationBellBadge"
+      aria-hidden="true"
+    >{% if unread_notification_count > 9 %}9+{% else %}{{ unread_notification_count }}{% endif %}</span>
+  </button>
+
+  <div
+    class="notification-bell__panel"
+    id="notificationBellPanel"
+    role="region"
+    aria-label="فهرست اعلان‌ها"
+    hidden
+  >
+    <div class="notification-bell__panel-inner" id="notificationBellPanelContent">
+      <div class="notification-bell__loading" id="notificationBellLoading" hidden>
+        <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
+        <span class="ms-2">در حال بارگذاری…</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -188,8 +188,11 @@
             </li>
           </ul>
           <!-- Right Side Navigation Links - Authentication -->
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto align-items-center">
             {% if user.is_authenticated %}
+            <li class="nav-item notification-bell-item d-none d-lg-block">
+              {% include 'includes/notification_bell.html' %}
+            </li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle text-white"
@@ -270,6 +273,16 @@
             data-bs-dismiss="offcanvas"
             >پروفایل</a
           >
+          <a
+            href="{% url 'notifications:list' %}"
+            class="mobile-nav-drawer-cta__btn mobile-nav-drawer-cta__btn--notifications"
+            data-bs-dismiss="offcanvas"
+          >
+            <span>اعلان‌ها</span>
+            {% if unread_notification_count %}
+            <span class="mobile-nav-drawer-notifications-count">{{ unread_notification_count }}</span>
+            {% endif %}
+          </a>
           <a
             href="{{ create_post_url }}"
             class="mobile-nav-drawer-cta__btn mobile-nav-drawer-cta__btn--primary"
@@ -481,6 +494,9 @@
     ></script>
     <!-- Custom JavaScript -->
     <script src="{% static 'js/script.js' %}?v={% now 'U' %}" defer></script>
+    {% if user.is_authenticated %}
+    <script src="{% static 'js/notifications.js' %}?v={% now 'U' %}" defer></script>
+    {% endif %}
     <!-- Additional JavaScript Block - For child templates -->
     {% block extras %} {% endblock %}
   </body>

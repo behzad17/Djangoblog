@@ -1,0 +1,13 @@
+پیوند | Peyvand
+
+سلام {{ user_name }}
+
+{% block email_content %}{% endblock %}
+
+{% if cta_url and cta_text %}
+{{ cta_text }}: {{ cta_url }}
+{% endif %}
+
+---
+این پیام از طرف پیوند ارسال شده است.
+{{ site_url }}

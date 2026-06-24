@@ -1,0 +1,16 @@
+{% extends "emails/base_email_content.html" %}
+
+{% block email_title %}آنچه این هفته در پیوند اتفاق افتاد{% endblock %}
+{% block header_title %}خلاصه هفتگی پیوند{% endblock %}
+
+{% block email_content %}
+<p>در هفته گذشته موارد زیر در پیوند منتشر شده‌اند:</p>
+<ul style="padding-right: 20px; margin: 0;">
+    <li>{{ new_articles }} مقاله جدید</li>
+    <li>{{ new_events }} رویداد جدید</li>
+    <li>{{ new_questions }} سوال جدید</li>
+    <li>{{ new_businesses }} کسب‌وکار جدید</li>
+    <li>{{ new_pro_ads }} آگهی Pro جدید</li>
+</ul>
+<p>برای مشاهده آخرین فعالیت‌ها روی دکمه زیر کلیک کنید.</p>
+{% endblock %}

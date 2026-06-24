@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}اعلان‌ها | Peyvand{% endblock title %}
+
+{% block content %}
+<div class="container py-4 py-md-5 notifications-page">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="notifications-page__header">
+        <div>
+          <h1 class="notifications-page__title">
+            <i class="fas fa-bell ms-2" aria-hidden="true"></i>
+            اعلان‌ها
+          </h1>
+          {% if unread_count %}
+          <p class="notifications-page__subtitle">{{ unread_count }} خوانده نشده</p>
+          {% endif %}
+        </div>
+        {% if unread_count %}
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm notifications-page__mark-all"
+          id="notificationsPageMarkAll"
+          data-mark-all-url="{% url 'notifications:mark_all_read' %}"
+        >
+          خواندن همه
+        </button>
+        {% endif %}
+      </div>
+
+      <div class="notifications-page__list">
+        {% if notifications %}
+          {% for notification in notifications %}
+          <article
+            class="notifications-page__item{% if not notification.is_read %} is-unread{% endif %}"
+            data-notification-id="{{ notification.id }}"
+          >
+            <div class="notifications-page__item-content">
+              <h2 class="notifications-page__item-title">{{ notification.title }}</h2>
+              <p class="notifications-page__item-message">{{ notification.message }}</p>
+              <time class="notifications-page__item-time" datetime="{{ notification.created_at|date:'c' }}">
+                {{ notification.created_at|date:"Y/n/j H:i" }}
+              </time>
+            </div>
+            {% if notification.url %}
+            <a
+              href="{{ notification.url }}"
+              class="btn btn-sm btn-primary notifications-page__item-link"
+              data-notification-link="{{ notification.id }}"
+            >
+              مشاهده
+            </a>
+            {% endif %}
+          </article>
+          {% endfor %}
+        {% else %}
+          <div class="notifications-page__empty">
+            <p>اعلانی ندارید</p>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if page_obj.has_other_pages %}
+      <nav class="notifications-page__pagination mt-4" aria-label="صفحه‌بندی اعلان‌ها">
+        <ul class="pagination justify-content-center mb-0">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+          </li>
+          {% endif %}
+          <li class="page-item disabled">
+            <span class="page-link">صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
+          </li>
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">بعدی</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

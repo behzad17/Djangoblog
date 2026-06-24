@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block email_title %}پیوند{% endblock email_title %}</title>
+    <style>
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #00A693 0%, #058073 100%);
+            color: #ffffff;
+            padding: 28px 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .email-body {
+            padding: 30px 24px;
+            color: #334155;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00A693;
+            margin-bottom: 18px;
+        }
+        .content {
+            margin-bottom: 24px;
+            color: #475569;
+        }
+        .content p {
+            margin: 0 0 14px;
+        }
+        .highlight {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .cta-wrap {
+            text-align: center;
+            margin: 28px 0 10px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #1b5583;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 18px 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .disclaimer {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body dir="rtl">
+    <div class="email-container">
+        <div class="email-header">
+            <h1>{% block header_title %}پیوند{% endblock header_title %}</h1>
+        </div>
+        <div class="email-body">
+            {% block email_body %}{% endblock email_body %}
+        </div>
+        <div class="footer">
+            <div>{{ site_name }}</div>
+            <div class="disclaimer">{% block footer_disclaimer %}این پیام از طرف پیوند ارسال شده است.{% endblock footer_disclaimer %}</div>
+        </div>
+    </div>
+</body>
+</html>

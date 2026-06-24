@@ -1,0 +1,242 @@
+from datetime import timedelta
+from io import StringIO
+
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.core import mail
+from django.core.management import call_command
+from django.test import TestCase, override_settings
+from django.utils import timezone
+
+from ads.models import Ad, AdCategory
+from askme.models import Moderator, Question
+from blog.models import Category, Post
+from notifications.constants import NotificationType
+from notifications.models import Notification
+from notifications.services import NotificationService
+from notifications.tasks import (
+    build_weekly_digest_stats,
+    get_expiring_ads,
+    send_expiring_ad_notifications,
+    send_weekly_digest,
+)
+
+
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    DEFAULT_FROM_EMAIL='noreply@test.com',
+    ADMIN_NOTIFICATION_ENABLED=False,
+)
+class ExpiringAdNotificationCommandTests(TestCase):
+    def setUp(self):
+        Site.objects.update_or_create(
+            pk=settings.SITE_ID,
+            defaults={'domain': 'testserver', 'name': 'Peyvand'},
+        )
+        self.owner = User.objects.create_user(
+            username='adowner',
+            email='owner@test.com',
+            password='password123',
+        )
+        self.category = AdCategory.objects.create(name='Services', slug='services')
+
+    def _create_ad(self, **kwargs):
+        today = timezone.localdate()
+        defaults = {
+            'title': 'Expiring Ad',
+            'slug': 'expiring-ad',
+            'category': self.category,
+            'owner': self.owner,
+            'image': 'test/ad-image',
+            'target_url': 'https://example.com',
+            'is_approved': True,
+            'is_active': True,
+            'url_approved': True,
+            'end_date': today + timedelta(days=7),
+        }
+        defaults.update(kwargs)
+        return Ad.objects.create(**defaults)
+
+    def test_get_expiring_ads_filters_by_exact_end_date(self):
+        matching = self._create_ad(slug='match')
+        self._create_ad(slug='other-date', end_date=timezone.localdate() + timedelta(days=3))
+
+        ads = list(get_expiring_ads(days=7))
+
+        self.assertEqual(len(ads), 1)
+        self.assertEqual(ads[0].pk, matching.pk)
+
+    def test_command_sends_notification_and_email(self):
+        ad = self._create_ad()
+
+        with self.captureOnCommitCallbacks(execute=True):
+            summary = send_expiring_ad_notifications(days=7, dry_run=False)
+
+        self.assertEqual(summary['sent'], 1)
+        notification = Notification.objects.get()
+        self.assertEqual(notification.notification_type, NotificationType.AD_EXPIRING)
+        self.assertEqual(notification.recipient, self.owner)
+        self.assertTrue(notification.email_sent)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(ad.title, mail.outbox[0].body)
+
+    def test_command_skips_duplicate_notifications(self):
+        self._create_ad()
+
+        with self.captureOnCommitCallbacks(execute=True):
+            send_expiring_ad_notifications(days=7, dry_run=False)
+
+        summary = send_expiring_ad_notifications(days=7, dry_run=False)
+
+        self.assertEqual(Notification.objects.count(), 1)
+        self.assertEqual(summary['skipped_dedup'], 1)
+        self.assertEqual(summary['sent'], 0)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_command_dry_run_creates_nothing(self):
+        self._create_ad()
+
+        summary = send_expiring_ad_notifications(days=7, dry_run=True)
+
+        self.assertEqual(summary['sent'], 1)
+        self.assertEqual(Notification.objects.count(), 0)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_management_command_output(self):
+        self._create_ad()
+        stdout = StringIO()
+
+        call_command('send_expiring_ad_notifications', '--dry-run', stdout=stdout)
+
+        self.assertIn('DRY RUN', stdout.getvalue())
+        self.assertIn('1 candidate', stdout.getvalue())
+
+
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    DEFAULT_FROM_EMAIL='noreply@test.com',
+)
+class WeeklyDigestCommandTests(TestCase):
+    def setUp(self):
+        Site.objects.update_or_create(
+            pk=settings.SITE_ID,
+            defaults={'domain': 'testserver', 'name': 'Peyvand'},
+        )
+        self.subscriber = User.objects.create_user(
+            username='digestuser',
+            email='digest@test.com',
+            password='password123',
+        )
+        self.opted_out = User.objects.create_user(
+            username='nodigest',
+            email='nodigest@test.com',
+            password='password123',
+        )
+        NotificationService.get_or_create_preferences(self.subscriber)
+        preferences = NotificationService.get_or_create_preferences(self.opted_out)
+        preferences.weekly_digest = False
+        preferences.save(update_fields=['weekly_digest'])
+
+        self.category = Category.objects.create(name='News', slug='news')
+        self.events_category = Category.objects.create(
+            name='Events',
+            slug='events-announcements',
+        )
+        self.author = User.objects.create_user(
+            username='author',
+            email='author@test.com',
+            password='password123',
+        )
+        self.ad_category = AdCategory.objects.create(name='Biz', slug='biz')
+        self.moderator_user = User.objects.create_user(
+            username='mod',
+            email='mod@test.com',
+            password='password123',
+        )
+        for user in (self.author, self.moderator_user):
+            prefs = NotificationService.get_or_create_preferences(user)
+            prefs.weekly_digest = False
+            prefs.save(update_fields=['weekly_digest'])
+        self.moderator = Moderator.objects.create(
+            user=self.moderator_user,
+            expert_title='Expert',
+            slug='expert',
+        )
+
+    def test_build_weekly_digest_stats_counts_activity(self):
+        now = timezone.now()
+        Post.objects.create(
+            title='Article',
+            slug='article',
+            author=self.author,
+            content='Body',
+            status=1,
+            category=self.category,
+        )
+        Post.objects.create(
+            title='Event',
+            slug='event-post',
+            author=self.author,
+            content='Body',
+            status=1,
+            category=self.events_category,
+        )
+        Question.objects.create(
+            user=self.subscriber,
+            moderator=self.moderator,
+            question_text='Private',
+        )
+        Ad.objects.create(
+            title='Business',
+            slug='business-ad',
+            category=self.ad_category,
+            owner=self.subscriber,
+            image='test/ad',
+            target_url='https://example.com',
+            is_approved=True,
+            is_active=True,
+            url_approved=True,
+            plan='pro',
+        )
+
+        period_end = timezone.localdate()
+        period_start = period_end - timedelta(days=7)
+        stats = build_weekly_digest_stats(period_start, period_end)
+
+        self.assertGreaterEqual(stats['new_articles'], 1)
+        self.assertGreaterEqual(stats['new_events'], 1)
+        self.assertGreaterEqual(stats['new_questions'], 1)
+        self.assertGreaterEqual(stats['new_businesses'], 1)
+        self.assertGreaterEqual(stats['new_pro_ads'], 1)
+
+    def test_send_weekly_digest_emails_opted_in_users_only(self):
+        summary = send_weekly_digest(dry_run=False)
+
+        self.assertEqual(summary['recipients'], 1)
+        self.assertEqual(summary['sent'], 1)
+        self.assertEqual(Notification.objects.count(), 0)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ['digest@test.com'])
+        self.assertIn('آنچه این هفته در پیوند اتفاق افتاد', mail.outbox[0].subject)
+
+    def test_send_weekly_digest_dry_run_sends_nothing(self):
+        summary = send_weekly_digest(dry_run=True)
+
+        self.assertEqual(summary['recipients'], 1)
+        self.assertEqual(summary['sent'], 1)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_send_weekly_digest_respects_user_id_filter(self):
+        summary = send_weekly_digest(dry_run=False, user_id=self.subscriber.id)
+
+        self.assertEqual(summary['recipients'], 1)
+        self.assertEqual(summary['sent'], 1)
+
+    def test_management_command_dry_run(self):
+        stdout = StringIO()
+        call_command('send_weekly_digest', '--dry-run', stdout=stdout)
+
+        self.assertIn('DRY RUN', stdout.getvalue())
+        self.assertIn('articles=', stdout.getvalue())
+        self.assertEqual(len(mail.outbox), 0)

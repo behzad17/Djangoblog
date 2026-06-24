@@ -84,6 +84,53 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Notification Preferences -->
+                <div class="col-12">
+                    <div class="card shadow-sm account-settings-card account-notification-prefs-card">
+                        <div class="card-body">
+                            <h5 class="card-title account-settings-title mb-1">
+                                <i class="fas fa-bell account-settings-icon text-primary"></i>اعلان‌ها و ایمیل‌ها
+                            </h5>
+                            <p class="card-text text-muted small account-settings-text mb-3">
+                                انتخاب کنید چه اعلان‌ها و ایمیل‌هایی دریافت کنید.
+                            </p>
+
+                            <form method="post" action="{% url 'account_settings' %}" class="account-notification-prefs-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="notification_preferences">
+
+                                {% if notification_form.non_field_errors %}
+                                    <div class="alert alert-danger py-2 small" role="alert">
+                                        {{ notification_form.non_field_errors }}
+                                    </div>
+                                {% endif %}
+
+                                {% for field in notification_form %}
+                                    <div class="form-check account-notification-pref-item mb-2">
+                                        {{ field }}
+                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                            <span class="account-notification-pref-label">{{ field.label }}</span>
+                                            {% if field.help_text %}
+                                                <small class="d-block text-muted account-notification-pref-help">
+                                                    {{ field.help_text }}
+                                                </small>
+                                            {% endif %}
+                                        </label>
+                                        {% if field.errors %}
+                                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+
+                                <button type="submit" class="btn btn-primary btn-sm account-settings-btn mt-2">
+                                    ذخیره تنظیمات اعلان‌ها
+                                    <i class="fas fa-check ms-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Info Alert -->
