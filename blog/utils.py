@@ -777,7 +777,7 @@ def get_community_statistics():
     }
 
 
-def get_upcoming_events(limit=5):
+def get_upcoming_events(limit=4):
     """
     Return the next published events with event_start_date on or after today,
     ordered soonest first.
