@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load ads_extras %}
 {% block content %}
 <!-- Hero Section -->
 <section
@@ -189,15 +190,25 @@
               {% endif %}
               
               {% if ad.address %}
-              <button type="button" class="btn btn-outline-secondary" disabled>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query={{ ad.address|urlencode }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-outline-secondary text-decoration-none"
+                title="{{ ad.address }}"
+                aria-label="{{ ad.address }}"
+              >
                 <i class="fas fa-home ms-2"></i>{{ ad.address|truncatewords:10 }}
-              </button>
+              </a>
               {% endif %}
               
               {% if ad.phone %}
-              <button type="button" class="btn btn-outline-secondary" disabled>
+              <a
+                href="tel:{{ ad.phone|phone_tel_href }}"
+                class="btn btn-outline-secondary text-decoration-none"
+              >
                 <i class="fas fa-phone me-2"></i><span dir="ltr">{{ ad.phone }}</span>
-              </button>
+              </a>
               {% endif %}
               
               {% if ad.instagram_url %}

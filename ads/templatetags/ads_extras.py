@@ -1,9 +1,26 @@
 from django import template
 from django.templatetags.static import static
+import re
 
 register = template.Library()
 
 DEFAULT_CATEGORY_IMAGE = "images/ads-categories/car-naghlie.jpg"
+
+
+@register.filter
+def phone_tel_href(value):
+    """Return dial-ready phone digits for use in tel: links."""
+    if not value:
+        return ""
+    phone = str(value).strip()
+    digits = re.sub(r"\D", "", phone)
+    if not digits:
+        return ""
+    if phone.startswith("+"):
+        return "+" + digits
+    if phone.startswith("00"):
+        return "+" + digits[2:]
+    return digits
 
 
 @register.filter
