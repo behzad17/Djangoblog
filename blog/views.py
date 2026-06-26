@@ -23,6 +23,7 @@ from .utils import (
     get_category_overview_rows,
     get_community_statistics,
     get_upcoming_events,
+    get_specialist_posts_queryset,
 )
 from .decorators import site_verified_required
 from ads.models import FavoriteAd
@@ -205,25 +206,11 @@ class PostList(generic.ListView):
             context['upcoming_events'] = []
 
         try:
-            expert_users = User.objects.filter(
-                profile__can_publish_without_approval=True
-            )
-            expert_posts_qs = (
-                Post.objects.filter(
-                    status=1,
-                    author__in=expert_users,
-                    is_deleted=False
-                )
-                .exclude(slug='').exclude(slug__isnull=True)
-                .select_related('category', 'author', 'author__profile')
-                .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
-                .order_by('-created_on')
-            )
+            expert_posts_qs = get_specialist_posts_queryset()
             context['popular_posts'] = expert_posts_qs[:10]
-            
+
             # Featured post for hero section (most recent post from experts content section)
-            # Filter out posts with empty/null slugs to prevent NoReverseMatch errors
-            featured_post = expert_posts_qs.exclude(slug='').exclude(slug__isnull=True).first()
+            featured_post = expert_posts_qs.first()
             context['featured_post'] = featured_post
         except Exception as e:
             # If there's an error, set defaults

@@ -762,7 +762,7 @@ def get_community_statistics():
         Post.objects.filter(
             status=1,
             is_deleted=False,
-            category__slug='events-announcements',
+            category__slug=EVENTS_CATEGORY_SLUG,
         )
         .exclude(slug='')
         .exclude(slug__isnull=True)
@@ -777,6 +777,32 @@ def get_community_statistics():
     }
 
 
+EVENTS_CATEGORY_SLUG = 'events-announcements'
+
+
+def get_specialist_posts_queryset():
+    """
+    Return published expert/moderator posts for homepage specialist content.
+    Excludes events category posts even when authored by experts.
+    """
+    expert_users = User.objects.filter(
+        profile__can_publish_without_approval=True
+    )
+    return (
+        Post.objects.filter(
+            status=1,
+            author__in=expert_users,
+            is_deleted=False,
+        )
+        .exclude(slug='')
+        .exclude(slug__isnull=True)
+        .exclude(category__slug=EVENTS_CATEGORY_SLUG)
+        .select_related('category', 'author', 'author__profile')
+        .annotate(comment_count=Count('comments', filter=Q(comments__approved=True)))
+        .order_by('-created_on')
+    )
+
+
 def get_upcoming_events(limit=4):
     """
     Return the next published events with event_start_date on or after today,
@@ -787,7 +813,7 @@ def get_upcoming_events(limit=4):
         Post.objects.filter(
             status=1,
             is_deleted=False,
-            category__slug='events-announcements',
+            category__slug=EVENTS_CATEGORY_SLUG,
             event_start_date__isnull=False,
             event_start_date__gte=today,
         )
