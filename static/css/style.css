@@ -4913,6 +4913,14 @@ body {
     --ue-content-width: calc(
       var(--ue-category-col) + var(--ue-icon-gap) + var(--ue-post-max)
     );
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .upcoming-events-header {
+    width: 100%;
+    max-width: 100%;
   }
 
   .upcoming-events-title {
@@ -4921,6 +4929,11 @@ body {
 
   .upcoming-events-view-all {
     font-size: 0.82rem;
+  }
+
+  .upcoming-events-scroll-wrap {
+    width: 100%;
+    max-width: 100%;
   }
 
   .upcoming-events-scroll {
@@ -4962,10 +4975,18 @@ body {
 }
 
 @media (min-width: 992px) {
-  .upcoming-events-scroll {
+  .upcoming-events-section {
+    padding-right: 150px;
+  }
+
+  .upcoming-events-header,
+  .upcoming-events-scroll-wrap {
     max-width: var(--ue-content-width);
-    margin-right: 150px;
-    margin-left: auto;
+  }
+
+  .upcoming-events-scroll {
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 
