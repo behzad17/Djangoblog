@@ -4764,6 +4764,25 @@ body {
   text-decoration: underline;
 }
 
+.upcoming-events-scroll-wrap {
+  position: relative;
+}
+
+.upcoming-events-scroll-hint {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(27, 85, 131, 0.5);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.95);
+  user-select: none;
+}
+
 .upcoming-events-scroll {
   display: flex;
   flex-wrap: nowrap;
