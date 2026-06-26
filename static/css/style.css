@@ -4972,15 +4972,21 @@ body {
   .upcoming-event-card__location {
     font-size: 0.72rem;
   }
+
+  .upcoming-events-header,
+  .upcoming-events-scroll-wrap {
+    margin-left: 20px;
+  }
 }
 
 @media (min-width: 992px) {
   .upcoming-events-section {
-    padding-right: 150px;
+    padding-right: 130px;
   }
 
   .upcoming-events-header,
   .upcoming-events-scroll-wrap {
+    margin-left: 0;
     max-width: var(--ue-content-width);
   }
 
