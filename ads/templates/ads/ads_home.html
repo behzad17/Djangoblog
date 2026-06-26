@@ -2,6 +2,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/ads-category-slider.css' %}?v={% now 'U' %}">
+<link rel="stylesheet" href="{% static 'css/ads-pro-landing.css' %}?v={% now 'U' %}">
 {% endblock extra_css %}
 
 {% block content %}
@@ -41,6 +42,27 @@
 <div class="container py-4">
   <!-- Category Slider - Center-Mode Navigation -->
   {% include 'ads/includes/_category_slider.html' with categories=categories ad_counts=ad_counts active_category_slug=active_category_slug %}
+
+  <!-- Pro Ads promotional card -->
+  <aside class="card shadow-sm mt-4" aria-labelledby="ads-pro-promo-title">
+    <div class="card-body p-3 p-md-4">
+      <div class="row align-items-center g-3">
+        <div class="col-md">
+          <h2 id="ads-pro-promo-title" class="ads-pro-promo-card__title h5 mb-2">
+            تبلیغ Pro برای چه کسانی مناسب است؟
+          </h2>
+          <p class="ads-pro-promo-card__text mb-0">
+            اگر می‌خواهید کسب‌وکارتان حرفه‌ای‌تر معرفی شود و اطلاعات کامل‌تری در اختیار کاربران قرار دهید، امکانات نسخه Pro را مشاهده کنید.
+          </p>
+        </div>
+        <div class="col-md-auto text-md-start text-center">
+          <a href="{% url 'ads:pro_landing' %}" class="btn btn-outline-secondary btn-sm">
+            مقایسه نسخه رایگان و Pro
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
 </div>
 {% endblock content %}
 

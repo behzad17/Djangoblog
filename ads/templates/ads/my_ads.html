@@ -95,6 +95,11 @@
               <i class="fas fa-clock ms-1"></i>درخواست Pro ثبت شده
             </span>
             {% endif %}
+            {% if ad.plan == 'free' and not ad.pro_requested %}
+            <p class="mb-0 mt-2">
+              <a href="{% url 'ads:pro_landing' %}" class="text-muted ads-pro-context-link">امکانات تبلیغ Pro را ببینید</a>
+            </p>
+            {% endif %}
           </div>
 
           <div class="mb-2">

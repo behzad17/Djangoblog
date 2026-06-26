@@ -16,6 +16,11 @@ from .signals import notify_admin_pro_request
 SOCIAL_URL_FIELDS = ('instagram_url', 'telegram_url', 'website_url')
 
 
+def pro_ads_landing(request):
+    """Marketing page for Peyvand Pro ads (UI only)."""
+    return render(request, 'ads/pro_landing.html')
+
+
 def _visible_ads_queryset():
     """
     Base queryset for ads that should be visible on the site.

@@ -5,6 +5,7 @@ app_name = "ads"
 
 urlpatterns = [
     path("", views.ad_category_list, name="ads_home"),
+    path("pro/", views.pro_ads_landing, name="pro_landing"),
     path("category/<slug:category_slug>/", views.ad_list_by_category, name="ads_by_category"),
     path("ad/<slug:slug>/", views.ad_detail, name="ad_detail"),
     # User ad management

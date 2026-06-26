@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تبلیغ Pro پیوند | معرفی حرفه‌ای کسب‌وکار{% endblock title %}
+
+{% block meta_description %}با تبلیغ Pro در پیوند، کسب‌وکار خود را حرفه‌ای‌تر به جامعه ایرانیان سوئد معرفی کنید. مقایسه امکانات نسخه رایگان و Pro.{% endblock meta_description %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'ads:pro_landing' %}{% endblock canonical_url %}
+
+{% block extra_meta %}
+<meta property="og:type" content="website" />
+<meta property="og:title" content="تبلیغ Pro پیوند | معرفی حرفه‌ای کسب‌وکار" />
+<meta property="og:description" content="با تبلیغ Pro در پیوند، کسب‌وکار خود را حرفه‌ای‌تر به جامعه ایرانیان سوئد معرفی کنید. مقایسه امکانات نسخه رایگان و Pro." />
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'ads:pro_landing' %}" />
+<meta property="og:locale" content="fa_IR" />
+<meta property="og:site_name" content="Peyvand" />
+{% endblock extra_meta %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ads-pro-landing.css' %}?v={% now 'U' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<!-- Hero -->
+<section
+  class="hero-section text-white mb-4 ads-hero-section"
+  style="background: #A4D2E0; padding: 3rem 0;"
+  aria-labelledby="ads-pro-hero-title"
+>
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8 ads-hero-column">
+        <h1 id="ads-pro-hero-title" class="hero-title mb-3">
+          کسب‌وکار خود را حرفه‌ای‌تر به جامعه ایرانیان سوئد معرفی کنید
+        </h1>
+        <p class="hero-subtitle mb-3">
+          با تبلیغ Pro در پیوند، کسب‌وکار شما با امکانات کامل‌تر معرفی می‌شود و کاربران می‌توانند راحت‌تر با خدمات، اطلاعات تماس و راه‌های ارتباطی شما آشنا شوند.
+        </p>
+        <div class="hero-buttons d-flex flex-wrap justify-content-center">
+          <div class="text-center">
+            {% if user.is_authenticated %}
+            <a href="{% url 'ads:create_ad' %}" class="btn btn-light">
+              <i class="fas fa-plus ms-2" aria-hidden="true"></i>ایجاد تبلیغ
+            </a>
+            {% else %}
+            <a href="{% url 'account_signup' %}" class="btn btn-light">
+              <i class="fas fa-user-plus ms-2" aria-hidden="true"></i>ثبت‌نام و ایجاد تبلیغ
+            </a>
+            {% endif %}
+            <p class="ads-pro-context-link text-muted mb-0 mt-2">
+              پس از ایجاد تبلیغ، می‌توانید درخواست ارتقا به نسخه Pro را ثبت کنید.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Introduction -->
+<div class="container py-4">
+  <section aria-labelledby="ads-pro-intro-title" class="text-center">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 id="ads-pro-intro-title" class="ads-pro-section__title">چرا تبلیغ Pro؟</h2>
+        <p class="ads-pro-section__lead mb-0">
+          نسخه رایگان برای معرفی اولیه کسب‌وکار مناسب است.
+          اگر می‌خواهید اطلاعات کامل‌تری در اختیار مخاطبان قرار دهید، صفحه اختصاصی برای کسب‌وکارتان داشته باشید و ارتباط مؤثرتری با کاربران برقرار کنید، نسخه Pro انتخاب مناسب‌تری خواهد بود.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Comparison Table -->
+<section class="pv-bg-main py-4" aria-labelledby="ads-pro-compare-title">
+  <div class="container">
+    <h2 id="ads-pro-compare-title" class="ads-pro-section__title text-center mb-4">مقایسه امکانات</h2>
+    <div class="card shadow-sm ads-pro-compare-wrap">
+      <div class="table-responsive">
+        <table class="table ads-pro-compare-table mb-0">
+          <thead>
+            <tr>
+              <th scope="col">امکانات</th>
+              <th scope="col">رایگان</th>
+              <th scope="col">Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">نمایش در فهرست تبلیغ‌ها</th>
+              <td><span aria-label="دارد">✅</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">صفحه اختصاصی برای تبلیغ</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">باز شدن کارت تبلیغ با کلیک</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">نمایش نشان Pro</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">نمایش عمومی اطلاعات تماس</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">نمایش عمومی وب‌سایت</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">نمایش عمومی اینستاگرام</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">نمایش عمومی تلگرام</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">گالری تصاویر</th>
+              <td><span aria-label="دارد">✅</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">امکان ثبت نظر کاربران</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+            <tr>
+              <th scope="row">امکان افزودن به علاقه‌مندی‌ها</th>
+              <td><span aria-label="ندارد">❌</span></td>
+              <td><span aria-label="دارد">✅</span></td>
+            </tr>
+          </tbody>
+          <caption>
+            این مقایسه بر اساس امکانات فعلی پیوند تهیه شده است و ممکن است با اضافه شدن قابلیت‌های جدید به‌روزرسانی شود.
+          </caption>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits -->
+<div class="container py-4">
+  <section aria-labelledby="ads-pro-benefits-title">
+    <h2 id="ads-pro-benefits-title" class="visually-hidden">مزایای تبلیغ Pro</h2>
+    <div class="row g-3 g-md-4">
+      <div class="col-md-6 col-lg-3">
+        <article class="card shadow-sm h-100 ads-pro-benefit-card">
+          <div class="card-body">
+            <div class="ads-pro-benefit-card__icon" aria-hidden="true">
+              <i class="fas fa-store"></i>
+            </div>
+            <h3 class="ads-pro-benefit-card__title">معرفی حرفه‌ای</h3>
+            <p class="ads-pro-benefit-card__text mb-0">
+              برای کسب‌وکار خود یک صفحه اختصاصی داشته باشید و خدماتتان را کامل‌تر معرفی کنید.
+            </p>
+          </div>
+        </article>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <article class="card shadow-sm h-100 ads-pro-benefit-card">
+          <div class="card-body">
+            <div class="ads-pro-benefit-card__icon" aria-hidden="true">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="ads-pro-benefit-card__title">اعتماد بیشتر</h3>
+            <p class="ads-pro-benefit-card__text mb-0">
+              اطلاعات کامل و صفحه اختصاصی باعث می‌شود کاربران با اطمینان بیشتری با شما ارتباط برقرار کنند.
+            </p>
+          </div>
+        </article>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <article class="card shadow-sm h-100 ads-pro-benefit-card">
+          <div class="card-body">
+            <div class="ads-pro-benefit-card__icon" aria-hidden="true">
+              <i class="fas fa-link"></i>
+            </div>
+            <h3 class="ads-pro-benefit-card__title">ارتباط آسان‌تر</h3>
+            <p class="ads-pro-benefit-card__text mb-0">
+              راه‌های ارتباطی مانند وب‌سایت و شبکه‌های اجتماعی را در اختیار کاربران قرار دهید.
+            </p>
+          </div>
+        </article>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <article class="card shadow-sm h-100 ads-pro-benefit-card">
+          <div class="card-body">
+            <div class="ads-pro-benefit-card__icon" aria-hidden="true">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="ads-pro-benefit-card__title">تجربه بهتر برای کاربران</h3>
+            <p class="ads-pro-benefit-card__text mb-0">
+              کاربران می‌توانند تبلیغ شما را مشاهده کنند، آن را ذخیره کنند و درباره آن نظر ثبت کنند.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Featured -->
+<section class="pv-bg-main py-4" aria-labelledby="ads-pro-featured-title">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm ads-pro-featured text-center">
+          <div class="card-body p-4">
+            <h2 id="ads-pro-featured-title" class="ads-pro-featured__title">⭐ Featured چیست؟</h2>
+            <p class="ads-pro-featured__text mb-0">
+              Featured یک قابلیت ویژه برای نمایش برجسته‌تر تبلیغ‌ها است.
+              این قابلیت از نسخه Pro مستقل است و در آینده برای افزایش میزان دیده‌شدن تبلیغ‌ها ارائه خواهد شد.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<div class="container py-4">
+  <section aria-labelledby="ads-pro-faq-title">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 id="ads-pro-faq-title" class="ads-pro-section__title text-center mb-4">سؤالات متداول</h2>
+        <div class="card shadow-sm">
+          <div class="card-body p-0">
+            <div class="accordion ads-pro-faq" id="adsProFaq">
+              <div class="accordion-item border-0 border-bottom">
+                <h3 class="accordion-header" id="adsProFaqHeading1">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#adsProFaq1" aria-expanded="true" aria-controls="adsProFaq1">
+                    آیا بعداً می‌توانم تبلیغ رایگان خود را به Pro ارتقا دهم؟
+                  </button>
+                </h3>
+                <div id="adsProFaq1" class="accordion-collapse collapse show" aria-labelledby="adsProFaqHeading1" data-bs-parent="#adsProFaq">
+                  <div class="accordion-body">
+                    بله، هر زمان که بخواهید می‌توانید درخواست ارتقا ثبت کنید.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item border-0 border-bottom">
+                <h3 class="accordion-header" id="adsProFaqHeading2">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adsProFaq2" aria-expanded="false" aria-controls="adsProFaq2">
+                    آیا اطلاعات تبلیغ من حفظ می‌شود؟
+                  </button>
+                </h3>
+                <div id="adsProFaq2" class="accordion-collapse collapse" aria-labelledby="adsProFaqHeading2" data-bs-parent="#adsProFaq">
+                  <div class="accordion-body">
+                    بله، پس از ارتقا اطلاعات تبلیغ حفظ خواهد شد.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item border-0 border-bottom">
+                <h3 class="accordion-header" id="adsProFaqHeading3">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adsProFaq3" aria-expanded="false" aria-controls="adsProFaq3">
+                    آیا بعداً می‌توانم تبلیغ خود را ویرایش کنم؟
+                  </button>
+                </h3>
+                <div id="adsProFaq3" class="accordion-collapse collapse" aria-labelledby="adsProFaqHeading3" data-bs-parent="#adsProFaq">
+                  <div class="accordion-body">
+                    بله. پس از هر ویرایش، تبلیغ مطابق روند فعلی دوباره بررسی خواهد شد.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item border-0">
+                <h3 class="accordion-header" id="adsProFaqHeading4">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adsProFaq4" aria-expanded="false" aria-controls="adsProFaq4">
+                    تفاوت Pro و Featured چیست؟
+                  </button>
+                </h3>
+                <div id="adsProFaq4" class="accordion-collapse collapse" aria-labelledby="adsProFaqHeading4" data-bs-parent="#adsProFaq">
+                  <div class="accordion-body">
+                    نسخه Pro امکانات بیشتری برای معرفی کسب‌وکار در اختیار شما قرار می‌دهد.
+                    Featured یک قابلیت مستقل برای نمایش برجسته‌تر تبلیغ است که در آینده ارائه خواهد شد.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Final CTA -->
+<section class="ads-pro-cta py-4" aria-labelledby="ads-pro-cta-title">
+  <div class="container text-center">
+    <h2 id="ads-pro-cta-title" class="ads-pro-cta__title mb-3">
+      آماده‌اید کسب‌وکار خود را حرفه‌ای‌تر معرفی کنید؟
+    </h2>
+    <p class="ads-pro-cta__text mb-3">
+      با تبلیغ Pro اطلاعات کامل‌تری در اختیار مخاطبان قرار دهید و حضور حرفه‌ای‌تری در پیوند داشته باشید.
+    </p>
+    <div class="hero-buttons d-flex flex-wrap justify-content-center">
+      <div class="text-center">
+        {% if user.is_authenticated %}
+        <a href="{% url 'ads:create_ad' %}" class="btn btn-light">
+          <i class="fas fa-plus ms-2" aria-hidden="true"></i>ایجاد تبلیغ
+        </a>
+        {% else %}
+        <a href="{% url 'account_signup' %}" class="btn btn-light">
+          <i class="fas fa-user-plus ms-2" aria-hidden="true"></i>ثبت‌نام و ایجاد تبلیغ
+        </a>
+        {% endif %}
+        <p class="ads-pro-context-link text-white-50 mb-0 mt-2">
+          پس از ایجاد تبلیغ، می‌توانید درخواست ارتقا به نسخه Pro را ثبت کنید.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

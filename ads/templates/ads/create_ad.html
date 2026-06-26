@@ -15,6 +15,9 @@
             <i class="fas fa-info-circle ms-2"></i>
             تبلیغ شما پس از ایجاد، در انتظار تایید مدیر خواهد بود. پس از تایید، تبلیغ شما در سایت نمایش داده می‌شود.
           </div>
+          <p class="text-muted text-center ads-pro-context-link mb-3">
+            <a href="{% url 'ads:pro_landing' %}" class="text-muted">مقایسه امکانات تبلیغ رایگان و Pro</a>
+          </p>
           
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}

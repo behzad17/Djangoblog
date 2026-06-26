@@ -1,0 +1,264 @@
+/* Peyvand Pro Ads landing page — aligned with site tokens and ads patterns */
+
+/* Secondary hero button on light-blue ads hero */
+.ads-hero-section .hero-buttons .btn-ads-pro-secondary {
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.35);
+  color: #415a77;
+  border: 2px solid rgba(65, 90, 119, 0.35);
+}
+
+.ads-hero-section .hero-buttons .btn-ads-pro-secondary:hover,
+.ads-hero-section .hero-buttons .btn-ads-pro-secondary:focus {
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #415a77;
+  border-color: rgba(65, 90, 119, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(27, 85, 131, 0.12);
+}
+
+/* Section headings and body copy */
+.ads-pro-section__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--pv-text-main, #2c2c2c);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.ads-pro-section__lead {
+  color: var(--pv-text-muted, #6b7280);
+  line-height: 1.75;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+@media (min-width: 768px) {
+  .ads-pro-section__lead {
+    text-align: justify;
+  }
+}
+
+/* Comparison table */
+.ads-pro-compare-wrap {
+  overflow: hidden;
+}
+
+.ads-pro-compare-table {
+  width: 100%;
+  min-width: 320px;
+  margin-bottom: 0;
+}
+
+.ads-pro-compare-table caption {
+  caption-side: bottom;
+  padding: 1rem 1.25rem;
+  color: var(--pv-text-muted, #6b7280);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.ads-pro-compare-table thead th {
+  background: #1b5583;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.85rem 1rem;
+  border: none;
+  white-space: nowrap;
+}
+
+.ads-pro-compare-table thead th:first-child {
+  text-align: right;
+}
+
+.ads-pro-compare-table tbody th {
+  font-weight: 500;
+  color: var(--pv-text-main, #2c2c2c);
+  padding: 0.8rem 1rem;
+  background: var(--pv-bg-card, #fff);
+  border-bottom: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+}
+
+.ads-pro-compare-table tbody td {
+  text-align: center;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+  font-size: 1.05rem;
+  background: var(--pv-bg-card, #fff);
+}
+
+.ads-pro-compare-table tbody tr:last-child th,
+.ads-pro-compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ads-pro-compare-table tbody tr:nth-child(even) th,
+.ads-pro-compare-table tbody tr:nth-child(even) td {
+  background: var(--pv-bg-main, #f5f7f6);
+}
+
+/* Benefit cards — Bootstrap card + shadow-sm base */
+.ads-pro-benefit-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ads-pro-benefit-card:hover {
+  transform: translateY(-2px);
+}
+
+.ads-pro-benefit-card__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(27, 85, 131, 0.1);
+  color: #1b5583;
+  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
+}
+
+.ads-pro-benefit-card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pv-text-main, #2c2c2c);
+  margin-bottom: 0.5rem;
+}
+
+.ads-pro-benefit-card__text {
+  color: var(--pv-text-muted, #6b7280);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Featured callout — matches glass-card-badge-featured gold */
+.ads-pro-featured {
+  background: rgba(255, 193, 7, 0.12);
+  border: 1px dashed rgba(255, 193, 7, 0.65);
+}
+
+.ads-pro-featured__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #415a77;
+  margin-bottom: 0.75rem;
+}
+
+.ads-pro-featured__text {
+  color: var(--pv-text-muted, #6b7280);
+  line-height: 1.75;
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* FAQ accordion */
+.ads-pro-faq .accordion-button {
+  font-weight: 600;
+  color: var(--pv-text-main, #2c2c2c);
+  text-align: right;
+  padding: 1rem 1.25rem;
+  line-height: 1.5;
+}
+
+.ads-pro-faq .accordion-button:not(.collapsed) {
+  background: rgba(27, 85, 131, 0.06);
+  color: #1b5583;
+  box-shadow: none;
+}
+
+.ads-pro-faq .accordion-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(27, 85, 131, 0.25);
+  border-color: rgba(27, 85, 131, 0.35);
+}
+
+.ads-pro-faq .accordion-body {
+  color: var(--pv-text-muted, #6b7280);
+  line-height: 1.75;
+  padding: 0 1.25rem 1rem;
+}
+
+/* Final CTA — navbar/footer navy */
+.ads-pro-cta {
+  background: #1b5583;
+  color: #fff;
+}
+
+.ads-pro-cta__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.ads-pro-cta__text {
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.ads-pro-cta .hero-buttons .btn-light {
+  color: #1b5583;
+}
+
+/* Ads home promotional card */
+.ads-pro-promo-card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--pv-text-main, #2c2c2c);
+}
+
+.ads-pro-promo-card__text {
+  color: var(--pv-text-muted, #6b7280);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.ads-pro-context-link {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 767.98px) {
+  .ads-pro-section__title {
+    font-size: 1.25rem;
+  }
+
+  .ads-pro-cta__title {
+    font-size: 1.25rem;
+  }
+
+  .ads-hero-section .hero-buttons .btn,
+  .ads-pro-cta .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .ads-pro-compare-table thead th,
+  .ads-pro-compare-table tbody th,
+  .ads-pro-compare-table tbody td {
+    padding: 0.65rem 0.6rem;
+    font-size: 0.875rem;
+  }
+
+  .ads-pro-compare-table tbody td {
+    font-size: 0.95rem;
+  }
+
+  .ads-pro-faq .accordion-button {
+    font-size: 0.95rem;
+    padding: 0.85rem 1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .ads-pro-featured__title {
+    font-size: 1.1rem;
+  }
+}

@@ -29,6 +29,7 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}" />
+    {% block extra_meta %}{% endblock extra_meta %}
 
     <!-- Google Fonts CSS - Loading custom fonts for the site -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
