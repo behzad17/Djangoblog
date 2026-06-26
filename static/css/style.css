@@ -4918,17 +4918,22 @@ body {
   }
 
   .upcoming-events-scroll {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
+    overflow: visible;
+    scroll-snap-type: none;
   }
 
   .upcoming-event-card {
-    flex: 1 1 0;
+    flex: unset;
     width: auto;
-    min-width: 9.5rem;
+    min-width: 0;
     max-width: none;
     min-height: 4.6rem;
     padding: 0.6rem 0.65rem;
     border-radius: 12px;
+    scroll-snap-align: unset;
   }
 
   .upcoming-event-card__day {
@@ -4950,12 +4955,7 @@ body {
 
 @media (min-width: 1200px) {
   .upcoming-events-scroll {
-    overflow-x: visible;
-  }
-
-  .upcoming-event-card {
-    flex: 1 1 0;
-    min-width: 0;
+    gap: 0.85rem;
   }
 }
 
