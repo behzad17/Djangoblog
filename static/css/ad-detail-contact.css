@@ -1,0 +1,190 @@
+/* Ad detail — contact & location card (scoped to ad_detail.html) */
+
+.ad-contact-card {
+  background: var(--pv-bg-card, #fff);
+  border: 1px solid rgba(27, 85, 131, 0.14);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  text-align: right;
+  box-shadow: 0 2px 12px rgba(27, 85, 131, 0.06);
+}
+
+.ad-contact-card--pro {
+  border-color: rgba(254, 204, 2, 0.5);
+  background: linear-gradient(160deg, #fffdf5 0%, #f8fafc 55%, #fff 100%);
+  box-shadow: 0 4px 16px rgba(27, 85, 131, 0.08);
+}
+
+.ad-contact-card__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1b5583;
+  margin: 0 0 0.65rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(27, 85, 131, 0.1);
+}
+
+.ad-contact-card--pro .ad-contact-card__title {
+  color: #164a72;
+}
+
+.ad-contact-card__title i {
+  color: #fecc02;
+  font-size: 0.95rem;
+}
+
+.ad-contact-card__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ad-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.6rem 0.35rem;
+  border-bottom: 1px solid rgba(27, 85, 131, 0.08);
+}
+
+.ad-contact-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0.15rem;
+}
+
+.ad-contact-row__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: rgba(27, 85, 131, 0.09);
+  color: #1b5583;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.88rem;
+}
+
+.ad-contact-card--pro .ad-contact-row__icon {
+  background: rgba(254, 204, 2, 0.22);
+  color: #8a6914;
+}
+
+.ad-contact-row__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.ad-contact-row__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--pv-text-muted, #6b7280);
+}
+
+.ad-contact-row__value {
+  font-size: 0.9rem;
+  color: var(--pv-text-main, #2c2c2c);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.ad-contact-row__value--ltr {
+  direction: ltr;
+  text-align: right;
+  unicode-bidi: plaintext;
+}
+
+.ad-contact-row__action {
+  color: rgba(27, 85, 131, 0.3);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.ad-contact-row--link {
+  text-decoration: none;
+  color: inherit;
+  border-radius: 8px;
+  margin-inline: -0.2rem;
+  padding-inline: 0.45rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ad-contact-row--link:hover {
+  background: rgba(27, 85, 131, 0.06);
+}
+
+.ad-contact-row--link:hover .ad-contact-row__value {
+  color: #1b5583;
+}
+
+.ad-contact-row--link:hover .ad-contact-row__action {
+  color: #1b5583;
+}
+
+.ad-contact-row--link:focus-visible {
+  outline: 2px solid rgba(27, 85, 131, 0.45);
+  outline-offset: 1px;
+  background: rgba(27, 85, 131, 0.05);
+}
+
+.ad-contact-row--static {
+  cursor: default;
+}
+
+.ad-contact-row--disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ad-contact-row--disabled .ad-contact-row__value {
+  color: var(--pv-text-muted, #6b7280);
+  font-size: 0.85rem;
+}
+
+.ad-contact-row--instagram .ad-contact-row__icon {
+  color: #c13584;
+  background: rgba(193, 53, 132, 0.1);
+}
+
+.ad-contact-row--telegram .ad-contact-row__icon {
+  color: #229ed9;
+  background: rgba(34, 158, 217, 0.1);
+}
+
+.ad-contact-row--website .ad-contact-row__icon {
+  color: #0d9488;
+  background: rgba(13, 148, 136, 0.1);
+}
+
+@media (min-width: 768px) {
+  .ad-contact-card {
+    max-width: 28rem;
+    margin-inline: auto;
+    padding: 1.1rem 1.25rem;
+  }
+
+  .ad-contact-row {
+    min-height: 52px;
+    padding: 0.65rem 0.5rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ad-contact-row {
+    min-height: 52px;
+    padding: 0.7rem 0.35rem;
+  }
+
+  .ad-contact-row--link {
+    min-height: 52px;
+  }
+}

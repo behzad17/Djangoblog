@@ -2,6 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load ads_extras %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ad-detail-contact.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
+
 {% block content %}
 <!-- Hero Section -->
 <section
@@ -176,92 +181,163 @@
           </div>
           {% endif %}
           
-          <!-- Contact/Location Information Buttons -->
+          <!-- Contact/Location Information -->
           {% if ad.city or ad.address or ad.phone or ad.instagram_url or ad.telegram_url or ad.website_url %}
-          <div class="mt-4">
-            <h6 class="mb-3 text-center">
-              <i class="fas fa-info-circle ms-2"></i>اطلاعات تماس و موقعیت
-            </h6>
-            <div class="d-flex flex-wrap justify-content-center gap-2">
-              {% if ad.city %}
-              <button type="button" class="btn btn-outline-secondary" disabled>
-                <i class="fas fa-map-marker-alt ms-2"></i>{{ ad.city }}
-              </button>
-              {% endif %}
-              
+          <div class="ad-contact-card mt-4{% if ad.plan == 'pro' %} ad-contact-card--pro{% endif %}">
+            <h2 class="ad-contact-card__title">
+              <i class="fas fa-info-circle" aria-hidden="true"></i>
+              اطلاعات تماس و موقعیت
+            </h2>
+            <div class="ad-contact-card__list">
               {% if ad.address %}
               <a
                 href="https://www.google.com/maps/search/?api=1&query={{ ad.address|urlencode }}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="btn btn-outline-secondary text-decoration-none"
+                class="ad-contact-row ad-contact-row--link"
                 title="{{ ad.address }}"
-                aria-label="{{ ad.address }}"
+                aria-label="آدرس: {{ ad.address }}"
               >
-                <i class="fas fa-home ms-2"></i>{{ ad.address|truncatewords:10 }}
+                <span class="ad-contact-row__icon" aria-hidden="true">
+                  <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <span class="ad-contact-row__body">
+                  <span class="ad-contact-row__label">آدرس</span>
+                  <span class="ad-contact-row__value">{{ ad.address }}</span>
+                </span>
+                <span class="ad-contact-row__action" aria-hidden="true">
+                  <i class="fas fa-external-link-alt"></i>
+                </span>
               </a>
               {% endif %}
-              
+
               {% if ad.phone %}
               <a
                 href="tel:{{ ad.phone|phone_tel_href }}"
-                class="btn btn-outline-secondary text-decoration-none"
+                class="ad-contact-row ad-contact-row--link"
+                aria-label="تماس: {{ ad.phone }}"
               >
-                <i class="fas fa-phone me-2"></i><span dir="ltr">{{ ad.phone }}</span>
+                <span class="ad-contact-row__icon" aria-hidden="true">
+                  <i class="fas fa-phone"></i>
+                </span>
+                <span class="ad-contact-row__body">
+                  <span class="ad-contact-row__label">شماره تماس</span>
+                  <span class="ad-contact-row__value ad-contact-row__value--ltr">{{ ad.phone }}</span>
+                </span>
+                <span class="ad-contact-row__action" aria-hidden="true">
+                  <i class="fas fa-phone-alt"></i>
+                </span>
               </a>
               {% endif %}
-              
-              {% if ad.instagram_url %}
-                {% if ad.social_urls_approved %}
-                <a
-                  href="{{ ad.instagram_url }}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn btn-outline-danger"
-                >
-                  <i class="fab fa-instagram ms-2"></i>اینستاگرام
-                </a>
-                {% else %}
-                <button type="button" class="btn btn-outline-secondary" disabled title="لینک در انتظار تایید">
-                  <i class="fab fa-instagram ms-2"></i>اینستاگرام
-                  <small class="d-block">(در انتظار تایید)</small>
-                </button>
-                {% endif %}
+
+              {% if ad.city %}
+              <div class="ad-contact-row ad-contact-row--static">
+                <span class="ad-contact-row__icon" aria-hidden="true">
+                  <i class="fas fa-city"></i>
+                </span>
+                <span class="ad-contact-row__body">
+                  <span class="ad-contact-row__label">شهر</span>
+                  <span class="ad-contact-row__value">{{ ad.city }}</span>
+                </span>
+              </div>
               {% endif %}
-              
-              {% if ad.telegram_url %}
-                {% if ad.social_urls_approved %}
-                <a
-                  href="{{ ad.telegram_url }}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn btn-outline-primary"
-                >
-                  <i class="fab fa-telegram-plane ms-2"></i>تلگرام
-                </a>
-                {% else %}
-                <button type="button" class="btn btn-outline-secondary" disabled title="لینک در انتظار تایید">
-                  <i class="fab fa-telegram-plane ms-2"></i>تلگرام
-                  <small class="d-block">(در انتظار تایید)</small>
-                </button>
-                {% endif %}
-              {% endif %}
-              
+
               {% if ad.website_url %}
                 {% if ad.social_urls_approved %}
                 <a
                   href="{{ ad.website_url }}"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="btn btn-outline-info"
+                  class="ad-contact-row ad-contact-row--link ad-contact-row--website"
+                  aria-label="وب‌سایت: {{ ad.website_url }}"
                 >
-                  <i class="fas fa-globe ms-2"></i>وب‌سایت
+                  <span class="ad-contact-row__icon" aria-hidden="true">
+                    <i class="fas fa-globe"></i>
+                  </span>
+                  <span class="ad-contact-row__body">
+                    <span class="ad-contact-row__label">وب‌سایت</span>
+                    <span class="ad-contact-row__value ad-contact-row__value--ltr">{{ ad.website_url|truncatechars:42 }}</span>
+                  </span>
+                  <span class="ad-contact-row__action" aria-hidden="true">
+                    <i class="fas fa-external-link-alt"></i>
+                  </span>
                 </a>
                 {% else %}
-                <button type="button" class="btn btn-outline-secondary" disabled title="لینک در انتظار تایید">
-                  <i class="fas fa-globe ms-2"></i>وب‌سایت
-                  <small class="d-block">(در انتظار تایید)</small>
-                </button>
+                <div class="ad-contact-row ad-contact-row--disabled" title="لینک در انتظار تایید">
+                  <span class="ad-contact-row__icon" aria-hidden="true">
+                    <i class="fas fa-globe"></i>
+                  </span>
+                  <span class="ad-contact-row__body">
+                    <span class="ad-contact-row__label">وب‌سایت</span>
+                    <span class="ad-contact-row__value">در انتظار تایید</span>
+                  </span>
+                </div>
+                {% endif %}
+              {% endif %}
+
+              {% if ad.instagram_url %}
+                {% if ad.social_urls_approved %}
+                <a
+                  href="{{ ad.instagram_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ad-contact-row ad-contact-row--link ad-contact-row--instagram"
+                  aria-label="اینستاگرام: {{ ad.instagram_url }}"
+                >
+                  <span class="ad-contact-row__icon" aria-hidden="true">
+                    <i class="fab fa-instagram"></i>
+                  </span>
+                  <span class="ad-contact-row__body">
+                    <span class="ad-contact-row__label">اینستاگرام</span>
+                    <span class="ad-contact-row__value ad-contact-row__value--ltr">{{ ad.instagram_url|truncatechars:42 }}</span>
+                  </span>
+                  <span class="ad-contact-row__action" aria-hidden="true">
+                    <i class="fas fa-external-link-alt"></i>
+                  </span>
+                </a>
+                {% else %}
+                <div class="ad-contact-row ad-contact-row--disabled" title="لینک در انتظار تایید">
+                  <span class="ad-contact-row__icon" aria-hidden="true">
+                    <i class="fab fa-instagram"></i>
+                  </span>
+                  <span class="ad-contact-row__body">
+                    <span class="ad-contact-row__label">اینستاگرام</span>
+                    <span class="ad-contact-row__value">در انتظار تایید</span>
+                  </span>
+                </div>
+                {% endif %}
+              {% endif %}
+
+              {% if ad.telegram_url %}
+                {% if ad.social_urls_approved %}
+                <a
+                  href="{{ ad.telegram_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ad-contact-row ad-contact-row--link ad-contact-row--telegram"
+                  aria-label="تلگرام: {{ ad.telegram_url }}"
+                >
+                  <span class="ad-contact-row__icon" aria-hidden="true">
+                    <i class="fab fa-telegram-plane"></i>
+                  </span>
+                  <span class="ad-contact-row__body">
+                    <span class="ad-contact-row__label">تلگرام</span>
+                    <span class="ad-contact-row__value ad-contact-row__value--ltr">{{ ad.telegram_url|truncatechars:42 }}</span>
+                  </span>
+                  <span class="ad-contact-row__action" aria-hidden="true">
+                    <i class="fas fa-external-link-alt"></i>
+                  </span>
+                </a>
+                {% else %}
+                <div class="ad-contact-row ad-contact-row--disabled" title="لینک در انتظار تایید">
+                  <span class="ad-contact-row__icon" aria-hidden="true">
+                    <i class="fab fa-telegram-plane"></i>
+                  </span>
+                  <span class="ad-contact-row__body">
+                    <span class="ad-contact-row__label">تلگرام</span>
+                    <span class="ad-contact-row__value">در انتظار تایید</span>
+                  </span>
+                </div>
                 {% endif %}
               {% endif %}
             </div>
