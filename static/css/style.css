@@ -4907,6 +4907,12 @@ body {
 @media (min-width: 768px) {
   .upcoming-events-section {
     margin-bottom: 0.75rem;
+    --ue-category-col: 96px;
+    --ue-icon-gap: 24px;
+    --ue-post-max: 560px;
+    --ue-content-width: calc(
+      var(--ue-category-col) + var(--ue-icon-gap) + var(--ue-post-max)
+    );
   }
 
   .upcoming-events-title {
@@ -4923,6 +4929,8 @@ body {
     gap: 0.75rem;
     overflow: visible;
     scroll-snap-type: none;
+    width: 100%;
+    max-width: 100%;
   }
 
   .upcoming-event-card {
@@ -4950,6 +4958,14 @@ body {
 
   .upcoming-event-card__location {
     font-size: 0.72rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .upcoming-events-scroll {
+    max-width: var(--ue-content-width);
+    margin-right: 150px;
+    margin-left: auto;
   }
 }
 
