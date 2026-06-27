@@ -2844,7 +2844,7 @@ body {
   main .hero-section:has(.hero-cta-cards-container) .hero-title {
     margin-top: 0.65rem !important;
     margin-bottom: 0.5rem !important;
-    font-size: 1.9rem;
+    font-size: calc(1.9rem * 0.85);
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-home-subtitle {
@@ -5359,7 +5359,7 @@ body {
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-title {
-    font-size: 1.75rem;
+    font-size: calc(1.75rem * 0.85);
     margin-top: 0.65rem !important;
     margin-bottom: 0.5rem;
     text-align: center;
