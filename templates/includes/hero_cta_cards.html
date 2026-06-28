@@ -9,19 +9,19 @@
 <!-- Hero CTA Feature Cards -->
 <h2 class="hero-cta-mobile-title d-md-none">خدمات پیوند</h2>
 <div class="hero-cta-cards-container">
-  {% include "includes/hero_cta_card.html" with href=home_url|add:"#category-filter-section" image="images/hero-cta/articles.jpg" alt="مطالب — مقالات و محتوای تخصصی" width=1327 height=1186 %}
+  {% include "includes/hero_cta_card.html" with href=home_url|add:"#category-filter-section" image="images/hero-cta/articles.jpg" alt="مطالب — مقالات و محتوای تخصصی" width=1176 height=1000 %}
 
   {% if user.is_authenticated %}
-  {% include "includes/hero_cta_card.html" with href=create_post_url image="images/hero-cta/publish.jpg" alt="انتشار پست — محتوای خود را با دیگران به اشتراک بگذارید" width=1322 height=1190 %}
+  {% include "includes/hero_cta_card.html" with href=create_post_url image="images/hero-cta/publish.jpg" alt="انتشار پست — محتوای خود را با دیگران به اشتراک بگذارید" width=1176 height=1000 %}
   {% else %}
-  {% include "includes/hero_cta_card.html" with href=signup_url image="images/hero-cta/publish.jpg" alt="ثبت‌نام برای انتشار پست — محتوای خود را با دیگران به اشتراک بگذارید" width=1322 height=1190 %}
+  {% include "includes/hero_cta_card.html" with href=signup_url image="images/hero-cta/publish.jpg" alt="ثبت‌نام برای انتشار پست — محتوای خود را با دیگران به اشتراک بگذارید" width=1176 height=1000 %}
   {% endif %}
 
-  {% include "includes/hero_cta_card.html" with href=ask_me_url image="images/hero-cta/experts.jpg" alt="سوال از متخصص — پرسش و پاسخ با متخصصان" width=1373 height=1146 %}
+  {% include "includes/hero_cta_card.html" with href=ask_me_url image="images/hero-cta/experts.jpg" alt="سوال از متخصص — پرسش و پاسخ با متخصصان" width=1176 height=1000 %}
 
-  {% include "includes/hero_cta_card.html" with href=ads_home_url image="images/hero-cta/business.jpg" alt="خدمات و مشاغل ایرانیان — در پیوند را پیدا کنید" width=1402 height=1122 %}
+  {% include "includes/hero_cta_card.html" with href=ads_home_url image="images/hero-cta/business.jpg" alt="خدمات و مشاغل ایرانیان — در پیوند را پیدا کنید" width=1176 height=1000 %}
 
-  {% include "includes/hero_cta_card.html" with href=events_url image="images/hero-cta/events.jpg" alt="رویدادها — همایش‌ها و رویدادهای ایرانیان" width=1322 height=1190 %}
+  {% include "includes/hero_cta_card.html" with href=events_url image="images/hero-cta/events.jpg" alt="رویدادها — همایش‌ها و رویدادهای ایرانیان" width=1176 height=1000 %}
 
-  {% include "includes/hero_cta_card.html" with href=related_links_url image="images/hero-cta/links.jpg" alt="لینک‌ها — دسترسی سریع به لینک‌های مفید" width=1298 height=1212 %}
+  {% include "includes/hero_cta_card.html" with href=related_links_url image="images/hero-cta/links.jpg" alt="لینک‌ها — دسترسی سریع به لینک‌های مفید" width=1176 height=1000 %}
 </div>
