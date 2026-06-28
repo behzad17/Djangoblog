@@ -1,9 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" fill="none" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 8 240 188" fill="none" aria-hidden="true">
   <defs>
-    <linearGradient id="hb-sky" x1="140" y1="0" x2="140" y2="200" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#fff" stop-opacity="0.06"/>
-    </linearGradient>
     <linearGradient id="hb-awning" x1="60" y1="52" x2="220" y2="52" gradientUnits="userSpaceOnUse">
       <stop stop-color="#FECC02"/>
       <stop offset="1" stop-color="#F4B400"/>
@@ -12,52 +8,41 @@
       <stop stop-color="#FFFFFF"/>
       <stop offset="1" stop-color="#E8F2FA"/>
     </linearGradient>
-    <linearGradient id="hb-glass" x1="140" y1="88" x2="140" y2="130" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#C5E4F7" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#8EC5E8" stop-opacity="0.55"/>
+    <linearGradient id="hb-glass" x1="140" y1="92" x2="140" y2="132" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D4EDFA"/>
+      <stop offset="1" stop-color="#8EC5E8" stop-opacity="0.65"/>
     </linearGradient>
-    <filter id="hb-shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#062A52" flood-opacity="0.22"/>
+    <filter id="hb-shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#062A52" flood-opacity="0.24"/>
     </filter>
-    <filter id="hb-soft" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#062A52" flood-opacity="0.12"/>
+    <filter id="hb-soft" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#062A52" flood-opacity="0.14"/>
     </filter>
   </defs>
-  <rect width="280" height="200" fill="url(#hb-sky)"/>
-  <!-- Ground plate -->
-  <ellipse cx="140" cy="176" rx="92" ry="10" fill="#fff" fill-opacity="0.14"/>
-  <!-- Main storefront -->
+  <ellipse cx="140" cy="178" rx="98" ry="11" fill="#fff" fill-opacity="0.16"/>
   <g filter="url(#hb-shadow)">
     <path d="M52 78c0-6 5-11 11-11h154c6 0 11 5 11 11v82c0 6-5 11-11 11H63c-6 0-11-5-11-11V78z" fill="url(#hb-building)"/>
     <path d="M48 72c4-8 14-14 24-14h136c10 0 20 6 24 14l-4 8H52l-4-8z" fill="url(#hb-awning)"/>
-    <path d="M48 72c4-8 14-14 24-14h136c10 0 20 6 24 14" stroke="#fff" stroke-opacity="0.35" stroke-width="2"/>
-    <!-- Awning stripes -->
-    <path d="M72 58v14M96 56v16M120 55v17M144 55v17M168 56v16M192 58v14M216 60v12" stroke="#083B82" stroke-opacity="0.08" stroke-width="6" stroke-linecap="round"/>
-    <!-- Window -->
-    <rect x="98" y="92" width="84" height="48" rx="8" fill="url(#hb-glass)" stroke="#fff" stroke-width="3"/>
-    <path d="M140 92v48" stroke="#fff" stroke-opacity="0.65" stroke-width="2"/>
-    <path d="M98 116h84" stroke="#fff" stroke-opacity="0.65" stroke-width="2"/>
-    <!-- Door -->
-    <rect x="122" y="144" width="36" height="24" rx="4" fill="#0E4EA7" fill-opacity="0.85"/>
-    <circle cx="150" cy="156" r="2.5" fill="#FECC02"/>
-    <!-- Sign badge -->
-    <rect x="112" y="118" width="56" height="18" rx="9" fill="#083B82" fill-opacity="0.88"/>
-    <rect x="118" y="123" width="44" height="8" rx="4" fill="#fff" fill-opacity="0.92"/>
+    <path d="M48 72c4-8 14-14 24-14h136c10 0 20 6 24 14" stroke="#fff" stroke-opacity="0.4" stroke-width="2.5"/>
+    <path d="M72 58v14M96 56v16M120 55v17M144 55v17M168 56v16M192 58v14M216 60v12" stroke="#083B82" stroke-opacity="0.09" stroke-width="6" stroke-linecap="round"/>
+    <rect x="96" y="90" width="88" height="52" rx="9" fill="url(#hb-glass)" stroke="#fff" stroke-width="3.5"/>
+    <path d="M140 90v52" stroke="#fff" stroke-opacity="0.7" stroke-width="2.5"/>
+    <path d="M96 116h88" stroke="#fff" stroke-opacity="0.7" stroke-width="2.5"/>
+    <rect x="120" y="142" width="40" height="26" rx="5" fill="#0E4EA7" fill-opacity="0.9"/>
+    <circle cx="150" cy="155" r="3" fill="#FECC02"/>
+    <rect x="110" y="116" width="60" height="20" rx="10" fill="#083B82" fill-opacity="0.9"/>
+    <rect x="117" y="122" width="46" height="9" rx="4.5" fill="#fff" fill-opacity="0.94"/>
   </g>
-  <!-- Briefcase accent -->
-  <g filter="url(#hb-soft)" transform="translate(198 118)">
-    <rect x="0" y="10" width="42" height="30" rx="6" fill="#fff" fill-opacity="0.95"/>
-    <path d="M12 10V8c0-3 3-5 9-5s9 2 9 5v2" stroke="#0E4EA7" stroke-width="3" stroke-linecap="round"/>
-    <rect x="6" y="18" width="30" height="4" rx="2" fill="#155DB5" fill-opacity="0.25"/>
-    <circle cx="21" cy="28" r="2" fill="#FECC02"/>
+  <g filter="url(#hb-soft)" transform="translate(204 112)">
+    <rect x="0" y="10" width="46" height="34" rx="7" fill="#fff" fill-opacity="0.96"/>
+    <path d="M13 10V7.5c0-3.5 3.5-6 10-6s10 2.5 10 6V10" stroke="#0E4EA7" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="7" y="20" width="32" height="5" rx="2.5" fill="#155DB5" fill-opacity="0.28"/>
+    <circle cx="23" cy="31" r="2.5" fill="#FECC02"/>
   </g>
-  <!-- Location pin accent -->
-  <g filter="url(#hb-soft)" transform="translate(36 96)">
-    <path d="M16 0C8.82 0 3 5.82 3 13c0 9.75 13 25 13 25s13-15.25 13-25C29 5.82 23.18 0 16 0z" fill="#fff" fill-opacity="0.92"/>
-    <circle cx="16" cy="13" r="5" fill="#155DB5"/>
+  <g filter="url(#hb-soft)" transform="translate(28 88)">
+    <path d="M18 0C9.72 0 3 6.72 3 15c0 11 15 28 15 28s15-17 15-28C33 6.72 26.28 0 18 0z" fill="#fff" fill-opacity="0.94"/>
+    <circle cx="18" cy="15" r="5.5" fill="#155DB5"/>
   </g>
-  <!-- Sparkle accents -->
-  <circle cx="228" cy="54" r="3" fill="#fff" fill-opacity="0.55"/>
-  <circle cx="52" cy="68" r="2" fill="#fff" fill-opacity="0.4"/>
-  <path d="M238 88l4 4-4 4-4-4 4-4z" fill="#FECC02" fill-opacity="0.75"/>
+  <circle cx="236" cy="48" r="3.5" fill="#fff" fill-opacity="0.6"/>
+  <path d="M246 82l5 5-5 5-5-5 5-5z" fill="#FECC02" fill-opacity="0.8"/>
 </svg>

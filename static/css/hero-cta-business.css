@@ -1,45 +1,42 @@
-/* Homepage hero — بانک مشاغل / مشاغل و خدمات feature card only */
+/* Hero business feature card — rebuilt layout (scoped to .hero-cta-card-business) */
 
 .hero-cta-card.hero-cta-card-business {
-  --hero-business-navy-top: #155db5;
-  --hero-business-navy-mid: #0e4ea7;
-  --hero-business-navy-bottom: #083b82;
-  --hero-business-gradient: linear-gradient(
+  --hbc-blue-top: #155db5;
+  --hbc-blue-mid: #0e4ea7;
+  --hbc-blue-bottom: #083b82;
+  --hbc-bg: linear-gradient(
     180deg,
-    var(--hero-business-navy-top) 0%,
-    var(--hero-business-navy-mid) 52%,
-    var(--hero-business-navy-bottom) 100%
+    var(--hbc-blue-top) 0%,
+    var(--hbc-blue-mid) 50%,
+    var(--hbc-blue-bottom) 100%
   );
-  --hero-business-gradient-hover: linear-gradient(
+  --hbc-bg-hover: linear-gradient(
     180deg,
     #1a66c4 0%,
-    #1158b3 52%,
+    #1158b3 50%,
     #0a448f 100%
   );
-  --hero-business-radius: 24px;
-  --hero-business-btn-radius: 18px;
-  --hero-business-shadow:
+  --hbc-radius: 24px;
+  --hbc-shadow:
     0 1px 2px rgba(15, 40, 90, 0.06),
-    0 6px 16px rgba(15, 40, 90, 0.1),
-    0 18px 40px rgba(15, 40, 90, 0.14);
-  --hero-business-shadow-hover:
+    0 8px 22px rgba(15, 40, 90, 0.12),
+    0 20px 44px rgba(15, 40, 90, 0.14);
+  --hbc-shadow-hover:
     0 2px 4px rgba(15, 40, 90, 0.08),
-    0 10px 24px rgba(15, 40, 90, 0.14),
-    0 26px 52px rgba(15, 40, 90, 0.2);
-  --hero-business-btn-text: var(--hero-business-navy-bottom);
-  --hero-business-gap-visual: 0.12rem;
-  --hero-business-gap-content: 0.52rem;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: var(--hero-business-gap-visual);
-  padding: 0;
+    0 12px 28px rgba(15, 40, 90, 0.14),
+    0 28px 56px rgba(15, 40, 90, 0.2);
+  padding: 0 !important;
+  gap: 0 !important;
+  border-radius: var(--hbc-radius);
+  background: var(--hbc-bg) !important;
+  box-shadow: var(--hbc-shadow);
   overflow: hidden;
-  border-radius: var(--hero-business-radius);
-  background: var(--hero-business-gradient) !important;
-  box-shadow: var(--hero-business-shadow);
+  text-decoration: none;
+  color: #fff;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
   transition:
     transform 0.28s ease-out,
     box-shadow 0.28s ease-out,
@@ -52,157 +49,152 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  z-index: 3;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  z-index: 2;
 }
 
-.hero-cta-card-business__decor {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.hero-cta-card-business__decor-item {
-  position: absolute;
-  color: #fff;
-  opacity: 0.045;
-  line-height: 0;
-}
-
-.hero-cta-card-business__decor-item svg {
+/* Inner shell — illustration-first composition */
+.hbc {
+  display: grid;
+  grid-template-rows: 45fr 55fr;
+  flex: 1 1 auto;
   width: 100%;
   height: 100%;
-  display: block;
-}
-
-.hero-cta-card-business__decor-item--pin {
-  top: 10%;
-  right: 8%;
-  width: 1.15rem;
-  height: 1.15rem;
-}
-
-.hero-cta-card-business__decor-item--plus {
-  top: 16%;
-  left: 10%;
-  width: 1rem;
-  height: 1rem;
-}
-
-.hero-cta-card-business__decor-item--heart {
-  bottom: 42%;
-  left: 6%;
-  width: 1.05rem;
-  height: 1.05rem;
-}
-
-.hero-cta-card-business__visual {
+  min-height: 0;
   position: relative;
   z-index: 1;
-  flex: 0 0 42%;
-  min-height: 0;
+}
+
+/* ── Art zone (~45%) ── */
+.hbc__art {
+  position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 0.58rem 0.3rem 0.06rem;
+  min-height: 0;
   overflow: hidden;
+  padding: 0.35rem 0.25rem 0;
 }
 
-.hero-cta-card-business__skyline {
+.hbc__skyline {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 28%;
-  color: rgba(255, 255, 255, 0.055);
+  height: 36%;
+  color: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
 }
 
-.hero-cta-card-business__illustration {
+.hbc__spark {
+  position: absolute;
+  color: #fff;
+  opacity: 0.04;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.hbc__spark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hbc__spark--pin {
+  top: 8%;
+  right: 7%;
+  width: 1rem;
+  height: 1rem;
+}
+
+.hbc__spark--plus {
+  top: 14%;
+  left: 8%;
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.hbc__illustration {
   position: relative;
   z-index: 1;
-  width: min(96%, 7.85rem);
-  height: auto;
-  max-height: 100%;
-  display: block;
+  height: 94%;
+  width: auto;
+  max-width: 112%;
   object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 14px 22px rgba(6, 42, 82, 0.2));
   transform: translateY(2px);
-  filter: drop-shadow(0 12px 20px rgba(6, 42, 82, 0.14));
 }
 
-.hero-cta-card-business__content {
-  position: relative;
-  z-index: 2;
-  flex: 1 1 auto;
+/* ── Body zone (~55%) ── */
+.hbc__body {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
-  gap: var(--hero-business-gap-content);
-  width: 100%;
+  gap: 0.35rem;
   min-height: 0;
-  padding: 0.08rem 0.72rem 0.72rem;
+  padding: 0.35rem 0.7rem 0.7rem;
   text-align: center;
 }
 
-.hero-cta-card-business .hero-cta-card-title {
+.hbc__title {
+  margin: 0;
+  font-size: clamp(0.72rem, 1.2vw, 0.95rem);
   font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: #fff;
-  margin: 0;
-  line-height: 1.22;
-  letter-spacing: -0.015em;
 }
 
-.hero-cta-card-business .hero-cta-card-subtitle {
+.hbc__subtitle {
+  margin: 0;
+  font-size: clamp(0.52rem, 0.85vw, 0.68rem);
+  font-weight: 500;
+  line-height: 1.45;
   color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-  line-height: 1.5;
-  letter-spacing: 0.01em;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
-.hero-cta-card-business__action {
-  display: inline-flex;
+.hbc__btn {
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.38rem;
-  width: calc(100% - 0.2rem);
-  margin-top: 0.06rem;
-  padding: 0.56rem 0.9rem;
-  min-height: 2.15rem;
-  border-radius: var(--hero-business-btn-radius);
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: auto;
+  padding: 0.55rem 0.75rem;
+  min-height: 2.25rem;
+  border-radius: 18px;
   background: #fff;
-  color: var(--hero-business-btn-text);
-  font-size: clamp(0.56rem, 1.55vw, 0.74rem);
+  color: var(--hbc-blue-bottom);
+  font-size: clamp(0.52rem, 1.45vw, 0.7rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.01em;
+  line-height: 1.1;
   box-shadow:
     0 1px 2px rgba(8, 59, 130, 0.08),
-    0 6px 16px rgba(8, 59, 130, 0.12);
+    0 8px 18px rgba(8, 59, 130, 0.14);
   transition:
     transform 0.28s ease-out,
     box-shadow 0.28s ease-out;
 }
 
-.hero-cta-card-business__action-arrow {
-  width: 0.88em;
-  height: 0.88em;
+.hbc__btn-arrow {
+  width: 0.9em;
+  height: 0.9em;
   flex-shrink: 0;
-  opacity: 0.88;
+  opacity: 0.9;
 }
 
-/* Mobile — same grid footprint, compact premium layout */
+/* Reset inherited Peyvand hero card typography inside business card */
+.hero-cta-card.hero-cta-card-business .hero-cta-card-icon {
+  display: none !important;
+}
+
+/* ── Mobile ── */
 @media (max-width: 767.98px) {
   .hero-cta-card.hero-cta-card-business {
-    --hero-business-radius: 17px;
-    --hero-business-btn-radius: 13px;
-    --hero-business-gap-content: 0.3rem;
-    border-radius: var(--hero-business-radius);
+    --hbc-radius: 17px;
     box-shadow:
       0 1px 2px rgba(15, 40, 90, 0.05),
       0 6px 18px rgba(15, 40, 90, 0.12);
@@ -212,112 +204,80 @@
   .hero-cta-card.hero-cta-card-business:focus,
   .hero-cta-card.hero-cta-card-business:focus-visible,
   .hero-cta-card.hero-cta-card-business:active {
-    background: var(--hero-business-gradient) !important;
+    background: var(--hbc-bg) !important;
+    transform: none;
   }
 
-  .hero-cta-card-business__visual {
-    flex-basis: 40%;
-    padding: 0.36rem 0.22rem 0.04rem;
+  .hbc__art {
+    padding: 0.28rem 0.18rem 0;
   }
 
-  .hero-cta-card-business__illustration {
-    width: min(96%, 4.35rem);
-    transform: translateY(1px);
-    filter: drop-shadow(0 8px 14px rgba(6, 42, 82, 0.12));
+  .hbc__illustration {
+    height: 96%;
+    max-width: 118%;
   }
 
-  .hero-cta-card-business__content {
-    padding: 0.06rem 0.44rem 0.48rem;
+  .hbc__body {
+    gap: 0.22rem;
+    padding: 0.22rem 0.42rem 0.46rem;
   }
 
-  .hero-cta-card-business .hero-cta-card-title {
-    font-size: clamp(0.66rem, 2.65vw, 0.82rem);
-    font-weight: 800;
+  .hbc__title {
+    font-size: clamp(0.64rem, 2.6vw, 0.78rem);
   }
 
-  .hero-cta-card-business .hero-cta-card-subtitle {
-    font-size: clamp(0.5rem, 2vw, 0.62rem);
+  .hbc__subtitle {
+    font-size: clamp(0.48rem, 2vw, 0.58rem);
   }
 
-  .hero-cta-card-business__action {
-    width: calc(100% - 0.12rem);
-    min-height: 1.72rem;
-    padding: 0.36rem 0.55rem;
-    border-radius: var(--hero-business-btn-radius);
-    font-size: clamp(0.48rem, 1.95vw, 0.58rem);
-    box-shadow:
-      0 1px 2px rgba(8, 59, 130, 0.06),
-      0 4px 12px rgba(8, 59, 130, 0.1);
-  }
-
-  .hero-cta-card-business__decor-item {
-    opacity: 0.035;
+  .hbc__btn {
+    min-height: 1.78rem;
+    padding: 0.34rem 0.5rem;
+    border-radius: 13px;
+    font-size: clamp(0.46rem, 1.9vw, 0.56rem);
   }
 }
 
-/* Tablet + desktop — premium card within existing grid cell */
+/* ── Tablet / desktop ── */
 @media (min-width: 768px) {
   .hero-cta-card.hero-cta-card-business {
-    --hero-business-gap-content: 0.48rem;
-    border-radius: var(--hero-business-radius);
-    box-shadow: var(--hero-business-shadow);
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
   }
 
   .hero-cta-card.hero-cta-card-business:hover,
   .hero-cta-card.hero-cta-card-business:focus,
   .hero-cta-card.hero-cta-card-business:focus-visible {
-    background: var(--hero-business-gradient-hover) !important;
+    background: var(--hbc-bg-hover) !important;
     color: #fff;
   }
 
-  .hero-cta-card-business__visual {
-    flex-basis: 43%;
-    padding: 0.62rem 0.38rem 0.08rem;
+  .hbc__body {
+    gap: 0.32rem;
+    padding: 0.3rem 0.62rem 0.62rem;
   }
 
-  .hero-cta-card-business__illustration {
-    width: min(96%, 7rem);
-  }
-
-  .hero-cta-card-business__content {
-    padding: 0.06rem 0.62rem 0.64rem;
-  }
-
-  .hero-cta-card-business .hero-cta-card-title {
-    font-size: clamp(0.8rem, 1.18vw, 1rem);
-    font-weight: 800;
-  }
-
-  .hero-cta-card-business .hero-cta-card-subtitle {
-    font-size: clamp(0.56rem, 0.82vw, 0.7rem);
-  }
-
-  .hero-cta-card-business__action {
-    min-height: 2.2rem;
-    padding: 0.52rem 0.82rem;
-    font-size: clamp(0.58rem, 0.9vw, 0.72rem);
+  .hbc__btn {
+    min-height: 2.3rem;
+    padding: 0.52rem 0.7rem;
   }
 }
 
 @media (min-width: 992px) {
-  .hero-cta-card-business__illustration {
-    width: min(98%, 7.85rem);
-  }
-
   .hero-cta-card.hero-cta-card-business:hover,
   .hero-cta-card.hero-cta-card-business:focus,
   .hero-cta-card.hero-cta-card-business:focus-visible {
     transform: translateY(-6px);
-    background: var(--hero-business-gradient-hover) !important;
-    box-shadow: var(--hero-business-shadow-hover);
+    box-shadow: var(--hbc-shadow-hover);
   }
 
-  .hero-cta-card.hero-cta-card-business:hover .hero-cta-card-business__action,
-  .hero-cta-card.hero-cta-card-business:focus-visible .hero-cta-card-business__action {
+  .hero-cta-card.hero-cta-card-business:hover .hbc__btn,
+  .hero-cta-card.hero-cta-card-business:focus-visible .hbc__btn {
     transform: translateY(-1px);
     box-shadow:
       0 2px 4px rgba(8, 59, 130, 0.1),
-      0 10px 22px rgba(8, 59, 130, 0.18);
+      0 10px 24px rgba(8, 59, 130, 0.18);
   }
 
   .hero-cta-card.hero-cta-card-business:active {
