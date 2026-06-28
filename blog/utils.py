@@ -803,7 +803,7 @@ def get_specialist_posts_queryset():
     )
 
 
-def get_upcoming_events(limit=4):
+def get_upcoming_events(limit=6):
     """
     Return the next published events with event_start_date on or after today,
     ordered soonest first.
