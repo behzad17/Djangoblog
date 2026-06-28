@@ -2221,8 +2221,6 @@ body {
   border-radius: inherit;
   pointer-events: none;
   user-select: none;
-  transform: scale(1.045);
-  transform-origin: center;
 }
 
 .hero-cta-card:hover {
