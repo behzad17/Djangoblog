@@ -1,4 +1,3 @@
-{% load static %}
 {% url 'home' as home_url %}
 {% url 'create_post' as create_post_url %}
 {% url 'ask_me' as ask_me_url %}
@@ -49,38 +48,13 @@
     </div>
   </a>
 
-  <a href="{{ ads_home_url }}" class="hero-cta-card hero-cta-card-purple hero-cta-card-business">
-    <div class="hbc">
-      <div class="hbc__art" aria-hidden="true">
-        <svg class="hbc__skyline" viewBox="0 0 360 44" preserveAspectRatio="none" focusable="false">
-          <path fill="currentColor" d="M0 44V30l20-7 24 5 28-11 32 9 36-14 26 9 22-7 28 11 30-9 24 7 26-11 30 13V44H0z"/>
-        </svg>
-        <span class="hbc__spark hbc__spark--pin">
-          <svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-        </span>
-        <span class="hbc__spark hbc__spark--plus">
-          <svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-        </span>
-        <img
-          class="hbc__illustration"
-          src="{% static 'images/hero-business-illustration.svg' %}"
-          alt=""
-          width="280"
-          height="200"
-          decoding="async"
-          loading="lazy"
-        />
-      </div>
-      <div class="hbc__body">
-        <h3 class="hbc__title">کسب‌وکارها</h3>
-        <p class="hbc__subtitle">محصولات و خدمات ایرانیان</p>
-        <span class="hbc__btn">
-          <span class="hbc__btn-text">مشاهده کسب‌وکارها</span>
-          <svg class="hbc__btn-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-          </svg>
-        </span>
-      </div>
+  <a href="{{ ads_home_url }}" class="hero-cta-card hero-cta-card-purple">
+    <span class="hero-cta-card-icon" aria-hidden="true">
+      <i class="fas fa-briefcase"></i>
+    </span>
+    <div class="hero-cta-card-content">
+      <h3 class="hero-cta-card-title">مشاغل و خدمات</h3>
+      <p class="hero-cta-card-subtitle">(آگهی ها)</p>
     </div>
   </a>
 
