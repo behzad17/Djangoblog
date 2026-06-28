@@ -2191,90 +2191,52 @@ body {
   width: 100%;
 }
 
-/* Icons are shown only in the mobile square-card layout */
-.hero-cta-card-icon {
-  display: none;
-}
-
 .hero-cta-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 1.2rem;
+  display: block;
+  padding: 0;
   border-radius: 24px;
   text-decoration: none;
   color: #ffffff;
-  background: var(--pv-cta-ask);
+  background: transparent;
   width: 100%;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  aspect-ratio: 1 / 0.85;
+  min-height: 0;
+  box-sizing: border-box;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  min-height: 72px;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hero-cta-card-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
 }
 
 .hero-cta-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   text-decoration: none;
-  color: #ffffff;
-  background: var(--pv-cta-ask-hover);
 }
 
-.hero-cta-card:focus {
-  background: var(--pv-cta-ask-hover);
-  color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+.hero-cta-card:focus-visible {
+  outline: 2px solid rgba(27, 85, 131, 0.85);
+  outline-offset: 2px;
 }
 
 .hero-cta-card:active {
-  background: var(--pv-cta-ask-hover);
-  color: #ffffff;
   transform: translateY(1px);
 }
 
-.hero-cta-card-content {
-  width: 100%;
-  text-align: center;
-  direction: rtl;
-}
-
-.hero-cta-card-title {
-  font-size: 1.12rem;
-  font-weight: 700;
-  margin: 0;
-  color: #ffffff;
-  line-height: 1.3;
-  text-align: center;
-}
-
-.hero-cta-card-subtitle {
-  font-size: 0.8rem;
-  font-weight: 400;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.4;
-  text-align: center;
-}
-
-.hero-cta-card-badge {
-  position: absolute;
-  top: 0.22rem;
-  inset-inline-start: 0.22rem;
-  z-index: 1;
-  padding: 0.12rem 0.38rem;
-  border-radius: 6px;
-  font-size: clamp(0.45rem, 1.4vw, 0.56rem);
-  font-weight: 600;
-  line-height: 1.2;
-  color: #1b5583;
-  background: rgba(255, 255, 255, 0.93);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-/* Mobile homepage CTA grid — 2 rows × 3 columns, square premium cards */
+/* Mobile homepage CTA grid — 2 rows × 3 columns */
 @media (max-width: 767.98px) {
   .hero-cta-mobile-title {
     margin: 0.45rem 0 0.3rem;
@@ -2309,23 +2271,10 @@ body {
   }
 
   .hero-cta-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.34rem;
     width: 91% !important;
     justify-self: center;
-    aspect-ratio: 1 / 0.85;
-    min-height: 0;
-    height: auto;
-    max-height: none;
-    padding: 0.4rem 0.3rem;
     border-radius: 17px;
-    background: #1B5583 !important;
     box-shadow: 0 9px 20px rgba(0, 0, 0, 0.12);
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
   }
 
   .hero-cta-card:hover,
@@ -2333,89 +2282,16 @@ body {
   .hero-cta-card:focus-visible {
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-    background: #1B5583 !important;
-    color: #ffffff;
     outline: none;
-  }
-
-  .hero-cta-card:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.85);
-    outline-offset: 2px;
   }
 
   .hero-cta-card:active {
     transform: scale(0.96);
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
-    background: #164a72 !important;
-  }
-
-  .hero-cta-card-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 1.35rem;
-    height: 1.35rem;
-    margin: 0;
-    font-size: 1.3225rem;
-    line-height: 1;
-    color: #ffffff;
-    opacity: 1;
-  }
-
-  .hero-cta-card-icon i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1em;
-    text-align: center;
-  }
-
-  .hero-cta-card-content {
-    display: flex;
-    flex: 0 1 auto;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.08rem;
-    width: 100%;
-    min-height: 1.3em;
-    text-align: center;
-    direction: rtl;
-  }
-
-  .hero-cta-card-title {
-    font-size: clamp(0.6785rem, 2.806vw, 0.828rem);
-    font-weight: 600;
-    line-height: 1.3;
-    text-align: center;
-    color: #ffffff;
-    width: 100%;
-    margin: 0;
-  }
-
-  .hero-cta-card-subtitle {
-    font-size: clamp(0.55rem, 2.1vw, 0.68rem);
-    font-weight: 500;
-    line-height: 1.2;
-    color: rgba(255, 255, 255, 0.92);
-    width: 100%;
-    margin: 0;
-  }
-
-  .hero-cta-card-primary {
-    box-shadow: 0 11px 24px rgba(0, 0, 0, 0.16);
-  }
-
-  .hero-cta-card-primary:hover,
-  .hero-cta-card-primary:focus,
-  .hero-cta-card-primary:focus-visible {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
   }
 }
 
-/* Tablet + Desktop homepage CTA — mobile card design, 6 cards in one row */
+/* Tablet + Desktop homepage CTA — 6 cards in one row */
 @media (min-width: 768px) {
   .hero-cta-cards-container {
     display: grid;
@@ -2439,45 +2315,8 @@ body {
   }
 
   .hero-cta-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.34rem;
-    aspect-ratio: 1 / 0.85;
-    min-height: 0;
-    height: auto;
-    max-height: none;
-    padding: 0.4rem 0.3rem;
     border-radius: 17px;
     box-shadow: 0 18px 42px rgba(11, 45, 74, 0.28);
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.24s ease, box-shadow 0.24s ease;
-  }
-
-  .hero-cta-card-categories {
-    background: linear-gradient(135deg, #00695c, #00897b) !important;
-  }
-
-  .hero-cta-card-orange {
-    background: linear-gradient(135deg, #29b6f6, #26c6da) !important;
-  }
-
-  .hero-cta-card-blue {
-    background: linear-gradient(135deg, #1e88e5, #42a5f5) !important;
-  }
-
-  .hero-cta-card-purple {
-    background: linear-gradient(135deg, #0288d1, #26a69a) !important;
-  }
-
-  .hero-cta-card-events {
-    background: linear-gradient(135deg, #1565c0, #1e88e5) !important;
-  }
-
-  .hero-cta-card-links {
-    background: linear-gradient(135deg, #0d47a1, #1565c0) !important;
   }
 
   .hero-cta-card:hover,
@@ -2485,125 +2324,12 @@ body {
   .hero-cta-card:focus-visible {
     transform: translateY(-8px);
     box-shadow: 0 24px 52px rgba(11, 45, 74, 0.38);
-    color: #ffffff;
     outline: none;
-  }
-
-  .hero-cta-card-categories:hover,
-  .hero-cta-card-categories:focus,
-  .hero-cta-card-categories:focus-visible,
-  .hero-cta-card-categories:active {
-    background: linear-gradient(135deg, #00796b, #009688) !important;
-  }
-
-  .hero-cta-card-orange:hover,
-  .hero-cta-card-orange:focus,
-  .hero-cta-card-orange:focus-visible,
-  .hero-cta-card-orange:active {
-    background: linear-gradient(135deg, #29b6f6, #26c6da) !important;
-  }
-
-  .hero-cta-card-blue:hover,
-  .hero-cta-card-blue:focus,
-  .hero-cta-card-blue:focus-visible,
-  .hero-cta-card-blue:active {
-    background: linear-gradient(135deg, #1e88e5, #42a5f5) !important;
-  }
-
-  .hero-cta-card-purple:hover,
-  .hero-cta-card-purple:focus,
-  .hero-cta-card-purple:focus-visible,
-  .hero-cta-card-purple:active {
-    background: linear-gradient(135deg, #0288d1, #26a69a) !important;
-  }
-
-  .hero-cta-card-events:hover,
-  .hero-cta-card-events:focus,
-  .hero-cta-card-events:focus-visible,
-  .hero-cta-card-events:active {
-    background: linear-gradient(135deg, #1565c0, #1e88e5) !important;
-  }
-
-  .hero-cta-card-links:hover,
-  .hero-cta-card-links:focus,
-  .hero-cta-card-links:focus-visible,
-  .hero-cta-card-links:active {
-    background: linear-gradient(135deg, #0d47a1, #1565c0) !important;
-  }
-
-  .hero-cta-card:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.85);
-    outline-offset: 2px;
   }
 
   .hero-cta-card:active {
     transform: translateY(-2px) scale(0.98);
     box-shadow: 0 12px 28px rgba(11, 45, 74, 0.24);
-  }
-
-  .hero-cta-card-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    margin: 0 0 0.625rem;
-    font-size: 2.5rem;
-    line-height: 1;
-    color: #ffffff;
-    opacity: 1;
-  }
-
-  .hero-cta-card-icon i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1em;
-    text-align: center;
-  }
-
-  .hero-cta-card-content {
-    display: flex;
-    flex: 0 1 auto;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.08rem;
-    width: 100%;
-    min-height: 1.3em;
-    text-align: center;
-    direction: rtl;
-  }
-
-  .hero-cta-card-title {
-    font-size: clamp(0.713rem, 1.0925vw, 0.943rem);
-    font-weight: 600;
-    line-height: 1.3;
-    text-align: center;
-    color: #ffffff;
-    width: 100%;
-    margin: 0;
-  }
-
-  .hero-cta-card-subtitle {
-    font-size: clamp(0.58rem, 0.82vw, 0.72rem);
-    font-weight: 500;
-    line-height: 1.2;
-    color: rgba(255, 255, 255, 0.92);
-    width: 100%;
-    margin: 0;
-  }
-
-  .hero-cta-card-primary {
-    box-shadow: 0 22px 48px rgba(11, 45, 74, 0.34);
-  }
-
-  .hero-cta-card-primary:hover,
-  .hero-cta-card-primary:focus,
-  .hero-cta-card-primary:focus-visible {
-    transform: translateY(-10px);
-    box-shadow: 0 28px 58px rgba(11, 45, 74, 0.42);
   }
 }
 
@@ -2612,15 +2338,8 @@ body {
   .hero-cta-card:hover,
   .hero-cta-card:focus,
   .hero-cta-card:focus-visible {
-    transform: translateY(-4px);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 26px 56px rgba(11, 45, 74, 0.42);
-  }
-
-  .hero-cta-card-primary:hover,
-  .hero-cta-card-primary:focus,
-  .hero-cta-card-primary:focus-visible {
-    transform: translateY(-4px);
-    box-shadow: 0 30px 64px rgba(11, 45, 74, 0.46);
   }
 }
 
@@ -2634,13 +2353,6 @@ body {
 
   .hero-cta-card {
     border-radius: 15px;
-    padding: 0.38rem 0.21rem;
-  }
-
-  .hero-cta-card-icon {
-    width: 1.15rem;
-    height: 1.15rem;
-    font-size: 1.127rem;
   }
 }
 
