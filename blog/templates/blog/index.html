@@ -1,6 +1,9 @@
 {% extends "base.html" %} {% load static category_extras %}
 {% block title %}جامعه آنلاین ایرانیانِ مقیم سوئد | Peyvand{% endblock title %}
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/hero-cta-business-proto.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
 {% block content %}
 <!-- Mobile Hero Banner (< 768px only) -->
 <div class="d-md-none">

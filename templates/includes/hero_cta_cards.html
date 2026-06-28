@@ -1,3 +1,4 @@
+{% load static %}
 {% url 'home' as home_url %}
 {% url 'create_post' as create_post_url %}
 {% url 'ask_me' as ask_me_url %}
@@ -48,13 +49,17 @@
     </div>
   </a>
 
-  <a href="{{ ads_home_url }}" class="hero-cta-card hero-cta-card-purple">
-    <span class="hero-cta-card-icon" aria-hidden="true">
+  <a
+    href="{{ ads_home_url }}"
+    class="hero-cta-card hero-cta-card-purple hero-cta-card-business-proto"
+    style="--cta-background-image: url('{% static 'images/hero-business-cta-placeholder.jpg' %}');"
+  >
+    <span class="hero-cta-card-icon hero-cta-card-icon--ring" aria-hidden="true">
       <i class="fas fa-briefcase"></i>
     </span>
     <div class="hero-cta-card-content">
       <h3 class="hero-cta-card-title">مشاغل و خدمات</h3>
-      <p class="hero-cta-card-subtitle">(آگهی ها)</p>
+      <p class="hero-cta-card-subtitle">محصولات و خدمات ایرانیان</p>
     </div>
   </a>
 
