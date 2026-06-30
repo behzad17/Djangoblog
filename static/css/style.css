@@ -5054,6 +5054,17 @@ body {
   }
 }
 
+/* Homepage hero — background image (tablet/desktop only) */
+@media (min-width: 768px) {
+  main .hero-section:has(.hero-cta-cards-container) {
+    background-color: #A4D2E0 !important;
+    background-image: url('../images/heroback.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center top !important;
+    background-size: cover !important;
+  }
+}
+
 /* Desktop hero: full-width intro + CTA cards in one row */
 @media (min-width: 992px) {
   main .hero-section:has(.hero-cta-cards-container) {
