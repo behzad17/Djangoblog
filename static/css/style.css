@@ -2299,6 +2299,14 @@ body {
       0 2px 8px rgba(11, 45, 74, 0.1);
   }
 
+  .hero-cta-cards-container .premium-cta-card__surface {
+    background: #F8F6F0;
+  }
+
+  .hero-cta-cards-container .premium-cta-card__surface::before {
+    background: linear-gradient(180deg, rgba(248, 246, 240, 0.55) 0%, rgba(248, 246, 240, 0) 38%);
+  }
+
   .hero-cta-cards-container .premium-cta-card:hover,
   .hero-cta-cards-container .premium-cta-card:focus,
   .hero-cta-cards-container .premium-cta-card:focus-visible {
