@@ -2536,10 +2536,13 @@ body {
     margin-right: auto;
   }
 
-  main .hero-section:has(.hero-cta-cards-container) .hero-title {
+  main .hero-section:has(.hero-cta-cards-container) .hero-title.hero-title--homepage {
     margin-top: 0.55rem !important;
     margin-bottom: 0.6rem !important;
     font-size: calc(1.9rem * 0.85 * 0.9);
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-home-subtitle {
@@ -5001,6 +5004,27 @@ body {
   color: #415a77;
 }
 
+main .hero-section:has(.hero-cta-cards-container) .hero-title.hero-title--homepage {
+  color: #0b1833 !important;
+  font-weight: 800;
+  line-height: 1.58;
+  letter-spacing: -0.012em;
+  text-shadow: none;
+  text-wrap: balance;
+}
+
+main .hero-section:has(.hero-cta-cards-container) .hero-title--homepage .hero-title__line {
+  display: block;
+}
+
+main .hero-section:has(.hero-cta-cards-container) .hero-title--homepage .hero-title__line--second {
+  margin-top: 0.2rem;
+}
+
+main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
+  color: #1b5583;
+}
+
 .hero-intro-text {
   margin-bottom: 0.75rem;
   color: #415a77;
@@ -5011,6 +5035,21 @@ body {
   .hero-section .hero-title,
   .hero-section .hero-intro-text {
     text-align: center !important;
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) .hero-title.hero-title--homepage {
+    font-size: clamp(1.02rem, 4.6vw, 1.22rem);
+    line-height: 1.62;
+    padding: 0 0.35rem;
+    margin-top: 0.65rem !important;
+    margin-bottom: 0.45rem !important;
+    max-width: 22rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) .hero-title--homepage .hero-title__line--second {
+    margin-top: 0.14rem;
   }
 }
 
@@ -5067,11 +5106,14 @@ body {
     margin-right: auto;
   }
 
-  main .hero-section:has(.hero-cta-cards-container) .hero-title {
+  main .hero-section:has(.hero-cta-cards-container) .hero-title.hero-title--homepage {
     font-size: calc(1.75rem * 0.85 * 0.9);
     margin-top: 0.55rem !important;
     margin-bottom: 0.6rem;
     text-align: center;
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-home-subtitle {
