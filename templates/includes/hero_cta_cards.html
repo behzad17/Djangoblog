@@ -9,19 +9,19 @@
 <!-- Hero CTA Feature Cards -->
 <h2 class="hero-cta-mobile-title d-md-none">خدمات پیوند</h2>
 <div class="hero-cta-cards-container">
-  {% include "includes/hero_cta_card.html" with href=home_url|add:"#category-filter-section" image="images/hero-cta/articles.jpg" alt="مطالب — مقالات و محتوای تخصصی" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" description="مقالات و محتوای تخصصی" illustration="images/premium-cta/icons/articles.webp" %}
 
   {% if user.is_authenticated %}
-  {% include "includes/hero_cta_card.html" with href=create_post_url image="images/hero-cta/publish.jpg" alt="انتشار پست — محتوای خود را با دیگران به اشتراک بگذارید" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" description="محتوای خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" %}
   {% else %}
-  {% include "includes/hero_cta_card.html" with href=signup_url image="images/hero-cta/publish.jpg" alt="ثبت‌نام برای انتشار پست — محتوای خود را با دیگران به اشتراک بگذارید" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=signup_url title="ثبت‌نام برای انتشار پست" description="محتوای خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" %}
   {% endif %}
 
-  {% include "includes/hero_cta_card.html" with href=ask_me_url image="images/hero-cta/experts.jpg" alt="سوال از متخصص — پرسش و پاسخ با متخصصان" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=ask_me_url title="سوال از متخصص" description="پرسش و پاسخ با متخصصان" illustration="images/premium-cta/icons/experts.webp" %}
 
-  {% include "includes/hero_cta_card.html" with href=ads_home_url image="images/hero-cta/business.jpg" alt="خدمات و مشاغل ایرانیان — در پیوند را پیدا کنید" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=ads_home_url title="مشاغل و خدمات" description="محصولات و خدمات ایرانیان" illustration="images/premium-cta/icons/business.webp" %}
 
-  {% include "includes/hero_cta_card.html" with href=events_url image="images/hero-cta/events.jpg" alt="رویدادها — همایش‌ها و رویدادهای ایرانیان" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=events_url title="رویدادها و برنامه‌ها" description="همایش‌ها و رویدادهای ایرانیان" illustration="images/premium-cta/icons/events.webp" %}
 
-  {% include "includes/hero_cta_card.html" with href=related_links_url image="images/hero-cta/links.jpg" alt="لینک‌ها — دسترسی سریع به لینک‌های مفید" width=1176 height=1000 %}
+  {% include "includes/components/premium_cta_card.html" with href=related_links_url title="لینک‌ها" description="دسترسی سریع به لینک‌های مفید" illustration="images/premium-cta/icons/links.webp" %}
 </div>

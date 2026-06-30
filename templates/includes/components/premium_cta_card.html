@@ -1,0 +1,30 @@
+{% load static %}
+{# Configurable: href, illustration, title, description only. Chrome is fixed in premium-cta-card.css #}
+<a href="{{ href }}" class="premium-cta-card">
+  <span class="premium-cta-card__surface">
+    <span class="premium-cta-card__media">
+      <img
+        class="premium-cta-card__illustration"
+        src="{% static illustration %}"
+        alt=""
+        width="210"
+        height="165"
+        loading="eager"
+        decoding="async"
+      />
+    </span>
+    <span class="premium-cta-card__content">
+      <h3 class="premium-cta-card__title">{{ title }}</h3>
+      {% if description %}
+      <p class="premium-cta-card__description">{{ description }}</p>
+      {% endif %}
+    </span>
+    <span class="premium-cta-card__action" aria-hidden="true">
+      <span class="premium-cta-card__action-button">
+        <svg class="premium-cta-card__action-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </span>
+    </span>
+  </span>
+</a>
