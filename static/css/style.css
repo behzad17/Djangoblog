@@ -5046,8 +5046,36 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
 @media (max-width: 767.98px) {
   .hero-section .hero-content,
   .hero-section .hero-title,
-  .hero-section .hero-intro-text {
+  .hero-section .hero-subtitle,
+  .hero-section .hero-intro-text,
+  .hero-section .hero-home-subtitle,
+  .hero-section .hero-subtitle-line1,
+  .hero-section .hero-subtitle-line2,
+  .hero-section .container .row [class*="col-"],
+  .category-hero-section,
+  .category-hero-section .category-hero-content,
+  .category-hero-title,
+  .category-hero-description,
+  .favorites-hero,
+  .favorites-hero .display-4,
+  .favorites-hero .lead,
+  .favorites-hero p,
+  .member-guide-hero,
+  .member-guide-hero .display-4,
+  .member-guide-hero h1,
+  .member-guide-hero .lead,
+  .member-guide-hero p,
+  .rtl .hero-section .hero-content,
+  .rtl .hero-section .hero-title,
+  .rtl .hero-section .hero-subtitle {
     text-align: center !important;
+  }
+
+  .hero-section .hero-subtitle,
+  .category-hero-description {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100%;
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-title.hero-title--homepage {
