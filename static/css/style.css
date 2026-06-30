@@ -2020,12 +2020,12 @@ body {
 
 /* Ads category pages — taller hero to fit title, description, and hint */
 .ads-category-hero-section {
-  padding: 3rem 0 !important;
+  padding: 4rem 0 !important;
 }
 
 @media (min-width: 768px) {
   .ads-category-hero-section {
-    padding: 4.5rem 0 !important;
+    padding: 6rem 0 !important;
   }
 }
 
