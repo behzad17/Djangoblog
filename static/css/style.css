@@ -5021,6 +5021,12 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
   color: #1b5583;
 }
 
+@media (min-width: 768px) {
+  main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
+    color: #0f52ba;
+  }
+}
+
 .hero-intro-text {
   margin-bottom: 0.75rem;
   color: #415a77;
