@@ -1843,15 +1843,12 @@ body {
   }
 }
 
-/* Desktop/Tablet homepage informational cards — ≥768px */
+/* Desktop/Tablet homepage informational cards — ≥768px (inside unified hero) */
 @media (min-width: 768px) {
-  .hero-info-cards-section {
-    background: #A4D2E0 !important;
-    padding: 0.85rem 0 1rem;
-  }
-
-  .hero-info-cards-section .container {
-    max-width: 1140px;
+  main .hero-section--homepage .hero-section__info {
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+    width: 100%;
   }
 
   .hero-info-cards-grid {
@@ -1919,12 +1916,9 @@ body {
 }
 
 @media (min-width: 992px) {
-  .hero-info-cards-section {
-    padding: 1rem 0 1.1rem;
-  }
-
-  .hero-info-cards-section .container {
-    max-width: 1100px;
+  main .hero-section--homepage .hero-section__info {
+    margin-top: 1.75rem;
+    padding-bottom: 0.65rem;
   }
 
   .hero-info-cards-grid {
@@ -2552,7 +2546,12 @@ body {
 
   main .hero-section:has(.hero-cta-cards-container) .hero-cta-cards-container {
     margin-top: calc(0.85rem + 1.875rem);
-    margin-bottom: 4rem;
+    margin-bottom: 0;
+  }
+
+  main .hero-section--homepage {
+    padding-bottom: 1rem;
+    box-shadow: inset 0 -20px 20px -20px rgba(255, 255, 255, 0.3);
   }
   
   .hero-section {
@@ -4387,8 +4386,10 @@ body {
 
 @media (min-width: 768px) {
   .community-stats-section {
-    padding: 0.35rem 0 0.45rem;
-    margin-top: 20px;
+    padding: 0.75rem 0 0.45rem;
+    margin-top: 0;
+    background: #fff;
+    border-top: 1px solid rgba(27, 85, 131, 0.08);
   }
 
   .community-stats-list {
@@ -4707,10 +4708,6 @@ body {
     margin-bottom: 0.35rem !important;
   }
 
-  .hero-info-cards-section {
-    padding-bottom: calc(0.65rem + 1rem);
-  }
-
   .category-overview-col--post .post-card {
     cursor: pointer;
     gap: 14px;
@@ -4780,9 +4777,8 @@ body {
 }
 
 @media (min-width: 992px) {
-  .hero-info-cards-section {
-    padding-top: 0.75rem;
-    padding-bottom: calc(0.55rem + 1.25rem);
+  main .hero-section--homepage {
+    padding-bottom: 1.25rem;
   }
 
   .category-overview-section:has(.category-overview-rows) {
@@ -5123,7 +5119,7 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
 
   main .hero-section:has(.hero-cta-cards-container) .hero-cta-cards-container {
     margin-top: calc(0.85rem + 2.375rem);
-    margin-bottom: 4rem;
+    margin-bottom: 0;
   }
 
   .hero-intro-text {
