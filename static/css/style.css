@@ -2184,7 +2184,7 @@ body {
   margin-top: 1.5rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.8rem;
+  gap: 1.6rem;
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
@@ -2194,8 +2194,8 @@ body {
 /* Mobile homepage CTA grid — 2 rows × 3 columns */
 @media (max-width: 767.98px) {
   .hero-cta-mobile-title {
-    margin: 0.45rem 0 0.3rem;
-    padding: 0 calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
+    margin: 0.45rem 0 0.2rem;
+    padding: 0 0.65rem;
     text-align: center;
     font-size: 1rem;
     font-weight: 700;
@@ -2210,11 +2210,11 @@ body {
     margin-bottom: 1rem;
     margin-left: 0;
     margin-right: 0;
-    padding: 0.25rem calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5) 0;
+    padding: 0.25rem 0.65rem 0;
     max-width: 100%;
     width: 100%;
-    column-gap: 0.86rem;
-    row-gap: 1.04rem;
+    column-gap: 1.29rem;
+    row-gap: 1.56rem;
   }
 
   .hero-cta-cards-container .premium-cta-card:first-child {
@@ -2257,14 +2257,14 @@ body {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-template-rows: 1fr;
     align-items: stretch;
-    margin-top: calc(0.85rem + 1.75rem);
+    margin-top: calc(0.85rem + 1.875rem);
     margin-bottom: 0;
     margin-left: auto;
     margin-right: auto;
     padding: 0;
-    max-width: 100%;
-    width: 100%;
-    column-gap: 0.86rem;
+    width: min(1080px, calc(100vw - 1.25rem));
+    max-width: none;
+    column-gap: 1.29rem;
     row-gap: 0;
   }
 
@@ -2293,10 +2293,12 @@ body {
   }
 }
 
-/* Desktop homepage CTA — refined hover lift */
-@media (min-width: 992px) {
+/* Desktop homepage CTA — full 2× gap + refined hover lift */
+@media (min-width: 1200px) {
   .hero-cta-cards-container {
-    margin-top: calc(0.85rem + 2.25rem);
+    width: 100%;
+    max-width: 1185px;
+    column-gap: 1.72rem;
   }
 
   .hero-cta-cards-container .premium-cta-card:hover,
@@ -2309,12 +2311,18 @@ body {
   }
 }
 
+@media (min-width: 992px) {
+  .hero-cta-cards-container {
+    margin-top: calc(0.85rem + 2.375rem);
+  }
+}
+
 @media (max-width: 360px) {
   .hero-cta-cards-container {
-    column-gap: 0.74rem;
-    row-gap: 0.94rem;
-    padding-left: calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
-    padding-right: calc(var(--bs-gutter-x, 1.5rem) + var(--bs-gutter-x, 1.5rem) * 0.5);
+    column-gap: 1.11rem;
+    row-gap: 1.41rem;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
   }
 
   .hero-cta-cards-container .premium-cta-card {
@@ -2507,7 +2515,7 @@ body {
 /* Responsive Hero Section */
 @media (max-width: 991.98px) and (min-width: 768px) {
   main .hero-section:has(.hero-cta-cards-container) {
-    padding: 0.35rem 0 0.25rem;
+    padding: 0.45rem 0 0.55rem;
   }
 
   main .hero-section:has(.hero-cta-cards-container) {
@@ -2517,11 +2525,20 @@ body {
 
   main .hero-section:has(.hero-cta-cards-container) > .container {
     width: 100%;
+    max-width: 100%;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) .hero-content {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-title {
-    margin-top: 0.65rem !important;
-    margin-bottom: 0.5rem !important;
+    margin-top: 0.55rem !important;
+    margin-bottom: 0.6rem !important;
     font-size: calc(1.9rem * 0.85 * 0.9);
   }
 
@@ -2531,8 +2548,8 @@ body {
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-cta-cards-container {
-    margin-top: calc(0.85rem + 1.75rem);
-    margin-bottom: 3.25rem;
+    margin-top: calc(0.85rem + 1.875rem);
+    margin-bottom: 4rem;
   }
   
   .hero-section {
@@ -5032,25 +5049,28 @@ body {
 /* Desktop hero: full-width intro + CTA cards in one row */
 @media (min-width: 992px) {
   main .hero-section:has(.hero-cta-cards-container) {
-    padding: 0.4rem 0 0.25rem;
+    padding: 0.5rem 0 0.6rem;
     display: block;
     min-height: 0;
   }
 
   main .hero-section:has(.hero-cta-cards-container) > .container {
     width: 100%;
+    max-width: 100%;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-content {
-    max-width: 1100px;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-title {
     font-size: calc(1.75rem * 0.85 * 0.9);
-    margin-top: 0.65rem !important;
-    margin-bottom: 0.5rem;
+    margin-top: 0.55rem !important;
+    margin-bottom: 0.6rem;
     text-align: center;
   }
 
@@ -5060,8 +5080,8 @@ body {
   }
 
   main .hero-section:has(.hero-cta-cards-container) .hero-cta-cards-container {
-    margin-top: calc(0.85rem + 2.25rem);
-    margin-bottom: 3.25rem;
+    margin-top: calc(0.85rem + 2.375rem);
+    margin-bottom: 4rem;
   }
 
   .hero-intro-text {
@@ -5070,6 +5090,18 @@ body {
     margin-right: auto !important;
     text-align: center;
     line-height: 1.8;
+  }
+}
+
+@media (min-width: 1200px) {
+  main .hero-section:has(.hero-cta-cards-container) > .container {
+    max-width: 1240px;
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    padding-right: var(--bs-gutter-x, 0.75rem);
+  }
+
+  main .hero-section:has(.hero-cta-cards-container) .hero-content {
+    max-width: 1185px;
   }
 }
 

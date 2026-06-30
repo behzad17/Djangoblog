@@ -221,19 +221,21 @@
   }
 }
 
-/* Tablet / desktop — taller cards, more internal breathing room */
+/* Tablet / desktop — taller cards, distributed internal spacing */
 @media (min-width: 768px) {
   .premium-cta-card {
-    aspect-ratio: 1 / 1.02;
+    aspect-ratio: 1 / 1.28;
   }
 
   .premium-cta-card__surface {
-    padding: 0.64rem 0.46rem 0.58rem;
+    justify-content: flex-start;
+    padding: 0.78rem 0.46rem 0.72rem;
   }
 
   .premium-cta-card__media {
     min-height: clamp(2.85rem, 12.5vw, 5.25rem);
-    margin-bottom: 0.38rem;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
   }
 
   .premium-cta-card__illustration {
@@ -241,11 +243,15 @@
   }
 
   .premium-cta-card__content {
-    gap: 0.28rem;
+    gap: 0.4rem;
+    flex: 0 1 auto;
+    min-height: 0;
   }
 
   .premium-cta-card__action {
-    padding-top: 0.38rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    flex-shrink: 0;
   }
 
   .premium-cta-card__title {
@@ -268,6 +274,18 @@
   }
 
   .premium-cta-card__surface {
-    padding: 0.7rem 0.48rem 0.64rem;
+    padding: 0.82rem 0.48rem 0.76rem;
+  }
+
+  .premium-cta-card__media {
+    margin-bottom: 0.54rem;
+  }
+
+  .premium-cta-card__content {
+    gap: 0.44rem;
+  }
+
+  .premium-cta-card__action {
+    padding-top: 0.48rem;
   }
 }
