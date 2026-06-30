@@ -216,26 +216,12 @@
   outline-offset: 2px;
 }
 
-/* Mobile — illustration + title only; no pill chrome or action buttons */
+/* Mobile — illustration + title; hide action buttons only */
 @media (max-width: 767.98px) {
-  .premium-cta-card {
-    aspect-ratio: auto;
-    border-radius: 0;
-    box-shadow: none;
-    overflow: visible;
-  }
-
   .premium-cta-card__surface {
     justify-content: center;
     gap: 0.18rem;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-  }
-
-  .premium-cta-card__surface::before {
-    display: none;
+    padding: 0.4rem 0.3rem 0.36rem;
   }
 
   .premium-cta-card__description {
@@ -268,11 +254,6 @@
   .premium-cta-card__title {
     font-size: clamp(0.6rem, 2.4vw, 0.74rem);
     line-height: 1.22;
-  }
-
-  .premium-cta-card:hover .premium-cta-card__surface,
-  .premium-cta-card:focus-visible .premium-cta-card__surface {
-    box-shadow: none;
   }
 }
 
