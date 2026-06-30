@@ -117,10 +117,12 @@ def main() -> None:
         raw = Image.open(src)
         keyed = key_magenta(raw)
         fitted = fit_canvas(keyed)
-        png_out = SRC_DIR / f"{name}.png"
+        png_src = SRC_DIR / f"{name}.png"
         webp_out = OUT_DIR / f"{name}.webp"
+        png_out = OUT_DIR / f"{name}.png"
+        fitted.save(png_src, "PNG")
         fitted.save(png_out, "PNG")
-        fitted.save(webp_out, "WEBP", quality=93, method=6)
+        fitted.save(webp_out, "WEBP", quality=93, method=6, lossless=False)
         print(f"  -> {webp_out.name} {analyze(webp_out)}")
 
     print("Done.")

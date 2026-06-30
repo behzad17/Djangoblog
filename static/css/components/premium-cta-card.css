@@ -71,6 +71,13 @@
   transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.premium-cta-card__media picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .premium-cta-card__illustration {
   display: block;
   width: auto;
@@ -265,13 +272,17 @@
   }
 
   .premium-cta-card__media {
-    min-height: 0;
+    min-height: clamp(2.65rem, 11.8vw, 4.95rem);
     margin-bottom: 0.38rem;
     flex-shrink: 0;
   }
 
   .premium-cta-card__illustration {
     max-height: clamp(2.65rem, 11.8vw, 4.95rem);
+    height: clamp(2.65rem, 11.8vw, 4.95rem);
+    width: auto;
+    max-width: 90%;
+    flex-shrink: 0;
   }
 
   .premium-cta-card__content {
@@ -313,6 +324,7 @@
 @media (min-width: 992px) {
   .premium-cta-card__illustration {
     max-height: 5.35rem;
+    height: 5.35rem;
     max-width: 90%;
   }
 
