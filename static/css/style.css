@@ -2307,11 +2307,11 @@ body {
   }
 
   .hero-cta-cards-container .premium-cta-card__surface {
-    background: #DBE9F4;
+    background: #F1F3F8;
   }
 
   .hero-cta-cards-container .premium-cta-card__surface::before {
-    background: linear-gradient(180deg, rgba(219, 233, 244, 0.55) 0%, rgba(219, 233, 244, 0) 38%);
+    background: linear-gradient(180deg, rgba(241, 243, 248, 0.55) 0%, rgba(241, 243, 248, 0) 38%);
   }
 
   .hero-cta-cards-container .premium-cta-card:hover,
