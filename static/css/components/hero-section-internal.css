@@ -1,0 +1,20 @@
+/* Internal page heroes — shared background (homepage excluded via modifier) */
+
+.hero-section--internal:not(.hero-section--homepage) {
+  background-color: #a4d2e0 !important;
+  background-repeat: no-repeat !important;
+  background-position: center top !important;
+  background-size: cover !important;
+}
+
+@media (max-width: 767.98px) {
+  .hero-section--internal:not(.hero-section--homepage) {
+    background-image: url('../../images/heroback-page-mobile.webp') !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-section--internal:not(.hero-section--homepage) {
+    background-image: url('../../images/heroback-page-desktop.webp') !important;
+  }
+}
