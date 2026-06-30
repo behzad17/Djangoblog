@@ -1898,7 +1898,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: clamp(0.828rem, 1.265vw, 1.012rem);
+    font-size: clamp(0.994rem, 1.518vw, 1.214rem);
     line-height: 1;
     color: #FFFFFF;
     opacity: 1;
