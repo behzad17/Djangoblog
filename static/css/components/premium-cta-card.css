@@ -150,6 +150,15 @@
   height: 0.66em;
 }
 
+.premium-cta-card__action-chevron {
+  display: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--pv-cta-card-action);
+  opacity: 0.38;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
 /* Standalone defaults (outside hero grid) */
 .premium-cta-card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -176,6 +185,20 @@
   box-shadow: 0 5px 14px rgba(27, 85, 131, 0.24);
 }
 
+@media (min-width: 768px) {
+  .premium-cta-card:hover .premium-cta-card__action-button,
+  .premium-cta-card:focus-visible .premium-cta-card__action-button {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(27, 85, 131, 0.2);
+  }
+
+  .premium-cta-card:hover .premium-cta-card__action-chevron,
+  .premium-cta-card:focus-visible .premium-cta-card__action-chevron {
+    transform: translateX(-2px);
+    opacity: 0.85;
+  }
+}
+
 .premium-cta-card:focus {
   outline: none;
 }
@@ -193,9 +216,18 @@
     padding: 0.4rem 0.3rem 0.36rem;
   }
 
-  .premium-cta-card__description,
-  .premium-cta-card__action {
+  .premium-cta-card__description {
     display: none;
+  }
+
+  .premium-cta-card__action-chevron {
+    display: none;
+  }
+
+  .premium-cta-card__action {
+    display: flex;
+    margin-top: 0.2rem;
+    padding-top: 0;
   }
 
   .premium-cta-card__media {
@@ -261,8 +293,16 @@
 
   .premium-cta-card__action {
     margin-top: auto;
-    padding-top: 0.38rem;
+    padding-top: 0.9rem;
     flex-shrink: 0;
+  }
+
+  .premium-cta-card__action-button {
+    display: none;
+  }
+
+  .premium-cta-card__action-chevron {
+    display: block;
   }
 
   .premium-cta-card__title {
@@ -289,7 +329,7 @@
   }
 
   .premium-cta-card__action {
-    padding-top: 0.36rem;
+    padding-top: 0.875rem;
   }
 }
 
