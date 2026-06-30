@@ -2195,6 +2195,23 @@ body {
   max-height: clamp(2.04rem, 9.2vw, 3.8rem);
 }
 
+/* Homepage hero CTA titles — 15% larger than premium-cta-card defaults */
+.hero-cta-cards-container .premium-cta-card__title {
+  font-size: clamp(calc(0.64rem * 1.15), calc(2.45vw * 1.15), calc(0.84rem * 1.15));
+}
+
+@media (max-width: 767.98px) {
+  .hero-cta-cards-container .premium-cta-card__title {
+    font-size: clamp(calc(0.6rem * 1.15), calc(2.4vw * 1.15), calc(0.74rem * 1.15));
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-cta-cards-container .premium-cta-card__title {
+    font-size: clamp(calc(0.68rem * 1.15), calc(0.98vw * 1.15), calc(0.86rem * 1.15));
+  }
+}
+
 /* Mobile homepage CTA grid — 2 rows × 3 columns */
 @media (max-width: 767.98px) {
   .hero-cta-mobile-title {
