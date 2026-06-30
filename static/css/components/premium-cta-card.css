@@ -270,7 +270,7 @@
 
   .premium-cta-card__media {
     min-height: clamp(2.65rem, 11.8vw, 4.95rem);
-    margin-bottom: 0.52rem;
+    margin-bottom: 1.15rem;
     flex-shrink: 0;
   }
 
@@ -330,7 +330,7 @@
   }
 
   .premium-cta-card__media {
-    margin-bottom: 0.56rem;
+    margin-bottom: 1.2rem;
   }
 
   .premium-cta-card__content {
