@@ -71,13 +71,6 @@
   transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.premium-cta-card__media picture {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
 .premium-cta-card__illustration {
   display: block;
   width: auto;
