@@ -1847,7 +1847,7 @@ body {
 @media (min-width: 768px) {
   main .hero-section--homepage .hero-section__info {
     margin-top: 1.5rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: calc(0.5rem * 1.5);
     width: 100%;
   }
 
@@ -1908,7 +1908,7 @@ body {
 @media (min-width: 992px) {
   main .hero-section--homepage .hero-section__info {
     margin-top: 1.75rem;
-    padding-bottom: 0.65rem;
+    padding-bottom: calc(0.65rem * 1.5);
   }
 
   .hero-info-cards-grid {
