@@ -185,6 +185,14 @@
   box-shadow: 0 5px 14px rgba(27, 85, 131, 0.24);
 }
 
+@media (max-width: 767.98px) {
+  .premium-cta-card:hover .premium-cta-card__action-button,
+  .premium-cta-card:focus-visible .premium-cta-card__action-button {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
 @media (min-width: 768px) {
   .premium-cta-card:hover .premium-cta-card__action-button,
   .premium-cta-card:focus-visible .premium-cta-card__action-button {
@@ -208,26 +216,36 @@
   outline-offset: 2px;
 }
 
-/* Mobile — illustration + title, vertically balanced */
+/* Mobile — illustration + title only; no pill chrome or action buttons */
 @media (max-width: 767.98px) {
+  .premium-cta-card {
+    aspect-ratio: auto;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
   .premium-cta-card__surface {
     justify-content: center;
     gap: 0.18rem;
-    padding: 0.4rem 0.3rem 0.36rem;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .premium-cta-card__surface::before {
+    display: none;
   }
 
   .premium-cta-card__description {
     display: none;
   }
 
+  .premium-cta-card__action,
+  .premium-cta-card__action-button,
   .premium-cta-card__action-chevron {
     display: none;
-  }
-
-  .premium-cta-card__action {
-    display: flex;
-    margin-top: 0.2rem;
-    padding-top: 0;
   }
 
   .premium-cta-card__media {
@@ -250,6 +268,11 @@
   .premium-cta-card__title {
     font-size: clamp(0.6rem, 2.4vw, 0.74rem);
     line-height: 1.22;
+  }
+
+  .premium-cta-card:hover .premium-cta-card__surface,
+  .premium-cta-card:focus-visible .premium-cta-card__surface {
+    box-shadow: none;
   }
 }
 
