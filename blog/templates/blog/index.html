@@ -3,6 +3,7 @@
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/components/premium-cta-card.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/components/homepage-pro-ads.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 {% block content %}
 <!-- Mobile Hero Banner (< 768px only) -->
@@ -88,6 +89,10 @@
 
       <div class="d-md-none">
         {% include 'includes/mobile_homepage_banners.html' %}
+      </div>
+
+      <div class="d-md-none">
+        {% include 'includes/homepage_pro_ads_section.html' %}
       </div>
     </div>
 
@@ -220,6 +225,10 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="d-none d-md-block">
+  {% include 'includes/homepage_pro_ads_section.html' %}
 </div>
 
 <!-- index.html content ends here -->

@@ -1,0 +1,24 @@
+{% url 'ads:ads_home' as ads_home_url %}
+
+{% if homepage_pro_ads %}
+<section class="homepage-pro-ads-section" aria-labelledby="homepage-pro-ads-heading">
+  <div class="homepage-pro-ads-section__inner">
+    <div class="homepage-pro-ads-section__header">
+      <h2 class="homepage-pro-ads-section__title" id="homepage-pro-ads-heading">
+        <i class="fas fa-crown ms-2" aria-hidden="true"></i>
+        تبلیغات Pro
+      </h2>
+      <a href="{{ ads_home_url }}" class="homepage-pro-ads-section__view-all">
+        مشاهده همه
+        <i class="fas fa-chevron-left me-1" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <div class="homepage-pro-ads-grid" role="list">
+      {% for ad in homepage_pro_ads %}
+        {% include 'ads/includes/_homepage_pro_card.html' with ad=ad %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

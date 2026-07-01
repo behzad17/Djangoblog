@@ -1,0 +1,40 @@
+{% load static %}
+<a
+  href="{% url 'ads:ad_detail' ad.slug %}"
+  class="homepage-pro-card"
+  role="listitem"
+  title="{{ ad.title }}"
+>
+  <span class="homepage-pro-card__media">
+    {% if ad.image %}
+    <img
+      class="homepage-pro-card__image"
+      src="{{ ad.image.url }}"
+      alt=""
+      loading="lazy"
+      decoding="async"
+      data-fallback="{% static 'images/default.jpg' %}"
+      onerror="this.onerror=null; this.src=this.dataset.fallback;"
+    />
+    {% else %}
+    <img
+      class="homepage-pro-card__image"
+      src="{% static 'images/default.jpg' %}"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    {% endif %}
+    <span class="homepage-pro-card__badge">
+      <i class="fas fa-crown ms-1" aria-hidden="true"></i>Pro
+    </span>
+  </span>
+  <span class="homepage-pro-card__body">
+    <span class="homepage-pro-card__title">{{ ad.title }}</span>
+    {% if ad.city %}
+    <span class="homepage-pro-card__city">
+      <i class="fas fa-map-marker-alt ms-1" aria-hidden="true"></i>{{ ad.city }}
+    </span>
+    {% endif %}
+  </span>
+</a>

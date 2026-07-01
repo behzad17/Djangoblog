@@ -27,6 +27,7 @@ from .utils import (
 )
 from .decorators import site_verified_required
 from ads.models import FavoriteAd
+from ads.homepage_pro_ads import get_homepage_pro_ads
 from django.utils import timezone
 
 
@@ -91,6 +92,7 @@ class PostList(generic.ListView):
                 'popular_posts': [],
                 'featured_post': None,
                 'upcoming_events': [],
+                'homepage_pro_ads': [],
             }
             return context
 
@@ -204,6 +206,11 @@ class PostList(generic.ListView):
             context['upcoming_events'] = get_upcoming_events()
         except Exception:
             context['upcoming_events'] = []
+
+        try:
+            context['homepage_pro_ads'] = get_homepage_pro_ads()
+        except Exception:
+            context['homepage_pro_ads'] = []
 
         try:
             expert_posts_qs = get_specialist_posts_queryset()
