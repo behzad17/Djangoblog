@@ -3849,13 +3849,10 @@ body {
 
 /* Homepage desktop sidebar — align with Pro ads + footer */
 @media (min-width: 992px) {
-  .homepage .homepage-main-grid {
-    overflow-x: clip;
-  }
-
   .homepage .homepage-sidebar {
     position: relative;
-    inset-inline-end: 22px;
+    inset: auto;
+    left: 22px;
   }
 }
 
