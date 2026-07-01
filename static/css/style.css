@@ -3855,7 +3855,7 @@ body {
 
   .homepage .homepage-sidebar {
     position: relative;
-    inset-inline-start: 22px;
+    inset-inline-end: 22px;
   }
 }
 
