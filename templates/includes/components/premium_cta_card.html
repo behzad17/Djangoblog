@@ -1,6 +1,6 @@
 {% load static %}
 {# Configurable: href, illustration, title, description only. Chrome is fixed in premium-cta-card.css #}
-<a href="{{ href }}" class="premium-cta-card">
+<a href="{{ href }}" class="premium-cta-card{% if extra_class %} {{ extra_class }}{% endif %}">
   <span class="premium-cta-card__surface">
     <span class="premium-cta-card__media">
       <img

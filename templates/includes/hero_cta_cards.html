@@ -12,9 +12,9 @@
   {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" description="مقالات و محتوای تخصصی" illustration="images/premium-cta/icons/articles.webp" %}
 
   {% if user.is_authenticated %}
-  {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" description="محتوای خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" %}
+  {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" description="محتوای خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" extra_class="premium-cta-card--primary" %}
   {% else %}
-  {% include "includes/components/premium_cta_card.html" with href=signup_url title="ثبت‌نام برای انتشار پست" description="محتوای خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" %}
+  {% include "includes/components/premium_cta_card.html" with href=signup_url title="ثبت‌نام برای انتشار پست" description="محتوای خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" extra_class="premium-cta-card--primary" %}
   {% endif %}
 
   {% include "includes/components/premium_cta_card.html" with href=ask_me_url title="سوال از متخصص" description="پرسش و پاسخ با متخصصان" illustration="images/premium-cta/icons/experts.webp" %}
