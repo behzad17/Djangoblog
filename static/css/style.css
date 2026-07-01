@@ -3847,6 +3847,18 @@ body {
   position: relative;
 }
 
+/* Homepage desktop sidebar — align with Pro ads + footer */
+@media (min-width: 992px) {
+  .homepage .homepage-main-grid {
+    overflow-x: clip;
+  }
+
+  .homepage .homepage-sidebar {
+    position: relative;
+    inset-inline-start: 22px;
+  }
+}
+
 .popular-posts-sidebar {
   background: var(--pv-bg-card) !important; /* Use card background token */
   border-radius: 12px;
