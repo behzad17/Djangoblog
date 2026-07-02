@@ -4790,7 +4790,8 @@ body {
 
 @media (min-width: 992px) {
   .upcoming-events-section {
-    padding-right: 130px;
+    /* Match category overview anchor; subtract icon gap (events span full row width) */
+    padding-right: calc(var(--hp-outer-edge-pad, 170px) - var(--ue-icon-gap));
   }
 
   .upcoming-events-header,
