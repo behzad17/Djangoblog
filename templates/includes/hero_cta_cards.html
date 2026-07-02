@@ -9,7 +9,7 @@
 <!-- Hero CTA Feature Cards -->
 <h2 class="hero-cta-mobile-title d-md-none">خدمات پیوند</h2>
 <div class="hero-cta-cards-container">
-  {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" description="محتوای منتشره کاربران" illustration="images/premium-cta/icons/articles.webp" extra_class="premium-cta-card--evolved" %}
+  {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" description="محتوای منتشره کاربران" illustration="images/premium-cta/icons/articles.webp" %}
 
   {% if user.is_authenticated %}
   {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" description="مطالب خود را به اشتراک بگذارید" illustration="images/premium-cta/icons/publish.webp" extra_class="premium-cta-card--primary" %}
