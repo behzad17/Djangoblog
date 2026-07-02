@@ -7,7 +7,7 @@ Cloudinary-backed ads in the ads app are separate — do not register them here.
 STATIC_BANNERS = {
     'ad-top': {
         'image': 'ad-top',
-        'url': '#',
+        'url': 'https://www.peyvand.se/ads/',
     },
     'ad-1': {
         'image': 'ad-1',
