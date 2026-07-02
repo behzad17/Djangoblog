@@ -6633,8 +6633,11 @@ body .container nav[aria-label="breadcrumb"] {
 .footer-logo-loop-wrapper {
   width: 100%;
   position: relative;
+  z-index: 0;
   padding: 20px 0;
-  overflow: hidden; /* Hide duplicated logos */
+  overflow: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .footer-logo-loop {
@@ -6643,6 +6646,7 @@ body .container nav[aria-label="breadcrumb"] {
   align-items: center;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .footer-logo-slide {
@@ -6651,34 +6655,49 @@ body .container nav[aria-label="breadcrumb"] {
   gap: 20px;
   margin: 0;
   padding: 0;
-  /* Width is 200% to accommodate duplicated logos */
-  width: 200%;
-  /* RTL animation: scroll from right to left */
+  width: max-content;
+  flex-shrink: 0;
+  -webkit-animation: scroll-logos-rtl 30s linear infinite;
   animation: scroll-logos-rtl 30s linear infinite;
-  will-change: transform; /* Optimize for animation */
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-/* Pause animation on hover */
-.footer-logo-loop-wrapper:hover .footer-logo-slide {
-  animation-play-state: paused;
+/* Pause animation on hover (pointer devices only — avoids iOS sticky-hover freeze) */
+@media (hover: hover) and (pointer: fine) {
+  .footer-logo-loop-wrapper:hover .footer-logo-slide {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+  }
 }
 
-/* RTL infinite scroll animation */
-@keyframes scroll-logos-rtl {
+/* Infinite scroll: move one duplicated set for seamless loop */
+@-webkit-keyframes scroll-logos-rtl {
   0% {
-    transform: translateX(0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    /* Move exactly 50% (one set of logos) for seamless loop */
-    transform: translateX(50%);
+    -webkit-transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes scroll-logos-rtl {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .footer-logo-slide {
+    -webkit-animation: none;
     animation: none;
-    /* Show only first set of logos when motion is reduced */
     width: 100%;
     justify-content: center;
   }
@@ -6703,8 +6722,6 @@ body .container nav[aria-label="breadcrumb"] {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
-
-/* Animation removed - logos are now static */
 
 /* Original footer-logos class kept for backward compatibility */
 .footer-logos {
@@ -7018,8 +7035,10 @@ body .container nav[aria-label="breadcrumb"] {
 }
 
 /* Logo hover effect for better interactivity */
-.footer-logo-img:hover {
-  opacity: 0.8;
+@media (hover: hover) and (pointer: fine) {
+  .footer-logo-img:hover {
+    opacity: 0.8;
+  }
 }
 
 /* Responsive adjustments for animated logo display */
@@ -7287,6 +7306,8 @@ body .container nav[aria-label="breadcrumb"] {
   .footer-mobile-logo-loop {
     margin: 0.5rem 0 0.75rem;
     overflow: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   .footer-mobile-logo-loop .footer-logo-loop-wrapper {
@@ -7304,7 +7325,6 @@ body .container nav[aria-label="breadcrumb"] {
     height: 48px;
     flex: 0 0 72px;
     object-fit: contain;
-    filter: brightness(1.05);
   }
 
   .footer-mobile .footer-mobile-contact-row {
@@ -7423,6 +7443,8 @@ body .container nav[aria-label="breadcrumb"] {
   .footer-wide-logo-loop {
     margin: 0.15rem 0 0.75rem;
     overflow: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   .footer-wide-logo-loop .footer-logo-loop-wrapper {
@@ -7440,7 +7462,6 @@ body .container nav[aria-label="breadcrumb"] {
     height: 58px;
     flex: 0 0 88px;
     object-fit: contain;
-    filter: brightness(1.05);
   }
 }
 
