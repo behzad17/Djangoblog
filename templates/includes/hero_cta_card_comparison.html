@@ -1,0 +1,25 @@
+{% url 'home' as home_url %}
+
+<!-- Review-only: side-by-side CTA comparison (not for production) -->
+<section class="cta-refinement-comparison" aria-label="مقایسه طراحی کارت CTA">
+  <div class="container">
+    <p class="cta-refinement-comparison__eyebrow">بررسی طراحی — فقط برای ارزیابی داخلی</p>
+    <h2 class="cta-refinement-comparison__heading">مطالب کاربران — مقایسه نسخه فعلی و نسخه refined</h2>
+
+    <div class="cta-refinement-comparison__grid">
+      <div class="cta-refinement-comparison__panel">
+        <p class="cta-refinement-comparison__label">Current</p>
+        <div class="cta-refinement-comparison__slot">
+          {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" description="محتوای منتشره کاربران" illustration="images/premium-cta/icons/articles.webp" %}
+        </div>
+      </div>
+
+      <div class="cta-refinement-comparison__panel">
+        <p class="cta-refinement-comparison__label">Refined prototype</p>
+        <div class="cta-refinement-comparison__slot">
+          {% include "includes/components/premium_cta_card_refined_prototype.html" with href=home_url|add:"#category-filter-section" illustration="images/premium-cta/icons/articles.webp" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
