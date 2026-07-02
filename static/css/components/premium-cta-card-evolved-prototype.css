@@ -1,0 +1,204 @@
+/* Homepage hero CTA — evolved prototype (مطالب کاربران only)
+ * Apple-inspired philosophy: clarity, whitespace, restraint — not visual mimicry.
+ */
+
+.hero-cta-cards-container .premium-cta-card--evolved {
+  border-radius: 18px;
+  transition:
+    transform 0.26s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.26s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow:
+    0 1px 2px rgba(11, 45, 74, 0.05),
+    0 10px 28px rgba(11, 45, 74, 0.09);
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__surface {
+  padding: 0.44rem 0.36rem 0.42rem;
+  background: #f6f7f9;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.72), inset 0 0 0 1px rgba(11, 45, 74, 0.05);
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__surface::before {
+  display: none;
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__media {
+  margin-bottom: 0.34rem;
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__illustration {
+  max-width: 84%;
+  object-position: center 46%;
+  transform: translateY(-2px);
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__content {
+  gap: 0.28rem;
+  max-width: 92%;
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__title {
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  color: #0f2438;
+  transform: translateY(1px);
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__description {
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+  color: #5a6f86;
+  max-width: 92%;
+  transform: translateY(2px);
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__action {
+  padding-top: 0.32rem;
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__action-chevron {
+  opacity: 0.22;
+  transform: translateY(-5px) scale(0.9);
+  transform-origin: center;
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved:hover .premium-cta-card__media,
+.hero-cta-cards-container .premium-cta-card--evolved:focus-visible .premium-cta-card__media {
+  transform: none;
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved:hover .premium-cta-card__illustration,
+.hero-cta-cards-container .premium-cta-card--evolved:focus-visible .premium-cta-card__illustration {
+  transform: translateY(-2px);
+}
+
+.hero-cta-cards-container .premium-cta-card--evolved:hover .premium-cta-card__action-chevron,
+.hero-cta-cards-container .premium-cta-card--evolved:focus-visible .premium-cta-card__action-chevron {
+  transform: translateY(-5px) scale(0.9);
+  opacity: 0.22;
+}
+
+@media (min-width: 768px) {
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__surface {
+    padding: 0.7rem 0.5rem 0.72rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__media {
+    margin-bottom: 1.28rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__content {
+    gap: 0.58rem;
+    max-width: 90%;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__title {
+    line-height: 1.26;
+    transform: translateY(1px);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__description {
+    line-height: 1.52;
+    transform: translateY(2px);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__illustration {
+    transform: translateY(-2px);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__action-chevron {
+    transform: translateY(-6px) scale(0.9);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__action {
+    padding-top: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__surface {
+    padding: 0.74rem 0.52rem 0.76rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__media {
+    margin-bottom: 1.32rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__content {
+    gap: 0.62rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__action {
+    padding-top: 1.02rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .hero-cta-cards-container .premium-cta-card--evolved:hover,
+  .hero-cta-cards-container .premium-cta-card--evolved:focus-visible {
+    transform: none;
+    box-shadow:
+      0 1px 2px rgba(11, 45, 74, 0.05),
+      0 10px 28px rgba(11, 45, 74, 0.09);
+  }
+}
+
+/* Desktop-only restrained hover */
+@media (min-width: 992px) and (hover: hover) {
+  .hero-cta-cards-container .premium-cta-card--evolved:hover,
+  .hero-cta-cards-container .premium-cta-card--evolved:focus-visible {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow:
+      0 2px 4px rgba(11, 45, 74, 0.06),
+      0 14px 32px rgba(11, 45, 74, 0.11);
+    outline: none;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved:hover .premium-cta-card__surface,
+  .hero-cta-cards-container .premium-cta-card--evolved:focus-visible .premium-cta-card__surface {
+    box-shadow:
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.8),
+      inset 0 0 0 1px rgba(11, 45, 74, 0.06);
+  }
+}
+
+@media (min-width: 1200px) and (hover: hover) {
+  .hero-cta-cards-container .premium-cta-card--evolved:hover,
+  .hero-cta-cards-container .premium-cta-card--evolved:focus-visible {
+    transform: translateY(-2px) scale(1.01);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero-cta-cards-container .premium-cta-card--evolved {
+    border-radius: 18px;
+    box-shadow:
+      0 1px 2px rgba(11, 45, 74, 0.04),
+      0 8px 20px rgba(11, 45, 74, 0.08);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__surface {
+    gap: 0.24rem;
+    padding: 0.46rem 0.34rem 0.4rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__media {
+    margin-bottom: 0.22rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__content {
+    gap: 0.14rem;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__title {
+    line-height: 1.28;
+    transform: translateY(1px);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--evolved .premium-cta-card__illustration {
+    transform: translateY(-1px);
+    object-position: center 47%;
+  }
+}
