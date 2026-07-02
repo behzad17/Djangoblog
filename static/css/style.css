@@ -4720,10 +4720,10 @@ body {
   transform: translateY(-50%);
   z-index: 1;
   pointer-events: none;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 800;
   line-height: 1;
-  color: rgba(27, 85, 131, 0.5);
+  color: #eb5757;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.95);
   user-select: none;
 }
@@ -4738,15 +4738,16 @@ body {
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
+  scrollbar-color: #eb5757 transparent;
   padding-bottom: 0.15rem;
 }
 
 .upcoming-events-scroll::-webkit-scrollbar {
-  height: 4px;
+  height: 6px;
 }
 
 .upcoming-events-scroll::-webkit-scrollbar-thumb {
-  background: rgba(27, 85, 131, 0.22);
+  background: #eb5757;
   border-radius: 999px;
 }
 
