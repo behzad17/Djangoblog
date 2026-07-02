@@ -3847,12 +3847,30 @@ body {
   position: relative;
 }
 
-/* Homepage desktop sidebar — align with Pro ads + footer */
+/* Homepage desktop sidebar — sit near right-pinned main content (posts/events) */
 @media (min-width: 992px) {
+  .homepage-main-grid {
+    --hp-grid-footprint: 656px;
+    --hp-outer-edge-pad: 170px;
+    --hp-main-col-end-pad: 12px;
+    --hp-post-inset-from-row-end: calc(
+      var(--hp-grid-footprint) + var(--hp-outer-edge-pad) + var(--hp-main-col-end-pad)
+    );
+    --hp-sidebar-gap: 2rem;
+  }
+
+  .homepage-main-grid > .row {
+    container-type: inline-size;
+    container-name: homepage-main-row;
+  }
+
   .homepage .homepage-sidebar {
     position: relative;
     inset: auto;
-    left: 22px;
+    left: max(
+      0px,
+      calc(75cqw - var(--hp-post-inset-from-row-end) - var(--hp-sidebar-gap))
+    );
   }
 }
 
