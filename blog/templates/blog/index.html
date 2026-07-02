@@ -4,8 +4,6 @@
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/components/premium-cta-card.css' %}?v={% now 'U' %}" />
-<link rel="stylesheet" href="{% static 'css/components/premium-cta-card-prototype.css' %}?v={% now 'U' %}" />
-<link rel="stylesheet" href="{% static 'css/components/premium-cta-card-comparison.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-pro-ads.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 {% block content %}
@@ -53,8 +51,6 @@
     </div>
   </div>
 </section>
-
-{% include 'includes/hero_cta_card_comparison.html' %}
 
 <!-- Mobile Secondary Banner (< 768px only) -->
 <div class="d-md-none">
