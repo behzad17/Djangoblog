@@ -2233,6 +2233,16 @@ body {
   .hero-cta-cards-container .premium-cta-card__title {
     font-size: clamp(calc(0.68rem * 1.15), calc(0.98vw * 1.15), calc(0.86rem * 1.15));
   }
+
+  .hero-cta-cards-container .premium-cta-card__content {
+    gap: 0.48rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-cta-cards-container .premium-cta-card__content {
+    gap: 0.52rem;
+  }
 }
 
 /* Mobile homepage CTA grid — 2 rows × 3 columns */
