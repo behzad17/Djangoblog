@@ -7305,6 +7305,21 @@ body .container nav[aria-label="breadcrumb"] {
     object-fit: contain;
     filter: brightness(1.05);
   }
+
+  .footer-mobile .footer-mobile-contact-row {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .footer-mobile .footer-mobile-contact-text {
+    flex: none;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  .footer-mobile .footer-mobile-contact-row--static .footer-mobile-contact-text {
+    color: #ffffff;
+  }
 }
 
 /* Tablet + Desktop Peyvand footer (≥768px) */
