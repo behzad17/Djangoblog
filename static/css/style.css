@@ -3869,7 +3869,7 @@ body {
     inset: auto;
     left: max(
       0px,
-      calc(75cqw - var(--hp-post-inset-from-row-end) - var(--hp-sidebar-gap) - 40px)
+      calc(75cqw - var(--hp-post-inset-from-row-end) - var(--hp-sidebar-gap) - 60px)
     );
   }
 }
