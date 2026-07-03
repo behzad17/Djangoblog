@@ -2,25 +2,52 @@
 
 {% if ad_show_gallery_lightbox %}
 <div class="ad-detail-gallery" data-ad-gallery>
-  <div class="ad-detail-gallery__hero">
+  <div class="ad-detail-gallery__stage">
     <div class="ad-detail-hero-media">
+      {% if ad_gallery_slides|length > 1 %}
+      <button
+        type="button"
+        class="ad-detail-gallery__inline-nav ad-detail-gallery__inline-nav--prev js-ad-gallery-inline-prev"
+        aria-label="تصویر قبلی"
+      >
+        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+      </button>
+      {% endif %}
+
       <button
         type="button"
         class="ad-detail-gallery__hero-button js-ad-gallery-open"
         data-gallery-index="0"
-        aria-label="باز کردن گالری تصاویر"
+        aria-label="باز کردن گالری تصاویر در حالت تمام‌صفحه"
       >
         <img
           src="{{ detail_primary_image_url }}"
           alt="{{ ad.title }}"
-          class="ad-detail-image ad-detail-hero-image"
+          class="ad-detail-image ad-detail-hero-image js-ad-gallery-hero-image"
+          data-primary-url="{{ detail_primary_image_url }}"
           loading="eager"
           fetchpriority="high"
-          width="650"
-          height="650"
+          width="560"
+          height="420"
           onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
         >
+        <span class="ad-detail-gallery__expand-badge" aria-hidden="true">
+          <i class="fas fa-expand"></i>
+        </span>
       </button>
+
+      {% if ad_gallery_slides|length > 1 %}
+      <button
+        type="button"
+        class="ad-detail-gallery__inline-nav ad-detail-gallery__inline-nav--next js-ad-gallery-inline-next"
+        aria-label="تصویر بعدی"
+      >
+        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <span class="ad-detail-gallery__counter js-ad-gallery-inline-counter" aria-live="polite">
+        1 / {{ ad_gallery_slides|length }}
+      </span>
+      {% endif %}
     </div>
   </div>
 
@@ -33,7 +60,7 @@
     {% for slide in ad_gallery_slides %}
     <button
       type="button"
-      class="ad-detail-gallery__thumb js-ad-gallery-open{% if forloop.first %} is-active{% endif %}"
+      class="ad-detail-gallery__thumb js-ad-gallery-thumb{% if forloop.first %} is-active{% endif %}"
       data-gallery-index="{{ forloop.counter0 }}"
       role="tab"
       id="ad-gallery-thumb-{{ forloop.counter0 }}"
@@ -47,8 +74,8 @@
         class="ad-detail-gallery__thumb-image"
         loading="lazy"
         decoding="async"
-        width="144"
-        height="144"
+        width="112"
+        height="112"
         onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
       >
     </button>
@@ -108,8 +135,8 @@
     class="ad-detail-image ad-detail-hero-image"
     loading="eager"
     fetchpriority="high"
-    width="650"
-    height="650"
+    width="560"
+    height="420"
     onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
   >
 {% else %}
@@ -117,8 +144,8 @@
     src="{% static 'images/default.jpg' %}"
     alt="{{ ad.title }}"
     class="ad-detail-image ad-detail-hero-image"
-    width="650"
-    height="650"
+    width="560"
+    height="420"
   >
 {% endif %}
 </div>

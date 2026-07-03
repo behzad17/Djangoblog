@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var lightboxCounter = document.getElementById('ad-gallery-lightbox-counter');
   var captionNode = document.getElementById('ad-gallery-lightbox-caption');
   var thumbStrip = root.querySelector('.ad-detail-gallery__thumbs');
+  var heroImage = root.querySelector('.js-ad-gallery-hero-image');
+  var inlineCounter = root.querySelector('.js-ad-gallery-inline-counter');
+  var inlineIndex = 0;
   var currentIndex = 0;
   var lastFocusedElement = null;
   var activeLayer = layerA;
@@ -79,6 +82,57 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function updateInlineCounter(index) {
+    if (inlineCounter) {
+      inlineCounter.textContent = (index + 1) + ' / ' + slides.length;
+    }
+  }
+
+  function updateInlinePreview(index) {
+    if (index < 0 || index >= slides.length) {
+      return;
+    }
+
+    inlineIndex = index;
+    var slide = slides[index];
+    preloadAdjacentSlides(index);
+    syncActiveThumb(index);
+    updateInlineCounter(index);
+
+    if (!heroImage) {
+      return;
+    }
+
+    loadSlideImage(slide.url).then(function (url) {
+      if (inlineIndex !== index) {
+        return;
+      }
+      heroImage.src = url;
+      heroImage.alt = slide.alt || '';
+    }).catch(function () {
+      if (inlineIndex !== index) {
+        return;
+      }
+      heroImage.src = slide.url;
+      heroImage.alt = slide.alt || '';
+    });
+  }
+
+  function resetInlinePreview() {
+    inlineIndex = 0;
+    if (!heroImage) {
+      syncActiveThumb(0);
+      updateInlineCounter(0);
+      return;
+    }
+
+    var primaryUrl = heroImage.getAttribute('data-primary-url') || slides[0].url;
+    heroImage.src = primaryUrl;
+    heroImage.alt = slides[0].alt || '';
+    syncActiveThumb(0);
+    updateInlineCounter(0);
+  }
+
   function updateSlideMeta(index, slide) {
     if (captionNode) {
       var caption = slide.alt || '';
@@ -88,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (lightboxCounter) {
       lightboxCounter.textContent = (index + 1) + ' / ' + slides.length;
     }
-    syncActiveThumb(index);
   }
 
   function showLayer(layer, slide) {
@@ -251,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
       lightboxCounter.textContent = '';
     }
     currentIndex = 0;
-    syncActiveThumb(0);
+    resetInlinePreview();
     if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
       lastFocusedElement.focus();
     }
@@ -273,12 +326,51 @@ document.addEventListener('DOMContentLoaded', function () {
     renderSlide(nextIndex);
   }
 
+  function showInlinePrevious(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    var nextIndex = inlineIndex - 1;
+    if (nextIndex < 0) {
+      nextIndex = slides.length - 1;
+    }
+    updateInlinePreview(nextIndex);
+  }
+
+  function showInlineNext(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    var nextIndex = inlineIndex + 1;
+    if (nextIndex >= slides.length) {
+      nextIndex = 0;
+    }
+    updateInlinePreview(nextIndex);
+  }
+
   root.querySelectorAll('.js-ad-gallery-open').forEach(function (trigger) {
     trigger.addEventListener('click', function () {
-      var index = parseInt(trigger.getAttribute('data-gallery-index') || '0', 10);
-      openLightbox(index);
+      openLightbox(inlineIndex);
     });
   });
+
+  root.querySelectorAll('.js-ad-gallery-thumb').forEach(function (thumb) {
+    thumb.addEventListener('click', function () {
+      var index = parseInt(thumb.getAttribute('data-gallery-index') || '0', 10);
+      updateInlinePreview(index);
+    });
+  });
+
+  var inlinePrevButton = root.querySelector('.js-ad-gallery-inline-prev');
+  var inlineNextButton = root.querySelector('.js-ad-gallery-inline-next');
+  if (inlinePrevButton) {
+    inlinePrevButton.addEventListener('click', showInlinePrevious);
+  }
+  if (inlineNextButton) {
+    inlineNextButton.addEventListener('click', showInlineNext);
+  }
 
   if (thumbStrip) {
     thumbStrip.addEventListener('keydown', function (event) {
@@ -300,14 +392,17 @@ document.addEventListener('DOMContentLoaded', function () {
         var step = event.key === 'ArrowRight' ? -1 : 1;
         nextTabIndex = (currentTabIndex + step + tabs.length) % tabs.length;
         tabs[nextTabIndex].focus();
+        updateInlinePreview(nextTabIndex);
       }
       if (event.key === 'Home') {
         event.preventDefault();
         tabs[0].focus();
+        updateInlinePreview(0);
       }
       if (event.key === 'End') {
         event.preventDefault();
         tabs[tabs.length - 1].focus();
+        updateInlinePreview(tabs.length - 1);
       }
     });
   }

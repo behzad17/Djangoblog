@@ -5806,15 +5806,17 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
 
 /* Ad Detail Page Styles */
 .ad-detail-image {
-  width: 650px;  /* Desktop / tablet fixed width */
-  height: 650px; /* Desktop / tablet fixed height */
-  max-width: 100%;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  max-height: min(42vh, 380px);
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 10px;
   display: block;
   margin: 0 auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: none;
+  transition: transform 0.3s ease;
 }
 
 .ad-image-link:hover .ad-detail-image {
@@ -5840,10 +5842,8 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
 }
 
 @media (max-width: 768px) {
-  .ad-detail-image {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
+  .ad-detail-image:not(.ad-detail-hero-image) {
+    max-height: min(38vh, 280px);
   }
 }
 
