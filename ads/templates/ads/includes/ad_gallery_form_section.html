@@ -15,34 +15,52 @@
     data-max-images="10"
     data-initial-count="{{ gallery_images|length }}"
   >
-    <ul id="ad-gallery-existing" class="ad-gallery-existing list-unstyled mb-3">
-      {% for gallery_image in gallery_images %}
-      <li
-        class="ad-gallery-existing-item"
-        data-image-id="{{ gallery_image.id }}"
-        draggable="true"
-      >
-        <img
-          src="{{ gallery_image.image.url }}"
-          alt="تصویر گالری {{ forloop.counter }}"
-          class="ad-gallery-existing-thumb"
-        >
-        <div class="ad-gallery-existing-actions">
-          <button type="button" class="btn btn-sm btn-outline-secondary ad-gallery-move-up" aria-label="انتقال به بالا">
-            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="btn btn-sm btn-outline-secondary ad-gallery-move-down" aria-label="انتقال به پایین">
-            <i class="fas fa-arrow-down" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="btn btn-sm btn-outline-danger ad-gallery-remove-existing" aria-label="حذف تصویر">
-            <i class="fas fa-trash-alt" aria-hidden="true"></i>
-          </button>
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="ad-gallery-preview-header">
+      <p id="ad-gallery-count" class="ad-gallery-preview-count mb-0" aria-live="polite"></p>
+    </div>
 
-    <div id="ad-gallery-new-preview" class="ad-gallery-new-preview mb-3" hidden></div>
+    <div class="ad-gallery-preview-panel{% if gallery_images %} has-items{% endif %}" id="ad-gallery-preview-panel">
+      <p id="ad-gallery-empty" class="ad-gallery-preview-empty"{% if gallery_images %} hidden{% endif %}>
+        هنوز تصویری برای گالری انتخاب نشده است.
+      </p>
+
+      <div class="ad-gallery-preview-grid" id="ad-gallery-preview-grid">
+        <ul id="ad-gallery-existing" class="ad-gallery-existing list-unstyled mb-0">
+          {% for gallery_image in gallery_images %}
+          <li
+            class="ad-gallery-card ad-gallery-existing-item"
+            data-image-id="{{ gallery_image.id }}"
+            draggable="true"
+          >
+            <div class="ad-gallery-card__frame">
+              <img
+                src="{{ gallery_image.image.url }}"
+                alt="تصویر گالری {{ forloop.counter }}"
+                class="ad-gallery-card__media ad-gallery-existing-thumb"
+              >
+              <button
+                type="button"
+                class="ad-gallery-card__remove ad-gallery-remove-existing"
+                aria-label="حذف تصویر گالری {{ forloop.counter }}"
+              >
+                <i class="fas fa-times" aria-hidden="true"></i>
+              </button>
+              <div class="ad-gallery-card__toolbar" aria-label="ترتیب تصاویر">
+                <button type="button" class="ad-gallery-card__tool ad-gallery-move-up" aria-label="انتقال به بالا">
+                  <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="ad-gallery-card__tool ad-gallery-move-down" aria-label="انتقال به پایین">
+                  <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <div id="ad-gallery-new-preview" class="ad-gallery-new-preview" hidden></div>
+      </div>
+    </div>
 
     <div class="ad-gallery-upload-row">
       <label for="gallery-images-input" class="form-label mb-1">افزودن تصاویر گالری</label>
@@ -60,7 +78,6 @@
       </div>
     </div>
 
-    <p id="ad-gallery-count" class="small text-muted mb-1" aria-live="polite"></p>
-    <p id="ad-gallery-validation" class="small text-danger mb-0" hidden aria-live="polite"></p>
+    <p id="ad-gallery-validation" class="ad-gallery-preview-validation small text-danger mb-0" hidden aria-live="polite"></p>
   </div>
 </section>

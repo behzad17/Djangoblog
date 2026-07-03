@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var countLabel = document.getElementById('ad-gallery-count');
   var validationLabel = document.getElementById('ad-gallery-validation');
   var uploadRow = document.querySelector('.ad-gallery-upload-row');
+  var previewPanel = document.getElementById('ad-gallery-preview-panel');
+  var emptyState = document.getElementById('ad-gallery-empty');
   var deletedIds = [];
   var pendingFiles = [];
   var newPreviewUrls = [];
@@ -94,6 +96,16 @@ document.addEventListener('DOMContentLoaded', function () {
     deleteInput.value = deletedIds.join(',');
   }
 
+  function updatePreviewPanelState() {
+    var total = getTotalCount();
+    if (previewPanel) {
+      previewPanel.classList.toggle('has-items', total > 0);
+    }
+    if (emptyState) {
+      emptyState.hidden = total > 0;
+    }
+  }
+
   function updateCountLabel() {
     if (!countLabel) {
       return;
@@ -103,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (fileInput) {
       fileInput.disabled = total >= maxImages;
     }
+    updatePreviewPanelState();
   }
 
   function clearNewPreview() {
@@ -140,24 +153,28 @@ document.addEventListener('DOMContentLoaded', function () {
       newPreviewUrls.push(url);
 
       var item = document.createElement('div');
-      item.className = 'ad-gallery-new-preview-item-wrap';
+      item.className = 'ad-gallery-card ad-gallery-new-card';
+
+      var frame = document.createElement('div');
+      frame.className = 'ad-gallery-card__frame';
 
       var img = document.createElement('img');
       img.src = url;
-      img.alt = file.name;
-      img.className = 'ad-gallery-new-preview-item';
+      img.alt = '';
+      img.className = 'ad-gallery-card__media';
 
       var removeButton = document.createElement('button');
       removeButton.type = 'button';
-      removeButton.className = 'ad-gallery-new-preview-remove';
-      removeButton.setAttribute('aria-label', 'حذف ' + file.name);
+      removeButton.className = 'ad-gallery-card__remove';
+      removeButton.setAttribute('aria-label', 'حذف تصویر انتخاب‌شده');
       removeButton.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
       removeButton.addEventListener('click', function () {
         removePendingFile(file);
       });
 
-      item.appendChild(img);
-      item.appendChild(removeButton);
+      frame.appendChild(img);
+      frame.appendChild(removeButton);
+      item.appendChild(frame);
       newPreview.appendChild(item);
     });
   }
@@ -305,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!item || item.classList.contains('is-marked-delete')) {
         return;
       }
-      if (event.target.closest('.ad-gallery-existing-actions')) {
+      if (event.target.closest('.ad-gallery-card__toolbar')) {
         return;
       }
       touchDragItem = item;
