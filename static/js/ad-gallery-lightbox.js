@@ -22,22 +22,40 @@ document.addEventListener('DOMContentLoaded', function () {
   var captionNode = document.getElementById('ad-gallery-lightbox-caption');
   var currentIndex = 0;
   var lastFocusedElement = null;
+  var preloadedUrls = Object.create(null);
 
-    function renderSlide(index) {
+  function preloadSlideUrl(url) {
+    if (!url || preloadedUrls[url]) {
+      return;
+    }
+    preloadedUrls[url] = true;
+    var image = new Image();
+    image.decoding = 'async';
+    image.src = url;
+  }
+
+  function preloadAdjacentSlides(index) {
+    if (!slides.length) {
+      return;
+    }
+    preloadSlideUrl(slides[index].url);
+    preloadSlideUrl(slides[(index + 1) % slides.length].url);
+    preloadSlideUrl(slides[(index - 1 + slides.length) % slides.length].url);
+  }
+
+  function renderSlide(index) {
     if (!lightboxImage || index < 0 || index >= slides.length) {
       return;
     }
     currentIndex = index;
     var slide = slides[index];
-    if (!lightboxImage.getAttribute('src')) {
-      lightboxImage.loading = 'eager';
-    } else {
-      lightboxImage.loading = 'lazy';
-    }
+    preloadAdjacentSlides(index);
     lightboxImage.src = slide.url;
     lightboxImage.alt = slide.alt || '';
     if (captionNode) {
-      captionNode.textContent = slide.alt || '';
+      var caption = slide.alt || '';
+      captionNode.textContent = caption;
+      captionNode.setAttribute('aria-hidden', caption ? 'false' : 'true');
     }
     if (lightboxCounter) {
       lightboxCounter.textContent = (index + 1) + ' / ' + slides.length;
@@ -69,8 +87,12 @@ document.addEventListener('DOMContentLoaded', function () {
     lightbox.classList.remove('is-open');
     lightbox.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('ad-gallery-lightbox-open');
-    lightboxImage.src = '';
+    lightboxImage.removeAttribute('src');
     lightboxImage.alt = '';
+    if (captionNode) {
+      captionNode.textContent = '';
+      captionNode.setAttribute('aria-hidden', 'true');
+    }
     if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
       lastFocusedElement.focus();
     }
