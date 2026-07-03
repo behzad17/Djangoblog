@@ -11,8 +11,23 @@ document.addEventListener('DOMContentLoaded', function () {
   var fileInput = document.getElementById('gallery-images-input');
   var newPreview = document.getElementById('ad-gallery-new-preview');
   var countLabel = document.getElementById('ad-gallery-count');
+  var validationLabel = document.getElementById('ad-gallery-validation');
+  var uploadRow = document.querySelector('.ad-gallery-upload-row');
   var deletedIds = [];
+  var pendingFiles = [];
   var newPreviewUrls = [];
+
+  function isImageFile(file) {
+    return file && file.type && file.type.indexOf('image/') === 0;
+  }
+
+  function filesAreSame(a, b) {
+    return (
+      a.name === b.name &&
+      a.size === b.size &&
+      a.lastModified === b.lastModified
+    );
+  }
 
   function getExistingCount() {
     if (!existingList) {
@@ -22,7 +37,43 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function getNewCount() {
-    return fileInput && fileInput.files ? fileInput.files.length : 0;
+    return pendingFiles.length;
+  }
+
+  function getTotalCount() {
+    return getExistingCount() + getNewCount();
+  }
+
+  function getRemainingSlots() {
+    return Math.max(0, maxImages - getExistingCount());
+  }
+
+  function syncFileInput() {
+    if (!fileInput || typeof DataTransfer === 'undefined') {
+      return;
+    }
+    var transfer = new DataTransfer();
+    pendingFiles.forEach(function (file) {
+      transfer.items.add(file);
+    });
+    fileInput.files = transfer.files;
+  }
+
+  function clearValidationMessage() {
+    if (!validationLabel) {
+      return;
+    }
+    validationLabel.textContent = '';
+    validationLabel.hidden = true;
+  }
+
+  function showValidationMessage(message) {
+    if (!validationLabel) {
+      window.alert(message);
+      return;
+    }
+    validationLabel.textContent = message;
+    validationLabel.hidden = false;
   }
 
   function updateOrderInput() {
@@ -47,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!countLabel) {
       return;
     }
-    var total = getExistingCount() + getNewCount();
-    countLabel.textContent = total + ' از ' + maxImages + ' تصویر گالری';
+    var total = getTotalCount();
+    countLabel.textContent = total + ' از ' + maxImages + ' تصویر انتخاب شده';
     if (fileInput) {
       fileInput.disabled = total >= maxImages;
     }
@@ -65,24 +116,112 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function removePendingFile(file) {
+    pendingFiles = pendingFiles.filter(function (pending) {
+      return !filesAreSame(pending, file);
+    });
+    syncFileInput();
+    renderNewPreview();
+    updateCountLabel();
+    clearValidationMessage();
+  }
+
   function renderNewPreview() {
-    if (!newPreview || !fileInput) {
+    if (!newPreview) {
       return;
     }
     clearNewPreview();
-    if (!fileInput.files || !fileInput.files.length) {
+    if (!pendingFiles.length) {
       return;
     }
     newPreview.hidden = false;
-    Array.prototype.forEach.call(fileInput.files, function (file) {
+    pendingFiles.forEach(function (file) {
       var url = URL.createObjectURL(file);
       newPreviewUrls.push(url);
+
+      var item = document.createElement('div');
+      item.className = 'ad-gallery-new-preview-item-wrap';
+
       var img = document.createElement('img');
       img.src = url;
       img.alt = file.name;
       img.className = 'ad-gallery-new-preview-item';
-      newPreview.appendChild(img);
+
+      var removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'ad-gallery-new-preview-remove';
+      removeButton.setAttribute('aria-label', 'حذف ' + file.name);
+      removeButton.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
+      removeButton.addEventListener('click', function () {
+        removePendingFile(file);
+      });
+
+      item.appendChild(img);
+      item.appendChild(removeButton);
+      newPreview.appendChild(item);
     });
+  }
+
+  function addFiles(fileList) {
+    if (!fileList || !fileList.length) {
+      return;
+    }
+
+    clearValidationMessage();
+
+    var remainingSlots = getRemainingSlots();
+    if (remainingSlots <= 0) {
+      showValidationMessage('حداکثر ' + maxImages + ' تصویر گالری مجاز است.');
+      return;
+    }
+
+    var accepted = 0;
+    var rejectedByLimit = 0;
+    var rejectedByType = 0;
+    var skippedDuplicates = 0;
+
+    Array.prototype.forEach.call(fileList, function (file) {
+      if (!isImageFile(file)) {
+        rejectedByType += 1;
+        return;
+      }
+
+      var isDuplicate = pendingFiles.some(function (pending) {
+        return filesAreSame(pending, file);
+      });
+      if (isDuplicate) {
+        skippedDuplicates += 1;
+        return;
+      }
+
+      if (getExistingCount() + pendingFiles.length >= maxImages) {
+        rejectedByLimit += 1;
+        return;
+      }
+
+      pendingFiles.push(file);
+      accepted += 1;
+    });
+
+    syncFileInput();
+    renderNewPreview();
+    updateCountLabel();
+
+    if (rejectedByLimit > 0) {
+      showValidationMessage(
+        rejectedByLimit + ' تصویر اضافی نادیده گرفته شد. حداکثر ' + maxImages + ' تصویر گالری مجاز است.'
+      );
+      return;
+    }
+
+    if (rejectedByType > 0) {
+      showValidationMessage('فقط فایل‌های تصویری پذیرفته می‌شوند.');
+      return;
+    }
+
+    if (!accepted && skippedDuplicates > 0) {
+      showValidationMessage('این تصاویر قبلاً انتخاب شده‌اند.');
+    }
   }
 
   function moveItem(item, direction) {
@@ -114,6 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDeleteInput();
         updateOrderInput();
         updateCountLabel();
+        clearValidationMessage();
         return;
       }
       if (event.target.closest('.ad-gallery-move-up')) {
@@ -159,7 +299,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     var touchDragItem = null;
-    var touchStartY = 0;
 
     existingList.addEventListener('touchstart', function (event) {
       var item = event.target.closest('.ad-gallery-existing-item');
@@ -170,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
       touchDragItem = item;
-      touchStartY = event.touches[0].clientY;
       item.classList.add('is-dragging');
     }, { passive: true });
 
@@ -215,16 +353,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (fileInput) {
     fileInput.addEventListener('change', function () {
-      var total = getExistingCount() + getNewCount();
-      if (total > maxImages) {
-        alert('حداکثر ' + maxImages + ' تصویر گالری مجاز است.');
-        fileInput.value = '';
-        clearNewPreview();
-        updateCountLabel();
+      addFiles(fileInput.files);
+      fileInput.value = '';
+      syncFileInput();
+    });
+  }
+
+  if (uploadRow) {
+    uploadRow.addEventListener('dragenter', function (event) {
+      if (getTotalCount() >= maxImages) {
         return;
       }
-      renderNewPreview();
-      updateCountLabel();
+      event.preventDefault();
+      uploadRow.classList.add('is-drag-over');
+    });
+
+    uploadRow.addEventListener('dragover', function (event) {
+      if (getTotalCount() >= maxImages) {
+        return;
+      }
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+      uploadRow.classList.add('is-drag-over');
+    });
+
+    uploadRow.addEventListener('dragleave', function (event) {
+      if (event.relatedTarget && uploadRow.contains(event.relatedTarget)) {
+        return;
+      }
+      uploadRow.classList.remove('is-drag-over');
+    });
+
+    uploadRow.addEventListener('drop', function (event) {
+      event.preventDefault();
+      uploadRow.classList.remove('is-drag-over');
+      if (event.dataTransfer && event.dataTransfer.files) {
+        addFiles(event.dataTransfer.files);
+      }
     });
   }
 

@@ -133,6 +133,47 @@ class AdGalleryFormTests(AdGalleryTestMixin, TestCase):
         self.assertTrue(errors)
         self.assertEqual(ad.gallery_images.count(), MAX_GALLERY_IMAGES)
 
+    @patch("cloudinary.uploader.upload")
+    def test_create_ad_view_accepts_multiple_gallery_files(self, mock_upload):
+        mock_upload.side_effect = lambda file, **kwargs: {
+            "public_id": f"test/{getattr(file, 'name', 'upload')}",
+            "resource_type": "image",
+            "version": 1,
+            "type": "upload",
+            "format": "png",
+        }
+        self.client.login(username="adowner", password="password123")
+        response = self.client.post(
+            reverse("ads:create_ad"),
+            {
+                "title": "Multi gallery upload",
+                "category": self.category.pk,
+                "target_url": "https://example.com",
+                "city": "Tehran",
+                "address": "Test address",
+                "image": self._image_file("primary.png"),
+                "gallery_images": [
+                    self._image_file("gallery-1.png"),
+                    self._image_file("gallery-2.png"),
+                    self._image_file("gallery-3.png"),
+                ],
+            },
+            follow=False,
+        )
+        self.assertEqual(response.status_code, 302)
+        ad = Ad.objects.get(title="Multi gallery upload")
+        self.assertEqual(ad.gallery_images.count(), 3)
+        self.assertGreaterEqual(mock_upload.call_count, 4)
+
+    def test_create_ad_form_allows_multiple_gallery_selection(self):
+        self.client.login(username="adowner", password="password123")
+        response = self.client.get(reverse("ads:create_ad"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="gallery-images-input"')
+        self.assertContains(response, "multiple")
+        self.assertContains(response, "ad-gallery-count")
+        self.assertContains(response, "ad-gallery-validation")
+
     def test_model_save_enforces_max_limit_server_side(self):
         ad = self._create_ad("model-max", plan="free")
         for index in range(MAX_GALLERY_IMAGES):
