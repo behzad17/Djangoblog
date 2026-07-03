@@ -17,10 +17,61 @@ document.addEventListener('DOMContentLoaded', function () {
   var emptyState = document.getElementById('ad-gallery-empty');
   var deletedIds = [];
   var pendingFiles = [];
-  var newPreviewUrls = [];
+  var previewUrlByKey = Object.create(null);
+
+  function fileKey(file) {
+    return [
+      file.name,
+      file.size,
+      file.lastModified,
+      file.type || '',
+    ].join('|');
+  }
+
+  function cloneFileForPending(file) {
+    return new File([file], file.name, {
+      type: file.type || 'application/octet-stream',
+      lastModified: file.lastModified,
+    });
+  }
+
+  function getPreviewUrl(file) {
+    var key = fileKey(file);
+    if (!previewUrlByKey[key]) {
+      previewUrlByKey[key] = URL.createObjectURL(file);
+    }
+    return previewUrlByKey[key];
+  }
+
+  function revokePreviewUrl(file) {
+    var key = fileKey(file);
+    if (previewUrlByKey[key]) {
+      URL.revokeObjectURL(previewUrlByKey[key]);
+      delete previewUrlByKey[key];
+    }
+  }
+
+  function pruneUnusedPreviewUrls() {
+    var activeKeys = Object.create(null);
+    pendingFiles.forEach(function (file) {
+      activeKeys[fileKey(file)] = true;
+    });
+    Object.keys(previewUrlByKey).forEach(function (key) {
+      if (!activeKeys[key]) {
+        URL.revokeObjectURL(previewUrlByKey[key]);
+        delete previewUrlByKey[key];
+      }
+    });
+  }
 
   function isImageFile(file) {
-    return file && file.type && file.type.indexOf('image/') === 0;
+    if (!file) {
+      return false;
+    }
+    if (file.type && file.type.indexOf('image/') === 0) {
+      return true;
+    }
+    return /\.(jpe?g|png|gif|webp|bmp|heic|heif|avif|svg)$/i.test(file.name || '');
   }
 
   function filesAreSame(a, b) {
@@ -118,18 +169,8 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePreviewPanelState();
   }
 
-  function clearNewPreview() {
-    newPreviewUrls.forEach(function (url) {
-      URL.revokeObjectURL(url);
-    });
-    newPreviewUrls = [];
-    if (newPreview) {
-      newPreview.innerHTML = '';
-      newPreview.hidden = true;
-    }
-  }
-
   function removePendingFile(file) {
+    revokePreviewUrl(file);
     pendingFiles = pendingFiles.filter(function (pending) {
       return !filesAreSame(pending, file);
     });
@@ -143,14 +184,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!newPreview) {
       return;
     }
-    clearNewPreview();
+
+    newPreview.innerHTML = '';
     if (!pendingFiles.length) {
+      newPreview.hidden = true;
+      pruneUnusedPreviewUrls();
       return;
     }
+
     newPreview.hidden = false;
     pendingFiles.forEach(function (file) {
-      var url = URL.createObjectURL(file);
-      newPreviewUrls.push(url);
+      var url = getPreviewUrl(file);
 
       var item = document.createElement('div');
       item.className = 'ad-gallery-card ad-gallery-new-card';
@@ -162,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
       img.src = url;
       img.alt = '';
       img.className = 'ad-gallery-card__media';
+      img.decoding = 'async';
 
       var removeButton = document.createElement('button');
       removeButton.type = 'button';
@@ -177,6 +222,8 @@ document.addEventListener('DOMContentLoaded', function () {
       item.appendChild(frame);
       newPreview.appendChild(item);
     });
+
+    pruneUnusedPreviewUrls();
   }
 
   function addFiles(fileList) {
@@ -216,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      pendingFiles.push(file);
+      pendingFiles.push(cloneFileForPending(file));
       accepted += 1;
     });
 
@@ -370,7 +417,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (fileInput) {
     fileInput.addEventListener('change', function () {
-      addFiles(fileInput.files);
+      var selectedFiles = fileInput.files
+        ? Array.prototype.slice.call(fileInput.files)
+        : [];
+      if (selectedFiles.length) {
+        addFiles(selectedFiles);
+      }
       fileInput.value = '';
       syncFileInput();
     });
