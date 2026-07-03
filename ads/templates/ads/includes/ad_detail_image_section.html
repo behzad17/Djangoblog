@@ -1,0 +1,90 @@
+{% load static %}
+
+{% if ad_show_gallery_lightbox %}
+<div class="ad-detail-gallery" data-ad-gallery>
+  <div class="ad-detail-gallery__hero">
+    <button
+      type="button"
+      class="ad-detail-gallery__hero-button js-ad-gallery-open"
+      data-gallery-index="0"
+      aria-label="باز کردن گالری تصاویر"
+    >
+      <img
+        src="{{ ad_gallery_slides.0.url }}"
+        alt="{{ ad.title }}"
+        class="img-fluid ad-detail-image"
+        loading="eager"
+        fetchpriority="high"
+        onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+      >
+    </button>
+  </div>
+
+  {% if ad_gallery_slides|length > 1 %}
+  <div class="ad-detail-gallery__thumbs" role="list" aria-label="تصاویر گالری">
+    {% for slide in ad_gallery_slides %}
+    <button
+      type="button"
+      class="ad-detail-gallery__thumb js-ad-gallery-open{% if forloop.first %} is-active{% endif %}"
+      data-gallery-index="{{ forloop.counter0 }}"
+      role="listitem"
+      aria-label="{{ slide.alt }}"
+    >
+      <img
+        src="{{ slide.thumb_url }}"
+        alt=""
+        class="ad-detail-gallery__thumb-image"
+        loading="lazy"
+        decoding="async"
+        onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+      >
+    </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div
+    id="ad-gallery-lightbox"
+    class="ad-gallery-lightbox"
+    aria-hidden="true"
+    data-gallery-slides="{{ ad_gallery_slides|length }}"
+  >
+    <div class="ad-gallery-lightbox__backdrop js-ad-gallery-close"></div>
+    <div class="ad-gallery-lightbox__dialog" role="dialog" aria-modal="true" aria-label="گالری تصاویر">
+      <button type="button" class="ad-gallery-lightbox__close js-ad-gallery-close" aria-label="بستن">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <button type="button" class="ad-gallery-lightbox__nav ad-gallery-lightbox__nav--prev js-ad-gallery-prev" aria-label="تصویر قبلی">
+        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+      </button>
+      <figure class="ad-gallery-lightbox__figure">
+        <img id="ad-gallery-lightbox-image" src="" alt="" class="ad-gallery-lightbox__image">
+        <figcaption id="ad-gallery-lightbox-caption" class="ad-gallery-lightbox__caption"></figcaption>
+      </figure>
+      <button type="button" class="ad-gallery-lightbox__nav ad-gallery-lightbox__nav--next js-ad-gallery-next" aria-label="تصویر بعدی">
+        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <p id="ad-gallery-lightbox-counter" class="ad-gallery-lightbox__counter" aria-live="polite"></p>
+    </div>
+  </div>
+
+  {{ ad_gallery_slides|json_script:"ad-gallery-slides-json" }}
+</div>
+{% else %}
+{% if ad.image %}
+<img
+  src="{{ detail_primary_image_url }}"
+  alt="{{ ad.title }}"
+  class="img-fluid ad-detail-image"
+  loading="eager"
+  fetchpriority="high"
+  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+>
+{% else %}
+<img
+  src="{% static 'images/default.jpg' %}"
+  alt="{{ ad.title }}"
+  class="img-fluid ad-detail-image"
+>
+{% endif %}
+{% endif %}

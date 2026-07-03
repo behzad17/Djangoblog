@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404
 from django.utils import timezone
-from django.db import models
+from django.db import models, transaction
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
@@ -11,6 +11,7 @@ from notifications.dispatchers import notify_ad_favorited
 
 from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
+from .gallery import get_detail_image_context, process_gallery_submission
 from .signals import notify_admin_pro_request
 
 SOCIAL_URL_FIELDS = ('instagram_url', 'telegram_url', 'website_url')
@@ -259,7 +260,7 @@ def ad_detail(request, slug):
     Comments are published immediately (no moderation).
     """
     ad = get_object_or_404(
-        Ad.objects.select_related('category', 'owner'),
+        Ad.objects.select_related('category', 'owner').prefetch_related('gallery_images'),
         slug=slug,
     )
 
@@ -382,6 +383,7 @@ def ad_detail(request, slug):
         "pro_request_form": pro_request_form,
         "can_request_pro": can_request_pro,
     }
+    context.update(get_detail_image_context(ad))
     return render(request, "ads/ad_detail.html", context)
 
 
@@ -397,12 +399,22 @@ def create_ad(request):
     if request.method == 'POST':
         form = AdForm(request.POST, request.FILES)
         if form.is_valid():
-            ad = form.save(commit=False)
-            ad.owner = request.user
-            ad.is_approved = False  # Require admin approval
-            ad.url_approved = False  # Require URL approval
-            ad.is_active = True
-            ad.save()
+            with transaction.atomic():
+                ad = form.save(commit=False)
+                ad.owner = request.user
+                ad.is_approved = False  # Require admin approval
+                ad.url_approved = False  # Require URL approval
+                ad.is_active = True
+                ad.save()
+                gallery_errors = process_gallery_submission(ad, request.POST, request.FILES)
+            if gallery_errors:
+                for error in gallery_errors:
+                    messages.error(request, error)
+                return render(
+                    request,
+                    'ads/create_ad.html',
+                    {'form': form, 'gallery_images': []},
+                )
             messages.success(
                 request,
                 'تبلیغ شما با موفقیت ایجاد شد! در انتظار تایید مدیر می‌باشد.'
@@ -420,7 +432,10 @@ def create_ad(request):
                 pass
         form = AdForm(initial=initial)
     
-    return render(request, 'ads/create_ad.html', {'form': form})
+    return render(request, 'ads/create_ad.html', {
+        'form': form,
+        'gallery_images': [],
+    })
 
 
 @site_verified_required
@@ -443,29 +458,48 @@ def edit_ad(request, slug):
         }
         form = AdForm(request.POST, request.FILES, instance=ad)
         if form.is_valid():
-            ad = form.save(commit=False)
-            social_urls_changed = any(
-                getattr(ad, field) != original_social_urls[field]
-                for field in SOCIAL_URL_FIELDS
-            )
-            if social_urls_changed:
-                ad.social_urls_approved = False
-            # Reset approval if content changed (admin needs to review again)
-            if ad.is_approved:
-                ad.is_approved = False
-                ad.url_approved = False
+            with transaction.atomic():
+                ad = form.save(commit=False)
+                social_urls_changed = any(
+                    getattr(ad, field) != original_social_urls[field]
+                    for field in SOCIAL_URL_FIELDS
+                )
+                if social_urls_changed:
+                    ad.social_urls_approved = False
+                approval_reset = ad.is_approved
+                if approval_reset:
+                    ad.is_approved = False
+                    ad.url_approved = False
+                ad.save()
+                gallery_errors = process_gallery_submission(ad, request.POST, request.FILES)
+            if gallery_errors:
+                for error in gallery_errors:
+                    messages.error(request, error)
+                return render(
+                    request,
+                    'ads/edit_ad.html',
+                    {
+                        'form': form,
+                        'ad': ad,
+                        'gallery_images': list(ad.gallery_images.all()),
+                    },
+                )
+            if approval_reset:
                 messages.info(
                     request,
                     'تبلیغ به‌روزرسانی شد. در انتظار تایید مجدد مدیر می‌باشد.'
                 )
             else:
                 messages.success(request, 'تبلیغ با موفقیت به‌روزرسانی شد.')
-            ad.save()
             return redirect('ads:my_ads')
     else:
         form = AdForm(instance=ad)
     
-    return render(request, 'ads/edit_ad.html', {'form': form, 'ad': ad})
+    return render(request, 'ads/edit_ad.html', {
+        'form': form,
+        'ad': ad,
+        'gallery_images': list(ad.gallery_images.all()),
+    })
 
 
 @login_required

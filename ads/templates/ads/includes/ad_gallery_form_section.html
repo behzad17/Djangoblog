@@ -1,0 +1,64 @@
+{% load static %}
+<section class="ad-form-section ad-form-section--gallery mb-4">
+  <h3 class="ad-form-section__title">تصاویر گالری (اختیاری)</h3>
+  <p class="ad-form-section__description text-muted">
+    می‌توانید تا ۱۰ تصویر اضافی بارگذاری کنید. این تصاویر بلافاصله ذخیره می‌شوند و
+    در صورت ارتقای تبلیغ به پیوند Pro به‌صورت خودکار نمایش داده خواهند شد.
+  </p>
+
+  <input type="hidden" name="gallery_order" id="gallery-order-input" value="">
+  <input type="hidden" name="gallery_delete" id="gallery-delete-input" value="">
+
+  <div
+    id="ad-gallery-manager"
+    class="ad-gallery-manager"
+    data-max-images="10"
+    data-initial-count="{{ gallery_images|length }}"
+  >
+    <ul id="ad-gallery-existing" class="ad-gallery-existing list-unstyled mb-3">
+      {% for gallery_image in gallery_images %}
+      <li
+        class="ad-gallery-existing-item"
+        data-image-id="{{ gallery_image.id }}"
+        draggable="true"
+      >
+        <img
+          src="{{ gallery_image.image.url }}"
+          alt="تصویر گالری {{ forloop.counter }}"
+          class="ad-gallery-existing-thumb"
+        >
+        <div class="ad-gallery-existing-actions">
+          <button type="button" class="btn btn-sm btn-outline-secondary ad-gallery-move-up" aria-label="انتقال به بالا">
+            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary ad-gallery-move-down" aria-label="انتقال به پایین">
+            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger ad-gallery-remove-existing" aria-label="حذف تصویر">
+            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+          </button>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div id="ad-gallery-new-preview" class="ad-gallery-new-preview mb-3" hidden></div>
+
+    <div class="ad-gallery-upload-row">
+      <label for="gallery-images-input" class="form-label mb-1">افزودن تصاویر گالری</label>
+      <input
+        type="file"
+        name="gallery_images"
+        id="gallery-images-input"
+        class="form-control"
+        accept="image/*"
+        multiple
+      >
+      <div class="form-text">
+        حداکثر ۱۰ تصویر گالری در مجموع. هر فایل حداکثر ۵ مگابایت.
+      </div>
+    </div>
+
+    <p id="ad-gallery-count" class="small text-muted mb-0" aria-live="polite"></p>
+  </div>
+</section>

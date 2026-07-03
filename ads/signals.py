@@ -1,7 +1,7 @@
 """
-Signals for ads app - admin notifications.
+Signals for ads app - admin notifications and Cloudinary cleanup.
 """
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
@@ -12,7 +12,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from .models import Ad
+from .cloudinary_cleanup import destroy_cloudinary_asset
+from .models import Ad, AdGalleryImage
+
+
+@receiver(pre_delete, sender=AdGalleryImage)
+def delete_gallery_image_asset(sender, instance, **kwargs):
+    """Remove gallery image from Cloudinary when the row is deleted."""
+    destroy_cloudinary_asset(instance.image)
+
+
+@receiver(pre_delete, sender=Ad)
+def delete_ad_primary_image_asset(sender, instance, **kwargs):
+    """Remove primary ad image from Cloudinary when the ad is deleted."""
+    destroy_cloudinary_asset(instance.image)
+
 
 @receiver(post_save, sender=Ad)
 def notify_admin_new_ad(sender, instance, created, **kwargs):

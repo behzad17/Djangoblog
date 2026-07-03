@@ -3,7 +3,16 @@ from django.utils.html import format_html
 
 from notifications.dispatchers import notify_ad_rejected
 
-from .models import AdCategory, Ad, AdComment, AdsViewCount
+from .models import AdCategory, Ad, AdComment, AdGalleryImage, AdsViewCount
+
+
+class AdGalleryImageInline(admin.TabularInline):
+    model = AdGalleryImage
+    extra = 0
+    max_num = 10
+    fields = ("image", "sort_order", "created_on")
+    readonly_fields = ("created_on",)
+    ordering = ("sort_order", "id")
 
 
 @admin.register(AdCategory)
@@ -72,6 +81,8 @@ class AdCategoryAdmin(admin.ModelAdmin):
 class AdAdmin(admin.ModelAdmin):
     """Admin interface for advertisements with moderation controls."""
 
+    inlines = (AdGalleryImageInline,)
+
     list_display = (
         "title",
         "category",
@@ -123,8 +134,11 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Media",
             {
-                "fields": ("image", "extra_image_1", "extra_image_2"),
-                "description": "Upload images. Main image is required. Extra images (up to 2) are optional and will be shown in a carousel on the ad detail page.",
+                "fields": ("image",),
+                "description": (
+                    "Primary image is required and used in listings. "
+                    "Optional gallery images (up to 10) are managed in the Gallery Images section below."
+                ),
             },
         ),
         (

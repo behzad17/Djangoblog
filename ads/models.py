@@ -248,6 +248,46 @@ class Ad(models.Model):
         return timezone.now() < self.featured_until
 
 
+class AdGalleryImage(models.Model):
+    """
+    Optional gallery image for an advertisement (0–10 per ad).
+
+    Stored for all plans; visible on detail only when ad.plan == 'pro'.
+    The primary Ad.image is never stored here.
+    """
+
+    ad = models.ForeignKey(
+        Ad,
+        on_delete=models.CASCADE,
+        related_name="gallery_images",
+    )
+    image = CloudinaryField(
+        "ad_gallery",
+        blank=False,
+        help_text="Optional gallery image for Pro ad detail pages.",
+    )
+    sort_order = models.PositiveSmallIntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["sort_order", "id"]
+        indexes = [
+            models.Index(fields=["ad", "sort_order"]),
+        ]
+        verbose_name = "Ad Gallery Image"
+        verbose_name_plural = "Ad Gallery Images"
+
+    def __str__(self):
+        return f"Gallery image {self.pk} for {self.ad.title}"
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            from .gallery import validate_gallery_capacity
+
+            validate_gallery_capacity(self.ad, additional_images=1)
+        super().save(*args, **kwargs)
+
+
 class FavoriteAd(models.Model):
     """
     A model representing a user's favorite/saved advertisement.
