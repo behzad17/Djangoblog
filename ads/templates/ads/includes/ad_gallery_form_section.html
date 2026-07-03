@@ -6,6 +6,8 @@
     در صورت ارتقای تبلیغ به پیوند Pro به‌صورت خودکار نمایش داده خواهند شد.
   </p>
 
+  {% include 'ads/includes/ad_image_upload_guidelines.html' %}
+
   <input type="hidden" name="gallery_order" id="gallery-order-input" value="">
   <input type="hidden" name="gallery_delete" id="gallery-delete-input" value="">
 
@@ -69,15 +71,22 @@
         name="gallery_images"
         id="gallery-images-input"
         class="form-control"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/*"
         multiple
       >
       <div class="form-text">
         می‌توانید چند تصویر را هم‌زمان انتخاب کنید یا بعداً تصاویر بیشتری اضافه کنید.
-        حداکثر ۱۰ تصویر گالری در مجموع. هر فایل حداکثر ۵ مگابایت.
+        حداکثر ۱۰ تصویر گالری در مجموع.
       </div>
     </div>
 
+    <p
+      id="ad-gallery-aspect-warning"
+      class="ad-image-aspect-warning"
+      role="status"
+      aria-live="polite"
+      hidden
+    ></p>
     <p id="ad-gallery-validation" class="ad-gallery-preview-validation small text-danger mb-0" hidden aria-live="polite"></p>
   </div>
 </section>

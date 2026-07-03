@@ -23,7 +23,7 @@ class AdForm(forms.ModelForm):
             }),
             'image': forms.FileInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*'
+                'accept': 'image/jpeg,image/png,image/webp,image/*',
             }),
             'target_url': forms.URLInput(attrs={
                 'class': 'form-control',

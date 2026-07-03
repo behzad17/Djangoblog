@@ -22,6 +22,90 @@
   max-height: 200px;
 }
 
+.ad-image-upload-guidelines {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(27, 85, 131, 0.12);
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.ad-image-upload-guidelines__content {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.ad-image-upload-guidelines__lead {
+  font-size: 0.9rem;
+  color: #173552;
+}
+
+.ad-image-upload-guidelines__list {
+  padding-right: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #495057;
+}
+
+.ad-image-upload-guidelines__visual {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.ad-image-upload-guidelines__square {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border: 2px dashed rgba(27, 85, 131, 0.45);
+  border-radius: 8px;
+  background:
+    linear-gradient(to right, rgba(27, 85, 131, 0.08) 1px, transparent 1px) 0 0 / 14px 14px,
+    linear-gradient(to bottom, rgba(27, 85, 131, 0.08) 1px, transparent 1px) 0 0 / 14px 14px,
+    #fff;
+  color: #173552;
+}
+
+.ad-image-upload-guidelines__ratio {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.ad-image-upload-guidelines__dims {
+  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  color: #6c757d;
+}
+
+.ad-image-upload-guidelines__caption {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  color: #6c757d;
+}
+
+.ad-image-aspect-warning {
+  margin: 0.65rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 193, 7, 0.45);
+  background: #fff8e1;
+  color: #7a5d00;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.ad-gallery-preview-validation {
+  margin-top: 0.65rem;
+}
+
 .ad-gallery-preview-header {
   margin-bottom: 0.75rem;
 }

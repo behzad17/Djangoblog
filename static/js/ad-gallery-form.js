@@ -195,6 +195,9 @@ document.addEventListener('DOMContentLoaded', function () {
     renderNewPreview();
     updateCountLabel();
     clearValidationMessage();
+    if (window.AdFormImageGuidance && typeof window.AdFormImageGuidance.checkGalleryFiles === 'function') {
+      window.AdFormImageGuidance.checkGalleryFiles(pendingFiles);
+    }
   }
 
   function renderNewPreview() {
@@ -287,6 +290,9 @@ document.addEventListener('DOMContentLoaded', function () {
     syncFileInput();
     renderNewPreview();
     updateCountLabel();
+    if (window.AdFormImageGuidance && typeof window.AdFormImageGuidance.checkGalleryFiles === 'function') {
+      window.AdFormImageGuidance.checkGalleryFiles(pendingFiles);
+    }
 
     if (rejectedByLimit > 0) {
       showValidationMessage(

@@ -173,6 +173,11 @@ class AdGalleryFormTests(AdGalleryTestMixin, TestCase):
         self.assertContains(response, "multiple")
         self.assertContains(response, "ad-gallery-count")
         self.assertContains(response, "ad-gallery-validation")
+        self.assertContains(response, "ad-image-upload-guidelines")
+        self.assertContains(response, "1200")
+        self.assertContains(response, "ad-primary-image-aspect-warning")
+        self.assertContains(response, "ad-gallery-aspect-warning")
+        self.assertContains(response, "ad-form-image-guidance.js")
 
     def test_csp_allows_blob_urls_for_gallery_previews(self):
         from django.conf import settings

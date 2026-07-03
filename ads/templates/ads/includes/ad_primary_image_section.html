@@ -6,6 +6,8 @@
     لیست‌ها، صفحه اصلی، جستجو، علاقه‌مندی‌ها، کارت تبلیغ و تصویر کاور.
   </p>
 
+  {% include 'ads/includes/ad_image_upload_guidelines.html' %}
+
   <div class="mb-3">
     <label for="{{ form.image.id_for_label }}" class="form-label">
       {{ form.image.label }}
@@ -21,6 +23,15 @@
     {% if form.image.errors %}
     <div class="text-danger small mt-1">{{ form.image.errors }}</div>
     {% endif %}
-    <div class="form-text">حداکثر ۵ مگابایت.{% if ad %} برای تغییر تصویر، فایل جدید انتخاب کنید.{% endif %}</div>
+    <p
+      id="ad-primary-image-aspect-warning"
+      class="ad-image-aspect-warning"
+      role="status"
+      aria-live="polite"
+      hidden
+    ></p>
+    {% if ad %}
+    <div class="form-text mt-2">برای تغییر تصویر، فایل جدید انتخاب کنید.</div>
+    {% endif %}
   </div>
 </section>
