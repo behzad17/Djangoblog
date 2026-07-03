@@ -2020,6 +2020,66 @@ body {
   font-size: 1rem; /* 20% smaller vs base hero-subtitle */
 }
 
+/* Ads homepage — primary hero CTA (create ad) */
+.ads-hero-section .hero-buttons .btn-ads-home-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--pv-color-secondary, #1f8a70) 88%, #ffffff) 0%,
+    var(--pv-color-secondary, #1f8a70) 100%
+  );
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 1px 2px rgba(15, 36, 56, 0.1),
+    0 4px 14px rgba(var(--pv-color-secondary-rgb, 31, 138, 112), 0.34);
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.ads-hero-section .hero-buttons .btn-ads-home-primary i {
+  line-height: 1;
+  font-size: 0.92em;
+}
+
+@media (hover: hover) {
+  .ads-hero-section .hero-buttons .btn-ads-home-primary:hover {
+    background: linear-gradient(
+      180deg,
+      var(--pv-cta-create-hover, #27ae60) 0%,
+      color-mix(in srgb, var(--pv-color-secondary, #1f8a70) 92%, #000000) 100%
+    );
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow:
+      0 2px 4px rgba(15, 36, 56, 0.12),
+      0 8px 22px rgba(var(--pv-color-secondary-rgb, 31, 138, 112), 0.4);
+  }
+}
+
+.ads-hero-section .hero-buttons .btn-ads-home-primary:active {
+  transform: translateY(0);
+  background: color-mix(in srgb, var(--pv-color-secondary, #1f8a70) 88%, #000000);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 1px 2px rgba(15, 36, 56, 0.14),
+    0 3px 10px rgba(var(--pv-color-secondary-rgb, 31, 138, 112), 0.3);
+}
+
+.ads-hero-section .hero-buttons .btn-ads-home-primary:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 3px rgba(var(--pv-color-secondary-rgb, 31, 138, 112), 0.38),
+    0 4px 14px rgba(var(--pv-color-secondary-rgb, 31, 138, 112), 0.34);
+}
+
 /* Ads category pages — taller hero to fit title, description, and hint */
 .ads-category-hero-section {
   padding: 4rem 0 !important;
