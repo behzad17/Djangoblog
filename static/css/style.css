@@ -2267,7 +2267,7 @@ body {
   max-height: clamp(2.04rem, 9.2vw, 3.8rem);
 }
 
-/* Homepage hero CTA — Bootstrap Icons (match category overview cards) */
+/* Homepage hero CTA — solid black icons */
 .hero-cta-cards-container .premium-cta-card__icon {
   display: inline-flex;
   align-items: center;
@@ -2275,18 +2275,14 @@ body {
   flex-shrink: 0;
   width: clamp(2.05rem, 5vw, 2.62rem);
   height: clamp(2.05rem, 5vw, 2.62rem);
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--pv-cta-icon-accent, #64748b) 10%, #ffffff);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--pv-cta-icon-accent, #64748b) 16%, transparent),
-    0 1px 2px rgba(15, 36, 56, 0.04);
-  font-size: clamp(1.18rem, 2.85vw, 1.5rem);
+  font-size: clamp(1.33rem, 3.2vw, 1.69rem);
   line-height: 1;
-  color: var(--pv-cta-icon-accent, #64748b);
+  color: #000000;
 }
 
 .hero-cta-cards-container .premium-cta-card__icon i {
   display: block;
+  color: #000000;
   transform: translateY(0.02em);
 }
 
@@ -2495,13 +2491,6 @@ body {
 .hero-cta-cards-container .premium-cta-card--primary .premium-cta-card__surface {
   background: linear-gradient(180deg, #fff0c2 0%, #ffd978 100%);
   box-shadow: inset 0 0 0 1px rgba(166, 108, 0, 0.28);
-}
-
-.hero-cta-cards-container .premium-cta-card--primary .premium-cta-card__icon {
-  background: color-mix(in srgb, var(--pv-cta-icon-accent, #b45309) 14%, #fff8e6);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--pv-cta-icon-accent, #b45309) 22%, transparent),
-    0 1px 2px rgba(130, 82, 0, 0.06);
 }
 
 .hero-cta-cards-container .premium-cta-card--primary {
