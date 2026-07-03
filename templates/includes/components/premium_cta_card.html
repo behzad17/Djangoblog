@@ -2,28 +2,30 @@
 {# Configurable: href, title; icon OR illustration; optional description, icon_accent, extra_class #}
 <a href="{{ href }}" class="premium-cta-card{% if extra_class %} {{ extra_class }}{% endif %}">
   <span class="premium-cta-card__surface">
-    <span class="premium-cta-card__media">
-      {% if icon %}
-      <span class="premium-cta-card__icon"{% if icon_accent %} style="--pv-cta-icon-accent: {{ icon_accent }};"{% endif %}>
-        <i class="{{ icon }}" aria-hidden="true"></i>
+    <span class="premium-cta-card__body">
+      <span class="premium-cta-card__media">
+        {% if icon %}
+        <span class="premium-cta-card__icon"{% if icon_accent %} style="--pv-cta-icon-accent: {{ icon_accent }};"{% endif %}>
+          <i class="{{ icon }}" aria-hidden="true"></i>
+        </span>
+        {% else %}
+        <img
+          class="premium-cta-card__illustration"
+          src="{% static illustration %}"
+          alt=""
+          width="210"
+          height="165"
+          loading="eager"
+          decoding="async"
+        />
+        {% endif %}
       </span>
-      {% else %}
-      <img
-        class="premium-cta-card__illustration"
-        src="{% static illustration %}"
-        alt=""
-        width="210"
-        height="165"
-        loading="eager"
-        decoding="async"
-      />
-      {% endif %}
-    </span>
-    <span class="premium-cta-card__content">
-      <h3 class="premium-cta-card__title">{{ title }}</h3>
-      {% if description %}
-      <p class="premium-cta-card__description">{{ description }}</p>
-      {% endif %}
+      <span class="premium-cta-card__content">
+        <h3 class="premium-cta-card__title">{{ title }}</h3>
+        {% if description %}
+        <p class="premium-cta-card__description">{{ description }}</p>
+        {% endif %}
+      </span>
     </span>
     <span class="premium-cta-card__action" aria-hidden="true">
       <span class="premium-cta-card__action-button">
