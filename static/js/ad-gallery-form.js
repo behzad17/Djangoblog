@@ -29,8 +29,25 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function cloneFileForPending(file) {
+    var mimeType = file.type;
+    if (!mimeType || mimeType === 'application/octet-stream') {
+      var extension = (file.name.split('.').pop() || '').toLowerCase();
+      var mimeByExtension = {
+        jpg: 'image/jpeg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        gif: 'image/gif',
+        webp: 'image/webp',
+        bmp: 'image/bmp',
+        heic: 'image/heic',
+        heif: 'image/heif',
+        avif: 'image/avif',
+        svg: 'image/svg+xml',
+      };
+      mimeType = mimeByExtension[extension] || 'image/jpeg';
+    }
     return new File([file], file.name, {
-      type: file.type || 'application/octet-stream',
+      type: mimeType,
       lastModified: file.lastModified,
     });
   }

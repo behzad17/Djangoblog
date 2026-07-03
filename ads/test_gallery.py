@@ -174,6 +174,16 @@ class AdGalleryFormTests(AdGalleryTestMixin, TestCase):
         self.assertContains(response, "ad-gallery-count")
         self.assertContains(response, "ad-gallery-validation")
 
+    def test_csp_allows_blob_urls_for_gallery_previews(self):
+        from django.conf import settings
+
+        self.assertIn("blob:", settings.CSP_IMG_SRC)
+        self.client.login(username="adowner", password="password123")
+        csp = self.client.get(reverse("ads:create_ad")).headers.get(
+            "Content-Security-Policy", ""
+        )
+        self.assertIn("blob:", csp)
+
     def test_model_save_enforces_max_limit_server_side(self):
         ad = self._create_ad("model-max", plan="free")
         for index in range(MAX_GALLERY_IMAGES):

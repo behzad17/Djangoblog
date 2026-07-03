@@ -444,6 +444,7 @@ CSP_IMG_SRC = (
     "'self'",
     "res.cloudinary.com",  # Cloudinary images
     "data:",  # Data URLs for images
+    "blob:",  # Local file previews (gallery upload UI)
     "https:",  # Allow HTTPS images from any source (needed for user content)
 )
 CSP_CONNECT_SRC = (
