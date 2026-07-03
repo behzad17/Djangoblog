@@ -70,11 +70,6 @@
   border: 1px solid rgba(27, 85, 131, 0.14);
 }
 
-.ad-detail-gallery {
-  max-width: min(100%, 560px);
-  margin: 0 auto;
-}
-
 .ad-detail-gallery__stage {
   width: 100%;
 }
@@ -82,8 +77,6 @@
 .ad-detail-gallery__hero-button {
   position: relative;
   display: block;
-  width: 100%;
-  height: 100%;
   padding: 0;
   border: 0;
   background: transparent;
@@ -92,30 +85,10 @@
 
 .ad-detail-hero-media {
   position: relative;
-  width: 100%;
-  max-width: 560px;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
-  aspect-ratio: 4 / 3;
-  max-height: min(42vh, 380px);
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f1f4f7;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-}
-
-.ad-detail-hero-media .ad-detail-image,
-.ad-detail-hero-media .ad-detail-hero-image {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-}
-
-.ad-detail-hero-image {
-  object-fit: cover;
-  border-radius: 0;
-  box-shadow: none;
 }
 
 .ad-detail-gallery__expand-badge {
@@ -188,9 +161,9 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.5rem;
-  padding: 0;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.15rem 0 0.35rem;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
@@ -201,11 +174,11 @@
 
 .ad-detail-gallery__thumb {
   flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   padding: 0;
   border: 2px solid transparent;
-  border-radius: 6px;
+  border-radius: 10px;
   overflow: hidden;
   background: #fff;
   cursor: pointer;
@@ -358,12 +331,8 @@ body.ad-gallery-lightbox-open {
   }
 
   .ad-detail-gallery__thumb {
-    width: 52px;
-    height: 52px;
-  }
-
-  .ad-detail-hero-media {
-    max-height: min(38vh, 280px);
+    width: 64px;
+    height: 64px;
   }
 
   .ad-detail-gallery__inline-nav {

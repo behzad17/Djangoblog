@@ -23,12 +23,12 @@
         <img
           src="{{ detail_primary_image_url }}"
           alt="{{ ad.title }}"
-          class="ad-detail-image ad-detail-hero-image js-ad-gallery-hero-image"
+          class="ad-detail-image js-ad-gallery-hero-image"
           data-primary-url="{{ detail_primary_image_url }}"
           loading="eager"
           fetchpriority="high"
-          width="560"
-          height="420"
+          width="650"
+          height="650"
           onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
         >
         <span class="ad-detail-gallery__expand-badge" aria-hidden="true">
@@ -74,8 +74,8 @@
         class="ad-detail-gallery__thumb-image"
         loading="lazy"
         decoding="async"
-        width="112"
-        height="112"
+        width="144"
+        height="144"
         onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
       >
     </button>
@@ -127,26 +127,24 @@
   {{ ad_gallery_slides|json_script:"ad-gallery-slides-json" }}
 </div>
 {% else %}
-<div class="ad-detail-hero-media">
 {% if ad.image %}
   <img
     src="{{ detail_primary_image_url }}"
     alt="{{ ad.title }}"
-    class="ad-detail-image ad-detail-hero-image"
+    class="ad-detail-image"
     loading="eager"
     fetchpriority="high"
-    width="560"
-    height="420"
+    width="650"
+    height="650"
     onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
   >
 {% else %}
   <img
     src="{% static 'images/default.jpg' %}"
     alt="{{ ad.title }}"
-    class="ad-detail-image ad-detail-hero-image"
-    width="560"
-    height="420"
+    class="ad-detail-image"
+    width="650"
+    height="650"
   >
 {% endif %}
-</div>
 {% endif %}
