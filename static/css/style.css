@@ -6492,6 +6492,22 @@ body .container nav[aria-label="breadcrumb"] {
   border-radius: 12px;
 }
 
+.comment-form-card .ad-comment-form {
+  position: relative;
+}
+
+.ad-comment-form__honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .comment-form-card .btn {
   padding: 6px 14px;
 }

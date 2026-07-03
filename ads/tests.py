@@ -294,6 +294,39 @@ class DeleteAdCommentAccessTests(AdsTestMixin, TestCase):
         self.assertFalse(comment.is_deleted)
 
 
+class AdCommentFormTests(AdsTestMixin, TestCase):
+    def _detail_url(self, slug):
+        return reverse("ads:ad_detail", args=[slug])
+
+    def test_comment_form_does_not_render_visible_honeypot_label(self):
+        ad = self._create_ad("comment-form-pro", plan="pro")
+        self.client.login(username="adowner", password="password123")
+        response = self.client.get(self._detail_url(ad.slug))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Honeypot")
+        self.assertContains(response, 'name="honeypot"')
+        self.assertContains(response, "ad-comment-form__honeypot")
+
+    def test_honeypot_rejects_bot_submission(self):
+        ad = self._create_ad("comment-bot-pro", plan="pro")
+        self.client.login(username="adowner", password="password123")
+        self.client.post(
+            self._detail_url(ad.slug),
+            {"body": "Valid comment", "honeypot": "spam"},
+        )
+        self.assertEqual(ad.comments.count(), 0)
+
+    def test_verified_user_can_post_comment(self):
+        ad = self._create_ad("comment-post-pro", plan="pro")
+        self.client.login(username="adowner", password="password123")
+        response = self.client.post(
+            self._detail_url(ad.slug),
+            {"body": "سلام، نظر تست", "honeypot": ""},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(ad.comments.filter(is_deleted=False).count(), 1)
+
+
 @override_settings(
     ADMIN_EMAIL="admin@test.com",
     DEFAULT_FROM_EMAIL="noreply@test.com",

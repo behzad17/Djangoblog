@@ -193,7 +193,8 @@ class AdCommentForm(forms.ModelForm):
             })
         }
         labels = {
-            'body': 'نظر'
+            'body': 'نظر',
+            'honeypot': '',
         }
 
     def clean_honeypot(self):

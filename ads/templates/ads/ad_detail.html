@@ -322,9 +322,12 @@
                 <h5 class="mb-0">ثبت نظر</h5>
                 <span class="text-muted small">ارسال به عنوان: {{ user.username }}</span>
               </div>
-              <form method="post" action="{% url 'ads:ad_detail' ad.slug %}" class="mt-2">
-                {{ comment_form | crispy }}
+              <form method="post" action="{% url 'ads:ad_detail' ad.slug %}" class="mt-2 ad-comment-form">
                 {% csrf_token %}
+                {{ comment_form.body|as_crispy_field }}
+                <div class="ad-comment-form__honeypot" aria-hidden="true">
+                  {{ comment_form.honeypot }}
+                </div>
                 <button type="submit" class="btn btn-primary btn-sm">
                   <i class="fas fa-paper-plane ms-1"></i>ارسال
                 </button>
