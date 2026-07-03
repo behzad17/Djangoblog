@@ -1,5 +1,38 @@
 {% extends "base.html" %} {% load ads_extras %} {% load static %}
 
+{% block title %}بانک مشاغل و خدمات | پیوند{% endblock title %}
+
+{% block meta_description %}بانک مشاغل و خدمات پیوند — معرفی خدمات، امکانات و نیازهای روزمره ایرانیان ساکن سوئد.{% endblock meta_description %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'ads:ads_home' %}{% endblock canonical_url %}
+
+{% block extra_meta %}
+<meta property="og:type" content="website" />
+<meta property="og:title" content="بانک مشاغل و خدمات | پیوند" />
+<meta property="og:description" content="بانک مشاغل و خدمات پیوند — معرفی خدمات، امکانات و نیازهای روزمره ایرانیان ساکن سوئد." />
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'ads:ads_home' %}" />
+<meta property="og:locale" content="fa_IR" />
+<meta property="og:site_name" content="Peyvand" />
+{% endblock extra_meta %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "بانک مشاغل و خدمات",
+  "description": "بانک مشاغل و خدمات پیوند — معرفی خدمات، امکانات و نیازهای روزمره ایرانیان ساکن سوئد.",
+  "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'ads:ads_home' %}",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Peyvand",
+    "alternateName": "پیوند",
+    "url": "{{ request.scheme }}://{{ request.get_host }}/"
+  }
+}
+</script>
+{% endblock structured_data %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/ads-category-slider.css' %}?v={% now 'U' %}">
 <link rel="stylesheet" href="{% static 'css/ads-pro-landing.css' %}?v={% now 'U' %}">
@@ -18,10 +51,10 @@
     <div class="row justify-content-center text-center">
       <div class="col-lg-8 ads-hero-column">
         <h1 class="hero-title mb-3">
-          نیازمندیها
+          بانک مشاغل و خدمات
         </h1>
         <p class="hero-subtitle mb-3">
-          بخش "نیازمندیها" برای معرفی خدمات، امکانات و نیازهای روزمره‌ای طراحی شده است که زندگی ایرانیان ساکن سوئد را ساده‌تر می‌کنند. ثبت محتوا برای همه کاربران ممکن است و هر معرفی یا آگهی باید ارتباط روشنی با زندگی ایرانیان در سوئد داشته باشد و از نظر لحن، شفافیت و سودمندی با ارزش‌های این جامعه هم‌خوان باشد.
+          بخش «بانک مشاغل و خدمات» برای معرفی خدمات، امکانات و نیازهای روزمره‌ای طراحی شده است که زندگی ایرانیان ساکن سوئد را ساده‌تر می‌کنند. ثبت محتوا برای همه کاربران ممکن است و هر معرفی یا آگهی باید ارتباط روشنی با زندگی ایرانیان در سوئد داشته باشد و از نظر لحن، شفافیت و سودمندی با ارزش‌های این جامعه هم‌خوان باشد.
         </p>
         <div class="hero-buttons">
           {% if user.is_authenticated %}
