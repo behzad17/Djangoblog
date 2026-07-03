@@ -9,19 +9,19 @@
 <!-- Hero CTA Feature Cards -->
 <h2 class="hero-cta-mobile-title d-md-none">خدمات پیوند</h2>
 <div class="hero-cta-cards-container">
-  {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" icon="bi bi-journal-text" icon_accent="#F2994A" %}
+  {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" icon="bi bi-journals" icon_accent="#F2994A" %}
 
   {% if user.is_authenticated %}
-  {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" icon="bi bi-pencil-square" icon_accent="#B45309" extra_class="premium-cta-card--primary" %}
+  {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" icon="bi bi-file-earmark-plus" icon_accent="#B45309" extra_class="premium-cta-card--primary" %}
   {% else %}
-  {% include "includes/components/premium_cta_card.html" with href=signup_url title="ثبت‌نام برای انتشار پست" icon="bi bi-pencil-square" icon_accent="#B45309" extra_class="premium-cta-card--primary" %}
+  {% include "includes/components/premium_cta_card.html" with href=signup_url title="ثبت‌نام برای انتشار پست" icon="bi bi-file-earmark-plus" icon_accent="#B45309" extra_class="premium-cta-card--primary" %}
   {% endif %}
 
-  {% include "includes/components/premium_cta_card.html" with href=ask_me_url title="سوال از متخصص" icon="bi bi-question-circle" icon_accent="#F59E0B" %}
+  {% include "includes/components/premium_cta_card.html" with href=ask_me_url title="سوال از متخصص" icon="bi bi-chat-left-quote" icon_accent="#F59E0B" %}
 
-  {% include "includes/components/premium_cta_card.html" with href=ads_home_url title="مشاغل و خدمات" icon="bi bi-briefcase" icon_accent="#27AE60" %}
+  {% include "includes/components/premium_cta_card.html" with href=ads_home_url title="مشاغل و خدمات" icon="bi bi-shop-window" icon_accent="#27AE60" %}
 
-  {% include "includes/components/premium_cta_card.html" with href=events_url title="رویدادها و برنامه‌ها" icon="bi bi-calendar-event" icon_accent="#EB5757" %}
+  {% include "includes/components/premium_cta_card.html" with href=events_url title="رویدادها و برنامه‌ها" icon="bi bi-calendar2-week" icon_accent="#EB5757" %}
 
-  {% include "includes/components/premium_cta_card.html" with href=related_links_url title="لینک‌ها" icon="bi bi-link-45deg" icon_accent="#0E7490" %}
+  {% include "includes/components/premium_cta_card.html" with href=related_links_url title="لینک‌ها" icon="bi bi-signpost-split" icon_accent="#0E7490" %}
 </div>
