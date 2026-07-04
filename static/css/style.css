@@ -2267,7 +2267,7 @@ body {
   max-height: clamp(2.04rem, 9.2vw, 3.8rem);
 }
 
-/* Homepage hero CTA — solid black icons */
+/* Homepage hero CTA — brand blue icons */
 .hero-cta-cards-container .premium-cta-card__icon {
   display: inline-flex;
   align-items: center;
@@ -2275,14 +2275,14 @@ body {
   flex-shrink: 0;
   width: clamp(2.05rem, 5vw, 2.62rem);
   height: clamp(2.05rem, 5vw, 2.62rem);
-  font-size: clamp(1.33rem, 3.2vw, 1.69rem);
+  font-size: clamp(1.463rem, 3.52vw, 1.859rem);
   line-height: 1;
-  color: #000000;
+  color: #1b5583;
 }
 
 .hero-cta-cards-container .premium-cta-card__icon i {
   display: block;
-  color: #000000;
+  color: #1b5583;
   transform: translateY(0.02em);
 }
 
@@ -2312,20 +2312,20 @@ body {
   max-width: 92%;
 }
 
-/* Homepage hero CTA titles — 15% larger than premium-cta-card defaults */
+/* Homepage hero CTA titles — 15% larger than premium-cta-card defaults (+10% hero bump) */
 .hero-cta-cards-container .premium-cta-card__title {
-  font-size: clamp(calc(0.64rem * 1.15), calc(2.45vw * 1.15), calc(0.84rem * 1.15));
+  font-size: clamp(calc(0.64rem * 1.265), calc(2.45vw * 1.265), calc(0.84rem * 1.265));
 }
 
 @media (max-width: 767.98px) {
   .hero-cta-cards-container .premium-cta-card__title {
-    font-size: clamp(calc(0.6rem * 1.15), calc(2.4vw * 1.15), calc(0.74rem * 1.15));
+    font-size: clamp(calc(0.6rem * 1.265), calc(2.4vw * 1.265), calc(0.74rem * 1.265));
   }
 }
 
 @media (min-width: 768px) {
   .hero-cta-cards-container .premium-cta-card__title {
-    font-size: clamp(calc(0.68rem * 1.15), calc(0.98vw * 1.15), calc(0.86rem * 1.15));
+    font-size: clamp(calc(0.68rem * 1.265), calc(0.98vw * 1.265), calc(0.86rem * 1.265));
   }
 }
 
@@ -2363,7 +2363,7 @@ body {
   font-weight: 800;
   line-height: 1.24;
   letter-spacing: -0.02em;
-  color: #0f2438;
+  color: #1b5583;
 }
 
 .hero-cta-cards-container .premium-cta-card__action {
