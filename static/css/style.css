@@ -2275,7 +2275,7 @@ body {
   flex-shrink: 0;
   width: clamp(2.05rem, 5vw, 2.62rem);
   height: clamp(2.05rem, 5vw, 2.62rem);
-  font-size: clamp(1.463rem, 3.52vw, 1.859rem);
+  font-size: clamp(1.39rem, 3.344vw, 1.766rem);
   line-height: 1;
   color: #1b5583;
 }
@@ -2312,20 +2312,20 @@ body {
   max-width: 92%;
 }
 
-/* Homepage hero CTA titles — 15% larger than premium-cta-card defaults (+10% hero bump) */
+/* Homepage hero CTA titles — scaled above premium-cta-card defaults */
 .hero-cta-cards-container .premium-cta-card__title {
-  font-size: clamp(calc(0.64rem * 1.265), calc(2.45vw * 1.265), calc(0.84rem * 1.265));
+  font-size: clamp(calc(0.64rem * 1.202), calc(2.45vw * 1.202), calc(0.84rem * 1.202));
 }
 
 @media (max-width: 767.98px) {
   .hero-cta-cards-container .premium-cta-card__title {
-    font-size: clamp(calc(0.6rem * 1.265), calc(2.4vw * 1.265), calc(0.74rem * 1.265));
+    font-size: clamp(calc(0.6rem * 1.202), calc(2.4vw * 1.202), calc(0.74rem * 1.202));
   }
 }
 
 @media (min-width: 768px) {
   .hero-cta-cards-container .premium-cta-card__title {
-    font-size: clamp(calc(0.68rem * 1.265), calc(0.98vw * 1.265), calc(0.86rem * 1.265));
+    font-size: clamp(calc(0.68rem * 1.202), calc(0.98vw * 1.202), calc(0.86rem * 1.202));
   }
 }
 
