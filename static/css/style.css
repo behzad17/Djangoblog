@@ -2284,6 +2284,17 @@ body {
   display: block;
   color: #1b5583;
   transform: translateY(0.02em);
+  transition:
+    color 0.22s ease,
+    transform 0.22s ease;
+}
+
+.hero-cta-cards-container .premium-cta-card__title {
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  color: #1b5583;
+  transition: color 0.22s ease;
 }
 
 .hero-cta-cards-container .premium-cta-card__description {
@@ -2344,6 +2355,9 @@ body {
   padding: 0.5rem 0.36rem 0.5rem;
   background: #f6f7f9;
   box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.72), inset 0 0 0 1px rgba(11, 45, 74, 0.05);
+  transition:
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
 }
 
 .hero-cta-cards-container .premium-cta-card__surface::before {
@@ -2359,13 +2373,6 @@ body {
   max-width: 84%;
 }
 
-.hero-cta-cards-container .premium-cta-card__title {
-  font-weight: 800;
-  line-height: 1.24;
-  letter-spacing: -0.02em;
-  color: #1b5583;
-}
-
 .hero-cta-cards-container .premium-cta-card__action {
   flex: 0 0 auto;
   margin-top: 0;
@@ -2374,17 +2381,61 @@ body {
 
 .hero-cta-cards-container .premium-cta-card__action-chevron {
   opacity: 0.26;
+  transition:
+    transform 0.22s ease,
+    opacity 0.22s ease;
 }
 
-.hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__media,
-.hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__media {
-  transform: none;
+@media (hover: hover) {
+  .hero-cta-cards-container .premium-cta-card:hover,
+  .hero-cta-cards-container .premium-cta-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow:
+      0 4px 10px rgba(11, 45, 74, 0.12),
+      0 18px 38px rgba(11, 45, 74, 0.18);
+    outline: none;
+  }
+
+  .hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__surface,
+  .hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__surface {
+    background: #ffffff;
+    box-shadow:
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.9),
+      inset 0 0 0 1.5px rgba(27, 85, 131, 0.24);
+  }
+
+  .hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__icon i,
+  .hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__icon i {
+    color: #13466b;
+    transform: translateY(calc(0.02em - 1px));
+  }
+
+  .hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__title,
+  .hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__title {
+    color: #13466b;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--primary:hover,
+  .hero-cta-cards-container .premium-cta-card--primary:focus-visible {
+    box-shadow:
+      0 4px 10px rgba(130, 82, 0, 0.14),
+      0 18px 38px rgba(130, 82, 0, 0.22);
+  }
+
+  .hero-cta-cards-container .premium-cta-card--primary:hover .premium-cta-card__surface,
+  .hero-cta-cards-container .premium-cta-card--primary:focus-visible .premium-cta-card__surface {
+    box-shadow:
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.72),
+      inset 0 0 0 1.5px rgba(166, 108, 0, 0.38);
+  }
 }
 
-.hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__action-chevron,
-.hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__action-chevron {
-  transform: none;
-  opacity: 0.26;
+@media (min-width: 768px) and (hover: hover) {
+  .hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__action-chevron,
+  .hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__action-chevron {
+    transform: translateX(-3px);
+    opacity: 0.72;
+  }
 }
 
 @media (min-width: 768px) {
@@ -2438,53 +2489,6 @@ body {
 
   .hero-cta-cards-container .premium-cta-card__action {
     bottom: 0.62rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .hero-cta-cards-container .premium-cta-card:hover,
-  .hero-cta-cards-container .premium-cta-card:focus-visible {
-    transform: none;
-    box-shadow:
-      0 1px 2px rgba(11, 45, 74, 0.05),
-      0 10px 28px rgba(11, 45, 74, 0.09);
-  }
-
-  .hero-cta-cards-container .premium-cta-card--primary:hover,
-  .hero-cta-cards-container .premium-cta-card--primary:focus-visible {
-    box-shadow:
-      0 1px 2px rgba(130, 82, 0, 0.08),
-      0 10px 28px rgba(130, 82, 0, 0.14);
-  }
-}
-
-@media (min-width: 992px) and (hover: hover) {
-  .hero-cta-cards-container .premium-cta-card:hover,
-  .hero-cta-cards-container .premium-cta-card:focus-visible {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow:
-      0 2px 4px rgba(11, 45, 74, 0.06),
-      0 14px 32px rgba(11, 45, 74, 0.11);
-    outline: none;
-  }
-
-  .hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__surface,
-  .hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__surface {
-    box-shadow:
-      inset 0 0 0 0.5px rgba(255, 255, 255, 0.8),
-      inset 0 0 0 1px rgba(11, 45, 74, 0.06);
-  }
-
-  .hero-cta-cards-container .premium-cta-card--primary:hover,
-  .hero-cta-cards-container .premium-cta-card--primary:focus-visible {
-    box-shadow:
-      0 2px 4px rgba(130, 82, 0, 0.08),
-      0 14px 32px rgba(130, 82, 0, 0.16);
-  }
-
-  .hero-cta-cards-container .premium-cta-card--primary:hover .premium-cta-card__surface,
-  .hero-cta-cards-container .premium-cta-card--primary:focus-visible .premium-cta-card__surface {
-    box-shadow: inset 0 0 0 1px rgba(166, 108, 0, 0.28);
   }
 }
 
@@ -2543,25 +2547,6 @@ body {
   }
 
   .hero-cta-cards-container .premium-cta-card--primary {
-    box-shadow:
-      0 2px 6px rgba(130, 82, 0, 0.14),
-      0 6px 18px rgba(130, 82, 0, 0.18),
-      0 14px 32px rgba(130, 82, 0, 0.2);
-  }
-
-  .hero-cta-cards-container .premium-cta-card:hover,
-  .hero-cta-cards-container .premium-cta-card:focus,
-  .hero-cta-cards-container .premium-cta-card:focus-visible {
-    transform: none;
-    box-shadow:
-      0 2px 6px rgba(11, 45, 74, 0.1),
-      0 6px 18px rgba(11, 45, 74, 0.14),
-      0 14px 32px rgba(11, 45, 74, 0.16);
-    outline: none;
-  }
-
-  .hero-cta-cards-container .premium-cta-card--primary:hover,
-  .hero-cta-cards-container .premium-cta-card--primary:focus-visible {
     box-shadow:
       0 2px 6px rgba(130, 82, 0, 0.14),
       0 6px 18px rgba(130, 82, 0, 0.18),
