@@ -2380,10 +2380,16 @@ body {
 }
 
 .hero-cta-cards-container .premium-cta-card__action-chevron {
-  opacity: 0.26;
   transition:
-    transform 0.22s ease,
-    opacity 0.22s ease;
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .hero-cta-cards-container .premium-cta-card__action-chevron {
+    color: #6b7280;
+    opacity: 1;
+  }
 }
 
 @media (hover: hover) {
@@ -2434,7 +2440,7 @@ body {
   .hero-cta-cards-container .premium-cta-card:hover .premium-cta-card__action-chevron,
   .hero-cta-cards-container .premium-cta-card:focus-visible .premium-cta-card__action-chevron {
     transform: translateX(-3px);
-    opacity: 0.72;
+    color: #1b5583;
   }
 }
 
