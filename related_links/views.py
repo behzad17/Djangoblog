@@ -1,26 +1,55 @@
-from django.shortcuts import render
-from .models import RelatedLink, LinkType
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+
+from .models import LinkType, RelatedLink, UsefulLinkCategory
+
+
+LINK_TYPE_TO_CATEGORY_SLUG = {
+    LinkType.PODCAST: 'podcasts',
+    LinkType.VIDEO: 'movies-videos',
+    LinkType.RADIO: 'radio',
+    LinkType.SOCIAL: 'social-media',
+    LinkType.WEBSITE: 'essential-apps',
+    LinkType.FILE: 'adult-education',
+}
 
 
 def links_list(request):
-    """Display list of related links with optional type filtering."""
-    links = RelatedLink.objects.filter(is_active=True)
-    
-    # Filter by type if provided
+    """Topic directory landing page or category link listing."""
+    category_slug = request.GET.get('category')
+    legacy_type = request.GET.get('type')
+
+    if not category_slug and legacy_type in dict(LinkType.choices):
+        category_slug = LINK_TYPE_TO_CATEGORY_SLUG.get(legacy_type)
+        if category_slug:
+            return redirect(f"{reverse('related_links:links_list')}?category={category_slug}")
+
+    if not category_slug:
+        categories = UsefulLinkCategory.objects.filter(is_active=True)
+        return render(
+            request,
+            'related_links/links_directory.html',
+            {'categories': categories},
+        )
+
+    active_category = get_object_or_404(
+        UsefulLinkCategory,
+        slug=category_slug,
+        is_active=True,
+    )
+
+    links = RelatedLink.objects.filter(is_active=True, category=active_category)
+
     active_type = request.GET.get('type')
-    if active_type and active_type in [choice[0] for choice in LinkType.choices]:
+    if active_type and active_type in dict(LinkType.choices):
         links = links.filter(link_type=active_type)
     else:
         active_type = None
-    
-    # Get all types for filter tabs
-    types = LinkType.choices
-    
+
     context = {
         'links': links,
-        'types': types,
+        'types': LinkType.choices,
         'active_type': active_type,
+        'active_category': active_category,
     }
-    
-    return render(request, 'related_links/links_list.html', context)
-
+    return render(request, 'related_links/links_category.html', context)

@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}لینک‌های مرتبط | Peyvand{% endblock title %}
+{% block title %}{{ active_category.name_fa }} | لینک‌های مرتبط | Peyvand{% endblock title %}
 
-{% block meta_description %}لینک‌های مفید و مرتبط برای ایرانیان مقیم سوئد - پادکست، ویدئو، رادیو، وب‌سایت و فایل‌های آموزشی{% endblock meta_description %}
+{% block meta_description %}لینک‌های مفید و مرتبط در دسته «{{ active_category.name_fa }}» برای ایرانیان مقیم سوئد{% endblock meta_description %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 
 {% block content %}
-<!-- Hero Section -->
 <section class="hero-section hero-section--internal text-white mb-4 related-links-hero-section" style="padding: 3rem 0;">
   <div class="container">
     <div class="row justify-content-center text-center">
@@ -26,21 +25,19 @@
   </div>
 </section>
 
-<!-- Related Links Page -->
 <div class="container py-4 related-links-page">
-  <!-- Filter Tabs -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="related-links-filters">
-        <a 
-          href="{% url 'related_links:links_list' %}" 
+        <a
+          href="{% url 'related_links:links_list' %}?category={{ active_category.slug }}"
           class="related-link-filter-btn {% if not active_type %}active{% endif %}"
         >
           همه
         </a>
         {% for type_value, type_label in types %}
-        <a 
-          href="{% url 'related_links:links_list' %}?type={{ type_value }}" 
+        <a
+          href="{% url 'related_links:links_list' %}?category={{ active_category.slug }}&type={{ type_value }}"
           class="related-link-filter-btn {% if active_type == type_value %}active{% endif %}"
         >
           {{ type_label }}
@@ -50,7 +47,6 @@
     </div>
   </div>
 
-  <!-- Links Grid -->
   {% if links %}
   <div class="row g-4 related-links-grid">
     {% for link in links %}
@@ -58,8 +54,8 @@
       <div class="related-link-card">
         {% if link.cover_image %}
         <div class="related-link-image-wrapper">
-          <img 
-            src="{{ link.cover_image.url }}" 
+          <img
+            src="{{ link.cover_image.url }}"
             alt="{{ link.title }}"
             class="related-link-image"
             onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
@@ -79,9 +75,9 @@
           {% if link.description %}
           <p class="related-link-description">{{ link.description|truncatewords:20 }}</p>
           {% endif %}
-          <a 
-            href="{{ link.url }}" 
-            target="_blank" 
+          <a
+            href="{{ link.url }}"
+            target="_blank"
             rel="noopener noreferrer"
             class="related-link-button"
           >
@@ -102,4 +98,3 @@
   {% endif %}
 </div>
 {% endblock content %}
-

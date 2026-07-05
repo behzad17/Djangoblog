@@ -1,0 +1,11 @@
+<a
+  href="{% url 'related_links:links_list' %}?category={{ category.slug }}"
+  class="useful-link-category-card"
+  title="{{ category.name_fa }}"
+  aria-label="{{ category.name_fa }}"
+>
+  <span class="useful-link-category-card__icon" aria-hidden="true">
+    <i class="{{ category.icon_class }}"></i>
+  </span>
+  <span class="useful-link-category-card__title">{{ category.name_fa }}</span>
+</a>
