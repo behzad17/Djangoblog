@@ -1,11 +1,21 @@
 <a
   href="{% url 'related_links:links_list' %}?category={{ category.slug }}"
   class="useful-link-category-card"
-  title="{{ category.name_fa }}"
-  aria-label="{{ category.name_fa }}"
+  {% if category.link_count %}
+  title="{{ category.name_fa }} — {{ category.link_count }} لینک"
+  aria-label="{{ category.name_fa }} — {{ category.link_count }} لینک"
+  {% else %}
+  title="{{ category.name_fa }} — به‌زودی"
+  aria-label="{{ category.name_fa }} — به‌زودی"
+  {% endif %}
 >
   <span class="useful-link-category-card__icon" aria-hidden="true">
     <i class="{{ category.icon_class }}"></i>
   </span>
   <span class="useful-link-category-card__title">{{ category.name_fa }}</span>
+  {% if category.link_count %}
+  <span class="useful-link-category-card__count">{{ category.link_count }} لینک</span>
+  {% else %}
+  <span class="useful-link-category-card__count">به‌زودی</span>
+  {% endif %}
 </a>

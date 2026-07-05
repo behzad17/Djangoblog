@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -14,6 +15,10 @@ LINK_TYPE_TO_CATEGORY_SLUG = {
 }
 
 
+def _active_link_count_annotation():
+    return Count('links', filter=Q(links__is_active=True))
+
+
 def links_list(request):
     """Topic directory landing page or category link listing."""
     category_slug = request.GET.get('category')
@@ -25,7 +30,10 @@ def links_list(request):
             return redirect(f"{reverse('related_links:links_list')}?category={category_slug}")
 
     if not category_slug:
-        categories = UsefulLinkCategory.objects.filter(is_active=True)
+        categories = (
+            UsefulLinkCategory.objects.filter(is_active=True)
+            .annotate(link_count=_active_link_count_annotation())
+        )
         return render(
             request,
             'related_links/links_directory.html',
@@ -33,7 +41,7 @@ def links_list(request):
         )
 
     active_category = get_object_or_404(
-        UsefulLinkCategory,
+        UsefulLinkCategory.objects.annotate(link_count=_active_link_count_annotation()),
         slug=category_slug,
         is_active=True,
     )
@@ -51,5 +59,6 @@ def links_list(request):
         'types': LinkType.choices,
         'active_type': active_type,
         'active_category': active_category,
+        'category_has_links': active_category.link_count > 0,
     }
     return render(request, 'related_links/links_category.html', context)

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
+{% load related_links_extras %}
 
 {% block title %}{{ active_category.name_fa }} | لینک‌های مرتبط | Peyvand{% endblock title %}
 
-{% block meta_description %}لینک‌های مفید و مرتبط در دسته «{{ active_category.name_fa }}» برای ایرانیان مقیم سوئد{% endblock meta_description %}
+{% block meta_description %}{{ active_category|category_hero_subtitle }}{% endblock meta_description %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
@@ -12,20 +13,36 @@
 {% block content %}
 <section class="hero-section hero-section--internal text-white mb-4 related-links-hero-section" style="padding: 3rem 0;">
   <div class="container">
-    <div class="row justify-content-center text-center">
-      <div class="col-lg-8">
-        <h1 class="hero-title mb-3">
-          <i class="fas fa-link ms-2"></i>لینک‌های مرتبط
-        </h1>
-        <p class="hero-subtitle">
-          مجموعه‌ای از لینک‌های مفید و مرتبط برای ایرانیان مقیم سوئد شامل پادکست‌ها، ویدئوها، رادیوها، وب‌سایت‌ها و فایل‌های آموزشی
-        </p>
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb breadcrumb-category mb-0">
+            <li class="breadcrumb-item">
+              <a href="{% url 'home' %}">خانه</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="{% url 'related_links:links_list' %}">لینک‌های مفید</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ active_category.name_fa }}
+            </li>
+          </ol>
+        </nav>
+        <div class="text-center">
+          <h1 class="hero-title mb-3">
+            <i class="{{ active_category.icon_class }} ms-2" aria-hidden="true"></i>{{ active_category.name_fa }}
+          </h1>
+          <p class="hero-subtitle mb-0">
+            {{ active_category|category_hero_subtitle }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <div class="container py-4 related-links-page">
+  {% if category_has_links %}
   <div class="row mb-4">
     <div class="col-12">
       <div class="related-links-filters">
@@ -46,6 +63,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
   {% if links %}
   <div class="row g-4 related-links-grid">
@@ -88,11 +106,21 @@
     </div>
     {% endfor %}
   </div>
-  {% else %}
+  {% elif category_has_links %}
   <div class="row">
     <div class="col-12 text-center py-5">
-      <i class="fas fa-link fa-3x text-muted mb-3"></i>
-      <p class="text-muted">در حال حاضر لینکی در دسترس نیست.</p>
+      <i class="bi bi-funnel text-muted related-links-empty-state__icon" aria-hidden="true"></i>
+      <p class="text-muted mb-0">لینکی با این فیلتر پیدا نشد.</p>
+    </div>
+  </div>
+  {% else %}
+  <div class="row">
+    <div class="col-12">
+      <div class="related-links-empty-state text-center py-5">
+        <i class="bi bi-inbox related-links-empty-state__icon" aria-hidden="true"></i>
+        <p class="related-links-empty-state__title mb-2">هنوز لینکی برای این دسته ثبت نشده است.</p>
+        <p class="related-links-empty-state__subtitle text-muted mb-0">به‌زودی منابع معتبر این بخش اضافه خواهند شد.</p>
+      </div>
     </div>
   </div>
   {% endif %}
