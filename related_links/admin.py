@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import RelatedLink, UsefulLinkCategory
+from .models import RelatedLink, UsefulLinkCategory, UsefulLinkResourceType
 
 
 class RelatedLinkAdminForm(forms.ModelForm):
@@ -46,6 +46,39 @@ class UsefulLinkCategoryAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
+@admin.register(UsefulLinkResourceType)
+class UsefulLinkResourceTypeAdmin(admin.ModelAdmin):
+    list_display = (
+        'name_fa',
+        'name_en',
+        'slug',
+        'icon',
+        'display_order',
+        'is_media',
+        'is_active',
+    )
+    list_filter = ('is_active', 'is_media')
+    search_fields = ('name_fa', 'name_en', 'slug')
+    list_editable = ('display_order', 'is_media', 'is_active')
+    prepopulated_fields = {'slug': ('name_en',)}
+    ordering = ('display_order', 'name_en')
+
+    fieldsets = (
+        ('اطلاعات نوع منبع', {
+            'fields': ('name_fa', 'name_en', 'slug', 'icon'),
+        }),
+        ('تنظیمات نمایش', {
+            'fields': ('display_order', 'is_media', 'is_active'),
+        }),
+        ('اطلاعات سیستم', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+
+    readonly_fields = ('created_at', 'updated_at')
+
+
 @admin.register(RelatedLink)
 class RelatedLinkAdmin(admin.ModelAdmin):
     """Editorial admin for Useful Links resources."""
@@ -55,18 +88,18 @@ class RelatedLinkAdmin(admin.ModelAdmin):
         'thumbnail_list',
         'title',
         'category',
-        'link_type',
+        'resource_type',
         'source_name',
         'order',
         'is_active',
     )
     list_display_links = ('title',)
-    list_filter = ('category', 'link_type', 'is_active')
+    list_filter = ('category', 'resource_type', 'is_active')
     search_fields = ('title', 'source_name', 'short_description')
     list_editable = ('order', 'is_active')
     list_per_page = 50
     ordering = ('order', 'title')
-    autocomplete_fields = ('category',)
+    autocomplete_fields = ('category', 'resource_type')
 
     fieldsets = (
         ('اطلاعات اصلی', {
@@ -74,7 +107,7 @@ class RelatedLinkAdmin(admin.ModelAdmin):
                 'title',
                 'url',
                 'category',
-                'link_type',
+                'resource_type',
                 'source_name',
             ),
         }),

@@ -3,15 +3,6 @@ from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 
 
-class LinkType(models.TextChoices):
-    PODCAST = 'podcast', '🎧 پادکست'
-    VIDEO = 'video', '🎬 فیلم / ویدئو'
-    RADIO = 'radio', '📻 رادیو'
-    WEBSITE = 'website', '🌐 وب‌سایت'
-    FILE = 'file', '📂 فایل آموزشی'
-    SOCIAL = 'social', '📱 شبکه‌های اجتماعی'
-
-
 class UsefulLinkCategory(models.Model):
     """Topic directory category for related links."""
 
@@ -49,6 +40,47 @@ class UsefulLinkCategory(models.Model):
         return f'bi bi-{icon}'
 
 
+class UsefulLinkResourceType(models.Model):
+    """Data-driven resource type for related links."""
+
+    name_en = models.CharField(max_length=120, verbose_name='نام انگلیسی')
+    name_fa = models.CharField(max_length=120, verbose_name='نام فارسی')
+    slug = models.SlugField(max_length=120, unique=True, verbose_name='نامک')
+    icon = models.CharField(
+        max_length=64,
+        verbose_name='آیکون',
+        help_text='نام کلاس Bootstrap Icons، مثال: bi-globe',
+    )
+    display_order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
+    is_active = models.BooleanField(default=True, verbose_name='فعال')
+    is_media = models.BooleanField(
+        default=False,
+        verbose_name='رسانه',
+        help_text='برای تمایز منابع رسانه\u200cای از منابع مرجع در رابط کاربری آینده.',
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به\u200cروزرسانی')
+
+    class Meta:
+        verbose_name = 'نوع منبع'
+        verbose_name_plural = 'انواع منبع'
+        ordering = ['display_order', 'name_en']
+
+    def __str__(self):
+        return self.name_fa
+
+    @property
+    def icon_class(self):
+        icon = (self.icon or '').strip()
+        if not icon:
+            return 'bi bi-link-45deg'
+        if icon.startswith('bi '):
+            return icon
+        if icon.startswith('bi-'):
+            return f'bi {icon}'
+        return f'bi bi-{icon}'
+
+
 class RelatedLink(models.Model):
     """Model for admin-managed related links with filtering by type."""
 
@@ -60,10 +92,10 @@ class RelatedLink(models.Model):
         related_name='links',
         verbose_name='دسته‌بندی',
     )
-    link_type = models.CharField(
-        max_length=20,
-        choices=LinkType.choices,
-        default=LinkType.WEBSITE,
+    resource_type = models.ForeignKey(
+        UsefulLinkResourceType,
+        on_delete=models.PROTECT,
+        related_name='links',
         verbose_name='نوع منبع',
     )
     description = models.TextField(blank=True, verbose_name='توضیحات تکمیلی')
@@ -107,13 +139,10 @@ class RelatedLink(models.Model):
         super().save(*args, **kwargs)
 
     def get_button_label(self):
-        """Get CTA button label based on link type."""
-        labels = {
-            LinkType.PODCAST: 'گوش دادن',
-            LinkType.RADIO: 'گوش دادن',
-            LinkType.VIDEO: 'تماشا',
-            LinkType.WEBSITE: 'مشاهده',
-            LinkType.FILE: 'مشاهده',
-            LinkType.SOCIAL: 'مشاهده',
-        }
-        return labels.get(self.link_type, 'مشاهده')
+        """Get CTA button label based on resource type."""
+        slug = self.resource_type.slug
+        if slug == 'video':
+            return 'تماشا'
+        if self.resource_type.is_media:
+            return 'گوش دادن'
+        return 'مشاهده'
