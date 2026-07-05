@@ -1,0 +1,23 @@
+<a
+  href="{{ link.url }}"
+  class="resource-link-row"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="{{ link.title }}{% if link.source_name %} — {{ link.source_name }}{% endif %}"
+>
+  <span class="resource-link-row__content">
+    <span class="resource-link-row__header">
+      <span class="resource-link-row__title">{{ link.title }}</span>
+      <span class="resource-link-row__badge">{{ link|link_type_label }}</span>
+    </span>
+    {% if link.source_name %}
+    <span class="resource-link-row__source">{{ link.source_name }}</span>
+    {% endif %}
+    {% if link.description %}
+    <span class="resource-link-row__description">{{ link.description|truncatewords:20 }}</span>
+    {% endif %}
+  </span>
+  <span class="resource-link-row__icon" aria-hidden="true">
+    <i class="bi bi-box-arrow-up-left"></i>
+  </span>
+</a>

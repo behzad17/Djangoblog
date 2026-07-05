@@ -60,5 +60,6 @@ def links_list(request):
         'active_type': active_type,
         'active_category': active_category,
         'category_has_links': active_category.link_count > 0,
+        'show_type_filters': active_category.link_count >= 8,
     }
     return render(request, 'related_links/links_category.html', context)

@@ -2,7 +2,7 @@
 {% load static %}
 {% load related_links_extras %}
 
-{% block title %}{{ active_category.name_fa }} | لینک‌های مرتبط | Peyvand{% endblock title %}
+{% block title %}{{ active_category.name_fa }} | لینک‌های مفید | Peyvand{% endblock title %}
 
 {% block meta_description %}{{ active_category|category_hero_subtitle }}{% endblock meta_description %}
 
@@ -42,7 +42,7 @@
 </section>
 
 <div class="container py-4 related-links-page">
-  {% if category_has_links %}
+  {% if category_has_links and show_type_filters %}
   <div class="row mb-4">
     <div class="col-12">
       <div class="related-links-filters">
@@ -66,44 +66,9 @@
   {% endif %}
 
   {% if links %}
-  <div class="row g-4 related-links-grid">
+  <div class="resource-link-list">
     {% for link in links %}
-    <div class="col-lg related-link-col mb-4">
-      <div class="related-link-card">
-        {% if link.cover_image %}
-        <div class="related-link-image-wrapper">
-          <img
-            src="{{ link.cover_image.url }}"
-            alt="{{ link.title }}"
-            class="related-link-image"
-            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
-          />
-        </div>
-        {% endif %}
-        <div class="related-link-content">
-          <div class="related-link-badge">
-            {{ link.get_link_type_display }}
-          </div>
-          <h5 class="related-link-title">{{ link.title }}</h5>
-          {% if link.source_name %}
-          <p class="related-link-source">
-            <i class="fas fa-building ms-1"></i>{{ link.source_name }}
-          </p>
-          {% endif %}
-          {% if link.description %}
-          <p class="related-link-description">{{ link.description|truncatewords:20 }}</p>
-          {% endif %}
-          <a
-            href="{{ link.url }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="related-link-button"
-          >
-            <i class="fas fa-external-link-alt ms-2"></i>{{ link.get_button_label }}
-          </a>
-        </div>
-      </div>
-    </div>
+    {% include "related_links/includes/resource_link_row.html" with link=link %}
     {% endfor %}
   </div>
   {% elif category_has_links %}
@@ -118,8 +83,13 @@
     <div class="col-12">
       <div class="related-links-empty-state text-center py-5">
         <i class="bi bi-inbox related-links-empty-state__icon" aria-hidden="true"></i>
-        <p class="related-links-empty-state__title mb-2">هنوز لینکی برای این دسته ثبت نشده است.</p>
-        <p class="related-links-empty-state__subtitle text-muted mb-0">به‌زودی منابع معتبر این بخش اضافه خواهند شد.</p>
+        <p class="related-links-empty-state__title mb-2">این بخش در حال آماده‌سازی است</p>
+        <p class="related-links-empty-state__subtitle text-muted mb-4">
+          به‌زودی منابع معتبر «{{ active_category.name_fa }}» در اینجا قرار می‌گیرد.
+        </p>
+        <a href="{% url 'related_links:links_list' %}" class="btn related-links-back-btn">
+          بازگشت به لینک‌های مفید
+        </a>
       </div>
     </div>
   </div>

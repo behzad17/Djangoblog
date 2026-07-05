@@ -81,8 +81,8 @@ class RelatedLink(models.Model):
     updated_on = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
 
     class Meta:
-        verbose_name = 'لینک مرتبط'
-        verbose_name_plural = 'لینک‌های مرتبط'
+        verbose_name = 'لینک مفید'
+        verbose_name_plural = 'لینک‌های مفید'
         ordering = ['order', '-created_on']
 
     def __str__(self):
