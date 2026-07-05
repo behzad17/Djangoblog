@@ -64,16 +64,22 @@ class RelatedLink(models.Model):
         max_length=20,
         choices=LinkType.choices,
         default=LinkType.WEBSITE,
-        verbose_name='نوع لینک',
+        verbose_name='نوع منبع',
     )
-    description = models.TextField(blank=True, verbose_name='توضیحات')
+    description = models.TextField(blank=True, verbose_name='توضیحات تکمیلی')
+    short_description = models.CharField(
+        max_length=160,
+        blank=True,
+        verbose_name='توضیح کوتاه',
+        help_text='حداکثر ۱۶۰ کاراکتر — فقط برای نمایش در فهرست لینک‌های مفید.',
+    )
     source_name = models.CharField(max_length=200, blank=True, verbose_name='نام منبع')
-    url = models.URLField(verbose_name='لینک')
+    url = models.URLField(verbose_name='آدرس وب')
     cover_image = CloudinaryField(
         'cover_image',
         blank=True,
         null=True,
-        help_text='تصویر کاور اختیاری',
+        help_text='تصویر اختیاری برای نمایش در فهرست منابع.',
     )
     is_active = models.BooleanField(default=True, verbose_name='فعال')
     order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
