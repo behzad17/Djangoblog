@@ -100,10 +100,10 @@ class RelatedLink(models.Model):
     )
     description = models.TextField(blank=True, verbose_name='توضیحات تکمیلی')
     short_description = models.CharField(
-        max_length=160,
+        max_length=180,
         blank=True,
         verbose_name='توضیح کوتاه',
-        help_text='حداکثر ۱۶۰ کاراکتر — فقط برای نمایش در فهرست لینک‌های مفید.',
+        help_text='حداکثر ۱۸۰ کاراکتر — فقط برای نمایش در فهرست لینک‌های مفید.',
     )
     source_name = models.CharField(max_length=200, blank=True, verbose_name='نام منبع')
     url = models.URLField(verbose_name='آدرس وب')

@@ -13,7 +13,7 @@ class RelatedLinkAdminForm(forms.ModelForm):
             'short_description': forms.Textarea(
                 attrs={
                     'rows': 2,
-                    'maxlength': 160,
+                    'maxlength': 180,
                     'style': 'max-width: 42rem;',
                     'placeholder': 'مثال: وب‌سایت رسمی مالیات، personnummer و خدمات مالیاتی دیجیتال.',
                 },
