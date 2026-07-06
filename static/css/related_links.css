@@ -165,22 +165,24 @@
 .resource-link-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 .resource-link-card {
-  --rl-card-height: 12rem;
-  --rl-media-ratio: 0.34;
+  --rl-card-height: 15rem;
+  --rl-thumb-width: 72%;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
   height: var(--rl-card-height);
+  padding: 14px 12px 18px;
   background: #ffffff;
   border: 1px solid #eef1f5;
   border-radius: 18px;
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.03),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+    0 2px 10px rgba(0, 0, 0, 0.04);
   text-decoration: none;
   color: inherit;
   overflow: hidden;
@@ -198,31 +200,14 @@
   outline-offset: 2px;
 }
 
-/* Upper third — visible 1:1 square thumbnail, centered */
-.resource-link-card__media {
-  flex: 0 0 calc(var(--rl-card-height) * var(--rl-media-ratio));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  container-type: size;
-  background: #f5f5f7;
-}
-
+/* Inset square thumbnail with rounded corners */
 .resource-link-card__thumb {
-  width: min(100cqw, 100cqh);
+  width: var(--rl-thumb-width);
   aspect-ratio: 1 / 1;
+  border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
-}
-
-@supports not (width: 1cqw) {
-  .resource-link-card__thumb {
-    height: 100%;
-    width: auto;
-    max-width: 100%;
-    aspect-ratio: 1 / 1;
-  }
+  background: #1a4a58;
 }
 
 .resource-link-card__image {
@@ -239,8 +224,9 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  color: #c7c7cc;
-  font-size: 1.5rem;
+  background: #1a4a58;
+  color: #ffffff;
+  font-size: clamp(1.5rem, 42%, 2.75rem);
   line-height: 1;
 }
 
@@ -249,18 +235,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: flex-start;
+  width: 100%;
   min-height: 0;
   overflow: hidden;
-  padding: 16px 10px 20px;
+  padding: 14px 2px 0;
+  text-align: center;
 }
 
 .resource-link-card__title {
   margin: 0;
   width: 100%;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.4;
   letter-spacing: -0.02em;
   color: #1d1d1f;
   display: -webkit-box;
@@ -270,22 +258,22 @@
 }
 
 .resource-link-card__description {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   width: 100%;
-  font-size: 0.6875rem;
+  font-size: 0.71875rem;
   font-weight: 400;
   line-height: 1.55;
-  color: #86868b;
+  color: #6e6e73;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .resource-link-card__source {
   width: 100%;
-  margin: 16px 0 0;
-  font-size: 0.625rem;
+  margin: 12px 0 0;
+  font-size: 0.6875rem;
   font-weight: 500;
   line-height: 1.35;
   color: #aeaeb2;
@@ -299,9 +287,9 @@
   align-items: center;
   justify-content: center;
   margin-top: auto;
-  padding-top: 18px;
-  color: #c7c7cc;
-  font-size: 0.75rem;
+  padding-top: 14px;
+  color: #8e8e93;
+  font-size: 0.8125rem;
   line-height: 1;
   transition: color 220ms ease;
 }
@@ -343,61 +331,48 @@
 @media (min-width: 768px) {
   .resource-link-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 14px;
   }
 
   .resource-link-card {
-    --rl-card-height: 12.5rem;
+    --rl-card-height: 15.5rem;
+    --rl-thumb-width: 70%;
+    padding: 16px 14px 20px;
   }
 
   .resource-link-card__body {
-    padding: 16px 12px 20px;
+    padding-top: 16px;
   }
 
   .resource-link-card__title {
-    font-size: 0.84375rem;
+    font-size: 0.9rem;
   }
 
   .resource-link-card__description {
-    font-size: 0.7rem;
-  }
-
-  .resource-link-card__source {
-    font-size: 0.65625rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (min-width: 992px) {
   .resource-link-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
   }
 
   .resource-link-card {
-    --rl-card-height: 13rem;
-  }
-
-  .resource-link-card__title {
-    font-size: 0.875rem;
+    --rl-card-height: 16rem;
   }
 }
 
 @media (min-width: 1200px) {
   .resource-link-grid {
     grid-template-columns: repeat(8, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
   }
 
   .resource-link-card {
-    --rl-card-height: 13rem;
-  }
-
-  .resource-link-card__title {
-    font-size: 0.875rem;
-  }
-
-  .resource-link-card__description {
-    font-size: 0.71875rem;
+    --rl-card-height: 16.5rem;
+    --rl-thumb-width: 68%;
   }
 }
 

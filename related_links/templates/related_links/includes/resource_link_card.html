@@ -5,22 +5,20 @@
   rel="noopener noreferrer"
   aria-label="{{ link.title }}{% if link.source_name %} — {{ link.source_name }}{% endif %}"
 >
-  <div class="resource-link-card__media">
-    <div class="resource-link-card__thumb">
-      {% if link.cover_image %}
-      <img
-        class="resource-link-card__image"
-        src="{{ link.cover_image.url }}"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-      {% else %}
-      <div class="resource-link-card__placeholder" aria-hidden="true">
-        <i class="{{ link.resource_type.icon_class }}"></i>
-      </div>
-      {% endif %}
+  <div class="resource-link-card__thumb">
+    {% if link.cover_image %}
+    <img
+      class="resource-link-card__image"
+      src="{{ link.cover_image.url }}"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    {% else %}
+    <div class="resource-link-card__placeholder" aria-hidden="true">
+      <i class="{{ link.resource_type.icon_class }}"></i>
     </div>
+    {% endif %}
   </div>
   <div class="resource-link-card__body">
     <h3 class="resource-link-card__title">{{ link.title }}</h3>
@@ -33,7 +31,7 @@
     <span class="resource-link-card__source">{{ link.source_name }}</span>
     {% endif %}
     <span class="resource-link-card__external" aria-hidden="true">
-      <i class="bi bi-arrow-up-left"></i>
+      <i class="bi bi-box-arrow-up-left"></i>
     </span>
   </div>
 </a>
