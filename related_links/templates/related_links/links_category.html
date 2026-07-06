@@ -66,9 +66,9 @@
   {% endif %}
 
   {% if links %}
-  <div class="resource-link-list">
+  <div class="resource-link-grid">
     {% for link in links %}
-    {% include "related_links/includes/resource_link_row.html" with link=link %}
+    {% include "related_links/includes/resource_link_card.html" with link=link %}
     {% endfor %}
   </div>
   {% elif category_has_links %}

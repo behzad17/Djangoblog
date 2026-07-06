@@ -1,0 +1,41 @@
+<a
+  href="{{ link.url }}"
+  class="resource-link-card"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="{{ link.title }}{% if link.source_name %} — {{ link.source_name }}{% endif %}"
+>
+  <div class="resource-link-card__media">
+    {% if link.cover_image %}
+    <img
+      class="resource-link-card__image"
+      src="{{ link.cover_image.url }}"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    {% else %}
+    <div class="resource-link-card__placeholder" aria-hidden="true">
+      <i class="{{ link.resource_type.icon_class }}"></i>
+    </div>
+    {% endif %}
+  </div>
+  <div class="resource-link-card__body">
+    <h3 class="resource-link-card__title">{{ link.title }}</h3>
+    {% if link.short_description %}
+    <p class="resource-link-card__description">{{ link.short_description }}</p>
+    {% elif link.description %}
+    <p class="resource-link-card__description">{{ link.description }}</p>
+    {% endif %}
+    <div class="resource-link-card__footer">
+      {% if link.source_name %}
+      <span class="resource-link-card__source">{{ link.source_name }}</span>
+      {% else %}
+      <span class="resource-link-card__source resource-link-card__source--empty"></span>
+      {% endif %}
+      <span class="resource-link-card__external" aria-hidden="true">
+        <i class="bi bi-box-arrow-up-left"></i>
+      </span>
+    </div>
+  </div>
+</a>
