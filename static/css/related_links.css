@@ -3,6 +3,39 @@
   padding: 1rem 0.75rem; /* Restore horizontal padding so cards don't touch edges */
 }
 
+/* Hero — taller artwork reveal; title/nav anchor at top */
+.related-links-hero-section {
+  padding-top: 3rem;
+  padding-bottom: 5.5rem;
+}
+
+/* Directory landing — push category grid down with more air below subtitle */
+.related-links-page--directory {
+  margin-top: 3.75rem; /* 60px */
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .related-links-hero-section {
+    padding-bottom: 6.25rem;
+  }
+
+  .related-links-page--directory {
+    margin-top: 4.375rem; /* 70px */
+  }
+}
+
+@media (max-width: 767.98px) {
+  .related-links-hero-section {
+    padding-bottom: 5rem;
+  }
+
+  .related-links-page--directory {
+    margin-top: 3.125rem; /* 50px */
+  }
+}
+
 /* Topic Directory — category cards (4 / 3 / 2 per row) */
 .useful-link-category-grid {
   --ul-cat-accent: var(--pv-color-secondary, #1F8A70);
