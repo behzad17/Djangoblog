@@ -22,6 +22,8 @@ def admin_stats(request):
         'pending_urls': 0,
         'recent_expert_posts': 0,
         'pending_pro_requests': 0,
+        'pending_community_discussions': 0,
+        'pending_community_replies': 0,
     }
     
     # Only add stats for admin pages (but NOT login/logout pages)

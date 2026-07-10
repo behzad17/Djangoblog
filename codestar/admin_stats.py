@@ -21,6 +21,8 @@ def get_admin_stats():
         'pending_urls': 0,
         'recent_expert_posts': 0,
         'pending_pro_requests': 0,  # New: Pro ad requests
+        'pending_community_discussions': 0,
+        'pending_community_replies': 0,
     }
     
     try:
@@ -103,6 +105,23 @@ def get_admin_stats():
             import logging
             logger = logging.getLogger(__name__)
             logger.error(f"Error counting recent expert posts: {e}", exc_info=True)
+
+        # Get pending community moderation items
+        try:
+            from community.selectors.discussions import list_pending_discussions
+            from community.selectors.replies import list_pending_replies
+
+            stats['pending_community_discussions'] = (
+                list_pending_discussions().count()
+            )
+            stats['pending_community_replies'] = list_pending_replies().count()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(
+                f"Error counting pending community items: {e}",
+                exc_info=True,
+            )
         
     except Exception as e:
         import logging

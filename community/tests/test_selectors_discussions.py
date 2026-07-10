@@ -98,6 +98,23 @@ class DiscussionSelectorVisibilityTests(TestCase):
         self.assertIn(visible.slug, slugs)
         self.assertNotIn(hidden.slug, slugs)
 
+    def test_list_pending_discussions(self):
+        from community.selectors.discussions import list_pending_discussions
+
+        visible = self._create(title='باز', body='متن')
+        hidden = self._create(title='مخفی', body='متن')
+        hidden.status = DiscussionStatus.HIDDEN
+        hidden.save(update_fields=['status'])
+        deleted = self._create(title='حذف شده', body='متن')
+        deleted.status = DiscussionStatus.HIDDEN
+        deleted.save(update_fields=['status'])
+        soft_delete_discussion(deleted, deleted_by=self.author)
+
+        results = list(list_pending_discussions())
+        self.assertEqual(results, [hidden])
+        self.assertNotIn(visible, results)
+        self.assertNotIn(deleted, results)
+
 
 class DiscussionSelectorBehaviorTests(TestCase):
     @classmethod

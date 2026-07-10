@@ -16,6 +16,7 @@ from community.selectors.discussions import (
     list_discussions_by_category,
     list_latest_discussions,
     list_open_discussions,
+    list_pending_discussions,
 )
 from community.selectors.replies import (
     count_public_replies,
@@ -41,6 +42,7 @@ __all__ = [
     'list_discussions_by_category',
     'list_latest_discussions',
     'list_open_discussions',
+    'list_pending_discussions',
     'list_pending_replies',
     'list_public_replies',
     'list_replies',

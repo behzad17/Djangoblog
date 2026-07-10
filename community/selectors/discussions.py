@@ -79,3 +79,15 @@ def list_discussions_by_author(user) -> QuerySet[Discussion]:
 def discussion_exists(slug: str) -> bool:
     """Return whether a public discussion exists for the slug."""
     return _public_discussions_queryset().filter(slug=slug).exists()
+
+
+def list_pending_discussions() -> QuerySet[Discussion]:
+    """Return discussions awaiting moderation, newest first."""
+    return (
+        Discussion.objects.filter(
+            is_deleted=False,
+            status=DiscussionStatus.HIDDEN,
+        )
+        .select_related('author', 'category')
+        .order_by('-created_on')
+    )
