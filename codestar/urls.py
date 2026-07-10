@@ -58,6 +58,7 @@ urlpatterns = [
     path("ads/", include("ads.urls", namespace="ads")),
     path("notifications/", include("notifications.urls", namespace="notifications")),
     path("related-links/", include("related_links.urls", namespace="related_links")),
+    path("community/", include("community.urls", namespace="community")),
     # Rate-limit login and signup endpoints
     # More lenient in development (20/min) for testing, stricter in production (5/min)
     # Note: Rate limiting is less strict in development to allow easier testing

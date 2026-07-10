@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'related_links',
     'accounts',
     'notifications',
+    'community',
 ]
 
 # django-simple-captcha (signup CAPTCHA) tuning:
@@ -564,6 +565,17 @@ LOGGING = {
         },
     },
 }
+
+# ---------------------------------------------------------------------------
+# Community — configuration placeholders (Sprint 1 foundation)
+# Business rules must read from these settings; do not hardcode values.
+# ---------------------------------------------------------------------------
+COMMUNITY_TRUST_REPLY_COUNT = 5
+COMMUNITY_RATE_LIMIT_DISCUSSIONS_USER = '5/h'
+COMMUNITY_RATE_LIMIT_REPLIES_USER = '20/h'
+COMMUNITY_LIST_PAGE_SIZE = 12
+COMMUNITY_SEARCH_CONFIG = 'simple'
+COMMUNITY_SEARCH_MIN_RANK = 0.01
 
 # TEMP: Allow all hosts to debug Bad Request (400) behind Cloudflare
 # This is a temporary debug setting to eliminate 400 errors.
