@@ -147,3 +147,32 @@ def notify_ad_expiring(ad, days=7):
         },
         dedup_key=dedup_key,
     )
+
+
+def notify_community_reply(reply):
+    """Notify the discussion author that someone replied."""
+    discussion = reply.discussion
+    recipient = discussion.author
+    actor = reply.author
+    if recipient is None or actor is None or recipient.pk == actor.pk:
+        return None
+
+    copy = IN_APP_MESSAGES[NotificationType.COMMUNITY_REPLY]
+    url = build_site_url(
+        reverse('community:discussion_detail', args=[discussion.slug]),
+    )
+
+    return NotificationService.notify(
+        recipient=recipient,
+        notification_type=NotificationType.COMMUNITY_REPLY,
+        title=copy['title'],
+        message=copy['message'],
+        url=url,
+        actor=actor,
+        metadata={
+            'discussion_id': discussion.id,
+            'reply_id': reply.id,
+        },
+        send_email=False,
+        dedup_key=f'discussion:{discussion.id}:reply:{reply.id}',
+    )

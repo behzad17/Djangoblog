@@ -1,0 +1,23 @@
+<article class="card shadow-sm mb-3 community-discussion-card">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+      {% include "community/includes/status_badge.html" with discussion=discussion %}
+      {% if discussion.category %}
+      <span class="badge bg-light text-dark border">{{ discussion.category.name }}</span>
+      {% endif %}
+    </div>
+    <h2 class="h5 mb-2">
+      <a href="{% url 'community:discussion_detail' discussion.slug %}" class="text-decoration-none">{{ discussion.title }}</a>
+    </h2>
+    <p class="text-muted small mb-2">
+      {% if discussion.author %}
+      {{ discussion.author.username }}
+      {% else %}
+      کاربر حذف‌شده
+      {% endif %}
+      · {{ discussion.last_activity_at|date:"Y/m/d H:i" }}
+      · {{ discussion.reply_count }} پاسخ
+    </p>
+    <p class="mb-0">{{ discussion.body|truncatechars:180 }}</p>
+  </div>
+</article>

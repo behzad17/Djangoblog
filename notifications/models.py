@@ -68,6 +68,10 @@ class NotificationPreference(models.Model):
         default=True,
         help_text='Receive the weekly digest email.',
     )
+    community_notifications = models.BooleanField(
+        default=True,
+        help_text='Receive in-app notifications for community replies.',
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -96,4 +100,6 @@ class NotificationPreference(models.Model):
             return False
         if notification_type == NotificationType.AD_FAVORITED:
             return self.favorite_notifications
+        if notification_type == NotificationType.COMMUNITY_REPLY:
+            return self.community_notifications
         return True

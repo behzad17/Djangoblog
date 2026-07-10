@@ -20,6 +20,7 @@
     Pending URLs: {{ stats.total_pending_urls }},
     Pending Questions: {{ stats.total_pending_questions }},
     Pending Comments: {{ stats.total_pending_comments }},
+    Pending Community Replies: {{ stats.total_pending_replies }},
     Recent Expert Posts (24h): {{ stats.recent_expert_posts_count }}
 </div>
 
@@ -132,6 +133,49 @@
     {% if stats.total_pending_comments > 20 %}
     <p style="margin-top: 10px;">
         <a href="{% url 'admin:blog_comment_changelist' %}?approved__exact=0">View all {{ stats.total_pending_comments }} pending comments →</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Pending Community Replies Section -->
+{% if pending_replies %}
+<div style="margin: 30px 0;">
+    <h2>💬 Pending Community Replies ({{ stats.total_pending_replies }})</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Reply</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Author</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Discussion</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Reason</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Created</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reply in pending_replies %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ reply.body|truncatewords:15 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ reply.author.username }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ reply.discussion.title|truncatewords:5 }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    {% if reply.moderation_reason == 'new_user' %}👤 New User
+                    {% elif reply.moderation_reason == 'contains_link' %}🔗 Contains Link
+                    {% elif reply.moderation_reason == 'manual_review' %}🛡 Manual Review
+                    {% else %}-{% endif %}
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ reply.created_on|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <a href="{% url 'admin:community_reply_change' reply.id %}" style="padding: 5px 10px; background: #417690; color: white; text-decoration: none; border-radius: 3px;">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if stats.total_pending_replies > 20 %}
+    <p style="margin-top: 10px;">
+        <a href="{% url 'admin:community_reply_changelist' %}?approved__exact=0">View all {{ stats.total_pending_replies }} pending replies →</a>
     </p>
     {% endif %}
 </div>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static crispy_forms_tags %}
+
+{% block title %}بحث جدید | انجمن | Peyvand{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container py-4 community-page">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h1 class="h3 mb-3">ایجاد بحث جدید</h1>
+      <p class="text-muted">سؤال یا تجربه خود را با جامعه به اشتراک بگذارید.</p>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.title|as_crispy_field }}
+            {{ form.category|as_crispy_field }}
+            {{ form.body|as_crispy_field }}
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">انتشار بحث</button>
+              <a href="{% url 'community:discussion_list' %}" class="btn btn-outline-secondary">انصراف</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

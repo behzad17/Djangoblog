@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static crispy_forms_tags %}
+
+{% block title %}{{ discussion.title }} | انجمن | Peyvand{% endblock title %}
+{% block meta_description %}{{ discussion.body|truncatechars:160 }}{% endblock meta_description %}
+{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container py-4 community-page">
+  <article class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+        <div>
+          {% include "community/includes/status_badge.html" %}
+          {% if discussion.category %}
+          <span class="badge bg-light text-dark border ms-2">{{ discussion.category.name }}</span>
+          {% endif %}
+        </div>
+        {% if can_close %}
+        <form method="post" action="{% url 'community:discussion_close' discussion.slug %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger">بستن بحث</button>
+        </form>
+        {% endif %}
+      </div>
+
+      <h1 class="h3">{{ discussion.title }}</h1>
+      <p class="text-muted small mb-3">
+        {% if discussion.author %}
+        <i class="fas fa-user ms-1"></i>{{ discussion.author.username }}
+        {% else %}
+        کاربر حذف‌شده
+        {% endif %}
+        <span class="mx-2">|</span>
+        <i class="far fa-calendar ms-1"></i>{{ discussion.created_on|date:"Y/m/d H:i" }}
+        <span class="mx-2">|</span>
+        <i class="far fa-comments ms-1"></i>{{ discussion.reply_count }} پاسخ
+      </p>
+
+      {% if is_closed %}
+      <div class="alert alert-secondary">این بحث بسته شده و پاسخ جدید پذیرفته نمی‌شود.</div>
+      {% endif %}
+
+      <div class="community-discussion-body">{{ discussion.body|linebreaksbr }}</div>
+    </div>
+  </article>
+
+  <section class="mb-4">
+    <h2 class="h5 mb-3">پاسخ‌ها ({{ replies|length }})</h2>
+    {% include "community/includes/reply_list.html" %}
+  </section>
+
+  {% if can_reply %}
+  <section class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="h5 mb-3">ثبت پاسخ</h2>
+      <form method="post" action="{% url 'community:discussion_reply' discussion.slug %}">
+        {% csrf_token %}
+        {{ reply_form.body|as_crispy_field }}
+        <button type="submit" class="btn btn-primary">ارسال پاسخ</button>
+      </form>
+    </div>
+  </section>
+  {% elif not user.is_authenticated %}
+  <div class="alert alert-info">
+    برای پاسخ دادن <a href="{% url 'account_login' %}?next={{ request.path }}">وارد شوید</a>.
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}

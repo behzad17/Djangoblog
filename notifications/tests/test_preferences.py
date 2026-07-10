@@ -23,7 +23,13 @@ class NotificationPreferenceFormTests(TestCase):
 
         self.assertEqual(
             field_names,
-            ['askme_emails', 'ad_emails', 'favorite_notifications', 'weekly_digest'],
+            [
+                'askme_emails',
+                'ad_emails',
+                'favorite_notifications',
+                'community_notifications',
+                'weekly_digest',
+            ],
         )
         self.assertNotIn('comment_notifications', field_names)
 
@@ -41,6 +47,7 @@ class NotificationPreferenceFormTests(TestCase):
                 'askme_emails': True,
                 'ad_emails': False,
                 'favorite_notifications': True,
+                'community_notifications': False,
                 'weekly_digest': False,
             },
             instance=self.preferences,
@@ -53,6 +60,7 @@ class NotificationPreferenceFormTests(TestCase):
         self.assertTrue(self.preferences.askme_emails)
         self.assertFalse(self.preferences.ad_emails)
         self.assertTrue(self.preferences.favorite_notifications)
+        self.assertFalse(self.preferences.community_notifications)
         self.assertFalse(self.preferences.weekly_digest)
 
 
@@ -137,6 +145,7 @@ class NotificationPreferencesViewTests(TestCase):
         self.preferences.askme_emails = True
         self.preferences.ad_emails = True
         self.preferences.favorite_notifications = True
+        self.preferences.community_notifications = True
         self.preferences.weekly_digest = True
         self.preferences.save()
 
@@ -147,6 +156,7 @@ class NotificationPreferencesViewTests(TestCase):
         self.assertFalse(self.preferences.askme_emails)
         self.assertFalse(self.preferences.ad_emails)
         self.assertFalse(self.preferences.favorite_notifications)
+        self.assertFalse(self.preferences.community_notifications)
         self.assertFalse(self.preferences.weekly_digest)
 
     def test_post_without_form_type_does_not_update_preferences(self):

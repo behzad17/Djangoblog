@@ -24,6 +24,7 @@ from community.selectors.replies import (
     list_replies,
     list_replies_by_author,
 )
+from community.selectors.search import search_discussions
 
 __all__ = [
     'category_exists',
@@ -44,4 +45,5 @@ __all__ = [
     'list_public_replies',
     'list_replies',
     'list_replies_by_author',
+    'search_discussions',
 ]

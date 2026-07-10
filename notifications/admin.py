@@ -76,6 +76,7 @@ class NotificationPreferenceAdmin(admin.ModelAdmin):
     'askme_emails',
     'ad_emails',
     'favorite_notifications',
+    'community_notifications',
     'weekly_digest',
     'comment_notifications',
     'updated_at',
@@ -84,6 +85,7 @@ class NotificationPreferenceAdmin(admin.ModelAdmin):
     'askme_emails',
     'ad_emails',
     'favorite_notifications',
+    'community_notifications',
     'weekly_digest',
     'comment_notifications',
   )

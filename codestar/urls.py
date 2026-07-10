@@ -20,6 +20,7 @@ from django.contrib.sitemaps.views import sitemap
 from ratelimit.decorators import ratelimit
 from allauth.account import views as allauth_views
 from blog.sitemaps import PostSitemap, CategorySitemap
+from community.sitemaps import DiscussionSitemap
 from blog.views_robots import robots_txt
 from codestar.views_db_health import db_health_dashboard
 from codestar.admin_incoming import admin_incoming_items
@@ -50,6 +51,7 @@ from codestar.views_analytics import analytics_dashboard
 sitemaps = {
     'posts': PostSitemap,
     'categories': CategorySitemap,
+    'community_discussions': DiscussionSitemap,
 }
 
 urlpatterns = [

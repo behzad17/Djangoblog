@@ -41,6 +41,12 @@ def admin_incoming_items(request):
     pending_comments = Comment.objects.filter(
         approved=False
     ).select_related('author', 'post').order_by('-created_on')[:20]
+
+    from community.models import Reply
+
+    pending_replies = Reply.objects.filter(
+        approved=False
+    ).select_related('author', 'discussion').order_by('-created_on')[:20]
     
     # Recent expert posts (last 24 hours)
     recent_expert_posts = Post.objects.filter(
@@ -59,6 +65,7 @@ def admin_incoming_items(request):
         ),
         'total_pending_questions': Question.objects.filter(answered=False).count(),
         'total_pending_comments': Comment.objects.filter(approved=False).count(),
+        'total_pending_replies': Reply.objects.filter(approved=False).count(),
         'recent_expert_posts_count': recent_expert_posts.count(),
     }
     
@@ -69,6 +76,7 @@ def admin_incoming_items(request):
         'pending_urls_posts': pending_urls_posts,
         'pending_questions': pending_questions,
         'pending_comments': pending_comments,
+        'pending_replies': pending_replies,
         'recent_expert_posts': recent_expert_posts,
         'stats': stats,
     })

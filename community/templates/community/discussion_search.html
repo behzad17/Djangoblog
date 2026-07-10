@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}جستجو{% if query %} - {{ query }}{% endif %} | انجمن | Peyvand{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container py-4 community-page">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h1 class="h4 mb-3"><i class="fas fa-search ms-2"></i>جستجو در انجمن</h1>
+      <form method="get" action="{% url 'community:search' %}">
+        <div class="row g-3">
+          <div class="col-md-7">
+            <label for="id_q" class="form-label">کلمه کلیدی</label>
+            <input type="text" name="q" id="id_q" class="form-control" value="{{ query }}" placeholder="جستجو در عنوان و متن بحث‌ها" />
+          </div>
+          <div class="col-md-3">
+            <label for="id_category" class="form-label">دسته‌بندی</label>
+            <select name="category" id="id_category" class="form-select">
+              <option value="">همه دسته‌ها</option>
+              {% for category in categories %}
+              <option value="{{ category.slug }}" {% if selected_category and selected_category.slug == category.slug %}selected{% endif %}>{{ category.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">جستجو</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if query or selected_category %}
+  <p class="text-muted">{{ total_count }} نتیجه</p>
+  {% endif %}
+
+  {% if discussions %}
+  <div class="community-discussion-list">
+    {% for discussion in discussions %}
+      {% include "community/includes/discussion_card.html" %}
+    {% endfor %}
+  </div>
+  {% elif query or selected_category %}
+  {% include "community/includes/empty_state.html" with message="نتیجه‌ای یافت نشد." %}
+  {% endif %}
+
+  {% if page_obj.has_other_pages %}
+  <nav class="mt-4" aria-label="صفحه‌بندی نتایج">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?q={{ query }}&category={% if selected_category %}{{ selected_category.slug }}{% endif %}&page={{ page_obj.previous_page_number }}">قبلی</a></li>
+      {% endif %}
+      <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?q={{ query }}&category={% if selected_category %}{{ selected_category.slug }}{% endif %}&page={{ page_obj.next_page_number }}">بعدی</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock content %}

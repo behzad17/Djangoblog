@@ -1,0 +1,21 @@
+{% if replies %}
+<div class="list-group">
+  {% for reply in replies %}
+  <div class="list-group-item">
+    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+      <strong>
+        {% if reply.author %}
+        {{ reply.author.username }}
+        {% else %}
+        کاربر حذف‌شده
+        {% endif %}
+      </strong>
+      <small class="text-muted">{{ reply.created_on|date:"Y/m/d H:i" }}</small>
+    </div>
+    <div>{{ reply.body|linebreaksbr }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+{% include "community/includes/empty_state.html" with message="هنوز پاسخی ثبت نشده است." %}
+{% endif %}

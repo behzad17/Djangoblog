@@ -8,6 +8,7 @@ class NotificationType(models.TextChoices):
     AD_PRO = 'ad_pro', 'Ad upgraded to Pro'
     AD_EXPIRING = 'ad_expiring', 'Ad expiring soon'
     AD_FAVORITED = 'ad_favorited', 'Ad favorited'
+    COMMUNITY_REPLY = 'community_reply', 'Community reply'
     WEEKLY_DIGEST = 'weekly_digest', 'Weekly digest'
 
 
@@ -36,6 +37,10 @@ IN_APP_MESSAGES = {
     NotificationType.AD_FAVORITED: {
         'title': 'علاقه‌مندی جدید',
         'message': 'آگهی شما به فهرست علاقه‌مندی‌های یک کاربر اضافه شد.',
+    },
+    NotificationType.COMMUNITY_REPLY: {
+        'title': 'پاسخ جدید برای بحث شما',
+        'message': 'یک کاربر به بحث شما پاسخ داد.',
     },
 }
 

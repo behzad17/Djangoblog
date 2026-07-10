@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}انجمن | Peyvand{% endblock title %}
+{% block meta_description %}بحث‌ها و پرسش‌های جامعه ایرانیان مقیم سوئد در پیوند{% endblock meta_description %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container py-4 community-page">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+      <h1 class="h3 mb-1">انجمن</h1>
+      <p class="text-muted mb-0">پرسش، تجربه و کمک متقابل</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <a href="{% url 'community:search' %}" class="btn btn-outline-primary">
+        <i class="fas fa-search ms-1"></i>جستجو
+      </a>
+      {% if can_create %}
+      <a href="{% url 'community:discussion_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus ms-1"></i>بحث جدید
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% include "community/includes/category_filter.html" %}
+
+  <div class="mb-3 d-flex flex-wrap gap-2">
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=all"
+       class="btn btn-sm {% if status == 'all' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">همه</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=open"
+       class="btn btn-sm {% if status == 'open' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">باز</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=closed"
+       class="btn btn-sm {% if status == 'closed' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">بسته</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=active&status={{ status }}"
+       class="btn btn-sm {% if sort != 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">فعال‌ترین</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=newest&status={{ status }}"
+       class="btn btn-sm {% if sort == 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">جدیدترین</a>
+  </div>
+
+  {% if discussions %}
+  <div class="community-discussion-list">
+    {% for discussion in discussions %}
+      {% include "community/includes/discussion_card.html" %}
+    {% endfor %}
+  </div>
+  {% else %}
+  {% include "community/includes/empty_state.html" with message="هنوز بحثی ثبت نشده است." %}
+  {% endif %}
+
+  {% if page_obj.has_other_pages %}
+  <nav class="mt-4" aria-label="صفحه‌بندی بحث‌ها">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&status={{ status }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}">قبلی</a>
+      </li>
+      {% endif %}
+      <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&status={{ status }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}">بعدی</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock content %}
