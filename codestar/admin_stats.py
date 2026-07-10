@@ -106,7 +106,7 @@ def get_admin_stats():
             logger = logging.getLogger(__name__)
             logger.error(f"Error counting recent expert posts: {e}", exc_info=True)
 
-        # Get pending community moderation items
+        # Pending community moderation (discussions: MVP uses hidden status; see ADR-003)
         try:
             from community.selectors.discussions import list_pending_discussions
             from community.selectors.replies import list_pending_replies

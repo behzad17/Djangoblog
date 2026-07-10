@@ -82,7 +82,12 @@ def discussion_exists(slug: str) -> bool:
 
 
 def list_pending_discussions() -> QuerySet[Discussion]:
-    """Return discussions awaiting moderation, newest first."""
+    """Return discussions awaiting moderation, newest first.
+
+    MVP: uses ``status=hidden`` (non-deleted) as a temporary moderation queue.
+    A dedicated ``PENDING`` moderation state will replace this so moderation
+    is separate from visibility (see docs/adr/community/ADR-003-discussion-status.md).
+    """
     return (
         Discussion.objects.filter(
             is_deleted=False,

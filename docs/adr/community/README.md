@@ -10,7 +10,7 @@ ADRs document significant architectural choices, their context, and consequences
 |-----|-------|--------|
 | [ADR-001](ADR-001-community-categories.md) | Community has its own categories | Proposed |
 | [ADR-002](ADR-002-flat-replies.md) | Replies are flat | Proposed |
-| [ADR-003](ADR-003-discussion-status.md) | Discussion status: Open / Closed | Proposed |
+| [ADR-003](ADR-003-discussion-status.md) | Discussion status: Open / Closed / Hidden (MVP moderation via hidden) | Accepted (MVP) |
 | [ADR-004](ADR-004-separate-from-askme.md) | Community is separate from AskMe | Proposed |
 | [ADR-005](ADR-005-soft-delete.md) | Soft delete for discussions | Proposed |
 | [ADR-006](ADR-006-denormalized-counters.md) | Denormalized counters | Proposed |
