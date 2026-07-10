@@ -19,11 +19,9 @@
       <a href="{% url 'community:search' %}" class="btn btn-outline-primary">
         <i class="fas fa-search ms-1"></i>جستجو
       </a>
-      {% if can_create %}
-      <a href="{% url 'community:discussion_create' %}" class="btn btn-primary">
+      <a href="{{ create_discussion_url }}" class="btn btn-primary">
         <i class="fas fa-plus ms-1"></i>بحث جدید
       </a>
-      {% endif %}
     </div>
   </div>
 

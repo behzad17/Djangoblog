@@ -65,6 +65,11 @@
       </form>
     </div>
   </section>
+  {% elif show_verification_prompt %}
+  <div class="alert alert-info">
+    برای ارسال سؤال یا پاسخ، ابتدا حساب کاربری خود را تکمیل و تأیید کنید.
+    <a href="{% url 'complete_setup' %}" class="btn btn-sm btn-primary ms-2">تکمیل حساب کاربری</a>
+  </div>
   {% elif not user.is_authenticated %}
   <div class="alert alert-info">
     برای پاسخ دادن <a href="{% url 'account_login' %}?next={{ request.path }}">وارد شوید</a>.

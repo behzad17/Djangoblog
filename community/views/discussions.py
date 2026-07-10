@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.urls import reverse
+from urllib.parse import urlencode
 from django.views.decorators.http import require_http_methods, require_POST
 from ratelimit.decorators import ratelimit
 
@@ -29,6 +31,24 @@ def _paginate(request, queryset):
     page_size = getattr(settings, 'COMMUNITY_LIST_PAGE_SIZE', 12)
     paginator = Paginator(queryset, page_size)
     return paginator.get_page(request.GET.get('page'))
+
+
+def _create_discussion_url(user) -> str:
+    if not getattr(user, 'is_authenticated', False):
+        params = urlencode({'next': reverse('community:discussion_create')})
+        return f"{reverse('account_login')}?{params}"
+    if can_create_discussion(user):
+        return reverse('community:discussion_create')
+    return reverse('complete_setup')
+
+
+def _show_verification_prompt(user, discussion) -> bool:
+    if not getattr(user, 'is_authenticated', False):
+        return False
+    if discussion.is_deleted or discussion.status != DiscussionStatus.OPEN:
+        return False
+    profile = getattr(user, 'profile', None)
+    return profile is None or not profile.is_site_verified
 
 
 def community_home(request):
@@ -74,7 +94,7 @@ def discussion_list(request):
             'selected_category': selected_category,
             'sort': sort,
             'status': status,
-            'can_create': can_create_discussion(request.user),
+            'create_discussion_url': _create_discussion_url(request.user),
         },
     )
 
@@ -97,6 +117,10 @@ def discussion_detail(request, slug):
             'can_reply': can_reply(request.user, discussion),
             'can_close': can_close(request.user, discussion),
             'is_closed': discussion.status == DiscussionStatus.CLOSED,
+            'show_verification_prompt': _show_verification_prompt(
+                request.user,
+                discussion,
+            ),
         },
     )
 

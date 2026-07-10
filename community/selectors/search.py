@@ -22,6 +22,8 @@ def search_discussions(
     if not cleaned_query:
         return queryset.order_by('-last_activity_at')
 
+    fallback_queryset = queryset
+
     if connection.vendor == 'postgresql':
         from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 
@@ -32,18 +34,18 @@ def search_discussions(
             + SearchVector('body', weight='B', config=search_config)
         )
         search_query = SearchQuery(cleaned_query, config=search_config)
-        queryset = (
-            queryset.annotate(
+        fts_queryset = (
+            fallback_queryset.annotate(
                 rank=Coalesce(SearchRank(vector, search_query), 0.0),
             )
             .filter(rank__gte=min_rank)
             .order_by('-rank', '-last_activity_at')
         )
-        if queryset.exists():
-            return queryset
+        if fts_queryset.exists():
+            return fts_queryset
 
     return (
-        queryset.filter(
+        fallback_queryset.filter(
             Q(title__icontains=cleaned_query)
             | Q(body__icontains=cleaned_query),
         )

@@ -160,3 +160,69 @@ class CommunityViewTests(TestCase):
                 notification_type=NotificationType.COMMUNITY_REPLY,
             ).exists(),
         )
+
+    def test_anonymous_user_sees_create_discussion_cta_to_login(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'بحث جدید')
+        self.assertContains(response, reverse('account_login'))
+
+    def test_unverified_user_sees_create_discussion_cta_to_complete_setup(self):
+        unverified = User.objects.create_user(
+            username='unverified',
+            password='password123',
+        )
+        UserProfile.objects.update_or_create(
+            user=unverified,
+            defaults={'is_site_verified': False},
+        )
+        self.client.login(username='unverified', password='password123')
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'بحث جدید')
+        self.assertContains(response, reverse('complete_setup'))
+
+    def test_verified_user_sees_create_discussion_cta_to_create_page(self):
+        self.client.login(username='author', password='password123')
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'بحث جدید')
+        self.assertContains(response, reverse('community:discussion_create'))
+
+    def test_unverified_user_sees_verification_prompt_on_open_discussion(self):
+        unverified = User.objects.create_user(
+            username='unverified-detail',
+            password='password123',
+        )
+        UserProfile.objects.update_or_create(
+            user=unverified,
+            defaults={'is_site_verified': False},
+        )
+        self.client.login(username='unverified-detail', password='password123')
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+        self.assertContains(
+            response,
+            'برای ارسال سؤال یا پاسخ، ابتدا حساب کاربری خود را تکمیل و تأیید کنید.',
+        )
+        self.assertContains(response, reverse('complete_setup'))
+        self.assertNotContains(response, 'ثبت پاسخ')
+
+    def test_closed_discussion_does_not_show_verification_prompt(self):
+        unverified = User.objects.create_user(
+            username='unverified-closed',
+            password='password123',
+        )
+        UserProfile.objects.update_or_create(
+            user=unverified,
+            defaults={'is_site_verified': False},
+        )
+        self.discussion.status = DiscussionStatus.CLOSED
+        self.discussion.save(update_fields=['status'])
+        self.client.login(username='unverified-closed', password='password123')
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+        self.assertNotContains(
+            response,
+            'برای ارسال سؤال یا پاسخ، ابتدا حساب کاربری خود را تکمیل و تأیید کنید.',
+        )
+        self.assertNotContains(response, 'ثبت پاسخ')
