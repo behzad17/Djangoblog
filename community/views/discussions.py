@@ -23,6 +23,7 @@ from community.selectors.discussions import (
     list_open_discussions,
 )
 from community.selectors.replies import list_public_replies
+from ads.selectors.related import get_related_ads
 from community.services.discussions import close_discussion, create_discussion
 from community.services.replies import create_reply
 
@@ -107,12 +108,14 @@ def discussion_detail(request, slug):
         raise Http404('Discussion not found.') from exc
 
     replies = list_public_replies(discussion)
+    related_ads = get_related_ads(discussion, limit=3)
     return render(
         request,
         'community/discussion_detail.html',
         {
             'discussion': discussion,
             'replies': replies,
+            'related_ads': related_ads,
             'reply_form': ReplyCreateForm(),
             'can_reply': can_reply(request.user, discussion),
             'can_close': can_close(request.user, discussion),

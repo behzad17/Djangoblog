@@ -63,6 +63,46 @@ class CommunityViewTests(TestCase):
         self.assertContains(response, self.discussion.title)
         self.assertContains(response, 'متن بحث تست')
         self.assertIsInstance(response.context['reply_form'], ReplyCreateForm)
+        self.assertEqual(response.context['related_ads'], [])
+
+    def test_discussion_detail_renders_related_ads(self):
+        import cloudinary
+        from ads.models import Ad, AdCategory
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        ad_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        Ad.objects.create(
+            title='مشاور حقوقی',
+            slug='legal-ad',
+            category=ad_category,
+            owner=self.author,
+            image='test/ad-image',
+            target_url='https://example.com',
+            city='Stockholm',
+            plan='pro',
+            is_active=True,
+            is_approved=True,
+            url_approved=True,
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'مشاور حقوقی')
+        self.assertEqual(len(response.context['related_ads']), 1)
 
     def test_discussion_create_requires_login(self):
         response = self.client.get(reverse('community:discussion_create'))

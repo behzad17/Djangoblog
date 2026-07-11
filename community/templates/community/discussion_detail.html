@@ -54,6 +54,10 @@
     {% include "community/includes/reply_list.html" %}
   </section>
 
+  {% if related_ads %}
+  {% include "community/includes/related_ads.html" %}
+  {% endif %}
+
   {% if can_reply %}
   <section class="card shadow-sm">
     <div class="card-body">

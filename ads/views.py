@@ -13,6 +13,7 @@ from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 from .gallery import get_detail_image_context, process_gallery_submission
 from .signals import notify_admin_pro_request
+from ads.selectors.visibility import list_visible_ads as _visible_ads_queryset
 
 SOCIAL_URL_FIELDS = ('instagram_url', 'telegram_url', 'website_url')
 
@@ -20,54 +21,6 @@ SOCIAL_URL_FIELDS = ('instagram_url', 'telegram_url', 'website_url')
 def pro_ads_landing(request):
     """Marketing page for Peyvand Pro ads (UI only)."""
     return render(request, 'ads/pro_landing.html')
-
-
-def _visible_ads_queryset():
-    """
-    Base queryset for ads that should be visible on the site.
-    Featured ads appear first, then ordered by newest.
-    Only requires is_approved=True (admin approval) to appear in list.
-    URL approval is separate and only affects whether the URL is clickable.
-    """
-    today = timezone.now().date()
-    now = timezone.now()
-    qs = Ad.objects.filter(
-        is_active=True,
-        is_approved=True,
-    )
-    # Apply date filters only when set
-    qs = qs.filter(
-        models.Q(start_date__isnull=True) | models.Q(start_date__lte=today),
-        models.Q(end_date__isnull=True) | models.Q(end_date__gte=today),
-    )
-    # Order by: featured first (only if featured_until is in future or null), then by priority, then newest
-    # Annotate to check if featured status is currently active
-    from django.db.models import Case, When, BooleanField, Q, F, Value, IntegerField
-    qs = qs.annotate(
-        is_currently_featured=Case(
-            When(
-                Q(is_featured=True) & (Q(featured_until__isnull=True) | Q(featured_until__gt=now)),
-                then=True
-            ),
-            default=False,
-            output_field=BooleanField()
-        )
-    )
-    # Order: featured first, then by featured_priority (lower = higher priority), then by created_on
-    # Use a large number (999999) for featured ads without priority so they appear after prioritized ones
-    qs = qs.annotate(
-        priority_value=Case(
-            When(
-                is_currently_featured=True,
-                then=Case(
-                    When(featured_priority__isnull=False, then=F('featured_priority')),
-                    default=Value(999999, output_field=IntegerField())  # Featured ads without priority go to end
-                )
-            ),
-            default=Value(9999999, output_field=IntegerField())  # Non-featured ads go to very end
-        )
-    ).order_by('-is_currently_featured', 'priority_value', '-created_on')
-    return qs.select_related("category")
 
 
 def ad_category_list(request):

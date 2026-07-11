@@ -391,3 +391,225 @@ class ProRequestEmailTests(AdsTestMixin, TestCase):
         ad.refresh_from_db()
         self.assertTrue(ad.pro_requested)
         self.assertEqual(ad.pro_request_phone, "0701234567")
+
+
+class RelatedAdsSelectorTests(AdsTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        from community.models import CommunityCategory
+
+        cls.community_category = CommunityCategory.objects.create(
+            name='سلامت',
+            slug='health',
+        )
+        cls.health_ad_category = AdCategory.objects.create(
+            name='خدمات پزشکی و سلامت',
+            slug='health-welfare',
+        )
+        cls.other_ad_category = AdCategory.objects.create(
+            name='خدمات مالی',
+            slug='economi',
+        )
+
+    def setUp(self):
+        super().setUp()
+
+    def _create_discussion(self, **kwargs):
+        from community.services.discussions import create_discussion
+
+        defaults = {
+            'author': self.owner,
+            'category': self.community_category,
+            'title': 'سؤال درباره بیمه سلامت',
+            'body': 'به دنبال راهنمایی برای بیمه هستم.',
+        }
+        defaults.update(kwargs)
+        return create_discussion(**defaults)
+
+    def test_returns_mapped_category_ads(self):
+        from ads.selectors.related import get_related_ads
+
+        discussion = self._create_discussion()
+        matched = self._create_ad(
+            'health-ad',
+            category=self.health_ad_category,
+            plan='pro',
+        )
+        self._create_ad(
+            'finance-ad',
+            category=self.other_ad_category,
+            title='خدمات مالی',
+            plan='pro',
+        )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0], matched)
+
+    def test_excludes_pending_and_inactive_ads(self):
+        from ads.selectors.related import get_related_ads
+
+        discussion = self._create_discussion()
+        self._create_ad('visible-ad', category=self.health_ad_category, plan='pro')
+        self._create_ad(
+            'pending-ad',
+            category=self.health_ad_category,
+            is_approved=False,
+            plan='pro',
+        )
+        self._create_ad(
+            'url-pending-ad',
+            category=self.health_ad_category,
+            url_approved=False,
+            plan='pro',
+        )
+        self._create_ad(
+            'inactive-ad',
+            category=self.health_ad_category,
+            is_active=False,
+            plan='pro',
+        )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].slug, 'visible-ad')
+
+    def test_limits_results_to_three(self):
+        from ads.selectors.related import get_related_ads
+
+        discussion = self._create_discussion()
+        for index in range(5):
+            self._create_ad(
+                f'health-ad-{index}',
+                category=self.health_ad_category,
+                title=f'سلامت {index}',
+                plan='pro',
+            )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(len(results), 3)
+
+    def test_returns_empty_when_no_related_matches(self):
+        from ads.selectors.related import get_related_ads
+        from community.models import CommunityCategory
+
+        general = CommunityCategory.objects.create(
+            name='عمومی',
+            slug='general',
+        )
+        discussion = self._create_discussion(
+            title='موضوع بدون ارتباط',
+            body='متن عمومی',
+            category=general,
+        )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(results, [])
+
+    def test_keyword_title_match_when_category_mapping_empty(self):
+        from ads.selectors.related import get_related_ads
+        from community.models import CommunityCategory
+
+        buy_sell = CommunityCategory.objects.create(
+            name='خرید و فروش',
+            slug='buy-sell',
+        )
+        discussion = self._create_discussion(
+            category=buy_sell,
+            title='خرید مبلمان دست دوم',
+            body='به دنبال فروشنده هستم.',
+        )
+        self._create_ad(
+            'furniture-ad',
+            category=self.other_ad_category,
+            title='فروش مبلمان دست دوم',
+            plan='pro',
+        )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].slug, 'furniture-ad')
+
+    def test_excludes_free_ads(self):
+        from ads.selectors.related import get_related_ads
+
+        discussion = self._create_discussion()
+        self._create_ad(
+            'free-health-ad',
+            category=self.health_ad_category,
+            plan='free',
+        )
+        pro_ad = self._create_ad(
+            'pro-health-ad',
+            category=self.health_ad_category,
+            plan='pro',
+        )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(results, [pro_ad])
+
+    def test_persian_stem_keyword_match(self):
+        from ads.selectors.related import get_related_ads
+        from community.models import CommunityCategory
+
+        tax_category = CommunityCategory.objects.create(
+            name='عمومی',
+            slug='general-tax',
+        )
+        discussion = self._create_discussion(
+            category=tax_category,
+            title='سؤال درباره مالیات بر درآمد',
+            body='به دنبال مشاور مالیاتی هستم.',
+        )
+        matched = self._create_ad(
+            'tax-ad',
+            category=self.other_ad_category,
+            title='مشاوره مالیاتی برای ایرانیان',
+            plan='pro',
+        )
+
+        results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(results, [matched])
+
+    def test_get_related_ads_uses_bounded_queries(self):
+        from ads.selectors.related import get_related_ads
+        from django.test.utils import CaptureQueriesContext
+        from django.db import connection
+
+        discussion = self._create_discussion()
+        for index in range(4):
+            self._create_ad(
+                f'query-health-ad-{index}',
+                category=self.health_ad_category,
+                title=f'سلامت {index}',
+                plan='pro',
+            )
+
+        with CaptureQueriesContext(connection) as context:
+            results = get_related_ads(discussion, limit=3)
+
+        self.assertEqual(len(results), 3)
+        self.assertLessEqual(len(context.captured_queries), 2)
+
+
+class PersianTextMatchingTests(TestCase):
+    def test_normalizes_arabic_characters(self):
+        from ads.selectors.text_matching import normalize_persian_text
+
+        self.assertEqual(
+            normalize_persian_text('ماليات'),
+            normalize_persian_text('مالیات'),
+        )
+
+    def test_tokens_match_persian_suffix_variants(self):
+        from ads.selectors.text_matching import tokens_match
+
+        self.assertTrue(tokens_match('مالیات', 'مالیاتی'))
+        self.assertTrue(tokens_match('مالیاتی', 'مالیات'))
