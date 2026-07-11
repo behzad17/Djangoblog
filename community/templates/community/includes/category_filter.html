@@ -1,21 +1,32 @@
-<section class="community-list-section community-list-section--categories">
-  <h2 class="community-section-heading">دسته‌بندی‌ها</h2>
-  <nav class="community-category-nav" aria-label="دسته‌بندی بحث‌ها">
-    <div class="community-category-nav__list d-flex flex-wrap gap-2">
-      <a href="{% url 'community:discussion_list' %}"
-         class="community-category-nav__item btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}">
-        <span class="community-category-nav__label">همه</span>
+<nav class="community-topic-nav community-category-nav" aria-label="دسته‌بندی بحث‌ها">
+  <h2 class="community-topic-nav__heading">
+    <i class="fas fa-th-large" aria-hidden="true"></i>
+    موضوعات
+  </h2>
+  <div class="community-topic-grid">
+    <a href="{% url 'community:discussion_list' %}"
+       class="community-topic{% if not selected_category %} is-active{% endif %}">
+      <span class="community-topic__icon community-topic__icon--all">
+        <i class="fas fa-border-all" aria-hidden="true"></i>
+      </span>
+      <span class="community-topic__body">
+        <span class="community-topic__name">همه</span>
         {% if community_home_stats %}
-        <span class="community-category-nav__count">({{ community_home_stats.total_discussions }})</span>
+        <span class="community-topic__count">{{ community_home_stats.total_discussions }} بحث</span>
         {% endif %}
-      </a>
-      {% for category in categories %}
-      <a href="?category={{ category.slug }}&sort={{ sort }}&status={{ status }}"
-         class="community-category-nav__item btn btn-sm {% if selected_category and selected_category.slug == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">
-        <span class="community-category-nav__label">{{ category.name }}</span>
-        <span class="community-category-nav__count">({{ category.discussion_count }})</span>
-      </a>
-      {% endfor %}
-    </div>
-  </nav>
-</section>
+      </span>
+    </a>
+    {% for category in categories %}
+    <a href="?category={{ category.slug }}&sort={{ sort }}&status={{ status }}"
+       class="community-topic{% if selected_category and selected_category.slug == category.slug %} is-active{% endif %}">
+      <span class="community-topic__icon">
+        {% include "community/includes/category_topic_icon.html" with slug=category.slug %}
+      </span>
+      <span class="community-topic__body">
+        <span class="community-topic__name">{{ category.name }}</span>
+        <span class="community-topic__count">{{ category.discussion_count }} بحث</span>
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+</nav>

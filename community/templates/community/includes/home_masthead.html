@@ -1,0 +1,72 @@
+<header class="community-home__masthead" aria-labelledby="community-home-title">
+  <div class="container">
+    <div class="community-home__masthead-grid">
+      <div class="community-home__intro">
+        <p class="community-home__eyebrow" id="community-home-title">انجمن پیوند</p>
+        <h1 class="community-home__headline">پرسش، تجربه و کمک متقابل</h1>
+        <p class="community-home__lede">
+          محلی برای پرسیدن سؤال، به اشتراک گذاشتن تجربه و کمک به ایرانیان ساکن سوئد.
+        </p>
+        <p class="community-home__description">
+          در انجمن پیوند می‌توانید درباره زندگی، مهاجرت، کار، قوانین، تحصیل، سلامت و سایر موضوعات سؤال بپرسید، تجربه‌های خود را به اشتراک بگذارید و از تجربه دیگران استفاده کنید.
+        </p>
+      </div>
+
+      <div class="community-home__search-panel">
+        {% if show_search_guidance %}
+        <form method="get" action="{% url 'community:search' %}" class="community-home__search community-search-guidance" role="search" aria-label="جستجو در انجمن">
+          <label for="community-home-search-q" class="visually-hidden">جستجو در انجمن</label>
+          <div class="community-home__search-field">
+            <i class="fas fa-search community-home__search-icon" aria-hidden="true"></i>
+            <input
+              type="search"
+              name="q"
+              id="community-home-search-q"
+              class="community-home__search-input"
+              placeholder="جستجو در عنوان و متن بحث‌ها…"
+              autocomplete="off"
+            />
+            <button type="submit" class="community-home__search-submit">جستجو در انجمن</button>
+          </div>
+          <p class="community-home__search-note">
+            قبل از ایجاد بحث جدید، ابتدا در انجمن جستجو کنید.
+          </p>
+          <p class="community-home__search-note community-home__search-note--muted">
+            ممکن است پاسخ سؤال شما قبلاً توسط دیگران داده شده باشد.
+          </p>
+        </form>
+        {% endif %}
+
+        <div class="community-home__secondary-action">
+          <a href="{{ create_discussion_url }}" class="community-home__create-link">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+            ایجاد بحث جدید
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% if community_home_stats %}
+    <dl class="community-home__summary community-home-stats" aria-label="آمار انجمن">
+      <div class="community-home__summary-item">
+        <dt><i class="far fa-comment-dots" aria-hidden="true"></i> بحث</dt>
+        <dd>{{ community_home_stats.total_discussions }}</dd>
+      </div>
+      <div class="community-home__summary-item">
+        <dt><i class="far fa-comment" aria-hidden="true"></i> پاسخ</dt>
+        <dd>{{ community_home_stats.total_replies }}</dd>
+      </div>
+      {% if community_home_stats.active_members is not None %}
+      <div class="community-home__summary-item">
+        <dt><i class="fas fa-users" aria-hidden="true"></i> عضو فعال</dt>
+        <dd>{{ community_home_stats.active_members }}</dd>
+      </div>
+      {% endif %}
+      <div class="community-home__summary-item">
+        <dt><i class="fas fa-layer-group" aria-hidden="true"></i> دسته‌بندی</dt>
+        <dd>{{ community_home_stats.categories }}</dd>
+      </div>
+    </dl>
+    {% endif %}
+  </div>
+</header>

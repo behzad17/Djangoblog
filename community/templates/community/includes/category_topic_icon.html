@@ -1,0 +1,21 @@
+{% load static %}
+{# Category topic icon — slug-based, presentation only #}
+{% if slug == 'immigration-residency' or slug == 'immigration' %}
+<i class="fas fa-passport" aria-hidden="true"></i>
+{% elif slug == 'work-education' or slug == 'work-study' %}
+<i class="fas fa-briefcase" aria-hidden="true"></i>
+{% elif slug == 'daily-life' %}
+<i class="fas fa-home" aria-hidden="true"></i>
+{% elif slug == 'law-legal' %}
+<i class="fas fa-balance-scale" aria-hidden="true"></i>
+{% elif slug == 'health' %}
+<i class="fas fa-heartbeat" aria-hidden="true"></i>
+{% elif slug == 'culture-events' %}
+<i class="fas fa-calendar-alt" aria-hidden="true"></i>
+{% elif slug == 'buy-sell' %}
+<i class="fas fa-shopping-bag" aria-hidden="true"></i>
+{% elif slug == 'general' %}
+<i class="fas fa-comments" aria-hidden="true"></i>
+{% else %}
+<i class="fas fa-folder-open" aria-hidden="true"></i>
+{% endif %}

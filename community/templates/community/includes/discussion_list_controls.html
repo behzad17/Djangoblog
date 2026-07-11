@@ -1,15 +1,19 @@
-<section class="community-list-section community-list-section--controls">
-  <h2 class="community-section-heading">مرتب‌سازی و وضعیت</h2>
-  <div class="community-discussion-controls d-flex flex-wrap gap-2">
+<div class="community-feed-toolbar" aria-label="مرتب‌سازی و وضعیت">
+  <span class="community-feed-toolbar__label">
+    <i class="fas fa-sliders-h" aria-hidden="true"></i>
+    نمایش
+  </span>
+  <div class="community-segmented community-discussion-controls" role="group" aria-label="فیلتر و مرتب‌سازی بحث‌ها">
     <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=all"
-       class="btn btn-sm {% if status == 'all' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">همه</a>
+       class="community-segmented__item{% if status == 'all' %} is-active{% endif %}">همه</a>
     <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=open"
-       class="btn btn-sm {% if status == 'open' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">باز</a>
+       class="community-segmented__item{% if status == 'open' %} is-active{% endif %}">باز</a>
     <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=closed"
-       class="btn btn-sm {% if status == 'closed' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">بسته</a>
+       class="community-segmented__item{% if status == 'closed' %} is-active{% endif %}">بسته</a>
+    <span class="community-segmented__divider" aria-hidden="true"></span>
     <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=active&status={{ status }}"
-       class="btn btn-sm {% if sort != 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">فعال‌ترین</a>
+       class="community-segmented__item{% if sort != 'newest' %} is-active{% endif %}">فعال‌ترین</a>
     <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=newest&status={{ status }}"
-       class="btn btn-sm {% if sort == 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">جدیدترین</a>
+       class="community-segmented__item{% if sort == 'newest' %} is-active{% endif %}">جدیدترین</a>
   </div>
-</section>
+</div>

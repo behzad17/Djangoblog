@@ -88,7 +88,7 @@ class CommunityViewTests(TestCase):
         response = self.client.get(reverse('community:discussion_list'))
         self.assertContains(response, 'community-category-nav')
         self.assertContains(response, f'{self.category.name}')
-        self.assertContains(response, '(1)')
+        self.assertContains(response, '1 بحث')
 
     def test_discussion_list_card_shows_metadata(self):
         response = self.client.get(reverse('community:discussion_list'))
@@ -100,9 +100,9 @@ class CommunityViewTests(TestCase):
 
     def test_discussion_list_shows_section_headings(self):
         response = self.client.get(reverse('community:discussion_list'))
-        self.assertContains(response, 'دسته‌بندی‌ها')
-        self.assertContains(response, 'مرتب‌سازی و وضعیت')
-        self.assertContains(response, 'بحث‌های اخیر (1)')
+        self.assertContains(response, 'موضوعات')
+        self.assertContains(response, 'نمایش')
+        self.assertContains(response, 'بحث‌های اخیر')
         self.assertContains(response, 'community-list-section--discussions')
 
     def test_discussion_list_shows_search_guidance_panel(self):

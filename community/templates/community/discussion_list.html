@@ -9,46 +9,54 @@
 {% endblock extra_css %}
 
 {% block content %}
-{% include "community/includes/home_hero.html" %}
-{% include "community/includes/search_guidance_panel.html" %}
-{% include "community/includes/home_stats_bar.html" %}
+<div class="community-home">
+  {% include "community/includes/home_masthead.html" %}
 
-<div class="container pb-4 community-page">
-  {% include "community/includes/category_filter.html" %}
-  {% include "community/includes/discussion_list_controls.html" %}
+  <div class="container community-home__main">
+    <div class="community-home__layout">
+      <aside class="community-home__sidebar">
+        {% include "community/includes/category_filter.html" %}
+      </aside>
 
-  <section class="community-list-section community-list-section--discussions" aria-labelledby="community-discussions-heading">
-    <h2 id="community-discussions-heading" class="community-section-heading">
-      بحث‌های اخیر ({{ page_obj.paginator.count }})
-    </h2>
+      <main class="community-home__feed community-list-section community-list-section--discussions" aria-labelledby="community-discussions-heading">
+        <header class="community-feed__header">
+          <h2 id="community-discussions-heading" class="community-feed__title">
+            <i class="far fa-comments" aria-hidden="true"></i>
+            بحث‌های اخیر
+            <span class="community-feed__count">{{ page_obj.paginator.count }}</span>
+          </h2>
+          {% include "community/includes/discussion_list_controls.html" %}
+        </header>
 
-  {% if discussions %}
-  <div class="community-discussion-list">
-    {% for discussion in discussions %}
-      {% include "community/includes/discussion_card.html" %}
-    {% endfor %}
+        {% if discussions %}
+        <div class="community-discussion-list">
+          {% for discussion in discussions %}
+            {% include "community/includes/discussion_card.html" %}
+          {% endfor %}
+        </div>
+        {% else %}
+        {% include "community/includes/empty_state.html" with message="هنوز بحثی ثبت نشده است." %}
+        {% endif %}
+
+        {% if page_obj.has_other_pages %}
+        <nav class="community-feed__pagination" aria-label="صفحه‌بندی بحث‌ها">
+          <ul class="pagination justify-content-center mb-0">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&status={{ status }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}">قبلی</a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&status={{ status }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}">بعدی</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+      </main>
+    </div>
   </div>
-  {% else %}
-  {% include "community/includes/empty_state.html" with message="هنوز بحثی ثبت نشده است." %}
-  {% endif %}
-
-  {% if page_obj.has_other_pages %}
-  <nav class="mt-4" aria-label="صفحه‌بندی بحث‌ها">
-    <ul class="pagination justify-content-center">
-      {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&status={{ status }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}">قبلی</a>
-      </li>
-      {% endif %}
-      <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
-      {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&status={{ status }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}">بعدی</a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
-  </section>
 </div>
 {% endblock content %}
