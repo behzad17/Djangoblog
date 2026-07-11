@@ -7,6 +7,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'community/css/community.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -60,6 +61,10 @@
 
   {% if related_experts %}
   {% include "community/includes/related_experts.html" %}
+  {% endif %}
+
+  {% if related_useful_links %}
+  {% include "community/includes/related_useful_links.html" %}
   {% endif %}
 
   {% if can_reply %}

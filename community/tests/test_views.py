@@ -65,6 +65,40 @@ class CommunityViewTests(TestCase):
         self.assertIsInstance(response.context['reply_form'], ReplyCreateForm)
         self.assertEqual(response.context['related_ads'], [])
         self.assertEqual(response.context['related_experts'], [])
+        self.assertEqual(response.context['related_useful_links'], [])
+
+    def _create_useful_link(self, slug, **kwargs):
+        from related_links.models import (
+            RelatedLink,
+            UsefulLinkCategory,
+            UsefulLinkResourceType,
+        )
+
+        category = kwargs.pop('category', None) or UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug=f'migration-{slug}',
+            icon='bi-globe',
+            is_active=True,
+        )
+        resource_type = kwargs.pop('resource_type', None) or UsefulLinkResourceType.objects.create(
+            name_en='Website',
+            name_fa='وب‌سایت',
+            slug=f'website-{slug}',
+            icon='bi-globe',
+            is_active=True,
+        )
+        defaults = {
+            'title': f'لینک {slug}',
+            'slug': slug,
+            'category': category,
+            'resource_type': resource_type,
+            'url': 'https://example.com',
+            'short_description': 'راهنمای مهاجرت',
+            'is_active': True,
+        }
+        defaults.update(kwargs)
+        return RelatedLink.objects.create(**defaults)
 
     def test_discussion_detail_renders_related_ads(self):
         import cloudinary
@@ -204,8 +238,216 @@ class CommunityViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, 'آگهی‌های مرتبط')
         self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertNotContains(response, 'لینک‌های مفید مرتبط')
         self.assertEqual(response.context['related_ads'], [])
         self.assertEqual(response.context['related_experts'], [])
+        self.assertEqual(response.context['related_useful_links'], [])
+
+    def test_discussion_detail_renders_related_useful_links_only(self):
+        from related_links.models import UsefulLinkCategory
+
+        UsefulLinkCategory.objects.filter(slug='migration').delete()
+        migration_category = UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug='migration',
+            icon='bi-globe',
+            is_active=True,
+        )
+        self._create_useful_link(
+            'migration-link-only',
+            category=migration_category,
+            title='راهنمای مهاجرت',
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'لینک‌های مفید مرتبط')
+        self.assertContains(response, 'راهنمای مهاجرت')
+        self.assertEqual(len(response.context['related_useful_links']), 1)
+
+    def test_discussion_detail_renders_related_ads_and_links(self):
+        import cloudinary
+        from ads.models import Ad, AdCategory
+        from related_links.models import UsefulLinkCategory
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        ad_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        Ad.objects.create(
+            title='مشاور حقوقی',
+            slug='legal-ad-links',
+            category=ad_category,
+            owner=self.author,
+            image='test/ad-image',
+            target_url='https://example.com',
+            city='Stockholm',
+            plan='pro',
+            is_active=True,
+            is_approved=True,
+            url_approved=True,
+        )
+        UsefulLinkCategory.objects.filter(slug='migration').delete()
+        migration_category = UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug='migration',
+            icon='bi-globe',
+            is_active=True,
+        )
+        self._create_useful_link(
+            'migration-link-ads',
+            category=migration_category,
+            title='راهنمای مهاجرت',
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'آگهی‌های مرتبط')
+        self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_ads']), 1)
+        self.assertEqual(len(response.context['related_useful_links']), 1)
+
+    def test_discussion_detail_renders_related_experts_and_links(self):
+        import cloudinary
+        from askme.models import Moderator
+        from related_links.models import UsefulLinkCategory
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        expert_user = User.objects.create_user(
+            username='relatedexpertlinks',
+            password='password123',
+        )
+        Moderator.objects.create(
+            user=expert_user,
+            expert_title='وکیل مهاجرت',
+            complete_name='متخصص حقوقی',
+            field_specialty='حقوق و مهاجرت',
+            slug='related-expert-links',
+            profile_image='test/expert-image',
+            is_active=True,
+        )
+        UsefulLinkCategory.objects.filter(slug='migration').delete()
+        migration_category = UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug='migration',
+            icon='bi-globe',
+            is_active=True,
+        )
+        self._create_useful_link(
+            'migration-link-experts',
+            category=migration_category,
+            title='راهنمای مهاجرت',
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_experts']), 1)
+        self.assertEqual(len(response.context['related_useful_links']), 1)
+
+    def test_discussion_detail_renders_all_related_sections(self):
+        import cloudinary
+        from ads.models import Ad, AdCategory
+        from askme.models import Moderator
+        from related_links.models import UsefulLinkCategory
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        ad_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        Ad.objects.create(
+            title='مشاور حقوقی',
+            slug='legal-ad-all',
+            category=ad_category,
+            owner=self.author,
+            image='test/ad-image',
+            target_url='https://example.com',
+            city='Stockholm',
+            plan='pro',
+            is_active=True,
+            is_approved=True,
+            url_approved=True,
+        )
+        expert_user = User.objects.create_user(
+            username='relatedexpertall',
+            password='password123',
+        )
+        Moderator.objects.create(
+            user=expert_user,
+            expert_title='وکیل مهاجرت',
+            complete_name='متخصص حقوقی',
+            field_specialty='حقوق و مهاجرت',
+            slug='related-expert-all',
+            profile_image='test/expert-image',
+            is_active=True,
+        )
+        UsefulLinkCategory.objects.filter(slug='migration').delete()
+        migration_category = UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug='migration',
+            icon='bi-globe',
+            is_active=True,
+        )
+        self._create_useful_link(
+            'migration-link-all',
+            category=migration_category,
+            title='راهنمای مهاجرت',
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_ads']), 1)
+        self.assertEqual(len(response.context['related_experts']), 1)
+        self.assertEqual(len(response.context['related_useful_links']), 1)
 
     def test_discussion_create_requires_login(self):
         response = self.client.get(reverse('community:discussion_create'))
