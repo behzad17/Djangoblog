@@ -41,9 +41,16 @@ class CommunityViewTests(TestCase):
         cls.discussion = create_discussion(
             author=cls.author,
             category=cls.category,
-            title='سؤال درباره اقامت',
-            body='متن بحث تست',
+            title='سؤال درباره مهاجرت',
+            body='به دنبال مشاور مهاجرت هستم.',
         )
+
+    def _align_discussion_for_migration_expert(self):
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+        self.discussion.title = 'سؤال درباره مهاجرت'
+        self.discussion.body = 'به دنبال مشاور مهاجرت هستم.'
+        self.discussion.save(update_fields=['title', 'body'])
 
     def test_community_home_redirects_to_discussion_list(self):
         response = self.client.get(reverse('community:home'))
@@ -61,7 +68,7 @@ class CommunityViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.discussion.title)
-        self.assertContains(response, 'متن بحث تست')
+        self.assertContains(response, 'به دنبال مشاور مهاجرت هستم.')
         self.assertIsInstance(response.context['reply_form'], ReplyCreateForm)
         self.assertEqual(response.context['related_ads'], [])
         self.assertEqual(response.context['related_experts'], [])
@@ -143,6 +150,7 @@ class CommunityViewTests(TestCase):
         import cloudinary
         from askme.models import Moderator
 
+        self._align_discussion_for_migration_expert()
         cloudinary.config(
             cloud_name='test',
             api_key='test',
@@ -157,7 +165,7 @@ class CommunityViewTests(TestCase):
             user=expert_user,
             expert_title='وکیل مهاجرت',
             complete_name='متخصص حقوقی',
-            field_specialty='حقوق و مهاجرت',
+            field_specialty='مهاجرت و اقامت',
             slug='related-expert',
             profile_image='test/expert-image',
             is_active=True,
@@ -212,7 +220,7 @@ class CommunityViewTests(TestCase):
             user=expert_user,
             expert_title='وکیل مهاجرت',
             complete_name='متخصص حقوقی',
-            field_specialty='حقوق و مهاجرت',
+            field_specialty='مهاجرت و اقامت',
             slug='related-expert-both',
             profile_image='test/expert-image',
             is_active=True,
@@ -347,7 +355,7 @@ class CommunityViewTests(TestCase):
             user=expert_user,
             expert_title='وکیل مهاجرت',
             complete_name='متخصص حقوقی',
-            field_specialty='حقوق و مهاجرت',
+            field_specialty='مهاجرت و اقامت',
             slug='related-expert-links',
             profile_image='test/expert-image',
             is_active=True,
@@ -416,7 +424,7 @@ class CommunityViewTests(TestCase):
             user=expert_user,
             expert_title='وکیل مهاجرت',
             complete_name='متخصص حقوقی',
-            field_specialty='حقوق و مهاجرت',
+            field_specialty='مهاجرت و اقامت',
             slug='related-expert-all',
             profile_image='test/expert-image',
             is_active=True,
@@ -513,7 +521,7 @@ class CommunityViewTests(TestCase):
     def test_community_search_renders(self):
         response = self.client.get(
             reverse('community:search'),
-            {'q': 'اقامت'},
+            {'q': 'مهاجرت'},
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.discussion.title)

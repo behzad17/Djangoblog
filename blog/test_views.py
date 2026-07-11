@@ -86,11 +86,11 @@ class PostDetailRelatedContentTests(TestCase):
             defaults={'name': 'قانون و ادغام'},
         )
         cls.post = Post.objects.create(
-            title='راهنمای اقامت',
+            title='سؤال درباره مهاجرت',
             slug='blog-related-post',
             author=cls.author,
             category=cls.mapped_category,
-            content='سؤال درباره اقامت',
+            content='به دنبال مشاور مهاجرت هستم.',
             status=1,
         )
 
@@ -179,7 +179,7 @@ class PostDetailRelatedContentTests(TestCase):
             user=expert_user,
             expert_title='وکیل مهاجرت',
             complete_name='متخصص حقوقی',
-            field_specialty='حقوق و مهاجرت',
+            field_specialty='مهاجرت و اقامت',
             slug='blog-related-expert',
             profile_image='test/expert-image',
             is_active=True,
@@ -252,7 +252,7 @@ class PostDetailRelatedContentTests(TestCase):
             user=expert_user,
             expert_title='وکیل مهاجرت',
             complete_name='متخصص حقوقی',
-            field_specialty='حقوق و مهاجرت',
+            field_specialty='مهاجرت و اقامت',
             slug='blog-related-expert-all',
             profile_image='test/expert-image',
             is_active=True,

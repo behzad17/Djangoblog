@@ -6,9 +6,9 @@ Matching logic in ``experts.selectors.related`` reads from this module only.
 """
 
 COMMUNITY_TO_EXPERT_SPECIALTIES: dict[str, list[str]] = {
-    'immigration-residency': ['مهاجرت', 'اقامت', 'حقوق', 'ویزا'],
+    'immigration-residency': ['مهاجرت', 'اقامت', 'ویزا'],
     'work-education': ['کار', 'تحصیل', 'شغل', 'آموزش', 'استخدام'],
-    'daily-life': ['زندگی', 'اجتماعی', 'خدمات'],
+    'daily-life': ['زندگی', 'اجتماعی'],
     'law-legal': ['حقوق', 'وکیل', 'قانون', 'legal'],
     'health': ['پزشک', 'سلامت', 'درمان', 'health', 'medical'],
     'culture-events': ['فرهنگ', 'رویداد', 'سرگرمی'],

@@ -169,6 +169,91 @@ class RelatedExpertsSelectorTests(TestCase):
 
         self.assertEqual(results, [matched])
 
+    def test_prefers_topical_keywords_over_loosely_related_experts(self):
+        discussion = self._create_discussion(
+            title='شرکت حسابداری',
+            body='دنبال شرکت حسابداری هستم.',
+        )
+        accountant = self._create_expert(
+            'accountant-expert',
+            expert_title='حسابدار',
+            field_specialty='مالی و حسابداری',
+            bio='خدمات حسابداری و مالیاتی',
+        )
+        self._create_expert(
+            'immigration-expert',
+            expert_title='وکیل مهاجرت',
+            field_specialty='حقوق و مهاجرت',
+            bio='مشاوره حقوقی',
+        )
+        self._create_expert(
+            'family-law-expert',
+            expert_title='وکیل خانواده',
+            field_specialty='حقوق خانواده',
+            bio='دعاوی خانواده',
+        )
+
+        results = get_related_experts(discussion, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].slug, 'accountant-expert')
+
+    def test_does_not_pad_results_with_weak_matches(self):
+        discussion = self._create_discussion(
+            title='شرکت حسابداری',
+            body='دنبال شرکت حسابداری هستم.',
+        )
+        self._create_expert(
+            'accountant-only',
+            expert_title='حسابدار',
+            field_specialty='مالی و حسابداری',
+        )
+        self._create_expert(
+            'unrelated-lawyer',
+            expert_title='وکیل مهاجرت',
+            field_specialty='حقوق و مهاجرت',
+        )
+
+        results = get_related_experts(discussion, limit=3)
+
+        self.assertEqual(len(results), 1)
+
+    def test_specific_category_fallback_when_no_keywords(self):
+        immigration = CommunityCategory.objects.create(
+            name='مهاجرت',
+            slug='immigration-residency',
+        )
+        discussion = self._create_discussion(
+            category=immigration,
+            title='و در به',
+            body='با برای از',
+        )
+        matched = self._create_expert(
+            'fallback-migration-expert',
+            expert_title='وکیل مهاجرت',
+            field_specialty='مهاجرت و اقامت',
+        )
+        self._create_expert(
+            'fallback-family-lawyer',
+            expert_title='وکیل خانواده',
+            field_specialty='حقوق خانواده',
+        )
+
+        results = get_related_experts(discussion, limit=3)
+
+        self.assertEqual(results, [matched])
+
+    def test_no_fallback_for_broad_category_without_keywords(self):
+        discussion = self._create_discussion(
+            title='و در به',
+            body='با برای از',
+        )
+        self._create_expert('broad-legal-expert')
+
+        results = get_related_experts(discussion, limit=3)
+
+        self.assertEqual(results, [])
+
     def test_get_related_experts_uses_bounded_queries(self):
         discussion = self._create_discussion()
         for index in range(4):
@@ -198,7 +283,10 @@ class RelatedExpertsSelectorTests(TestCase):
             content='سؤال درباره اقامت',
             status=1,
         )
-        matched = self._create_expert('blog-legal-expert')
+        matched = self._create_expert(
+            'blog-legal-expert',
+            field_specialty='مهاجرت و اقامت',
+        )
         self._create_expert(
             'blog-finance-expert',
             expert_title='حسابدار',
@@ -222,13 +310,14 @@ class RelatedExpertsSelectorTests(TestCase):
             slug='blog-expert-query',
             author=self.discussion_author,
             category=blog_category,
-            content='سؤال درباره اقامت',
+            content='سؤال درباره مهاجرت و اقامت',
             status=1,
         )
         for index in range(4):
             self._create_expert(
                 f'blog-query-expert-{index}',
-                expert_title=f'وکیل {index}',
+                expert_title=f'وکیل مهاجرت {index}',
+                field_specialty='مهاجرت و اقامت',
             )
 
         with CaptureQueriesContext(connection) as context:
