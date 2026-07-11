@@ -27,10 +27,6 @@ def get_related_ads(discussion: Discussion, *, limit: int = 3) -> list[Ad]:
     2. Shared tags (skipped — not supported on discussions/ads yet)
     3. Keyword overlap with ad titles
     4. Keyword overlap with ad category name/description
-
-    Future related-content selectors (experts, useful links) should follow
-    the same pattern: dedicated module, shared text matching, config-driven
-    category mapping, and a ``get_related_*`` entry point.
     """
     if limit <= 0:
         return []
