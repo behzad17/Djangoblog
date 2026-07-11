@@ -8,8 +8,6 @@
     </div>
 
     <footer class="community-discussion-card__footer">
-      {% include "community/includes/discussion_card_badges.html" %}
-
       <ul class="community-discussion-card__meta list-unstyled mb-0">
         <li class="community-discussion-card__meta-item">
           <i class="fas fa-user" aria-hidden="true"></i>
@@ -32,6 +30,8 @@
           {{ discussion.reply_count }} پاسخ
         </li>
       </ul>
+
+      {% include "community/includes/discussion_card_badges.html" %}
     </footer>
   </div>
 </article>
