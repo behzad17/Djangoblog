@@ -9,36 +9,18 @@
 {% endblock extra_css %}
 
 {% block content %}
-<div class="container py-4 community-page">
-  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-    <div>
-      <h1 class="h3 mb-1">انجمن</h1>
-      <p class="text-muted mb-0">پرسش، تجربه و کمک متقابل</p>
-    </div>
-    <div class="d-flex flex-wrap gap-2">
-      <a href="{% url 'community:search' %}" class="btn btn-outline-primary">
-        <i class="fas fa-search ms-1"></i>جستجو
-      </a>
-      <a href="{{ create_discussion_url }}" class="btn btn-primary">
-        <i class="fas fa-plus ms-1"></i>بحث جدید
-      </a>
-    </div>
-  </div>
+{% include "community/includes/home_hero.html" %}
+{% include "community/includes/search_guidance_panel.html" %}
+{% include "community/includes/home_stats_bar.html" %}
 
+<div class="container pb-4 community-page">
   {% include "community/includes/category_filter.html" %}
+  {% include "community/includes/discussion_list_controls.html" %}
 
-  <div class="mb-3 d-flex flex-wrap gap-2">
-    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=all"
-       class="btn btn-sm {% if status == 'all' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">همه</a>
-    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=open"
-       class="btn btn-sm {% if status == 'open' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">باز</a>
-    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=closed"
-       class="btn btn-sm {% if status == 'closed' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">بسته</a>
-    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=active&status={{ status }}"
-       class="btn btn-sm {% if sort != 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">فعال‌ترین</a>
-    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=newest&status={{ status }}"
-       class="btn btn-sm {% if sort == 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">جدیدترین</a>
-  </div>
+  <section class="community-list-section community-list-section--discussions" aria-labelledby="community-discussions-heading">
+    <h2 id="community-discussions-heading" class="community-section-heading">
+      بحث‌های اخیر ({{ page_obj.paginator.count }})
+    </h2>
 
   {% if discussions %}
   <div class="community-discussion-list">
@@ -67,5 +49,6 @@
     </ul>
   </nav>
   {% endif %}
+  </section>
 </div>
 {% endblock content %}

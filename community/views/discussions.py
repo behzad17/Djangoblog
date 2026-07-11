@@ -14,7 +14,10 @@ from community.constants import DiscussionStatus
 from community.exceptions import CommunityDomainError
 from community.forms import DiscussionCreateForm, ReplyCreateForm
 from community.permissions import can_close, can_create_discussion, can_reply
-from community.selectors.categories import get_category_by_slug, list_active_categories
+from community.selectors.categories import (
+    get_category_by_slug,
+    list_active_categories_with_discussion_counts,
+)
 from community.selectors.discussions import (
     get_discussion_by_slug,
     list_closed_discussions,
@@ -23,6 +26,7 @@ from community.selectors.discussions import (
     list_open_discussions,
 )
 from community.selectors.replies import list_public_replies
+from community.selectors.stats import get_community_home_stats
 from ads.selectors.related import get_related_ads
 from experts.selectors.related import get_related_experts
 from related_links.selectors.related import get_related_links
@@ -87,17 +91,20 @@ def discussion_list(request):
         queryset = queryset.order_by('-created_on')
 
     page_obj = _paginate(request, queryset)
+    search_query = request.GET.get('q', '').strip()
     return render(
         request,
         'community/discussion_list.html',
         {
             'page_obj': page_obj,
             'discussions': page_obj.object_list,
-            'categories': list_active_categories(),
+            'categories': list_active_categories_with_discussion_counts(),
             'selected_category': selected_category,
             'sort': sort,
             'status': status,
             'create_discussion_url': _create_discussion_url(request.user),
+            'community_home_stats': get_community_home_stats(),
+            'show_search_guidance': not search_query,
         },
     )
 

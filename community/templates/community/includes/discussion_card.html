@@ -1,23 +1,32 @@
-<article class="card shadow-sm mb-3 community-discussion-card">
+<article class="card community-discussion-card">
   <div class="card-body">
-    <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-      {% include "community/includes/status_badge.html" with discussion=discussion %}
-      {% if discussion.category %}
-      <span class="badge bg-light text-dark border">{{ discussion.category.name }}</span>
-      {% endif %}
-    </div>
-    <h2 class="h5 mb-2">
+    {% include "community/includes/discussion_card_badges.html" %}
+
+    <h2 class="community-discussion-card__title h6 mb-0">
       <a href="{% url 'community:discussion_detail' discussion.slug %}" class="text-decoration-none">{{ discussion.title }}</a>
     </h2>
-    <p class="text-muted small mb-2">
-      {% if discussion.author %}
-      {{ discussion.author.username }}
-      {% else %}
-      کاربر حذف‌شده
-      {% endif %}
-      · {{ discussion.last_activity_at|date:"Y/m/d H:i" }}
-      · {{ discussion.reply_count }} پاسخ
-    </p>
-    <p class="mb-0">{{ discussion.body|truncatechars:180 }}</p>
+
+    <ul class="community-discussion-card__meta list-unstyled mb-0">
+      <li class="community-discussion-card__meta-item">
+        <i class="fas fa-user ms-1" aria-hidden="true"></i>
+        <span class="visually-hidden">نویسنده:</span>
+        {% if discussion.author %}
+        {{ discussion.author.username }}
+        {% else %}
+        کاربر حذف‌شده
+        {% endif %}
+      </li>
+      <li class="community-discussion-card__meta-item">
+        <i class="far fa-clock ms-1" aria-hidden="true"></i>
+        <span class="visually-hidden">آخرین فعالیت:</span>
+        {{ discussion.last_activity_at|date:"Y/m/d H:i" }}
+      </li>
+      <li class="community-discussion-card__meta-item">
+        <i class="far fa-comment ms-1" aria-hidden="true"></i>
+        {{ discussion.reply_count }} پاسخ
+      </li>
+    </ul>
+
+    <p class="community-discussion-card__excerpt mb-0">{{ discussion.body|truncatechars:140 }}</p>
   </div>
 </article>

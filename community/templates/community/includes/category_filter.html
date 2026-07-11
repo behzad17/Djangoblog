@@ -1,8 +1,21 @@
-<div class="d-flex flex-wrap gap-2 mb-3">
-  <a href="{% url 'community:discussion_list' %}"
-     class="btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}">همه</a>
-  {% for category in categories %}
-  <a href="?category={{ category.slug }}&sort={{ sort }}&status={{ status }}"
-     class="btn btn-sm {% if selected_category and selected_category.slug == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ category.name }}</a>
-  {% endfor %}
-</div>
+<section class="community-list-section community-list-section--categories">
+  <h2 class="community-section-heading">دسته‌بندی‌ها</h2>
+  <nav class="community-category-nav" aria-label="دسته‌بندی بحث‌ها">
+    <div class="community-category-nav__list d-flex flex-wrap gap-2">
+      <a href="{% url 'community:discussion_list' %}"
+         class="community-category-nav__item btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}">
+        <span class="community-category-nav__label">همه</span>
+        {% if community_home_stats %}
+        <span class="community-category-nav__count">({{ community_home_stats.total_discussions }})</span>
+        {% endif %}
+      </a>
+      {% for category in categories %}
+      <a href="?category={{ category.slug }}&sort={{ sort }}&status={{ status }}"
+         class="community-category-nav__item btn btn-sm {% if selected_category and selected_category.slug == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">
+        <span class="community-category-nav__label">{{ category.name }}</span>
+        <span class="community-category-nav__count">({{ category.discussion_count }})</span>
+      </a>
+      {% endfor %}
+    </div>
+  </nav>
+</section>

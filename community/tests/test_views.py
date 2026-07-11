@@ -59,8 +59,74 @@ class CommunityViewTests(TestCase):
     def test_discussion_list_renders(self):
         response = self.client.get(reverse('community:discussion_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'انجمن')
+        self.assertContains(response, 'انجمن پیوند')
+        self.assertContains(response, 'ایجاد بحث جدید')
+        self.assertContains(response, 'جستجو در انجمن')
         self.assertContains(response, self.discussion.title)
+
+    def test_discussion_list_hero_includes_purpose_copy(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(
+            response,
+            'محلی برای پرسیدن سؤال، به اشتراک گذاشتن تجربه و کمک به ایرانیان ساکن سوئد.',
+        )
+        self.assertContains(
+            response,
+            'در انجمن پیوند می‌توانید درباره زندگی، مهاجرت، کار، قوانین، تحصیل، سلامت',
+        )
+
+    def test_discussion_list_renders_stats_bar(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'community-home-stats')
+        self.assertContains(response, 'عضو فعال')
+        self.assertContains(response, 'دسته‌بندی')
+        self.assertContains(response, 'پاسخ')
+        self.assertContains(response, 'بحث')
+        self.assertEqual(response.context['community_home_stats']['total_discussions'], 1)
+
+    def test_discussion_list_shows_category_discussion_counts(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'community-category-nav')
+        self.assertContains(response, f'{self.category.name}')
+        self.assertContains(response, '(1)')
+
+    def test_discussion_list_card_shows_metadata(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'community-discussion-card__meta')
+        self.assertContains(response, self.author.username)
+        self.assertContains(response, '0 پاسخ')
+        self.assertNotContains(response, 'community-discussion-card__badge--status-open')
+
+    def test_discussion_list_shows_section_headings(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'دسته‌بندی‌ها')
+        self.assertContains(response, 'مرتب‌سازی و وضعیت')
+        self.assertContains(response, 'بحث‌های اخیر (1)')
+        self.assertContains(response, 'community-list-section--discussions')
+
+    def test_discussion_list_shows_search_guidance_panel(self):
+        response = self.client.get(reverse('community:discussion_list'))
+        self.assertContains(response, 'community-search-guidance')
+        self.assertContains(
+            response,
+            'قبل از ایجاد بحث جدید، ابتدا در انجمن جستجو کنید.',
+        )
+        self.assertContains(
+            response,
+            'ممکن است پاسخ سؤال شما قبلاً توسط دیگران داده شده باشد.',
+        )
+        self.assertContains(response, 'جستجو در انجمن')
+
+    def test_discussion_list_hides_search_guidance_when_query_present(self):
+        response = self.client.get(
+            reverse('community:discussion_list'),
+            {'q': 'مهاجرت'},
+        )
+        self.assertNotContains(response, 'community-search-guidance')
+        self.assertNotContains(
+            response,
+            'قبل از ایجاد بحث جدید، ابتدا در انجمن جستجو کنید.',
+        )
 
     def test_discussion_detail_renders(self):
         response = self.client.get(
@@ -525,6 +591,7 @@ class CommunityViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.discussion.title)
+        self.assertNotContains(response, 'community-search-guidance')
 
     @override_settings(COMMUNITY_TRUST_REPLY_COUNT=0)
     def test_approved_reply_notifies_discussion_author(self):

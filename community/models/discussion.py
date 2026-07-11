@@ -71,3 +71,11 @@ class Discussion(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def is_solved(self):
+        """Whether the discussion has been marked as solved.
+
+        Placeholder until solved state is persisted on the model.
+        """
+        return False

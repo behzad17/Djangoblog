@@ -93,6 +93,10 @@ class DiscussionModelTests(TestCase):
         self.assertIsNone(discussion.deleted_by)
         self.assertIsNone(discussion.closed_at)
         self.assertIsNone(discussion.closed_by)
+
+    def test_is_solved_defaults_to_false(self):
+        discussion = self._create_discussion()
+        self.assertFalse(discussion.is_solved)
         self.assertIsNotNone(discussion.created_on)
         self.assertIsNotNone(discussion.updated_on)
 

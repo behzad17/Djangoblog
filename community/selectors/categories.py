@@ -1,6 +1,7 @@
-from django.db.models import QuerySet
+from django.db.models import Count, Q, QuerySet
 
 from community.models import CommunityCategory
+from community.selectors.discussions import PUBLIC_DISCUSSION_STATUSES
 
 
 def _category_queryset() -> QuerySet[CommunityCategory]:
@@ -18,6 +19,17 @@ def list_active_categories() -> QuerySet[CommunityCategory]:
         _category_queryset()
         .filter(is_active=True)
         .order_by('display_order', 'name')
+    )
+
+
+def list_active_categories_with_discussion_counts() -> QuerySet[CommunityCategory]:
+    """Return active categories annotated with public discussion counts."""
+    public_discussions = Q(
+        discussions__is_deleted=False,
+        discussions__status__in=PUBLIC_DISCUSSION_STATUSES,
+    )
+    return list_active_categories().annotate(
+        discussion_count=Count('discussions', filter=public_discussions),
     )
 
 

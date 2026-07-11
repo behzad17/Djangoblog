@@ -1,0 +1,26 @@
+{% if community_home_stats %}
+<section class="community-home-stats" aria-label="آمار انجمن">
+  <div class="container">
+    <div class="community-home-stats__grid">
+      <div class="community-home-stats__card">
+        <span class="community-home-stats__value">{{ community_home_stats.total_discussions }}</span>
+        <span class="community-home-stats__label">بحث</span>
+      </div>
+      <div class="community-home-stats__card">
+        <span class="community-home-stats__value">{{ community_home_stats.total_replies }}</span>
+        <span class="community-home-stats__label">پاسخ</span>
+      </div>
+      {% if community_home_stats.active_members is not None %}
+      <div class="community-home-stats__card">
+        <span class="community-home-stats__value">{{ community_home_stats.active_members }}</span>
+        <span class="community-home-stats__label">عضو فعال</span>
+      </div>
+      {% endif %}
+      <div class="community-home-stats__card">
+        <span class="community-home-stats__value">{{ community_home_stats.categories }}</span>
+        <span class="community-home-stats__label">دسته‌بندی</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}

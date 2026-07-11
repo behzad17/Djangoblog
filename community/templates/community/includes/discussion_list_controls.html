@@ -1,0 +1,15 @@
+<section class="community-list-section community-list-section--controls">
+  <h2 class="community-section-heading">مرتب‌سازی و وضعیت</h2>
+  <div class="community-discussion-controls d-flex flex-wrap gap-2">
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=all"
+       class="btn btn-sm {% if status == 'all' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">همه</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=open"
+       class="btn btn-sm {% if status == 'open' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">باز</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort={{ sort }}&status=closed"
+       class="btn btn-sm {% if status == 'closed' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">بسته</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=active&status={{ status }}"
+       class="btn btn-sm {% if sort != 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">فعال‌ترین</a>
+    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=newest&status={{ status }}"
+       class="btn btn-sm {% if sort == 'newest' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">جدیدترین</a>
+  </div>
+</section>
