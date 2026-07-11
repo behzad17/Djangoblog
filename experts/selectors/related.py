@@ -2,7 +2,7 @@
 
 from django.db.models import Q, QuerySet
 
-from ads.selectors.text_matching import (
+from codestar.related.text_matching import (
     extract_search_keywords,
     keyword_search_variants,
     score_token_overlap,

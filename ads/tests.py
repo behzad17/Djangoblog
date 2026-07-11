@@ -601,7 +601,7 @@ class RelatedAdsSelectorTests(AdsTestMixin, TestCase):
 
 class PersianTextMatchingTests(TestCase):
     def test_normalizes_arabic_characters(self):
-        from ads.selectors.text_matching import normalize_persian_text
+        from codestar.related.text_matching import normalize_persian_text
 
         self.assertEqual(
             normalize_persian_text('ماليات'),
@@ -609,7 +609,7 @@ class PersianTextMatchingTests(TestCase):
         )
 
     def test_tokens_match_persian_suffix_variants(self):
-        from ads.selectors.text_matching import tokens_match
+        from codestar.related.text_matching import tokens_match
 
         self.assertTrue(tokens_match('مالیات', 'مالیاتی'))
         self.assertTrue(tokens_match('مالیاتی', 'مالیات'))
