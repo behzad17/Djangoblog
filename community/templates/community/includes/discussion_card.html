@@ -1,32 +1,37 @@
 <article class="card community-discussion-card">
-  <div class="card-body">
-    {% include "community/includes/discussion_card_badges.html" %}
+  <div class="card-body community-discussion-card__body">
+    <div class="community-discussion-card__content">
+      <h2 class="community-discussion-card__title">
+        <a href="{% url 'community:discussion_detail' discussion.slug %}">{{ discussion.title }}</a>
+      </h2>
+      <p class="community-discussion-card__preview">{{ discussion.body|truncatechars:160 }}</p>
+    </div>
 
-    <h2 class="community-discussion-card__title h6 mb-0">
-      <a href="{% url 'community:discussion_detail' discussion.slug %}" class="text-decoration-none">{{ discussion.title }}</a>
-    </h2>
+    <footer class="community-discussion-card__footer">
+      {% include "community/includes/discussion_card_badges.html" %}
 
-    <ul class="community-discussion-card__meta list-unstyled mb-0">
-      <li class="community-discussion-card__meta-item">
-        <i class="fas fa-user ms-1" aria-hidden="true"></i>
-        <span class="visually-hidden">نویسنده:</span>
-        {% if discussion.author %}
-        {{ discussion.author.username }}
-        {% else %}
-        کاربر حذف‌شده
-        {% endif %}
-      </li>
-      <li class="community-discussion-card__meta-item">
-        <i class="far fa-clock ms-1" aria-hidden="true"></i>
-        <span class="visually-hidden">آخرین فعالیت:</span>
-        {{ discussion.last_activity_at|date:"Y/m/d H:i" }}
-      </li>
-      <li class="community-discussion-card__meta-item">
-        <i class="far fa-comment ms-1" aria-hidden="true"></i>
-        {{ discussion.reply_count }} پاسخ
-      </li>
-    </ul>
-
-    <p class="community-discussion-card__excerpt mb-0">{{ discussion.body|truncatechars:140 }}</p>
+      <ul class="community-discussion-card__meta list-unstyled mb-0">
+        <li class="community-discussion-card__meta-item">
+          <i class="fas fa-user" aria-hidden="true"></i>
+          <span class="visually-hidden">نویسنده:</span>
+          {% if discussion.author %}
+          {{ discussion.author.username }}
+          {% else %}
+          کاربر حذف‌شده
+          {% endif %}
+        </li>
+        <li class="community-discussion-card__meta-item community-discussion-card__meta-item--divider" aria-hidden="true"></li>
+        <li class="community-discussion-card__meta-item">
+          <i class="far fa-clock" aria-hidden="true"></i>
+          <span class="visually-hidden">آخرین فعالیت:</span>
+          <time datetime="{{ discussion.last_activity_at|date:'c' }}">{{ discussion.last_activity_at|date:"Y/m/d" }}</time>
+        </li>
+        <li class="community-discussion-card__meta-item community-discussion-card__meta-item--divider" aria-hidden="true"></li>
+        <li class="community-discussion-card__meta-item community-discussion-card__meta-item--replies{% if discussion.reply_count %} community-discussion-card__meta-item--replies-active{% endif %}">
+          <i class="far fa-comment" aria-hidden="true"></i>
+          {{ discussion.reply_count }} پاسخ
+        </li>
+      </ul>
+    </footer>
   </div>
 </article>

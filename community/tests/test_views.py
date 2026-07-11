@@ -92,7 +92,8 @@ class CommunityViewTests(TestCase):
 
     def test_discussion_list_card_shows_metadata(self):
         response = self.client.get(reverse('community:discussion_list'))
-        self.assertContains(response, 'community-discussion-card__meta')
+        self.assertContains(response, 'community-discussion-card__footer')
+        self.assertContains(response, 'community-discussion-card__preview')
         self.assertContains(response, self.author.username)
         self.assertContains(response, '0 پاسخ')
         self.assertNotContains(response, 'community-discussion-card__badge--status-open')

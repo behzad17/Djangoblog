@@ -1,13 +1,15 @@
+{% if discussion.category or discussion.is_solved or discussion.status == 'closed' %}
 <div class="community-discussion-card__badges">
   {% if discussion.category %}
-  <span class="badge community-discussion-card__badge community-discussion-card__badge--category">{{ discussion.category.name }}</span>
+  <span class="community-discussion-card__badge community-discussion-card__badge--category">{{ discussion.category.name }}</span>
   {% endif %}
   {% if discussion.is_solved %}
-  <span class="badge community-discussion-card__badge community-discussion-card__badge--solved">
-    <i class="fas fa-check ms-1" aria-hidden="true"></i>حل‌شده
+  <span class="community-discussion-card__badge community-discussion-card__badge--solved">
+    <i class="fas fa-check" aria-hidden="true"></i>حل‌شده
   </span>
   {% endif %}
   {% if discussion.status == 'closed' %}
-  <span class="badge community-discussion-card__badge community-discussion-card__badge--status-closed">بسته</span>
+  <span class="community-discussion-card__badge community-discussion-card__badge--status-closed">بسته</span>
   {% endif %}
 </div>
+{% endif %}
