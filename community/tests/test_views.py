@@ -59,7 +59,7 @@ class CommunityViewTests(TestCase):
     def test_discussion_list_renders(self):
         response = self.client.get(reverse('community:discussion_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'انجمن پیوند')
+        self.assertContains(response, 'گفتگو، تجربه و همفکری')
         self.assertContains(response, 'ایجاد بحث جدید')
         self.assertContains(response, 'جستجو در انجمن')
         self.assertContains(response, self.discussion.title)
@@ -72,7 +72,7 @@ class CommunityViewTests(TestCase):
         )
         self.assertContains(
             response,
-            'انجمن پیوند فضایی برای گفتگو و تبادل نظر میان ایرانیان ساکن سوئد است.',
+            'بخش گفتگوها فضایی برای گفتگو و تبادل نظر میان ایرانیان ساکن سوئد است.',
         )
 
     def test_discussion_list_renders_stats_bar(self):
