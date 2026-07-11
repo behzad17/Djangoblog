@@ -1843,7 +1843,7 @@ body {
   }
 }
 
-/* Desktop/Tablet homepage informational cards — ≥768px (inside unified hero) */
+/* Desktop/Tablet homepage discussions CTA — ≥768px (inside unified hero) */
 @media (min-width: 768px) {
   main .hero-section--homepage .hero-section__info {
     margin-top: 1.5rem;
@@ -1851,69 +1851,98 @@ body {
     width: 100%;
   }
 
-  .hero-info-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.72rem;
+  .hero-discussions-cta {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    direction: rtl;
     width: 100%;
-    margin: 0 auto;
+    min-height: clamp(58px, 6.8vw, 88px);
+    height: clamp(58px, 6.8vw, 88px);
+    border-radius: 19px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background: #ffffff;
+    border: 1px solid rgba(27, 85, 131, 0.13);
+    box-shadow:
+      0 1px 2px rgba(11, 45, 74, 0.05),
+      0 2px 7px rgba(27, 85, 131, 0.06);
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 0.26s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 0.26s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 0.22s ease;
   }
 
-  .hero-info-card {
+  .hero-discussions-cta__accent {
+    flex: 0 0 28%;
+    max-width: 28%;
+    min-width: 7.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.26rem;
-    min-height: clamp(58px, 6.8vw, 88px);
-    max-height: clamp(58px, 6.8vw, 88px);
-    height: clamp(58px, 6.8vw, 88px);
-    padding: 0.38rem 0.4rem;
-    border-radius: 19px;
-    background: #F1F3F8;
-    border: 1px solid rgba(27, 85, 131, 0.13);
-    box-shadow: 0 2px 7px rgba(27, 85, 131, 0.06);
+    gap: 0.18rem;
+    padding: 0.45rem 0.85rem;
+    background: #1b5583;
+    color: #ffffff;
     text-align: center;
-    direction: rtl;
-    box-sizing: border-box;
-    transition:
-      transform 0.22s ease,
-      box-shadow 0.22s ease,
-      border-color 0.22s ease;
   }
 
-  @media (hover: hover) {
-    .hero-info-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(27, 85, 131, 0.24);
-      box-shadow: 0 6px 16px rgba(27, 85, 131, 0.11);
-    }
-  }
-
-  .hero-info-card--events,
-  .hero-info-card--services,
-  .hero-info-card--ask,
-  .hero-info-card--share {
-    background: #F1F3F8;
-  }
-
-  .hero-info-card__icon {
-    display: flex;
+  .hero-discussions-cta__icon {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: clamp(0.994rem, 1.518vw, 1.214rem);
+    font-size: clamp(0.95rem, 1.35vw, 1.18rem);
     line-height: 1;
-    color: #1b5583;
-    opacity: 1;
+    color: rgba(255, 255, 255, 0.92);
   }
 
-  .hero-info-card__title {
+  .hero-discussions-cta__title {
     margin: 0;
-    font-size: clamp(0.598rem, 0.897vw, 0.805rem);
-    font-weight: 600;
-    line-height: 1.35;
-    color: #173552;
+    font-size: clamp(0.88rem, 1.15vw, 1.08rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+
+  .hero-discussions-cta__body {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 0.65rem 1.35rem;
+    background: #ffffff;
+    text-align: center;
+  }
+
+  .hero-discussions-cta__description {
+    margin: 0;
+    font-size: clamp(0.68rem, 0.95vw, 0.88rem);
+    font-weight: 500;
+    line-height: 1.55;
+    color: #6b7280;
+    text-wrap: balance;
+  }
+
+  @media (hover: hover) {
+    .hero-discussions-cta:hover {
+      transform: translateY(-3px);
+      border-color: rgba(27, 85, 131, 0.24);
+      box-shadow:
+        0 4px 10px rgba(11, 45, 74, 0.12),
+        0 18px 38px rgba(11, 45, 74, 0.18);
+    }
+  }
+
+  .hero-discussions-cta:focus-visible {
+    outline: 2px solid rgba(27, 85, 131, 0.85);
+    outline-offset: 2px;
   }
 }
 
@@ -1923,8 +1952,12 @@ body {
     padding-bottom: calc(0.65rem * 3);
   }
 
-  .hero-info-cards-grid {
-    gap: 0.86rem;
+  .hero-discussions-cta__body {
+    padding: 0.72rem 1.65rem;
+  }
+
+  .hero-discussions-cta__description {
+    font-size: clamp(0.74rem, 0.88vw, 0.92rem);
   }
 }
 
