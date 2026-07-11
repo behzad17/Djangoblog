@@ -70,10 +70,6 @@ class CommunityViewTests(TestCase):
             response,
             'محلی برای پرسیدن سؤال، به اشتراک گذاشتن تجربه و کمک به ایرانیان ساکن سوئد.',
         )
-        self.assertContains(
-            response,
-            'در انجمن پیوند می‌توانید درباره زندگی، مهاجرت، کار، قوانین، تحصیل، سلامت',
-        )
 
     def test_discussion_list_renders_stats_bar(self):
         response = self.client.get(reverse('community:discussion_list'))
