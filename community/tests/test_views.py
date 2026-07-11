@@ -59,7 +59,7 @@ class CommunityViewTests(TestCase):
     def test_discussion_list_renders(self):
         response = self.client.get(reverse('community:discussion_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده')
+        self.assertContains(response, 'پرسش و پاسخ، تبادل تجربه و گفتگوهای سازنده')
         self.assertContains(response, 'ایجاد بحث جدید')
         self.assertContains(response, 'جستجو در انجمن')
         self.assertContains(response, self.discussion.title)
@@ -68,7 +68,7 @@ class CommunityViewTests(TestCase):
         response = self.client.get(reverse('community:discussion_list'))
         self.assertContains(
             response,
-            'فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده',
+            'پرسش و پاسخ، تبادل تجربه و گفتگوهای سازنده',
         )
         self.assertContains(
             response,
