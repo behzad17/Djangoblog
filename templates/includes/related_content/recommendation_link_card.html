@@ -1,0 +1,37 @@
+<a
+  href="{{ link.url }}"
+  class="related-rec related-rec--link"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="{{ link.title }}{% if link.source_name %} — {{ link.source_name }}{% endif %}"
+>
+  <div class="related-rec__media">
+    {% if link.cover_image %}
+    <img
+      class="related-rec__image"
+      src="{{ link.cover_image.url }}"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    {% else %}
+    <div class="related-rec__placeholder" aria-hidden="true">
+      <i class="{{ link.resource_type.icon_class }}"></i>
+    </div>
+    {% endif %}
+  </div>
+  <div class="related-rec__body">
+    <h3 class="related-rec__title">{{ link.title }}</h3>
+    {% if link.short_description %}
+    <p class="related-rec__description">{{ link.short_description }}</p>
+    {% elif link.description %}
+    <p class="related-rec__description">{{ link.description }}</p>
+    {% endif %}
+    {% if link.source_name %}
+    <span class="related-rec__source">{{ link.source_name }}</span>
+    {% endif %}
+  </div>
+  <span class="related-rec__external" aria-hidden="true">
+    <i class="bi bi-box-arrow-up-left"></i>
+  </span>
+</a>

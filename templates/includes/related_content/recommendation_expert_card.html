@@ -1,0 +1,54 @@
+{% load static %}
+{% static 'images/default.jpg' as default_image_url %}
+<div class="related-rec-expert">
+  {% if expert.slug %}
+  <a href="{% url 'expert_profile' expert.slug %}" class="related-rec-expert__main">
+  {% else %}
+  <div class="related-rec-expert__main">
+  {% endif %}
+    <div class="related-rec__media related-rec__media--round">
+      <img
+        src="{% if expert.profile_image and expert.profile_image.url %}{{ expert.profile_image.url }}{% else %}{{ default_image_url }}{% endif %}"
+        alt="{{ expert.get_display_name }}"
+        class="related-rec__image"
+        loading="lazy"
+        decoding="async"
+        onerror="this.onerror=null; this.src='{{ default_image_url }}';"
+      />
+    </div>
+    <div class="related-rec__body">
+      <h3 class="related-rec__title">{{ expert.get_display_name }}</h3>
+      <p class="related-rec__meta related-rec__meta--primary">
+        <i class="fas fa-certificate ms-1"></i>{{ expert.expert_title }}
+      </p>
+      {% if expert.bio %}
+      <p class="related-rec__description">{{ expert.bio|striptags|truncatewords:12 }}</p>
+      {% endif %}
+      <p class="related-rec-expert__stats">
+        <i class="fas fa-question-circle ms-1"></i>{{ expert.get_directory_question_count }} سوال پاسخ داده شده
+      </p>
+    </div>
+  {% if expert.slug %}
+  </a>
+  {% else %}
+  </div>
+  {% endif %}
+  {% if user.is_authenticated %}
+  {% if expert.slug %}
+  <a
+    href="{% url 'expert_profile' expert.slug %}"
+    class="btn btn-primary btn-sm w-100 related-rec-expert__action"
+  >
+    <i class="fas fa-paper-plane ms-1"></i>پرسیدن سوال
+  </a>
+  {% else %}
+  <button type="button" class="btn btn-primary btn-sm w-100 related-rec-expert__action" disabled>
+    <i class="fas fa-paper-plane ms-1"></i>پرسیدن سوال
+  </button>
+  {% endif %}
+  {% else %}
+  <a href="{% url 'account_login' %}" class="btn btn-outline-primary btn-sm w-100 related-rec-expert__action">
+    <i class="fas fa-sign-in-alt ms-1"></i>ورود برای پرسیدن
+  </a>
+  {% endif %}
+</div>

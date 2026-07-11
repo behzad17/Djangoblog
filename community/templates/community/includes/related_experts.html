@@ -1,12 +1,12 @@
-<section class="card shadow-sm border-0 mb-4">
+<section class="card shadow-sm border-0 related-content">
   <div class="card-body">
-    <h2 class="h5 card-title mb-3">
+    <h2 class="related-content__heading">
       <i class="fas fa-user-tie ms-2"></i>متخصصان مرتبط
     </h2>
-    <div class="row g-3">
+    <div class="row related-content__grid">
       {% for expert in related_experts %}
       <div class="col-lg-4 col-md-6 col-12">
-        {% include "askme/includes/_expert_card.html" with expert=expert %}
+        {% include "includes/related_content/recommendation_expert_card.html" with expert=expert %}
       </div>
       {% endfor %}
     </div>

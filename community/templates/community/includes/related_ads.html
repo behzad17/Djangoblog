@@ -1,12 +1,12 @@
-<section class="card shadow-sm border-0 mb-4">
+<section class="card shadow-sm border-0 related-content">
   <div class="card-body">
-    <h2 class="h5 card-title mb-3">
+    <h2 class="related-content__heading">
       <i class="fas fa-bullhorn ms-2"></i>آگهی‌های مرتبط
     </h2>
-    <div class="row g-3">
+    <div class="row related-content__grid">
       {% for ad in related_ads %}
       <div class="col-lg-4 col-md-6 col-12">
-        {% include "ads/includes/_directory_ad_card.html" with ad=ad show_owner_actions=False %}
+        {% include "includes/related_content/recommendation_ad_card.html" with ad=ad %}
       </div>
       {% endfor %}
     </div>

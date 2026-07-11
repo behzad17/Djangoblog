@@ -6,7 +6,7 @@
 {% block meta_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% else %}{{ post.content|striptags|truncatewords:25 }}{% endif %}{% endblock meta_description %}
 {% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/related_content.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 {% block structured_data %}
 <script type="application/ld+json">

@@ -1,0 +1,55 @@
+{% load static %}
+<a
+  href="{% url 'ads:ad_detail' ad.slug %}"
+  class="related-rec related-rec--ad {% if ad.is_currently_featured %}ad-featured{% endif %} text-decoration-none"
+>
+  <div class="related-rec__media">
+    {% if ad.image %}
+    <img
+      src="{{ ad.image.url }}"
+      alt="{{ ad.title }}"
+      class="related-rec__image"
+      loading="lazy"
+      decoding="async"
+      onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+    />
+    {% else %}
+    <img
+      src="{% static 'images/default.jpg' %}"
+      alt="{{ ad.title }}"
+      class="related-rec__image"
+      loading="lazy"
+      decoding="async"
+    />
+    {% endif %}
+    <div class="related-rec__badges">
+      {% if ad.is_currently_featured %}
+      <span class="related-rec__badge related-rec__badge--featured">
+        <i class="fas fa-star ms-1"></i>ویژه
+      </span>
+      {% endif %}
+      {% if ad.plan == 'pro' %}
+      <span class="related-rec__badge related-rec__badge--pro">
+        <i class="fas fa-crown ms-1"></i>Pro
+      </span>
+      {% endif %}
+      {% if user.is_authenticated and ad.owner == user %}
+      <span class="related-rec__badge related-rec__badge--owner">
+        <i class="fas fa-user ms-1"></i>تبلیغ شما
+      </span>
+      {% elif ad.is_approved and ad.url_approved %}
+      <span class="related-rec__badge related-rec__badge--active">
+        <i class="fas fa-fire ms-1"></i>فعال
+      </span>
+      {% endif %}
+    </div>
+  </div>
+  <div class="related-rec__body">
+    <h3 class="related-rec__title">{{ ad.title }}</h3>
+    {% if ad.target_url and ad.url_approved %}
+    <p class="related-rec__meta">
+      <i class="fas fa-external-link-alt ms-1"></i>{{ ad.target_url|truncatechars:40 }}
+    </p>
+    {% endif %}
+  </div>
+</a>

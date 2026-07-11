@@ -1,12 +1,12 @@
-<section class="card shadow-sm border-0 mb-4">
+<section class="card shadow-sm border-0 related-content">
   <div class="card-body">
-    <h2 class="h5 card-title mb-3">
+    <h2 class="related-content__heading">
       <i class="fas fa-link ms-2"></i>لینک‌های مفید مرتبط
     </h2>
-    <div class="row g-3">
+    <div class="row related-content__grid">
       {% for link in related_useful_links %}
       <div class="col-lg-4 col-md-6 col-12">
-        {% include "related_links/includes/resource_link_card.html" with link=link %}
+        {% include "includes/related_content/recommendation_link_card.html" with link=link %}
       </div>
       {% endfor %}
     </div>
