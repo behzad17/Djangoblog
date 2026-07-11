@@ -1849,6 +1849,8 @@ body {
     margin-top: 1.5rem;
     padding-bottom: calc(0.5rem * 3);
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .hero-discussions-cta {
@@ -1856,7 +1858,9 @@ body {
     flex-direction: row;
     align-items: stretch;
     direction: rtl;
-    width: 100%;
+    width: 50%;
+    max-width: 540px;
+    margin-inline: auto;
     min-height: clamp(58px, 6.8vw, 88px);
     height: clamp(58px, 6.8vw, 88px);
     border-radius: 19px;
@@ -1916,14 +1920,14 @@ body {
     align-items: center;
     justify-content: center;
     min-width: 0;
-    padding: 0.65rem 1.35rem;
+    padding: 0.55rem 0.85rem;
     background: #ffffff;
     text-align: center;
   }
 
   .hero-discussions-cta__description {
     margin: 0;
-    font-size: clamp(0.68rem, 0.95vw, 0.88rem);
+    font-size: clamp(0.62rem, 0.82vw, 0.78rem);
     font-weight: 500;
     line-height: 1.55;
     color: #6b7280;
@@ -1953,11 +1957,11 @@ body {
   }
 
   .hero-discussions-cta__body {
-    padding: 0.72rem 1.65rem;
+    padding: 0.6rem 1rem;
   }
 
   .hero-discussions-cta__description {
-    font-size: clamp(0.74rem, 0.88vw, 0.92rem);
+    font-size: clamp(0.66rem, 0.76vw, 0.82rem);
   }
 }
 
