@@ -5,6 +5,9 @@
 {% block title %}{{ post.title }} | Peyvand{% endblock title %}
 {% block meta_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% else %}{{ post.content|striptags|truncatewords:25 }}{% endif %}{% endblock meta_description %}
 {% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
 {% block structured_data %}
 <script type="application/ld+json">
 {
@@ -267,6 +270,18 @@
         </div>
       </div>
       </div>
+
+      {% if related_ads %}
+      {% include "community/includes/related_ads.html" %}
+      {% endif %}
+
+      {% if related_experts %}
+      {% include "community/includes/related_experts.html" %}
+      {% endif %}
+
+      {% if related_useful_links %}
+      {% include "community/includes/related_useful_links.html" %}
+      {% endif %}
 
       <div class="post-detail-comments">
       <!-- Comment Form (now above comments) -->

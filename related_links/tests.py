@@ -201,6 +201,60 @@ class RelatedLinksSelectorTests(TestCase):
         self.assertEqual(len(results), 3)
         self.assertLessEqual(len(context.captured_queries), 2)
 
+    def test_returns_mapped_category_links_for_blog_post(self):
+        from blog.models import Category, Post
+
+        blog_category, _ = Category.objects.get_or_create(
+            slug='law-integration',
+            defaults={'name': 'قانون و ادغام'},
+        )
+        post = Post.objects.create(
+            title='راهنمای اقامت',
+            slug='blog-link-residency',
+            author=self.discussion_author,
+            category=blog_category,
+            content='سؤال درباره اقامت',
+            status=1,
+        )
+        matched = self._create_link('blog-migration-link')
+        self._create_link(
+            'blog-finance-link',
+            category=self.other_link_category,
+            short_description='خدمات مالی',
+        )
+
+        results = get_related_links(post, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0], matched)
+
+    def test_get_related_links_for_blog_post_uses_bounded_queries(self):
+        from blog.models import Category, Post
+
+        blog_category, _ = Category.objects.get_or_create(
+            slug='law-integration',
+            defaults={'name': 'قانون و ادغام'},
+        )
+        post = Post.objects.create(
+            title='راهنمای اقامت',
+            slug='blog-link-query',
+            author=self.discussion_author,
+            category=blog_category,
+            content='سؤال درباره اقامت',
+            status=1,
+        )
+        for index in range(4):
+            self._create_link(
+                f'blog-query-link-{index}',
+                title=f'مهاجرت {index}',
+            )
+
+        with CaptureQueriesContext(connection) as context:
+            results = get_related_links(post, limit=3)
+
+        self.assertEqual(len(results), 3)
+        self.assertLessEqual(len(context.captured_queries), 2)
+
     def test_persian_normalization_for_link_matching(self):
         self.assertEqual(
             normalize_persian_text('ماليات'),

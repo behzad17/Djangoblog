@@ -598,6 +598,70 @@ class RelatedAdsSelectorTests(AdsTestMixin, TestCase):
         self.assertEqual(len(results), 3)
         self.assertLessEqual(len(context.captured_queries), 2)
 
+    def test_returns_mapped_category_ads_for_blog_post(self):
+        from ads.selectors.related import get_related_ads
+        from blog.models import Category, Post
+
+        blog_category, _ = Category.objects.get_or_create(
+            slug='law-integration',
+            defaults={'name': 'قانون و ادغام'},
+        )
+        legal_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        post = Post.objects.create(
+            title='راهنمای اقامت',
+            slug='blog-residency-guide',
+            author=self.owner,
+            category=blog_category,
+            content='سؤال درباره اقامت',
+            status=1,
+        )
+        matched = self._create_ad(
+            'blog-law-ad',
+            category=legal_category,
+            plan='pro',
+        )
+        self._create_ad(
+            'blog-finance-ad',
+            category=self.other_ad_category,
+            title='خدمات مالی',
+            plan='pro',
+        )
+
+        results = get_related_ads(post, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0], matched)
+
+    def test_blog_post_html_content_is_stripped_for_keyword_matching(self):
+        from ads.selectors.related import get_related_ads
+        from blog.models import Category, Post
+
+        blog_category, _ = Category.objects.get_or_create(
+            slug='platform-updates',
+            defaults={'name': 'تازه‌های روز'},
+        )
+        post = Post.objects.create(
+            title='سؤال درباره مالیات',
+            slug='blog-tax-html',
+            author=self.owner,
+            category=blog_category,
+            content='<p>به دنبال <strong>مالیات</strong> هستم.</p><p>در سوئد</p>',
+            status=1,
+        )
+        matched = self._create_ad(
+            'blog-tax-ad',
+            category=self.other_ad_category,
+            title='مشاوره مالیاتی',
+            plan='pro',
+        )
+
+        results = get_related_ads(post, limit=3)
+
+        self.assertEqual(results, [matched])
+
 
 class PersianTextMatchingTests(TestCase):
     def test_normalizes_arabic_characters(self):

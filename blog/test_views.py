@@ -39,6 +39,9 @@ class TestBlogViews(TestCase):
         self.assertIn(b"Blog content", response.content)
         self.assertIsInstance(
             response.context['comment_form'], CommentForm)
+        self.assertEqual(response.context['related_ads'], [])
+        self.assertEqual(response.context['related_experts'], [])
+        self.assertEqual(response.context['related_useful_links'], [])
 
     def test_successful_comment_submission(self):
         """Test for posting a comment on a post"""
@@ -61,3 +64,229 @@ class TestBlogViews(TestCase):
             response,
             'نظر شما ثبت شد و در انتظار بررسی است.',
         )
+
+
+class PostDetailRelatedContentTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        import cloudinary
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        cls.author = User.objects.create_user(
+            username='blogrelatedauthor',
+            password='password123',
+        )
+        cls.mapped_category, _ = Category.objects.get_or_create(
+            slug='law-integration',
+            defaults={'name': 'قانون و ادغام'},
+        )
+        cls.post = Post.objects.create(
+            title='راهنمای اقامت',
+            slug='blog-related-post',
+            author=cls.author,
+            category=cls.mapped_category,
+            content='سؤال درباره اقامت',
+            status=1,
+        )
+
+    def _create_useful_link(self, slug, **kwargs):
+        from related_links.models import (
+            RelatedLink,
+            UsefulLinkCategory,
+            UsefulLinkResourceType,
+        )
+
+        category = kwargs.pop('category', None) or UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug=f'migration-{slug}',
+            icon='bi-globe',
+            is_active=True,
+        )
+        resource_type = kwargs.pop('resource_type', None) or UsefulLinkResourceType.objects.create(
+            name_en='Website',
+            name_fa='وب‌سایت',
+            slug=f'website-{slug}',
+            icon='bi-globe',
+            is_active=True,
+        )
+        defaults = {
+            'title': f'لینک {slug}',
+            'slug': slug,
+            'category': category,
+            'resource_type': resource_type,
+            'url': 'https://example.com',
+            'short_description': 'راهنمای مهاجرت',
+            'is_active': True,
+        }
+        defaults.update(kwargs)
+        return RelatedLink.objects.create(**defaults)
+
+    def test_post_detail_renders_no_related_sections(self):
+        response = self.client.get(
+            reverse('post_detail', args=[self.post.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertNotContains(response, 'لینک‌های مفید مرتبط')
+
+    def test_post_detail_renders_related_ads_only(self):
+        from ads.models import Ad, AdCategory
+
+        ad_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        Ad.objects.create(
+            title='مشاور حقوقی',
+            slug='blog-related-ad',
+            category=ad_category,
+            owner=self.author,
+            image='test/ad-image',
+            target_url='https://example.com',
+            city='Stockholm',
+            plan='pro',
+            is_active=True,
+            is_approved=True,
+            url_approved=True,
+        )
+
+        response = self.client.get(
+            reverse('post_detail', args=[self.post.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'آگهی‌های مرتبط')
+        self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertNotContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_ads']), 1)
+
+    def test_post_detail_renders_related_experts_only(self):
+        from askme.models import Moderator
+
+        expert_user = User.objects.create_user(
+            username='blogrelatedexpert',
+            password='password123',
+        )
+        Moderator.objects.create(
+            user=expert_user,
+            expert_title='وکیل مهاجرت',
+            complete_name='متخصص حقوقی',
+            field_specialty='حقوق و مهاجرت',
+            slug='blog-related-expert',
+            profile_image='test/expert-image',
+            is_active=True,
+        )
+
+        response = self.client.get(
+            reverse('post_detail', args=[self.post.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'متخصصان مرتبط')
+        self.assertNotContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_experts']), 1)
+
+    def test_post_detail_renders_related_useful_links_only(self):
+        from related_links.models import UsefulLinkCategory
+
+        UsefulLinkCategory.objects.filter(slug='migration').delete()
+        migration_category = UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug='migration',
+            icon='bi-globe',
+            is_active=True,
+        )
+        self._create_useful_link(
+            'blog-related-link',
+            category=migration_category,
+            title='راهنمای مهاجرت',
+        )
+
+        response = self.client.get(
+            reverse('post_detail', args=[self.post.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_useful_links']), 1)
+
+    def test_post_detail_renders_all_related_sections(self):
+        from ads.models import Ad, AdCategory
+        from askme.models import Moderator
+        from related_links.models import UsefulLinkCategory
+
+        ad_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        Ad.objects.create(
+            title='مشاور حقوقی',
+            slug='blog-related-ad-all',
+            category=ad_category,
+            owner=self.author,
+            image='test/ad-image',
+            target_url='https://example.com',
+            city='Stockholm',
+            plan='pro',
+            is_active=True,
+            is_approved=True,
+            url_approved=True,
+        )
+        expert_user = User.objects.create_user(
+            username='blogrelatedexpertall',
+            password='password123',
+        )
+        Moderator.objects.create(
+            user=expert_user,
+            expert_title='وکیل مهاجرت',
+            complete_name='متخصص حقوقی',
+            field_specialty='حقوق و مهاجرت',
+            slug='blog-related-expert-all',
+            profile_image='test/expert-image',
+            is_active=True,
+        )
+        UsefulLinkCategory.objects.filter(slug='migration').delete()
+        migration_category = UsefulLinkCategory.objects.create(
+            name_en='Migration',
+            name_fa='مهاجرت',
+            slug='migration',
+            icon='bi-globe',
+            is_active=True,
+        )
+        self._create_useful_link(
+            'blog-related-link-all',
+            category=migration_category,
+            title='راهنمای مهاجرت',
+        )
+
+        response = self.client.get(
+            reverse('post_detail', args=[self.post.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'لینک‌های مفید مرتبط')
+        self.assertEqual(len(response.context['related_ads']), 1)
+        self.assertEqual(len(response.context['related_experts']), 1)
+        self.assertEqual(len(response.context['related_useful_links']), 1)
+
+        ads_index = response.content.index('آگهی\u200cهای مرتبط'.encode())
+        experts_index = response.content.index('متخصصان مرتبط'.encode())
+        links_index = response.content.index('لینک\u200cهای مفید مرتبط'.encode())
+        comments_index = response.content.index('نظرات'.encode())
+        self.assertLess(ads_index, experts_index)
+        self.assertLess(experts_index, links_index)
+        self.assertLess(links_index, comments_index)

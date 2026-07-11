@@ -240,6 +240,23 @@ def track_page_view(request, post=None, url_path=None):
 
 
 # Reading Time and TOC (Table of Contents) Utilities
+def html_to_plain_text(content_html):
+    """
+    Convert HTML content to plain text while preserving word boundaries.
+
+    Tags are replaced with spaces so adjacent block/inline elements do not
+    concatenate words (for example ``<p>مالیات</p><p>سوئد</p>`` → ``مالیات سوئد``).
+    """
+    if not content_html:
+        return ''
+
+    if not isinstance(content_html, str):
+        content_html = str(content_html)
+
+    text = re.sub(r'<[^>]+>', ' ', content_html)
+    return re.sub(r'\s+', ' ', text).strip()
+
+
 def compute_reading_time(content_html):
     """
     Calculate reading time in minutes from HTML content.
@@ -259,11 +276,7 @@ def compute_reading_time(content_html):
             content_html = str(content_html)
         
         # Strip HTML tags to get plain text
-        # Simple regex to remove HTML tags (safe for sanitized content)
-        text = re.sub(r'<[^>]+>', ' ', content_html)
-        
-        # Remove extra whitespace and split into words
-        text = re.sub(r'\s+', ' ', text).strip()
+        text = html_to_plain_text(content_html)
         
         # Split by whitespace (works for both Persian and English)
         words = text.split()
@@ -397,8 +410,7 @@ def should_show_toc(content_html, toc_items, min_headings=3, min_words=600):
     # Must have at least some headings
     if len(toc_items) < min_headings:
         # Check word count as alternative
-        text = re.sub(r'<[^>]+>', ' ', content_html)
-        text = re.sub(r'\s+', ' ', text).strip()
+        text = html_to_plain_text(content_html)
         word_count = len(text.split())
         
         # Show TOC if content is long enough even with fewer headings

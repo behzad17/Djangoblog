@@ -17,6 +17,9 @@ import json
 
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
+from ads.selectors.related import get_related_ads
+from experts.selectors.related import get_related_experts
+from related_links.selectors.related import get_related_links
 from .utils import (
     track_page_view,
     determine_comment_approval,
@@ -405,7 +408,7 @@ def post_detail(request, slug):
     
     try:
         from .utils import compute_reading_time, build_toc_and_anchors, should_show_toc
-        
+
         # Ensure post.content is not None
         post_content = post.content or ''
         
@@ -425,6 +428,10 @@ def post_detail(request, slug):
     else:
         template_name = 'blog/post_detail.html'
 
+    related_ads = get_related_ads(post, limit=3)
+    related_experts = get_related_experts(post, limit=3)
+    related_useful_links = get_related_links(post, limit=3)
+
     return render(
         request,
         template_name,
@@ -434,6 +441,9 @@ def post_detail(request, slug):
             "comment_count": comment_count,
             "comment_form": comment_form,
             "related_posts": related_posts,
+            "related_ads": related_ads,
+            "related_experts": related_experts,
+            "related_useful_links": related_useful_links,
             "is_favorited": is_favorited,
             "is_liked": is_liked,
             "hide_pending_messages": hide_pending_messages,

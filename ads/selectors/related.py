@@ -1,9 +1,16 @@
 """Related content selectors for cross-app recommendations."""
 
+from __future__ import annotations
+
+from typing import Any
+
 from django.db.models import Q, QuerySet
 
-from ads.config.community_category_mapping import ad_category_slugs_for_community_category
+from ads.config.blog_category_mapping import BLOG_TO_AD_CATEGORY_SLUGS
+from ads.config.community_category_mapping import COMMUNITY_TO_AD_CATEGORY_SLUGS
 from ads.models import Ad
+from codestar.related.category_mapping import mapped_values_for_source
+from codestar.related.sources import related_content_source
 from codestar.related.text_matching import (
     extract_search_keywords,
     keyword_search_variants,
@@ -11,43 +18,47 @@ from codestar.related.text_matching import (
     tokenize_persian_text,
 )
 from ads.selectors.visibility import list_publicly_visible_pro_ads
-from community.models import Discussion
 
 _MIN_KEYWORD_SCORE = 2
 _KEYWORD_CANDIDATE_LIMIT = 40
 _MAX_KEYWORD_VARIANTS = 12
 
 
-def get_related_ads(discussion: Discussion, *, limit: int = 3) -> list[Ad]:
+def get_related_ads(content: Any, *, limit: int = 3) -> list[Ad]:
     """
-    Return contextually related, publicly visible Pro ads for a discussion.
+    Return contextually related, publicly visible Pro ads for a discussion or post.
+
+    Accepts a Community ``Discussion``, Blog ``Post``, or ``RelatedContentSource``.
 
     Matching priority:
-    1. Mapped ad categories for the discussion category
-    2. Shared tags (skipped — not supported on discussions/ads yet)
+    1. Mapped ad categories for the content category
+    2. Shared tags (skipped — not supported yet)
     3. Keyword overlap with ad titles
     4. Keyword overlap with ad category name/description
     """
     if limit <= 0:
         return []
 
+    source = related_content_source(content)
     base_qs = list_publicly_visible_pro_ads()
     results: list[Ad] = []
     seen_ids: set[int] = set()
 
-    category = getattr(discussion, 'category', None)
-    if category is not None:
-        mapped_slugs = ad_category_slugs_for_community_category(category.slug)
-        if mapped_slugs:
-            for ad in base_qs.filter(category__slug__in=mapped_slugs)[:limit]:
-                if ad.pk not in seen_ids:
-                    results.append(ad)
-                    seen_ids.add(ad.pk)
+    mapped_slugs = mapped_values_for_source(
+        source,
+        community_map=COMMUNITY_TO_AD_CATEGORY_SLUGS,
+        blog_map=BLOG_TO_AD_CATEGORY_SLUGS,
+    )
+    if mapped_slugs:
+        for ad in base_qs.filter(category__slug__in=mapped_slugs)[:limit]:
+            if ad.pk not in seen_ids:
+                results.append(ad)
+                seen_ids.add(ad.pk)
 
     if len(results) >= limit:
         return results[:limit]
 
-    keywords = extract_search_keywords(discussion.title, discussion.body)
+    keywords = extract_search_keywords(source.title, source.body)
     if not keywords:
         return results[:limit]
 

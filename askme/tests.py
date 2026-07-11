@@ -182,3 +182,57 @@ class RelatedExpertsSelectorTests(TestCase):
 
         self.assertEqual(len(results), 3)
         self.assertLessEqual(len(context.captured_queries), 2)
+
+    def test_returns_mapped_category_experts_for_blog_post(self):
+        from blog.models import Category, Post
+
+        blog_category, _ = Category.objects.get_or_create(
+            slug='law-integration',
+            defaults={'name': 'قانون و ادغام'},
+        )
+        post = Post.objects.create(
+            title='راهنمای اقامت',
+            slug='blog-expert-residency',
+            author=self.discussion_author,
+            category=blog_category,
+            content='سؤال درباره اقامت',
+            status=1,
+        )
+        matched = self._create_expert('blog-legal-expert')
+        self._create_expert(
+            'blog-finance-expert',
+            expert_title='حسابدار',
+            field_specialty='مالی',
+        )
+
+        results = get_related_experts(post, limit=3)
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0], matched)
+
+    def test_get_related_experts_for_blog_post_uses_bounded_queries(self):
+        from blog.models import Category, Post
+
+        blog_category, _ = Category.objects.get_or_create(
+            slug='law-integration',
+            defaults={'name': 'قانون و ادغام'},
+        )
+        post = Post.objects.create(
+            title='راهنمای اقامت',
+            slug='blog-expert-query',
+            author=self.discussion_author,
+            category=blog_category,
+            content='سؤال درباره اقامت',
+            status=1,
+        )
+        for index in range(4):
+            self._create_expert(
+                f'blog-query-expert-{index}',
+                expert_title=f'وکیل {index}',
+            )
+
+        with CaptureQueriesContext(connection) as context:
+            results = get_related_experts(post, limit=3)
+
+        self.assertEqual(len(results), 3)
+        self.assertLessEqual(len(context.captured_queries), 2)

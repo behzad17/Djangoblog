@@ -2,6 +2,9 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load security_filters %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
 {% block content %}
 <!-- Photo Hero Section - Full Width Image (1–3 images) -->
 <div class="photo-detail-hero">
@@ -227,6 +230,18 @@
           {% endif %}
         </div>
       </div>
+
+      {% if related_ads %}
+      {% include "community/includes/related_ads.html" %}
+      {% endif %}
+
+      {% if related_experts %}
+      {% include "community/includes/related_experts.html" %}
+      {% endif %}
+
+      {% if related_useful_links %}
+      {% include "community/includes/related_useful_links.html" %}
+      {% endif %}
 
       <!-- Comment Form -->
       <div class="card mb-3 shadow-sm border-0 comment-form-card">
