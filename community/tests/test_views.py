@@ -68,7 +68,11 @@ class CommunityViewTests(TestCase):
         response = self.client.get(reverse('community:discussion_list'))
         self.assertContains(
             response,
-            'محلی برای پرسیدن سؤال، به اشتراک گذاشتن تجربه و کمک به ایرانیان ساکن سوئد.',
+            'گفتگو، تجربه و همفکری',
+        )
+        self.assertContains(
+            response,
+            'انجمن پیوند فضایی برای گفتگو و تبادل نظر میان ایرانیان ساکن سوئد است.',
         )
 
     def test_discussion_list_renders_stats_bar(self):
