@@ -64,6 +64,7 @@ class CommunityViewTests(TestCase):
         self.assertContains(response, 'متن بحث تست')
         self.assertIsInstance(response.context['reply_form'], ReplyCreateForm)
         self.assertEqual(response.context['related_ads'], [])
+        self.assertEqual(response.context['related_experts'], [])
 
     def test_discussion_detail_renders_related_ads(self):
         import cloudinary
@@ -103,6 +104,108 @@ class CommunityViewTests(TestCase):
         self.assertContains(response, 'آگهی‌های مرتبط')
         self.assertContains(response, 'مشاور حقوقی')
         self.assertEqual(len(response.context['related_ads']), 1)
+
+    def test_discussion_detail_renders_related_experts_only(self):
+        import cloudinary
+        from askme.models import Moderator
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        expert_user = User.objects.create_user(
+            username='relatedexpert',
+            password='password123',
+        )
+        Moderator.objects.create(
+            user=expert_user,
+            expert_title='وکیل مهاجرت',
+            complete_name='متخصص حقوقی',
+            field_specialty='حقوق و مهاجرت',
+            slug='related-expert',
+            profile_image='test/expert-image',
+            is_active=True,
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'متخصصان مرتبط')
+        self.assertContains(response, 'متخصص حقوقی')
+        self.assertEqual(response.context['related_ads'], [])
+        self.assertEqual(len(response.context['related_experts']), 1)
+
+    def test_discussion_detail_renders_related_ads_and_experts(self):
+        import cloudinary
+        from ads.models import Ad, AdCategory
+        from askme.models import Moderator
+
+        cloudinary.config(
+            cloud_name='test',
+            api_key='test',
+            api_secret='test',
+            secure=True,
+        )
+        ad_category = AdCategory.objects.create(
+            name='خدمات حقوقی',
+            slug='legal-financial',
+        )
+        Ad.objects.create(
+            title='مشاور حقوقی',
+            slug='legal-ad-both',
+            category=ad_category,
+            owner=self.author,
+            image='test/ad-image',
+            target_url='https://example.com',
+            city='Stockholm',
+            plan='pro',
+            is_active=True,
+            is_approved=True,
+            url_approved=True,
+        )
+        expert_user = User.objects.create_user(
+            username='relatedexpertboth',
+            password='password123',
+        )
+        Moderator.objects.create(
+            user=expert_user,
+            expert_title='وکیل مهاجرت',
+            complete_name='متخصص حقوقی',
+            field_specialty='حقوق و مهاجرت',
+            slug='related-expert-both',
+            profile_image='test/expert-image',
+            is_active=True,
+        )
+        self.category.slug = 'immigration-residency'
+        self.category.save(update_fields=['slug'])
+
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'آگهی‌های مرتبط')
+        self.assertContains(response, 'متخصصان مرتبط')
+        self.assertEqual(len(response.context['related_ads']), 1)
+        self.assertEqual(len(response.context['related_experts']), 1)
+
+    def test_discussion_detail_renders_no_related_sections(self):
+        response = self.client.get(
+            reverse('community:discussion_detail', args=[self.discussion.slug]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'آگهی‌های مرتبط')
+        self.assertNotContains(response, 'متخصصان مرتبط')
+        self.assertEqual(response.context['related_ads'], [])
+        self.assertEqual(response.context['related_experts'], [])
 
     def test_discussion_create_requires_login(self):
         response = self.client.get(reverse('community:discussion_create'))

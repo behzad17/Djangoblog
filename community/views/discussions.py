@@ -24,6 +24,7 @@ from community.selectors.discussions import (
 )
 from community.selectors.replies import list_public_replies
 from ads.selectors.related import get_related_ads
+from experts.selectors.related import get_related_experts
 from community.services.discussions import close_discussion, create_discussion
 from community.services.replies import create_reply
 
@@ -109,6 +110,7 @@ def discussion_detail(request, slug):
 
     replies = list_public_replies(discussion)
     related_ads = get_related_ads(discussion, limit=3)
+    related_experts = get_related_experts(discussion, limit=3)
     return render(
         request,
         'community/discussion_detail.html',
@@ -116,6 +118,7 @@ def discussion_detail(request, slug):
             'discussion': discussion,
             'replies': replies,
             'related_ads': related_ads,
+            'related_experts': related_experts,
             'reply_form': ReplyCreateForm(),
             'can_reply': can_reply(request.user, discussion),
             'can_close': can_close(request.user, discussion),

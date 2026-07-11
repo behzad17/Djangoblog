@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.db.models import Q
 from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
+from experts.selectors.visibility import list_publicly_visible_experts
 from .models import Moderator, Question
 from .forms import QuestionForm, AnswerForm
 
@@ -20,7 +21,7 @@ def ask_me(request):
     Public view - anyone can see moderators, but only authenticated users can ask questions.
     """
     try:
-        moderators = Moderator.objects.filter(is_active=True).select_related('user')
+        moderators = list_publicly_visible_experts()
     except Exception:
         moderators = []
     

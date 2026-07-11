@@ -58,6 +58,10 @@
   {% include "community/includes/related_ads.html" %}
   {% endif %}
 
+  {% if related_experts %}
+  {% include "community/includes/related_experts.html" %}
+  {% endif %}
+
   {% if can_reply %}
   <section class="card shadow-sm">
     <div class="card-body">

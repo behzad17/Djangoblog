@@ -46,65 +46,7 @@
   <div class="row g-4 justify-content-center">
     {% for moderator in moderators %}
     <div class="col-lg-3 col-md-4 col-sm-6">
-      <div class="moderator-card card h-100 shadow-sm">
-        <div class="card-body text-center px-3 pt-3 pb-1">
-          <div class="moderator-image-wrapper mb-2">
-            <img
-              src="{% if moderator.profile_image and moderator.profile_image.url %}{{ moderator.profile_image.url }}{% else %}{{ default_image_url }}{% endif %}"
-              alt="{{ moderator.get_display_name }}"
-              class="moderator-image"
-              onerror="this.onerror=null; this.src='{{ default_image_url }}';"
-            />
-          </div>
-          <h5 class="moderator-name mb-1">
-            {% if moderator.slug %}
-            <a href="{% url 'expert_profile' moderator.slug %}" class="text-decoration-none text-dark">
-              {{ moderator.get_display_name }}
-            </a>
-            {% else %}
-            {{ moderator.get_display_name }}
-            {% endif %}
-          </h5>
-          <p class="moderator-title text-primary mb-2">
-            <i class="fas fa-certificate ms-1"></i>{{ moderator.expert_title }}
-          </p>
-          {% if moderator.bio %}
-          <p class="moderator-bio small text-muted mb-2">
-            {{ moderator.bio|striptags|truncatewords:15 }}
-          </p>
-          {% endif %}
-          <div class="moderator-stats mb-2">
-            <small class="text-muted">
-              <i class="fas fa-question-circle ms-1"></i>{{ moderator.question_count }} سوال پاسخ داده شده
-            </small>
-          </div>
-          {% if user.is_authenticated %}
-          {% if moderator.slug %}
-          <a
-            href="{% url 'expert_profile' moderator.slug %}"
-            class="btn btn-primary btn-sm w-100 ask-question-btn"
-          >
-            <i class="fas fa-paper-plane ms-2"></i>پرسیدن سوال
-          </a>
-          {% else %}
-          <button
-            type="button"
-            class="btn btn-primary btn-sm w-100 ask-question-btn"
-            disabled
-          >
-            <i class="fas fa-paper-plane ms-2"></i>پرسیدن سوال
-          </button>
-          {% endif %}
-          {% else %}
-          <a
-            href="{% url 'account_login' %}"
-            class="btn btn-outline-primary btn-sm w-100"
-          >
-            <i class="fas fa-sign-in-alt ms-2"></i>ورود برای پرسیدن
-          </a>
-          {% endif %}
-        </div>
-      </div>
+      {% include "askme/includes/_expert_card.html" with expert=moderator %}
     </div>
     {% endfor %}
   </div>

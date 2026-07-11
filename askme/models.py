@@ -107,6 +107,13 @@ class Moderator(models.Model):
     def question_count(self):
         """Returns the number of questions for this moderator."""
         return self.questions.count()
+
+    def get_directory_question_count(self):
+        """Return annotated count when available to avoid extra queries."""
+        annotated = getattr(self, 'display_question_count', None)
+        if annotated is not None:
+            return annotated
+        return self.question_count()
     
     def answered_count(self):
         """Returns the number of answered questions."""
