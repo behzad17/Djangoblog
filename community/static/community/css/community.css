@@ -42,11 +42,12 @@
 
 .community-home__headline {
   margin: 0 0 0.75rem;
-  font-size: clamp(1.65rem, 3.5vw, 2.35rem);
+  font-size: clamp(1.32rem, 2.8vw, 1.88rem);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.3;
   letter-spacing: -0.025em;
   color: var(--community-ink);
+  max-width: 36rem;
 }
 
 .community-home__lede {
