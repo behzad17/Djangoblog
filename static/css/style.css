@@ -6291,31 +6291,6 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
 }
 
 @media (max-width: 991.98px) {
-  .post-detail-layout {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .post-detail-layout > .post-detail-main {
-    display: contents;
-  }
-
-  .post-detail-article {
-    order: 1;
-  }
-
-  .post-detail-comments {
-    order: 2;
-  }
-
-  .post-detail-layout > .post-detail-sidebar {
-    order: 3;
-  }
-
-  .post-detail-related {
-    order: 4;
-  }
-
   .post-detail-banner-sidebar .ad-placeholder-top {
     margin-top: 15px;
     margin-bottom: 15px !important;
