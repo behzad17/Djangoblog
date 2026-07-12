@@ -26,6 +26,8 @@
     <title>{% block title %}Peyvand | جامعه آنلاین ایرانیانِ مقیم سوئد{% endblock title %}</title>
     <meta name="description" content="{% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق{% endblock meta_description %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {% include "includes/favicons.html" %}
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}" />

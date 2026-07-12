@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Monochrome mask for Safari pinned tabs; browser applies page accent color. -->
+  <circle cx="222" cy="388" r="173" fill="#000"/>
+  <circle cx="802" cy="388" r="173" fill="#000"/>
+  <path
+    d="M49 618 C49 814 295 814 590 814 C590 720 520 618 420 618 C320 618 295 618 49 618 Z"
+    fill="#000"
+  />
+  <path
+    d="M620 350 C620 814 1023 814 1023 560 C1023 350 920 350 820 350 C720 350 620 350 620 350 Z"
+    fill="#000"
+  />
+</svg>
