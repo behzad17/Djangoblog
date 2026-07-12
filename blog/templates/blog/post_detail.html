@@ -271,20 +271,8 @@
       </div>
       </div>
 
-      {% if related_ads %}
-      {% include "community/includes/related_ads.html" %}
-      {% endif %}
-
-      {% if related_experts %}
-      {% include "community/includes/related_experts.html" %}
-      {% endif %}
-
-      {% if related_useful_links %}
-      {% include "community/includes/related_useful_links.html" %}
-      {% endif %}
-
       <div class="post-detail-comments">
-      <!-- Comment Form (now above comments) -->
+      <!-- Comment Form -->
       <div class="card mb-3 shadow-sm border-0 comment-form-card">
         <div class="card-body">
           {% if user.is_authenticated %}
@@ -372,6 +360,12 @@
           </div>
         </div>
       </div>
+      </div>
+      {% endif %}
+
+      {% if related_useful_links %}
+      <div class="post-detail-useful-links">
+      {% include "community/includes/related_useful_links.html" %}
       </div>
       {% endif %}
     </div>

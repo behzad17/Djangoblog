@@ -6257,6 +6257,19 @@ main .hero-section:has(.hero-cta-cards-container) .hero-title-highlight {
   border-radius: 12px;
 }
 
+.post-detail-comments {
+  margin-top: 0;
+}
+
+.post-detail-related,
+.post-detail-useful-links {
+  margin-top: 0;
+}
+
+.post-detail-useful-links .related-content {
+  margin-bottom: 1rem;
+}
+
 .post-detail-banner-sidebar {
   display: flex;
   flex-direction: column;

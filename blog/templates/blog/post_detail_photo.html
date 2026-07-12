@@ -231,18 +231,6 @@
         </div>
       </div>
 
-      {% if related_ads %}
-      {% include "community/includes/related_ads.html" %}
-      {% endif %}
-
-      {% if related_experts %}
-      {% include "community/includes/related_experts.html" %}
-      {% endif %}
-
-      {% if related_useful_links %}
-      {% include "community/includes/related_useful_links.html" %}
-      {% endif %}
-
       <!-- Comment Form -->
       <div class="card mb-3 shadow-sm border-0 comment-form-card">
         <div class="card-body">
@@ -300,6 +288,31 @@
           {% endfor %}
         </div>
       </div>
+
+      {% if related_posts %}
+      <div class="post-detail-related">
+      <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="fas fa-th-list me-2"></i>Related Posts
+          </h5>
+          <div class="row blog-post-row g-3">
+            {% for related_post in related_posts %}
+            <div class="col-md-6 col-sm-12">
+              {% include 'includes/post_card.html' with post=related_post show_category=True show_meta=True %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      </div>
+      {% endif %}
+
+      {% if related_useful_links %}
+      <div class="post-detail-useful-links">
+      {% include "community/includes/related_useful_links.html" %}
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
