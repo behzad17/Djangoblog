@@ -18,3 +18,69 @@
     background-image: url('../../images/heroback-page-desktop.webp') !important;
   }
 }
+
+/* AskMe expert profile detail — taller hero, skyline-friendly crop */
+.expert-profile-hero {
+  display: flex;
+  align-items: center;
+  min-height: 320px;
+  padding-block: 2rem !important;
+  margin-bottom: 1rem !important;
+  background-position: center 55% !important;
+  background-size: cover !important;
+}
+
+.expert-profile-hero > .container {
+  width: 100%;
+}
+
+.expert-profile-hero .hero-title {
+  margin-top: 0 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.expert-profile-hero .hero-subtitle {
+  margin-inline: auto;
+  margin-right: auto;
+  margin-bottom: 0 !important;
+}
+
+.expert-profile-content {
+  margin-top: 0;
+}
+
+.expert-profile-back {
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .expert-profile-hero {
+    min-height: 280px;
+    padding-block: 1.75rem !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .expert-profile-hero {
+    min-height: 235px;
+    padding-block: 1.5rem !important;
+    width: 100% !important;
+  }
+
+  .expert-profile-hero > .container {
+    padding-inline: 1rem !important;
+    padding-block: 0 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .expert-profile-hero {
+    min-height: 320px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .expert-profile-hero {
+    min-height: 340px;
+  }
+}
