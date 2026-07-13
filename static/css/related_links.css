@@ -125,7 +125,7 @@
 
 .useful-link-category-card__count {
   margin-top: 0.35rem;
-  font-size: 0.8rem;
+  font-size: 0.96rem;
   font-weight: 500;
   color: var(--pv-text-muted, #6B7280);
   line-height: 1.3;
@@ -169,7 +169,7 @@
   }
 
   .useful-link-category-card__count {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 }
 
