@@ -2,6 +2,25 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load security_filters %}
+{% block social_meta %}
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{ post.title }} | Peyvand" />
+<meta property="og:description" content="{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% else %}{{ post.content|striptags|truncatewords:25 }}{% endif %}" />
+<meta property="og:url" content="https://{{ request.get_host }}{{ request.path }}" />
+<meta property="og:locale" content="fa_IR" />
+<meta property="og:site_name" content="Peyvand" />
+{% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
+<meta property="og:image" content="{% if post.featured_image.url|slice:':4' == 'http' %}{{ post.featured_image.url }}{% else %}https://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}" />
+{% else %}
+<meta property="og:image" content="https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}" />
+{% endif %}
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="{{ post.title }}" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="{% if post.featured_image and 'placeholder' not in post.featured_image.url|default:'' %}{% if post.featured_image.url|slice:':4' == 'http' %}{{ post.featured_image.url }}{% else %}https://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}{% else %}https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}{% endif %}" />
+{% endblock social_meta %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/related_content.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}

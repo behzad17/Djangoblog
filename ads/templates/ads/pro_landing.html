@@ -7,14 +7,21 @@
 
 {% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'ads:pro_landing' %}{% endblock canonical_url %}
 
-{% block extra_meta %}
+{% block social_meta %}
 <meta property="og:type" content="website" />
 <meta property="og:title" content="تبلیغ Pro پیوند | معرفی حرفه‌ای کسب‌وکار" />
 <meta property="og:description" content="با تبلیغ Pro در پیوند، کسب‌وکار خود را حرفه‌ای‌تر به جامعه ایرانیان سوئد معرفی کنید. مقایسه امکانات نسخه رایگان و Pro." />
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'ads:pro_landing' %}" />
 <meta property="og:locale" content="fa_IR" />
 <meta property="og:site_name" content="Peyvand" />
-{% endblock extra_meta %}
+<meta property="og:image" content="https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Peyvand — جامعه آنلاین ایرانیانِ مقیم سوئد" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}" />
+{% endblock social_meta %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/ads-pro-landing.css' %}?v={% now 'U' %}">

@@ -31,6 +31,22 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}" />
+    {% block social_meta %}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Peyvand" />
+    <meta property="og:description" content="جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق" />
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.path }}" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:site_name" content="Peyvand" />
+    <meta property="og:image" content="https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Peyvand — جامعه آنلاین ایرانیانِ مقیم سوئد" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}" />
+    {% endblock social_meta %}
+
     {% block extra_meta %}{% endblock extra_meta %}
 
     <!-- Google Fonts CSS - Loading custom fonts for the site -->
