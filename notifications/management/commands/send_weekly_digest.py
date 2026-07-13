@@ -49,7 +49,6 @@ class Command(BaseCommand):
         self.stdout.write(
             f'  articles={stats["new_articles"]}, '
             f'events={stats["new_events"]}, '
-            f'questions={stats["new_questions"]}, '
             f'businesses={stats["new_businesses"]}, '
             f'pro_ads={stats["new_pro_ads"]}'
         )

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تازه‌های این هفته | Peyvand{% endblock title %}
+{% block meta_description %}خلاصه فعالیت هفته گذشته در پیوند — مقالات، رویدادها، کسب‌وکارها و آگهی‌های ویژه.{% endblock meta_description %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/weekly-highlights.css' %}?v={% now 'U' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+<section class="hero-section hero-section--internal text-white weekly-highlights-hero">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="hero-title mb-2">تازه‌های این هفته</h1>
+        <p class="hero-subtitle mb-0">
+          خلاصه فعالیت هفت روز گذشته در پیوند
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container py-4 weekly-highlights-page">
+  {% if summary_lines %}
+  <section class="weekly-highlights-summary" aria-label="خلاصه هفته">
+    {% for line in summary_lines %}
+    <p class="weekly-highlights-summary__line">{{ line.emoji }} {{ line.text }}</p>
+    {% endfor %}
+  </section>
+  {% else %}
+  <div class="alert alert-light border weekly-highlights-empty">
+    این هفته فعالیت تازه‌ای در پیوند ثبت نشده است.
+  </div>
+  {% endif %}
+
+  {% if featured_items %}
+  <section class="weekly-highlights-section">
+    <h2 class="weekly-highlights-section__title">منتخب این هفته</h2>
+    <div class="weekly-highlights-featured-list">
+      {% for item in featured_items %}
+      <a href="{{ item.url }}" class="weekly-highlights-card">
+        {% if item.thumbnail_url %}
+        <img
+          src="{{ item.thumbnail_url }}"
+          alt=""
+          class="weekly-highlights-card__thumb"
+          width="68"
+          height="68"
+          loading="lazy"
+        />
+        {% endif %}
+        <span class="weekly-highlights-card__body">
+          <span class="weekly-highlights-card__title">{{ item.title }}</span>
+          <span class="weekly-highlights-card__description">{{ item.description }}</span>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if articles %}
+  <section class="weekly-highlights-section">
+    <h2 class="weekly-highlights-section__title">📰 مقالات</h2>
+    <div class="weekly-highlights-list">
+      {% for post in articles %}
+      <a href="{% url 'post_detail' post.slug %}" class="weekly-highlights-card">
+        {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
+        <img
+          src="{{ post.featured_image.url }}"
+          alt=""
+          class="weekly-highlights-card__thumb"
+          width="68"
+          height="68"
+          loading="lazy"
+        />
+        {% endif %}
+        <span class="weekly-highlights-card__body">
+          <span class="weekly-highlights-card__title">{{ post.title }}</span>
+          {% if post.excerpt %}
+          <span class="weekly-highlights-card__description">{{ post.excerpt|truncatewords:18 }}</span>
+          {% endif %}
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if events %}
+  <section class="weekly-highlights-section">
+    <h2 class="weekly-highlights-section__title">📅 رویدادها</h2>
+    <div class="weekly-highlights-list">
+      {% for post in events %}
+      <a href="{% url 'post_detail' post.slug %}" class="weekly-highlights-card">
+        {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
+        <img
+          src="{{ post.featured_image.url }}"
+          alt=""
+          class="weekly-highlights-card__thumb"
+          width="68"
+          height="68"
+          loading="lazy"
+        />
+        {% endif %}
+        <span class="weekly-highlights-card__body">
+          <span class="weekly-highlights-card__title">{{ post.title }}</span>
+          {% if post.event_location %}
+          <span class="weekly-highlights-card__description">{{ post.event_location }}</span>
+          {% elif post.excerpt %}
+          <span class="weekly-highlights-card__description">{{ post.excerpt|truncatewords:18 }}</span>
+          {% endif %}
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if businesses %}
+  <section class="weekly-highlights-section">
+    <h2 class="weekly-highlights-section__title">🏢 کسب‌وکارها</h2>
+    <div class="weekly-highlights-list">
+      {% for ad in businesses %}
+      <a href="{% url 'ads:ad_detail' ad.slug %}" class="weekly-highlights-card">
+        {% if ad.image and "placeholder" not in ad.image.url|default:"" %}
+        <img
+          src="{{ ad.image.url }}"
+          alt=""
+          class="weekly-highlights-card__thumb"
+          width="68"
+          height="68"
+          loading="lazy"
+        />
+        {% endif %}
+        <span class="weekly-highlights-card__body">
+          <span class="weekly-highlights-card__title">{{ ad.title }}</span>
+          <span class="weekly-highlights-card__description">
+            {% if ad.city %}{{ ad.city }} — {% endif %}{{ ad.category.name }}
+          </span>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if pro_ads %}
+  <section class="weekly-highlights-section">
+    <h2 class="weekly-highlights-section__title">⭐ آگهی‌های ویژه</h2>
+    <div class="weekly-highlights-list">
+      {% for ad in pro_ads %}
+      <a href="{% url 'ads:ad_detail' ad.slug %}" class="weekly-highlights-card">
+        {% if ad.image and "placeholder" not in ad.image.url|default:"" %}
+        <img
+          src="{{ ad.image.url }}"
+          alt=""
+          class="weekly-highlights-card__thumb"
+          width="68"
+          height="68"
+          loading="lazy"
+        />
+        {% endif %}
+        <span class="weekly-highlights-card__body">
+          <span class="weekly-highlights-card__title">{{ ad.title }}</span>
+          <span class="weekly-highlights-card__description">
+            {% if ad.city %}{{ ad.city }} — {% endif %}{{ ad.category.name }}
+          </span>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

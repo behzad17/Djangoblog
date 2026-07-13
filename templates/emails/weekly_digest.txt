@@ -1,16 +1,22 @@
 سلام {{ user_name }}
 
-در هفته گذشته موارد زیر در پیوند منتشر شده‌اند:
+{% if summary_lines %}این هفته در پیوند:
 
-• {{ new_articles }} مقاله جدید
-• {{ new_events }} رویداد جدید
-• {{ new_questions }} سوال جدید
-• {{ new_businesses }} کسب‌وکار جدید
-• {{ new_pro_ads }} آگهی Pro جدید
-
-برای مشاهده آخرین فعالیت‌ها روی لینک زیر کلیک کنید.
-
-مشاهده جدیدترین مطالب: {{ cta_url }}
+{% for line in summary_lines %}{{ line.emoji }} {{ line.text }}
+{% endfor %}
+{% else %}این هفته فعالیت تازه‌ای در پیوند ثبت نشده است.
+{% endif %}
+{% if featured_items %}
+منتخب این هفته
+{% for item in featured_items %}
+• {{ item.title }}
+  {{ item.description }}
+  {{ item.url }}
+{% endfor %}
+{% endif %}
+{% if cta_url and cta_text %}
+{{ cta_text }}: {{ cta_url }}
+{% endif %}
 
 ---
 این پیام از طرف پیوند ارسال شده است.

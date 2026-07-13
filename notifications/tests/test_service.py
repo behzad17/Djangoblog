@@ -96,13 +96,20 @@ class NotificationServiceTests(TestCase):
             recipient=self.user,
             notification_type=NotificationType.WEEKLY_DIGEST,
             email_context={
-                'new_articles': 3,
-                'new_events': 1,
-                'new_questions': 2,
-                'new_businesses': 4,
-                'new_pro_ads': 1,
-                'cta_url': 'https://peyvand.se/',
-                'cta_text': 'مشاهده جدیدترین مطالب',
+                'summary_lines': [
+                    {'emoji': '📰', 'text': '3 مقاله جدید'},
+                    {'emoji': '📅', 'text': '1 رویداد جدید'},
+                ],
+                'featured_items': [
+                    {
+                        'title': 'Featured Article',
+                        'description': 'Short description',
+                        'url': 'https://peyvand.se/article/',
+                        'thumbnail_url': None,
+                    }
+                ],
+                'cta_url': 'https://peyvand.se/this-week/',
+                'cta_text': 'مشاهده همه 3 مقاله',
             },
         )
 
@@ -110,6 +117,8 @@ class NotificationServiceTests(TestCase):
         self.assertEqual(Notification.objects.count(), 0)
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn('آنچه این هفته در پیوند اتفاق افتاد', mail.outbox[0].subject)
+        self.assertIn('منتخب این هفته', mail.outbox[0].body)
+        self.assertNotIn('سوال جدید', mail.outbox[0].body)
 
     def test_favorite_copy_constant(self):
         from notifications.constants import IN_APP_MESSAGES

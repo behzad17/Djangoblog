@@ -1,22 +1,33 @@
-from datetime import datetime, timedelta
 import logging
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.utils import timezone
 
 from ads.models import Ad
-from askme.models import Question
-from blog.models import Post
 
 from .constants import NotificationType
 from .dispatchers import notify_ad_expiring
-from .email import build_site_url
 from .services import NotificationService
+from .weekly_digest import (
+    build_weekly_digest_email_context,
+    build_weekly_digest_stats,
+    get_weekly_digest_period,
+    get_weekly_digest_recipients,
+    is_weekly_digest_send_day,
+)
 
 User = get_user_model()
-EVENTS_CATEGORY_SLUG = 'events-announcements'
 logger = logging.getLogger(__name__)
+
+# Re-exported for tests and management command output.
+__all__ = [
+    'build_weekly_digest_stats',
+    'get_weekly_digest_period',
+    'get_weekly_digest_recipients',
+    'is_weekly_digest_send_day',
+    'send_weekly_digest',
+]
 
 
 def get_expiring_ads(days=7):
@@ -75,72 +86,6 @@ def send_expiring_ad_notifications(*, days=7, dry_run=False):
     return summary
 
 
-def get_weekly_digest_period():
-    """Return the 7-day window ending at the start of today (local time)."""
-    period_end = timezone.localdate()
-    period_start = period_end - timedelta(days=7)
-    return period_start, period_end
-
-
-def build_weekly_digest_stats(period_start, period_end):
-    """Aggregate Peyvand activity counts for the weekly digest email."""
-    start_dt = timezone.make_aware(datetime.combine(period_start, datetime.min.time()))
-    end_exclusive = period_end + timedelta(days=1)
-    end_dt = timezone.make_aware(datetime.combine(end_exclusive, datetime.min.time()))
-
-    published_posts = Post.objects.filter(
-        status=1,
-        is_deleted=False,
-        created_on__gte=start_dt,
-        created_on__lt=end_dt,
-    )
-
-    return {
-        'new_articles': published_posts.exclude(
-            category__slug=EVENTS_CATEGORY_SLUG
-        ).count(),
-        'new_events': published_posts.filter(
-            category__slug=EVENTS_CATEGORY_SLUG
-        ).count(),
-        'new_questions': Question.objects.filter(
-            created_on__gte=start_dt,
-            created_on__lt=end_dt,
-        ).count(),
-        'new_businesses': Ad.objects.filter(
-            is_approved=True,
-            is_active=True,
-            created_on__gte=start_dt,
-            created_on__lt=end_dt,
-        ).count(),
-        'new_pro_ads': Ad.objects.filter(
-            plan='pro',
-            updated_on__gte=start_dt,
-            updated_on__lt=end_dt,
-        ).count(),
-        'period_start': period_start,
-        'period_end': period_end,
-    }
-
-
-def get_weekly_digest_recipients(user_id=None):
-    """Return active users opted in to the weekly digest."""
-    queryset = User.objects.filter(
-        is_active=True,
-        notification_preferences__weekly_digest=True,
-    ).exclude(email='')
-
-    if user_id is not None:
-        queryset = queryset.filter(pk=user_id)
-
-    return queryset.select_related('notification_preferences').order_by('id')
-
-
-def is_weekly_digest_send_day(for_date=None):
-    """Return True when the weekly digest is allowed to send (Friday, local time)."""
-    target_date = for_date or timezone.localdate()
-    return target_date.weekday() == 4
-
-
 def send_weekly_digest(*, dry_run=False, user_id=None):
     """
     Send the weekly digest email to opted-in users.
@@ -183,16 +128,7 @@ def send_weekly_digest(*, dry_run=False, user_id=None):
         'stats': stats,
     }
 
-    cta_url = build_site_url(reverse('home'))
-    email_context = {
-        'new_articles': stats['new_articles'],
-        'new_events': stats['new_events'],
-        'new_questions': stats['new_questions'],
-        'new_businesses': stats['new_businesses'],
-        'new_pro_ads': stats['new_pro_ads'],
-        'cta_url': cta_url,
-        'cta_text': 'مشاهده جدیدترین مطالب',
-    }
+    email_context = build_weekly_digest_email_context(period_start, period_end)
 
     for user in recipients:
         preferences = getattr(user, 'notification_preferences', None)

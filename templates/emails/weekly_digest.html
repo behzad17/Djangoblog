@@ -4,13 +4,39 @@
 {% block header_title %}خلاصه هفتگی پیوند{% endblock %}
 
 {% block email_content %}
-<p>در هفته گذشته موارد زیر در پیوند منتشر شده‌اند:</p>
-<ul style="padding-right: 20px; margin: 0;">
-    <li>{{ new_articles }} مقاله جدید</li>
-    <li>{{ new_events }} رویداد جدید</li>
-    <li>{{ new_questions }} سوال جدید</li>
-    <li>{{ new_businesses }} کسب‌وکار جدید</li>
-    <li>{{ new_pro_ads }} آگهی Pro جدید</li>
-</ul>
-<p>برای مشاهده آخرین فعالیت‌ها روی دکمه زیر کلیک کنید.</p>
+{% if summary_lines %}
+<p style="margin: 0 0 14px;">این هفته در پیوند:</p>
+<div style="margin: 0 0 22px;">
+  {% for line in summary_lines %}
+  <p style="margin: 0 0 8px; font-size: 15px; color: #1e293b;">{{ line.emoji }} {{ line.text }}</p>
+  {% endfor %}
+</div>
+{% else %}
+<p style="margin: 0 0 22px;">این هفته فعالیت تازه‌ای در پیوند ثبت نشده است.</p>
+{% endif %}
+
+{% if featured_items %}
+<h2 style="margin: 0 0 14px; font-size: 17px; color: #1e293b;">منتخب این هفته</h2>
+{% for item in featured_items %}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin: 0 0 14px;">
+  <tr>
+    {% if item.thumbnail_url %}
+    <td width="68" valign="top" style="padding-left: 12px;">
+      <a href="{{ item.url }}" style="text-decoration: none;">
+        <img src="{{ item.thumbnail_url }}" alt="" width="68" height="68" style="display: block; width: 68px; height: 68px; border-radius: 8px; object-fit: cover; border: 0;">
+      </a>
+    </td>
+    {% endif %}
+    <td valign="top" style="{% if not item.thumbnail_url %}padding-right: 0;{% endif %}">
+      <a href="{{ item.url }}" style="display: block; font-size: 15px; font-weight: 700; color: #1b5583; text-decoration: none; margin-bottom: 4px;">{{ item.title }}</a>
+      <div style="font-size: 13px; line-height: 1.5; color: #64748b;">{{ item.description }}</div>
+    </td>
+  </tr>
+</table>
+{% endfor %}
+{% endif %}
+
+{% if cta_url and cta_text %}
+<p style="margin: 8px 0 0;">برای دیدن همه تازه‌های این هفته روی دکمه زیر کلیک کنید.</p>
+{% endif %}
 {% endblock %}

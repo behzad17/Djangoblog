@@ -12,6 +12,7 @@ urlpatterns = [
     path('remove-from-favorites/<int:post_id>/', views.remove_from_favorites, name='remove_from_favorites'),
     path('like-post/<int:post_id>/', views.like_post, name='like_post'),
     path('complete-setup/', views.complete_setup, name='complete_setup'),
+    path('this-week/', views.weekly_highlights, name='weekly_highlights'),
     # Use str instead of slug to allow Unicode characters (Persian/Farsi)
     path('<str:slug>/', views.post_detail, name='post_detail'),
     path('<str:slug>/edit/', views.edit_post, name='edit_post'),

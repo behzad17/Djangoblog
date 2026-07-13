@@ -30,6 +30,10 @@ from .decorators import site_verified_required
 from ads.models import FavoriteAd
 from ads.homepage_pro_ads import get_homepage_pro_ads
 from django.utils import timezone
+from notifications.weekly_digest import (
+    build_weekly_digest_page_context,
+    get_weekly_digest_period,
+)
 
 
 class PostList(generic.ListView):
@@ -955,3 +959,10 @@ def category_posts(request, category_slug):
             'is_paginated': page_obj.has_other_pages(),
         }
     )
+
+
+def weekly_highlights(request):
+    """Public landing page for this week's Peyvand activity."""
+    period_start, period_end = get_weekly_digest_period()
+    context = build_weekly_digest_page_context(period_start, period_end)
+    return render(request, 'blog/weekly_highlights.html', context)

@@ -11,7 +11,6 @@ from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from ads.models import Ad, AdCategory
-from askme.models import Moderator, Question
 from blog.models import Category, Post
 from notifications.constants import NotificationType
 from notifications.models import Notification
@@ -152,24 +151,12 @@ class WeeklyDigestCommandTests(TestCase):
             email='author@test.com',
             password='password123',
         )
+        prefs = NotificationService.get_or_create_preferences(self.author)
+        prefs.weekly_digest = False
+        prefs.save(update_fields=['weekly_digest'])
         self.ad_category = AdCategory.objects.create(name='Biz', slug='biz')
-        self.moderator_user = User.objects.create_user(
-            username='mod',
-            email='mod@test.com',
-            password='password123',
-        )
-        for user in (self.author, self.moderator_user):
-            prefs = NotificationService.get_or_create_preferences(user)
-            prefs.weekly_digest = False
-            prefs.save(update_fields=['weekly_digest'])
-        self.moderator = Moderator.objects.create(
-            user=self.moderator_user,
-            expert_title='Expert',
-            slug='expert',
-        )
 
     def test_build_weekly_digest_stats_counts_activity(self):
-        now = timezone.now()
         Post.objects.create(
             title='Article',
             slug='article',
@@ -185,11 +172,6 @@ class WeeklyDigestCommandTests(TestCase):
             content='Body',
             status=1,
             category=self.events_category,
-        )
-        Question.objects.create(
-            user=self.subscriber,
-            moderator=self.moderator,
-            question_text='Private',
         )
         Ad.objects.create(
             title='Business',
@@ -210,7 +192,7 @@ class WeeklyDigestCommandTests(TestCase):
 
         self.assertGreaterEqual(stats['new_articles'], 1)
         self.assertGreaterEqual(stats['new_events'], 1)
-        self.assertGreaterEqual(stats['new_questions'], 1)
+        self.assertNotIn('new_questions', stats)
         self.assertGreaterEqual(stats['new_businesses'], 1)
         self.assertGreaterEqual(stats['new_pro_ads'], 1)
 
