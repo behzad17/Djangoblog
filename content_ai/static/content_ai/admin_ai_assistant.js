@@ -604,6 +604,34 @@
       renderVersions();
     }
 
+    function resetAssistantFields() {
+      if (!form) {
+        return;
+      }
+      var title = form.querySelector('[name="title"]');
+      var category = form.querySelector('[name="category_id"]');
+      var language = form.querySelector('[name="language"]');
+      var context = form.querySelector('[name="context"]');
+      var instructions = form.querySelector('[name="instructions"]');
+      var initialTitle = root.getAttribute('data-initial-title') || '';
+      var initialCategory = root.getAttribute('data-initial-category') || '';
+      if (title) {
+        title.value = initialTitle;
+      }
+      if (category) {
+        category.value = initialCategory;
+      }
+      if (language) {
+        language.value = 'sv';
+      }
+      if (context) {
+        context.value = '';
+      }
+      if (instructions) {
+        instructions.value = '';
+      }
+    }
+
     function resetSession() {
       versions = [];
       activeIndex = null;
@@ -613,21 +641,7 @@
       renderVersions();
       resetFeedbackForm();
       stopLoading();
-      if (form) {
-        form.reset();
-        var lang = form.querySelector('[name="language"]');
-        if (lang && !lang.value) {
-          lang.value = 'sv';
-        }
-        var initialTitle = root.getAttribute('data-initial-title') || '';
-        var initialCategory = root.getAttribute('data-initial-category') || '';
-        if (initialTitle) {
-          form.querySelector('[name="title"]').value = initialTitle;
-        }
-        if (initialCategory) {
-          form.querySelector('[name="category_id"]').value = initialCategory;
-        }
-      }
+      resetAssistantFields();
     }
 
     function openModal() {
@@ -653,19 +667,34 @@
     }
 
     function collectRequest() {
-      var categorySelect = form.querySelector('[name="category_id"]');
+      // Modal lives inside Django Admin's <form>; assistant fields must not be a nested
+      // <form> (browsers drop it → form is null). Resolve the field container each call.
+      var fieldRoot = form || document.getElementById('ai-assistant-form');
+      if (!fieldRoot) {
+        showError('Assistant form is unavailable. Reload the page and try again.');
+        return null;
+      }
+      var categorySelect = fieldRoot.querySelector('[name="category_id"]');
+      if (!categorySelect) {
+        showError('Category field is missing.');
+        return null;
+      }
       var categoryId = categorySelect.value;
       var categoryName = '';
       if (categorySelect.selectedIndex >= 0) {
         categoryName = categorySelect.options[categorySelect.selectedIndex].text;
       }
+      var titleEl = fieldRoot.querySelector('[name="title"]');
+      var languageEl = fieldRoot.querySelector('[name="language"]');
+      var contextEl = fieldRoot.querySelector('[name="context"]');
+      var instructionsEl = fieldRoot.querySelector('[name="instructions"]');
       return {
-        title: form.querySelector('[name="title"]').value || '',
+        title: (titleEl && titleEl.value) || '',
         category_id: categoryId ? Number(categoryId) : null,
         category: categoryName,
-        language: form.querySelector('[name="language"]').value || '',
-        context: form.querySelector('[name="context"]').value || '',
-        instructions: form.querySelector('[name="instructions"]').value || '',
+        language: (languageEl && languageEl.value) || '',
+        context: (contextEl && contextEl.value) || '',
+        instructions: (instructionsEl && instructionsEl.value) || '',
         post_id: root.getAttribute('data-post-id') || '',
       };
     }
@@ -759,6 +788,9 @@
 
       var fromRegenerate = actionId === 'regenerate';
       var payload = fromRegenerate && lastRequest ? lastRequest : collectRequest();
+      if (!payload) {
+        return;
+      }
       if (!payload.category_id) {
         showError('Please choose a category.');
         return;

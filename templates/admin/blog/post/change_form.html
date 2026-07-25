@@ -42,7 +42,7 @@
       Closing without Use Draft / Regenerate / Reject does not store feedback.
     </p>
 
-    <form id="ai-assistant-form" onsubmit="return false;">
+    <div id="ai-assistant-form" class="ai-assistant-fields">
       <label for="ai-field-title">Title</label>
       <input id="ai-field-title" type="text" name="title" maxlength="200" value="{{ ai_assistant_initial_title|escape }}" autocomplete="off">
 
@@ -65,7 +65,7 @@
 
       <label for="ai-field-instructions">Instructions</label>
       <textarea id="ai-field-instructions" name="instructions" rows="3"></textarea>
-    </form>
+    </div>
 
     <div class="ai-assistant-section">
       <h3 class="ai-assistant-section-title">Primary Action</h3>

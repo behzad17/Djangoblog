@@ -51,7 +51,13 @@ class AdminAssistantUxChromeTests(TestCase):
         self.assertContains(response, 'id="ai-preview-diff-details"')
         self.assertContains(response, 'Changes from previous version')
 
-    def test_static_assets_referenced(self):
+    def test_assistant_fields_are_not_nested_form(self):
+        """
+        Assistant fields sit inside Django Admin's change <form>.
+        A nested <form> is dropped by browsers, leaving collectRequest() with null.
+        """
         response = self.client.get(reverse('admin:blog_post_add'))
-        self.assertContains(response, 'admin_ai_assistant.js')
-        self.assertContains(response, 'admin_ai_assistant.css')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="ai-assistant-form"')
+        self.assertNotContains(response, '<form id="ai-assistant-form"')
+        self.assertContains(response, 'class="ai-assistant-fields"')
