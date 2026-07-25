@@ -64,7 +64,7 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
 
         self.client.responses.create.assert_called_once_with(
             model='gpt-test-model',
-            input='post prompt',
+            input='Write one short sentence in Persian saying hello.',
         )
         self.assertIsInstance(result, GenerationResult)
         self.assertTrue(result.success)
@@ -92,7 +92,7 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
 
         self.client.responses.create.assert_called_once_with(
             model='gpt-test-model',
-            input='ad prompt',
+            input='Write one short sentence in Persian saying hello.',
         )
         self.assertIsInstance(result, GenerationResult)
         self.assertEqual(result.content, 'Generated ad body')
@@ -135,11 +135,15 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
                 self.provider.generate_post('prompt')
 
         joined = '\n'.join(logs.output)
-        self.assertIn('OpenAI generation failed before GenerationError', joined)
+        self.assertIn(
+            'OpenAI generation failed after',
+            joined,
+        )
         self.assertIn('status_code=400', joined)
         self.assertIn('model_not_found', joined)
         self.assertIn('bad model', joined)
         self.assertIn('FakeAPIError', joined)
+        self.assertIn('request_id', joined)
 
     def test_usage_mapped_into_telemetry(self):
         response = MagicMock()

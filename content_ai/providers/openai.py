@@ -6,6 +6,7 @@ Never exposes raw SDK response objects to callers.
 from __future__ import annotations
 
 import logging
+import time
 
 from django.conf import settings
 
@@ -125,21 +126,43 @@ class OpenAIProvider(BaseAIProvider):
 
     def _generate(self, prompt, task):
         prompt_text = prompt or ''
+        # TEMPORARY DIAGNOSTIC: isolate timeout cause (prompt vs SDK/network/model).
+        # Revert to input=prompt after the diagnostic run.
+        diagnostic_input = (
+            'Write one short sentence in Persian saying hello.'
+        )
+        logger.info(
+            'OpenAI request starting: model=%s timeout=%s prompt_chars=%d preview=%r',
+            self.model,
+            self.timeout,
+            len(prompt_text),
+            prompt_text[:300],
+        )
+        logger.info(
+            'OpenAI TEMPORARY diagnostic input active: %r',
+            diagnostic_input,
+        )
+        started = time.monotonic()
         try:
             response = self._client.responses.create(
                 model=self.model,
-                input=prompt,
+                input=diagnostic_input,
             )
         except Exception as exc:
+            elapsed = time.monotonic() - started
             details = _openai_error_details(exc)
             # Full stack + OpenAI payload (status, body, error.code/message).
             logger.exception(
-                'OpenAI generation failed before GenerationError: '
-                'status_code=%s error_code=%s error_message=%s body=%s details=%s',
+                'OpenAI generation failed after %.2fs before GenerationError: '
+                'status_code=%s error_code=%s error_message=%s body=%s '
+                'response_text=%s request_id=%s details=%s',
+                elapsed,
                 details.get('status_code'),
                 details.get('error_code'),
                 details.get('error_message'),
                 details.get('body'),
+                details.get('response_text'),
+                details.get('request_id'),
                 details,
             )
             telemetry = AIExecutionTelemetry(
@@ -149,16 +172,24 @@ class OpenAIProvider(BaseAIProvider):
                 error_type=type(exc).__name__,
                 prompt_length=len(prompt_text),
                 response_length=0,
+                duration_ms=round(elapsed * 1000, 3),
                 metadata={
                     'openai_status_code': details.get('status_code'),
                     'openai_error_code': details.get('error_code'),
                     'openai_error_message': details.get('error_message'),
+                    'openai_request_id': details.get('request_id'),
                 },
             )
             raise GenerationError(
                 f'OpenAI generation failed: {exc}',
                 telemetry=telemetry,
             ) from exc
+
+        elapsed = time.monotonic() - started
+        logger.info(
+            'OpenAI response received successfully in %.2fs',
+            elapsed,
+        )
 
         content = getattr(response, 'output_text', None)
         if content is None:
@@ -171,6 +202,7 @@ class OpenAIProvider(BaseAIProvider):
             success=True,
             prompt_length=len(prompt_text),
             response_length=len(content_text),
+            duration_ms=round(elapsed * 1000, 3),
             token_usage=_extract_token_usage(response),
             estimated_cost=None,
             metadata={'response_id': getattr(response, 'id', None)},
