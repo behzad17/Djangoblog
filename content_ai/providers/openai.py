@@ -11,10 +11,12 @@ import time
 from django.conf import settings
 
 from content_ai.providers.base import BaseAIProvider
+from content_ai.providers.capabilities import ProviderCapabilities
 from content_ai.providers.exceptions import (
     GenerationError,
     ProviderConfigurationError,
 )
+from content_ai.providers.models import ModelMetadata
 from content_ai.schemas.responses import GenerationResult
 from content_ai.telemetry import AIExecutionTelemetry
 
@@ -125,6 +127,26 @@ class OpenAIProvider(BaseAIProvider):
 
     def generate_ad(self, prompt=''):
         return self._generate(prompt, task='ad_generation')
+
+    def capabilities(self) -> ProviderCapabilities:
+        return ProviderCapabilities(
+            text_generation=True,
+            json_output=False,
+            streaming=False,
+            structured_output=False,
+            long_context=True,
+        )
+
+    def discover_models(self) -> list[ModelMetadata]:
+        return [
+            ModelMetadata(
+                provider=self.name,
+                model=self.model,
+                supports_json=False,
+                supports_streaming=False,
+                status='available',
+            )
+        ]
 
     def _generate(self, prompt, task):
         prompt_text = prompt or ''

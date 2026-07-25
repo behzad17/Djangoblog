@@ -44,6 +44,9 @@ ENABLE_AI_EVALUATION_FRAMEWORK = False
 # Fact checking framework (RFC-007) — passive; never auto-approves publish.
 ENABLE_FACT_CHECKING_FRAMEWORK = False
 
+# Provider platform manager/factory (RFC-005) — optional; get_provider unchanged.
+ENABLE_PROVIDER_PLATFORM = False
+
 FEATURE_FLAGS: dict[str, bool] = {
     # When True, production may call PromptBuilder (not enabled).
     'use_ai_engine_prompt_builder': False,
@@ -58,4 +61,5 @@ FEATURE_FLAGS: dict[str, bool] = {
     'ENABLE_EDITORIAL_WORKFLOW': ENABLE_EDITORIAL_WORKFLOW,
     'ENABLE_AI_EVALUATION_FRAMEWORK': ENABLE_AI_EVALUATION_FRAMEWORK,
     'ENABLE_FACT_CHECKING_FRAMEWORK': ENABLE_FACT_CHECKING_FRAMEWORK,
+    'ENABLE_PROVIDER_PLATFORM': ENABLE_PROVIDER_PLATFORM,
 }

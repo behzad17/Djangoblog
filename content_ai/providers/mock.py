@@ -1,6 +1,8 @@
 """Deterministic mock provider for architecture and tests. No network calls."""
 
 from content_ai.providers.base import BaseAIProvider
+from content_ai.providers.capabilities import ProviderCapabilities
+from content_ai.providers.models import ModelMetadata
 from content_ai.schemas.responses import GenerationResult
 from content_ai.telemetry import AIExecutionTelemetry
 
@@ -17,6 +19,23 @@ class MockProvider(BaseAIProvider):
     """
 
     name = 'mock'
+
+    def capabilities(self) -> ProviderCapabilities:
+        return ProviderCapabilities(
+            text_generation=True,
+            json_output=True,
+            streaming=False,
+        )
+
+    def discover_models(self) -> list[ModelMetadata]:
+        return [
+            ModelMetadata(
+                provider=self.name,
+                model=MOCK_MODEL,
+                supports_json=True,
+                status='available',
+            )
+        ]
 
     def _result(self, prompt='', metadata=None, warnings=None):
         meta = {'prompt': prompt}

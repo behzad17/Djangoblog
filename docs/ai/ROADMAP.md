@@ -25,7 +25,7 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 |-----|--------|--------|
 | RFC-003 | Editorial Workflow | Done (inactive architecture) |
 | RFC-004 | Prompt Evaluation | Done (inactive architecture) |
-| RFC-005 | AI Provider Abstraction | Deepen multi-provider readiness (beyond current registry) |
+| RFC-005 | AI Provider Abstraction | Done (compatible architecture) |
 
 **Depends on:** Phase 1  
 **Outcome:** Safer editorial loops and evaluation before expanding intelligence features.

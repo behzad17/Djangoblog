@@ -17,7 +17,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-002.5** | Editorial Knowledge Base | 1 Foundation | Done | `sweden` / `community` / `peyvand` content |
 | **RFC-003** | Editorial Workflow | 2 Platform | Done (architecture) | Lifecycle orchestrator; inactive (`ENABLE_EDITORIAL_WORKFLOW=False`) |
 | **RFC-004** | Prompt Evaluation | 2 Platform | Done (architecture) | Passive metrics/snapshots/reports (`ENABLE_AI_EVALUATION_FRAMEWORK=False`) |
-| **RFC-005** | AI Provider Abstraction | 2 Platform | Planned | Extend multi-provider strategy ([providers.md](./providers.md) today) |
+| **RFC-005** | AI Provider Abstraction | 2 Platform | Done (architecture) | Manager/factory/capabilities; OpenAI path unchanged |
 | **RFC-006** | Source Intelligence | 3 Intelligence | Planned | Sources & citations |
 | **RFC-007** | Fact Checking | 3 Intelligence | Done (architecture) | Passive claim/evidence pipeline (`ENABLE_FACT_CHECKING_FRAMEWORK=False`) |
 | **RFC-008** | SEO Intelligence | 3 Intelligence | Planned | SEO assists |
@@ -59,7 +59,8 @@ comparison, and report builders. Independent from generation stacks.
 
 ### RFC-005 — AI Provider Abstraction
 
-Strengthen vendor-neutral provider strategy, failover, and configuration (builds on existing registry).
+Provider platform: registry, factory, manager, capabilities, usage reports.
+Existing ``get_provider`` / OpenAI behaviour remain compatible.
 
 ### RFC-006 — Source Intelligence
 
