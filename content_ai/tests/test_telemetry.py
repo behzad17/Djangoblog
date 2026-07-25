@@ -99,7 +99,7 @@ class GenerationServiceTelemetryTests(SimpleTestCase):
         provider.generate_post.side_effect = GenerationError('boom')
 
         with patch(
-            'content_ai.services.generation.get_provider',
+            'content_ai.providers.registry.get_provider',
             return_value=provider,
         ):
             with self.assertRaises(GenerationError) as ctx:

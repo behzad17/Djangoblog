@@ -22,4 +22,5 @@ class ResearchService(WorkflowStageService):
         # Knowledge retrieval hook point (RFC-002 / future RAG) — inactive.
         context.extension_data.setdefault('hooks', {})
         context.extension_data['hooks']['knowledge_retrieval'] = 'pending'
+        context.extension_data['hooks']['preparation'] = 'completed'
         return context

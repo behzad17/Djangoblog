@@ -1,7 +1,7 @@
 """Editorial workflow package (RFC-003).
 
-Inactive architecture for the AI-assisted editorial lifecycle.
-Does not change production generation or publishing.
+Production generation is coordinated by WorkflowOrchestrator.execute().
+Does not auto-publish Blog posts.
 """
 
 from content_ai.workflow.context import StageLogEntry, WorkflowContext
@@ -13,6 +13,7 @@ from content_ai.workflow.exceptions import (
     WorkflowValidationError,
 )
 from content_ai.workflow.orchestrator import (
+    PRODUCTION_GENERATION_STAGES,
     WorkflowOrchestrator,
     create_initial_context,
     default_stages,
@@ -37,4 +38,5 @@ __all__ = [
     'can_transition',
     'create_initial_context',
     'default_stages',
+    'PRODUCTION_GENERATION_STAGES',
 ]

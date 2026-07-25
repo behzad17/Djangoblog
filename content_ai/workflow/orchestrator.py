@@ -33,12 +33,16 @@ from content_ai.workflow.states import (
 logger = logging.getLogger(__name__)
 
 
+# Production generation sequence (preparation → drafting/prompt+provider).
+PRODUCTION_GENERATION_STAGES: tuple[str, ...] = ('research', 'drafting')
+
+
 class WorkflowOrchestrator:
     """
     Execute registered workflow stages and manage state transitions.
 
     Does not hardcode editorial business rules beyond transition validation.
-    Does not call production generation or publish Blog posts.
+    Does not publish Blog posts. Production generation runs via ``execute()``.
     """
 
     def __init__(self, stages: Iterable[WorkflowStageService] | None = None):
@@ -186,6 +190,31 @@ class WorkflowOrchestrator:
                 context.model,
             )
 
+        return context
+
+    def execute(
+        self,
+        context: WorkflowContext,
+        stage_names: Iterable[str] | None = None,
+    ) -> WorkflowContext:
+        """
+        Run stages in order through ``run_stage``.
+
+        Default sequence is the production generation path:
+        ``research`` (preparation) then ``drafting`` (prompt assembly +
+        provider generation). Does not run approval or publishing.
+        """
+        names = (
+            list(stage_names)
+            if stage_names is not None
+            else list(PRODUCTION_GENERATION_STAGES)
+        )
+        if not names:
+            raise WorkflowValidationError(
+                'execute() requires at least one stage name.'
+            )
+        for stage_name in names:
+            context = self.run_stage(context, stage_name)
         return context
 
     def validate_configuration(self) -> None:

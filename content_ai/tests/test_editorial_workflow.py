@@ -1,15 +1,21 @@
-"""Tests for inactive editorial workflow architecture (RFC-003)."""
+"""Tests for editorial workflow architecture (RFC-003)."""
 
 from __future__ import annotations
 
 import unittest
+from unittest.mock import MagicMock, patch
 
 from content_ai.config.ai_engine import (
     ENABLE_EDITORIAL_WORKFLOW,
     FEATURE_FLAGS,
 )
+from content_ai.constants import AIGenerationTask
+from content_ai.providers.mock import MOCK_RESPONSE, MockProvider
+from content_ai.schemas import GenerationResult, PostGenerationRequest
+from content_ai.services.generation import ContentGenerationService
 from content_ai.workflow import (
     ContextError,
+    PRODUCTION_GENERATION_STAGES,
     StageExecutionError,
     TransitionError,
     WorkflowContext,
@@ -24,9 +30,9 @@ from content_ai.workflow.services.base import WorkflowStageService
 
 
 class WorkflowFlagTests(unittest.TestCase):
-    def test_workflow_disabled(self):
-        self.assertFalse(ENABLE_EDITORIAL_WORKFLOW)
-        self.assertFalse(FEATURE_FLAGS['ENABLE_EDITORIAL_WORKFLOW'])
+    def test_workflow_enabled_for_production(self):
+        self.assertTrue(ENABLE_EDITORIAL_WORKFLOW)
+        self.assertTrue(FEATURE_FLAGS['ENABLE_EDITORIAL_WORKFLOW'])
 
 
 class WorkflowContextTests(unittest.TestCase):
@@ -111,6 +117,22 @@ class OrchestratorTests(unittest.TestCase):
         self.assertTrue(ctx.stage_logs)
         self.assertEqual(ctx.stage_logs[-1].stage_name, 'drafting')
 
+    def test_execute_runs_production_generation_stages(self):
+        self.assertEqual(
+            PRODUCTION_GENERATION_STAGES,
+            ('research', 'drafting'),
+        )
+        ctx = create_initial_context(title='Housing news', language='fa')
+        ctx = self.orch.execute(ctx)
+        self.assertEqual(ctx.state, WorkflowState.DRAFTING)
+        self.assertIn('workflow-stub draft', ctx.generated_draft)
+        stage_names = [entry.stage_name for entry in ctx.stage_logs]
+        self.assertEqual(stage_names, ['research', 'drafting'])
+        self.assertEqual(
+            ctx.extension_data.get('hooks', {}).get('preparation'),
+            'completed',
+        )
+
     def test_stage_failure_sets_failed(self):
         class Boom(WorkflowStageService):
             name = 'boom'
@@ -144,23 +166,44 @@ class OrchestratorTests(unittest.TestCase):
         self.assertEqual(ctx.state, WorkflowState.READY_FOR_APPROVAL)
         self.assertIn('fact_checking', ctx.extension_data.get('hooks', {}))
 
-    def test_production_generation_untouched_smoke(self):
-        from content_ai.editorial.service import EditorialAIService
-        from unittest.mock import MagicMock
 
-        generation = MagicMock()
-        generation.generate.return_value = MagicMock(
-            content='ok',
-            metadata={},
-            provider='mock',
+class ProductionWorkflowIntegrationTests(unittest.TestCase):
+    def test_content_generation_runs_workflow_execute(self):
+        service = ContentGenerationService()
+        provider = MagicMock(spec=MockProvider)
+        provider.name = 'mock'
+        provider.generate_post.return_value = GenerationResult(
             success=True,
-            warnings=[],
-            telemetry=None,
+            content=MOCK_RESPONSE,
+            provider='mock',
         )
-        draft = EditorialAIService(generation_service=generation).generate_draft(
-            title='X'
+
+        with patch(
+            'content_ai.providers.registry.get_provider',
+            return_value=provider,
+        ), patch.object(
+            service.workflow,
+            'execute',
+            wraps=service.workflow.execute,
+        ) as mocked_execute:
+            result = service.generate(
+                AIGenerationTask.POST_GENERATION,
+                PostGenerationRequest(title='Workflow'),
+            )
+
+        mocked_execute.assert_called_once()
+        provider.generate_post.assert_called_once()
+        self.assertEqual(result.content, MOCK_RESPONSE)
+        self.assertEqual(
+            result.metadata.get('workflow_state'),
+            WorkflowState.DRAFTING.value,
         )
-        self.assertEqual(draft.body, 'ok')
+        ctx = mocked_execute.call_args.args[0]
+        hooks = ctx.extension_data.get('hooks', {})
+        self.assertEqual(hooks.get('preparation'), 'completed')
+        self.assertEqual(hooks.get('prompt_assembly'), 'completed')
+        self.assertEqual(hooks.get('ai_provider'), 'completed')
+        self.assertEqual(hooks.get('completion'), 'completed')
 
 
 if __name__ == '__main__':

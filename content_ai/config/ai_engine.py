@@ -35,8 +35,8 @@ ENABLE_KNOWLEDGE_ENGINE = False
 ENABLE_RAG = False
 ENABLE_KNOWLEDGE_INJECTION = False
 
-# Editorial workflow (RFC-003) — architecture only; not wired to production.
-ENABLE_EDITORIAL_WORKFLOW = False
+# Editorial workflow (RFC-003) — production generation runs via execute().
+ENABLE_EDITORIAL_WORKFLOW = True
 
 # AI evaluation framework (RFC-004) — passive until integrated.
 ENABLE_AI_EVALUATION_FRAMEWORK = False

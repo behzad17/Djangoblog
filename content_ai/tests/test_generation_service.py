@@ -11,6 +11,7 @@ from content_ai.schemas import (
     PostGenerationRequest,
 )
 from content_ai.services.generation import ContentGenerationService
+from content_ai.workflow import WorkflowState
 
 
 class ContentGenerationServiceTests(SimpleTestCase):
@@ -21,7 +22,7 @@ class ContentGenerationServiceTests(SimpleTestCase):
     def test_resolves_configured_provider(self):
         request = PostGenerationRequest(title='test')
         with patch(
-            'content_ai.services.generation.get_provider',
+            'content_ai.providers.registry.get_provider',
             wraps=__import__(
                 'content_ai.providers.registry',
                 fromlist=['get_provider'],
@@ -36,7 +37,7 @@ class ContentGenerationServiceTests(SimpleTestCase):
         self.assertEqual(result.content, MOCK_RESPONSE)
 
     @override_settings(CONTENT_AI_PROVIDER='mock')
-    def test_uses_prompt_builder_and_passes_prompt_string(self):
+    def test_uses_workflow_prompt_builder_and_passes_prompt_string(self):
         request = PostGenerationRequest(title='housing')
         expected = GenerationResult(
             success=True,
@@ -48,13 +49,18 @@ class ContentGenerationServiceTests(SimpleTestCase):
         provider.generate_post.return_value = expected
 
         with patch(
-            'content_ai.services.generation.get_provider',
+            'content_ai.providers.registry.get_provider',
             return_value=provider,
-        ):
+        ), patch.object(
+            self.service.workflow,
+            'execute',
+            wraps=self.service.workflow.execute,
+        ) as mocked_execute:
             result = self.service.generate(
                 AIGenerationTask.POST_GENERATION,
                 request,
             )
+            mocked_execute.assert_called_once()
 
         provider.generate_post.assert_called_once()
         prompt = provider.generate_post.call_args.args[0]
@@ -68,6 +74,10 @@ class ContentGenerationServiceTests(SimpleTestCase):
         self.assertIsNotNone(result.telemetry)
         self.assertTrue(result.telemetry.success)
         self.assertEqual(result.metadata.get('prompt_version'), 'v1')
+        self.assertEqual(
+            result.metadata.get('workflow_state'),
+            WorkflowState.DRAFTING.value,
+        )
 
     @override_settings(CONTENT_AI_PROVIDER='mock')
     def test_ad_generation_passes_prompt_string(self):
@@ -81,7 +91,7 @@ class ContentGenerationServiceTests(SimpleTestCase):
         )
 
         with patch(
-            'content_ai.services.generation.get_provider',
+            'content_ai.providers.registry.get_provider',
             return_value=provider,
         ):
             self.service.generate(AIGenerationTask.AD_GENERATION, request)
