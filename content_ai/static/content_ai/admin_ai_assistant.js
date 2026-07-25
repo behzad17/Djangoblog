@@ -307,7 +307,7 @@
     var openBtn = document.getElementById('ai-assistant-open');
     var modal = document.getElementById('ai-assistant-modal');
     var backdrop = document.getElementById('ai-assistant-backdrop');
-    var form = document.getElementById('ai-assistant-form');
+    var fieldRoot = document.getElementById('ai-assistant-form');
     var errorBox = document.getElementById('ai-assistant-error');
     var loadingEl = document.getElementById('ai-assistant-loading');
     var statusText = document.getElementById('ai-assistant-status-text');
@@ -605,14 +605,14 @@
     }
 
     function resetAssistantFields() {
-      if (!form) {
+      if (!fieldRoot) {
         return;
       }
-      var title = form.querySelector('[name="title"]');
-      var category = form.querySelector('[name="category_id"]');
-      var language = form.querySelector('[name="language"]');
-      var context = form.querySelector('[name="context"]');
-      var instructions = form.querySelector('[name="instructions"]');
+      var title = fieldRoot.querySelector('[name="title"]');
+      var category = fieldRoot.querySelector('[name="category_id"]');
+      var language = fieldRoot.querySelector('[name="language"]');
+      var context = fieldRoot.querySelector('[name="context"]');
+      var instructions = fieldRoot.querySelector('[name="instructions"]');
       var initialTitle = root.getAttribute('data-initial-title') || '';
       var initialCategory = root.getAttribute('data-initial-category') || '';
       if (title) {
@@ -668,13 +668,15 @@
 
     function collectRequest() {
       // Modal lives inside Django Admin's <form>; assistant fields must not be a nested
-      // <form> (browsers drop it → form is null). Resolve the field container each call.
-      var fieldRoot = form || document.getElementById('ai-assistant-form');
-      if (!fieldRoot) {
+      // <form> (browsers drop it → container is null). Resolve the field container each call.
+      var container =
+        fieldRoot || document.getElementById('ai-assistant-form');
+      if (!container) {
+        console.error('AI Assistant container not found.');
         showError('Assistant form is unavailable. Reload the page and try again.');
         return null;
       }
-      var categorySelect = fieldRoot.querySelector('[name="category_id"]');
+      var categorySelect = container.querySelector('[name="category_id"]');
       if (!categorySelect) {
         showError('Category field is missing.');
         return null;
@@ -684,10 +686,10 @@
       if (categorySelect.selectedIndex >= 0) {
         categoryName = categorySelect.options[categorySelect.selectedIndex].text;
       }
-      var titleEl = fieldRoot.querySelector('[name="title"]');
-      var languageEl = fieldRoot.querySelector('[name="language"]');
-      var contextEl = fieldRoot.querySelector('[name="context"]');
-      var instructionsEl = fieldRoot.querySelector('[name="instructions"]');
+      var titleEl = container.querySelector('[name="title"]');
+      var languageEl = container.querySelector('[name="language"]');
+      var contextEl = container.querySelector('[name="context"]');
+      var instructionsEl = container.querySelector('[name="instructions"]');
       return {
         title: (titleEl && titleEl.value) || '',
         category_id: categoryId ? Number(categoryId) : null,
@@ -857,8 +859,13 @@
         accepted: true,
         action: 'use_draft',
       }).finally(function () {
+        var titleInput =
+          (fieldRoot && fieldRoot.querySelector('[name="title"]')) ||
+          document.getElementById('ai-field-title');
         var title =
-          version.title || form.querySelector('[name="title"]').value || '';
+          version.title ||
+          (titleInput && titleInput.value) ||
+          '';
         setFieldValue('id_title', title);
         setFieldValue('id_content', version.body || '');
         setFieldValue('id_excerpt', version.summary || '');
