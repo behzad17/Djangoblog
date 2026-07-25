@@ -44,6 +44,20 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## Editorial Domain Layer
+
+- `EditorialAIService` builds `PostGenerationRequest`, runs the generation pipeline, and returns an in-memory `EditorialDraft`
+- `EditorialDraft` is a dataclass only — no Django model, no database writes, no Blog `Post` creation
+- Shared entry point for:
+  - Sandbox
+  - Future API
+  - Future n8n
+  - Future Blog integration (persistence remains a later PR)
+
+**Outcome:** Editorial generation is domain-shaped without coupling to Blog persistence.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
 - n8n produces Blog Post drafts via the planned AI Blog draft endpoints.
