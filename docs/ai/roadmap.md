@@ -22,12 +22,13 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 ## Phase 2 — AI Provider Integration
 
 - Introduce a vendor-neutral provider interface (`BaseAIProvider`) and registry.
-- Ship `MockProvider` only (deterministic, no network) for architecture and tests.
-- Wire n8n / real vendors in later PRs — not in the abstraction layer.
-- Standardise provider → Django payload mapping when generation is introduced.
-- Keep provider secrets out of Django source until a real provider PR.
+- Ship `MockProvider` (deterministic, no network) for architecture and tests.
+- Add `OpenAIProvider` using the Responses API (selected via `CONTENT_AI_PROVIDER=openai`).
+- Keep production default on `mock` until explicitly switched.
+- Standardise provider → Django payload mapping when generation is introduced into Blog/Ads.
+- Keep provider secrets in environment / credential stores.
 
-**Outcome:** Application code depends on an interface, not a vendor. Real providers remain future work.
+**Outcome:** Application code depends on an interface. OpenAI is available as an optional provider; mock remains the safe default.
 
 ---
 

@@ -15,7 +15,7 @@ from content_ai.schemas import GenerationResult
 
 class ProviderRegistryTests(SimpleTestCase):
     def test_list_providers_includes_mock(self):
-        self.assertEqual(list_providers(), ['mock'])
+        self.assertEqual(list_providers(), ['mock', 'openai'])
 
     @override_settings(CONTENT_AI_PROVIDER='mock')
     def test_get_provider_uses_settings_when_name_omitted(self):
@@ -29,8 +29,8 @@ class ProviderRegistryTests(SimpleTestCase):
 
     def test_unknown_provider_raises(self):
         with self.assertRaises(ProviderNotFound) as ctx:
-            get_provider('openai')
-        self.assertIn('openai', str(ctx.exception))
+            get_provider('not-a-provider')
+        self.assertIn('not-a-provider', str(ctx.exception))
 
     @override_settings(CONTENT_AI_PROVIDER='')
     def test_missing_configuration_raises(self):

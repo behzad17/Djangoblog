@@ -1,6 +1,6 @@
 # Content AI Provider Abstraction
 
-**Status:** Interface, mock, schemas, prompts, and orchestration only — no real AI vendors connected.  
+**Status:** Interface, mock, OpenAI Responses provider, schemas, prompts, and orchestration.  
 **Related:** [API contract](./api-contract.md) · [Roadmap](./roadmap.md)
 
 ---
@@ -123,17 +123,43 @@ from content_ai.providers import get_provider
 
 provider = get_provider()          # uses settings.CONTENT_AI_PROVIDER
 provider = get_provider('mock')    # explicit name
+provider = get_provider('openai')  # OpenAI Responses API
 ```
 
-| Setting | Current value |
-|---|---|
-| `CONTENT_AI_PROVIDER` | `"mock"` |
+| Setting | Default | Purpose |
+|---|---|---|
+| `CONTENT_AI_PROVIDER` | `"mock"` | Active provider name |
+| `OPENAI_API_KEY` | `""` | Required when provider is `openai` |
+| `OPENAI_MODEL` | `""` | Required when provider is `openai` (set via env; not hardcoded) |
+| `OPENAI_TIMEOUT` | `60` | Optional request timeout (seconds) |
 
-Supported today: **`mock`** only.
+Supported today: **`mock`**, **`openai`**.
 
-Unknown names raise `ProviderNotFound`. Missing / empty configuration raises `ProviderConfigurationError`.
+Production stays on **`mock`** unless `CONTENT_AI_PROVIDER` is explicitly set to `openai`.
+
+Unknown names raise `ProviderNotFound`. Missing / empty `CONTENT_AI_PROVIDER` raises `ProviderConfigurationError`. Missing OpenAI key/model when constructing `OpenAIProvider` raises `ProviderConfigurationError`.
 
 The generation service always uses `get_provider()` (settings-driven). Callers should not import vendor modules directly.
+
+### Switching providers
+
+| Mode | Settings |
+|---|---|
+| Safe default (no network) | `CONTENT_AI_PROVIDER=mock` |
+| OpenAI | `CONTENT_AI_PROVIDER=openai` plus `OPENAI_API_KEY` and `OPENAI_MODEL` |
+
+Never commit API keys. Use environment / Heroku config vars.
+
+---
+
+## OpenAI provider
+
+`content_ai/providers/openai.py` implements `OpenAIProvider` using the official OpenAI Python SDK **Responses API** (`client.responses.create`). Chat Completions are not used.
+
+- Accepts a prompt string from the prompt layer
+- Returns `GenerationResult` only (never raw SDK objects)
+- Maps SDK / network failures to `GenerationError`
+- Supports `generate_post(prompt)` and `generate_ad(prompt)` via a shared private helper
 
 ---
 
@@ -160,6 +186,7 @@ Tasks without a registered prompt template raise `GenerationError`.
 content_ai/providers/
     base.py         # BaseAIProvider interface
     mock.py         # MockProvider (tests / architecture only)
+    openai.py       # OpenAIProvider (Responses API)
     registry.py     # get_provider(name)
     exceptions.py   # ProviderNotFound, ProviderConfigurationError, GenerationError
 

@@ -108,8 +108,12 @@ INSTALLED_APPS = [
 ]
 
 # Content AI — provider name resolved via content_ai.providers.get_provider().
-# No API keys or vendor SDKs are configured here.
-CONTENT_AI_PROVIDER = 'mock'
+# Default remains "mock" so production behaviour is unchanged until explicitly
+# switched. OpenAI settings are read from the environment; never hardcode keys.
+CONTENT_AI_PROVIDER = os.environ.get('CONTENT_AI_PROVIDER', 'mock')
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+OPENAI_MODEL = os.environ.get('OPENAI_MODEL', '')
+OPENAI_TIMEOUT = float(os.environ.get('OPENAI_TIMEOUT', '60'))
 
 # django-simple-captcha (signup CAPTCHA) tuning:
 # Make the captcha clearer by using only numbers, fewer characters, bigger font,

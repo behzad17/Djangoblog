@@ -85,7 +85,7 @@ class ContentGenerationServiceTests(SimpleTestCase):
         self.assertIn('Task: AD_GENERATION', prompt)
         self.assertIn('Business name: Cafe', prompt)
 
-    @override_settings(CONTENT_AI_PROVIDER='openai')
+    @override_settings(CONTENT_AI_PROVIDER='not-a-provider')
     def test_unknown_provider_raises(self):
         with self.assertRaises(ProviderNotFound):
             self.service.generate(

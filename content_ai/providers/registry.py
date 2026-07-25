@@ -8,9 +8,11 @@ from content_ai.providers.exceptions import (
     ProviderNotFound,
 )
 from content_ai.providers.mock import MockProvider
+from content_ai.providers.openai import OpenAIProvider
 
 _PROVIDERS = {
     'mock': MockProvider,
+    'openai': OpenAIProvider,
 }
 
 
