@@ -1,0 +1,21 @@
+"""AI Engine configuration package (architecture placeholder)."""
+
+from content_ai.config.ai_engine import (
+    DEFAULT_PROMPT_VERSION,
+    DEFAULT_STYLE,
+    FEATURE_FLAGS,
+    FUTURE_AI_PROVIDERS,
+    SUPPORTED_PROMPT_VERSIONS,
+    SUPPORTED_STYLES,
+    SYSTEM_MODULE_ORDER,
+)
+
+__all__ = [
+    'DEFAULT_PROMPT_VERSION',
+    'DEFAULT_STYLE',
+    'FEATURE_FLAGS',
+    'FUTURE_AI_PROVIDERS',
+    'SUPPORTED_PROMPT_VERSIONS',
+    'SUPPORTED_STYLES',
+    'SYSTEM_MODULE_ORDER',
+]
