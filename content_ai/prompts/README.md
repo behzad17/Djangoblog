@@ -1,11 +1,11 @@
 # Peyvand AI Engine — Prompt Architecture (RFC-001)
 
-Architecture-only foundation for Prompt Engineering, Knowledge Management,
-Behaviour modules, Versioning, Telemetry placeholders, and Configuration.
+Prompt Engineering foundation: behaviour modules, versioning, validation,
+and configuration. PromptBuilder assembles production prompts.
 
-**This package is inactive in production.** Existing generation continues to
-use `content_ai/prompts/post/`, `content_ai/prompts/ads/`, `PromptLoader`,
-`TemplateRenderer`, and the OpenAI provider unchanged.
+**PromptBuilder is the production prompt assembler.** Task assets under
+`content_ai/prompts/post/` and `content_ai/prompts/ads/` supply the
+user-prompt section only; behaviour modules live under `prompts/vN/`.
 
 ---
 
@@ -34,7 +34,7 @@ content_ai/prompts/
   v1/styles/          news, analysis, educational, friendly
   builders/           PromptBuilder
   validators/         PromptValidator
-  post/, ads/, …      EXISTING production templates (untouched)
+  post/, ads/, …      Task user-prompt assets (fed into PromptBuilder)
 
 content_ai/knowledge/ authorities, glossary, migration, healthcare, …
 content_ai/config/    ai_engine.py defaults and flags
@@ -155,5 +155,6 @@ Do not treat engine telemetry stubs as production analytics.
 - Editorial workflows, human review, approval  
 - AI agent architecture and richer analytics  
 
-This foundation exists so those capabilities can land without rewriting
-production generation when migration begins.
+Production generation already routes through PromptBuilder. Remaining
+roadmap items (knowledge injection, structured JSON, multi-provider A/B)
+build on this path without a second prompt pipeline.

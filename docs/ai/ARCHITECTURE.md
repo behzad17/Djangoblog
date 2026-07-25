@@ -36,7 +36,7 @@ Django apps (Blog, Ads, Admin assistant, internal APIs). Owns persistence, permi
 ### Prompt Engine (RFC-001)
 
 Versioned behaviour modules (`identity`, `audience`, `writing`, styles), `PromptBuilder`, `PromptValidator`, config flags.  
-**Today:** architecture present; production generation still uses existing asset templates (`prompts/post`, `prompts/ads`) until a migration RFC.
+**Today:** production generation assembles prompts via `PromptBuilder`; task assets (`prompts/post`, `prompts/ads`) supply the user-prompt section only.
 
 ### Knowledge Engine (RFC-002 + RFC-002.5)
 

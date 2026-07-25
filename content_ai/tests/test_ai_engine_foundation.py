@@ -1,6 +1,6 @@
-"""Tests for inactive AI Engine prompt architecture (RFC-001).
+"""Tests for AI Engine prompt architecture (RFC-001).
 
-Does not exercise production OpenAI or AssetPromptTemplate paths.
+Covers PromptBuilder / PromptValidator used by production generation.
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ class AIEngineConfigTests(unittest.TestCase):
             set(SUPPORTED_STYLES),
             {'news', 'analysis', 'educational', 'friendly'},
         )
-        self.assertFalse(FEATURE_FLAGS['use_ai_engine_prompt_builder'])
+        self.assertTrue(FEATURE_FLAGS['use_ai_engine_prompt_builder'])
 
 
 class PromptValidatorSuccessTests(unittest.TestCase):

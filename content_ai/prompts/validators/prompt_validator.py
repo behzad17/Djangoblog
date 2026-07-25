@@ -1,6 +1,6 @@
 """Validate AI Engine prompt modules, versions, styles, and assembly order.
 
-Architecture-only. Not used by production generation.
+Used by PromptBuilder for production and Studio prompt assembly.
 """
 
 from __future__ import annotations

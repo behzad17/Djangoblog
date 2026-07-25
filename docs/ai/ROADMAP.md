@@ -11,11 +11,11 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 
 | RFC | Title | Status |
 |-----|--------|--------|
-| [RFC-001](./RFC_INDEX.md#rfc-001--prompt-engine) | Prompt Engine | Done (inactive architecture) |
+| [RFC-001](./RFC_INDEX.md#rfc-001--prompt-engine) | Prompt Engine | Done (wired into production generation) |
 | [RFC-002](./RFC_INDEX.md#rfc-002--knowledge-engine) | Knowledge Engine | Done (inactive) |
 | [RFC-002.5](./RFC_INDEX.md#rfc-0025--editorial-knowledge-base) | Editorial Knowledge Base | Done (passive content) |
 
-**Outcome:** Prompt and knowledge foundations exist without changing production generation behaviour.
+**Outcome:** Prompt Engine is the production source of truth for prompt assembly; Knowledge foundations remain passive until enabled.
 
 ---
 
@@ -81,7 +81,8 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 
 Prepared for across phases — implement only via dedicated RFCs:
 
-- [ ] Prompt versioning in production path  
+- [x] Prompt versioning in production path  
+
 - [ ] Knowledge retrieval (RAG) enabled behind flags  
 - [ ] Embedding / semantic / hybrid search  
 - [ ] Vector database integration  

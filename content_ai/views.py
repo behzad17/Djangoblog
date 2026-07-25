@@ -9,14 +9,16 @@ from django.shortcuts import render
 
 from content_ai.constants import AIGenerationTask
 from content_ai.forms import ContentAISandboxForm
-from content_ai.prompts.registry import get_prompt_template
 from content_ai.providers.exceptions import (
     GenerationError,
     ProviderConfigurationError,
     ProviderNotFound,
 )
 from content_ai.schemas.requests import AdGenerationRequest, PostGenerationRequest
-from content_ai.services.generation import ContentGenerationService
+from content_ai.services.generation import (
+    ContentGenerationService,
+    build_generation_prompt,
+)
 
 
 def user_can_access_sandbox(user):
@@ -73,7 +75,10 @@ def sandbox(request):
         schema_request = _build_request(task, form.cleaned_data)
 
         try:
-            prompt_preview = get_prompt_template(task).build(schema_request)
+            prompt_preview, _prompt_version = build_generation_prompt(
+                task,
+                schema_request,
+            )
             context['prompt_preview'] = prompt_preview
 
             started = time.perf_counter()

@@ -1,6 +1,6 @@
 """Assemble versioned AI Engine prompts from modular markdown assets.
 
-Architecture-only. Not wired into production generation or OpenAI.
+Production generation obtains prompts through PromptBuilder (RFC-001).
 """
 
 from __future__ import annotations

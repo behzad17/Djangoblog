@@ -2,7 +2,9 @@
 
 import time
 
+from content_ai.config import DEFAULT_PROMPT_VERSION, DEFAULT_STYLE
 from content_ai.constants import AIGenerationTask
+from content_ai.prompts.builders import PromptBuilder
 from content_ai.prompts.registry import get_prompt_template
 from content_ai.providers.exceptions import GenerationError
 from content_ai.providers.registry import get_provider
@@ -24,11 +26,28 @@ _TASK_METHODS = {
 }
 
 
+def build_generation_prompt(task, request=None):
+    """
+    Assemble the production prompt via PromptBuilder.
+
+    Task asset templates (post/ads) supply the user-prompt section only.
+    PromptBuilder is the sole assembler of the final prompt string.
+    """
+    template = get_prompt_template(task)
+    user_prompt = template.build(request)
+    prompt = PromptBuilder().build(
+        version=DEFAULT_PROMPT_VERSION,
+        style=DEFAULT_STYLE,
+        user_prompt=user_prompt,
+    )
+    return prompt, DEFAULT_PROMPT_VERSION
+
+
 class ContentGenerationService:
     """
-    Orchestrates AI generation via prompt templates and the configured provider.
+    Orchestrates AI generation via PromptBuilder and the configured provider.
 
-    Flow: request → prompt template → prompt string → provider → GenerationResult.
+    Flow: request → task user prompt → PromptBuilder → provider → GenerationResult.
     Measures execution timing and attaches ``AIExecutionTelemetry``.
     No validation, persistence, or business logic.
     """
@@ -45,10 +64,8 @@ class ContentGenerationService:
         if method_name is None:
             raise GenerationError(f"Unsupported generation task: '{task}'.")
 
-        template = get_prompt_template(task)
-        prompt = template.build(request)
+        prompt, prompt_version = build_generation_prompt(task, request)
         prompt_length = len(prompt or '')
-        prompt_version = getattr(template, 'version', '') or ''
 
         provider = get_provider(provider_name or None)
         method = getattr(provider, method_name, None)

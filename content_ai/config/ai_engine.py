@@ -1,7 +1,7 @@
-"""AI Engine configuration placeholders.
+"""AI Engine configuration.
 
-Inactive until a future migration wires PromptBuilder into generation.
-Does not affect production OpenAI / prompt-template behaviour.
+PromptBuilder is the production prompt assembler (RFC-001).
+Task asset templates supply the user-prompt section only.
 """
 
 from __future__ import annotations
@@ -54,8 +54,8 @@ ENABLE_AI_EDITORIAL_WORKSPACE = True
 ENABLE_AI_STUDIO = True
 
 FEATURE_FLAGS: dict[str, bool] = {
-    # When True, production may call PromptBuilder (not enabled).
-    'use_ai_engine_prompt_builder': False,
+    # Production generation assembles prompts via PromptBuilder.
+    'use_ai_engine_prompt_builder': True,
     # When True, knowledge modules may be retrieved into prompts (not enabled).
     'inject_knowledge_into_prompts': False,
     # When True, structured JSON output schema is enforced (not enabled).

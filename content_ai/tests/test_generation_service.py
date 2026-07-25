@@ -36,7 +36,7 @@ class ContentGenerationServiceTests(SimpleTestCase):
         self.assertEqual(result.content, MOCK_RESPONSE)
 
     @override_settings(CONTENT_AI_PROVIDER='mock')
-    def test_uses_prompt_registry_and_passes_prompt_string(self):
+    def test_uses_prompt_builder_and_passes_prompt_string(self):
         request = PostGenerationRequest(title='housing')
         expected = GenerationResult(
             success=True,
@@ -59,12 +59,15 @@ class ContentGenerationServiceTests(SimpleTestCase):
         provider.generate_post.assert_called_once()
         prompt = provider.generate_post.call_args.args[0]
         self.assertIsInstance(prompt, str)
+        self.assertIn('## Identity', prompt)
+        self.assertIn('## User Prompt', prompt)
         self.assertIn('Task: POST_GENERATION', prompt)
         self.assertIn('Title: housing', prompt)
         self.assertEqual(result.content, 'delegated')
         self.assertEqual(result.provider, 'mock')
         self.assertIsNotNone(result.telemetry)
         self.assertTrue(result.telemetry.success)
+        self.assertEqual(result.metadata.get('prompt_version'), 'v1')
 
     @override_settings(CONTENT_AI_PROVIDER='mock')
     def test_ad_generation_passes_prompt_string(self):
@@ -85,6 +88,8 @@ class ContentGenerationServiceTests(SimpleTestCase):
 
         prompt = provider.generate_ad.call_args.args[0]
         self.assertIsInstance(prompt, str)
+        self.assertIn('## Identity', prompt)
+        self.assertIn('## User Prompt', prompt)
         self.assertIn('Task: AD_GENERATION', prompt)
         self.assertIn('Business name: Cafe', prompt)
 

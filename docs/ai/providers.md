@@ -117,8 +117,8 @@ result = ContentGenerationService().generate(
 
 `ContentGenerationService.generate(task, request)`:
 
-1. Resolves the prompt template for `task`.
-2. Builds a prompt string from the request schema.
+1. Resolves the task asset template for `task` (user-prompt section).
+2. Assembles the final prompt via `PromptBuilder` (behaviour modules + user prompt).
 3. Resolves the configured provider via the registry.
 4. Calls the provider method with the **prompt string**.
 5. Returns `GenerationResult` unchanged.
@@ -126,7 +126,7 @@ result = ContentGenerationService().generate(
 Flow:
 
 ```
-Request → Prompt Template → Prompt String → Provider → GenerationResult
+Request → Task User Prompt → PromptBuilder → Provider → GenerationResult
 ```
 
 It performs **no** validation, persistence, Blog/Ads writes, networking, or business rules.

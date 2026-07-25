@@ -39,7 +39,7 @@ Mission, principles, boundaries, governance, and roadmap for Peyvand AI as an Ed
 
 ### RFC-001 — Prompt Engine
 
-Modular prompt behaviour (`v1` system + styles), `PromptBuilder`, `PromptValidator`, AI Engine config. Not wired into production generation by default.
+Modular prompt behaviour (`v1` system + styles), `PromptBuilder`, `PromptValidator`, AI Engine config. Production generation assembles prompts via `PromptBuilder`.
 
 ### RFC-002 — Knowledge Engine
 
