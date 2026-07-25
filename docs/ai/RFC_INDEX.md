@@ -28,6 +28,8 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-013** | Continuous Improvement | 5 Advanced | Planned | Governed optimisation loops |
 | **APF-001** | AI Editorial Workspace | Product Feature | Done (compose UI) | [features/APF-001.md](./features/APF-001.md) — staff workspace; no auto-publish |
 | **APF-002** | AI Studio | Product Feature | Done (compose UI) | [features/APF-002.md](./features/APF-002.md) — admin experiment/eval control centre |
+| **ES-000** | Editorial Studio Blueprint | Product | Accepted (design) | [features/ES-000.md](./features/ES-000.md) — newsroom product map; no implementation |
+| **ES-001** | News Import | Product Tool | Started | First Studio tool — Swedish URL → Persian draft |
 
 ---
 
@@ -96,6 +98,16 @@ Aggregate telemetry into product analytics for quality, latency, cost, and knowl
 ### RFC-013 — Continuous Improvement
 
 Closed-loop improvement with experiment controls, rollback, and RFC governance.
+
+### ES-000 — Editorial Studio Product Blueprint
+
+Product map for the Peyvand editor newsroom: navigation, shared workflow,
+shared result model, tool catalogue, and V1–V3 delivery order. Design only.
+
+### ES-001 — News Import
+
+First Editorial Studio tool: Swedish news URL → Persian draft via the
+production workflow. No auto-publish.
 
 ---
 
