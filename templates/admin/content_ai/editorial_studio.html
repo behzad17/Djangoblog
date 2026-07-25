@@ -1,0 +1,69 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:"Django site admin" }}{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'content_ai/editorial_studio.css' %}">
+{% endblock %}
+
+{% block content %}
+<div
+  id="editorial-studio"
+  class="editorial-studio"
+  data-api-url="{{ api_url }}"
+>
+  <header class="editorial-studio__header">
+    <div>
+      <p class="editorial-studio__eyebrow">Admin · Editorial Studio</p>
+      <h1>News Import</h1>
+      <p class="editorial-studio__subtitle">
+        Paste a Swedish news URL. Generate a Persian editorial draft through
+        the production AI workflow. Never publishes.
+      </p>
+    </div>
+    <div class="editorial-studio__header-actions">
+      <a class="button" href="{{ workspace_url }}">Editorial Workspace</a>
+      <a class="button" href="{{ studio_url }}">AI Studio</a>
+      <a class="button" href="{% url 'admin:index' %}">Admin home</a>
+    </div>
+  </header>
+
+  <p class="editorial-studio__safety">
+    Drafts are suggestions only. Review and publish manually in Blog Admin.
+  </p>
+
+  <section class="editorial-studio__panel">
+    <h2>Article URL</h2>
+    <label for="es-news-url">Swedish news article URL
+      <input
+        id="es-news-url"
+        type="url"
+        placeholder="https://www.example.se/nyheter/..."
+        autocomplete="off"
+      >
+    </label>
+    <div class="editorial-studio__toolbar">
+      <button type="button" class="button default" id="es-generate">
+        Generate Draft
+      </button>
+      <span class="editorial-studio__status" id="es-status" aria-live="polite"></span>
+    </div>
+    <p class="editorial-studio__error" id="es-error" hidden></p>
+  </section>
+
+  <section class="editorial-studio__panel" id="es-results" hidden>
+    <h2>Result</h2>
+    <div class="editorial-studio__meta" id="es-source-meta"></div>
+    <h3>Article title</h3>
+    <p id="es-title" class="editorial-studio__title"></p>
+    <h3>Persian draft</h3>
+    <pre id="es-draft" class="editorial-studio__draft"></pre>
+    <h3>Metadata</h3>
+    <pre id="es-metadata" class="editorial-studio__pre"></pre>
+  </section>
+</div>
+
+<script src="{% static 'content_ai/editorial_studio.js' %}"></script>
+{% endblock %}

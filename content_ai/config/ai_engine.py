@@ -53,6 +53,9 @@ ENABLE_AI_EDITORIAL_WORKSPACE = True
 # AI Studio (APF-002) — admin experiment/eval UI; never writes production.
 ENABLE_AI_STUDIO = True
 
+# Editorial Studio (ES-001) — News Import and future editorial tools.
+ENABLE_EDITORIAL_STUDIO = True
+
 FEATURE_FLAGS: dict[str, bool] = {
     # Production generation assembles prompts via PromptBuilder.
     'use_ai_engine_prompt_builder': True,
@@ -70,4 +73,5 @@ FEATURE_FLAGS: dict[str, bool] = {
     'ENABLE_PROVIDER_PLATFORM': ENABLE_PROVIDER_PLATFORM,
     'ENABLE_AI_EDITORIAL_WORKSPACE': ENABLE_AI_EDITORIAL_WORKSPACE,
     'ENABLE_AI_STUDIO': ENABLE_AI_STUDIO,
+    'ENABLE_EDITORIAL_STUDIO': ENABLE_EDITORIAL_STUDIO,
 }
