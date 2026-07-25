@@ -107,6 +107,10 @@ INSTALLED_APPS = [
     'content_ai',
 ]
 
+# Content AI — provider name resolved via content_ai.providers.get_provider().
+# No API keys or vendor SDKs are configured here.
+CONTENT_AI_PROVIDER = 'mock'
+
 # django-simple-captcha (signup CAPTCHA) tuning:
 # Make the captcha clearer by using only numbers, fewer characters, bigger font,
 # and minimal/no visual noise.

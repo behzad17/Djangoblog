@@ -21,12 +21,13 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ## Phase 2 — AI Provider Integration
 
-- Wire n8n workflows to chosen AI providers.
-- Standardise provider → Django payload mapping.
-- Handle retries, timeouts, and provider error mapping into the job fail API.
-- Keep provider secrets in n8n credentials.
+- Introduce a vendor-neutral provider interface (`BaseAIProvider`) and registry.
+- Ship `MockProvider` only (deterministic, no network) for architecture and tests.
+- Wire n8n / real vendors in later PRs — not in the abstraction layer.
+- Standardise provider → Django payload mapping when generation is introduced.
+- Keep provider secrets out of Django source until a real provider PR.
 
-**Outcome:** Reliable generation pipeline that can submit drafts to Django.
+**Outcome:** Application code depends on an interface, not a vendor. Real providers remain future work.
 
 ---
 
