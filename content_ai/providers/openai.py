@@ -126,11 +126,6 @@ class OpenAIProvider(BaseAIProvider):
 
     def _generate(self, prompt, task):
         prompt_text = prompt or ''
-        # TEMPORARY DIAGNOSTIC: isolate timeout cause (prompt vs SDK/network/model).
-        # Revert to input=prompt after the diagnostic run.
-        diagnostic_input = (
-            'Write one short sentence in Persian saying hello.'
-        )
         logger.info(
             'OpenAI request starting: model=%s timeout=%s prompt_chars=%d preview=%r',
             self.model,
@@ -138,15 +133,11 @@ class OpenAIProvider(BaseAIProvider):
             len(prompt_text),
             prompt_text[:300],
         )
-        logger.info(
-            'OpenAI TEMPORARY diagnostic input active: %r',
-            diagnostic_input,
-        )
         started = time.monotonic()
         try:
             response = self._client.responses.create(
                 model=self.model,
-                input=diagnostic_input,
+                input=prompt,
             )
         except Exception as exc:
             elapsed = time.monotonic() - started

@@ -64,7 +64,7 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
 
         self.client.responses.create.assert_called_once_with(
             model='gpt-test-model',
-            input='Write one short sentence in Persian saying hello.',
+            input='post prompt',
         )
         self.assertIsInstance(result, GenerationResult)
         self.assertTrue(result.success)
@@ -92,7 +92,7 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
 
         self.client.responses.create.assert_called_once_with(
             model='gpt-test-model',
-            input='Write one short sentence in Persian saying hello.',
+            input='ad prompt',
         )
         self.assertIsInstance(result, GenerationResult)
         self.assertEqual(result.content, 'Generated ad body')
