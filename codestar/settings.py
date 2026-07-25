@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     'accounts',
     'notifications',
     'community',
+    'content_ai',
 ]
 
 # django-simple-captcha (signup CAPTCHA) tuning:

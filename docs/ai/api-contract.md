@@ -26,6 +26,7 @@
 - **n8n** is an orchestration layer only. It triggers workflows, calls AI providers, and posts results back to Django.
 - **n8n never accesses the database directly.** All reads and writes go through Django APIs.
 - **AI never publishes automatically.** Generated Blog Posts and Advertisements enter a draft / pending state and require Admin approval before becoming public.
+- **`content_ai` tracks executions only.** The `AIJob` model records job type, status, and provider metadata. It does not store Blog Posts or Advertisements; those remain owned by Blog and Ads.
 
 ---
 
@@ -37,12 +38,14 @@
 | Authorisation | Restrict AI endpoints to trusted automation clients |
 | Validation | Reject malformed or incomplete payloads |
 | Persistence | Create and update draft content in Blog / Ads (via future AI-aware services) |
-| Lifecycle | Track job status (queued → processing → completed / failed) |
+| Lifecycle | Track job status via `content_ai.AIJob` (pending → running → completed / failed) |
 | Approval | Keep Admin as the only path to publish AI-generated content |
-| Audit | Record source metadata (workflow id, provider, timestamps) where planned |
+| Audit | Record source metadata (provider, model, prompt version, timestamps) on `AIJob` |
 | Errors | Return structured error responses; never expose internal secrets |
 
 Django does **not** call AI providers directly in this architecture. Provider calls are owned by n8n.
+
+The `content_ai` app owns **no business content**. Blog owns Blog Posts. Ads owns Advertisements.
 
 ---
 

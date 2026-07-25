@@ -13,8 +13,9 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 - Agree authentication strategy (API Token) and standard JSON envelopes.
 - Document job lifecycle and Admin approval rules.
 - Ensure no change to existing production Blog / Ads behaviour.
+- Add isolated `content_ai` Django app with `AIJob` execution tracking only (no providers, APIs, or generation).
 
-**Outcome:** Shared contract and guardrails before any code lands.
+**Outcome:** Shared contract, guardrails, and an isolated execution-tracking foundation. No public behaviour change.
 
 ---
 
