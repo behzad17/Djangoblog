@@ -3,6 +3,7 @@
 from content_ai.config.ai_engine import (
     DEFAULT_PROMPT_VERSION,
     DEFAULT_STYLE,
+    ENABLE_EDITORIAL_WORKFLOW,
     ENABLE_KNOWLEDGE_ENGINE,
     ENABLE_KNOWLEDGE_INJECTION,
     ENABLE_RAG,
@@ -16,6 +17,7 @@ from content_ai.config.ai_engine import (
 __all__ = [
     'DEFAULT_PROMPT_VERSION',
     'DEFAULT_STYLE',
+    'ENABLE_EDITORIAL_WORKFLOW',
     'ENABLE_KNOWLEDGE_ENGINE',
     'ENABLE_KNOWLEDGE_INJECTION',
     'ENABLE_RAG',

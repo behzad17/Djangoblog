@@ -15,7 +15,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-001** | Prompt Engine | 1 Foundation | Done | Versioned modules, builder, validator (inactive in prod path) |
 | **RFC-002** | Knowledge Engine | 1 Foundation | Done | Manifest, parser, selectors, injectors (flags off) |
 | **RFC-002.5** | Editorial Knowledge Base | 1 Foundation | Done | `sweden` / `community` / `peyvand` content |
-| **RFC-003** | Editorial Workflow | 2 Platform | Planned | Draft → review → approve |
+| **RFC-003** | Editorial Workflow | 2 Platform | Done (architecture) | Lifecycle orchestrator; inactive (`ENABLE_EDITORIAL_WORKFLOW=False`) |
 | **RFC-004** | Prompt Evaluation | 2 Platform | Planned | Offline / sandbox evaluation |
 | **RFC-005** | AI Provider Abstraction | 2 Platform | Planned | Extend multi-provider strategy ([providers.md](./providers.md) today) |
 | **RFC-006** | Source Intelligence | 3 Intelligence | Planned | Sources & citations |
@@ -49,7 +49,8 @@ Populates the knowledge engine with Sweden, Community, and Peyvand domains, temp
 
 ### RFC-003 — Editorial Workflow
 
-End-to-end editorial handling of AI suggestions (states, permissions, audit).
+End-to-end editorial lifecycle states, `WorkflowContext`, stub stage services, and
+`WorkflowOrchestrator`. Inactive in production; no auto-publish.
 
 ### RFC-004 — Prompt Evaluation
 

@@ -35,6 +35,9 @@ ENABLE_KNOWLEDGE_ENGINE = False
 ENABLE_RAG = False
 ENABLE_KNOWLEDGE_INJECTION = False
 
+# Editorial workflow (RFC-003) — architecture only; not wired to production.
+ENABLE_EDITORIAL_WORKFLOW = False
+
 FEATURE_FLAGS: dict[str, bool] = {
     # When True, production may call PromptBuilder (not enabled).
     'use_ai_engine_prompt_builder': False,
@@ -46,4 +49,5 @@ FEATURE_FLAGS: dict[str, bool] = {
     'ENABLE_KNOWLEDGE_ENGINE': ENABLE_KNOWLEDGE_ENGINE,
     'ENABLE_RAG': ENABLE_RAG,
     'ENABLE_KNOWLEDGE_INJECTION': ENABLE_KNOWLEDGE_INJECTION,
+    'ENABLE_EDITORIAL_WORKFLOW': ENABLE_EDITORIAL_WORKFLOW,
 }
