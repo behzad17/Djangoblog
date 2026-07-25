@@ -16,7 +16,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-002** | Knowledge Engine | 1 Foundation | Done | Manifest, parser, selectors, injectors (flags off) |
 | **RFC-002.5** | Editorial Knowledge Base | 1 Foundation | Done | `sweden` / `community` / `peyvand` content |
 | **RFC-003** | Editorial Workflow | 2 Platform | Done (architecture) | Lifecycle orchestrator; inactive (`ENABLE_EDITORIAL_WORKFLOW=False`) |
-| **RFC-004** | Prompt Evaluation | 2 Platform | Planned | Offline / sandbox evaluation |
+| **RFC-004** | Prompt Evaluation | 2 Platform | Done (architecture) | Passive metrics/snapshots/reports (`ENABLE_AI_EVALUATION_FRAMEWORK=False`) |
 | **RFC-005** | AI Provider Abstraction | 2 Platform | Planned | Extend multi-provider strategy ([providers.md](./providers.md) today) |
 | **RFC-006** | Source Intelligence | 3 Intelligence | Planned | Sources & citations |
 | **RFC-007** | Fact Checking | 3 Intelligence | Planned | Claim verification |
@@ -54,7 +54,8 @@ End-to-end editorial lifecycle states, `WorkflowContext`, stub stage services, a
 
 ### RFC-004 — Prompt Evaluation
 
-Systematic evaluation of prompt versions and styles against quality metrics.
+Passive AI Evaluation Framework: snapshots, pluggable metrics, scoring,
+comparison, and report builders. Independent from generation stacks.
 
 ### RFC-005 — AI Provider Abstraction
 

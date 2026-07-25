@@ -24,7 +24,7 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 | RFC | Title | Intent |
 |-----|--------|--------|
 | RFC-003 | Editorial Workflow | Done (inactive architecture) |
-| RFC-004 | Prompt Evaluation | Measure prompt quality offline / in sandbox |
+| RFC-004 | Prompt Evaluation | Done (inactive architecture) |
 | RFC-005 | AI Provider Abstraction | Deepen multi-provider readiness (beyond current registry) |
 
 **Depends on:** Phase 1  

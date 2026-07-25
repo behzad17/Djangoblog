@@ -38,6 +38,9 @@ ENABLE_KNOWLEDGE_INJECTION = False
 # Editorial workflow (RFC-003) — architecture only; not wired to production.
 ENABLE_EDITORIAL_WORKFLOW = False
 
+# AI evaluation framework (RFC-004) — passive until integrated.
+ENABLE_AI_EVALUATION_FRAMEWORK = False
+
 FEATURE_FLAGS: dict[str, bool] = {
     # When True, production may call PromptBuilder (not enabled).
     'use_ai_engine_prompt_builder': False,
@@ -50,4 +53,5 @@ FEATURE_FLAGS: dict[str, bool] = {
     'ENABLE_RAG': ENABLE_RAG,
     'ENABLE_KNOWLEDGE_INJECTION': ENABLE_KNOWLEDGE_INJECTION,
     'ENABLE_EDITORIAL_WORKFLOW': ENABLE_EDITORIAL_WORKFLOW,
+    'ENABLE_AI_EVALUATION_FRAMEWORK': ENABLE_AI_EVALUATION_FRAMEWORK,
 }
