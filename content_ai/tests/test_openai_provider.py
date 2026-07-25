@@ -110,6 +110,37 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
         self.assertFalse(ctx.exception.telemetry.success)
         self.assertEqual(ctx.exception.telemetry.error_type, 'RuntimeError')
 
+    def test_api_error_logs_status_body_and_stack(self):
+        class FakeAPIError(Exception):
+            def __init__(self):
+                super().__init__(
+                    "Error code: 400 - {'error': {'message': 'bad model', "
+                    "'type': 'invalid_request_error', 'code': 'model_not_found'}}"
+                )
+                self.status_code = 400
+                self.code = 'model_not_found'
+                self.body = {
+                    'error': {
+                        'message': 'bad model',
+                        'type': 'invalid_request_error',
+                        'code': 'model_not_found',
+                    }
+                }
+                self.request_id = 'req_test_123'
+
+        self.client.responses.create.side_effect = FakeAPIError()
+
+        with self.assertLogs('content_ai.providers.openai', level='ERROR') as logs:
+            with self.assertRaises(GenerationError):
+                self.provider.generate_post('prompt')
+
+        joined = '\n'.join(logs.output)
+        self.assertIn('OpenAI generation failed before GenerationError', joined)
+        self.assertIn('status_code=400', joined)
+        self.assertIn('model_not_found', joined)
+        self.assertIn('bad model', joined)
+        self.assertIn('FakeAPIError', joined)
+
     def test_usage_mapped_into_telemetry(self):
         response = MagicMock()
         response.output_text = 'body'

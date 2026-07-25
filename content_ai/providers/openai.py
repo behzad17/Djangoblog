@@ -5,6 +5,8 @@ Never exposes raw SDK response objects to callers.
 
 from __future__ import annotations
 
+import logging
+
 from django.conf import settings
 
 from content_ai.providers.base import BaseAIProvider
@@ -14,6 +16,8 @@ from content_ai.providers.exceptions import (
 )
 from content_ai.schemas.responses import GenerationResult
 from content_ai.telemetry import AIExecutionTelemetry
+
+logger = logging.getLogger(__name__)
 
 
 def _extract_token_usage(response):
@@ -26,6 +30,58 @@ def _extract_token_usage(response):
         'output_tokens': getattr(usage, 'output_tokens', None),
         'total_tokens': getattr(usage, 'total_tokens', None),
     }
+
+
+def _openai_error_details(exc):
+    """
+    Collect OpenAI / httpx exception fields for diagnostics.
+
+    Prefer structured ``body`` / ``error.code`` / ``error.message`` when present.
+    """
+    details = {
+        'exception_type': type(exc).__name__,
+        'message': str(exc),
+    }
+    status_code = getattr(exc, 'status_code', None)
+    if status_code is not None:
+        details['status_code'] = status_code
+
+    body = getattr(exc, 'body', None)
+    if body is not None:
+        details['body'] = body
+        error_obj = None
+        if isinstance(body, dict):
+            nested = body.get('error')
+            error_obj = nested if isinstance(nested, dict) else body
+        if isinstance(error_obj, dict):
+            if error_obj.get('code') is not None:
+                details['error_code'] = error_obj.get('code')
+            if error_obj.get('message') is not None:
+                details['error_message'] = error_obj.get('message')
+            if error_obj.get('type') is not None:
+                details['error_type'] = error_obj.get('type')
+            if error_obj.get('param') is not None:
+                details['error_param'] = error_obj.get('param')
+
+    code = getattr(exc, 'code', None)
+    if code is not None and 'error_code' not in details:
+        details['error_code'] = code
+
+    request_id = getattr(exc, 'request_id', None)
+    if request_id:
+        details['request_id'] = request_id
+
+    response = getattr(exc, 'response', None)
+    if response is not None:
+        text = getattr(response, 'text', None)
+        if text:
+            details['response_text'] = text
+        if status_code is None:
+            response_status = getattr(response, 'status_code', None)
+            if response_status is not None:
+                details['status_code'] = response_status
+
+    return details
 
 
 class OpenAIProvider(BaseAIProvider):
@@ -75,6 +131,17 @@ class OpenAIProvider(BaseAIProvider):
                 input=prompt,
             )
         except Exception as exc:
+            details = _openai_error_details(exc)
+            # Full stack + OpenAI payload (status, body, error.code/message).
+            logger.exception(
+                'OpenAI generation failed before GenerationError: '
+                'status_code=%s error_code=%s error_message=%s body=%s details=%s',
+                details.get('status_code'),
+                details.get('error_code'),
+                details.get('error_message'),
+                details.get('body'),
+                details,
+            )
             telemetry = AIExecutionTelemetry(
                 provider=self.name,
                 model=self.model,
@@ -82,6 +149,11 @@ class OpenAIProvider(BaseAIProvider):
                 error_type=type(exc).__name__,
                 prompt_length=len(prompt_text),
                 response_length=0,
+                metadata={
+                    'openai_status_code': details.get('status_code'),
+                    'openai_error_code': details.get('error_code'),
+                    'openai_error_message': details.get('error_message'),
+                },
             )
             raise GenerationError(
                 f'OpenAI generation failed: {exc}',
