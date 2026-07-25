@@ -29,6 +29,12 @@ SYSTEM_MODULE_ORDER: tuple[str, ...] = (
 
 # Future: provider registry keys, model defaults, feature flags.
 FUTURE_AI_PROVIDERS: tuple[str, ...] = ()
+
+# Knowledge Engine / RAG (RFC-002) — all disabled in production.
+ENABLE_KNOWLEDGE_ENGINE = False
+ENABLE_RAG = False
+ENABLE_KNOWLEDGE_INJECTION = False
+
 FEATURE_FLAGS: dict[str, bool] = {
     # When True, production may call PromptBuilder (not enabled).
     'use_ai_engine_prompt_builder': False,
@@ -36,4 +42,8 @@ FEATURE_FLAGS: dict[str, bool] = {
     'inject_knowledge_into_prompts': False,
     # When True, structured JSON output schema is enforced (not enabled).
     'structured_json_output': False,
+    # RFC-002 mirrors of module-level flags (also False).
+    'ENABLE_KNOWLEDGE_ENGINE': ENABLE_KNOWLEDGE_ENGINE,
+    'ENABLE_RAG': ENABLE_RAG,
+    'ENABLE_KNOWLEDGE_INJECTION': ENABLE_KNOWLEDGE_INJECTION,
 }

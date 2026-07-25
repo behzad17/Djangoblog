@@ -1,0 +1,74 @@
+# Peyvand Knowledge Manifest (RFC-002)
+#
+# Placeholder metadata only. Not used by production generation.
+# Knowledge Engine remains inactive until feature flags are enabled.
+
+authorities:
+  file: authorities.md
+  title: Authorities
+  tags:
+    - authorities
+    - swedish agencies
+    - government
+    - myndighet
+  priority: 20
+
+migration:
+  file: migration.md
+  title: Migration
+  tags:
+    - migration
+    - residence permit
+    - asylum
+    - citizenship
+  priority: 10
+
+healthcare:
+  file: healthcare.md
+  title: Healthcare
+  tags:
+    - healthcare
+    - hospital
+    - doctor
+    - vårdcentral
+  priority: 30
+
+education:
+  file: education.md
+  title: Education
+  tags:
+    - education
+    - school
+    - university
+    - sfi
+  priority: 40
+
+taxation:
+  file: taxation.md
+  title: Taxation
+  tags:
+    - taxation
+    - tax
+    - skatteverket
+    - income
+  priority: 50
+
+labour_market:
+  file: labour_market.md
+  title: Labour Market
+  tags:
+    - labour market
+    - employment
+    - job
+    - arbetsförmedlingen
+  priority: 60
+
+glossary:
+  file: glossary.md
+  title: Glossary
+  tags:
+    - glossary
+    - terminology
+    - swedish
+    - persian
+  priority: 70
