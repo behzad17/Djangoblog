@@ -32,6 +32,18 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## Developer Sandbox
+
+- Manual Content AI console at `/content-ai/sandbox/`
+- Purpose: manual testing, prompt debugging, provider verification
+- Access: authenticated users in `DEBUG`, or superusers only
+- Uses the real pipeline (request → prompt → provider → `GenerationResult`)
+- No Blog/Ads persistence, no public API, no n8n
+
+**Outcome:** Developers can exercise providers safely without changing production workflows.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
 - n8n produces Blog Post drafts via the planned AI Blog draft endpoints.

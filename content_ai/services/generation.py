@@ -23,12 +23,13 @@ class ContentGenerationService:
     No validation, persistence, or business logic.
     """
 
-    def generate(self, task, request=None):
+    def generate(self, task, request=None, provider_name=None):
         """
         Run ``task`` against the configured provider.
 
         ``request`` should be a canonical request schema (e.g.
         ``PostGenerationRequest`` / ``AdGenerationRequest``) when applicable.
+        ``provider_name`` optionally overrides ``settings.CONTENT_AI_PROVIDER``.
         """
         method_name = _TASK_METHODS.get(task)
         if method_name is None:
@@ -37,7 +38,7 @@ class ContentGenerationService:
         template = get_prompt_template(task)
         prompt = template.build(request)
 
-        provider = get_provider()
+        provider = get_provider(provider_name or None)
         method = getattr(provider, method_name, None)
         if method is None:
             raise GenerationError(

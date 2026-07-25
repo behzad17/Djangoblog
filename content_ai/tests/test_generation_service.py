@@ -31,7 +31,7 @@ class ContentGenerationServiceTests(SimpleTestCase):
                 AIGenerationTask.POST_GENERATION,
                 request,
             )
-            mocked_get_provider.assert_called_once_with()
+            mocked_get_provider.assert_called_once_with(None)
         self.assertIsInstance(result, GenerationResult)
         self.assertEqual(result.content, MOCK_RESPONSE)
 

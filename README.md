@@ -109,6 +109,8 @@ Default provider is **`mock`** (no network). To use OpenAI (Responses API), set:
 - `OPENAI_MODEL=...`
 - Optional: `OPENAI_TIMEOUT=60`
 
+Developer sandbox (login + DEBUG or superuser): `/content-ai/sandbox/`
+
 See [docs/ai/api-contract.md](docs/ai/api-contract.md), [docs/ai/providers.md](docs/ai/providers.md), and [docs/ai/roadmap.md](docs/ai/roadmap.md).
 
 ## Front-End Design
