@@ -35,8 +35,8 @@
   </p>
 
   <section class="editorial-studio__panel">
-    <h2>Article URL</h2>
-    <label for="es-news-url">Swedish news article URL
+    <h2>Source URL</h2>
+    <label for="es-news-url">Article URL
       <input
         id="es-news-url"
         type="url"
@@ -44,6 +44,29 @@
         autocomplete="off"
       >
     </label>
+  </section>
+
+  <section class="editorial-studio__panel">
+    <h2>Content Type</h2>
+    <div class="editorial-studio__choices" role="radiogroup" aria-label="Content type">
+      <label><input type="radio" name="es-content-type" value="auto" checked> Auto Detect</label>
+      <label><input type="radio" name="es-content-type" value="news"> News</label>
+      <label><input type="radio" name="es-content-type" value="government"> Government Information</label>
+      <label><input type="radio" name="es-content-type" value="research"> Research</label>
+      <label><input type="radio" name="es-content-type" value="press_release"> Press Release</label>
+    </div>
+  </section>
+
+  <section class="editorial-studio__panel">
+    <h2>Output</h2>
+    <div class="editorial-studio__choices" role="radiogroup" aria-label="Output mode">
+      <label><input type="radio" name="es-output-mode" value="publish_ready" checked> Publish-ready News</label>
+      <label><input type="radio" name="es-output-mode" value="educational"> Educational Article</label>
+      <label><input type="radio" name="es-output-mode" value="summary"> Summary</label>
+    </div>
+  </section>
+
+  <section class="editorial-studio__panel">
     <div class="editorial-studio__toolbar">
       <button type="button" class="button default" id="es-generate">
         Generate Draft
@@ -55,13 +78,23 @@
 
   <section class="editorial-studio__panel" id="es-results" hidden>
     <h2>Result</h2>
-    <div class="editorial-studio__meta" id="es-source-meta"></div>
-    <h3>Article title</h3>
+    <h3>Title</h3>
     <p id="es-title" class="editorial-studio__title"></p>
-    <h3>Persian draft</h3>
-    <pre id="es-draft" class="editorial-studio__draft"></pre>
-    <h3>Metadata</h3>
-    <pre id="es-metadata" class="editorial-studio__pre"></pre>
+    <h3>Lead</h3>
+    <p id="es-lead" class="editorial-studio__lead"></p>
+    <h3>Body</h3>
+    <pre id="es-body" class="editorial-studio__draft"></pre>
+    <h3>Short Summary</h3>
+    <p id="es-summary"></p>
+    <h3>Suggested Category</h3>
+    <p id="es-category"></p>
+    <h3>Suggested Tags</h3>
+    <p id="es-tags"></p>
+  </section>
+
+  <section class="editorial-studio__panel" id="es-metadata-panel" hidden>
+    <h2>Metadata</h2>
+    <div class="editorial-studio__meta" id="es-metadata"></div>
   </section>
 </div>
 

@@ -8,14 +8,25 @@
   const statusEl = document.getElementById('es-status');
   const errorEl = document.getElementById('es-error');
   const results = document.getElementById('es-results');
-  const sourceMeta = document.getElementById('es-source-meta');
-  const titleEl = document.getElementById('es-title');
-  const draftEl = document.getElementById('es-draft');
+  const metadataPanel = document.getElementById('es-metadata-panel');
   const metadataEl = document.getElementById('es-metadata');
+  const titleEl = document.getElementById('es-title');
+  const leadEl = document.getElementById('es-lead');
+  const bodyEl = document.getElementById('es-body');
+  const summaryEl = document.getElementById('es-summary');
+  const categoryEl = document.getElementById('es-category');
+  const tagsEl = document.getElementById('es-tags');
 
   function csrfToken() {
     const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
     return match ? decodeURIComponent(match[1]) : '';
+  }
+
+  function selectedValue(name, fallback) {
+    const checked = document.querySelector(
+      'input[name="' + name + '"]:checked'
+    );
+    return checked ? checked.value : fallback;
   }
 
   function setError(message) {
@@ -40,49 +51,72 @@
   }
 
   function escapeHtml(value) {
-    return value
+    return String(value || '')
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
   }
 
-  function renderResult(payload) {
-    const source = payload.source || {};
+  function renderMetadata(payload) {
     const meta = payload.metadata || {};
-    sourceMeta.innerHTML = [
-      ['Source URL', source.url || meta.source_url || ''],
-      ['Domain', source.domain || meta.source_domain || ''],
-      ['Detected language', source.detected_language || meta.detected_language || ''],
-      ['Source type', source.source_type || ''],
-    ]
+    const rows = [
+      ['Source', payload.source_name || meta.source_name || '—'],
+      ['Source URL', payload.source_url || meta.source_url || '—'],
+      [
+        'Language',
+        payload.output_language ||
+          payload.language ||
+          meta.language ||
+          '—',
+      ],
+      [
+        'Source language',
+        payload.source_language || meta.detected_language || '—',
+      ],
+      [
+        'Workflow',
+        (payload.workflow_stages || meta.workflow_stages || []).join(' → ') ||
+          '—',
+      ],
+      ['Provider', payload.provider || meta.provider || '—'],
+      [
+        'Duration',
+        payload.duration_ms != null
+          ? payload.duration_ms + ' ms'
+          : meta.duration_ms != null
+            ? meta.duration_ms + ' ms'
+            : '—',
+      ],
+      ['Content type', payload.content_type || meta.content_type || '—'],
+      ['Output', payload.output_mode || meta.output_mode || '—'],
+    ];
+    metadataEl.innerHTML = rows
       .map(
         ([label, value]) =>
-          `<div><strong>${label}:</strong> ${escapeHtml(String(value || '—'))}</div>`
+          `<div><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</div>`
       )
       .join('');
+    metadataPanel.hidden = false;
+  }
+
+  function renderResult(payload) {
     titleEl.textContent = payload.title || '—';
-    draftEl.textContent = payload.draft || '';
-    metadataEl.textContent = JSON.stringify(
-      {
-        source_url: meta.source_url,
-        source_domain: meta.source_domain,
-        detected_language: meta.detected_language,
-        workflow_stages: meta.workflow_stages,
-        workflow_state: meta.workflow_state,
-        provider: meta.provider,
-        duration_ms: meta.duration_ms,
-        prompt_version: meta.prompt_version,
-      },
-      null,
-      2
-    );
+    leadEl.textContent = payload.lead || '—';
+    bodyEl.textContent = payload.body || payload.draft || '';
+    summaryEl.textContent =
+      payload.short_summary || payload.summary || '—';
+    categoryEl.textContent = payload.suggested_category || '—';
+    const tags = payload.suggested_tags || [];
+    tagsEl.textContent = tags.length ? tags.join(', ') : '—';
     results.hidden = false;
+    renderMetadata(payload);
   }
 
   async function generateDraft() {
     setError('');
     results.hidden = true;
+    metadataPanel.hidden = true;
     const url = (urlInput.value || '').trim();
     if (!url) {
       setError('Please paste a news article URL.');
@@ -96,7 +130,11 @@
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken(),
         },
-        body: JSON.stringify({ url: url }),
+        body: JSON.stringify({
+          url: url,
+          content_type: selectedValue('es-content-type', 'auto'),
+          output_mode: selectedValue('es-output-mode', 'publish_ready'),
+        }),
         credentials: 'same-origin',
       });
       const data = await response.json();

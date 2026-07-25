@@ -28,8 +28,9 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-013** | Continuous Improvement | 5 Advanced | Planned | Governed optimisation loops |
 | **APF-001** | AI Editorial Workspace | Product Feature | Done (compose UI) | [features/APF-001.md](./features/APF-001.md) — staff workspace; no auto-publish |
 | **APF-002** | AI Studio | Product Feature | Done (compose UI) | [features/APF-002.md](./features/APF-002.md) — admin experiment/eval control centre |
-| **ES-000** | Editorial Studio Blueprint | Product | Accepted (design) | [features/ES-000.md](./features/ES-000.md) — newsroom product map; no implementation |
-| **ES-001** | News Import | Product Tool | Started | First Studio tool — Swedish URL → Persian draft |
+| **ES-000** | Editorial Studio Blueprint | Product | Accepted (design) | [features/ES-000.md](./features/ES-000.md) — newsroom product map |
+| **ES-001** | News Import | Product Tool | Superseded by ES-001A | Initial News Import shell |
+| **ES-001A** | Smart News Import | Product Tool | Done | [features/ES-001A.md](./features/ES-001A.md) — URL → workflow → Persian draft |
 
 ---
 

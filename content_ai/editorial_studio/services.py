@@ -1,12 +1,14 @@
-"""Editorial Studio — News Import service (ES-001).
+"""Editorial Studio — Smart News Import (ES-001A).
 
-Fetches a news URL, extracts readable content, and runs the production
-editorial generation pipeline (WorkflowOrchestrator via EditorialAIService).
-Does not publish.
+Fetches a URL, extracts readable content, and runs the production editorial
+generation pipeline (WorkflowOrchestrator via EditorialAIService).
+Returns a structured Persian draft. Does not publish, edit, or save.
 """
 
 from __future__ import annotations
 
+import re
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 from content_ai.editorial.service import EditorialAIService
@@ -18,16 +20,201 @@ from content_ai.source.extract import (
 )
 from content_ai.source.inspector import SourceInspector
 
-PERSIAN_NEWS_INSTRUCTIONS = (
-    'Write a Persian editorial draft for the Iranian community in Sweden. '
-    'Base the draft only on the provided source article. Preserve key facts, '
-    'names, dates, and figures. Do not invent information. Use clear, '
-    'community-facing Persian.'
+CONTENT_TYPES = (
+    'auto',
+    'news',
+    'government',
+    'research',
+    'press_release',
+)
+
+OUTPUT_MODES = (
+    'publish_ready',
+    'educational',
+    'summary',
+)
+
+CONTENT_TYPE_LABELS = {
+    'news': 'news article',
+    'government': 'government information',
+    'research': 'research / analysis',
+    'press_release': 'press release',
+}
+
+OUTPUT_MODE_INSTRUCTIONS = {
+    'publish_ready': (
+        'Produce a publish-ready Persian news draft suitable for Peyvand.'
+    ),
+    'educational': (
+        'Produce an educational Persian article that explains what happened, '
+        'why it matters for the Iranian community in Sweden, impact, and '
+        'practical guidance. Keep facts grounded in the source.'
+    ),
+    'summary': (
+        'Produce a concise Persian summary draft with a clear lead and short body. '
+        'Keep only the most important facts from the source.'
+    ),
+}
+
+STRUCTURED_OUTPUT_RULES = (
+    'Return the draft in exactly this labelled structure (Persian text):\n'
+    'TITLE:\n...\n'
+    'LEAD:\n...\n'
+    'BODY:\n...\n'
+    'SUMMARY:\n...\n'
+    'CATEGORY:\n...\n'
+    'TAGS:\ncomma, separated, tags\n'
+    'Base the draft only on the provided source. Do not invent facts, names, '
+    'dates, or figures. Use clear community-facing Persian.'
 )
 
 
+def _utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _contains_word(blob: str, *tokens: str) -> bool:
+    return any(re.search(rf'\b{re.escape(token)}\b', blob) for token in tokens)
+
+
+def detect_content_type(article: ExtractedArticle) -> str:
+    """Lightweight content-type hint from URL/title/text (no LLM call)."""
+    blob = ' '.join(
+        [
+            article.url or '',
+            article.domain or '',
+            article.title or '',
+            (article.text or '')[:800],
+        ]
+    ).lower()
+    # Avoid bare "kommun" — common in ordinary municipal news.
+    if _contains_word(
+        blob,
+        'regeringen',
+        'myndigheten',
+        'myndighet',
+        'förordning',
+        'riksdagen',
+        'riksdag',
+        'skatteverket',
+        'migrationsverket',
+        'government',
+    ) or any(
+        token in blob
+        for token in ('skatteverket.se', 'migrationsverket.se', 'regeringen.se')
+    ):
+        return 'government'
+    if _contains_word(blob, 'pressmeddelande') or any(
+        token in blob for token in ('press release', 'press-release')
+    ):
+        return 'press_release'
+    if _contains_word(
+        blob, 'studie', 'forskning', 'rapport', 'research', 'analysis'
+    ):
+        return 'research'
+    return 'news'
+
+
+def source_name_from_domain(domain: str) -> str:
+    host = (domain or '').strip().lower()
+    if host.startswith('www.'):
+        host = host[4:]
+    if not host:
+        return 'Unknown source'
+    # Keep IPs / localhost readable (avoid "127" from 127.0.0.1).
+    first = host.split('.')[0]
+    if first.isdigit() or host in {'localhost'} or ':' in host.split('.')[0]:
+        return host
+    # Prefer first label as a readable source name (e.g. svd.se → SVD).
+    return first.upper() if len(first) <= 5 else first.capitalize()
+
+
+def parse_structured_draft(raw: str, *, fallback_title: str = '') -> dict:
+    """Parse labelled AI output into title/lead/body/summary/category/tags."""
+    text = (raw or '').strip()
+    if not text:
+        return {
+            'title': fallback_title or '',
+            'lead': '',
+            'body': '',
+            'summary': '',
+            'suggested_category': 'news',
+            'suggested_tags': [],
+        }
+
+    markers = (
+        'TITLE',
+        'LEAD',
+        'BODY',
+        'SUMMARY',
+        'CATEGORY',
+        'TAGS',
+    )
+    pattern = re.compile(
+        r'^(TITLE|LEAD|BODY|SUMMARY|CATEGORY|TAGS)\s*:\s*',
+        re.IGNORECASE | re.MULTILINE,
+    )
+    matches = list(pattern.finditer(text))
+    sections: dict[str, str] = {}
+    if matches:
+        for index, match in enumerate(matches):
+            key = match.group(1).upper()
+            start = match.end()
+            end = (
+                matches[index + 1].start()
+                if index + 1 < len(matches)
+                else len(text)
+            )
+            sections[key] = text[start:end].strip()
+    else:
+        paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
+        lead = paragraphs[0] if paragraphs else text
+        body = '\n\n'.join(paragraphs[1:]) if len(paragraphs) > 1 else text
+        sections = {
+            'TITLE': fallback_title,
+            'LEAD': lead,
+            'BODY': body,
+            'SUMMARY': lead,
+            'CATEGORY': 'news',
+            'TAGS': '',
+        }
+
+    tags_raw = sections.get('TAGS', '')
+    tags = [
+        part.strip()
+        for part in re.split(r'[,،\n]+', tags_raw)
+        if part.strip()
+    ]
+    return {
+        'title': sections.get('TITLE') or fallback_title or '',
+        'lead': sections.get('LEAD') or '',
+        'body': sections.get('BODY') or text,
+        'summary': sections.get('SUMMARY') or sections.get('LEAD') or '',
+        'suggested_category': (
+            sections.get('CATEGORY') or 'news'
+        ).strip().lower() or 'news',
+        'suggested_tags': tags,
+    }
+
+
+def build_instructions(
+    *,
+    content_type: str,
+    output_mode: str,
+) -> str:
+    type_label = CONTENT_TYPE_LABELS.get(content_type, 'news article')
+    mode_instruction = OUTPUT_MODE_INSTRUCTIONS.get(
+        output_mode,
+        OUTPUT_MODE_INSTRUCTIONS['publish_ready'],
+    )
+    return (
+        f'The source is a {type_label}. {mode_instruction} '
+        f'{STRUCTURED_OUTPUT_RULES}'
+    )
+
+
 class NewsImportService:
-    """One-shot news URL → Persian draft via the production AI workflow."""
+    """Smart news URL → structured Persian draft via production AI workflow."""
 
     def __init__(
         self,
@@ -41,50 +228,109 @@ class NewsImportService:
         self,
         url: str,
         *,
+        content_type: str = 'auto',
+        output_mode: str = 'publish_ready',
         provider_name: str | None = None,
     ) -> dict:
         """
-        Extract article from ``url`` and generate a Persian draft.
+        Extract article from ``url`` and generate a structured Persian draft.
 
-        Returns a JSON-serialisable payload with source info, draft, and
-        workflow metadata. Raises ArticleExtractionError or GenerationError.
+        Raises ArticleExtractionError or GenerationError with editor-facing
+        messages where possible.
         """
+        content_type = (content_type or 'auto').strip().lower()
+        output_mode = (output_mode or 'publish_ready').strip().lower()
+        if content_type not in CONTENT_TYPES:
+            raise ArticleExtractionError(
+                'Unknown content type. Choose Auto Detect, News, '
+                'Government Information, Research, or Press Release.'
+            )
+        if output_mode not in OUTPUT_MODES:
+            raise ArticleExtractionError(
+                'Unknown output mode. Choose Publish-ready News, '
+                'Educational Article, or Summary.'
+            )
+
         article = self.extractor(url)
+        resolved_type = (
+            detect_content_type(article)
+            if content_type == 'auto'
+            else content_type
+        )
         source_meta = self._source_metadata(article)
+        category_hint = {
+            'news': 'news',
+            'government': 'laws',
+            'research': 'news',
+            'press_release': 'news',
+        }.get(resolved_type, 'news')
+
         draft = self.editorial.generate_draft(
             title=article.title,
             source=article.url,
             language='fa',
-            category='news',
+            category=category_hint,
             context=article.text,
-            instructions=PERSIAN_NEWS_INSTRUCTIONS,
+            instructions=build_instructions(
+                content_type=resolved_type,
+                output_mode=output_mode,
+            ),
             provider_name=provider_name,
+        )
+
+        parsed = parse_structured_draft(
+            draft.body,
+            fallback_title=article.title,
         )
         metadata = dict(draft.metadata or {})
         telemetry = draft.telemetry
+        provider = (
+            (telemetry.provider if telemetry else '')
+            or metadata.get('provider')
+            or ''
+        )
+        duration_ms = telemetry.duration_ms if telemetry else None
+        source_language = (
+            source_meta.get('detected_language')
+            or article.detected_language
+            or 'sv'
+        )
+        output_language = draft.language or 'fa'
+
         return {
-            'source': source_meta,
-            'title': draft.title or article.title,
+            'title': parsed['title'],
+            'lead': parsed['lead'],
+            'body': parsed['body'],
+            'summary': parsed['summary'],
+            'short_summary': parsed['summary'],
+            'suggested_category': parsed['suggested_category'],
+            'suggested_tags': parsed['suggested_tags'],
+            'source_url': article.url,
+            'source_name': source_meta.get('name') or '',
+            'language': output_language,
+            'source_language': source_language,
+            'output_language': output_language,
+            'content_type': resolved_type,
+            'content_type_requested': content_type,
+            'output_mode': output_mode,
+            # Back-compat for earlier ES-001 clients/tests.
             'draft': draft.body,
-            'language': draft.language or 'fa',
+            'source': source_meta,
+            'workflow_stages': metadata.get('workflow_stages') or [],
+            'provider': provider,
+            'duration_ms': duration_ms,
+            'generated_at': _utc_now_iso(),
             'metadata': {
                 'source_url': article.url,
+                'source_name': source_meta.get('name') or '',
                 'source_domain': source_meta.get('domain', ''),
-                'detected_language': source_meta.get('detected_language', ''),
+                'language': output_language,
+                'detected_language': source_language,
+                'content_type': resolved_type,
+                'output_mode': output_mode,
                 'workflow_stages': metadata.get('workflow_stages') or [],
-                'workflow_state': metadata.get('workflow_state') or '',
-                'provider': (
-                    draft.metadata.get('provider')
-                    or (telemetry.provider if telemetry else '')
-                    or metadata.get('provider')
-                    or ''
-                ),
-                'duration_ms': (
-                    telemetry.duration_ms if telemetry else None
-                ),
-                'prompt_version': metadata.get('prompt_version') or '',
-                'intelligence': metadata.get('intelligence') or {},
-                'warnings': list(draft.metadata.get('warnings') or []),
+                'provider': provider,
+                'duration_ms': duration_ms,
             },
         }
 
@@ -99,22 +345,23 @@ class NewsImportService:
         return {
             'url': article.url,
             'domain': domain,
+            'name': source_name_from_domain(domain),
             'title': article.title,
             'source_type': record.source_type,
             'detected_language': (
                 record.detected_language or article.detected_language
             ),
-            'trust_score': record.trust_score,
-            'excerpt': (article.text[:400] + '…')
-            if len(article.text) > 400
-            else article.text,
-            'warnings': list(record.warnings),
         }
 
 
 __all__ = [
+    'CONTENT_TYPES',
+    'OUTPUT_MODES',
     'ArticleExtractionError',
     'GenerationError',
     'NewsImportService',
-    'PERSIAN_NEWS_INSTRUCTIONS',
+    'build_instructions',
+    'detect_content_type',
+    'parse_structured_draft',
+    'source_name_from_domain',
 ]

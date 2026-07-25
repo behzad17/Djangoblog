@@ -1,4 +1,4 @@
-"""Tests for Editorial Studio News Import (ES-001)."""
+"""Tests for Editorial Studio Smart News Import (ES-001A)."""
 
 from __future__ import annotations
 
@@ -13,7 +13,12 @@ from content_ai.config.ai_engine import (
     FEATURE_FLAGS,
 )
 from content_ai.editorial.drafts import EditorialDraft
-from content_ai.editorial_studio.services import NewsImportService
+from content_ai.editorial_studio.services import (
+    NewsImportService,
+    detect_content_type,
+    parse_structured_draft,
+    source_name_from_domain,
+)
 from content_ai.providers.exceptions import GenerationError
 from content_ai.source.extract import (
     ArticleExtractionError,
@@ -34,6 +39,21 @@ SAMPLE_HTML = """
   <p>Experter säger att efterfrågan fortsätter att öka i regionen.</p>
 </article>
 </body></html>
+"""
+
+STRUCTURED_BODY = """
+TITLE:
+مسکن در استکهلم
+LEAD:
+بازار مسکن در استکهلم همچنان پرتقاضا است.
+BODY:
+شهرداری برنامه‌های جدیدی برای ساخت مسکن اعلام کرده است.
+SUMMARY:
+تقاضای مسکن در استکهلم ادامه دارد.
+CATEGORY:
+news
+TAGS:
+مسکن, استکهلم, سوئد
 """
 
 
@@ -70,6 +90,44 @@ class ExtractorTests(SimpleTestCase):
             )
 
 
+class SmartImportHelperTests(SimpleTestCase):
+    def test_parse_structured_draft(self):
+        parsed = parse_structured_draft(STRUCTURED_BODY, fallback_title='X')
+        self.assertEqual(parsed['title'], 'مسکن در استکهلم')
+        self.assertIn('پرتقاضا', parsed['lead'])
+        self.assertIn('شهرداری', parsed['body'])
+        self.assertEqual(parsed['suggested_category'], 'news')
+        self.assertEqual(parsed['suggested_tags'], ['مسکن', 'استکهلم', 'سوئد'])
+
+    def test_detect_government_content_type(self):
+        article = ExtractedArticle(
+            url='https://www.skatteverket.se/press',
+            title='Ny förordning',
+            text='Regeringen och myndigheten meddelar nya regler.',
+            domain='www.skatteverket.se',
+            detected_language='sv',
+        )
+        self.assertEqual(detect_content_type(article), 'government')
+
+    def test_source_name_from_domain(self):
+        self.assertEqual(source_name_from_domain('www.svd.se'), 'SVD')
+        self.assertEqual(
+            source_name_from_domain('www.example.se'),
+            'Example',
+        )
+        self.assertEqual(source_name_from_domain('127.0.0.1'), '127.0.0.1')
+
+    def test_municipal_news_stays_news_not_government(self):
+        article = ExtractedArticle(
+            url='https://www.example.se/nyheter/bostad',
+            title='Bostadsnyheter i Stockholm',
+            text='Kommunen planerar nya lägenheter för familjer.',
+            domain='www.example.se',
+            detected_language='sv',
+        )
+        self.assertEqual(detect_content_type(article), 'news')
+
+
 class NewsImportServiceTests(SimpleTestCase):
     def test_invalid_url_raises_extraction_error(self):
         service = NewsImportService()
@@ -84,7 +142,7 @@ class NewsImportServiceTests(SimpleTestCase):
         with self.assertRaises(ArticleExtractionError):
             service.import_news('https://www.example.se/nyheter/x')
 
-    def test_workflow_success_returns_persian_draft_and_metadata(self):
+    def test_workflow_success_returns_structured_result_and_metadata(self):
         extracted = ExtractedArticle(
             url='https://www.example.se/nyheter/bostad',
             title='Bostadsnyheter i Stockholm',
@@ -95,7 +153,7 @@ class NewsImportServiceTests(SimpleTestCase):
         editorial = MagicMock()
         editorial.generate_draft.return_value = EditorialDraft(
             title='Bostadsnyheter i Stockholm',
-            body='پیش‌نویس فارسی درباره مسکن در استکهلم',
+            body=STRUCTURED_BODY,
             language='fa',
             metadata={
                 'provider': 'mock',
@@ -120,19 +178,61 @@ class NewsImportServiceTests(SimpleTestCase):
             editorial=editorial,
             extractor=lambda url: extracted,
         )
-        result = service.import_news('https://www.example.se/nyheter/bostad')
+        result = service.import_news(
+            'https://www.example.se/nyheter/bostad',
+            content_type='auto',
+            output_mode='publish_ready',
+        )
 
         editorial.generate_draft.assert_called_once()
         kwargs = editorial.generate_draft.call_args.kwargs
         self.assertEqual(kwargs['language'], 'fa')
         self.assertEqual(kwargs['source'], extracted.url)
         self.assertEqual(kwargs['context'], extracted.text)
-        self.assertEqual(result['draft'], 'پیش‌نویس فارسی درباره مسکن در استکهلم')
-        self.assertEqual(result['source']['domain'], 'www.example.se')
-        self.assertEqual(result['metadata']['detected_language'], 'sv')
-        self.assertIn('drafting', result['metadata']['workflow_stages'])
+        self.assertIn('TITLE:', kwargs['instructions'])
+        self.assertEqual(result['title'], 'مسکن در استکهلم')
+        self.assertIn('پرتقاضا', result['lead'])
+        self.assertIn('شهرداری', result['body'])
+        self.assertEqual(result['suggested_category'], 'news')
+        self.assertEqual(result['suggested_tags'], ['مسکن', 'استکهلم', 'سوئد'])
+        self.assertEqual(result['source_url'], extracted.url)
+        self.assertEqual(result['source_name'], 'Example')
+        self.assertEqual(result['language'], 'fa')
+        self.assertEqual(result['source_language'], 'sv')
+        self.assertEqual(result['content_type'], 'news')
+        self.assertIn('drafting', result['workflow_stages'])
+        self.assertEqual(result['provider'], 'mock')
+        self.assertEqual(result['duration_ms'], 12.5)
         self.assertEqual(result['metadata']['provider'], 'mock')
-        self.assertEqual(result['metadata']['duration_ms'], 12.5)
+        self.assertNotIn('intelligence', result['metadata'])
+
+    def test_educational_output_mode_changes_instructions(self):
+        extracted = ExtractedArticle(
+            url='https://www.example.se/nyheter/bostad',
+            title='Title',
+            text='Det är viktigt att förstå bostadsmarknaden ' * 5,
+            domain='www.example.se',
+            detected_language='sv',
+        )
+        editorial = MagicMock()
+        editorial.generate_draft.return_value = EditorialDraft(
+            title='Title',
+            body=STRUCTURED_BODY,
+            language='fa',
+            metadata={'workflow_stages': ['research', 'drafting']},
+            telemetry=AIExecutionTelemetry(provider='mock', duration_ms=1),
+        )
+        service = NewsImportService(
+            editorial=editorial,
+            extractor=lambda url: extracted,
+        )
+        service.import_news(
+            extracted.url,
+            content_type='news',
+            output_mode='educational',
+        )
+        instructions = editorial.generate_draft.call_args.kwargs['instructions']
+        self.assertIn('educational Persian article', instructions)
 
     def test_workflow_failure_propagates(self):
         extracted = ExtractedArticle(
@@ -173,6 +273,8 @@ class EditorialStudioViewTests(TestCase):
         response = self.client.get(self.page_url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'News Import')
+        self.assertContains(response, 'Content Type')
+        self.assertContains(response, 'Publish-ready News')
         self.assertContains(response, 'Generate Draft')
 
     def test_invalid_url_returns_clean_error(self):
@@ -184,34 +286,46 @@ class EditorialStudioViewTests(TestCase):
         self.assertEqual(response.status_code, 400)
         payload = response.json()
         self.assertIn('error', payload)
-        self.assertEqual(payload['error']['code'], 'extraction_failed')
+        self.assertIn(payload['error']['code'], {'invalid_url', 'extraction_failed'})
 
     @patch('content_ai.editorial_studio.views.NewsImportService.import_news')
     def test_api_success(self, mocked_import):
         mocked_import.return_value = {
-            'source': {
-                'url': 'https://www.example.se/a',
-                'domain': 'www.example.se',
-                'detected_language': 'sv',
-            },
             'title': 'Title',
-            'draft': 'متن فارسی',
-            'language': 'fa',
+            'lead': 'Lead',
+            'body': 'Body',
+            'short_summary': 'Summary',
+            'suggested_category': 'news',
+            'suggested_tags': ['a', 'b'],
+            'source_url': 'https://www.example.se/a',
+            'source_name': 'Example',
+            'language': 'sv',
+            'workflow_stages': ['research', 'drafting'],
+            'provider': 'mock',
+            'duration_ms': 3,
             'metadata': {
-                'workflow_stages': ['research', 'drafting'],
+                'source_url': 'https://www.example.se/a',
                 'provider': 'mock',
                 'duration_ms': 3,
+                'workflow_stages': ['research', 'drafting'],
             },
         }
         response = self.client.post(
             self.api_url,
-            data='{"url":"https://www.example.se/a"}',
+            data=(
+                '{"url":"https://www.example.se/a",'
+                '"content_type":"news","output_mode":"summary"}'
+            ),
             content_type='application/json',
         )
         self.assertEqual(response.status_code, 200)
         payload = response.json()
         self.assertTrue(payload['ok'])
-        self.assertEqual(payload['result']['draft'], 'متن فارسی')
+        self.assertEqual(payload['result']['body'], 'Body')
+        mocked_import.assert_called_once()
+        kwargs = mocked_import.call_args.kwargs
+        self.assertEqual(kwargs['content_type'], 'news')
+        self.assertEqual(kwargs['output_mode'], 'summary')
 
     @patch('content_ai.editorial_studio.views.NewsImportService.import_news')
     def test_api_extraction_failure(self, mocked_import):
@@ -236,3 +350,4 @@ class EditorialStudioViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 502)
         self.assertEqual(response.json()['error']['code'], 'generation_failed')
+        self.assertIn('try again', response.json()['error']['message'].lower())

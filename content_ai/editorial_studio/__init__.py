@@ -1,6 +1,6 @@
-"""Editorial Studio package (ES-001).
+"""Editorial Studio package (ES-000 / ES-001A).
 
-Staff tools for editorial AI features. First tool: News Import.
+Staff tools for editorial AI features. First tool: Smart News Import.
 Does not auto-publish.
 """
 
