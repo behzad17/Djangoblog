@@ -98,6 +98,12 @@ This section outlines all improvements made after initial feedback, documenting 
 - Version Control: Git, GitHub
 - Deployment: Heroku/GitHub Pages
 
+## AI Integration
+
+Content AI assists with content generation only. Blog and Ads remain the owners of their data. n8n is an orchestration layer (it does not access the database). AI never publishes automatically — every AI-generated Blog Post and Advertisement requires Admin approval.
+
+See [docs/ai/api-contract.md](docs/ai/api-contract.md) and [docs/ai/roadmap.md](docs/ai/roadmap.md).
+
 ## Front-End Design
 
 The front-end follows best practices in UI/UX design:
