@@ -37,7 +37,7 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 | RFC | Title | Intent |
 |-----|--------|--------|
 | RFC-006 | Source Intelligence | Source discovery / citation aids |
-| RFC-007 | Fact Checking | Claim verification workflows |
+| RFC-007 | Fact Checking | Done (inactive architecture) |
 | RFC-008 | SEO Intelligence | Title/structure recommendations |
 
 **Depends on:** Phase 2 (workflow + evaluation), Knowledge Base  

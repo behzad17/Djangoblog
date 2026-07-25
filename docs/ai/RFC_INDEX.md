@@ -19,7 +19,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-004** | Prompt Evaluation | 2 Platform | Done (architecture) | Passive metrics/snapshots/reports (`ENABLE_AI_EVALUATION_FRAMEWORK=False`) |
 | **RFC-005** | AI Provider Abstraction | 2 Platform | Planned | Extend multi-provider strategy ([providers.md](./providers.md) today) |
 | **RFC-006** | Source Intelligence | 3 Intelligence | Planned | Sources & citations |
-| **RFC-007** | Fact Checking | 3 Intelligence | Planned | Claim verification |
+| **RFC-007** | Fact Checking | 3 Intelligence | Done (architecture) | Passive claim/evidence pipeline (`ENABLE_FACT_CHECKING_FRAMEWORK=False`) |
 | **RFC-008** | SEO Intelligence | 3 Intelligence | Planned | SEO assists |
 | **RFC-009** | Feedback Learning | 4 Learning | Planned | Learn from editor feedback |
 | **RFC-010** | Editorial Memory | 4 Learning | Planned | Persistent editorial context |
@@ -67,7 +67,8 @@ Help editors find and attribute reliable sources for Swedish/community topics.
 
 ### RFC-007 — Fact Checking
 
-Detect unsupported claims; require human resolution before publish.
+Passive claim/evidence/confidence/report architecture. Assists editors only;
+never auto-publishes or decides absolute truth.
 
 ### RFC-008 — SEO Intelligence
 
