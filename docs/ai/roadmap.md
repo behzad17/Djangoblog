@@ -73,11 +73,22 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## Blog Draft Integration
+
+- `BlogDraftPersistenceService.create_blog_draft(editorial_draft, author, category)` maps an `EditorialDraft` onto the existing Blog `Post` model
+- AI creates **Draft** posts only (`status=0`)
+- Slug generation is left to existing `Post.save()` behaviour
+- Publishing remains a **manual editorial decision** (Admin / existing Blog workflow)
+- No Admin buttons, n8n, scheduling, SEO generation, or extra notifications are added in this layer
+
+**Outcome:** First Blog write-path for AI content without changing public publishing behaviour.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
-- n8n produces Blog Post drafts via the planned AI Blog draft endpoints.
-- Django stores drafts as unpublished content.
-- Admin reviews and publishes only after approval.
+- `BlogDraftPersistenceService` maps `EditorialDraft` → Blog `Post` as Draft only.
+- Publishing remains Admin / editorial approval via existing Blog workflow.
 - Existing Blog public APIs and templates remain unchanged.
 
 **Outcome:** AI-assisted Blog drafts with mandatory Admin gate.
