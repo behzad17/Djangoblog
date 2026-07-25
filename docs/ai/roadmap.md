@@ -79,7 +79,7 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 - AI creates **Draft** posts only (`status=0`)
 - Slug generation is left to existing `Post.save()` behaviour
 - Publishing remains a **manual editorial decision** (Admin / existing Blog workflow)
-- No Admin buttons, n8n, scheduling, SEO generation, or extra notifications are added in this layer
+- Persistence layer itself does not add Admin UI, n8n, scheduling, or SEO generation
 
 **Outcome:** First Blog write-path for AI content without changing public publishing behaviour.
 
@@ -97,9 +97,23 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## AI-assisted Editorial Workflow
+
+- Staff editors can use **Generate with AI** on the Blog Post Admin (add or Draft edit only)
+- Intermediate Admin page collects title, category, language, context, and instructions
+- `EditorialAIService` returns an in-memory suggestion; fields are applied to the Admin form via session
+- **Human-in-the-loop:** AI proposes; editors review/edit title, body, and summary; editors save Draft
+- Nothing is auto-saved or published; existing Blog publish workflow is unchanged
+- No public pages, scheduling, background jobs, or n8n in this layer
+
+**Outcome:** AI assists editors inside Admin without changing public publishing behaviour.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
 - `EditorialDraftPublisher` + `BlogDraftPersistenceService` map `EditorialDraft` → Blog `Post` as Draft only.
+- Admin **Generate with AI** assists editors with human-in-the-loop review before save.
 - Publishing remains Admin / editorial approval via existing Blog workflow.
 - Existing Blog public APIs and templates remain unchanged.
 

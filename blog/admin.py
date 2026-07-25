@@ -1,7 +1,24 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.shortcuts import redirect, render
+from django.urls import path, reverse
 from django.utils.html import format_html
+
+from content_ai.admin_editorial import (
+    SESSION_SUGGESTION_KEY,
+    AdminGenerateWithAIForm,
+    apply_suggestion_to_initial,
+    suggestion_from_draft,
+)
+from content_ai.editorial.service import EditorialAIService
+from content_ai.providers.exceptions import (
+    GenerationError,
+    ProviderConfigurationError,
+    ProviderNotFound,
+)
+
 from .models import Post, Comment, Category, UserProfile, PostViewCount
 
 @admin.register(Category)
@@ -51,6 +68,7 @@ class ExpertAuthorFilter(SimpleListFilter):
 class PostAdmin(admin.ModelAdmin):
     """Admin interface for Post model with plain textareas (no Summernote)."""
 
+    change_form_template = 'admin/blog/post/change_form.html'
     list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'is_deleted', 'deleted_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
     list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on', ExpertAuthorFilter,)
@@ -86,6 +104,170 @@ class PostAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('created_on', 'updated_on', 'deleted_at', 'deleted_by', 'slug')
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                'generate-with-ai/',
+                self.admin_site.admin_view(self.generate_with_ai_view),
+                name='blog_post_generate_with_ai',
+            ),
+        ]
+        return custom_urls + urls
+
+    def _can_show_generate_with_ai(self, request, obj=None):
+        """Button only for add or Draft edits; never for published posts."""
+        if obj is None:
+            return self.has_add_permission(request)
+        return (
+            self.has_change_permission(request, obj)
+            and obj.status == 0
+            and not obj.is_deleted
+        )
+
+    def _generate_with_ai_url(self, obj=None):
+        url = reverse('admin:blog_post_generate_with_ai')
+        if obj is not None:
+            return f'{url}?post_id={obj.pk}'
+        return url
+
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        obj = None
+        if object_id:
+            obj = self.get_object(request, object_id)
+
+        if request.method == 'GET':
+            suggestion = request.session.pop(SESSION_SUGGESTION_KEY, None)
+            if suggestion:
+                request._content_ai_suggestion = suggestion
+                messages.info(
+                    request,
+                    'AI suggestion loaded into the form. Review and save as '
+                    'Draft when ready. Nothing was saved automatically.',
+                )
+
+        show = self._can_show_generate_with_ai(request, obj)
+        extra_context['show_generate_with_ai'] = show
+        extra_context['generate_with_ai_url'] = (
+            self._generate_with_ai_url(obj) if show else ''
+        )
+        return super().changeform_view(
+            request,
+            object_id,
+            form_url,
+            extra_context=extra_context,
+        )
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        Form = super().get_form(request, obj, change=change, **kwargs)
+        suggestion = getattr(request, '_content_ai_suggestion', None)
+        if not suggestion:
+            return Form
+
+        class AISuggestedPostForm(Form):
+            def __init__(self, *args, _suggestion=suggestion, **form_kwargs):
+                initial = apply_suggestion_to_initial(
+                    form_kwargs.get('initial') or {},
+                    _suggestion,
+                )
+                form_kwargs['initial'] = initial
+                super().__init__(*args, **form_kwargs)
+
+        AISuggestedPostForm.__name__ = Form.__name__
+        AISuggestedPostForm.__qualname__ = getattr(
+            Form,
+            '__qualname__',
+            Form.__name__,
+        )
+        return AISuggestedPostForm
+
+    def generate_with_ai_view(self, request):
+        """
+        Intermediate Admin page: collect prompts, generate suggestion, return
+        to the change form. Never persists or publishes.
+        """
+        post = None
+        post_id = request.GET.get('post_id') or request.POST.get('post_id')
+        if post_id:
+            post = self.get_object(request, post_id)
+            if post is None:
+                messages.error(request, 'Post not found.')
+                return redirect('admin:blog_post_changelist')
+            if post.status != 0 or post.is_deleted:
+                messages.error(
+                    request,
+                    'Generate with AI is only available for Draft posts.',
+                )
+                return redirect('admin:blog_post_change', post.pk)
+            if not self.has_change_permission(request, post):
+                raise PermissionDenied
+            cancel_url = reverse('admin:blog_post_change', args=[post.pk])
+        else:
+            if not self.has_add_permission(request):
+                raise PermissionDenied
+            cancel_url = reverse('admin:blog_post_add')
+
+        initial = {}
+        if post is not None and request.method == 'GET':
+            initial = {
+                'title': post.title,
+                'category': post.category_id,
+            }
+
+        form = AdminGenerateWithAIForm(
+            request.POST or None,
+            initial=initial,
+        )
+        error = None
+
+        if request.method == 'POST' and form.is_valid():
+            cleaned = form.cleaned_data
+            category = cleaned['category']
+            try:
+                draft = EditorialAIService().generate_draft(
+                    title=cleaned.get('title') or '',
+                    language=cleaned.get('language') or '',
+                    category=category.name,
+                    context=cleaned.get('context') or '',
+                    instructions=cleaned.get('instructions') or '',
+                )
+            except ProviderNotFound as exc:
+                error = str(exc)
+            except ProviderConfigurationError as exc:
+                error = str(exc)
+            except GenerationError as exc:
+                error = str(exc)
+            except Exception:
+                error = 'Unexpected generation failure. Please try again.'
+            else:
+                suggestion = suggestion_from_draft(
+                    draft,
+                    category_id=category.pk,
+                )
+                if not suggestion['title'] and cleaned.get('title'):
+                    suggestion['title'] = cleaned['title']
+                request.session[SESSION_SUGGESTION_KEY] = suggestion
+                request.session.modified = True
+                if post is not None:
+                    return redirect('admin:blog_post_change', post.pk)
+                return redirect('admin:blog_post_add')
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+            'form': form,
+            'post': post,
+            'error': error,
+            'cancel_url': cancel_url,
+            'title': 'Generate with AI',
+        }
+        return render(
+            request,
+            'admin/blog/post/generate_with_ai.html',
+            context,
+        )
+
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))
         show_extra_images = obj and getattr(obj, 'category', None) and getattr(obj.category, 'slug', None) == 'photo-gallery'
@@ -96,7 +278,7 @@ class PostAdmin(admin.ModelAdmin):
                     fieldsets[i] = (name, {**options, 'fields': tuple(fields_list)})
                     break
         return fieldsets
-    
+
     def get_queryset(self, request):
         """Override queryset to handle expert_author filter parameter."""
         qs = super().get_queryset(request)
@@ -114,7 +296,7 @@ class PostAdmin(admin.ModelAdmin):
                 Q(author__profile__can_publish_without_approval=False)
             ).select_related('author', 'author__profile')
         return qs
-    
+
     def url_status(self, obj):
         """Display URL approval status."""
         if not obj.external_url:
@@ -124,7 +306,7 @@ class PostAdmin(admin.ModelAdmin):
         else:
             return "⏳ Pending"
     url_status.short_description = 'URL Status'
-    
+
     def deleted_status(self, obj):
         """Display soft delete status."""
         if obj.is_deleted:
