@@ -309,6 +309,7 @@ Any backlog endpoint requires its own implementation PR and must continue to res
 
 ## Related documents
 
-- [AI Roadmap](./roadmap.md)
+- [AI Product Roadmap](./ROADMAP.md)
+- [Content AI Implementation Roadmap](./content-ai-implementation-roadmap.md)
 - [Provider abstraction](./providers.md)
 - Project [README](../../README.md) — AI Integration overview

@@ -1,6 +1,7 @@
-# Content AI Roadmap
+# Content AI Implementation Roadmap
 
-**Status:** Planning only — no implementation in this document.  
+**Status:** Planning / delivery notes for the Django Content AI app.  
+**Product programme:** [RFC-000](./RFC-000.md) · [ROADMAP.md](./ROADMAP.md) · [RFC_INDEX.md](./RFC_INDEX.md)  
 **Contract:** See [api-contract.md](./api-contract.md).
 
 AI features on peyvand.se are additive. Blog and Ads remain the owners of their data. n8n orchestrates workflows; Django validates, stores, and enforces Admin approval. AI never publishes automatically.

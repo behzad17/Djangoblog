@@ -1,7 +1,7 @@
 # Content AI Provider Abstraction
 
 **Status:** Interface, mock, OpenAI Responses provider, schemas, prompts, and orchestration.  
-**Related:** [API contract](./api-contract.md) · [Roadmap](./roadmap.md)
+**Related:** [API contract](./api-contract.md) · [Product roadmap](./ROADMAP.md) · [Implementation roadmap](./content-ai-implementation-roadmap.md)
 
 ---
 
