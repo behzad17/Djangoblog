@@ -1,4 +1,4 @@
-"""Knowledge module data model (RFC-002)."""
+"""Knowledge module data model (RFC-002 / RFC-002.5)."""
 
 from __future__ import annotations
 
@@ -8,10 +8,10 @@ from dataclasses import dataclass, field
 @dataclass(frozen=True, slots=True)
 class KnowledgeModule:
     """
-    One editorial knowledge module loaded from the manifest + markdown.
+    One editorial knowledge document loaded from the manifest + markdown.
 
-    Future fields (language, country, version, last_updated) are intentionally
-    omitted until a later RFC.
+    Editorial metadata (category, country, language, …) lives in ``metadata``
+    and is validated from YAML front matter when present.
     """
 
     name: str

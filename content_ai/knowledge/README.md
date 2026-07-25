@@ -1,133 +1,112 @@
-# Peyvand Knowledge Engine (RFC-002)
+# Peyvand Editorial Knowledge Base
 
-Architecture for editorial knowledge storage, selection, and (future) injection.
+RFC-002 infrastructure + RFC-002.5 editorial content.
 
-**Inactive in production.** Feature flags default to `False`. Existing AI
-generation, OpenAI, and `PromptBuilder` behaviour are unchanged.
-
----
-
-## Architecture
-
-| Concern | Component | Status |
-|---------|-----------|--------|
-| Storage | `*.md` + `manifest.yaml` | Placeholder content |
-| Parsing | `utils/parser.py` | Loads + validates |
-| Selection | `selectors/` | Keyword placeholder → `[]` |
-| Injection | `injectors/knowledge_injector.py` | No-op (returns prompt) |
-| Integration | `integration.apply_knowledge_if_enabled` | Disabled unless all flags on |
-| Prompt construction | `prompts/builders/PromptBuilder` | **Untouched** |
-
-Knowledge (WHAT) stays independent from prompt behaviour modules (HOW).
+**Passive in production.** Feature flags remain `False`. No PromptBuilder,
+OpenAI, or generation changes. No automatic knowledge injection.
 
 ---
 
-## Manifest
+## Architecture overview
 
-`manifest.yaml` lists each module:
+Knowledge is organised into three independent domains:
 
-```yaml
-migration:
-  file: migration.md
-  title: Migration
-  tags:
-    - migration
-    - residence permit
-  priority: 10
-```
+| Domain | Path | Responsibility |
+|--------|------|----------------|
+| **Sweden** | `sweden/` | Official/system Swedish knowledge (authorities, services, terminology) |
+| **Community** | `community/` | Curated Iranian-in-Sweden lived-experience knowledge |
+| **Peyvand** | `peyvand/` | Peyvand editorial intelligence (style, glossary, workflow) |
 
-Validation checks: manifest present, markdown files exist, metadata shape,
-duplicate tags across modules.
+Cross-cutting:
 
----
+| Path | Role |
+|------|------|
+| `templates/` | Reusable document templates |
+| `manifest.yaml` | Index of all knowledge modules |
+| `utils/parser.py` | Load + validate (engine) |
+| `selectors/` / `injectors/` | Inactive RAG placeholders (RFC-002) |
 
-## Knowledge modules
-
-Markdown placeholders under this directory. No large editorial content yet.
-
-| File | Topic |
-|------|--------|
-| `authorities.md` | Swedish authorities |
-| `migration.md` | Migration system |
-| `healthcare.md` | Healthcare |
-| `education.md` | Education |
-| `taxation.md` | Taxes |
-| `labour_market.md` | Employment |
-| `glossary.md` | Swedish ↔ Persian terms |
+Knowledge must stay independent from prompts: no AI instructions, no model-specific behaviour inside these files.
 
 ---
 
-## Parser
+## Folder responsibilities
 
-```python
-from content_ai.knowledge import parse_knowledge_modules
+### `sweden/`
 
-modules = parse_knowledge_modules()
-```
+Authorities as separate documents, plus topic overviews:
 
-Returns `KnowledgeModule(name, title, file, tags, priority, content)`.
+- `authorities/` — Skatteverket, Migrationsverket, Försäkringskassan, …
+- `migration/`, `healthcare/`, `education/`, `taxation/`, `labour_market/`
+- `housing/`, `digital_services/`, `laws/`, `public_services/`, `terminology/`
 
----
+### `community/`
 
-## Selectors
+- `iranian_life_in_sweden/`, `newcomer_guide/`, `cultural_notes/`
+- `common_questions/`, `swedish_customs/`, `practical_guides/`
+- `common_mistakes/`, `frequently_confused_terms/`, `FAQ/`
 
-```python
-from content_ai.knowledge import get_knowledge_selector
+### `peyvand/`
 
-selector = get_knowledge_selector()  # keyword (default)
-selected = selector.select(user_prompt, style='news', language='fa')
-# → [] today
-```
-
-Future selector names (not implemented): embedding, hybrid, semantic.
-
----
-
-## Injectors
-
-```python
-from content_ai.knowledge import KnowledgeInjector
-
-KnowledgeInjector().inject(prompt, modules)  # returns prompt unchanged
-```
+- `editorial_style/style_guide.md` — official handbook
+- `terminology/glossary.md` — official terminology standard
+- `editorial_guidelines/`, `seo/`, `categories/`, `moderation/`
+- `publishing/`, `tone_of_voice/`, `quality_rules/`, `content_templates/`
 
 ---
 
-## Configuration
+## Templates
 
-In `content_ai/config/ai_engine.py`:
+Under `templates/`:
 
-- `ENABLE_KNOWLEDGE_ENGINE = False`
-- `ENABLE_RAG = False`
-- `ENABLE_KNOWLEDGE_INJECTION = False`
+authority, concept, guide, process, faq, glossary_entry, comparison,
+editorial_policy, knowledge_document.
 
-Do not enable these in production until a migration RFC.
-
----
-
-## Integration point (disabled)
-
-`apply_knowledge_if_enabled(prompt, user_prompt=..., style=..., language=...)`
-exists for a future PromptBuilder migration. With flags off it returns
-`prompt` unchanged and is **not** called by production code today.
+Use these when adding new knowledge so structure stays consistent.
 
 ---
 
-## Adding a knowledge module
+## Metadata
 
-1. Add `topic.md` (placeholder is fine).  
-2. Register it in `manifest.yaml` with `file`, `title`, `tags`, `priority`.  
-3. Ensure tags are unique across the manifest.  
-4. Run Knowledge Engine tests.
+Every knowledge markdown file uses YAML front matter:
+
+- title, category, tags
+- country, language, target_audience, difficulty
+- last_updated, references, status, author, version
+
+The manifest lists `file`, `title`, `tags`, `priority`, `domain`, `category`.
 
 ---
 
-## Future RAG roadmap (not implemented)
+## Glossary structure
 
-- Real keyword retrieval and ranking  
-- Embeddings + vector database  
-- Semantic / hybrid search  
-- Country-specific and multi-language packs  
-- Versioned knowledge and automatic prompt injection  
+`peyvand/terminology/glossary.md` entries include:
 
-Only the architecture is prepared in this RFC.
+Swedish term · Persian term · alternative wording · definition ·
+editorial recommendation · example usage · related concepts · references
+
+---
+
+## Editorial Style Guide
+
+`peyvand/editorial_style/style_guide.md` is Peyvand’s official handbook
+(writing, typography, numbers/dates/currency, headlines, leads, SEO,
+forbidden/preferred wording).
+
+---
+
+## How to add knowledge
+
+1. Choose domain (`sweden` / `community` / `peyvand`).  
+2. Copy a template from `templates/`.  
+3. Fill front matter + body (facts only; no prompt text).  
+4. Register the file in `manifest.yaml` with unique module key and tags.  
+5. Run `content_ai.tests.test_knowledge_engine` / editorial KB tests.
+
+---
+
+## Future RAG integration
+
+When enabled in a later RFC, selectors may rank these modules and injectors
+may append them to prompts. Until then, knowledge stays editorial-only and
+version-controlled in git.

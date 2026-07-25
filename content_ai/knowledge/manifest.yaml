@@ -1,74 +1,470 @@
-# Peyvand Knowledge Manifest (RFC-002)
-#
-# Placeholder metadata only. Not used by production generation.
-# Knowledge Engine remains inactive until feature flags are enabled.
-
-authorities:
-  file: authorities.md
-  title: Authorities
-  tags:
-    - authorities
-    - swedish agencies
-    - government
-    - myndighet
-  priority: 20
-
-migration:
-  file: migration.md
-  title: Migration
-  tags:
-    - migration
-    - residence permit
-    - asylum
-    - citizenship
-  priority: 10
-
-healthcare:
-  file: healthcare.md
-  title: Healthcare
-  tags:
-    - healthcare
-    - hospital
-    - doctor
-    - vårdcentral
-  priority: 30
-
-education:
-  file: education.md
-  title: Education
-  tags:
-    - education
-    - school
-    - university
-    - sfi
-  priority: 40
-
-taxation:
-  file: taxation.md
-  title: Taxation
-  tags:
-    - taxation
-    - tax
+_meta:
+  version: '1.0'
+  description: Peyvand Editorial Knowledge Base (RFC-002.5). Passive until RAG flags
+    enabled.
+modules:
+  community__FAQ__overview:
+    file: community/FAQ/overview.md
+    title: Community FAQ
+    tags:
+    - community-faq
+    priority: 10
+    domain: community
+    category: community/faq
+  community__README:
+    file: community/README.md
+    title: Community Domain README
+    tags:
+    - readme-community
+    priority: 11
+    domain: community
+    category: community
+  community__common_mistakes__overview:
+    file: community/common_mistakes/overview.md
+    title: Common newcomer mistakes
+    tags:
+    - community-common-mistakes
+    priority: 12
+    domain: community
+    category: community/common-mistakes
+  community__common_questions__overview:
+    file: community/common_questions/overview.md
+    title: Common questions
+    tags:
+    - community-common-questions
+    priority: 13
+    domain: community
+    category: community/common-questions
+  community__cultural_notes__overview:
+    file: community/cultural_notes/overview.md
+    title: Cultural notes
+    tags:
+    - community-cultural-notes
+    priority: 14
+    domain: community
+    category: community/cultural-notes
+  community__frequently_confused_terms__overview:
+    file: community/frequently_confused_terms/overview.md
+    title: Frequently confused terms
+    tags:
+    - community-confused-terms
+    priority: 15
+    domain: community
+    category: community/confused-terms
+  community__iranian_life_in_sweden__overview:
+    file: community/iranian_life_in_sweden/overview.md
+    title: Iranian life in Sweden
+    tags:
+    - community-iranian-life
+    priority: 16
+    domain: community
+    category: community/iranian-life
+  community__newcomer_guide__overview:
+    file: community/newcomer_guide/overview.md
+    title: Newcomer guide
+    tags:
+    - community-newcomer-guide
+    priority: 17
+    domain: community
+    category: community/newcomer-guide
+  community__practical_guides__bankid:
+    file: community/practical_guides/bankid.md
+    title: How BankID is commonly used
+    tags:
+    - community-bankid
+    priority: 18
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__bureaucracy:
+    file: community/practical_guides/bureaucracy.md
+    title: Understanding Swedish bureaucracy
+    tags:
+    - community-bureaucracy
+    priority: 19
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__first_apartment:
+    file: community/practical_guides/first_apartment.md
+    title: Finding your first apartment
+    tags:
+    - community-first-apartment
+    priority: 20
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__first_job:
+    file: community/practical_guides/first_job.md
+    title: Finding your first job
+    tags:
+    - community-first-job
+    priority: 21
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__parenthood:
+    file: community/practical_guides/parenthood.md
+    title: Parenthood in Sweden — orientation
+    tags:
+    - community-parenthood
+    priority: 22
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__public_transport:
+    file: community/practical_guides/public_transport.md
+    title: Public transport
+    tags:
+    - community-public-transport
+    priority: 23
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__swish:
+    file: community/practical_guides/swish.md
+    title: How Swish is commonly used
+    tags:
+    - community-swish
+    priority: 24
+    domain: community
+    category: community/practical-guides
+  community__practical_guides__workplace_culture:
+    file: community/practical_guides/workplace_culture.md
+    title: Workplace culture
+    tags:
+    - community-workplace-culture
+    priority: 25
+    domain: community
+    category: community/practical-guides
+  community__swedish_customs__fika:
+    file: community/swedish_customs/fika.md
+    title: Fika
+    tags:
+    - community-fika
+    priority: 26
+    domain: community
+    category: community/swedish-customs
+  peyvand__README:
+    file: peyvand/README.md
+    title: Peyvand Domain README
+    tags:
+    - readme-peyvand
+    priority: 27
+    domain: peyvand
+    category: peyvand
+  peyvand__categories__overview:
+    file: peyvand/categories/overview.md
+    title: Category definitions
+    tags:
+    - peyvand-categories
+    priority: 28
+    domain: peyvand
+    category: peyvand/categories
+  peyvand__content_templates__overview:
+    file: peyvand/content_templates/overview.md
+    title: Content templates index
+    tags:
+    - peyvand-content-templates
+    priority: 29
+    domain: peyvand
+    category: peyvand/content-templates
+  peyvand__editorial_guidelines__overview:
+    file: peyvand/editorial_guidelines/overview.md
+    title: Editorial guidelines
+    tags:
+    - peyvand-editorial-guidelines
+    priority: 30
+    domain: peyvand
+    category: peyvand/editorial-guidelines
+  peyvand__editorial_style__style_guide:
+    file: peyvand/editorial_style/style_guide.md
+    title: Peyvand Editorial Style Guide
+    tags:
+    - peyvand-style-guide
+    priority: 31
+    domain: peyvand
+    category: peyvand/editorial-style
+  peyvand__moderation__overview:
+    file: peyvand/moderation/overview.md
+    title: Moderation policy
+    tags:
+    - peyvand-moderation
+    priority: 32
+    domain: peyvand
+    category: peyvand/moderation
+  peyvand__publishing__overview:
+    file: peyvand/publishing/overview.md
+    title: Publishing workflow
+    tags:
+    - peyvand-publishing
+    priority: 33
+    domain: peyvand
+    category: peyvand/publishing
+  peyvand__quality_rules__overview:
+    file: peyvand/quality_rules/overview.md
+    title: Content quality rules
+    tags:
+    - peyvand-quality
+    priority: 34
+    domain: peyvand
+    category: peyvand/quality-rules
+  peyvand__seo__overview:
+    file: peyvand/seo/overview.md
+    title: SEO recommendations
+    tags:
+    - peyvand-seo
+    priority: 35
+    domain: peyvand
+    category: peyvand/seo
+  peyvand__terminology__glossary:
+    file: peyvand/terminology/glossary.md
+    title: Peyvand Editorial Glossary
+    tags:
+    - peyvand-glossary
+    priority: 36
+    domain: peyvand
+    category: peyvand/terminology
+  peyvand__tone_of_voice__overview:
+    file: peyvand/tone_of_voice/overview.md
+    title: Tone of voice
+    tags:
+    - peyvand-tone
+    priority: 37
+    domain: peyvand
+    category: peyvand/tone-of-voice
+  sweden__README:
+    file: sweden/README.md
+    title: Sweden Domain README
+    tags:
+    - readme-sweden
+    priority: 38
+    domain: sweden
+    category: sweden
+  sweden__authorities__Arbetsförmedlingen:
+    file: sweden/authorities/Arbetsförmedlingen.md
+    title: Swedish Public Employment Service
+    tags:
+    - arbetsformedlingen
+    - employment-service
+    priority: 39
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__CSN:
+    file: sweden/authorities/CSN.md
+    title: Swedish Board of Student Finance
+    tags:
+    - csn
+    - student-finance
+    priority: 40
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Försäkringskassan:
+    file: sweden/authorities/Försäkringskassan.md
+    title: Swedish Social Insurance Agency
+    tags:
+    - forsakringskassan
+    - social-insurance
+    priority: 41
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Kommun:
+    file: sweden/authorities/Kommun.md
+    title: Municipality (Kommun)
+    tags:
+    - kommun
+    - municipality
+    priority: 42
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Kronofogden:
+    file: sweden/authorities/Kronofogden.md
+    title: Swedish Enforcement Authority
+    tags:
+    - kronofogden
+    - enforcement
+    priority: 43
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Migrationsverket:
+    file: sweden/authorities/Migrationsverket.md
+    title: Swedish Migration Agency
+    tags:
+    - migrationsverket
+    - migration-agency
+    priority: 44
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Polisen:
+    file: sweden/authorities/Polisen.md
+    title: Swedish Police Authority
+    tags:
+    - polisen
+    - police
+    priority: 45
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Region:
+    file: sweden/authorities/Region.md
+    title: Region (healthcare region)
+    tags:
+    - region
+    - healthcare-region
+    priority: 46
+    domain: sweden
+    category: sweden/authorities
+  sweden__authorities__Skatteverket:
+    file: sweden/authorities/Skatteverket.md
+    title: Swedish Tax Agency
+    tags:
     - skatteverket
-    - income
-  priority: 50
-
-labour_market:
-  file: labour_market.md
-  title: Labour Market
-  tags:
-    - labour market
-    - employment
-    - job
-    - arbetsförmedlingen
-  priority: 60
-
-glossary:
-  file: glossary.md
-  title: Glossary
-  tags:
-    - glossary
-    - terminology
-    - swedish
-    - persian
-  priority: 70
+    - tax-agency
+    priority: 47
+    domain: sweden
+    category: sweden/authorities
+  sweden__digital_services__overview:
+    file: sweden/digital_services/overview.md
+    title: Digital services in Sweden
+    tags:
+    - sweden-digital-services
+    priority: 48
+    domain: sweden
+    category: sweden/digital-services
+  sweden__education__overview:
+    file: sweden/education/overview.md
+    title: Education in Sweden
+    tags:
+    - sweden-education
+    priority: 49
+    domain: sweden
+    category: sweden/education
+  sweden__healthcare__overview:
+    file: sweden/healthcare/overview.md
+    title: Healthcare in Sweden
+    tags:
+    - sweden-healthcare
+    priority: 50
+    domain: sweden
+    category: sweden/healthcare
+  sweden__housing__overview:
+    file: sweden/housing/overview.md
+    title: Housing in Sweden
+    tags:
+    - sweden-housing
+    priority: 51
+    domain: sweden
+    category: sweden/housing
+  sweden__labour_market__overview:
+    file: sweden/labour_market/overview.md
+    title: Labour market in Sweden
+    tags:
+    - sweden-labour-market
+    priority: 52
+    domain: sweden
+    category: sweden/labour-market
+  sweden__laws__overview:
+    file: sweden/laws/overview.md
+    title: Laws — editorial notes
+    tags:
+    - sweden-laws
+    priority: 53
+    domain: sweden
+    category: sweden/laws
+  sweden__migration__overview:
+    file: sweden/migration/overview.md
+    title: Migration in Sweden
+    tags:
+    - sweden-migration
+    priority: 54
+    domain: sweden
+    category: sweden/migration
+  sweden__public_services__overview:
+    file: sweden/public_services/overview.md
+    title: Public services overview
+    tags:
+    - sweden-public-services
+    priority: 55
+    domain: sweden
+    category: sweden/public-services
+  sweden__taxation__overview:
+    file: sweden/taxation/overview.md
+    title: Taxation in Sweden
+    tags:
+    - sweden-taxation
+    priority: 56
+    domain: sweden
+    category: sweden/taxation
+  sweden__terminology__overview:
+    file: sweden/terminology/overview.md
+    title: Swedish terminology notes
+    tags:
+    - sweden-terminology
+    priority: 57
+    domain: sweden
+    category: sweden/terminology
+  templates__authority:
+    file: templates/authority.md
+    title: Template — Authority
+    tags:
+    - template-authority
+    priority: 58
+    domain: templates
+    category: templates
+  templates__comparison:
+    file: templates/comparison.md
+    title: Template — Comparison
+    tags:
+    - template-comparison
+    priority: 59
+    domain: templates
+    category: templates
+  templates__concept:
+    file: templates/concept.md
+    title: Template — Concept
+    tags:
+    - template-concept
+    priority: 60
+    domain: templates
+    category: templates
+  templates__editorial_policy:
+    file: templates/editorial_policy.md
+    title: Template — Editorial Policy
+    tags:
+    - template-editorial_policy
+    priority: 61
+    domain: templates
+    category: templates
+  templates__faq:
+    file: templates/faq.md
+    title: Template — Faq
+    tags:
+    - template-faq
+    priority: 62
+    domain: templates
+    category: templates
+  templates__glossary_entry:
+    file: templates/glossary_entry.md
+    title: Template — Glossary Entry
+    tags:
+    - template-glossary_entry
+    priority: 63
+    domain: templates
+    category: templates
+  templates__guide:
+    file: templates/guide.md
+    title: Template — Guide
+    tags:
+    - template-guide
+    priority: 64
+    domain: templates
+    category: templates
+  templates__knowledge_document:
+    file: templates/knowledge_document.md
+    title: Template — Knowledge Document
+    tags:
+    - template-knowledge_document
+    priority: 65
+    domain: templates
+    category: templates
+  templates__process:
+    file: templates/process.md
+    title: Template — Process
+    tags:
+    - template-process
+    priority: 66
+    domain: templates
+    category: templates

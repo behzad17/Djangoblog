@@ -237,16 +237,15 @@ class ExistingTelemetryImportSmokeTests(unittest.TestCase):
 class KnowledgeAndConfigLayoutTests(unittest.TestCase):
     def test_knowledge_placeholders_exist(self):
         root = Path(__file__).resolve().parents[1] / 'knowledge'
-        for name in (
-            'authorities.md',
-            'glossary.md',
-            'migration.md',
-            'healthcare.md',
-            'education.md',
-            'taxation.md',
-            'labour_market.md',
-        ):
-            self.assertTrue((root / name).is_file(), msg=name)
+        for name in ('sweden', 'community', 'peyvand', 'templates'):
+            self.assertTrue((root / name).is_dir(), msg=name)
+        self.assertTrue((root / 'manifest.yaml').is_file())
+        self.assertTrue(
+            (root / 'sweden' / 'authorities' / 'Skatteverket.md').is_file()
+        )
+        self.assertTrue(
+            (root / 'peyvand' / 'terminology' / 'glossary.md').is_file()
+        )
 
     def test_system_and_style_placeholders_exist(self):
         root = _repo_prompts_root() / 'v1'
