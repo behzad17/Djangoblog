@@ -14,11 +14,12 @@
   data-initial-category="{{ ai_assistant_initial_category }}"
   data-actions='{{ ai_assistant_actions_json|escape }}'
 >
-  <button type="button" class="button" id="ai-assistant-open">
+  <button type="button" class="button" id="ai-assistant-open" aria-haspopup="dialog">
     ✨ Generate with AI
   </button>
   <span class="help">
     AI proposes draft content only. Use Draft fills the form — Save Draft still saves.
+    Shortcuts: Esc close · Ctrl/Cmd+Enter generate · ←/→ versions.
   </span>
 
   <div id="ai-assistant-backdrop" class="ai-assistant-backdrop" hidden></div>
@@ -28,13 +29,14 @@
     role="dialog"
     aria-modal="true"
     aria-labelledby="ai-assistant-heading"
+    aria-describedby="ai-assistant-lead"
     hidden
   >
     <div class="ai-assistant-modal-header">
       <h2 id="ai-assistant-heading">AI Editorial Assistant</h2>
-      <button type="button" class="ai-assistant-close" data-ai-assistant-cancel aria-label="Close">×</button>
+      <button type="button" class="ai-assistant-close" data-ai-assistant-cancel aria-label="Close assistant">×</button>
     </div>
-    <p class="ai-assistant-lead">
+    <p class="ai-assistant-lead" id="ai-assistant-lead">
       Human-in-the-loop: AI proposes, you decide. Up to three temporary versions
       for this modal session. Nothing is saved until you use Save Draft.
       Closing without Use Draft / Regenerate / Reject does not store feedback.
@@ -42,7 +44,7 @@
 
     <form id="ai-assistant-form" onsubmit="return false;">
       <label for="ai-field-title">Title</label>
-      <input id="ai-field-title" type="text" name="title" maxlength="200" value="{{ ai_assistant_initial_title|escape }}">
+      <input id="ai-field-title" type="text" name="title" maxlength="200" value="{{ ai_assistant_initial_title|escape }}" autocomplete="off">
 
       <label for="ai-field-category">Category</label>
       <select id="ai-field-category" name="category_id" required>
@@ -56,7 +58,7 @@
       </select>
 
       <label for="ai-field-language">Language</label>
-      <input id="ai-field-language" type="text" name="language" maxlength="32" value="sv">
+      <input id="ai-field-language" type="text" name="language" maxlength="32" value="sv" autocomplete="off">
 
       <label for="ai-field-context">Context</label>
       <textarea id="ai-field-context" name="context" rows="3"></textarea>
@@ -74,33 +76,60 @@
           class="default ai-assistant-action"
           id="ai-assistant-action-{{ action.id }}"
           data-ai-action="{{ action.id }}"
+          aria-keyshortcuts="Control+Enter Meta+Enter"
           {% if not action.enabled %}disabled title="{{ action.coming_soon }}"{% endif %}
         >{{ action.icon }} {{ action.label }}</button>
         {% endfor %}
       </div>
+      <div id="ai-assistant-loading" class="ai-assistant-loading" hidden role="status" aria-live="polite">
+        <span class="ai-assistant-spinner" aria-hidden="true"></span>
+        <span id="ai-assistant-status-text">Preparing request…</span>
+      </div>
     </div>
 
-    <div id="ai-assistant-error" class="ai-assistant-error" hidden></div>
-    <div id="ai-assistant-versions" class="ai-assistant-versions" hidden></div>
+    <div id="ai-assistant-error" class="ai-assistant-error" hidden role="alert"></div>
+    <div id="ai-assistant-versions" class="ai-assistant-versions" hidden aria-label="Generated versions"></div>
 
     <div id="ai-assistant-preview" class="ai-assistant-preview" hidden>
-      <h3 class="ai-assistant-section-title">Result</h3>
-      <h4>Title</h4>
-      <div id="ai-preview-title"></div>
-      <h4>Summary</h4>
-      <div id="ai-preview-summary"></div>
-      <h4>Body</h4>
-      <div id="ai-preview-body" class="ai-preview-body"></div>
-      <details>
+      <div class="ai-preview-toolbar">
+        <h3 class="ai-assistant-section-title">Result</h3>
+        <div class="ai-copy-actions" role="group" aria-label="Copy preview">
+          <button type="button" class="button" data-ai-copy="title">Copy title</button>
+          <button type="button" class="button" data-ai-copy="summary">Copy summary</button>
+          <button type="button" class="button" data-ai-copy="body">Copy body</button>
+          <button type="button" class="button" data-ai-copy="all">Copy all</button>
+        </div>
+      </div>
+
+      <div class="ai-preview-block">
+        <h4>Title</h4>
+        <div id="ai-preview-title" class="ai-preview-title"></div>
+      </div>
+      <div class="ai-preview-block">
+        <h4>Summary</h4>
+        <div id="ai-preview-summary" class="ai-preview-prose"></div>
+      </div>
+      <div class="ai-preview-block">
+        <h4>Body</h4>
+        <div id="ai-preview-body" class="ai-preview-body ai-preview-prose" tabindex="0"></div>
+      </div>
+
+      <details id="ai-preview-diff-details" class="ai-preview-diff" hidden>
+        <summary>Changes from previous version</summary>
+        <div id="ai-preview-diff" class="ai-preview-diff-body" aria-live="polite"></div>
+      </details>
+
+      <details id="ai-telemetry-details">
         <summary>Telemetry</summary>
-        <pre id="ai-preview-telemetry"></pre>
+        <dl id="ai-preview-telemetry-summary" class="ai-telemetry-summary"></dl>
+        <pre id="ai-preview-telemetry" class="ai-telemetry-raw" hidden></pre>
       </details>
 
       <div class="ai-assistant-section ai-feedback-panel">
         <h3 class="ai-assistant-section-title">Editorial Feedback</h3>
         <div class="ai-feedback-ratings" id="ai-feedback-ratings" role="group" aria-label="Rating">
           {% for value, label in ai_feedback_ratings %}
-          <button type="button" class="button ai-feedback-rating" data-rating="{{ value }}">{{ label }}</button>
+          <button type="button" class="button ai-feedback-rating" data-rating="{{ value }}" aria-pressed="false">{{ label }}</button>
           {% endfor %}
         </div>
         <div class="ai-feedback-reasons" id="ai-feedback-reasons">

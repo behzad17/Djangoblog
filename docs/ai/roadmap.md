@@ -150,6 +150,21 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## Editorial Experience Polish
+
+- Loading UX: spinner + rotating status copy while Generate/Regenerate runs; actions disabled
+- Keyboard: Esc closes, Ctrl/Cmd+Enter generates, ←/→ switch versions, focus trap in the modal
+- Version cards show time / Current / Accepted badges
+- Preview renders lightweight markdown (headings, lists, tables, code) with scrollable body
+- Copy title / summary / body / all
+- Optional word-level diff vs previous version after regenerate
+- Telemetry collapsed by default with provider, model, duration, tokens, estimated cost
+- Accessibility: ARIA labels, live status, high-contrast focus styles
+
+**Outcome:** Production-feel editor UX without changing AI or Blog behaviour.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
 - `EditorialDraftPublisher` + `BlogDraftPersistenceService` map `EditorialDraft` → Blog `Post` as Draft only.
