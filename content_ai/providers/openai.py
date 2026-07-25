@@ -113,9 +113,12 @@ class OpenAIProvider(BaseAIProvider):
         else:
             from openai import OpenAI
 
+            # TEMPORARY: isolate Heroku H12 vs SDK timeout/retries.
+            # Revert to timeout=self.timeout (and default max_retries) after diagnosis.
             self._client = OpenAI(
                 api_key=self.api_key,
-                timeout=self.timeout,
+                timeout=20,
+                max_retries=0,
             )
 
     def generate_post(self, prompt=''):
