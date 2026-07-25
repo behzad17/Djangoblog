@@ -73,6 +73,14 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
         self.assertEqual(result.metadata['task'], 'post_generation')
         self.assertEqual(result.metadata['model'], 'gpt-test-model')
         self.assertEqual(result.metadata['response_id'], 'resp_post_1')
+        self.assertIsNotNone(result.telemetry)
+        self.assertEqual(result.telemetry.provider, 'openai')
+        self.assertEqual(result.telemetry.model, 'gpt-test-model')
+        self.assertEqual(result.telemetry.prompt_length, len('post prompt'))
+        self.assertEqual(
+            result.telemetry.response_length,
+            len('Generated post body'),
+        )
 
     def test_generate_ad_success_returns_generation_result(self):
         response = MagicMock()
@@ -98,6 +106,31 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
 
         self.assertIn('OpenAI generation failed', str(ctx.exception))
         self.assertNotIsInstance(ctx.exception, RuntimeError)
+        self.assertIsNotNone(ctx.exception.telemetry)
+        self.assertFalse(ctx.exception.telemetry.success)
+        self.assertEqual(ctx.exception.telemetry.error_type, 'RuntimeError')
+
+    def test_usage_mapped_into_telemetry(self):
+        response = MagicMock()
+        response.output_text = 'body'
+        response.id = 'resp_usage'
+        response.usage = MagicMock(
+            input_tokens=11,
+            output_tokens=7,
+            total_tokens=18,
+        )
+        self.client.responses.create.return_value = response
+
+        result = self.provider.generate_post('prompt')
+
+        self.assertEqual(
+            result.telemetry.token_usage,
+            {
+                'input_tokens': 11,
+                'output_tokens': 7,
+                'total_tokens': 18,
+            },
+        )
 
     def test_missing_output_text_returns_empty_content(self):
         class _Response:

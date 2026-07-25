@@ -65,3 +65,4 @@ class ResponseSchemaTests(SimpleTestCase):
         self.assertEqual(result.metadata, {})
         self.assertEqual(result.warnings, [])
         self.assertEqual(result.provider, '')
+        self.assertIsNone(result.telemetry)

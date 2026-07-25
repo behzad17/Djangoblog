@@ -13,6 +13,19 @@ from content_ai.providers.exceptions import (
     ProviderConfigurationError,
 )
 from content_ai.schemas.responses import GenerationResult
+from content_ai.telemetry import AIExecutionTelemetry
+
+
+def _extract_token_usage(response):
+    """Map SDK usage fields into a plain dict. Never return the SDK object."""
+    usage = getattr(response, 'usage', None)
+    if usage is None:
+        return None
+    return {
+        'input_tokens': getattr(usage, 'input_tokens', None),
+        'output_tokens': getattr(usage, 'output_tokens', None),
+        'total_tokens': getattr(usage, 'total_tokens', None),
+    }
 
 
 class OpenAIProvider(BaseAIProvider):
@@ -55,20 +68,41 @@ class OpenAIProvider(BaseAIProvider):
         return self._generate(prompt, task='ad_generation')
 
     def _generate(self, prompt, task):
+        prompt_text = prompt or ''
         try:
             response = self._client.responses.create(
                 model=self.model,
                 input=prompt,
             )
         except Exception as exc:
+            telemetry = AIExecutionTelemetry(
+                provider=self.name,
+                model=self.model,
+                success=False,
+                error_type=type(exc).__name__,
+                prompt_length=len(prompt_text),
+                response_length=0,
+            )
             raise GenerationError(
-                f'OpenAI generation failed: {exc}'
+                f'OpenAI generation failed: {exc}',
+                telemetry=telemetry,
             ) from exc
 
         content = getattr(response, 'output_text', None)
         if content is None:
             content = ''
+        content_text = str(content)
 
+        telemetry = AIExecutionTelemetry(
+            provider=self.name,
+            model=self.model,
+            success=True,
+            prompt_length=len(prompt_text),
+            response_length=len(content_text),
+            token_usage=_extract_token_usage(response),
+            estimated_cost=None,
+            metadata={'response_id': getattr(response, 'id', None)},
+        )
         return GenerationResult(
             success=True,
             content=content,
@@ -78,4 +112,5 @@ class OpenAIProvider(BaseAIProvider):
                 'response_id': getattr(response, 'id', None),
             },
             provider=self.name,
+            telemetry=telemetry,
         )

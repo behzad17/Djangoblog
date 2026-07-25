@@ -39,9 +39,28 @@ Defined in `content_ai/schemas/responses.py`:
 
 | Schema | Fields |
 |---|---|
-| `GenerationResult` | `success`, `content`, `metadata`, `warnings`, `provider` |
+| `GenerationResult` | `success`, `content`, `metadata`, `warnings`, `provider`, `telemetry` (optional) |
 
 Every provider method must return `GenerationResult`. The rest of the application must not depend on raw vendor JSON or SDK objects.
+
+---
+
+## Execution telemetry
+
+`content_ai/telemetry.py` defines in-memory `AIExecutionTelemetry`:
+
+| Field | Purpose |
+|---|---|
+| `provider` / `model` | Which adapter and model ran |
+| `started_at` / `finished_at` / `duration_ms` | Timing (filled by `ContentGenerationService`) |
+| `success` / `error_type` | Outcome |
+| `prompt_length` / `response_length` | Size hints |
+| `token_usage` / `estimated_cost` | Optional vendor usage (plain dicts/numbers only) |
+| `metadata` | Extra non-vendor-specific notes |
+
+`GenerationResult.telemetry` may be `None`. Providers may pre-populate fields (mock/OpenAI); the generation service measures duration and attaches the final object.
+
+Telemetry is **not persisted**. Future logging / DB / analytics backends are separate PRs.
 
 ---
 

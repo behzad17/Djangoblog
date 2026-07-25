@@ -61,7 +61,10 @@ class ContentGenerationServiceTests(SimpleTestCase):
         self.assertIsInstance(prompt, str)
         self.assertIn('Task: POST_GENERATION', prompt)
         self.assertIn('Title: housing', prompt)
-        self.assertEqual(result, expected)
+        self.assertEqual(result.content, 'delegated')
+        self.assertEqual(result.provider, 'mock')
+        self.assertIsNotNone(result.telemetry)
+        self.assertTrue(result.telemetry.success)
 
     @override_settings(CONTENT_AI_PROVIDER='mock')
     def test_ad_generation_passes_prompt_string(self):

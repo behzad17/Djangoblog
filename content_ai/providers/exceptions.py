@@ -15,3 +15,7 @@ class ProviderConfigurationError(ProviderError):
 
 class GenerationError(ProviderError):
     """Raised when a provider fails to produce a generation result."""
+
+    def __init__(self, message, telemetry=None):
+        super().__init__(message)
+        self.telemetry = telemetry
