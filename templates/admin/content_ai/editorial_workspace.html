@@ -1,0 +1,131 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:"Django site admin" }}{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'content_ai/editorial_workspace.css' %}">
+{% endblock %}
+
+{% block content %}
+{{ session|json_script:"ai-ws-session-data" }}
+<div
+  id="ai-editorial-workspace"
+  class="ai-workspace"
+  data-api-base="{{ api_base }}"
+>
+  <header class="ai-workspace__header">
+    <div>
+      <h1>AI Editorial Workspace</h1>
+      <p class="ai-workspace__subtitle">
+        AI assists. You decide. Nothing publishes automatically.
+      </p>
+    </div>
+    <div class="ai-workspace__header-actions">
+      <label>
+        Workflow
+        <select id="ai-ws-workflow">
+          {% for state in workflow_states %}
+            <option value="{{ state.id }}">{{ state.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button type="button" class="button" id="ai-ws-reset">New session</button>
+      <a class="button" href="{% url 'admin:blog_post_changelist' %}">Back to posts</a>
+    </div>
+  </header>
+
+  <div class="ai-workspace__grid">
+    <section class="ai-workspace__panel" id="panel-source">
+      <h2>Source material</h2>
+      <label>URL <input type="url" id="ai-ws-source-url" placeholder="https://"></label>
+      <label>Title <input type="text" id="ai-ws-source-title"></label>
+      <label>Publisher <input type="text" id="ai-ws-source-publisher"></label>
+      <label>Text / notes
+        <textarea id="ai-ws-source-text" rows="10" placeholder="Paste source text, notes, or draft"></textarea>
+      </label>
+      <label>Import existing article ID
+        <input type="number" id="ai-ws-import-post-id" min="1" placeholder="Post ID">
+      </label>
+      <div class="ai-workspace__toolbar">
+        <button type="button" class="button default" id="ai-ws-ingest">Ingest source</button>
+        <button type="button" class="button" id="ai-ws-import">Import article</button>
+      </div>
+      <div class="ai-workspace__meta" id="ai-ws-source-meta"></div>
+      <h3>Research notes</h3>
+      <textarea id="ai-ws-research" rows="8"></textarea>
+    </section>
+
+    <section class="ai-workspace__panel ai-workspace__panel--main" id="panel-article">
+      <h2>Generated article</h2>
+      <div class="ai-workspace__toolbar">
+        <button type="button" class="button default" id="ai-ws-generate">Generate draft</button>
+        <button type="button" class="button" data-regen="headline">Regen headline</button>
+        <button type="button" class="button" data-regen="lead">Regen lead</button>
+        <button type="button" class="button" data-regen="body">Regen body</button>
+        <button type="button" class="button" data-regen="summary">Regen summary</button>
+      </div>
+      <label>Headline <input type="text" id="ai-ws-headline"></label>
+      <label>Lead <textarea id="ai-ws-lead" rows="3"></textarea></label>
+      <label>Body <textarea id="ai-ws-body" rows="16"></textarea></label>
+      <label>Summary <textarea id="ai-ws-summary" rows="3"></textarea></label>
+      <label>Excerpt <textarea id="ai-ws-excerpt" rows="2"></textarea></label>
+      <label>Category <input type="text" id="ai-ws-category"></label>
+      <label>Tags <input type="text" id="ai-ws-tags" placeholder="comma,separated"></label>
+      <button type="button" class="button" id="ai-ws-save-sections">Save edits</button>
+    </section>
+
+    <section class="ai-workspace__panel" id="panel-assistant">
+      <h2>AI assistant</h2>
+      <div class="ai-workspace__actions" id="ai-ws-actions">
+        {% for action in actions %}
+          <button
+            type="button"
+            class="button"
+            data-action-id="{{ action.id }}"
+            {% if not action.implemented %}disabled title="Coming soon"{% endif %}
+          >{{ action.label }}</button>
+        {% endfor %}
+      </div>
+      <h3>Explainability</h3>
+      <ul id="ai-ws-explanations" class="ai-workspace__list"></ul>
+      <h3>History</h3>
+      <ul id="ai-ws-history" class="ai-workspace__list"></ul>
+    </section>
+  </div>
+
+  <section class="ai-workspace__bottom" id="panel-validation">
+    <div class="ai-workspace__bottom-grid">
+      <div>
+        <h2>Fact check</h2>
+        <button type="button" class="button" id="ai-ws-factcheck">Run fact check</button>
+        <pre id="ai-ws-factcheck-out" class="ai-workspace__pre"></pre>
+      </div>
+      <div>
+        <h2>Source intelligence</h2>
+        <pre id="ai-ws-source-intel" class="ai-workspace__pre"></pre>
+      </div>
+      <div>
+        <h2>SEO</h2>
+        <button type="button" class="button" id="ai-ws-seo">Prepare SEO</button>
+        <pre id="ai-ws-seo-out" class="ai-workspace__pre"></pre>
+      </div>
+      <div>
+        <h2>Evaluation</h2>
+        <button type="button" class="button" id="ai-ws-evaluate">Evaluate</button>
+        <pre id="ai-ws-eval-out" class="ai-workspace__pre"></pre>
+      </div>
+    </div>
+    <p class="ai-workspace__footnote">
+      Publishing always requires human approval in Blog Admin. This workspace never auto-publishes.
+    </p>
+  </section>
+</div>
+{% endblock %}
+
+{% block footer %}
+  {{ block.super }}
+  {% csrf_token %}
+  <script src="{% static 'content_ai/editorial_workspace.js' %}"></script>
+{% endblock %}

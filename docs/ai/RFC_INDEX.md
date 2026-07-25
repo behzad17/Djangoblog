@@ -18,7 +18,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-003** | Editorial Workflow | 2 Platform | Done (architecture) | Lifecycle orchestrator; inactive (`ENABLE_EDITORIAL_WORKFLOW=False`) |
 | **RFC-004** | Prompt Evaluation | 2 Platform | Done (architecture) | Passive metrics/snapshots/reports (`ENABLE_AI_EVALUATION_FRAMEWORK=False`) |
 | **RFC-005** | AI Provider Abstraction | 2 Platform | Done (architecture) | Manager/factory/capabilities; OpenAI path unchanged |
-| **RFC-006** | Source Intelligence | 3 Intelligence | Planned | Sources & citations |
+| **RFC-006** | Source Intelligence | 3 Intelligence | Stub (APF-001) | Minimal inspector; full RFC planned |
 | **RFC-007** | Fact Checking | 3 Intelligence | Done (architecture) | Passive claim/evidence pipeline (`ENABLE_FACT_CHECKING_FRAMEWORK=False`) |
 | **RFC-008** | SEO Intelligence | 3 Intelligence | Planned | SEO assists |
 | **RFC-009** | Feedback Learning | 4 Learning | Planned | Learn from editor feedback |
@@ -26,6 +26,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-011** | AI Editorial Agents | 5 Advanced | Planned | Multi-step agents + human gates |
 | **RFC-012** | Analytics | 5 Advanced | Planned | Quality / cost / utilisation |
 | **RFC-013** | Continuous Improvement | 5 Advanced | Planned | Governed optimisation loops |
+| **APF-001** | AI Editorial Workspace | Product Feature | Done (compose UI) | [features/APF-001.md](./features/APF-001.md) — staff workspace; no auto-publish |
 
 ---
 

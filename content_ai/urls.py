@@ -1,9 +1,16 @@
 from django.urls import path
 
 from content_ai.views import sandbox
+from content_ai.workspace.views import editorial_workspace, workspace_api
 
 app_name = 'content_ai'
 
 urlpatterns = [
     path('sandbox/', sandbox, name='sandbox'),
+    path('workspace/', editorial_workspace, name='editorial_workspace'),
+    path(
+        'workspace/api/<slug:action>/',
+        workspace_api,
+        name='workspace_api',
+    ),
 ]

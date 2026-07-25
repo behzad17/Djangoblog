@@ -1,0 +1,141 @@
+/* AI Editorial Workspace (APF-001) — modular admin layout */
+
+.ai-workspace {
+  --ai-ws-ink: #1c1917;
+  --ai-ws-muted: #57534e;
+  --ai-ws-line: #d6d3d1;
+  --ai-ws-panel: #fafaf9;
+  --ai-ws-accent: #0f766e;
+  color: var(--ai-ws-ink);
+  font-family: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+}
+
+.ai-workspace__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ai-ws-line);
+}
+
+.ai-workspace__header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.ai-workspace__subtitle {
+  margin: 0;
+  color: var(--ai-ws-muted);
+}
+
+.ai-workspace__header-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.ai-workspace__grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.4fr) minmax(220px, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ai-workspace__panel,
+.ai-workspace__bottom {
+  background: var(--ai-ws-panel);
+  border: 1px solid var(--ai-ws-line);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.ai-workspace__panel h2,
+.ai-workspace__bottom h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.ai-workspace__panel label {
+  display: block;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.ai-workspace__panel input,
+.ai-workspace__panel textarea,
+.ai-workspace__panel select,
+.ai-workspace__header-actions select {
+  width: 100%;
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+}
+
+.ai-workspace__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.ai-workspace__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ai-workspace__actions .button {
+  text-align: left;
+}
+
+.ai-workspace__list {
+  padding-left: 1.1rem;
+  color: var(--ai-ws-muted);
+}
+
+.ai-workspace__list button.linklike {
+  background: none;
+  border: none;
+  color: var(--ai-ws-accent);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.ai-workspace__bottom-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ai-workspace__pre {
+  background: #fff;
+  border: 1px solid var(--ai-ws-line);
+  padding: 0.5rem;
+  max-height: 180px;
+  overflow: auto;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.ai-workspace__footnote {
+  margin: 1rem 0 0;
+  color: var(--ai-ws-muted);
+  font-size: 0.9rem;
+}
+
+.ai-workspace__meta {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--ai-ws-muted);
+}
+
+@media (max-width: 1100px) {
+  .ai-workspace__grid,
+  .ai-workspace__bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}

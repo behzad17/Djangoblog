@@ -47,6 +47,9 @@ ENABLE_FACT_CHECKING_FRAMEWORK = False
 # Provider platform manager/factory (RFC-005) — optional; get_provider unchanged.
 ENABLE_PROVIDER_PLATFORM = False
 
+# AI Editorial Workspace (APF-001) — staff UI; never auto-publishes.
+ENABLE_AI_EDITORIAL_WORKSPACE = True
+
 FEATURE_FLAGS: dict[str, bool] = {
     # When True, production may call PromptBuilder (not enabled).
     'use_ai_engine_prompt_builder': False,
@@ -62,4 +65,5 @@ FEATURE_FLAGS: dict[str, bool] = {
     'ENABLE_AI_EVALUATION_FRAMEWORK': ENABLE_AI_EVALUATION_FRAMEWORK,
     'ENABLE_FACT_CHECKING_FRAMEWORK': ENABLE_FACT_CHECKING_FRAMEWORK,
     'ENABLE_PROVIDER_PLATFORM': ENABLE_PROVIDER_PLATFORM,
+    'ENABLE_AI_EDITORIAL_WORKSPACE': ENABLE_AI_EDITORIAL_WORKSPACE,
 }

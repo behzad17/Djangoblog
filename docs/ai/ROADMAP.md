@@ -43,6 +43,12 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 **Depends on:** Phase 2 (workflow + evaluation), Knowledge Base  
 **Outcome:** Higher trust and discoverability with humans still approving.
 
+### Product feature (compose layer)
+
+| Feature | Title | Status |
+|---------|--------|--------|
+| [APF-001](./features/APF-001.md) | AI Editorial Workspace | Done — staff UI composing RFCs 001–007; no auto-publish |
+
 ---
 
 ## Phase 4 — Learning

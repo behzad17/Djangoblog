@@ -3,6 +3,14 @@
 
 {% block form_top %}
 {{ block.super }}
+<div class="ai-assistant-toolbar module" style="margin-bottom: 0.75rem;">
+  <a class="button" href="{% url 'content_ai:editorial_workspace' %}">
+    Open Editorial Workspace
+  </a>
+  <span class="help">
+    Full AI editorial workspace (source → draft → review). Does not replace this form or auto-publish.
+  </span>
+</div>
 {% if show_generate_with_ai %}
 <div
   id="ai-editorial-assistant"
