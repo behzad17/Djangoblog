@@ -1,16 +1,15 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.http import JsonResponse
 from django.urls import path, reverse
 from django.utils.html import format_html
+import json
 
 from content_ai.admin_editorial import (
-    SESSION_SUGGESTION_KEY,
-    AdminGenerateWithAIForm,
-    apply_suggestion_to_initial,
-    suggestion_from_draft,
+    categories_for_assistant,
+    preview_from_draft,
 )
 from content_ai.editorial.service import EditorialAIService
 from content_ai.providers.exceptions import (
@@ -18,8 +17,10 @@ from content_ai.providers.exceptions import (
     ProviderConfigurationError,
     ProviderNotFound,
 )
+from content_ai.serializers import serialize_error
 
 from .models import Post, Comment, Category, UserProfile, PostViewCount
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -72,9 +73,10 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug', 'category', 'status', 'pinned', 'pinned_row', 'url_status', 'is_deleted', 'deleted_status', 'created_on')
     search_fields = ['title', 'content', 'external_url']
     list_filter = ('status', 'category', 'pinned', 'url_approved', 'is_deleted', 'created_on', ExpertAuthorFilter,)
-    # Slug is auto-generated from title in Post.save() method
-    # prepopulated_fields removed - slug will be generated automatically for Persian titles
-    # Using plain textareas instead of Summernote for admin panel
+
+    class Media:
+        css = {'all': ('content_ai/admin_ai_assistant.css',)}
+        js = ('content_ai/admin_ai_assistant.js',)
     fieldsets = (
         ('Post Information', {
             'fields': ('title', 'slug', 'author', 'category', 'status', 'pinned', 'pinned_row')
@@ -108,9 +110,9 @@ class PostAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         custom_urls = [
             path(
-                'generate-with-ai/',
-                self.admin_site.admin_view(self.generate_with_ai_view),
-                name='blog_post_generate_with_ai',
+                'ai-assistant/generate/',
+                self.admin_site.admin_view(self.ai_assistant_generate_view),
+                name='blog_post_ai_assistant_generate',
             ),
         ]
         return custom_urls + urls
@@ -125,32 +127,24 @@ class PostAdmin(admin.ModelAdmin):
             and not obj.is_deleted
         )
 
-    def _generate_with_ai_url(self, obj=None):
-        url = reverse('admin:blog_post_generate_with_ai')
-        if obj is not None:
-            return f'{url}?post_id={obj.pk}'
-        return url
-
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         extra_context = extra_context or {}
         obj = None
         if object_id:
             obj = self.get_object(request, object_id)
 
-        if request.method == 'GET':
-            suggestion = request.session.pop(SESSION_SUGGESTION_KEY, None)
-            if suggestion:
-                request._content_ai_suggestion = suggestion
-                messages.info(
-                    request,
-                    'AI suggestion loaded into the form. Review and save as '
-                    'Draft when ready. Nothing was saved automatically.',
-                )
-
         show = self._can_show_generate_with_ai(request, obj)
         extra_context['show_generate_with_ai'] = show
-        extra_context['generate_with_ai_url'] = (
-            self._generate_with_ai_url(obj) if show else ''
+        extra_context['ai_assistant_generate_url'] = reverse(
+            'admin:blog_post_ai_assistant_generate'
+        )
+        extra_context['ai_assistant_categories'] = (
+            categories_for_assistant() if show else []
+        )
+        extra_context['ai_assistant_post_id'] = obj.pk if obj else ''
+        extra_context['ai_assistant_initial_title'] = obj.title if obj else ''
+        extra_context['ai_assistant_initial_category'] = (
+            obj.category_id if obj else ''
         )
         return super().changeform_view(
             request,
@@ -159,114 +153,131 @@ class PostAdmin(admin.ModelAdmin):
             extra_context=extra_context,
         )
 
-    def get_form(self, request, obj=None, change=False, **kwargs):
-        Form = super().get_form(request, obj, change=change, **kwargs)
-        suggestion = getattr(request, '_content_ai_suggestion', None)
-        if not suggestion:
-            return Form
-
-        class AISuggestedPostForm(Form):
-            def __init__(self, *args, _suggestion=suggestion, **form_kwargs):
-                initial = apply_suggestion_to_initial(
-                    form_kwargs.get('initial') or {},
-                    _suggestion,
-                )
-                form_kwargs['initial'] = initial
-                super().__init__(*args, **form_kwargs)
-
-        AISuggestedPostForm.__name__ = Form.__name__
-        AISuggestedPostForm.__qualname__ = getattr(
-            Form,
-            '__qualname__',
-            Form.__name__,
-        )
-        return AISuggestedPostForm
-
-    def generate_with_ai_view(self, request):
-        """
-        Intermediate Admin page: collect prompts, generate suggestion, return
-        to the change form. Never persists or publishes.
-        """
-        post = None
-        post_id = request.GET.get('post_id') or request.POST.get('post_id')
+    def _assistant_permission_error(self, request, post_id):
         if post_id:
-            post = self.get_object(request, post_id)
+            post = self.get_object(request, str(post_id))
             if post is None:
-                messages.error(request, 'Post not found.')
-                return redirect('admin:blog_post_changelist')
-            if post.status != 0 or post.is_deleted:
-                messages.error(
-                    request,
-                    'Generate with AI is only available for Draft posts.',
+                return JsonResponse(
+                    serialize_error('not_found', 'Post not found.'),
+                    status=404,
                 )
-                return redirect('admin:blog_post_change', post.pk)
+            if post.status != 0 or post.is_deleted:
+                return JsonResponse(
+                    serialize_error(
+                        'invalid_status',
+                        'Generate with AI is only available for Draft posts.',
+                    ),
+                    status=400,
+                )
             if not self.has_change_permission(request, post):
                 raise PermissionDenied
-            cancel_url = reverse('admin:blog_post_change', args=[post.pk])
-        else:
-            if not self.has_add_permission(request):
-                raise PermissionDenied
-            cancel_url = reverse('admin:blog_post_add')
+            return None
+        if not self.has_add_permission(request):
+            raise PermissionDenied
+        return None
 
-        initial = {}
-        if post is not None and request.method == 'GET':
-            initial = {
-                'title': post.title,
-                'category': post.category_id,
-            }
+    def ai_assistant_generate_view(self, request):
+        """
+        JSON generate endpoint for the Admin AI modal.
 
-        form = AdminGenerateWithAIForm(
-            request.POST or None,
-            initial=initial,
-        )
-        error = None
+        Returns an in-memory preview only. Never saves or publishes.
+        """
+        if request.method != 'POST':
+            return JsonResponse(
+                serialize_error('method_not_allowed', 'POST required.'),
+                status=405,
+            )
 
-        if request.method == 'POST' and form.is_valid():
-            cleaned = form.cleaned_data
-            category = cleaned['category']
+        try:
+            payload = json.loads(request.body.decode('utf-8') or '{}')
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return JsonResponse(
+                serialize_error('invalid_json', 'Request body must be valid JSON.'),
+                status=400,
+            )
+        if not isinstance(payload, dict):
+            return JsonResponse(
+                serialize_error('invalid_json', 'Request body must be a JSON object.'),
+                status=400,
+            )
+
+        post_id = payload.get('post_id') or None
+        denied = self._assistant_permission_error(request, post_id)
+        if denied is not None:
+            return denied
+
+        category_id = payload.get('category_id')
+        category = None
+        if category_id is not None and category_id != '':
             try:
-                draft = EditorialAIService().generate_draft(
-                    title=cleaned.get('title') or '',
-                    language=cleaned.get('language') or '',
-                    category=category.name,
-                    context=cleaned.get('context') or '',
-                    instructions=cleaned.get('instructions') or '',
+                category = Category.objects.get(pk=category_id)
+            except (Category.DoesNotExist, TypeError, ValueError):
+                return JsonResponse(
+                    serialize_error('validation_error', 'Invalid category.'),
+                    status=400,
                 )
-            except ProviderNotFound as exc:
-                error = str(exc)
-            except ProviderConfigurationError as exc:
-                error = str(exc)
-            except GenerationError as exc:
-                error = str(exc)
-            except Exception:
-                error = 'Unexpected generation failure. Please try again.'
-            else:
-                suggestion = suggestion_from_draft(
-                    draft,
-                    category_id=category.pk,
-                )
-                if not suggestion['title'] and cleaned.get('title'):
-                    suggestion['title'] = cleaned['title']
-                request.session[SESSION_SUGGESTION_KEY] = suggestion
-                request.session.modified = True
-                if post is not None:
-                    return redirect('admin:blog_post_change', post.pk)
-                return redirect('admin:blog_post_add')
+        if category is None:
+            return JsonResponse(
+                serialize_error('validation_error', 'Category is required.'),
+                status=400,
+            )
 
-        context = {
-            **self.admin_site.each_context(request),
-            'opts': self.model._meta,
-            'form': form,
-            'post': post,
-            'error': error,
-            'cancel_url': cancel_url,
-            'title': 'Generate with AI',
-        }
-        return render(
-            request,
-            'admin/blog/post/generate_with_ai.html',
-            context,
+        title = payload.get('title') or ''
+        language = payload.get('language') or ''
+        context = payload.get('context') or ''
+        instructions = payload.get('instructions') or ''
+        category_name = payload.get('category') or category.name
+        for label, value in (
+            ('title', title),
+            ('language', language),
+            ('context', context),
+            ('instructions', instructions),
+            ('category', category_name),
+        ):
+            if not isinstance(value, str):
+                return JsonResponse(
+                    serialize_error(
+                        'validation_error',
+                        f"Field '{label}' must be a string.",
+                    ),
+                    status=400,
+                )
+
+        try:
+            draft = EditorialAIService().generate_draft(
+                title=title,
+                language=language,
+                category=category_name,
+                context=context,
+                instructions=instructions,
+            )
+        except ProviderNotFound as exc:
+            return JsonResponse(
+                serialize_error('provider_not_found', str(exc)),
+                status=400,
+            )
+        except ProviderConfigurationError as exc:
+            return JsonResponse(
+                serialize_error('provider_configuration_error', str(exc)),
+                status=503,
+            )
+        except GenerationError as exc:
+            return JsonResponse(
+                serialize_error('generation_failed', str(exc)),
+                status=502,
+            )
+        except Exception:
+            return JsonResponse(
+                serialize_error('internal_error', 'Unexpected generation failure.'),
+                status=500,
+            )
+
+        preview = preview_from_draft(
+            draft,
+            category_id=category.pk,
+            request_values={'title': title},
         )
+        return JsonResponse({'preview': preview}, status=200)
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))

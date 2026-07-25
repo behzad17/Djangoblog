@@ -1,14 +1,87 @@
 {% extends "admin/change_form.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block form_top %}
 {{ block.super }}
 {% if show_generate_with_ai %}
-<div class="module" style="margin-bottom: 12px; padding: 10px 12px;">
-  <a class="button" href="{{ generate_with_ai_url }}">Generate with AI</a>
-  <span style="margin-left: 8px; color: #666;">
-    AI suggests draft content only. Nothing is saved until you review and save.
+<div
+  id="ai-editorial-assistant"
+  class="ai-assistant-toolbar module"
+  data-generate-url="{{ ai_assistant_generate_url }}"
+  data-post-id="{{ ai_assistant_post_id }}"
+  data-initial-title="{{ ai_assistant_initial_title|escape }}"
+  data-initial-category="{{ ai_assistant_initial_category }}"
+>
+  <button type="button" class="button" id="ai-assistant-open">
+    ✨ Generate with AI
+  </button>
+  <span class="help">
+    AI proposes draft content only. Accept to fill the form — Save Draft still saves.
   </span>
+
+  <div id="ai-assistant-backdrop" class="ai-assistant-backdrop" hidden></div>
+  <div
+    id="ai-assistant-modal"
+    class="ai-assistant-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ai-assistant-heading"
+    hidden
+  >
+    <h2 id="ai-assistant-heading">AI Editorial Assistant</h2>
+    <p class="ai-assistant-lead">
+      Generate a draft suggestion, preview it, and Accept only when ready.
+      Up to three versions are kept for this modal session. Nothing is saved until you use Save Draft.
+    </p>
+
+    <form id="ai-assistant-form" onsubmit="return false;">
+      <label for="ai-field-title">Title</label>
+      <input id="ai-field-title" type="text" name="title" maxlength="200" value="{{ ai_assistant_initial_title|escape }}">
+
+      <label for="ai-field-category">Category</label>
+      <select id="ai-field-category" name="category_id" required>
+        <option value="">---------</option>
+        {% for category in ai_assistant_categories %}
+        <option
+          value="{{ category.id }}"
+          {% if ai_assistant_initial_category == category.id %}selected{% endif %}
+        >{{ category.name }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="ai-field-language">Language</label>
+      <input id="ai-field-language" type="text" name="language" maxlength="32" value="sv">
+
+      <label for="ai-field-context">Context</label>
+      <textarea id="ai-field-context" name="context" rows="3"></textarea>
+
+      <label for="ai-field-instructions">Instructions</label>
+      <textarea id="ai-field-instructions" name="instructions" rows="3"></textarea>
+    </form>
+
+    <div class="ai-assistant-actions">
+      <button type="button" class="default" id="ai-assistant-generate">Generate</button>
+      <button type="button" class="button" id="ai-assistant-regenerate" disabled>Regenerate</button>
+      <button type="button" class="button" id="ai-assistant-accept" disabled>Accept</button>
+      <button type="button" class="button" data-ai-assistant-cancel>Cancel</button>
+    </div>
+
+    <div id="ai-assistant-error" class="ai-assistant-error" hidden></div>
+    <div id="ai-assistant-versions" class="ai-assistant-versions" hidden></div>
+
+    <div id="ai-assistant-preview" class="ai-assistant-preview" hidden>
+      <h3>Title</h3>
+      <div id="ai-preview-title"></div>
+      <h3>Summary</h3>
+      <div id="ai-preview-summary"></div>
+      <h3>Body</h3>
+      <div id="ai-preview-body" class="ai-preview-body"></div>
+      <details>
+        <summary>Telemetry</summary>
+        <pre id="ai-preview-telemetry"></pre>
+      </details>
+    </div>
+  </div>
 </div>
 {% endif %}
 {% endblock %}

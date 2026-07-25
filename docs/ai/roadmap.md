@@ -99,21 +99,33 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ## AI-assisted Editorial Workflow
 
-- Staff editors can use **Generate with AI** on the Blog Post Admin (add or Draft edit only)
-- Intermediate Admin page collects title, category, language, context, and instructions
-- `EditorialAIService` returns an in-memory suggestion; fields are applied to the Admin form via session
-- **Human-in-the-loop:** AI proposes; editors review/edit title, body, and summary; editors save Draft
-- Nothing is auto-saved or published; existing Blog publish workflow is unchanged
-- No public pages, scheduling, background jobs, or n8n in this layer
+- Staff editors can use **✨ Generate with AI** on the Blog Post Admin (add or Draft edit only)
+- Admin modal collects title, category, language, context, and instructions
+- Generate / Regenerate call the Admin JSON assistant endpoint → `EditorialAIService` → preview
+- **Human-in-the-loop:** AI proposes; editors Accept into the Admin form; Save Draft remains manual
+- Temporary version history keeps the last **three** previews for the open modal session only
+- Cancel / close clears history; nothing is persisted server-side
+- No auto-save, auto-publish, scheduling, background jobs, or n8n
 
-**Outcome:** AI assists editors inside Admin without changing public publishing behaviour.
+**Outcome:** AI Editorial Assistant inside Admin without changing public publishing behaviour.
+
+---
+
+## AI Editorial Assistant
+
+- Modal UX: Generate → Preview (title / summary / body / collapsible telemetry) → Accept | Cancel | Regenerate
+- Accept populates Admin fields only; the existing Save Draft button persists
+- Published posts never show the assistant
+- Reuses Blog add/change permissions
+
+**Outcome:** Editors stay in control with ephemeral preview history.
 
 ---
 
 ## Phase 3 — Blog Draft Generation
 
 - `EditorialDraftPublisher` + `BlogDraftPersistenceService` map `EditorialDraft` → Blog `Post` as Draft only.
-- Admin **Generate with AI** assists editors with human-in-the-loop review before save.
+- Admin **Generate with AI** modal assists editors with preview, regenerate, and temporary version history before Accept / Save Draft.
 - Publishing remains Admin / editorial approval via existing Blog workflow.
 - Existing Blog public APIs and templates remain unchanged.
 

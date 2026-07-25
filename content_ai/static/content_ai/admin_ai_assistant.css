@@ -1,0 +1,138 @@
+/* AI Editorial Assistant modal — Admin only */
+.ai-assistant-toolbar {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+}
+
+.ai-assistant-toolbar .help {
+  margin-left: 8px;
+  color: #666;
+}
+
+.ai-assistant-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+}
+
+.ai-assistant-modal {
+  position: fixed;
+  z-index: 1001;
+  top: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, 94vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  padding: 16px 18px 18px;
+}
+
+.ai-assistant-modal h2 {
+  margin: 0 0 8px;
+}
+
+.ai-assistant-modal .ai-assistant-lead {
+  color: #555;
+  margin: 0 0 14px;
+}
+
+.ai-assistant-modal label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 4px;
+}
+
+.ai-assistant-modal input[type="text"],
+.ai-assistant-modal select,
+.ai-assistant-modal textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ai-assistant-modal textarea {
+  min-height: 72px;
+}
+
+.ai-assistant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.ai-assistant-actions .default {
+  font-size: 14px;
+  padding: 8px 16px;
+}
+
+.ai-assistant-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  color: #842029;
+}
+
+.ai-assistant-versions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.ai-assistant-version-btn {
+  border: 1px solid #999;
+  background: #f8f8f8;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.ai-assistant-version-btn.is-active {
+  background: #417690;
+  border-color: #417690;
+  color: #fff;
+}
+
+.ai-assistant-preview {
+  margin-top: 14px;
+  border-top: 1px solid #ddd;
+  padding-top: 12px;
+}
+
+.ai-assistant-preview h3 {
+  margin: 12px 0 4px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #666;
+}
+
+.ai-assistant-preview .ai-preview-body {
+  white-space: pre-wrap;
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  padding: 10px;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.ai-assistant-preview details {
+  margin-top: 10px;
+}
+
+.ai-assistant-preview pre {
+  white-space: pre-wrap;
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  padding: 8px;
+  max-height: 160px;
+  overflow: auto;
+}
+
+body.ai-assistant-open {
+  overflow: hidden;
+}
