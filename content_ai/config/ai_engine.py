@@ -50,6 +50,9 @@ ENABLE_PROVIDER_PLATFORM = False
 # AI Editorial Workspace (APF-001) — staff UI; never auto-publishes.
 ENABLE_AI_EDITORIAL_WORKSPACE = True
 
+# AI Studio (APF-002) — admin experiment/eval UI; never writes production.
+ENABLE_AI_STUDIO = True
+
 FEATURE_FLAGS: dict[str, bool] = {
     # When True, production may call PromptBuilder (not enabled).
     'use_ai_engine_prompt_builder': False,
@@ -66,4 +69,5 @@ FEATURE_FLAGS: dict[str, bool] = {
     'ENABLE_FACT_CHECKING_FRAMEWORK': ENABLE_FACT_CHECKING_FRAMEWORK,
     'ENABLE_PROVIDER_PLATFORM': ENABLE_PROVIDER_PLATFORM,
     'ENABLE_AI_EDITORIAL_WORKSPACE': ENABLE_AI_EDITORIAL_WORKSPACE,
+    'ENABLE_AI_STUDIO': ENABLE_AI_STUDIO,
 }

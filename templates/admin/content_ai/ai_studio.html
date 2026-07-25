@@ -1,0 +1,171 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:"Django site admin" }}{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'content_ai/ai_studio.css' %}">
+{% endblock %}
+
+{% block content %}
+{{ session|json_script:"ai-studio-session-data" }}
+{{ prompt_options|json_script:"ai-studio-prompt-options" }}
+<div
+  id="ai-studio"
+  class="ai-studio"
+  data-api-base="{{ api_base }}"
+>
+  <header class="ai-studio__header">
+    <div>
+      <p class="ai-studio__eyebrow">Admin · AI</p>
+      <h1>AI Studio</h1>
+      <p class="ai-studio__subtitle">
+        Experiment, compare, inspect, evaluate — without affecting production.
+      </p>
+    </div>
+    <div class="ai-studio__header-actions">
+      <label>
+        Environment
+        <select id="ai-studio-environment">
+          <option value="testing">Testing</option>
+          <option value="experimental">Experimental</option>
+        </select>
+      </label>
+      <span class="ai-studio__badge" id="ai-studio-env-badge">Testing</span>
+      <button type="button" class="button" id="ai-studio-reset">Reset session</button>
+      <a class="button" href="{{ workspace_url }}">Editorial Workspace</a>
+      <a class="button" href="{% url 'admin:index' %}">Admin home</a>
+    </div>
+  </header>
+
+  <p class="ai-studio__safety">
+    Production prompts and knowledge are read-only here.
+    Studio never publishes and never overwrites production automatically.
+  </p>
+
+  <div class="ai-studio__layout">
+    <nav class="ai-studio__nav" aria-label="Studio modules">
+      {% for module in modules %}
+        <button
+          type="button"
+          class="ai-studio__nav-btn{% if module.status == 'future' %} is-future{% endif %}"
+          data-module="{{ module.id }}"
+          {% if module.status == 'future' %}disabled title="Reserved for future"{% endif %}
+        >
+          <strong>{{ module.label }}</strong>
+          <span>{{ module.description }}</span>
+        </button>
+      {% endfor %}
+    </nav>
+
+    <main class="ai-studio__main">
+      <section class="ai-studio__panel" data-panel="prompt_lab">
+        <h2>Prompt Lab</h2>
+        <div class="ai-studio__row">
+          <label>Version A
+            <select id="pl-version-a"></select>
+          </label>
+          <label>Style A
+            <select id="pl-style-a"></select>
+          </label>
+          <label>Version B
+            <select id="pl-version-b"></select>
+          </label>
+          <label>Style B
+            <select id="pl-style-b"></select>
+          </label>
+        </div>
+        <label>User prompt
+          <textarea id="pl-user-prompt" rows="4" placeholder="Test user prompt"></textarea>
+        </label>
+        <div class="ai-studio__toolbar">
+          <button type="button" class="button default" id="pl-preview">Preview assembly</button>
+          <button type="button" class="button" id="pl-compare">Compare A vs B</button>
+          <button type="button" class="button" id="pl-run-test">Run test generation</button>
+        </div>
+        <label>Provider for test
+          <input type="text" id="pl-provider" value="mock">
+        </label>
+        <pre id="pl-out" class="ai-studio__pre"></pre>
+      </section>
+
+      <section class="ai-studio__panel" data-panel="knowledge_lab" hidden>
+        <h2>Knowledge Lab</h2>
+        <div class="ai-studio__toolbar">
+          <button type="button" class="button default" id="kl-browse">Browse packs</button>
+          <button type="button" class="button" id="kl-compare">Compare packs</button>
+        </div>
+        <div class="ai-studio__row">
+          <label>Pack A <input type="text" id="kl-pack-a" placeholder="module name"></label>
+          <label>Pack B <input type="text" id="kl-pack-b" placeholder="module name"></label>
+        </div>
+        <pre id="kl-out" class="ai-studio__pre"></pre>
+      </section>
+
+      <section class="ai-studio__panel" data-panel="provider_lab" hidden>
+        <h2>Provider Lab</h2>
+        <button type="button" class="button default" id="pr-inspect">Inspect providers</button>
+        <pre id="pr-out" class="ai-studio__pre"></pre>
+      </section>
+
+      <section class="ai-studio__panel" data-panel="evaluation_lab" hidden>
+        <h2>Evaluation Lab</h2>
+        <label>Input text <textarea id="ev-input" rows="3"></textarea></label>
+        <label>Output text <textarea id="ev-output" rows="6"></textarea></label>
+        <button type="button" class="button default" id="ev-run">Evaluate</button>
+        <pre id="ev-out" class="ai-studio__pre"></pre>
+      </section>
+
+      <section class="ai-studio__panel" data-panel="workflow_inspector" hidden>
+        <h2>Workflow Inspector</h2>
+        <label>State
+          <select id="wf-state">
+            <option value="idea">idea</option>
+            <option value="researching">researching</option>
+            <option value="drafting">drafting</option>
+            <option value="reviewing">reviewing</option>
+            <option value="ready_for_approval">ready_for_approval</option>
+            <option value="approved">approved</option>
+            <option value="published">published</option>
+          </select>
+        </label>
+        <button type="button" class="button default" id="wf-inspect">Inspect</button>
+        <pre id="wf-out" class="ai-studio__pre"></pre>
+      </section>
+
+      <section class="ai-studio__panel" data-panel="generation_history" hidden>
+        <h2>Generation History</h2>
+        <div class="ai-studio__toolbar">
+          <button type="button" class="button default" id="gh-refresh">Refresh</button>
+          <button type="button" class="button" id="gh-compare">Compare selected</button>
+        </div>
+        <div class="ai-studio__row">
+          <label>Generation A <input type="text" id="gh-id-a" placeholder="generation_id"></label>
+          <label>Generation B <input type="text" id="gh-id-b" placeholder="generation_id"></label>
+        </div>
+        <pre id="gh-out" class="ai-studio__pre"></pre>
+      </section>
+
+      <section class="ai-studio__panel" data-panel="system_health" hidden>
+        <h2>System Health</h2>
+        <button type="button" class="button default" id="sh-refresh">Refresh health</button>
+        <pre id="sh-out" class="ai-studio__pre"></pre>
+      </section>
+    </main>
+
+    <aside class="ai-studio__aside">
+      <h2>Explainability</h2>
+      <ul id="ai-studio-explanations" class="ai-studio__list"></ul>
+      <h2>Last comparison</h2>
+      <pre id="ai-studio-comparison" class="ai-studio__pre ai-studio__pre--small"></pre>
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+  {{ block.super }}
+  {% csrf_token %}
+  <script src="{% static 'content_ai/ai_studio.js' %}"></script>
+{% endblock %}

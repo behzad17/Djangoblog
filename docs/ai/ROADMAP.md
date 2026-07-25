@@ -48,6 +48,7 @@ This document is the **product** roadmap for Peyvand AI RFCs. It does not schedu
 | Feature | Title | Status |
 |---------|--------|--------|
 | [APF-001](./features/APF-001.md) | AI Editorial Workspace | Done — staff UI composing RFCs 001–007; no auto-publish |
+| [APF-002](./features/APF-002.md) | AI Studio | Done — admin experiment/eval labs; never writes production |
 
 ---
 

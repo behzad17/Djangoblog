@@ -27,6 +27,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-012** | Analytics | 5 Advanced | Planned | Quality / cost / utilisation |
 | **RFC-013** | Continuous Improvement | 5 Advanced | Planned | Governed optimisation loops |
 | **APF-001** | AI Editorial Workspace | Product Feature | Done (compose UI) | [features/APF-001.md](./features/APF-001.md) — staff workspace; no auto-publish |
+| **APF-002** | AI Studio | Product Feature | Done (compose UI) | [features/APF-002.md](./features/APF-002.md) — admin experiment/eval control centre |
 
 ---
 

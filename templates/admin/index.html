@@ -135,6 +135,23 @@
   </div>
 </div>
 
+<!-- AI control centre (APF-002) -->
+<div class="module" style="margin-bottom: 24px;">
+  <table>
+    <caption>
+      <span class="section">AI</span>
+    </caption>
+    <tr>
+      <th scope="row"><a href="{% url 'content_ai:ai_studio' %}">AI Studio</a></th>
+      <td>Experiment, compare, evaluate AI behaviour (admin only)</td>
+    </tr>
+    <tr>
+      <th scope="row"><a href="{% url 'content_ai:editorial_workspace' %}">AI Editorial Workspace</a></th>
+      <td>Compose drafts with AI assistance (never auto-publishes)</td>
+    </tr>
+  </table>
+</div>
+
 <!-- Default Django Admin Index Content -->
 {% if app_list %}
     {% for app in app_list %}

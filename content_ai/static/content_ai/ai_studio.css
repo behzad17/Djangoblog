@@ -1,0 +1,178 @@
+/* AI Studio (APF-002) — admin experiment control centre */
+
+.ai-studio {
+  --studio-ink: #1c1917;
+  --studio-muted: #57534e;
+  --studio-line: #d6d3d1;
+  --studio-panel: #fafaf9;
+  --studio-accent: #1d4ed8;
+  --studio-warn: #b45309;
+  color: var(--studio-ink);
+  font-family: "Source Serif 4", "Iowan Old Style", Palatino, serif;
+}
+
+.ai-studio__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--studio-line);
+}
+
+.ai-studio__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  color: var(--studio-muted);
+}
+
+.ai-studio__header h1 {
+  margin: 0.15rem 0 0.25rem;
+  font-size: 1.85rem;
+}
+
+.ai-studio__subtitle {
+  margin: 0;
+  color: var(--studio-muted);
+}
+
+.ai-studio__header-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.ai-studio__badge {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--studio-warn);
+  color: var(--studio-warn);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ai-studio__safety {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.85rem;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 0.9rem;
+}
+
+.ai-studio__layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.9fr) minmax(340px, 1.6fr) minmax(200px, 0.9fr);
+  gap: 1rem;
+}
+
+.ai-studio__nav,
+.ai-studio__main,
+.ai-studio__aside,
+.ai-studio__panel {
+  background: var(--studio-panel);
+  border: 1px solid var(--studio-line);
+  border-radius: 4px;
+  padding: 0.85rem;
+}
+
+.ai-studio__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ai-studio__nav-btn {
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--studio-line);
+  padding: 0.55rem 0.65rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.ai-studio__nav-btn strong {
+  display: block;
+}
+
+.ai-studio__nav-btn span {
+  display: block;
+  color: var(--studio-muted);
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}
+
+.ai-studio__nav-btn.is-active {
+  border-color: var(--studio-accent);
+  box-shadow: inset 3px 0 0 var(--studio-accent);
+}
+
+.ai-studio__nav-btn.is-future {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ai-studio__panel h2,
+.ai-studio__aside h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.ai-studio__panel label {
+  display: block;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.ai-studio__panel input,
+.ai-studio__panel textarea,
+.ai-studio__panel select,
+.ai-studio__header-actions select {
+  width: 100%;
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+}
+
+.ai-studio__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.ai-studio__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+
+.ai-studio__pre {
+  background: #fff;
+  border: 1px solid var(--studio-line);
+  padding: 0.6rem;
+  max-height: 420px;
+  overflow: auto;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.ai-studio__pre--small {
+  max-height: 180px;
+}
+
+.ai-studio__list {
+  padding-left: 1.1rem;
+  color: var(--studio-muted);
+}
+
+@media (max-width: 1100px) {
+  .ai-studio__layout,
+  .ai-studio__row {
+    grid-template-columns: 1fr;
+  }
+}
