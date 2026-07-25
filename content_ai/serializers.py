@@ -7,13 +7,27 @@ from __future__ import annotations
 
 from content_ai.telemetry import AIExecutionTelemetry
 
-POST_GENERATION_FIELDS = (
+# Public request fields for the AI Blog Writer editorial draft endpoint.
+EDITORIAL_DRAFT_REQUEST_FIELDS = (
     'title',
-    'source',
     'language',
     'category',
     'context',
     'instructions',
+)
+
+# Still accepted for PostGenerationRequest mapping / internal testing.
+_OPTIONAL_REQUEST_FIELDS = (
+    'source',
+    'provider_name',
+)
+
+_SENSITIVE_METADATA_KEYS = frozenset(
+    {
+        'prompt',
+        'prompt_text',
+        'raw_prompt',
+    }
 )
 
 
@@ -25,22 +39,23 @@ def parse_editorial_draft_request(data):
     """
     Normalize JSON into kwargs for ``EditorialAIService.generate_draft``.
 
-    Accepts fields matching ``PostGenerationRequest`` plus optional
-    ``provider_name``.
+    Primary fields: title, language, category, context, instructions.
+    Optional: source, provider_name.
     """
     if data is None:
         raise SerializationError('Request body is required.')
     if not isinstance(data, dict):
         raise SerializationError('Request body must be a JSON object.')
 
-    unknown = set(data.keys()) - set(POST_GENERATION_FIELDS) - {'provider_name'}
+    allowed = set(EDITORIAL_DRAFT_REQUEST_FIELDS) | set(_OPTIONAL_REQUEST_FIELDS)
+    unknown = set(data.keys()) - allowed
     if unknown:
         raise SerializationError(
             f"Unknown fields: {', '.join(sorted(unknown))}."
         )
 
     kwargs = {}
-    for field in POST_GENERATION_FIELDS:
+    for field in EDITORIAL_DRAFT_REQUEST_FIELDS + ('source',):
         value = data.get(field, '')
         if value is None:
             value = ''
@@ -54,6 +69,17 @@ def parse_editorial_draft_request(data):
             raise SerializationError("Field 'provider_name' must be a string.")
         kwargs['provider_name'] = provider_name
     return kwargs
+
+
+def sanitize_metadata(metadata):
+    """Remove prompt strings and other sensitive keys from API metadata."""
+    if not metadata:
+        return {}
+    return {
+        key: value
+        for key, value in dict(metadata).items()
+        if key not in _SENSITIVE_METADATA_KEYS
+    }
 
 
 def serialize_telemetry(telemetry: AIExecutionTelemetry | None):
@@ -75,7 +101,7 @@ def serialize_telemetry(telemetry: AIExecutionTelemetry | None):
         'response_length': telemetry.response_length,
         'token_usage': telemetry.token_usage,
         'estimated_cost': telemetry.estimated_cost,
-        'metadata': dict(telemetry.metadata),
+        'metadata': sanitize_metadata(telemetry.metadata),
     }
 
 
@@ -86,7 +112,7 @@ def serialize_editorial_draft(draft):
         'body': draft.body,
         'summary': draft.summary,
         'language': draft.language,
-        'metadata': dict(draft.metadata),
+        'metadata': sanitize_metadata(draft.metadata),
         'telemetry': serialize_telemetry(draft.telemetry),
     }
 

@@ -58,15 +58,18 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
-## Internal Content AI API
+## Internal AI Integration API
 
-- Endpoint: `POST /api/internal/content-ai/editorial/draft/`
-- Auth: authenticated **staff** (or superuser) only — not public
-- Invokes `EditorialAIService.generate_draft()` and returns an in-memory `EditorialDraft` JSON payload (including `telemetry`)
+- Endpoint: `POST /api/internal/ai/editorial/draft/`
+- Alias (compat): `POST /api/internal/content-ai/editorial/draft/`
+- Auth: authenticated **staff** or **superuser** only — **not public**
+- Request fields: `title`, `language`, `category`, `context`, `instructions` (maps to `PostGenerationRequest`)
+- Invokes `EditorialAIService.generate_draft()` and returns an in-memory `EditorialDraft` JSON payload (`title`, `body`, `summary`, `language`, `metadata`, `telemetry`)
+- Prompt strings and provider SDK objects are never returned
 - Nothing is persisted (no Blog `Post`, no Ads, no DB writes)
-- Integration point for future n8n / automation clients once they authenticate as staff/internal callers
+- Integration point for future n8n / automation once they authenticate as staff/internal callers
 
-**Outcome:** A minimal internal HTTP surface over the editorial domain, without changing public site behaviour.
+**Outcome:** Secure internal HTTP surface for AI Blog Writer, without changing public site behaviour.
 
 ---
 

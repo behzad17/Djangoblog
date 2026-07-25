@@ -7,7 +7,6 @@ from django.urls import reverse
 
 from content_ai.providers.exceptions import GenerationError
 from content_ai.providers.mock import MOCK_RESPONSE
-from content_ai.schemas.responses import GenerationResult
 from content_ai.telemetry import AIExecutionTelemetry
 
 User = get_user_model()
@@ -26,6 +25,11 @@ class InternalEditorialDraftAPIAuthTests(TestCase):
             username='apistaff',
             password='password123',
             is_staff=True,
+        )
+        self.superuser = User.objects.create_superuser(
+            username='apisuper',
+            email='super@example.com',
+            password='password123',
         )
 
     def test_anonymous_returns_401(self):
@@ -47,12 +51,31 @@ class InternalEditorialDraftAPIAuthTests(TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()['error']['code'], 'forbidden')
 
+    def test_superuser_allowed(self):
+        self.client.login(username='apisuper', password='password123')
+        response = self.client.post(
+            self.url,
+            data=json.dumps(
+                {
+                    'title': 'Super draft',
+                    'language': 'sv',
+                    'category': 'news',
+                    'context': 'ctx',
+                    'instructions': 'short',
+                    'provider_name': 'mock',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+
 
 @override_settings(CONTENT_AI_PROVIDER='mock')
 class InternalEditorialDraftAPITests(TestCase):
     def setUp(self):
         self.client = Client()
         self.url = reverse('content_ai_api:editorial_draft')
+        self.assertEqual(self.url, '/api/internal/ai/editorial/draft/')
         self.staff = User.objects.create_user(
             username='draftstaff',
             password='password123',
@@ -67,7 +90,6 @@ class InternalEditorialDraftAPITests(TestCase):
                 {
                     'title': 'API draft',
                     'language': 'sv',
-                    'source': 'internal',
                     'category': 'news',
                     'context': 'ctx',
                     'instructions': 'short',
@@ -88,6 +110,28 @@ class InternalEditorialDraftAPITests(TestCase):
         self.assertEqual(payload['telemetry']['provider'], 'mock')
         self.assertTrue(payload['telemetry']['success'])
         self.assertIsNotNone(payload['telemetry']['duration_ms'])
+
+    def test_response_does_not_expose_prompt_strings(self):
+        response = self.client.post(
+            self.url,
+            data=json.dumps(
+                {
+                    'title': 'Secret prompt check',
+                    'language': 'sv',
+                    'category': 'news',
+                    'context': 'ctx',
+                    'instructions': 'short',
+                    'provider_name': 'mock',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertNotIn('prompt', payload.get('metadata', {}))
+        raw = json.dumps(payload)
+        self.assertNotIn('Task: POST_GENERATION', raw)
+        self.assertNotIn('System: You are a Peyvand', raw)
 
     def test_invalid_json_returns_400(self):
         response = self.client.post(
@@ -132,6 +176,38 @@ class InternalEditorialDraftAPITests(TestCase):
         self.assertEqual(payload['telemetry']['success'], False)
         self.assertEqual(payload['telemetry']['error_type'], 'GenerationError')
 
+    def test_unexpected_failure_returns_500(self):
+        with patch(
+            'content_ai.api.EditorialAIService.generate_draft',
+            side_effect=RuntimeError('boom'),
+        ):
+            response = self.client.post(
+                self.url,
+                data=json.dumps({'title': 'T', 'provider_name': 'mock'}),
+                content_type='application/json',
+            )
+        self.assertEqual(response.status_code, 500)
+        payload = response.json()
+        self.assertEqual(payload['error']['code'], 'internal_error')
+        self.assertNotIn('boom', payload['error']['message'])
+
     def test_get_not_allowed(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 405)
+
+    def test_legacy_path_still_works(self):
+        legacy_url = reverse('content_ai_editorial_draft_legacy')
+        self.assertEqual(legacy_url, '/api/internal/content-ai/editorial/draft/')
+        response = self.client.post(
+            legacy_url,
+            data=json.dumps(
+                {
+                    'title': 'Legacy',
+                    'language': 'sv',
+                    'provider_name': 'mock',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['title'], 'Legacy')

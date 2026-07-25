@@ -23,6 +23,7 @@ from ratelimit.decorators import ratelimit
 from allauth.account import views as allauth_views
 from blog.sitemaps import PostSitemap, CategorySitemap
 from community.sitemaps import DiscussionSitemap
+from content_ai.api import create_editorial_draft
 from blog.views_robots import robots_txt
 from codestar.views_db_health import db_health_dashboard
 from codestar.admin_incoming import admin_incoming_items
@@ -72,10 +73,16 @@ urlpatterns = [
     path("community/", include("community.urls", namespace="community")),
     # Developer-only Content AI sandbox (DEBUG or superuser; login required)
     path("content-ai/", include("content_ai.urls", namespace="content_ai")),
-    # Internal Content AI API (staff-only; no Blog/Ads persistence)
+    # Internal AI Integration API (staff/superuser only; no Blog/Ads persistence)
     path(
-        "api/internal/content-ai/",
+        "api/internal/ai/",
         include("content_ai.urls_api", namespace="content_ai_api"),
+    ),
+    # Backward-compatible alias of the internal editorial draft API
+    path(
+        "api/internal/content-ai/editorial/draft/",
+        create_editorial_draft,
+        name="content_ai_editorial_draft_legacy",
     ),
     # Rate-limit login and signup endpoints
     # More lenient in development (20/min) for testing, stricter in production (5/min)

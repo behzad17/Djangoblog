@@ -111,7 +111,7 @@ Default provider is **`mock`** (no network). To use OpenAI (Responses API), set:
 
 Developer sandbox (login + DEBUG or superuser): `/content-ai/sandbox/`
 
-Internal staff API: `POST /api/internal/content-ai/editorial/draft/` (returns in-memory draft + telemetry; no Blog save)
+Internal AI Integration API (staff/superuser): `POST /api/internal/ai/editorial/draft/` (returns in-memory draft + telemetry; no Blog save)
 
 See [docs/ai/api-contract.md](docs/ai/api-contract.md), [docs/ai/providers.md](docs/ai/providers.md), and [docs/ai/roadmap.md](docs/ai/roadmap.md).
 
