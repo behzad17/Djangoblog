@@ -55,6 +55,7 @@
     }
 
     var generateUrl = root.getAttribute('data-generate-url');
+    var feedbackUrl = root.getAttribute('data-feedback-url');
     var actions = parseActions(root);
     var actionsById = {};
     actions.forEach(function (action) {
@@ -75,12 +76,16 @@
     var generateBtn = document.querySelector('[data-ai-action="generate"]');
     var regenerateBtn = document.querySelector('[data-ai-action="regenerate"]');
     var useDraftBtn = document.getElementById('ai-assistant-use-draft');
+    var rejectBtn = document.getElementById('ai-assistant-reject');
     var cancelBtns = document.querySelectorAll('[data-ai-assistant-cancel]');
     var actionButtons = document.querySelectorAll('[data-ai-action]');
+    var ratingButtons = document.querySelectorAll('.ai-feedback-rating');
+    var commentEl = document.getElementById('ai-feedback-comment');
     var busy = false;
     var versions = [];
     var activeIndex = null;
     var lastRequest = null;
+    var selectedRating = '';
 
     function showError(message) {
       errorBox.textContent = message || 'Generation failed. Please try again.';
@@ -90,6 +95,93 @@
     function clearError() {
       errorBox.textContent = '';
       errorBox.hidden = true;
+    }
+
+    function selectedReasons() {
+      var values = [];
+      document
+        .querySelectorAll('input[name="ai_feedback_reason"]:checked')
+        .forEach(function (input) {
+          values.push(input.value);
+        });
+      return values;
+    }
+
+    function resetFeedbackForm() {
+      selectedRating = '';
+      ratingButtons.forEach(function (btn) {
+        btn.classList.remove('is-selected');
+      });
+      document
+        .querySelectorAll('input[name="ai_feedback_reason"]')
+        .forEach(function (input) {
+          input.checked = false;
+        });
+      if (commentEl) {
+        commentEl.value = '';
+      }
+    }
+
+    function collectFeedbackPayload(extra) {
+      var version = versions[activeIndex];
+      if (!version || !version.generation_id) {
+        return null;
+      }
+      var rating = selectedRating;
+      if (extra && extra.rating) {
+        rating = extra.rating;
+      }
+      if (!rating) {
+        if (extra && extra.accepted) {
+          rating = 'good';
+        } else if (extra && extra.regenerated) {
+          rating = 'needs_improvement';
+        } else if (extra && extra.rejected) {
+          rating = 'rejected';
+        }
+      }
+      var payload = {
+        generation_id: version.generation_id,
+        prompt_task: version.prompt_task || 'post_generation',
+        prompt_version: version.prompt_version || 'v1',
+        provider: version.provider || '',
+        model: version.model || '',
+        language: version.language || '',
+        rating: rating,
+        reasons: selectedReasons(),
+        comment: commentEl ? commentEl.value || '' : '',
+        accepted: !!(extra && extra.accepted),
+        regenerated: !!(extra && extra.regenerated),
+        post_id: root.getAttribute('data-post-id') || '',
+        action: (extra && extra.action) || '',
+      };
+      return payload;
+    }
+
+    function submitFeedback(extra) {
+      if (!feedbackUrl) {
+        return Promise.resolve(false);
+      }
+      var payload = collectFeedbackPayload(extra);
+      if (!payload || !payload.rating) {
+        return Promise.resolve(false);
+      }
+      return fetch(feedbackUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken(),
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(function (response) {
+          return response.ok;
+        })
+        .catch(function () {
+          return false;
+        });
     }
 
     function renderVersions() {
@@ -127,6 +219,9 @@
       if (useDraftBtn) {
         useDraftBtn.disabled = busy;
       }
+      if (rejectBtn) {
+        rejectBtn.disabled = busy;
+      }
     }
 
     function hidePreview() {
@@ -137,6 +232,9 @@
       if (useDraftBtn) {
         useDraftBtn.disabled = true;
       }
+      if (rejectBtn) {
+        rejectBtn.disabled = true;
+      }
     }
 
     function resetSession() {
@@ -146,6 +244,7 @@
       clearError();
       hidePreview();
       renderVersions();
+      resetFeedbackForm();
       if (form) {
         form.reset();
         var lang = form.querySelector('[name="language"]');
@@ -207,6 +306,9 @@
       if (useDraftBtn) {
         useDraftBtn.disabled = isBusy || activeIndex === null;
       }
+      if (rejectBtn) {
+        rejectBtn.disabled = isBusy || activeIndex === null;
+      }
     }
 
     function addVersion(previewPayload) {
@@ -215,6 +317,7 @@
         versions = versions.slice(-MAX_VERSIONS);
       }
       activeIndex = versions.length - 1;
+      resetFeedbackForm();
       showPreview(versions[activeIndex]);
       renderVersions();
     }
@@ -235,20 +338,32 @@
         showError('Please choose a category.');
         return;
       }
+
+      var proceed = Promise.resolve(true);
+      if (fromRegenerate && versions.length) {
+        proceed = submitFeedback({
+          regenerated: true,
+          action: 'regenerate',
+        });
+      }
+
       lastRequest = payload;
       payload.action = actionId;
       setBusy(true);
 
-      fetch(generateUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken(),
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
+      proceed
+        .then(function () {
+          return fetch(generateUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken(),
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+        })
         .then(function (response) {
           return response.json().then(function (data) {
             return { ok: response.ok, status: response.status, data: data };
@@ -279,16 +394,35 @@
         return;
       }
       var version = versions[activeIndex];
-      var title =
-        version.title || form.querySelector('[name="title"]').value || '';
-      setFieldValue('id_title', title);
-      setFieldValue('id_content', version.body || '');
-      setFieldValue('id_excerpt', version.summary || '');
-      if (version.category_id) {
-        setFieldValue('id_category', version.category_id);
+      submitFeedback({
+        accepted: true,
+        action: 'use_draft',
+      }).finally(function () {
+        var title =
+          version.title || form.querySelector('[name="title"]').value || '';
+        setFieldValue('id_title', title);
+        setFieldValue('id_content', version.body || '');
+        setFieldValue('id_excerpt', version.summary || '');
+        if (version.category_id) {
+          setFieldValue('id_category', version.category_id);
+        }
+        setFieldValue('id_status', '0');
+        closeModal();
+      });
+    }
+
+    function rejectDraft() {
+      if (activeIndex === null || !versions[activeIndex]) {
+        return;
       }
-      setFieldValue('id_status', '0');
-      closeModal();
+      submitFeedback({
+        rejected: true,
+        rating: 'rejected',
+        action: 'reject',
+      }).finally(function () {
+        resetFeedbackForm();
+        showError('Feedback recorded as Rejected. Previous versions remain available.');
+      });
     }
 
     if (openBtn) {
@@ -306,8 +440,22 @@
         runAction(actionId);
       });
     });
+    ratingButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        selectedRating = btn.getAttribute('data-rating') || '';
+        ratingButtons.forEach(function (other) {
+          other.classList.toggle(
+            'is-selected',
+            other === btn
+          );
+        });
+      });
+    });
     if (useDraftBtn) {
       useDraftBtn.addEventListener('click', useDraft);
+    }
+    if (rejectBtn) {
+      rejectBtn.addEventListener('click', rejectDraft);
     }
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && modal && !modal.hidden) {

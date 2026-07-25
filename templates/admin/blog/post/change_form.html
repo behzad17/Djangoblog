@@ -8,6 +8,7 @@
   id="ai-editorial-assistant"
   class="ai-assistant-toolbar module"
   data-generate-url="{{ ai_assistant_generate_url }}"
+  data-feedback-url="{{ ai_assistant_feedback_url }}"
   data-post-id="{{ ai_assistant_post_id }}"
   data-initial-title="{{ ai_assistant_initial_title|escape }}"
   data-initial-category="{{ ai_assistant_initial_category }}"
@@ -36,6 +37,7 @@
     <p class="ai-assistant-lead">
       Human-in-the-loop: AI proposes, you decide. Up to three temporary versions
       for this modal session. Nothing is saved until you use Save Draft.
+      Closing without Use Draft / Regenerate / Reject does not store feedback.
     </p>
 
     <form id="ai-assistant-form" onsubmit="return false;">
@@ -93,6 +95,25 @@
         <summary>Telemetry</summary>
         <pre id="ai-preview-telemetry"></pre>
       </details>
+
+      <div class="ai-assistant-section ai-feedback-panel">
+        <h3 class="ai-assistant-section-title">Editorial Feedback</h3>
+        <div class="ai-feedback-ratings" id="ai-feedback-ratings" role="group" aria-label="Rating">
+          {% for value, label in ai_feedback_ratings %}
+          <button type="button" class="button ai-feedback-rating" data-rating="{{ value }}">{{ label }}</button>
+          {% endfor %}
+        </div>
+        <div class="ai-feedback-reasons" id="ai-feedback-reasons">
+          {% for value, label in ai_feedback_reasons %}
+          <label class="ai-feedback-reason">
+            <input type="checkbox" name="ai_feedback_reason" value="{{ value }}">
+            {{ label }}
+          </label>
+          {% endfor %}
+        </div>
+        <label for="ai-feedback-comment">Comment (optional)</label>
+        <textarea id="ai-feedback-comment" rows="2" placeholder="Optional note for prompt quality review"></textarea>
+      </div>
     </div>
 
     <div class="ai-assistant-section">
@@ -119,7 +140,8 @@
     </div>
 
     <div class="ai-assistant-actions ai-assistant-footer-actions">
-      <button type="button" class="default" id="ai-assistant-use-draft" disabled>Use Draft</button>
+      <button type="button" class="default" id="ai-assistant-use-draft" disabled>👍 Use Draft</button>
+      <button type="button" class="button" id="ai-assistant-reject" disabled>👎 Reject</button>
       <button type="button" class="button" data-ai-assistant-cancel>Cancel</button>
     </div>
   </div>

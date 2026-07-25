@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from content_ai.evaluation import admin as evaluation_admin  # noqa: F401
 from content_ai.models import AIJob
 
 

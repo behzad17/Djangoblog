@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 from content_ai.constants import AIJobStatus, AIJobType
+from content_ai.evaluation.models import AIGenerationFeedback  # noqa: F401
 
 
 class AIJob(models.Model):

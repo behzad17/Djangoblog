@@ -136,6 +136,20 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## AI Feedback Loop
+
+- `AIGenerationFeedback` stores structured human evaluation for AI previews
+- Ratings: Excellent / Good / Needs Improvement / Rejected
+- Extendable reason codes (too long, wrong tone, hallucination, …)
+- Editorial Assistant records feedback on **Use Draft** (`accepted=True`), **Regenerate** (`regenerated=True`), and **Reject**
+- Closing the modal without those actions does **not** create feedback
+- `FeedbackService` validates and persists; Admin is read-only for review/filtering
+- No automatic prompt optimisation, dashboards, A/B engines, or aggregation in this phase
+
+**Outcome:** Human evaluation data ready for future prompt analytics and version metrics.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
 - `EditorialDraftPublisher` + `BlogDraftPersistenceService` map `EditorialDraft` → Blog `Post` as Draft only.

@@ -106,20 +106,40 @@ def suggestion_from_draft(draft, *, category_id) -> dict:
 
 def preview_from_draft(draft, *, category_id, request_values=None) -> dict:
     """Build a modal preview payload (includes telemetry when present)."""
+    import uuid
+
+    from content_ai.constants import AIGenerationTask
+    from content_ai.prompts.loader import DEFAULT_PROMPT_VERSION
     from content_ai.serializers import serialize_editorial_draft
 
     serialized = serialize_editorial_draft(draft)
     if not serialized.get('title') and request_values:
         serialized['title'] = request_values.get('title') or ''
+    metadata = serialized.get('metadata') or {}
+    telemetry = serialized.get('telemetry') or {}
+    provider = ''
+    model_name = ''
+    if isinstance(telemetry, dict):
+        provider = telemetry.get('provider') or ''
+        model_name = telemetry.get('model') or ''
+    provider = provider or metadata.get('provider') or ''
+    model_name = model_name or metadata.get('model') or ''
     return {
+        'generation_id': str(uuid.uuid4()),
         'title': serialized.get('title') or '',
         'summary': serialized.get('summary') or '',
         'body': serialized.get('body') or '',
         'language': serialized.get('language') or '',
-        'metadata': serialized.get('metadata') or {},
+        'metadata': metadata,
         'telemetry': serialized.get('telemetry'),
         'category_id': category_id,
         'status': 0,
+        'prompt_task': metadata.get('prompt_task')
+        or AIGenerationTask.POST_GENERATION,
+        'prompt_version': metadata.get('prompt_version')
+        or DEFAULT_PROMPT_VERSION,
+        'provider': provider,
+        'model': model_name,
     }
 
 

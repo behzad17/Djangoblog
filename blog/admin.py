@@ -17,6 +17,8 @@ from content_ai.assistant.actions import (
     list_actions_for_ui,
     primary_actions,
 )
+from content_ai.evaluation.constants import AIFeedbackRating, AIFeedbackReason
+from content_ai.evaluation.services import FeedbackService, FeedbackValidationError
 from content_ai.editorial.service import EditorialAIService
 from content_ai.providers.exceptions import (
     GenerationError,
@@ -120,6 +122,11 @@ class PostAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.ai_assistant_generate_view),
                 name='blog_post_ai_assistant_generate',
             ),
+            path(
+                'ai-assistant/feedback/',
+                self.admin_site.admin_view(self.ai_assistant_feedback_view),
+                name='blog_post_ai_assistant_feedback',
+            ),
         ]
         return custom_urls + urls
 
@@ -144,6 +151,9 @@ class PostAdmin(admin.ModelAdmin):
         extra_context['ai_assistant_generate_url'] = reverse(
             'admin:blog_post_ai_assistant_generate'
         )
+        extra_context['ai_assistant_feedback_url'] = reverse(
+            'admin:blog_post_ai_assistant_feedback'
+        )
         extra_context['ai_assistant_categories'] = (
             categories_for_assistant() if show else []
         )
@@ -160,6 +170,12 @@ class PostAdmin(admin.ModelAdmin):
         )
         extra_context['ai_assistant_actions_json'] = (
             json.dumps(list_actions_for_ui()) if show else '[]'
+        )
+        extra_context['ai_feedback_ratings'] = (
+            list(AIFeedbackRating.choices) if show else []
+        )
+        extra_context['ai_feedback_reasons'] = (
+            list(AIFeedbackReason.choices) if show else []
         )
         return super().changeform_view(
             request,
@@ -308,6 +324,76 @@ class PostAdmin(admin.ModelAdmin):
             request_values={'title': title},
         )
         return JsonResponse({'preview': preview}, status=200)
+
+    def ai_assistant_feedback_view(self, request):
+        """
+        Persist editorial feedback for an AI preview.
+
+        Does not save Blog posts. Closing the modal without an explicit
+        Use Draft / Regenerate / Reject action does not call this endpoint.
+        """
+        if request.method != 'POST':
+            return JsonResponse(
+                serialize_error('method_not_allowed', 'POST required.'),
+                status=405,
+            )
+
+        try:
+            payload = json.loads(request.body.decode('utf-8') or '{}')
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return JsonResponse(
+                serialize_error('invalid_json', 'Request body must be valid JSON.'),
+                status=400,
+            )
+        if not isinstance(payload, dict):
+            return JsonResponse(
+                serialize_error('invalid_json', 'Request body must be a JSON object.'),
+                status=400,
+            )
+
+        post_id = payload.get('post_id') or None
+        denied = self._assistant_permission_error(request, post_id)
+        if denied is not None:
+            return denied
+
+        try:
+            feedback = FeedbackService().create_feedback(
+                generation_id=payload.get('generation_id'),
+                prompt_task=payload.get('prompt_task') or '',
+                prompt_version=payload.get('prompt_version') or '',
+                provider=payload.get('provider') or '',
+                model_name=payload.get('model') or payload.get('model_name') or '',
+                language=payload.get('language') or '',
+                rating=payload.get('rating'),
+                reasons=payload.get('reasons'),
+                comment=payload.get('comment') or '',
+                accepted=bool(payload.get('accepted')),
+                regenerated=bool(payload.get('regenerated')),
+                created_by=request.user if request.user.is_authenticated else None,
+                metadata={
+                    'source': 'admin_ai_assistant',
+                    'action': payload.get('action') or '',
+                },
+            )
+        except FeedbackValidationError as exc:
+            return JsonResponse(
+                serialize_error('validation_error', str(exc)),
+                status=400,
+            )
+        except Exception:
+            return JsonResponse(
+                serialize_error('internal_error', 'Could not store feedback.'),
+                status=500,
+            )
+
+        return JsonResponse(
+            {
+                'ok': True,
+                'id': feedback.pk,
+                'generation_id': str(feedback.generation_id),
+            },
+            status=201,
+        )
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))

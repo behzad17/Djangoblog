@@ -6,6 +6,7 @@ from content_ai.constants import AIGenerationTask
 from content_ai.prompts.registry import get_prompt_template
 from content_ai.providers.exceptions import GenerationError
 from content_ai.providers.registry import get_provider
+from content_ai.schemas.responses import GenerationResult
 from content_ai.telemetry import (
     AIExecutionTelemetry,
     attach_telemetry,
@@ -47,6 +48,7 @@ class ContentGenerationService:
         template = get_prompt_template(task)
         prompt = template.build(request)
         prompt_length = len(prompt or '')
+        prompt_version = getattr(template, 'version', '') or ''
 
         provider = get_provider(provider_name or None)
         method = getattr(provider, method_name, None)
@@ -111,5 +113,17 @@ class ContentGenerationService:
                 if result.telemetry and result.telemetry.response_length
                 else len(content)
             ),
+        )
+        metadata = dict(result.metadata or {})
+        metadata.setdefault('prompt_task', str(task))
+        if prompt_version:
+            metadata.setdefault('prompt_version', prompt_version)
+        result = GenerationResult(
+            success=result.success,
+            content=result.content,
+            metadata=metadata,
+            warnings=list(result.warnings or []),
+            provider=result.provider,
+            telemetry=None,
         )
         return attach_telemetry(result, telemetry)

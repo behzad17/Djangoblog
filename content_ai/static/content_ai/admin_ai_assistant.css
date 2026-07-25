@@ -183,6 +183,43 @@
   overflow: auto;
 }
 
+.ai-feedback-panel {
+  margin-top: 14px;
+}
+
+.ai-feedback-ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.ai-feedback-rating.is-selected {
+  background: #417690;
+  border-color: #417690;
+  color: #fff;
+}
+
+.ai-feedback-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 10px;
+}
+
+.ai-feedback-reason {
+  font-weight: normal;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#ai-feedback-comment {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 body.ai-assistant-open {
   overflow: hidden;
 }
