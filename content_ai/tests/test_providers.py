@@ -10,6 +10,7 @@ from content_ai.providers import (
     list_providers,
 )
 from content_ai.providers.mock import MOCK_RESPONSE
+from content_ai.schemas import GenerationResult
 
 
 class ProviderRegistryTests(SimpleTestCase):
@@ -41,21 +42,27 @@ class MockProviderTests(SimpleTestCase):
     def setUp(self):
         self.provider = MockProvider()
 
-    def test_generate_post_returns_deterministic_payload(self):
-        result = self.provider.generate_post(topic='ignored')
-        self.assertEqual(result['title'], MOCK_RESPONSE)
-        self.assertEqual(result['content'], MOCK_RESPONSE)
-        self.assertEqual(result['excerpt'], MOCK_RESPONSE)
+    def test_generate_post_receives_prompt_string(self):
+        prompt = 'System: test\nTask: POST_GENERATION\n'
+        result = self.provider.generate_post(prompt)
+        self.assertIsInstance(result, GenerationResult)
+        self.assertTrue(result.success)
+        self.assertEqual(result.content, MOCK_RESPONSE)
+        self.assertEqual(result.provider, 'mock')
+        self.assertEqual(result.metadata['prompt'], prompt)
 
-    def test_generate_ad_returns_deterministic_payload(self):
-        result = self.provider.generate_ad()
-        self.assertEqual(result['title'], MOCK_RESPONSE)
-        self.assertEqual(result['description'], MOCK_RESPONSE)
+    def test_generate_ad_receives_prompt_string(self):
+        prompt = 'System: test\nTask: AD_GENERATION\n'
+        result = self.provider.generate_ad(prompt)
+        self.assertIsInstance(result, GenerationResult)
+        self.assertEqual(result.metadata['prompt'], prompt)
 
-    def test_rewrite_summarize_translate_are_deterministic(self):
-        self.assertEqual(self.provider.rewrite()['text'], MOCK_RESPONSE)
-        self.assertEqual(self.provider.summarize()['summary'], MOCK_RESPONSE)
-        self.assertEqual(self.provider.translate()['text'], MOCK_RESPONSE)
+    def test_rewrite_summarize_translate_accept_prompt_string(self):
+        for method_name in ('rewrite', 'summarize', 'translate'):
+            with self.subTest(method=method_name):
+                result = getattr(self.provider, method_name)('prompt text')
+                self.assertIsInstance(result, GenerationResult)
+                self.assertEqual(result.metadata['prompt'], 'prompt text')
 
     def test_mock_provider_is_base_ai_provider(self):
         self.assertIsInstance(self.provider, BaseAIProvider)

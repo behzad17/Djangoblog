@@ -9,33 +9,34 @@ class BaseAIProvider:
     """
     Contract for Content AI providers.
 
-    Methods raise ``NotImplementedError`` until a concrete provider overrides
-    them. No network I/O belongs in this base class.
+    Methods accept a plain prompt string (built by the prompt layer) and must
+    return ``GenerationResult``. Base methods raise ``NotImplementedError``.
+    No network I/O belongs in this base class.
     """
 
     name = 'base'
 
-    def generate_post(self, *args, **kwargs):
+    def generate_post(self, prompt=''):
         raise NotImplementedError(
             f'{type(self).__name__} does not implement generate_post()'
         )
 
-    def generate_ad(self, *args, **kwargs):
+    def generate_ad(self, prompt=''):
         raise NotImplementedError(
             f'{type(self).__name__} does not implement generate_ad()'
         )
 
-    def rewrite(self, *args, **kwargs):
+    def rewrite(self, prompt=''):
         raise NotImplementedError(
             f'{type(self).__name__} does not implement rewrite()'
         )
 
-    def summarize(self, *args, **kwargs):
+    def summarize(self, prompt=''):
         raise NotImplementedError(
             f'{type(self).__name__} does not implement summarize()'
         )
 
-    def translate(self, *args, **kwargs):
+    def translate(self, prompt=''):
         raise NotImplementedError(
             f'{type(self).__name__} does not implement translate()'
         )

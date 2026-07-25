@@ -1,6 +1,7 @@
 """Single orchestration entry point for Content AI generation."""
 
 from content_ai.constants import AIGenerationTask
+from content_ai.prompts.registry import get_prompt_template
 from content_ai.providers.exceptions import GenerationError
 from content_ai.providers.registry import get_provider
 
@@ -16,22 +17,25 @@ _TASK_METHODS = {
 
 class ContentGenerationService:
     """
-    Orchestrates AI generation via the configured provider.
+    Orchestrates AI generation via prompt templates and the configured provider.
 
-    Resolves the provider, delegates by task, and returns the provider result.
+    Flow: request → prompt template → prompt string → provider → GenerationResult.
     No validation, persistence, or business logic.
     """
 
-    def generate(self, task, payload=None):
+    def generate(self, task, request=None):
         """
         Run ``task`` against the configured provider.
 
-        ``payload`` should be a mapping of keyword arguments for the provider
-        method. Defaults to an empty mapping.
+        ``request`` should be a canonical request schema (e.g.
+        ``PostGenerationRequest`` / ``AdGenerationRequest``) when applicable.
         """
         method_name = _TASK_METHODS.get(task)
         if method_name is None:
             raise GenerationError(f"Unsupported generation task: '{task}'.")
+
+        template = get_prompt_template(task)
+        prompt = template.build(request)
 
         provider = get_provider()
         method = getattr(provider, method_name, None)
@@ -40,5 +44,4 @@ class ContentGenerationService:
                 f"Provider '{provider.name}' does not support task '{task}'."
             )
 
-        kwargs = {} if payload is None else dict(payload)
-        return method(**kwargs)
+        return method(prompt)

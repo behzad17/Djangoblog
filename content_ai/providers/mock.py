@@ -1,6 +1,7 @@
 """Deterministic mock provider for architecture and tests. No network calls."""
 
 from content_ai.providers.base import BaseAIProvider
+from content_ai.schemas.responses import GenerationResult
 
 MOCK_RESPONSE = 'Mock AI response'
 
@@ -9,29 +10,35 @@ class MockProvider(BaseAIProvider):
     """
     Fake provider used only to exercise the provider interface.
 
-    Returns deterministic payloads. Never performs HTTP or SDK calls.
+    Accepts a prompt string and returns deterministic ``GenerationResult``
+    values. Never performs HTTP or SDK calls.
     """
 
     name = 'mock'
 
-    def generate_post(self, *args, **kwargs):
-        return {
-            'title': MOCK_RESPONSE,
-            'content': MOCK_RESPONSE,
-            'excerpt': MOCK_RESPONSE,
-        }
+    def _result(self, prompt='', metadata=None, warnings=None):
+        meta = {'prompt': prompt}
+        if metadata:
+            meta.update(metadata)
+        return GenerationResult(
+            success=True,
+            content=MOCK_RESPONSE,
+            metadata=meta,
+            warnings=[] if warnings is None else warnings,
+            provider=self.name,
+        )
 
-    def generate_ad(self, *args, **kwargs):
-        return {
-            'title': MOCK_RESPONSE,
-            'description': MOCK_RESPONSE,
-        }
+    def generate_post(self, prompt=''):
+        return self._result(prompt=prompt, metadata={'task': 'post_generation'})
 
-    def rewrite(self, *args, **kwargs):
-        return {'text': MOCK_RESPONSE}
+    def generate_ad(self, prompt=''):
+        return self._result(prompt=prompt, metadata={'task': 'ad_generation'})
 
-    def summarize(self, *args, **kwargs):
-        return {'summary': MOCK_RESPONSE}
+    def rewrite(self, prompt=''):
+        return self._result(prompt=prompt, metadata={'task': 'rewrite'})
 
-    def translate(self, *args, **kwargs):
-        return {'text': MOCK_RESPONSE}
+    def summarize(self, prompt=''):
+        return self._result(prompt=prompt, metadata={'task': 'summary'})
+
+    def translate(self, prompt=''):
+        return self._result(prompt=prompt, metadata={'task': 'translation'})
