@@ -44,6 +44,17 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## Prompt Asset Management
+
+- Prompt bodies live as versioned markdown assets under `content_ai/prompts/{post|ads}/v1.md`
+- `PromptLoader` reads Git-managed files; `TemplateRenderer` injects request fields (`{{ title }}`, …)
+- `PostPromptTemplate` / `AdPromptTemplate` load assets and render — Python no longer embeds large prompt strings
+- Future `v2` / `v3` (and A/B selection) are file-based; no database, Admin UI, or runtime editing
+
+**Outcome:** Prompts are reviewable assets in Git, ready for versioned iteration.
+
+---
+
 ## Editorial Domain Layer
 
 - `EditorialAIService` builds `PostGenerationRequest`, runs the generation pipeline, and returns an in-memory `EditorialDraft`

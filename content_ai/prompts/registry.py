@@ -12,10 +12,11 @@ _PROMPT_TEMPLATES = {
 }
 
 
-def get_prompt_template(task) -> BasePromptTemplate:
+def get_prompt_template(task, version=None) -> BasePromptTemplate:
     """
     Resolve a prompt template for ``task``.
 
+    Optional ``version`` selects a Git-managed markdown asset (default ``v1``).
     Unknown or unregistered tasks raise ``GenerationError``.
     """
     template_cls = _PROMPT_TEMPLATES.get(task)
@@ -23,7 +24,9 @@ def get_prompt_template(task) -> BasePromptTemplate:
         raise GenerationError(
             f"No prompt template registered for task: '{task}'."
         )
-    return template_cls()
+    if version is None:
+        return template_cls()
+    return template_cls(version=version)
 
 
 def list_prompt_tasks():
