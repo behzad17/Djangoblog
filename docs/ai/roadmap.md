@@ -85,9 +85,21 @@ AI features on peyvand.se are additive. Blog and Ads remain the owners of their 
 
 ---
 
+## Editorial Draft Publisher
+
+- `EditorialDraftPublisher.publish_to_blog(draft, *, author, category)` is the reusable bridge between the AI editorial domain and the Blog domain
+- Delegates to `BlogDraftPersistenceService` so Blog creation rules stay centralized
+- Despite the name, it **never publishes** — it only creates Blog drafts (`status=0`)
+- Publishing remains a **manual editorial decision**
+- No Admin UI, API changes, n8n, scheduling, or notifications in this layer
+
+**Outcome:** A stable AI → Blog draft bridge without changing public behaviour.
+
+---
+
 ## Phase 3 — Blog Draft Generation
 
-- `BlogDraftPersistenceService` maps `EditorialDraft` → Blog `Post` as Draft only.
+- `EditorialDraftPublisher` + `BlogDraftPersistenceService` map `EditorialDraft` → Blog `Post` as Draft only.
 - Publishing remains Admin / editorial approval via existing Blog workflow.
 - Existing Blog public APIs and templates remain unchanged.
 
