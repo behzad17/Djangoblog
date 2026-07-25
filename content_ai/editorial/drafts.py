@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from content_ai.telemetry import AIExecutionTelemetry
+
 
 @dataclass(frozen=True, slots=True)
 class EditorialDraft:
@@ -18,3 +20,4 @@ class EditorialDraft:
     summary: str = ''
     language: str = ''
     metadata: dict = field(default_factory=dict)
+    telemetry: AIExecutionTelemetry | None = None

@@ -65,4 +65,5 @@ class EditorialAIService:
             summary='',
             language=request.language,
             metadata=metadata,
+            telemetry=result.telemetry,
         )

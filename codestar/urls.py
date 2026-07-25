@@ -72,6 +72,11 @@ urlpatterns = [
     path("community/", include("community.urls", namespace="community")),
     # Developer-only Content AI sandbox (DEBUG or superuser; login required)
     path("content-ai/", include("content_ai.urls", namespace="content_ai")),
+    # Internal Content AI API (staff-only; no Blog/Ads persistence)
+    path(
+        "api/internal/content-ai/",
+        include("content_ai.urls_api", namespace="content_ai_api"),
+    ),
     # Rate-limit login and signup endpoints
     # More lenient in development (20/min) for testing, stricter in production (5/min)
     # Note: Rate limiting is less strict in development to allow easier testing

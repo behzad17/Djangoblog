@@ -6,6 +6,7 @@ from content_ai.editorial import EditorialAIService, EditorialDraft
 from content_ai.providers.exceptions import GenerationError
 from content_ai.providers.mock import MOCK_RESPONSE
 from content_ai.schemas.responses import GenerationResult
+from content_ai.telemetry import AIExecutionTelemetry
 
 
 @override_settings(CONTENT_AI_PROVIDER='mock')
@@ -30,6 +31,9 @@ class EditorialAIServiceTests(SimpleTestCase):
         self.assertEqual(draft.language, 'sv')
         self.assertEqual(draft.metadata.get('provider'), 'mock')
         self.assertTrue(draft.metadata.get('success'))
+        self.assertIsNotNone(draft.telemetry)
+        self.assertEqual(draft.telemetry.provider, 'mock')
+        self.assertTrue(draft.telemetry.success)
 
     def test_conversion_maps_generation_result_fields(self):
         generation = MagicMock()
@@ -39,6 +43,7 @@ class EditorialAIServiceTests(SimpleTestCase):
             metadata={'task': 'post_generation', 'model': 'x'},
             warnings=['note'],
             provider='mock',
+            telemetry=AIExecutionTelemetry(provider='mock', success=True),
         )
         service = EditorialAIService(generation_service=generation)
 
@@ -51,6 +56,8 @@ class EditorialAIServiceTests(SimpleTestCase):
         self.assertEqual(draft.metadata['provider'], 'mock')
         self.assertEqual(draft.metadata['warnings'], ['note'])
         self.assertTrue(draft.metadata['success'])
+        self.assertIsNotNone(draft.telemetry)
+        self.assertEqual(draft.telemetry.provider, 'mock')
 
     def test_provider_errors_propagate(self):
         generation = MagicMock()
@@ -82,3 +89,4 @@ class EditorialDraftTests(SimpleTestCase):
         self.assertEqual(draft.summary, '')
         self.assertEqual(draft.language, '')
         self.assertEqual(draft.metadata, {})
+        self.assertIsNone(draft.telemetry)
