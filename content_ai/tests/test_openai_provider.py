@@ -135,10 +135,8 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
                 self.provider.generate_post('prompt')
 
         joined = '\n'.join(logs.output)
-        self.assertIn(
-            'OpenAI generation failed after',
-            joined,
-        )
+        self.assertIn('OpenAI generation failed after', joined)
+        self.assertIn('exception_type=FakeAPIError', joined)
         self.assertIn('status_code=400', joined)
         self.assertIn('model_not_found', joined)
         self.assertIn('bad model', joined)

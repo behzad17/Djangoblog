@@ -97,7 +97,8 @@ class OpenAIProvider(BaseAIProvider):
     def __init__(self, client=None):
         self.api_key = getattr(settings, 'OPENAI_API_KEY', '') or ''
         self.model = getattr(settings, 'OPENAI_MODEL', '') or ''
-        self.timeout = getattr(settings, 'OPENAI_TIMEOUT', 60)
+        # Short timeout avoids Heroku H12 (~30s); no retries so errors surface fast.
+        self.timeout = 20
 
         if not self.api_key:
             raise ProviderConfigurationError(
@@ -113,8 +114,6 @@ class OpenAIProvider(BaseAIProvider):
         else:
             from openai import OpenAI
 
-            # TEMPORARY: isolate Heroku H12 vs SDK timeout/retries.
-            # Revert to timeout=self.timeout (and default max_retries) after diagnosis.
             self._client = OpenAI(
                 api_key=self.api_key,
                 timeout=20,
@@ -145,18 +144,19 @@ class OpenAIProvider(BaseAIProvider):
         except Exception as exc:
             elapsed = time.monotonic() - started
             details = _openai_error_details(exc)
-            # Full stack + OpenAI payload (status, body, error.code/message).
             logger.exception(
-                'OpenAI generation failed after %.2fs before GenerationError: '
-                'status_code=%s error_code=%s error_message=%s body=%s '
-                'response_text=%s request_id=%s details=%s',
+                'OpenAI generation failed after %.2fs: '
+                'exception_type=%s message=%s status_code=%s error_code=%s '
+                'error_message=%s request_id=%s body=%s response_text=%s details=%s',
                 elapsed,
+                details.get('exception_type'),
+                details.get('message'),
                 details.get('status_code'),
                 details.get('error_code'),
                 details.get('error_message'),
+                details.get('request_id'),
                 details.get('body'),
                 details.get('response_text'),
-                details.get('request_id'),
                 details,
             )
             telemetry = AIExecutionTelemetry(
@@ -181,7 +181,8 @@ class OpenAIProvider(BaseAIProvider):
 
         elapsed = time.monotonic() - started
         logger.info(
-            'OpenAI response received successfully in %.2fs',
+            'OpenAI response received successfully: model=%s elapsed=%.2fs',
+            self.model,
             elapsed,
         )
 
