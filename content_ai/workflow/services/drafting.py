@@ -63,9 +63,42 @@ class DraftService(WorkflowStageService):
 
         prompt, prompt_version = build_generation_prompt(task, request)
         context.prompt_version = prompt_version or context.prompt_version
-        context.extension_data['prompt_length'] = len(prompt or '')
         context.extension_data.setdefault('hooks', {})
         context.extension_data['hooks']['prompt_assembly'] = 'completed'
+
+        # Knowledge injection after PromptBuilder (flags may keep this a no-op).
+        from content_ai.config import DEFAULT_STYLE
+        from content_ai.knowledge.integration import apply_knowledge_if_enabled
+
+        user_prompt = ''
+        if request is not None:
+            user_prompt = getattr(request, 'title', '') or getattr(
+                request, 'business_name', ''
+            ) or ''
+            instructions = getattr(request, 'instructions', '') or ''
+            if instructions:
+                user_prompt = f'{user_prompt}\n{instructions}'.strip()
+        try:
+            prompt = apply_knowledge_if_enabled(
+                prompt,
+                user_prompt=user_prompt,
+                style=DEFAULT_STYLE,
+                language=context.language or '',
+            )
+            context.extension_data['hooks']['knowledge_injection'] = (
+                'completed'
+                if (
+                    context.extension_data.get('knowledge', {}).get(
+                        'injection_enabled'
+                    )
+                )
+                else 'skipped'
+            )
+        except Exception as exc:  # noqa: BLE001 — soft-fail knowledge inject
+            context.add_warning(f'Knowledge injection skipped: {exc}')
+            context.extension_data['hooks']['knowledge_injection'] = 'failed_soft'
+
+        context.extension_data['prompt_length'] = len(prompt or '')
 
         provider = get_provider(provider_name or None)
         method = getattr(provider, method_name, None)

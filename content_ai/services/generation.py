@@ -60,8 +60,9 @@ class ContentGenerationService:
     """
     Orchestrates AI generation via WorkflowOrchestrator.
 
-    Flow: request → WorkflowOrchestrator.execute() → research → drafting
-    (PromptBuilder once → provider) → GenerationResult.
+    Flow: request → WorkflowOrchestrator.execute() → research →
+    source_intelligence → knowledge → drafting (PromptBuilder once →
+    optional knowledge inject → provider) → evaluation → GenerationResult.
     Measures execution timing and attaches ``AIExecutionTelemetry``.
     No validation, persistence, or business logic.
     """
@@ -170,8 +171,25 @@ class ContentGenerationService:
         if prompt_version:
             metadata.setdefault('prompt_version', prompt_version)
         metadata.setdefault('workflow_state', context.state.value)
+        metadata.setdefault(
+            'workflow_stages',
+            [entry.stage_name for entry in context.stage_logs],
+        )
+        metadata.setdefault(
+            'intelligence',
+            {
+                'source': context.extension_data.get('source_intelligence'),
+                'knowledge': context.extension_data.get('knowledge'),
+                'evaluation': context.extension_data.get('evaluation'),
+                'hooks': dict(context.extension_data.get('hooks') or {}),
+            },
+        )
         context.extension_data.setdefault('hooks', {})
         context.extension_data['hooks']['completion'] = 'completed'
+        # Keep intelligence hooks snapshot after completion mark.
+        metadata['intelligence']['hooks'] = dict(
+            context.extension_data.get('hooks') or {}
+        )
 
         result = GenerationResult(
             success=result.success,

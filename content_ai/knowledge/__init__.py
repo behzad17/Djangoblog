@@ -1,7 +1,7 @@
-"""Knowledge layer package (RFC-001 placeholders + RFC-002 engine).
+"""Knowledge layer package (RFC-002 / RFC-002.5).
 
-Storage, selection, and injection are implemented as inactive architecture.
-Production generation does not call this package.
+Storage, selection, and injection are wired into the production workflow.
+Injection remains gated by ENABLE_KNOWLEDGE_* flags (default off).
 """
 
 from content_ai.knowledge.exceptions import (
@@ -10,6 +10,10 @@ from content_ai.knowledge.exceptions import (
     ManifestError,
 )
 from content_ai.knowledge.injectors import KnowledgeInjector
+from content_ai.knowledge.integration import (
+    apply_knowledge_if_enabled,
+    prepare_knowledge_for_context,
+)
 from content_ai.knowledge.models import KnowledgeModule
 from content_ai.knowledge.selectors import (
     KeywordSelector,
@@ -30,8 +34,10 @@ __all__ = [
     'KnowledgeSelector',
     'KnowledgeValidationError',
     'ManifestError',
+    'apply_knowledge_if_enabled',
     'get_knowledge_selector',
     'load_manifest',
     'parse_knowledge_modules',
+    'prepare_knowledge_for_context',
     'validate_manifest',
 ]

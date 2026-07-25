@@ -120,17 +120,44 @@ class OrchestratorTests(unittest.TestCase):
     def test_execute_runs_production_generation_stages(self):
         self.assertEqual(
             PRODUCTION_GENERATION_STAGES,
-            ('research', 'drafting'),
+            (
+                'research',
+                'source_intelligence',
+                'knowledge',
+                'drafting',
+                'evaluation',
+            ),
         )
         ctx = create_initial_context(title='Housing news', language='fa')
         ctx = self.orch.execute(ctx)
         self.assertEqual(ctx.state, WorkflowState.DRAFTING)
         self.assertIn('workflow-stub draft', ctx.generated_draft)
         stage_names = [entry.stage_name for entry in ctx.stage_logs]
-        self.assertEqual(stage_names, ['research', 'drafting'])
+        self.assertEqual(
+            stage_names,
+            [
+                'research',
+                'source_intelligence',
+                'knowledge',
+                'drafting',
+                'evaluation',
+            ],
+        )
         self.assertEqual(
             ctx.extension_data.get('hooks', {}).get('preparation'),
             'completed',
+        )
+        self.assertEqual(
+            ctx.extension_data.get('source_intelligence', {}).get('status'),
+            'completed',
+        )
+        self.assertEqual(
+            ctx.extension_data.get('knowledge', {}).get('status'),
+            'skipped',
+        )
+        self.assertEqual(
+            ctx.extension_data.get('evaluation', {}).get('status'),
+            'skipped',
         )
 
     def test_stage_failure_sets_failed(self):
@@ -198,12 +225,100 @@ class ProductionWorkflowIntegrationTests(unittest.TestCase):
             result.metadata.get('workflow_state'),
             WorkflowState.DRAFTING.value,
         )
-        ctx = mocked_execute.call_args.args[0]
-        hooks = ctx.extension_data.get('hooks', {})
+        self.assertEqual(
+            result.metadata.get('workflow_stages'),
+            list(PRODUCTION_GENERATION_STAGES),
+        )
+        intelligence = result.metadata.get('intelligence') or {}
+        self.assertEqual(
+            (intelligence.get('source') or {}).get('status'),
+            'completed',
+        )
+        self.assertEqual(
+            (intelligence.get('knowledge') or {}).get('status'),
+            'skipped',
+        )
+        self.assertEqual(
+            (intelligence.get('evaluation') or {}).get('status'),
+            'skipped',
+        )
+        hooks = intelligence.get('hooks') or {}
         self.assertEqual(hooks.get('preparation'), 'completed')
+        self.assertEqual(hooks.get('source_intelligence'), 'completed')
+        self.assertEqual(hooks.get('knowledge_retrieval'), 'skipped')
         self.assertEqual(hooks.get('prompt_assembly'), 'completed')
         self.assertEqual(hooks.get('ai_provider'), 'completed')
+        self.assertEqual(hooks.get('prompt_evaluation'), 'skipped')
         self.assertEqual(hooks.get('completion'), 'completed')
+
+    def test_knowledge_enabled_prepares_metadata_without_blocking(self):
+        service = ContentGenerationService()
+        with patch(
+            'content_ai.knowledge.integration.ENABLE_KNOWLEDGE_ENGINE',
+            True,
+        ), patch(
+            'content_ai.knowledge.integration.ENABLE_RAG',
+            False,
+        ):
+            result = service.generate(
+                AIGenerationTask.POST_GENERATION,
+                PostGenerationRequest(title='Knowledge'),
+                provider_name='mock',
+            )
+        self.assertTrue(result.success)
+        knowledge = (result.metadata.get('intelligence') or {}).get(
+            'knowledge'
+        ) or {}
+        self.assertEqual(knowledge.get('status'), 'prepared')
+        self.assertGreater(knowledge.get('module_count', 0), 0)
+        self.assertEqual(
+            (result.metadata.get('intelligence') or {})
+            .get('hooks', {})
+            .get('knowledge_retrieval'),
+            'completed',
+        )
+
+    def test_evaluation_hook_runs_when_flag_enabled(self):
+        service = ContentGenerationService()
+        with patch(
+            'content_ai.workflow.services.evaluation.ENABLE_AI_EVALUATION_FRAMEWORK',
+            True,
+        ):
+            result = service.generate(
+                AIGenerationTask.POST_GENERATION,
+                PostGenerationRequest(title='Evaluate me'),
+                provider_name='mock',
+            )
+        self.assertTrue(result.success)
+        evaluation = (result.metadata.get('intelligence') or {}).get(
+            'evaluation'
+        ) or {}
+        self.assertEqual(evaluation.get('status'), 'completed')
+        self.assertIn('overall_score', evaluation)
+        self.assertEqual(
+            (result.metadata.get('intelligence') or {})
+            .get('hooks', {})
+            .get('prompt_evaluation'),
+            'completed',
+        )
+
+    def test_source_intelligence_enriches_request_metadata(self):
+        service = ContentGenerationService()
+        result = service.generate(
+            AIGenerationTask.POST_GENERATION,
+            PostGenerationRequest(
+                title='خبر مسکن',
+                source='https://example.com/housing',
+                context='Persian community housing update',
+            ),
+            provider_name='mock',
+        )
+        source = (result.metadata.get('intelligence') or {}).get(
+            'source'
+        ) or {}
+        self.assertEqual(source.get('status'), 'completed')
+        self.assertEqual(source.get('source_type'), 'url')
+        self.assertEqual(source.get('detected_language'), 'fa')
 
 
 if __name__ == '__main__':

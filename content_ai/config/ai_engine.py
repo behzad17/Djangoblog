@@ -30,7 +30,7 @@ SYSTEM_MODULE_ORDER: tuple[str, ...] = (
 # Future: provider registry keys, model defaults, feature flags.
 FUTURE_AI_PROVIDERS: tuple[str, ...] = ()
 
-# Knowledge Engine / RAG (RFC-002) — all disabled in production.
+# Knowledge Engine / RAG (RFC-002) — wired into workflow; injection gated.
 ENABLE_KNOWLEDGE_ENGINE = False
 ENABLE_RAG = False
 ENABLE_KNOWLEDGE_INJECTION = False
@@ -38,7 +38,7 @@ ENABLE_KNOWLEDGE_INJECTION = False
 # Editorial workflow (RFC-003) — production generation runs via execute().
 ENABLE_EDITORIAL_WORKFLOW = True
 
-# AI evaluation framework (RFC-004) — passive until integrated.
+# AI evaluation framework (RFC-004) — workflow hook present; scoring gated.
 ENABLE_AI_EVALUATION_FRAMEWORK = False
 
 # Fact checking framework (RFC-007) — passive; never auto-approves publish.

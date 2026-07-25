@@ -273,6 +273,24 @@ class SelectorInjectorFactoryTests(unittest.TestCase):
             prompt,
         )
 
+    def test_prepare_knowledge_skipped_when_disabled(self):
+        from content_ai.knowledge.integration import prepare_knowledge_for_context
+
+        payload = prepare_knowledge_for_context(user_prompt='housing')
+        self.assertEqual(payload.get('status'), 'skipped')
+
+    def test_prepare_knowledge_when_engine_enabled(self):
+        from content_ai.knowledge.integration import prepare_knowledge_for_context
+        from unittest.mock import patch
+
+        with patch(
+            'content_ai.knowledge.integration.ENABLE_KNOWLEDGE_ENGINE',
+            True,
+        ):
+            payload = prepare_knowledge_for_context(user_prompt='housing')
+        self.assertEqual(payload.get('status'), 'prepared')
+        self.assertGreater(payload.get('module_count', 0), 0)
+
 
 class EditorialKnowledgeBaseLayoutTests(unittest.TestCase):
     def test_three_domains_exist(self):

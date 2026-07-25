@@ -18,11 +18,14 @@ from content_ai.workflow.services import (
     ApprovalService,
     ArchiveService,
     DraftService,
+    EvaluationHookService,
     FactCheckPlaceholderService,
+    KnowledgeService,
     PublishingService,
     ResearchService,
     ReviewService,
     RevisionService,
+    SourceIntelligenceService,
 )
 from content_ai.workflow.states import (
     ALLOWED_TRANSITIONS,
@@ -33,8 +36,14 @@ from content_ai.workflow.states import (
 logger = logging.getLogger(__name__)
 
 
-# Production generation sequence (preparation → drafting/prompt+provider).
-PRODUCTION_GENERATION_STAGES: tuple[str, ...] = ('research', 'drafting')
+# Production generation sequence including intelligence hooks.
+PRODUCTION_GENERATION_STAGES: tuple[str, ...] = (
+    'research',
+    'source_intelligence',
+    'knowledge',
+    'drafting',
+    'evaluation',
+)
 
 
 class WorkflowOrchestrator:
@@ -242,10 +251,13 @@ class WorkflowOrchestrator:
 
 
 def default_stages() -> list[WorkflowStageService]:
-    """Default stub stage set for the architecture (inactive in production)."""
+    """Default stage set including production intelligence hooks."""
     return [
         ResearchService(),
+        SourceIntelligenceService(),
+        KnowledgeService(),
         DraftService(),
+        EvaluationHookService(),
         FactCheckPlaceholderService(),
         ReviewService(),
         RevisionService(),
