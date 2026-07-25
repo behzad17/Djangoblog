@@ -1,8 +1,9 @@
-/* AI Editorial Assistant — Admin modal (ephemeral previews only). */
+/* AI Editorial Assistant — action-based Admin modal (ephemeral previews). */
 (function () {
   'use strict';
 
   var MAX_VERSIONS = 3;
+  var IMPLEMENTED = { generate: true, regenerate: true };
 
   function ready(fn) {
     if (document.readyState !== 'loading') {
@@ -38,6 +39,15 @@
     }
   }
 
+  function parseActions(root) {
+    var raw = root.getAttribute('data-actions') || '[]';
+    try {
+      return JSON.parse(raw);
+    } catch (err) {
+      return [];
+    }
+  }
+
   ready(function () {
     var root = document.getElementById('ai-editorial-assistant');
     if (!root) {
@@ -45,6 +55,12 @@
     }
 
     var generateUrl = root.getAttribute('data-generate-url');
+    var actions = parseActions(root);
+    var actionsById = {};
+    actions.forEach(function (action) {
+      actionsById[action.id] = action;
+    });
+
     var openBtn = document.getElementById('ai-assistant-open');
     var modal = document.getElementById('ai-assistant-modal');
     var backdrop = document.getElementById('ai-assistant-backdrop');
@@ -56,10 +72,11 @@
     var previewBody = document.getElementById('ai-preview-body');
     var previewTelemetry = document.getElementById('ai-preview-telemetry');
     var versionsEl = document.getElementById('ai-assistant-versions');
-    var generateBtn = document.getElementById('ai-assistant-generate');
-    var regenerateBtn = document.getElementById('ai-assistant-regenerate');
-    var acceptBtn = document.getElementById('ai-assistant-accept');
+    var generateBtn = document.querySelector('[data-ai-action="generate"]');
+    var regenerateBtn = document.querySelector('[data-ai-action="regenerate"]');
+    var useDraftBtn = document.getElementById('ai-assistant-use-draft');
     var cancelBtns = document.querySelectorAll('[data-ai-assistant-cancel]');
+    var actionButtons = document.querySelectorAll('[data-ai-action]');
     var busy = false;
     var versions = [];
     var activeIndex = null;
@@ -104,14 +121,22 @@
       previewSummary.textContent = version.summary || '';
       previewBody.textContent = version.body || '';
       previewTelemetry.textContent = formatTelemetry(version.telemetry);
-      regenerateBtn.disabled = false;
-      acceptBtn.disabled = false;
+      if (regenerateBtn) {
+        regenerateBtn.disabled = busy;
+      }
+      if (useDraftBtn) {
+        useDraftBtn.disabled = busy;
+      }
     }
 
     function hidePreview() {
       preview.hidden = true;
-      regenerateBtn.disabled = true;
-      acceptBtn.disabled = true;
+      if (regenerateBtn) {
+        regenerateBtn.disabled = true;
+      }
+      if (useDraftBtn) {
+        useDraftBtn.disabled = true;
+      }
     }
 
     function resetSession() {
@@ -172,14 +197,20 @@
 
     function setBusy(isBusy) {
       busy = isBusy;
-      generateBtn.disabled = isBusy;
-      regenerateBtn.disabled = isBusy || !versions.length;
-      acceptBtn.disabled = isBusy || activeIndex === null;
-      generateBtn.textContent = isBusy ? 'Generating…' : 'Generate';
+      if (generateBtn) {
+        generateBtn.disabled = isBusy;
+        generateBtn.textContent = isBusy ? '✨ Generating…' : '✨ Generate';
+      }
+      if (regenerateBtn) {
+        regenerateBtn.disabled = isBusy || !versions.length;
+      }
+      if (useDraftBtn) {
+        useDraftBtn.disabled = isBusy || activeIndex === null;
+      }
     }
 
-    function addVersion(preview) {
-      versions.push(preview);
+    function addVersion(previewPayload) {
+      versions.push(previewPayload);
       if (versions.length > MAX_VERSIONS) {
         versions = versions.slice(-MAX_VERSIONS);
       }
@@ -188,17 +219,24 @@
       renderVersions();
     }
 
-    function generate(fromRegenerate) {
+    function runAction(actionId) {
+      var meta = actionsById[actionId];
+      if (!meta || !meta.enabled || !IMPLEMENTED[actionId]) {
+        return;
+      }
       if (busy) {
         return;
       }
       clearError();
+
+      var fromRegenerate = actionId === 'regenerate';
       var payload = fromRegenerate && lastRequest ? lastRequest : collectRequest();
       if (!payload.category_id) {
         showError('Please choose a category.');
         return;
       }
       lastRequest = payload;
+      payload.action = actionId;
       setBusy(true);
 
       fetch(generateUrl, {
@@ -236,12 +274,13 @@
         });
     }
 
-    function acceptActive() {
+    function useDraft() {
       if (activeIndex === null || !versions[activeIndex]) {
         return;
       }
       var version = versions[activeIndex];
-      var title = version.title || form.querySelector('[name="title"]').value || '';
+      var title =
+        version.title || form.querySelector('[name="title"]').value || '';
       setFieldValue('id_title', title);
       setFieldValue('id_content', version.body || '');
       setFieldValue('id_excerpt', version.summary || '');
@@ -261,18 +300,14 @@
     if (backdrop) {
       backdrop.addEventListener('click', closeModal);
     }
-    if (generateBtn) {
-      generateBtn.addEventListener('click', function () {
-        generate(false);
+    actionButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var actionId = btn.getAttribute('data-ai-action');
+        runAction(actionId);
       });
-    }
-    if (regenerateBtn) {
-      regenerateBtn.addEventListener('click', function () {
-        generate(true);
-      });
-    }
-    if (acceptBtn) {
-      acceptBtn.addEventListener('click', acceptActive);
+    });
+    if (useDraftBtn) {
+      useDraftBtn.addEventListener('click', useDraft);
     }
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && modal && !modal.hidden) {

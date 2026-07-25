@@ -11,12 +11,13 @@
   data-post-id="{{ ai_assistant_post_id }}"
   data-initial-title="{{ ai_assistant_initial_title|escape }}"
   data-initial-category="{{ ai_assistant_initial_category }}"
+  data-actions='{{ ai_assistant_actions_json|escape }}'
 >
   <button type="button" class="button" id="ai-assistant-open">
     ✨ Generate with AI
   </button>
   <span class="help">
-    AI proposes draft content only. Accept to fill the form — Save Draft still saves.
+    AI proposes draft content only. Use Draft fills the form — Save Draft still saves.
   </span>
 
   <div id="ai-assistant-backdrop" class="ai-assistant-backdrop" hidden></div>
@@ -28,10 +29,13 @@
     aria-labelledby="ai-assistant-heading"
     hidden
   >
-    <h2 id="ai-assistant-heading">AI Editorial Assistant</h2>
+    <div class="ai-assistant-modal-header">
+      <h2 id="ai-assistant-heading">AI Editorial Assistant</h2>
+      <button type="button" class="ai-assistant-close" data-ai-assistant-cancel aria-label="Close">×</button>
+    </div>
     <p class="ai-assistant-lead">
-      Generate a draft suggestion, preview it, and Accept only when ready.
-      Up to three versions are kept for this modal session. Nothing is saved until you use Save Draft.
+      Human-in-the-loop: AI proposes, you decide. Up to three temporary versions
+      for this modal session. Nothing is saved until you use Save Draft.
     </p>
 
     <form id="ai-assistant-form" onsubmit="return false;">
@@ -59,27 +63,64 @@
       <textarea id="ai-field-instructions" name="instructions" rows="3"></textarea>
     </form>
 
-    <div class="ai-assistant-actions">
-      <button type="button" class="default" id="ai-assistant-generate">Generate</button>
-      <button type="button" class="button" id="ai-assistant-regenerate" disabled>Regenerate</button>
-      <button type="button" class="button" id="ai-assistant-accept" disabled>Accept</button>
-      <button type="button" class="button" data-ai-assistant-cancel>Cancel</button>
+    <div class="ai-assistant-section">
+      <h3 class="ai-assistant-section-title">Primary Action</h3>
+      <div class="ai-assistant-actions ai-assistant-actions-primary" id="ai-assistant-primary-actions">
+        {% for action in ai_assistant_primary_actions %}
+        <button
+          type="button"
+          class="default ai-assistant-action"
+          id="ai-assistant-action-{{ action.id }}"
+          data-ai-action="{{ action.id }}"
+          {% if not action.enabled %}disabled title="{{ action.coming_soon }}"{% endif %}
+        >{{ action.icon }} {{ action.label }}</button>
+        {% endfor %}
+      </div>
     </div>
 
     <div id="ai-assistant-error" class="ai-assistant-error" hidden></div>
     <div id="ai-assistant-versions" class="ai-assistant-versions" hidden></div>
 
     <div id="ai-assistant-preview" class="ai-assistant-preview" hidden>
-      <h3>Title</h3>
+      <h3 class="ai-assistant-section-title">Result</h3>
+      <h4>Title</h4>
       <div id="ai-preview-title"></div>
-      <h3>Summary</h3>
+      <h4>Summary</h4>
       <div id="ai-preview-summary"></div>
-      <h3>Body</h3>
+      <h4>Body</h4>
       <div id="ai-preview-body" class="ai-preview-body"></div>
       <details>
         <summary>Telemetry</summary>
         <pre id="ai-preview-telemetry"></pre>
       </details>
+    </div>
+
+    <div class="ai-assistant-section">
+      <h3 class="ai-assistant-section-title">Assistant Actions</h3>
+      <div class="ai-assistant-actions" id="ai-assistant-secondary-actions">
+        {% for action in ai_assistant_secondary_actions %}
+        <button
+          type="button"
+          class="button ai-assistant-action{% if not action.enabled %} is-coming-soon{% endif %}"
+          id="ai-assistant-action-{{ action.id }}"
+          data-ai-action="{{ action.id }}"
+          {% if action.id == 'regenerate' %}disabled{% endif %}
+          {% if not action.enabled %}disabled title="{{ action.coming_soon }}" aria-disabled="true"{% endif %}
+        >
+          {% if action.enabled %}
+            {{ action.icon }} {{ action.label }}
+          {% else %}
+            {{ action.icon }} {{ action.label }}
+            <span class="ai-coming-soon">{{ action.coming_soon }}</span>
+          {% endif %}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ai-assistant-actions ai-assistant-footer-actions">
+      <button type="button" class="default" id="ai-assistant-use-draft" disabled>Use Draft</button>
+      <button type="button" class="button" data-ai-assistant-cancel>Cancel</button>
     </div>
   </div>
 </div>

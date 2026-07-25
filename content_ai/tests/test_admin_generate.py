@@ -13,11 +13,46 @@ from content_ai.admin_editorial import (
     apply_suggestion_to_initial,
     preview_from_draft,
 )
+from content_ai.assistant.actions import (
+    IMPLEMENTED_ACTIONS,
+    get_action,
+    is_action_implemented,
+    list_actions_for_ui,
+)
 from content_ai.editorial.drafts import EditorialDraft
 from content_ai.providers.exceptions import GenerationError
 from content_ai.telemetry import AIExecutionTelemetry
 
 User = get_user_model()
+
+
+class AssistantActionRegistryTests(SimpleTestCase):
+    def test_v1_only_generate_and_regenerate_are_implemented(self):
+        self.assertEqual(IMPLEMENTED_ACTIONS, frozenset({'generate', 'regenerate'}))
+        self.assertTrue(is_action_implemented('generate'))
+        self.assertTrue(is_action_implemented('regenerate'))
+        for action_id in (
+            'rewrite',
+            'shorter',
+            'longer',
+            'translate',
+            'seo_optimize',
+            'social_post',
+        ):
+            self.assertFalse(is_action_implemented(action_id))
+            action = get_action(action_id)
+            self.assertIsNotNone(action)
+            self.assertFalse(action.enabled)
+
+    def test_list_actions_for_ui_includes_placeholders(self):
+        actions = list_actions_for_ui()
+        ids = [item['id'] for item in actions]
+        self.assertEqual(ids[0], 'generate')
+        self.assertIn('rewrite', ids)
+        self.assertIn('social_post', ids)
+        rewrite = next(item for item in actions if item['id'] == 'rewrite')
+        self.assertFalse(rewrite['enabled'])
+        self.assertEqual(rewrite['coming_soon'], 'Coming soon')
 
 
 class TemporaryVersionHistoryTests(SimpleTestCase):
@@ -50,6 +85,7 @@ class TemporaryVersionHistoryTests(SimpleTestCase):
 
 class ApplySuggestionTests(SimpleTestCase):
     def test_accept_payload_maps_to_admin_fields(self):
+        """Use Draft maps preview fields onto Admin form initial data."""
         initial = apply_suggestion_to_initial(
             {},
             {
@@ -123,6 +159,7 @@ class AdminAIEditorialAssistantTests(TestCase):
 
     def _generate_payload(self, **overrides):
         payload = {
+            'action': 'generate',
             'title': 'Working title',
             'category_id': self.category.pk,
             'category': self.category.name,
@@ -174,6 +211,10 @@ class AdminAIEditorialAssistantTests(TestCase):
         self.assertContains(response, 'Generate with AI')
         self.assertContains(response, 'ai-editorial-assistant')
         self.assertContains(response, self.generate_url)
+        self.assertContains(response, 'Use Draft')
+        self.assertContains(response, 'Coming soon')
+        self.assertContains(response, 'data-ai-action="rewrite"')
+        self.assertContains(response, 'data-ai-action="regenerate"')
 
     def test_button_visible_on_draft(self):
         self._login_staff()
@@ -182,6 +223,7 @@ class AdminAIEditorialAssistantTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Generate with AI')
         self.assertContains(response, f'data-post-id="{self.draft.pk}"')
+        self.assertContains(response, 'Assistant Actions')
 
     def test_button_hidden_on_published(self):
         self._login_staff()
@@ -244,12 +286,12 @@ class AdminAIEditorialAssistantTests(TestCase):
         self._login_staff()
         first = self.client.post(
             self.generate_url,
-            data=json.dumps(self._generate_payload()),
+            data=json.dumps(self._generate_payload(action='generate')),
             content_type='application/json',
         )
         second = self.client.post(
             self.generate_url,
-            data=json.dumps(self._generate_payload()),
+            data=json.dumps(self._generate_payload(action='regenerate')),
             content_type='application/json',
         )
         self.assertEqual(first.status_code, 200)
@@ -259,6 +301,16 @@ class AdminAIEditorialAssistantTests(TestCase):
         self.assertEqual(mock_generate.call_count, 2)
         self.draft.refresh_from_db()
         self.assertEqual(self.draft.content, 'Draft body')
+
+    def test_future_action_rejected(self):
+        self._login_staff()
+        response = self.client.post(
+            self.generate_url,
+            data=json.dumps(self._generate_payload(action='rewrite')),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['error']['code'], 'action_not_implemented')
 
     @patch('blog.admin.EditorialAIService.generate_draft')
     def test_generate_on_draft_does_not_overwrite_post(self, mock_generate):

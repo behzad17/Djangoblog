@@ -11,6 +11,12 @@ from content_ai.admin_editorial import (
     categories_for_assistant,
     preview_from_draft,
 )
+from content_ai.assistant.actions import (
+    assistant_actions,
+    is_action_implemented,
+    list_actions_for_ui,
+    primary_actions,
+)
 from content_ai.editorial.service import EditorialAIService
 from content_ai.providers.exceptions import (
     GenerationError,
@@ -146,6 +152,15 @@ class PostAdmin(admin.ModelAdmin):
         extra_context['ai_assistant_initial_category'] = (
             obj.category_id if obj else ''
         )
+        extra_context['ai_assistant_primary_actions'] = (
+            primary_actions() if show else []
+        )
+        extra_context['ai_assistant_secondary_actions'] = (
+            assistant_actions() if show else []
+        )
+        extra_context['ai_assistant_actions_json'] = (
+            json.dumps(list_actions_for_ui()) if show else '[]'
+        )
         return super().changeform_view(
             request,
             object_id,
@@ -198,6 +213,21 @@ class PostAdmin(admin.ModelAdmin):
         if not isinstance(payload, dict):
             return JsonResponse(
                 serialize_error('invalid_json', 'Request body must be a JSON object.'),
+                status=400,
+            )
+
+        action_id = payload.get('action') or 'generate'
+        if not isinstance(action_id, str):
+            return JsonResponse(
+                serialize_error('validation_error', "Field 'action' must be a string."),
+                status=400,
+            )
+        if not is_action_implemented(action_id):
+            return JsonResponse(
+                serialize_error(
+                    'action_not_implemented',
+                    f"Action '{action_id}' is not available yet.",
+                ),
                 status=400,
             )
 

@@ -1,7 +1,7 @@
 """Admin helpers for the AI Editorial Assistant (human-in-the-loop).
 
-Generation previews are ephemeral. Nothing is saved until the editor Accepts
-into the Admin form and then uses Save Draft.
+Generation previews are ephemeral. Nothing is saved until the editor chooses
+Use Draft into the Admin form and then uses Save Draft.
 """
 
 from __future__ import annotations

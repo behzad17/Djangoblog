@@ -19,11 +19,11 @@
 .ai-assistant-modal {
   position: fixed;
   z-index: 1001;
-  top: 5vh;
+  top: 4vh;
   left: 50%;
   transform: translateX(-50%);
-  width: min(720px, 94vw);
-  max-height: 90vh;
+  width: min(760px, 94vw);
+  max-height: 92vh;
   overflow: auto;
   background: #fff;
   border: 1px solid #ccc;
@@ -31,13 +31,30 @@
   padding: 16px 18px 18px;
 }
 
+.ai-assistant-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .ai-assistant-modal h2 {
-  margin: 0 0 8px;
+  margin: 0;
+}
+
+.ai-assistant-close {
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  padding: 0 4px;
 }
 
 .ai-assistant-modal .ai-assistant-lead {
   color: #555;
-  margin: 0 0 14px;
+  margin: 10px 0 14px;
 }
 
 .ai-assistant-modal label {
@@ -57,16 +74,51 @@
   min-height: 72px;
 }
 
+.ai-assistant-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.ai-assistant-section-title {
+  margin: 0 0 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #666;
+}
+
 .ai-assistant-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 14px;
 }
 
-.ai-assistant-actions .default {
+.ai-assistant-actions-primary .default {
   font-size: 14px;
-  padding: 8px 16px;
+  padding: 10px 18px;
+}
+
+.ai-assistant-footer-actions {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.ai-assistant-action.is-coming-soon,
+.ai-assistant-action:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.ai-coming-soon {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  color: #888;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .ai-assistant-error {
@@ -81,7 +133,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .ai-assistant-version-btn {
@@ -99,13 +151,11 @@
 
 .ai-assistant-preview {
   margin-top: 14px;
-  border-top: 1px solid #ddd;
-  padding-top: 12px;
 }
 
-.ai-assistant-preview h3 {
+.ai-assistant-preview h4 {
   margin: 12px 0 4px;
-  font-size: 13px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: #666;
@@ -116,7 +166,7 @@
   background: #f7f7f7;
   border: 1px solid #e5e5e5;
   padding: 10px;
-  max-height: 240px;
+  max-height: 220px;
   overflow: auto;
 }
 
