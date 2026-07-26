@@ -14,6 +14,10 @@ from content_ai.editorial.content_types import (
     resolve_goal,
     resolve_style,
 )
+from content_ai.editorial.article_length import (
+    ARTICLE_LENGTH_LABELS,
+    resolve_article_length,
+)
 from content_ai.editorial.category_recommender import (
     list_blog_categories_for_ui,
     recommend_category,
@@ -298,8 +302,9 @@ class WorkspaceService:
         content_type: str | None = None,
         goal: str | None = None,
         writing_style: str | None = None,
+        article_length: str | None = None,
     ) -> WorkspaceSession:
-        """Apply editor overrides for content type, goal, and/or style."""
+        """Apply editor overrides for content type, goal, style, and/or length."""
         if content_type is not None:
             session.content_type_override = resolve_content_type(content_type)
         if goal is not None:
@@ -312,6 +317,8 @@ class WorkspaceService:
                 writing_style,
                 content_type=session.resolved_content_type(),
             )
+        if article_length is not None:
+            session.article_length = resolve_article_length(article_length)
         profile = get_profile(session.resolved_content_type())
         session.template_id = profile.resolved_template_id()
         # When type changes without an explicit style override, refresh
@@ -427,8 +434,11 @@ class WorkspaceService:
         category: str = '',
         instructions: str = '',
         provider_name: str | None = None,
+        article_length: str | None = None,
     ) -> WorkspaceSession:
         assert_generation_integrity(session)
+        if article_length is not None:
+            session.article_length = resolve_article_length(article_length)
         if not session.content_type and not session.content_type_override:
             self._classify_session(
                 session,
@@ -440,6 +450,7 @@ class WorkspaceService:
         content_type = session.resolved_content_type()
         goal = session.resolved_goal()
         writing_style = session.resolved_writing_style()
+        length = session.resolved_article_length()
         profile = get_profile(content_type)
         session.template_id = profile.resolved_template_id()
         # Generation context is ONLY current imported source text.
@@ -457,6 +468,7 @@ class WorkspaceService:
             content_type=content_type,
             goal=goal,
             style=writing_style,
+            article_length=length,
         )
         lead = (draft.lead or '').strip()
         body = (draft.body or '').strip()
@@ -500,6 +512,7 @@ class WorkspaceService:
             f'Draft generated with template {session.template_id}.',
             f'Content type: {profile.label}; goal: {goal}; '
             f'style: {writing_style}.',
+            f'Article length: {ARTICLE_LENGTH_LABELS.get(length, length)}.',
             f'Prompt version: {PROMPT_ENGINE_VERSION}.',
             f'{profile.lead_label} and body follow the content-type structure.',
             f'Category recommendation: {selected_cat or "—"}.',
@@ -525,6 +538,7 @@ class WorkspaceService:
             'content_type': content_type,
             'goal': goal,
             'writing_style': writing_style,
+            'article_length': length,
             'template_id': session.template_id,
             'prompt_version': PROMPT_ENGINE_VERSION,
             'session_id': session.session_id,
@@ -561,6 +575,7 @@ class WorkspaceService:
             content_type=session.resolved_content_type(),
             goal=session.resolved_goal(),
             style=session.resolved_writing_style(),
+            article_length=session.resolved_article_length(),
         )
         explanation = f'{section} regenerated independently.'
         if section == 'headline':

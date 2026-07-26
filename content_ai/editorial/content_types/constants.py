@@ -102,8 +102,9 @@ WRITING_STYLE_LABELS: dict[str, str] = {
 
 WRITING_STYLE_GUIDANCE: dict[str, str] = {
     WritingStyle.JOURNALISTIC: (
-        'Use concise journalistic Persian: factual, scannable, inverted-pyramid '
-        'instincts, no fluff.'
+        'Use clear journalistic Persian: factual, scannable, inverted-pyramid '
+        'instincts, no fluff. Do not shorten the article for style alone — '
+        'follow the selected Article Length for BODY depth.'
     ),
     WritingStyle.EDUCATIONAL: (
         'Use clear educational Persian: teach step by step, define terms briefly, '

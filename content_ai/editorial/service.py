@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from content_ai.constants import AIGenerationTask
+from content_ai.editorial.article_length import resolve_article_length
 from content_ai.editorial.content_types import (
     body_pass_rules,
     get_profile,
@@ -47,22 +48,26 @@ class EditorialAIService:
         content_type: str | None = None,
         goal: str | None = None,
         style: str | None = None,
+        article_length: str | None = None,
     ) -> EditorialDraft:
         source_title = (title or '').strip()
         language = (language or '').strip() or 'fa'
         resolved_type = resolve_content_type(content_type)
         resolved_goal = resolve_goal(goal, content_type=resolved_type)
         resolved_style = resolve_style(style, content_type=resolved_type)
+        resolved_length = resolve_article_length(article_length)
         profile = get_profile(resolved_type)
         head_rules = headline_lead_pass_rules(
             content_type=resolved_type,
             goal=resolved_goal,
             style=resolved_style,
+            article_length=resolved_length,
         )
         body_rules = body_pass_rules(
             content_type=resolved_type,
             goal=resolved_goal,
             style=resolved_style,
+            article_length=resolved_length,
         )
 
         head_result = self._generation_service.generate(
@@ -117,6 +122,7 @@ class EditorialAIService:
             content_type=resolved_type,
             goal=resolved_goal,
             style=resolved_style,
+            article_length=resolved_length,
             template_id=profile.resolved_template_id(),
         )
 
@@ -160,6 +166,7 @@ class EditorialAIService:
         content_type: str = 'news',
         goal: str = 'inform',
         style: str = 'journalistic',
+        article_length: str = 'full',
         template_id: str = 'news.v1',
     ) -> EditorialDraft:
         body_text = (
@@ -187,6 +194,7 @@ class EditorialAIService:
         metadata['content_type'] = content_type
         metadata['goal'] = goal
         metadata['writing_style'] = style
+        metadata['article_length'] = article_length
         metadata['template_id'] = template_id
         metadata['suggested_category'] = (
             parsed.get('suggested_category') or category or content_type

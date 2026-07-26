@@ -117,6 +117,16 @@
           </label>
           <p class="ai-workspace__hint" id="ai-ws-style-meta"></p>
         </div>
+        <label>Article Length
+          <select id="ai-ws-article-length">
+            {% for item in article_lengths %}
+              <option value="{{ item.id }}"{% if item.id == 'full' %} selected{% endif %}>{{ item.label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <p class="ai-workspace__hint" id="ai-ws-length-meta">
+          Default is Full Article — complete coverage, not a summary.
+        </p>
         <button type="button" class="button" id="ai-ws-apply-classification">
           Apply classification
         </button>
@@ -214,5 +224,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-category-rec"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-article-length"></script>
 {% endblock %}

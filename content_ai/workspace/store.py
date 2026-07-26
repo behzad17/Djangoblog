@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from content_ai.workflow.states import WorkflowState
+from content_ai.editorial.article_length import resolve_article_length
 from content_ai.workspace.session import (
     ArticleSections,
     HistoryEntry,
@@ -73,6 +74,9 @@ def load_session(request) -> WorkspaceSession | None:
             raw.get('writing_style_confidence') or 0
         ),
         writing_style_override=raw.get('writing_style_override') or '',
+        article_length=resolve_article_length(
+            raw.get('article_length') or 'full'
+        ),
         template_id=raw.get('template_id') or 'news.v1',
         pipeline=dict(raw.get('pipeline') or {}),
     )

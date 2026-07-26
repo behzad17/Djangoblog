@@ -7,6 +7,10 @@ from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
 
+from content_ai.editorial.article_length import (
+    ARTICLE_LENGTH_LABELS,
+    resolve_article_length,
+)
 from content_ai.editorial.content_types import (
     PROMPT_ENGINE_VERSION,
     get_profile,
@@ -117,6 +121,7 @@ class WorkspaceSession:
     writing_style: str = 'journalistic'
     writing_style_confidence: float = 0.0
     writing_style_override: str = ''
+    article_length: str = 'full'
     template_id: str = 'news.v1'
     pipeline: dict[str, bool] = field(default_factory=dict)
     updated_at: datetime = field(default_factory=utc_now)
@@ -147,6 +152,9 @@ class WorkspaceSession:
             self.writing_style_override or self.writing_style,
             content_type=self.resolved_content_type(),
         )
+
+    def resolved_article_length(self) -> str:
+        return resolve_article_length(self.article_length)
 
     def section_labels(self) -> dict[str, str]:
         return dict(get_profile(self.resolved_content_type()).section_labels)
@@ -208,6 +216,11 @@ class WorkspaceSession:
             'writing_style_detected': self.writing_style,
             'writing_style_confidence': self.writing_style_confidence,
             'writing_style_override': self.writing_style_override,
+            'article_length': self.resolved_article_length(),
+            'article_length_label': ARTICLE_LENGTH_LABELS.get(
+                self.resolved_article_length(),
+                self.resolved_article_length(),
+            ),
             'template_id': self.template_id or profile.resolved_template_id(),
             'prompt_version': PROMPT_ENGINE_VERSION,
             'lead_label': profile.lead_label,
@@ -281,6 +294,9 @@ class WorkspaceSession:
                 data.get('writing_style_confidence') or 0
             ),
             writing_style_override=data.get('writing_style_override') or '',
+            article_length=resolve_article_length(
+                data.get('article_length') or 'full'
+            ),
             template_id=data.get('template_id') or 'news.v1',
             pipeline=dict(data.get('pipeline') or {}),
         )

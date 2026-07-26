@@ -63,6 +63,14 @@
     if (typeEl) typeEl.value = session.content_type || 'news';
     if (goalEl) goalEl.value = session.goal || 'inform';
     if (styleEl) styleEl.value = session.writing_style || 'journalistic';
+    var lengthEl = document.getElementById('ai-ws-article-length');
+    if (lengthEl) lengthEl.value = session.article_length || 'full';
+    var lengthMeta = document.getElementById('ai-ws-length-meta');
+    if (lengthMeta) {
+      lengthMeta.textContent =
+        (session.article_length_label || 'Full Article') +
+        ' — length changes the generation prompt, not post-truncation.';
+    }
     document.getElementById('ai-ws-content-type-meta').textContent =
       'Confidence: ' + confidencePct(session.content_type_confidence) +
       (session.content_type_override ? ' · overridden' : '');
@@ -304,6 +312,7 @@
       'Detected Style: ' + (session.writing_style_detected || session.writing_style || '—'),
       'Prompt Template: ' + (session.template_id || '—'),
       'Prompt Version: ' + (session.prompt_version || 'v1'),
+      'Article Length: ' + (session.article_length_label || session.article_length || 'Full Article'),
     ];
     if (reasons.length) {
       lines.push('Reasoning: ' + reasons.join(' '));
@@ -318,6 +327,7 @@
       content_type: document.getElementById('ai-ws-content-type').value,
       goal: document.getElementById('ai-ws-goal').value,
       writing_style: document.getElementById('ai-ws-writing-style').value,
+      article_length: document.getElementById('ai-ws-article-length').value,
       regenerate: !!regenerate,
       sections: readSections(),
       source_text: document.getElementById('ai-ws-source-text').value,
@@ -440,6 +450,10 @@
   if (styleSelect) {
     styleSelect.addEventListener('change', onClassificationChange);
   }
+  var lengthSelect = document.getElementById('ai-ws-article-length');
+  if (lengthSelect) {
+    lengthSelect.addEventListener('change', onClassificationChange);
+  }
 
   document.getElementById('ai-ws-generate').addEventListener('click', function () {
     post('generate_draft', {
@@ -450,6 +464,7 @@
       content_type: document.getElementById('ai-ws-content-type').value,
       goal: document.getElementById('ai-ws-goal').value,
       writing_style: document.getElementById('ai-ws-writing-style').value,
+      article_length: document.getElementById('ai-ws-article-length').value,
     }).then(function (data) {
       if (data.ok) applySession(data.session);
     });

@@ -15,6 +15,7 @@ from django.views.decorators.http import require_GET, require_POST
 logger = logging.getLogger(__name__)
 
 from content_ai.config.ai_engine import ENABLE_AI_EDITORIAL_WORKSPACE
+from content_ai.editorial.article_length import list_article_lengths_for_ui
 from content_ai.editorial.category_recommender import list_blog_categories_for_ui
 from content_ai.editorial.content_types import (
     list_content_types_for_ui,
@@ -92,6 +93,7 @@ def editorial_workspace(request):
             'content_types': list_content_types_for_ui(),
             'editorial_goals': list_goals_for_ui(),
             'writing_styles': list_styles_for_ui(),
+            'article_lengths': list_article_lengths_for_ui(),
             'blog_categories': list_blog_categories_for_ui(),
             'workflow_states': [
                 {'id': s.value, 'label': s.value.replace('_', ' ').title()}
@@ -167,6 +169,7 @@ def workspace_api(request, action: str):
                 goal=payload.get('goal'),
                 writing_style=payload.get('writing_style')
                 or payload.get('style'),
+                article_length=payload.get('article_length'),
             )
             if payload.get('regenerate'):
                 service.generate_draft(
@@ -175,6 +178,7 @@ def workspace_api(request, action: str):
                     category=payload.get('category') or '',
                     instructions=payload.get('instructions') or '',
                     provider_name=payload.get('provider') or None,
+                    article_length=payload.get('article_length'),
                 )
             save_session(request, session)
             return JsonResponse(
@@ -185,13 +189,14 @@ def workspace_api(request, action: str):
             _apply_sections_payload(session, payload)
             if payload.get('content_type') or payload.get('goal') or payload.get(
                 'writing_style'
-            ) or payload.get('style'):
+            ) or payload.get('style') or payload.get('article_length'):
                 service.set_classification(
                     session,
                     content_type=payload.get('content_type'),
                     goal=payload.get('goal'),
                     writing_style=payload.get('writing_style')
                     or payload.get('style'),
+                    article_length=payload.get('article_length'),
                 )
             # Never silently reuse previous session text for a new URL.
             # Use exactly what the client sent for URL/text; empty stays empty.
@@ -221,6 +226,7 @@ def workspace_api(request, action: str):
                 category=payload.get('category') or '',
                 instructions=payload.get('instructions') or '',
                 provider_name=payload.get('provider') or None,
+                article_length=payload.get('article_length'),
             )
             save_session(request, session)
             return JsonResponse(
