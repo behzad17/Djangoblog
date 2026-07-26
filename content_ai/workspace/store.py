@@ -66,6 +66,13 @@ def load_session(request) -> WorkspaceSession | None:
         goal=raw.get('goal_detected') or raw.get('goal') or 'inform',
         goal_confidence=float(raw.get('goal_confidence') or 0),
         goal_override=raw.get('goal_override') or '',
+        writing_style=raw.get('writing_style_detected')
+        or raw.get('writing_style')
+        or 'journalistic',
+        writing_style_confidence=float(
+            raw.get('writing_style_confidence') or 0
+        ),
+        writing_style_override=raw.get('writing_style_override') or '',
         template_id=raw.get('template_id') or 'news.v1',
         pipeline=dict(raw.get('pipeline') or {}),
     )

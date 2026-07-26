@@ -57,16 +57,23 @@
 
     var typeEl = document.getElementById('ai-ws-content-type');
     var goalEl = document.getElementById('ai-ws-goal');
+    var styleEl = document.getElementById('ai-ws-writing-style');
     if (typeEl) typeEl.value = session.content_type || 'news';
     if (goalEl) goalEl.value = session.goal || 'inform';
+    if (styleEl) styleEl.value = session.writing_style || 'journalistic';
     document.getElementById('ai-ws-content-type-meta').textContent =
-      'Detected: ' + (session.content_type_detected || session.content_type || 'news') +
-      ' (' + Number(session.content_type_confidence || 0).toFixed(2) + ')' +
+      'Confidence: ' + confidencePct(session.content_type_confidence) +
       (session.content_type_override ? ' · overridden' : '');
     document.getElementById('ai-ws-goal-meta').textContent =
-      'Detected: ' + (session.goal_detected || session.goal || 'inform') +
-      ' (' + Number(session.goal_confidence || 0).toFixed(2) + ')' +
+      'Confidence: ' + confidencePct(session.goal_confidence) +
       (session.goal_override ? ' · overridden' : '');
+    var styleMeta = document.getElementById('ai-ws-style-meta');
+    if (styleMeta) {
+      styleMeta.textContent =
+        'Confidence: ' + confidencePct(session.writing_style_confidence) +
+        (session.writing_style_override ? ' · overridden' : '');
+    }
+    renderIntelligenceExplain(session);
 
     var leadLabel = session.lead_label || 'Lead';
     document.getElementById('ai-ws-lead-label').textContent = leadLabel;
@@ -270,10 +277,41 @@
     });
   }
 
+  function confidencePct(value) {
+    var n = Number(value || 0);
+    if (n <= 1) n = Math.round(n * 100);
+    else n = Math.round(n);
+    return n + '%';
+  }
+
+  function renderIntelligenceExplain(session) {
+    var el = document.getElementById('ai-ws-intel-explain');
+    if (!el) return;
+    var reasons = []
+      .concat(session.classification_reasons || [])
+      .concat(session.goal_reasons || [])
+      .concat(session.style_reasons || [])
+      .slice(0, 4);
+    var lines = [
+      'Detected Content Type: ' + (session.content_type_detected || session.content_type || '—'),
+      'Detected Goal: ' + (session.goal_detected || session.goal || '—'),
+      'Detected Style: ' + (session.writing_style_detected || session.writing_style || '—'),
+      'Prompt Template: ' + (session.template_id || '—'),
+      'Prompt Version: ' + (session.prompt_version || 'v1'),
+    ];
+    if (reasons.length) {
+      lines.push('Reasoning: ' + reasons.join(' '));
+    }
+    el.innerHTML = lines.map(function (line) {
+      return '<div>' + line + '</div>';
+    }).join('');
+  }
+
   function currentClassificationPayload(regenerate) {
     return {
       content_type: document.getElementById('ai-ws-content-type').value,
       goal: document.getElementById('ai-ws-goal').value,
+      writing_style: document.getElementById('ai-ws-writing-style').value,
       regenerate: !!regenerate,
       sections: readSections(),
       source_text: document.getElementById('ai-ws-source-text').value,
@@ -322,6 +360,10 @@
   }
   document.getElementById('ai-ws-content-type').addEventListener('change', onClassificationChange);
   document.getElementById('ai-ws-goal').addEventListener('change', onClassificationChange);
+  var styleSelect = document.getElementById('ai-ws-writing-style');
+  if (styleSelect) {
+    styleSelect.addEventListener('change', onClassificationChange);
+  }
 
   document.getElementById('ai-ws-generate').addEventListener('click', function () {
     post('generate_draft', {
@@ -331,6 +373,7 @@
       language: 'fa',
       content_type: document.getElementById('ai-ws-content-type').value,
       goal: document.getElementById('ai-ws-goal').value,
+      writing_style: document.getElementById('ai-ws-writing-style').value,
     }).then(function (data) {
       if (data.ok) applySession(data.session);
     });

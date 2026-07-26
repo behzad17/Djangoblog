@@ -8,9 +8,11 @@ from typing import Any
 from uuid import uuid4
 
 from content_ai.editorial.content_types import (
+    PROMPT_ENGINE_VERSION,
     get_profile,
     resolve_content_type,
     resolve_goal,
+    resolve_style,
 )
 from content_ai.workflow.states import WorkflowState
 
@@ -22,8 +24,9 @@ def utc_now() -> datetime:
 PIPELINE_STEPS: tuple[tuple[str, str], ...] = (
     ('source_imported', 'Source imported'),
     ('metadata_extracted', 'Metadata extracted'),
-    ('content_classified', 'Content classified'),
+    ('content_classified', 'Content type classified'),
     ('goal_detected', 'Editorial goal detected'),
+    ('style_detected', 'Writing style detected'),
     ('draft_generated', 'Draft generated'),
     ('seo_ready', 'SEO ready'),
     ('fact_checked', 'Fact checked'),
@@ -111,6 +114,9 @@ class WorkspaceSession:
     goal: str = 'inform'
     goal_confidence: float = 0.0
     goal_override: str = ''
+    writing_style: str = 'journalistic'
+    writing_style_confidence: float = 0.0
+    writing_style_override: str = ''
     template_id: str = 'news.v1'
     pipeline: dict[str, bool] = field(default_factory=dict)
     updated_at: datetime = field(default_factory=utc_now)
@@ -133,6 +139,12 @@ class WorkspaceSession:
     def resolved_goal(self) -> str:
         return resolve_goal(
             self.goal_override or self.goal,
+            content_type=self.resolved_content_type(),
+        )
+
+    def resolved_writing_style(self) -> str:
+        return resolve_style(
+            self.writing_style_override or self.writing_style,
             content_type=self.resolved_content_type(),
         )
 
@@ -171,6 +183,7 @@ class WorkspaceSession:
             key: bool((self.pipeline or {}).get(key))
             for key, _ in PIPELINE_STEPS
         }
+        classification = dict((self.metadata or {}).get('classification') or {})
         return {
             'session_id': self.session_id,
             'workflow_state': self.workflow_state.value,
@@ -191,9 +204,23 @@ class WorkspaceSession:
             'goal_detected': self.goal,
             'goal_confidence': self.goal_confidence,
             'goal_override': self.goal_override,
+            'writing_style': self.resolved_writing_style(),
+            'writing_style_detected': self.writing_style,
+            'writing_style_confidence': self.writing_style_confidence,
+            'writing_style_override': self.writing_style_override,
             'template_id': self.template_id or profile.resolved_template_id(),
+            'prompt_version': PROMPT_ENGINE_VERSION,
             'lead_label': profile.lead_label,
             'section_labels': self.section_labels(),
+            'classification_reasons': list(
+                classification.get('reasons') or []
+            ),
+            'goal_reasons': list(
+                (classification.get('goal') or {}).get('reasons') or []
+            ),
+            'style_reasons': list(
+                (classification.get('style') or {}).get('reasons') or []
+            ),
             'pipeline': pipeline,
             'pipeline_steps': [
                 {
@@ -244,6 +271,13 @@ class WorkspaceSession:
             goal=data.get('goal_detected') or data.get('goal') or 'inform',
             goal_confidence=float(data.get('goal_confidence') or 0),
             goal_override=data.get('goal_override') or '',
+            writing_style=data.get('writing_style_detected')
+            or data.get('writing_style')
+            or 'journalistic',
+            writing_style_confidence=float(
+                data.get('writing_style_confidence') or 0
+            ),
+            writing_style_override=data.get('writing_style_override') or '',
             template_id=data.get('template_id') or 'news.v1',
             pipeline=dict(data.get('pipeline') or {}),
         )

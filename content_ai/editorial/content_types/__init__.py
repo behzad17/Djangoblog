@@ -1,7 +1,8 @@
-"""Editorial content-type catalogue (Editorial AI v2).
+"""Editorial content-type catalogue (Editorial Intelligence v1).
 
-Extensible registry of content types, editorial goals, and per-type
-generation / assistant strategies. Defaults preserve news-shaped behaviour.
+Extensible registry of content types, editorial goals, writing styles, and
+per-type generation / assistant strategies. Defaults preserve news-shaped
+behaviour when signals are weak.
 """
 
 from __future__ import annotations
@@ -13,8 +14,11 @@ from content_ai.editorial.content_types.classify import (
 from content_ai.editorial.content_types.constants import (
     CONTENT_TYPES,
     EDITORIAL_GOALS,
+    PROMPT_ENGINE_VERSION,
+    WRITING_STYLES,
     ContentType,
     EditorialGoal,
+    WritingStyle,
 )
 from content_ai.editorial.content_types.goals import (
     GoalDetectionResult,
@@ -30,26 +34,39 @@ from content_ai.editorial.content_types.registry import (
     get_profile,
     list_content_types_for_ui,
     list_goals_for_ui,
+    list_styles_for_ui,
     resolve_content_type,
     resolve_goal,
+    resolve_style,
+)
+from content_ai.editorial.content_types.style import (
+    StyleDetectionResult,
+    detect_writing_style,
 )
 
 __all__ = [
     'CONTENT_TYPE_REGISTRY',
     'CONTENT_TYPES',
     'EDITORIAL_GOALS',
+    'PROMPT_ENGINE_VERSION',
+    'WRITING_STYLES',
     'ClassificationResult',
     'ContentType',
     'ContentTypeProfile',
     'EditorialGoal',
     'GoalDetectionResult',
+    'StyleDetectionResult',
+    'WritingStyle',
     'body_pass_rules',
     'classify_content',
     'detect_editorial_goal',
+    'detect_writing_style',
     'get_profile',
     'headline_lead_pass_rules',
     'list_content_types_for_ui',
     'list_goals_for_ui',
+    'list_styles_for_ui',
     'resolve_content_type',
     'resolve_goal',
+    'resolve_style',
 ]

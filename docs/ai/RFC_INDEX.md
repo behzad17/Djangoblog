@@ -26,7 +26,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-011** | AI Editorial Agents | 5 Advanced | Planned | Multi-step agents + human gates |
 | **RFC-012** | Analytics | 5 Advanced | Planned | Quality / cost / utilisation |
 | **RFC-013** | Continuous Improvement | 5 Advanced | Planned | Governed optimisation loops |
-| **APF-001** | AI Editorial Workspace | Product Feature | Done (v2 classify) | [features/APF-001.md](./features/APF-001.md) — content-type registry + goal detection; no auto-publish |
+| **APF-001** | AI Editorial Workspace | Product Feature | Done (Intelligence v1) | [features/APF-001.md](./features/APF-001.md) — type + goal + style classification; registry prompts; no auto-publish |
 | **APF-002** | AI Studio | Product Feature | Done (compose UI) | [features/APF-002.md](./features/APF-002.md) — admin experiment/eval control centre |
 | **ES-000** | Editorial Studio Blueprint | Product | Accepted (design) | [features/ES-000.md](./features/ES-000.md) — newsroom product map |
 | **ES-001** | News Import | Product Tool | Superseded by ES-001A | Initial News Import shell |

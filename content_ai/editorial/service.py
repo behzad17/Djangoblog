@@ -9,6 +9,7 @@ from content_ai.editorial.content_types import (
     headline_lead_pass_rules,
     resolve_content_type,
     resolve_goal,
+    resolve_style,
 )
 from content_ai.editorial.drafts import EditorialDraft
 from content_ai.editorial.structured import parse_structured_draft
@@ -45,19 +46,23 @@ class EditorialAIService:
         provider_name=None,
         content_type: str | None = None,
         goal: str | None = None,
+        style: str | None = None,
     ) -> EditorialDraft:
         source_title = (title or '').strip()
         language = (language or '').strip() or 'fa'
         resolved_type = resolve_content_type(content_type)
         resolved_goal = resolve_goal(goal, content_type=resolved_type)
+        resolved_style = resolve_style(style, content_type=resolved_type)
         profile = get_profile(resolved_type)
         head_rules = headline_lead_pass_rules(
             content_type=resolved_type,
             goal=resolved_goal,
+            style=resolved_style,
         )
         body_rules = body_pass_rules(
             content_type=resolved_type,
             goal=resolved_goal,
+            style=resolved_style,
         )
 
         head_result = self._generation_service.generate(
@@ -111,6 +116,7 @@ class EditorialAIService:
             body_result=body_result,
             content_type=resolved_type,
             goal=resolved_goal,
+            style=resolved_style,
             template_id=profile.resolved_template_id(),
         )
 
@@ -153,6 +159,7 @@ class EditorialAIService:
         body_result: GenerationResult,
         content_type: str = 'news',
         goal: str = 'inform',
+        style: str = 'journalistic',
         template_id: str = 'news.v1',
     ) -> EditorialDraft:
         body_text = (
@@ -179,6 +186,7 @@ class EditorialAIService:
         metadata['source_title'] = source_title
         metadata['content_type'] = content_type
         metadata['goal'] = goal
+        metadata['writing_style'] = style
         metadata['template_id'] = template_id
         metadata['suggested_category'] = (
             parsed.get('suggested_category') or category or content_type

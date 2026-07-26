@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 from content_ai.editorial.content_types import (
+    PROMPT_ENGINE_VERSION,
     classify_content,
     detect_editorial_goal,
+    detect_writing_style,
     get_profile,
     resolve_content_type,
     resolve_goal,
+    resolve_style,
 )
 from content_ai.editorial.service import EditorialAIService
 from content_ai.evaluation.evaluator import Evaluator
@@ -126,34 +129,54 @@ class WorkspaceService:
             title=title,
             text=text,
         )
+        style = detect_writing_style(
+            content_type=classification.content_type,
+            title=title,
+            text=text,
+        )
         session.content_type = classification.content_type
         session.content_type_confidence = classification.confidence
         session.goal = goal.goal
         session.goal_confidence = goal.confidence
+        session.writing_style = style.style
+        session.writing_style_confidence = style.confidence
         profile = get_profile(session.resolved_content_type())
         session.template_id = profile.resolved_template_id()
         session.metadata['classification'] = {
             **classification.to_dict(),
             'goal': goal.to_dict(),
+            'style': style.to_dict(),
             'template_id': session.template_id,
+            'prompt_version': PROMPT_ENGINE_VERSION,
             'lead_label': profile.lead_label,
             'override_content_type': session.content_type_override or None,
             'override_goal': session.goal_override or None,
+            'override_style': session.writing_style_override or None,
         }
-        session.mark_pipeline('content_classified', 'goal_detected')
+        session.mark_pipeline(
+            'content_classified',
+            'goal_detected',
+            'style_detected',
+        )
         session.last_explanations = [
             (
                 f'Detected content type: {profile.label} '
-                f'(confidence {classification.confidence:.2f}).'
+                f'(confidence {int(round(classification.confidence * 100))}%).'
             ),
             (
                 f'Detected editorial goal: {session.resolved_goal()} '
-                f'(confidence {goal.confidence:.2f}).'
+                f'(confidence {int(round(goal.confidence * 100))}%).'
+            ),
+            (
+                f'Detected writing style: {session.resolved_writing_style()} '
+                f'(confidence {int(round(style.confidence * 100))}%).'
             ),
             f'Prompt template: {session.template_id}.',
+            f'Prompt version: {PROMPT_ENGINE_VERSION}.',
             *(classification.reasons[:2]),
             *(goal.reasons[:1]),
-            'Editors can override content type and goal before generating.',
+            *(style.reasons[:1]),
+            'Editors can override type, goal, and style before generating.',
         ]
 
     def set_classification(
@@ -162,8 +185,9 @@ class WorkspaceService:
         *,
         content_type: str | None = None,
         goal: str | None = None,
+        writing_style: str | None = None,
     ) -> WorkspaceSession:
-        """Apply editor overrides for content type and/or goal."""
+        """Apply editor overrides for content type, goal, and/or style."""
         if content_type is not None:
             session.content_type_override = resolve_content_type(content_type)
         if goal is not None:
@@ -171,9 +195,26 @@ class WorkspaceService:
                 goal,
                 content_type=session.resolved_content_type(),
             )
+        if writing_style is not None:
+            session.writing_style_override = resolve_style(
+                writing_style,
+                content_type=session.resolved_content_type(),
+            )
         profile = get_profile(session.resolved_content_type())
         session.template_id = profile.resolved_template_id()
+        # When type changes without an explicit style override, refresh
+        # detected style toward the new type default while preserving
+        # any prior detection metadata.
+        if content_type is not None and not session.writing_style_override:
+            refreshed = detect_writing_style(
+                content_type=session.resolved_content_type(),
+                title=(session.metadata.get('source') or {}).get('title') or '',
+                text=session.source_material,
+            )
+            session.writing_style = refreshed.style
+            session.writing_style_confidence = refreshed.confidence
         classification = dict(session.metadata.get('classification') or {})
+        style_meta = dict(classification.get('style') or {})
         classification.update(
             {
                 'content_type': session.resolved_content_type(),
@@ -202,19 +243,40 @@ class WorkspaceService:
                         )
                     ),
                 },
+                'style': {
+                    'style': session.resolved_writing_style(),
+                    'confidence': (
+                        1.0
+                        if session.writing_style_override
+                        else session.writing_style_confidence
+                    ),
+                    'reasons': (
+                        ['Editor override selected this writing style.']
+                        if session.writing_style_override
+                        else style_meta.get('reasons', [])
+                    ),
+                },
                 'template_id': session.template_id,
+                'prompt_version': PROMPT_ENGINE_VERSION,
                 'lead_label': profile.lead_label,
                 'override_content_type': session.content_type_override or None,
                 'override_goal': session.goal_override or None,
+                'override_style': session.writing_style_override or None,
             }
         )
         session.metadata['classification'] = classification
-        session.mark_pipeline('content_classified', 'goal_detected')
+        session.mark_pipeline(
+            'content_classified',
+            'goal_detected',
+            'style_detected',
+        )
         session.last_explanations = [
             f'Using content type: {profile.label}.',
             f'Using editorial goal: {session.resolved_goal()}.',
+            f'Using writing style: {session.resolved_writing_style()}.',
             f'Prompt template: {session.template_id}.',
-            'Change either field and regenerate to apply a new template.',
+            f'Prompt version: {PROMPT_ENGINE_VERSION}.',
+            'Change any field and regenerate to apply a new template.',
         ]
         session.touch()
         return session
@@ -253,6 +315,7 @@ class WorkspaceService:
         working_title = title or session.sections.headline or 'Untitled draft'
         content_type = session.resolved_content_type()
         goal = session.resolved_goal()
+        writing_style = session.resolved_writing_style()
         profile = get_profile(content_type)
         session.template_id = profile.resolved_template_id()
         context = '\n\n'.join(
@@ -272,6 +335,7 @@ class WorkspaceService:
             provider_name=provider_name,
             content_type=content_type,
             goal=goal,
+            style=writing_style,
         )
         lead = (draft.lead or '').strip()
         body = (draft.body or '').strip()
@@ -296,7 +360,9 @@ class WorkspaceService:
         session.mark_pipeline('draft_generated')
         session.last_explanations = [
             f'Draft generated with template {session.template_id}.',
-            f'Content type: {profile.label}; goal: {goal}.',
+            f'Content type: {profile.label}; goal: {goal}; '
+            f'style: {writing_style}.',
+            f'Prompt version: {PROMPT_ENGINE_VERSION}.',
             f'{profile.lead_label} and body follow the content-type structure.',
             'Sections are independently editable; regenerate one section at a time.',
         ]
@@ -315,7 +381,9 @@ class WorkspaceService:
         session.metadata['generation'] = {
             'content_type': content_type,
             'goal': goal,
+            'writing_style': writing_style,
             'template_id': session.template_id,
+            'prompt_version': PROMPT_ENGINE_VERSION,
         }
         session.touch()
         return session
@@ -344,6 +412,7 @@ class WorkspaceService:
             provider_name=provider_name,
             content_type=session.resolved_content_type(),
             goal=session.resolved_goal(),
+            style=session.resolved_writing_style(),
         )
         explanation = f'{section} regenerated independently.'
         if section == 'headline':

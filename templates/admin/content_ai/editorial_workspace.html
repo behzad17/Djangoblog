@@ -12,6 +12,7 @@
 {{ session|json_script:"ai-ws-session-data" }}
 {{ content_types|json_script:"ai-ws-content-types" }}
 {{ editorial_goals|json_script:"ai-ws-goals" }}
+{{ writing_styles|json_script:"ai-ws-styles" }}
 <div
   id="ai-editorial-workspace"
   class="ai-workspace"
@@ -79,30 +80,49 @@
       </div>
       <div class="ai-workspace__meta" id="ai-ws-source-meta"></div>
 
-      <h3>Classification</h3>
-      <label>Content type
-        <select id="ai-ws-content-type">
-          {% for item in content_types %}
-            <option value="{{ item.id }}">{{ item.label }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      <p class="ai-workspace__hint" id="ai-ws-content-type-meta"></p>
-      <label>Editorial goal
-        <select id="ai-ws-goal">
-          {% for item in editorial_goals %}
-            <option value="{{ item.id }}">{{ item.label }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      <p class="ai-workspace__hint" id="ai-ws-goal-meta"></p>
-      <button type="button" class="button" id="ai-ws-apply-classification">Apply classification</button>
-
       <h3>Research notes</h3>
       <textarea id="ai-ws-research" rows="8"></textarea>
     </section>
 
     <section class="ai-workspace__panel ai-workspace__panel--main" id="panel-article">
+      <section
+        class="ai-workspace__intelligence"
+        id="ai-ws-intelligence"
+        aria-label="Editorial Intelligence"
+      >
+        <h2>Editorial Intelligence</h2>
+        <div class="ai-workspace__intelligence-grid">
+          <label>Content Type
+            <select id="ai-ws-content-type">
+              {% for item in content_types %}
+                <option value="{{ item.id }}">{{ item.label }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <p class="ai-workspace__hint" id="ai-ws-content-type-meta"></p>
+          <label>Editorial Goal
+            <select id="ai-ws-goal">
+              {% for item in editorial_goals %}
+                <option value="{{ item.id }}">{{ item.label }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <p class="ai-workspace__hint" id="ai-ws-goal-meta"></p>
+          <label>Writing Style
+            <select id="ai-ws-writing-style">
+              {% for item in writing_styles %}
+                <option value="{{ item.id }}">{{ item.label }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <p class="ai-workspace__hint" id="ai-ws-style-meta"></p>
+        </div>
+        <button type="button" class="button" id="ai-ws-apply-classification">
+          Apply classification
+        </button>
+        <div class="ai-workspace__explainability" id="ai-ws-intel-explain"></div>
+      </section>
+
       <h2>Generated article</h2>
       <div class="ai-workspace__toolbar">
         <button type="button" class="button default" id="ai-ws-generate">Generate draft</button>
@@ -181,5 +201,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-bfcache-reset"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-editorial-intel-v1"></script>
 {% endblock %}

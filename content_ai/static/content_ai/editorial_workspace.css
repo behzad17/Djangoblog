@@ -175,6 +175,37 @@
   color: var(--ai-ws-muted);
 }
 
+.ai-workspace__intelligence {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--ai-ws-line, #d0d5dd);
+  border-radius: 4px;
+  background: #f8fafc;
+}
+
+.ai-workspace__intelligence h2 {
+  margin-top: 0;
+}
+
+.ai-workspace__intelligence-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.15rem 1rem;
+}
+
+.ai-workspace__explainability {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--ai-ws-muted, #445);
+  line-height: 1.45;
+}
+
+@media (min-width: 900px) {
+  .ai-workspace__intelligence-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 @media (max-width: 1100px) {
   .ai-workspace__grid,
   .ai-workspace__bottom-grid {

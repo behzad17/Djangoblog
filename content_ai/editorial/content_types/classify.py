@@ -133,6 +133,33 @@ _TYPE_SIGNALS: dict[str, tuple[str, ...]] = {
         'portrait',
         'پرونده',
     ),
+    ContentType.EVENT: (
+        'event',
+        'evenemang',
+        'seminar',
+        'workshop',
+        'festival',
+        'registration open',
+        'ثبت‌نام',
+        'رویداد',
+        'همایش',
+    ),
+    ContentType.REVIEW: (
+        'review',
+        'recension',
+        'betyg',
+        'نقد',
+        'بازبینی',
+        'stars out of',
+    ),
+    ContentType.COMMUNITY_STORY: (
+        'community story',
+        'community',
+        'diaspora',
+        'local voice',
+        'داستان جامعه',
+        'جامعه ایرانی',
+    ),
     ContentType.NEWS: (
         'nyheter',
         'news',
@@ -155,6 +182,9 @@ _URL_HINTS: dict[str, tuple[str, ...]] = {
     ContentType.FAQ: ('/faq', '/vanliga-fragor'),
     ContentType.ANALYSIS: ('/analys', '/analysis', '/rapport'),
     ContentType.INTERVIEW: ('/intervju', '/interview'),
+    ContentType.EVENT: ('/event', '/evenemang', '/kalender'),
+    ContentType.REVIEW: ('/review', '/recension'),
+    ContentType.COMMUNITY_STORY: ('/community', '/diaspora'),
     ContentType.NEWS: ('/nyheter', '/news', '/article'),
 }
 

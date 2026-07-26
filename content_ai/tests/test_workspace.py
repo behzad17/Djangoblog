@@ -85,8 +85,11 @@ class WorkspaceServiceTests(SimpleTestCase):
         self.assertFalse(session.to_dict()['auto_publish_allowed'])
         self.assertTrue(session.pipeline.get('source_imported'))
         self.assertTrue(session.pipeline.get('content_classified'))
+        self.assertTrue(session.pipeline.get('style_detected'))
         self.assertIn('classification', session.metadata)
         self.assertTrue(session.content_type)
+        self.assertTrue(session.writing_style)
+        self.assertIn('style', session.metadata['classification'])
 
     def test_set_classification_override(self):
         service = WorkspaceService()
@@ -100,13 +103,17 @@ class WorkspaceServiceTests(SimpleTestCase):
             session,
             content_type='guide',
             goal='teach',
+            writing_style='educational',
         )
         self.assertEqual(session.resolved_content_type(), 'guide')
         self.assertEqual(session.resolved_goal(), 'teach')
+        self.assertEqual(session.resolved_writing_style(), 'educational')
         self.assertEqual(session.template_id, 'guide.v1')
         payload = session.to_dict()
         self.assertEqual(payload['lead_label'], 'Introduction')
         self.assertEqual(payload['content_type_override'], 'guide')
+        self.assertEqual(payload['writing_style_override'], 'educational')
+        self.assertEqual(payload['prompt_version'], 'v1')
 
     def test_generate_draft_passes_content_type(self):
         editorial = MagicMock()
@@ -120,12 +127,18 @@ class WorkspaceServiceTests(SimpleTestCase):
         )
         service = WorkspaceService(editorial=editorial)
         session = service.new_session()
-        service.set_classification(session, content_type='guide', goal='teach')
+        service.set_classification(
+            session,
+            content_type='guide',
+            goal='teach',
+            writing_style='educational',
+        )
         session.source_material = 'How to apply for support steg för steg'
         service.generate_draft(session, title='Guide')
         kwargs = editorial.generate_draft.call_args.kwargs
         self.assertEqual(kwargs['content_type'], 'guide')
         self.assertEqual(kwargs['goal'], 'teach')
+        self.assertEqual(kwargs['style'], 'educational')
         self.assertTrue(session.pipeline.get('draft_generated'))
         self.assertEqual(session.sections.headline, 'Guide title')
         self.assertEqual(session.sections.lead, 'Intro')

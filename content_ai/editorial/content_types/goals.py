@@ -82,6 +82,15 @@ _GOAL_SIGNALS: dict[str, tuple[str, ...]] = {
         'portrait',
         'موفقیت',
     ),
+    EditorialGoal.DOCUMENT: (
+        'document',
+        'record',
+        'archive',
+        'minutes',
+        'protokoll',
+        'مستند',
+        'ثبت',
+    ),
     EditorialGoal.INFORM: (
         'news',
         'nyheter',

@@ -18,6 +18,7 @@ from content_ai.config.ai_engine import ENABLE_AI_EDITORIAL_WORKSPACE
 from content_ai.editorial.content_types import (
     list_content_types_for_ui,
     list_goals_for_ui,
+    list_styles_for_ui,
 )
 from content_ai.providers.exceptions import (
     GenerationError,
@@ -87,6 +88,7 @@ def editorial_workspace(request):
             'actions': list_actions_for_ui(session.resolved_content_type()),
             'content_types': list_content_types_for_ui(),
             'editorial_goals': list_goals_for_ui(),
+            'writing_styles': list_styles_for_ui(),
             'workflow_states': [
                 {'id': s.value, 'label': s.value.replace('_', ' ').title()}
                 for s in (
@@ -159,6 +161,8 @@ def workspace_api(request, action: str):
                 session,
                 content_type=payload.get('content_type'),
                 goal=payload.get('goal'),
+                writing_style=payload.get('writing_style')
+                or payload.get('style'),
             )
             if payload.get('regenerate'):
                 service.generate_draft(
@@ -175,11 +179,15 @@ def workspace_api(request, action: str):
 
         if action in ('generate_draft', 'generate'):
             _apply_sections_payload(session, payload)
-            if payload.get('content_type') or payload.get('goal'):
+            if payload.get('content_type') or payload.get('goal') or payload.get(
+                'writing_style'
+            ) or payload.get('style'):
                 service.set_classification(
                     session,
                     content_type=payload.get('content_type'),
                     goal=payload.get('goal'),
+                    writing_style=payload.get('writing_style')
+                    or payload.get('style'),
                 )
             if payload.get('source_text') or payload.get('source_url'):
                 service.ingest_source(
