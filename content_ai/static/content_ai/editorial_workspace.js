@@ -186,11 +186,18 @@
     var loading = document.getElementById('ai-ws-image-loading');
     if (gen) gen.disabled = imageGenerating;
     if (regen) regen.disabled = imageGenerating;
-    if (accept) accept.disabled = imageGenerating;
+    // Never disable Accept on the generate lock. A hung/slow generate_image
+    // fetch left accept.disabled=true, so browser clicks never fired and
+    // POST /accept_image/ was never sent.
+    if (accept) accept.disabled = false;
     if (loading) loading.hidden = !imageGenerating;
   }
 
   function runImageAction(action) {
+    console.log('runImageAction entered', {
+      action: action,
+      imageGeneratingBefore: imageGenerating,
+    });
     setImageGenerating(true);
     var errorEl = document.getElementById('ai-ws-image-error');
     if (errorEl) {
@@ -198,6 +205,18 @@
       errorEl.textContent = '';
     }
     var payload = featuredImagePayload();
+    console.log(
+      action === 'accept_image'
+        ? 'Sending accept request'
+        : 'Sending image request',
+      {
+        action: action,
+        endpoint: apiBase.replace(/\/$/, '') + '/' + action + '/',
+        image_style: payload.image_style,
+        promptChars: (payload.prompt || '').length,
+        aspect_ratio: '16:9',
+      }
+    );
     console.log('[ai-ws] IMAGE ACTION', {
       action: action,
       image_style: payload.image_style,
@@ -205,27 +224,30 @@
       aspect_ratio: '16:9',
       endpoint: apiBase.replace(/\/$/, '') + '/' + action + '/',
     });
-    return post(action, payload).then(function (data) {
-      setImageGenerating(false);
-      if (data && data.ok) {
-        try {
-          applySession(data.session);
-        } catch (applyErr) {
-          console.error(
-            '[ai-ws] applySession after image action failed',
-            applyErr,
-            applyErr && applyErr.stack
-          );
-          window.alert(
-            'Image response received but UI update failed:\n' +
-              (applyErr && applyErr.message) +
-              '\n\n' +
-              (applyErr && applyErr.stack)
-          );
+    return post(action, payload)
+      .then(function (data) {
+        if (data && data.ok) {
+          try {
+            applySession(data.session);
+          } catch (applyErr) {
+            console.error(
+              '[ai-ws] applySession after image action failed',
+              applyErr,
+              applyErr && applyErr.stack
+            );
+            window.alert(
+              'Image response received but UI update failed:\n' +
+                (applyErr && applyErr.message) +
+                '\n\n' +
+                (applyErr && applyErr.stack)
+            );
+          }
         }
-      }
-      return data;
-    });
+        return data;
+      })
+      .finally(function () {
+        setImageGenerating(false);
+      });
   }
 
   function renderFeaturedImage(state) {
@@ -924,7 +946,15 @@
   var acceptImageBtn = document.getElementById('ai-ws-accept-image');
   if (acceptImageBtn) {
     acceptImageBtn.addEventListener('click', function () {
-      if (imageGenerating) return;
+      console.log('Accept clicked', {
+        hidden: !!acceptImageBtn.hidden,
+        disabled: !!acceptImageBtn.disabled,
+        imageGenerating: imageGenerating,
+        hasListener: true,
+      });
+      // Do not early-return on imageGenerating — that silently blocked Accept
+      // while generate_image's client fetch was still open/hung after the
+      // server had already finished (Save Draft still worked).
       runImageAction('accept_image');
     });
   }
