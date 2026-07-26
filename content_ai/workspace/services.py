@@ -2,13 +2,20 @@
 
 from __future__ import annotations
 
+from content_ai.editorial.content_types import (
+    classify_content,
+    detect_editorial_goal,
+    get_profile,
+    resolve_content_type,
+    resolve_goal,
+)
 from content_ai.editorial.service import EditorialAIService
 from content_ai.evaluation.evaluator import Evaluator
 from content_ai.evaluation.snapshot import create_snapshot
 from content_ai.fact_check import FactChecker
 from content_ai.source import SourceInspector
 from content_ai.workflow import WorkflowOrchestrator, WorkflowState
-from content_ai.workspace.actions import get_action
+from content_ai.workspace.actions import get_action, list_actions_for_ui
 from content_ai.workspace.session import ArticleSections, WorkspaceSession
 
 
@@ -74,10 +81,6 @@ class WorkspaceService:
         session.source_material = record.raw_text or text
         session.research_notes = self._research_notes(record)
         session.workflow_state = WorkflowState.RESEARCHING
-        session.last_explanations = [
-            'Source material recorded for editorial research.',
-            'Trust score and classification are placeholders (RFC-006 stub).',
-        ]
         session.metadata['source'] = {
             'source_id': record.source_id,
             'title': record.title,
@@ -91,8 +94,133 @@ class WorkspaceService:
             'classification': record.classification,
             'warnings': list(record.warnings),
         }
+        session.mark_pipeline('source_imported', 'metadata_extracted')
+        self._classify_session(
+            session,
+            title=record.title or title,
+            text=session.source_material,
+            url=session.source_url,
+            publisher=publisher or record.publisher,
+        )
         session.touch()
         return session.metadata['source']
+
+    def _classify_session(
+        self,
+        session: WorkspaceSession,
+        *,
+        title: str = '',
+        text: str = '',
+        url: str = '',
+        publisher: str = '',
+    ) -> None:
+        classification = classify_content(
+            title=title,
+            text=text,
+            url=url,
+            publisher=publisher,
+            metadata=session.metadata.get('source') or {},
+        )
+        goal = detect_editorial_goal(
+            content_type=classification.content_type,
+            title=title,
+            text=text,
+        )
+        session.content_type = classification.content_type
+        session.content_type_confidence = classification.confidence
+        session.goal = goal.goal
+        session.goal_confidence = goal.confidence
+        profile = get_profile(session.resolved_content_type())
+        session.template_id = profile.resolved_template_id()
+        session.metadata['classification'] = {
+            **classification.to_dict(),
+            'goal': goal.to_dict(),
+            'template_id': session.template_id,
+            'lead_label': profile.lead_label,
+            'override_content_type': session.content_type_override or None,
+            'override_goal': session.goal_override or None,
+        }
+        session.mark_pipeline('content_classified', 'goal_detected')
+        session.last_explanations = [
+            (
+                f'Detected content type: {profile.label} '
+                f'(confidence {classification.confidence:.2f}).'
+            ),
+            (
+                f'Detected editorial goal: {session.resolved_goal()} '
+                f'(confidence {goal.confidence:.2f}).'
+            ),
+            f'Prompt template: {session.template_id}.',
+            *(classification.reasons[:2]),
+            *(goal.reasons[:1]),
+            'Editors can override content type and goal before generating.',
+        ]
+
+    def set_classification(
+        self,
+        session: WorkspaceSession,
+        *,
+        content_type: str | None = None,
+        goal: str | None = None,
+    ) -> WorkspaceSession:
+        """Apply editor overrides for content type and/or goal."""
+        if content_type is not None:
+            session.content_type_override = resolve_content_type(content_type)
+        if goal is not None:
+            session.goal_override = resolve_goal(
+                goal,
+                content_type=session.resolved_content_type(),
+            )
+        profile = get_profile(session.resolved_content_type())
+        session.template_id = profile.resolved_template_id()
+        classification = dict(session.metadata.get('classification') or {})
+        classification.update(
+            {
+                'content_type': session.resolved_content_type(),
+                'confidence': (
+                    1.0
+                    if session.content_type_override
+                    else session.content_type_confidence
+                ),
+                'reasons': (
+                    ['Editor override selected this content type.']
+                    if session.content_type_override
+                    else classification.get('reasons', [])
+                ),
+                'goal': {
+                    'goal': session.resolved_goal(),
+                    'confidence': (
+                        1.0
+                        if session.goal_override
+                        else session.goal_confidence
+                    ),
+                    'reasons': (
+                        ['Editor override selected this editorial goal.']
+                        if session.goal_override
+                        else (classification.get('goal') or {}).get(
+                            'reasons', []
+                        )
+                    ),
+                },
+                'template_id': session.template_id,
+                'lead_label': profile.lead_label,
+                'override_content_type': session.content_type_override or None,
+                'override_goal': session.goal_override or None,
+            }
+        )
+        session.metadata['classification'] = classification
+        session.mark_pipeline('content_classified', 'goal_detected')
+        session.last_explanations = [
+            f'Using content type: {profile.label}.',
+            f'Using editorial goal: {session.resolved_goal()}.',
+            f'Prompt template: {session.template_id}.',
+            'Change either field and regenerate to apply a new template.',
+        ]
+        session.touch()
+        return session
+
+    def assistant_actions(self, session: WorkspaceSession) -> list[dict]:
+        return list_actions_for_ui(session.resolved_content_type())
 
     def _research_notes(self, record) -> str:
         lines = [
@@ -115,7 +243,18 @@ class WorkspaceService:
         instructions: str = '',
         provider_name: str | None = None,
     ) -> WorkspaceSession:
+        if not session.content_type and not session.content_type_override:
+            self._classify_session(
+                session,
+                title=title or session.sections.headline,
+                text=session.source_material,
+                url=session.source_url,
+            )
         working_title = title or session.sections.headline or 'Untitled draft'
+        content_type = session.resolved_content_type()
+        goal = session.resolved_goal()
+        profile = get_profile(content_type)
+        session.template_id = profile.resolved_template_id()
         context = '\n\n'.join(
             part
             for part in (
@@ -131,6 +270,8 @@ class WorkspaceService:
             context=context,
             instructions=instructions,
             provider_name=provider_name,
+            content_type=content_type,
+            goal=goal,
         )
         lead = (draft.lead or '').strip()
         body = (draft.body or '').strip()
@@ -152,8 +293,11 @@ class WorkspaceService:
             excerpt=(draft.summary or lead)[:300],
         )
         session.workflow_state = WorkflowState.DRAFTING
+        session.mark_pipeline('draft_generated')
         session.last_explanations = [
-            'Draft generated via EditorialAIService (existing pipeline).',
+            f'Draft generated with template {session.template_id}.',
+            f'Content type: {profile.label}; goal: {goal}.',
+            f'{profile.lead_label} and body follow the content-type structure.',
             'Sections are independently editable; regenerate one section at a time.',
         ]
         from dataclasses import asdict
@@ -168,6 +312,11 @@ class WorkspaceService:
             session.metadata['last_telemetry'] = telemetry
         else:
             session.metadata['last_telemetry'] = {}
+        session.metadata['generation'] = {
+            'content_type': content_type,
+            'goal': goal,
+            'template_id': session.template_id,
+        }
         session.touch()
         return session
 
@@ -193,6 +342,8 @@ class WorkspaceService:
             context=session.sections.body or session.source_material,
             instructions=hint,
             provider_name=provider_name,
+            content_type=session.resolved_content_type(),
+            goal=session.resolved_goal(),
         )
         explanation = f'{section} regenerated independently.'
         if section == 'headline':
@@ -281,6 +432,11 @@ class WorkspaceService:
         report = self.fact_checker.check_text(text)
         payload = report.to_dict()
         session.metadata['fact_check'] = payload
+        session.mark_pipeline('fact_checked')
+        if session.pipeline.get('seo_ready') and session.pipeline.get(
+            'draft_generated'
+        ):
+            session.mark_pipeline('ready_for_publication')
         session.last_explanations = [
             'Fact check used RFC-007 FactChecker (stub evidence / editor review).',
         ]
@@ -337,6 +493,11 @@ class WorkspaceService:
             'note': 'SEO panel is placeholder architecture only.',
         }
         session.metadata['seo'] = payload
+        session.mark_pipeline('seo_ready')
+        if session.pipeline.get('fact_checked') and session.pipeline.get(
+            'draft_generated'
+        ):
+            session.mark_pipeline('ready_for_publication')
         session.touch()
         return payload
 
@@ -364,10 +525,14 @@ class WorkspaceService:
         )
         session.metadata['imported_post_id'] = post.pk
         session.workflow_state = WorkflowState.RESEARCHING
-        session.last_explanations = [
-            f'Imported article #{post.pk} as source material.',
-            'Import does not modify or publish the original post.',
-        ]
+        session.mark_pipeline('source_imported', 'metadata_extracted')
+        self._classify_session(
+            session,
+            title=post.title or '',
+            text=session.source_material,
+            url='',
+            publisher='',
+        )
         session.touch()
         return session
 
@@ -406,6 +571,11 @@ class WorkspaceService:
                     f'Invalid workflow move '
                     f'{session.workflow_state.value} → {target.value}.'
                 )
+        if target in {
+            WorkflowState.READY_FOR_APPROVAL,
+            WorkflowState.APPROVED,
+        }:
+            session.mark_pipeline('ready_for_publication')
         session.workflow_state = target
         session.last_explanations = [
             f'Workflow stage set to {target.value} (human-controlled).',

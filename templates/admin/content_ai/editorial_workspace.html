@@ -10,6 +10,8 @@
 
 {% block content %}
 {{ session|json_script:"ai-ws-session-data" }}
+{{ content_types|json_script:"ai-ws-content-types" }}
+{{ editorial_goals|json_script:"ai-ws-goals" }}
 <div
   id="ai-editorial-workspace"
   class="ai-workspace"
@@ -37,6 +39,8 @@
     </div>
   </header>
 
+  <section class="ai-workspace__pipeline" id="ai-ws-pipeline" aria-label="Editorial pipeline"></section>
+
   <div class="ai-workspace__grid">
     <section class="ai-workspace__panel" id="panel-source">
       <h2>Source material</h2>
@@ -54,6 +58,26 @@
         <button type="button" class="button" id="ai-ws-import">Import article</button>
       </div>
       <div class="ai-workspace__meta" id="ai-ws-source-meta"></div>
+
+      <h3>Classification</h3>
+      <label>Content type
+        <select id="ai-ws-content-type">
+          {% for item in content_types %}
+            <option value="{{ item.id }}">{{ item.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <p class="ai-workspace__hint" id="ai-ws-content-type-meta"></p>
+      <label>Editorial goal
+        <select id="ai-ws-goal">
+          {% for item in editorial_goals %}
+            <option value="{{ item.id }}">{{ item.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <p class="ai-workspace__hint" id="ai-ws-goal-meta"></p>
+      <button type="button" class="button" id="ai-ws-apply-classification">Apply classification</button>
+
       <h3>Research notes</h3>
       <textarea id="ai-ws-research" rows="8"></textarea>
     </section>
@@ -62,13 +86,15 @@
       <h2>Generated article</h2>
       <div class="ai-workspace__toolbar">
         <button type="button" class="button default" id="ai-ws-generate">Generate draft</button>
-        <button type="button" class="button" data-regen="headline">Regen headline</button>
-        <button type="button" class="button" data-regen="lead">Regen lead</button>
+        <button type="button" class="button" data-regen="headline" id="ai-ws-regen-headline">Regen headline</button>
+        <button type="button" class="button" data-regen="lead" id="ai-ws-regen-lead">Regen lead</button>
         <button type="button" class="button" data-regen="body">Regen body</button>
         <button type="button" class="button" data-regen="summary">Regen summary</button>
       </div>
-      <label>Headline <input type="text" id="ai-ws-headline"></label>
-      <label>Lead <textarea id="ai-ws-lead" rows="3"></textarea></label>
+      <label id="ai-ws-headline-label">Headline <input type="text" id="ai-ws-headline"></label>
+      <label id="ai-ws-lead-label-wrap"><span id="ai-ws-lead-label">Lead</span>
+        <textarea id="ai-ws-lead" rows="3"></textarea>
+      </label>
       <label>Body <textarea id="ai-ws-body" rows="16"></textarea></label>
       <label>Summary <textarea id="ai-ws-summary" rows="3"></textarea></label>
       <label>Excerpt <textarea id="ai-ws-excerpt" rows="2"></textarea></label>

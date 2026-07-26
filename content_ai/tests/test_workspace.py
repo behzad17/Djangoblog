@@ -58,9 +58,15 @@ class WorkspaceActionsTests(SimpleTestCase):
         ids = {a['id'] for a in list_actions_for_ui()}
         self.assertIn('improve_headline', ids)
         self.assertIn('prepare_seo', ids)
-        action = get_action('generate_faq')
+        action = get_action('related_topics')
         self.assertIsNotNone(action)
         self.assertFalse(action.implemented)
+
+    def test_actions_filter_by_content_type(self):
+        guide_ids = {a['id'] for a in list_actions_for_ui('guide')}
+        self.assertIn('improve_instructions', guide_ids)
+        news_ids = {a['id'] for a in list_actions_for_ui('news')}
+        self.assertNotIn('condense_answers', news_ids)
 
 
 class WorkspaceServiceTests(SimpleTestCase):
@@ -77,6 +83,52 @@ class WorkspaceServiceTests(SimpleTestCase):
         self.assertEqual(session.workflow_state, WorkflowState.RESEARCHING)
         self.assertIn('Source:', session.research_notes)
         self.assertFalse(session.to_dict()['auto_publish_allowed'])
+        self.assertTrue(session.pipeline.get('source_imported'))
+        self.assertTrue(session.pipeline.get('content_classified'))
+        self.assertIn('classification', session.metadata)
+        self.assertTrue(session.content_type)
+
+    def test_set_classification_override(self):
+        service = WorkspaceService()
+        session = service.new_session()
+        service.ingest_source(
+            session,
+            text='A short news update about housing.',
+            title='Housing update',
+        )
+        service.set_classification(
+            session,
+            content_type='guide',
+            goal='teach',
+        )
+        self.assertEqual(session.resolved_content_type(), 'guide')
+        self.assertEqual(session.resolved_goal(), 'teach')
+        self.assertEqual(session.template_id, 'guide.v1')
+        payload = session.to_dict()
+        self.assertEqual(payload['lead_label'], 'Introduction')
+        self.assertEqual(payload['content_type_override'], 'guide')
+
+    def test_generate_draft_passes_content_type(self):
+        editorial = MagicMock()
+        editorial.generate_draft.return_value = EditorialDraft(
+            title='Guide title',
+            lead='Intro',
+            body='Steps',
+            summary='Sum',
+            language='fa',
+            metadata={'suggested_tags': ['a']},
+        )
+        service = WorkspaceService(editorial=editorial)
+        session = service.new_session()
+        service.set_classification(session, content_type='guide', goal='teach')
+        session.source_material = 'How to apply for support steg för steg'
+        service.generate_draft(session, title='Guide')
+        kwargs = editorial.generate_draft.call_args.kwargs
+        self.assertEqual(kwargs['content_type'], 'guide')
+        self.assertEqual(kwargs['goal'], 'teach')
+        self.assertTrue(session.pipeline.get('draft_generated'))
+        self.assertEqual(session.sections.headline, 'Guide title')
+        self.assertEqual(session.sections.lead, 'Intro')
 
     def test_seo_placeholders(self):
         service = WorkspaceService()
@@ -135,7 +187,7 @@ class WorkspaceServiceTests(SimpleTestCase):
     def test_unimplemented_assistant_action(self):
         service = WorkspaceService()
         session = service.new_session()
-        service.run_assistant_action(session, 'generate_faq')
+        service.run_assistant_action(session, 'related_topics')
         self.assertIn('future', session.last_explanations[0].lower())
 
 

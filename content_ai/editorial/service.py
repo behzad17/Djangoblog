@@ -3,6 +3,13 @@
 from __future__ import annotations
 
 from content_ai.constants import AIGenerationTask
+from content_ai.editorial.content_types import (
+    body_pass_rules,
+    get_profile,
+    headline_lead_pass_rules,
+    resolve_content_type,
+    resolve_goal,
+)
 from content_ai.editorial.drafts import EditorialDraft
 from content_ai.editorial.structured import parse_structured_draft
 from content_ai.schemas.requests import PostGenerationRequest
@@ -10,42 +17,15 @@ from content_ai.schemas.responses import GenerationResult
 from content_ai.services.generation import ContentGenerationService
 from content_ai.telemetry import AIExecutionTelemetry, merge_telemetry
 
-# Pass 1: headline + lead only (before body).
-_HEADLINE_LEAD_RULES = (
-    'Generate ONLY the Persian headline and lead first.\n'
-    'Do NOT write the article body yet.\n'
-    'TITLE must be a fresh Persian headline. Do not copy the source-language '
-    'title into TITLE.\n'
-    'LEAD must be one or two clear Persian lead paragraphs grounded in the '
-    'source.\n'
-    'Return exactly this labelled structure:\n'
-    'TITLE:\n...\n'
-    'LEAD:\n...\n'
-)
-
-# Pass 2: body (and metadata) with locked title/lead.
-_BODY_RULES = (
-    'TITLE and LEAD are already decided and locked below.\n'
-    'Do NOT rewrite TITLE or LEAD.\n'
-    'Generate only the remaining sections.\n'
-    'Return exactly this labelled structure:\n'
-    'BODY:\n...\n'
-    'SUMMARY:\n...\n'
-    'CATEGORY:\n...\n'
-    'TAGS:\ncomma, separated, tags\n'
-    'Base BODY only on the provided source. Do not invent facts, names, '
-    'dates, or figures. Use clear community-facing Persian.\n'
-)
-
 
 class EditorialAIService:
     """
     Domain orchestration for editorial content generation.
 
     Creates a ``PostGenerationRequest``, runs the generation pipeline in two
-    passes (headline/lead, then body), and maps results to an in-memory
-    ``EditorialDraft``. Does not persist, parse Markdown, create slugs, or
-    assign authors.
+    passes (headline/lead, then body) using content-type templates, and maps
+    results to an in-memory ``EditorialDraft``. Does not persist, parse
+    Markdown, create slugs, or assign authors.
     """
 
     def __init__(self, generation_service=None):
@@ -63,9 +43,22 @@ class EditorialAIService:
         context='',
         instructions='',
         provider_name=None,
+        content_type: str | None = None,
+        goal: str | None = None,
     ) -> EditorialDraft:
         source_title = (title or '').strip()
         language = (language or '').strip() or 'fa'
+        resolved_type = resolve_content_type(content_type)
+        resolved_goal = resolve_goal(goal, content_type=resolved_type)
+        profile = get_profile(resolved_type)
+        head_rules = headline_lead_pass_rules(
+            content_type=resolved_type,
+            goal=resolved_goal,
+        )
+        body_rules = body_pass_rules(
+            content_type=resolved_type,
+            goal=resolved_goal,
+        )
 
         head_result = self._generation_service.generate(
             AIGenerationTask.POST_GENERATION,
@@ -76,7 +69,7 @@ class EditorialAIService:
                 category=category,
                 context=context,
                 instructions=self._pass_instructions(
-                    _HEADLINE_LEAD_RULES,
+                    head_rules,
                     instructions,
                     source_title=source_title,
                 ),
@@ -99,7 +92,7 @@ class EditorialAIService:
                 category=category,
                 context=context,
                 instructions=self._pass_instructions(
-                    _BODY_RULES,
+                    body_rules,
                     instructions,
                     source_title=source_title,
                     locked_title=persian_title,
@@ -116,6 +109,9 @@ class EditorialAIService:
             lead=lead,
             head_result=head_result,
             body_result=body_result,
+            content_type=resolved_type,
+            goal=resolved_goal,
+            template_id=profile.resolved_template_id(),
         )
 
     def _pass_instructions(
@@ -155,6 +151,9 @@ class EditorialAIService:
         lead: str,
         head_result: GenerationResult,
         body_result: GenerationResult,
+        content_type: str = 'news',
+        goal: str = 'inform',
+        template_id: str = 'news.v1',
     ) -> EditorialDraft:
         body_text = (
             '' if body_result.content is None else str(body_result.content)
@@ -178,8 +177,11 @@ class EditorialAIService:
         metadata['warnings'] = warnings
         metadata['generation_passes'] = ['headline_lead', 'body']
         metadata['source_title'] = source_title
+        metadata['content_type'] = content_type
+        metadata['goal'] = goal
+        metadata['template_id'] = template_id
         metadata['suggested_category'] = (
-            parsed.get('suggested_category') or category or 'news'
+            parsed.get('suggested_category') or category or content_type
         )
         metadata['suggested_tags'] = list(parsed.get('suggested_tags') or [])
 

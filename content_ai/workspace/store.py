@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
+from datetime import datetime
+
+from content_ai.workflow.states import WorkflowState
 from content_ai.workspace.session import (
     ArticleSections,
     HistoryEntry,
     WorkspaceSession,
     utc_now,
 )
-from content_ai.workflow.states import WorkflowState
-from datetime import datetime
 
 SESSION_KEY = 'content_ai_editorial_workspace'
 
@@ -57,4 +58,14 @@ def load_session(request) -> WorkspaceSession | None:
         history=history,
         last_explanations=list(raw.get('last_explanations') or []),
         metadata=dict(raw.get('metadata') or {}),
+        content_type=raw.get('content_type_detected')
+        or raw.get('content_type')
+        or 'news',
+        content_type_confidence=float(raw.get('content_type_confidence') or 0),
+        content_type_override=raw.get('content_type_override') or '',
+        goal=raw.get('goal_detected') or raw.get('goal') or 'inform',
+        goal_confidence=float(raw.get('goal_confidence') or 0),
+        goal_override=raw.get('goal_override') or '',
+        template_id=raw.get('template_id') or 'news.v1',
+        pipeline=dict(raw.get('pipeline') or {}),
     )

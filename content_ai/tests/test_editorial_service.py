@@ -72,12 +72,14 @@ class EditorialAIServiceTests(SimpleTestCase):
         self.assertEqual(generation.generate.call_count, 2)
         first_req = generation.generate.call_args_list[0].args[1]
         second_req = generation.generate.call_args_list[1].args[1]
-        self.assertIn('ONLY the Persian headline and lead', first_req.instructions)
+        self.assertIn('ONLY the Persian headline/title and opening', first_req.instructions)
         self.assertIn('Do NOT write the article body yet', first_req.instructions)
         self.assertIn('Bostadsnyheter i Stockholm', first_req.instructions)
         self.assertIn('Locked TITLE', second_req.instructions)
         self.assertIn('مسکن در استکهلم', second_req.instructions)
         self.assertIn('Do NOT rewrite TITLE or LEAD', second_req.instructions)
+        self.assertEqual(draft.metadata.get('content_type'), 'news')
+        self.assertEqual(draft.metadata.get('template_id'), 'news.v1')
 
         self.assertEqual(draft.title, 'مسکن در استکهلم')
         self.assertIn('پرتقاضا', draft.lead)

@@ -7,7 +7,6 @@ Returns a structured Persian draft. Does not publish, edit, or save.
 
 from __future__ import annotations
 
-import re
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
@@ -62,46 +61,25 @@ def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _contains_word(blob: str, *tokens: str) -> bool:
-    return any(re.search(rf'\b{re.escape(token)}\b', blob) for token in tokens)
-
-
 def detect_content_type(article: ExtractedArticle) -> str:
-    """Lightweight content-type hint from URL/title/text (no LLM call)."""
-    blob = ' '.join(
-        [
-            article.url or '',
-            article.domain or '',
-            article.title or '',
-            (article.text or '')[:800],
-        ]
-    ).lower()
-    # Avoid bare "kommun" — common in ordinary municipal news.
-    if _contains_word(
-        blob,
-        'regeringen',
-        'myndigheten',
-        'myndighet',
-        'förordning',
-        'riksdagen',
-        'riksdag',
-        'skatteverket',
-        'migrationsverket',
-        'government',
-    ) or any(
-        token in blob
-        for token in ('skatteverket.se', 'migrationsverket.se', 'regeringen.se')
-    ):
-        return 'government'
-    if _contains_word(blob, 'pressmeddelande') or any(
-        token in blob for token in ('press release', 'press-release')
-    ):
-        return 'press_release'
-    if _contains_word(
-        blob, 'studie', 'forskning', 'rapport', 'research', 'analysis'
-    ):
-        return 'research'
-    return 'news'
+    """Lightweight content-type hint via shared Editorial AI classifier."""
+    from content_ai.editorial.content_types import classify_content
+
+    result = classify_content(
+        title=article.title,
+        text=article.text,
+        url=article.url,
+        metadata={'domain': article.domain},
+    )
+    # Preserve Studio's coarser genres for ES-001A API compatibility.
+    mapping = {
+        'announcement': 'government',
+        'press_release': 'press_release',
+        'analysis': 'research',
+        'report': 'research',
+        'news': 'news',
+    }
+    return mapping.get(result.content_type, 'news')
 
 
 def source_name_from_domain(domain: str) -> str:

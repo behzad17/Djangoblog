@@ -11,6 +11,10 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
 
 from content_ai.config.ai_engine import ENABLE_AI_EDITORIAL_WORKSPACE
+from content_ai.editorial.content_types import (
+    list_content_types_for_ui,
+    list_goals_for_ui,
+)
 from content_ai.providers.exceptions import (
     GenerationError,
     ProviderConfigurationError,
@@ -22,6 +26,12 @@ from content_ai.workspace.actions import list_actions_for_ui
 from content_ai.workspace.services import WorkspaceService
 from content_ai.workspace.session import ArticleSections
 from content_ai.workspace.store import load_session, save_session
+
+
+def _session_payload(service: WorkspaceService, session) -> dict:
+    payload = session.to_dict()
+    payload['actions'] = service.assistant_actions(session)
+    return payload
 
 
 def _json_body(request) -> dict:
@@ -69,8 +79,10 @@ def editorial_workspace(request):
         'admin/content_ai/editorial_workspace.html',
         {
             'title': 'AI Editorial Workspace',
-            'session': session.to_dict(),
-            'actions': list_actions_for_ui(),
+            'session': _session_payload(service, session),
+            'actions': list_actions_for_ui(session.resolved_content_type()),
+            'content_types': list_content_types_for_ui(),
+            'editorial_goals': list_goals_for_ui(),
             'workflow_states': [
                 {'id': s.value, 'label': s.value.replace('_', ' ').title()}
                 for s in (
@@ -115,11 +127,40 @@ def workspace_api(request, action: str):
             )
             save_session(request, session)
             return JsonResponse(
-                {'ok': True, 'source': source, 'session': session.to_dict()}
+                {
+                    'ok': True,
+                    'source': source,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('set_classification', 'classification'):
+            service.set_classification(
+                session,
+                content_type=payload.get('content_type'),
+                goal=payload.get('goal'),
+            )
+            if payload.get('regenerate'):
+                service.generate_draft(
+                    session,
+                    title=payload.get('title') or session.sections.headline,
+                    category=payload.get('category') or '',
+                    instructions=payload.get('instructions') or '',
+                    provider_name=payload.get('provider') or None,
+                )
+            save_session(request, session)
+            return JsonResponse(
+                {'ok': True, 'session': _session_payload(service, session)}
             )
 
         if action in ('generate_draft', 'generate'):
             _apply_sections_payload(session, payload)
+            if payload.get('content_type') or payload.get('goal'):
+                service.set_classification(
+                    session,
+                    content_type=payload.get('content_type'),
+                    goal=payload.get('goal'),
+                )
             if payload.get('source_text') or payload.get('source_url'):
                 service.ingest_source(
                     session,
@@ -136,7 +177,9 @@ def workspace_api(request, action: str):
                 provider_name=payload.get('provider') or None,
             )
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse(
+                {'ok': True, 'session': _session_payload(service, session)}
+            )
 
         if action == 'regenerate_section':
             _apply_sections_payload(session, payload)
@@ -147,7 +190,7 @@ def workspace_api(request, action: str):
                 provider_name=payload.get('provider') or None,
             )
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         if action in ('run_action', 'assistant_action'):
             _apply_sections_payload(session, payload)
@@ -157,14 +200,14 @@ def workspace_api(request, action: str):
                 provider_name=payload.get('provider') or None,
             )
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         if action == 'fact_check':
             _apply_sections_payload(session, payload)
             report = service.fact_check(session)
             save_session(request, session)
             return JsonResponse(
-                {'ok': True, 'fact_check': report, 'session': session.to_dict()}
+                {'ok': True, 'fact_check': report, 'session': _session_payload(service, session)}
             )
 
         if action == 'evaluate':
@@ -172,7 +215,7 @@ def workspace_api(request, action: str):
             report = service.evaluate(session)
             save_session(request, session)
             return JsonResponse(
-                {'ok': True, 'evaluation': report, 'session': session.to_dict()}
+                {'ok': True, 'evaluation': report, 'session': _session_payload(service, session)}
             )
 
         if action in ('prepare_seo', 'seo'):
@@ -180,19 +223,19 @@ def workspace_api(request, action: str):
             report = service.seo_placeholders(session)
             save_session(request, session)
             return JsonResponse(
-                {'ok': True, 'seo': report, 'session': session.to_dict()}
+                {'ok': True, 'seo': report, 'session': _session_payload(service, session)}
             )
 
         if action in ('set_workflow', 'workflow'):
             target = WorkflowState(payload.get('state') or 'reviewing')
             service.advance_workflow(session, target)
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         if action == 'update_sections':
             _apply_sections_payload(session, payload)
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         if action == 'import_article':
             service.import_existing_article(
@@ -200,19 +243,19 @@ def workspace_api(request, action: str):
                 post_id=payload.get('post_id'),
             )
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         if action == 'restore_history':
             ok = session.restore_history(payload.get('entry_id') or '')
             save_session(request, session)
-            return JsonResponse({'ok': ok, 'session': session.to_dict()})
+            return JsonResponse({'ok': ok, 'session': _session_payload(service, session)})
 
         if action == 'reset':
             session = service.new_session(
                 language=payload.get('language') or 'fa',
             )
             save_session(request, session)
-            return JsonResponse({'ok': True, 'session': session.to_dict()})
+            return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         return JsonResponse(
             serialize_error('unknown_action', f'Unknown action: {action}'),
