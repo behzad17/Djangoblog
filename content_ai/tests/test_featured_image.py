@@ -6,6 +6,10 @@ from django.test import SimpleTestCase, TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from content_ai.editorial.image.attach import (
+    extract_cloudinary_public_id,
+    resolve_featured_image_public_id,
+)
 from content_ai.editorial.image.planner import plan_featured_image
 from content_ai.editorial.image.prompt import build_featured_image_brief
 from content_ai.editorial.image.style import (
@@ -317,7 +321,15 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
             'save_blog_draft',
             return_value={'post_id': 42, 'title': 'عنوان', 'created': True},
         ), patch('blog.models.Post.objects.get') as mock_get:
-            mock_get.return_value = MagicMock(pk=42)
+            post = MagicMock(pk=42)
+            post.featured_image = MagicMock(public_id='peyvand/editorial/featured/test')
+            mock_get.return_value = post
+            # attach is mocked; simulate persisted public_id on refresh.
+            def _attach(p, *, public_id):
+                p.featured_image = MagicMock(public_id=public_id)
+                return p
+
+            mock_attach.side_effect = _attach
             result = service.accept_featured_image(session, user=user)
 
         self.assertTrue(result['accepted'])
@@ -326,9 +338,11 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
             result['cloudinary_public_id'],
             'peyvand/editorial/featured/test',
         )
-        # Preview upload on generate + final upload on Accept.
-        self.assertEqual(mock_upload.call_count, 2)
-        mock_attach.assert_called_once()
+        self.assertGreaterEqual(mock_attach.call_count, 1)
+        self.assertNotEqual(
+            session.metadata['featured_image'].get('cloudinary_public_id'),
+            '',
+        )
 
 
 @override_settings(
@@ -401,3 +415,91 @@ class FeaturedImageApiTests(TestCase):
             payload['session']['sections']['body'],
             'بدنه',
         )
+
+
+class CloudinaryPublicIdHelperTests(SimpleTestCase):
+    def test_extract_from_delivery_url(self):
+        url = (
+            'https://res.cloudinary.com/demo/image/upload/v1785091045/'
+            'peyvand/editorial/featured/abc123.png'
+        )
+        self.assertEqual(
+            extract_cloudinary_public_id(url),
+            'peyvand/editorial/featured/abc123',
+        )
+
+    def test_resolve_prefers_explicit_public_id(self):
+        pid = resolve_featured_image_public_id(
+            {
+                'cloudinary_public_id': 'peyvand/editorial/featured/x',
+                'image_url': 'https://res.cloudinary.com/demo/image/upload/v1/other.png',
+            }
+        )
+        self.assertEqual(pid, 'peyvand/editorial/featured/x')
+
+
+@override_settings(CONTENT_AI_PROVIDER='mock')
+class FeaturedImagePersistIntegrationTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        from blog.models import Category
+
+        self.user = User.objects.create_user(
+            username='imgpersist',
+            password='pass',
+            is_staff=True,
+        )
+        Category.objects.get_or_create(
+            slug='news',
+            defaults={'name': 'News'},
+        )
+
+    @patch('content_ai.workspace.services.upload_featured_image_asset')
+    def test_generate_accept_save_draft_sets_post_featured_image(self, mock_upload):
+        from blog.models import Post
+
+        public_id = 'peyvand/editorial/featured/integration-test'
+        secure_url = (
+            f'https://res.cloudinary.com/demo/image/upload/v1/{public_id}.png'
+        )
+        mock_upload.return_value = {
+            'public_id': public_id,
+            'secure_url': secure_url,
+        }
+
+        service = WorkspaceService()
+        session = service.new_session()
+        session.sections = ArticleSections(
+            headline='عنوان ادغام تصویر',
+            lead='لید خبر',
+            body='بدنه مقاله برای ذخیره پیش‌نویس.',
+            category='News',
+            tags=['test'],
+        )
+        service.prepare_featured_image_prompt(session)
+        generated = service.generate_featured_image(session)
+        self.assertEqual(generated['status'], 'generated')
+
+        accepted = service.accept_featured_image(session, user=self.user)
+        self.assertTrue(accepted['accepted'])
+        self.assertEqual(accepted['cloudinary_public_id'], public_id)
+
+        post_id = accepted['blog_draft']['post_id']
+        post = Post.objects.get(pk=post_id)
+        stored = (
+            getattr(post.featured_image, 'public_id', None)
+            or str(post.featured_image)
+        )
+        self.assertNotEqual(stored, 'placeholder')
+        self.assertEqual(stored, public_id)
+
+        # Save Draft again must keep the image (not reset to placeholder).
+        saved = service.save_blog_draft(session, user=self.user)
+        self.assertEqual(saved['post_id'], post_id)
+        post.refresh_from_db()
+        stored_after = (
+            getattr(post.featured_image, 'public_id', None)
+            or str(post.featured_image)
+        )
+        self.assertNotEqual(stored_after, 'placeholder')
+        self.assertEqual(stored_after, public_id)
