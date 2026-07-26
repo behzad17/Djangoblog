@@ -116,6 +116,7 @@
     document.getElementById('ai-ws-factcheck-out').textContent = meta.fact_check
       ? JSON.stringify(meta.fact_check, null, 2)
       : '';
+    renderFeaturedImage(meta.featured_image || {});
     renderBlogDraft(session.blog_draft || meta.blog_draft || {});
     renderPublishSuccess(
       session.publish_success || meta.publish_success || null
@@ -125,6 +126,47 @@
     setTimeout(function () {
       applyingClassification = false;
     }, 0);
+  }
+
+  function renderFeaturedImage(state) {
+    var promptEl = document.getElementById('ai-ws-image-prompt');
+    var explainEl = document.getElementById('ai-ws-image-explanation');
+    var statusEl = document.getElementById('ai-ws-image-status');
+    var wrap = document.getElementById('ai-ws-image-preview-wrap');
+    var img = document.getElementById('ai-ws-image-preview');
+    if (!promptEl) return;
+    // Do not clobber an in-progress editor edit unless session has content.
+    if (state && (state.prompt || state.status)) {
+      promptEl.value = state.prompt || '';
+    }
+    if (explainEl) {
+      explainEl.textContent = (state && state.explanation) || '';
+    }
+    if (statusEl) {
+      var bits = [];
+      if (state && state.status) bits.push('Status: ' + state.status);
+      if (state && state.provider) bits.push('Provider: ' + state.provider);
+      if (state && state.aspect_ratio) bits.push(state.aspect_ratio);
+      if (state && state.error) bits.push('Error: ' + state.error);
+      if (state && state.previous_prompt) bits.push('Previous prompt available');
+      statusEl.textContent = bits.join(' · ');
+    }
+    if (wrap && img) {
+      if (state && state.image_url) {
+        img.src = state.image_url;
+        wrap.hidden = false;
+      } else {
+        img.removeAttribute('src');
+        wrap.hidden = true;
+      }
+    }
+  }
+
+  function featuredImagePayload() {
+    return {
+      sections: readSections(),
+      prompt: document.getElementById('ai-ws-image-prompt').value,
+    };
   }
 
   function renderBlogDraft(draft) {
@@ -555,6 +597,39 @@
       if (data.ok) applySession(data.session);
     });
   });
+
+  var prepareImageBtn = document.getElementById('ai-ws-prepare-image');
+  if (prepareImageBtn) {
+    prepareImageBtn.addEventListener('click', function () {
+      post('prepare_image_prompt', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+      });
+    });
+  }
+  var generateImageBtn = document.getElementById('ai-ws-generate-image');
+  if (generateImageBtn) {
+    generateImageBtn.addEventListener('click', function () {
+      post('generate_image', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+      });
+    });
+  }
+  var regenerateImageBtn = document.getElementById('ai-ws-regenerate-image');
+  if (regenerateImageBtn) {
+    regenerateImageBtn.addEventListener('click', function () {
+      post('regenerate_image', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+      });
+    });
+  }
+  var previousImagePromptBtn = document.getElementById('ai-ws-use-previous-image-prompt');
+  if (previousImagePromptBtn) {
+    previousImagePromptBtn.addEventListener('click', function () {
+      post('use_previous_image_prompt', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+      });
+    });
+  }
 
   document.getElementById('ai-ws-workflow').addEventListener('change', function (ev) {
     post('set_workflow', { state: ev.target.value }).then(function (data) {

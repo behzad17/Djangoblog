@@ -2,12 +2,19 @@
 
 from content_ai.providers.base import BaseAIProvider
 from content_ai.providers.capabilities import ProviderCapabilities
-from content_ai.providers.models import ModelMetadata
+from content_ai.providers.models import ImageGenerationResult, ModelMetadata
 from content_ai.schemas.responses import GenerationResult
 from content_ai.telemetry import AIExecutionTelemetry
 
 MOCK_RESPONSE = 'Mock AI response'
 MOCK_MODEL = 'mock'
+
+# 1x1 PNG — deterministic mock featured image (no network).
+_MOCK_PNG_B64 = (
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8'
+    'z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+)
+MOCK_IMAGE_DATA_URL = f'data:image/png;base64,{_MOCK_PNG_B64}'
 
 
 class MockProvider(BaseAIProvider):
@@ -25,6 +32,7 @@ class MockProvider(BaseAIProvider):
             text_generation=True,
             json_output=True,
             streaming=False,
+            image_generation=True,
         )
 
     def discover_models(self) -> list[ModelMetadata]:
@@ -75,3 +83,17 @@ class MockProvider(BaseAIProvider):
 
     def translate(self, prompt=''):
         return self._result(prompt=prompt, metadata={'task': 'translation'})
+
+    def generate_image(self, prompt='', *, aspect_ratio='16:9', **kwargs):
+        return ImageGenerationResult(
+            success=True,
+            image_url=MOCK_IMAGE_DATA_URL,
+            b64_data_url=MOCK_IMAGE_DATA_URL,
+            revised_prompt=(prompt or '').strip(),
+            provider=self.name,
+            model=MOCK_MODEL,
+            metadata={
+                'aspect_ratio': aspect_ratio or '16:9',
+                'source': 'mock',
+            },
+        )

@@ -32,6 +32,7 @@ PIPELINE_STEPS: tuple[tuple[str, str], ...] = (
     ('goal_detected', 'Editorial goal detected'),
     ('style_detected', 'Writing style detected'),
     ('draft_generated', 'Draft generated'),
+    ('image_ready', 'Featured image ready'),
     ('seo_ready', 'SEO ready'),
     ('fact_checked', 'Fact checked'),
     ('ready_for_publication', 'Ready for publication'),

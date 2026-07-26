@@ -23,6 +23,7 @@ from content_ai.editorial.category_recommender import (
     recommend_category,
 )
 from content_ai.editorial.service import EditorialAIService
+from content_ai.editorial.image import FeaturedImageService
 from content_ai.evaluation.evaluator import Evaluator
 from content_ai.evaluation.snapshot import create_snapshot
 from content_ai.fact_check import FactChecker
@@ -67,12 +68,14 @@ class WorkspaceService:
         fact_checker: FactChecker | None = None,
         evaluator: Evaluator | None = None,
         workflow: WorkflowOrchestrator | None = None,
+        featured_image: FeaturedImageService | None = None,
     ):
         self.editorial = editorial or EditorialAIService()
         self.source_inspector = source_inspector or SourceInspector()
         self.fact_checker = fact_checker or FactChecker()
         self.evaluator = evaluator or Evaluator()
         self.workflow = workflow or WorkflowOrchestrator()
+        self.featured_image = featured_image or FeaturedImageService()
 
     def new_session(
         self,
@@ -725,6 +728,11 @@ class WorkspaceService:
             'note': 'SEO panel is placeholder architecture only.',
         }
         session.metadata['seo'] = payload
+        # Prefer an already-prepared featured image prompt when present.
+        featured = session.metadata.get('featured_image') or {}
+        if featured.get('prompt'):
+            payload['image_prompt'] = featured.get('prompt') or ''
+            session.metadata['seo'] = payload
         session.mark_pipeline('seo_ready')
         if session.pipeline.get('fact_checked') and session.pipeline.get(
             'draft_generated'
@@ -732,6 +740,147 @@ class WorkspaceService:
             session.mark_pipeline('ready_for_publication')
         session.touch()
         return payload
+
+    def _featured_image_state(self, session: WorkspaceSession) -> dict:
+        return dict(session.metadata.get('featured_image') or {})
+
+    def prepare_featured_image_prompt(
+        self,
+        session: WorkspaceSession,
+    ) -> dict:
+        """
+        Build an editable image prompt from the generated Persian article.
+
+        Never builds from URL alone — requires headline/lead/body content.
+        Does not call the image provider.
+        """
+        sections = session.sections
+        if not (
+            (sections.headline or '').strip()
+            or (sections.lead or '').strip()
+            or (sections.body or '').strip()
+        ):
+            raise ValueError(
+                'Generate an article first, then prepare a featured image prompt.'
+            )
+        publisher = (session.metadata.get('source') or {}).get('publisher') or ''
+        brief = self.featured_image.prepare_brief(
+            headline=sections.headline,
+            lead=sections.lead,
+            body=sections.body or sections.summary,
+            content_type=session.resolved_content_type(),
+            goal=session.resolved_goal(),
+            category=sections.category,
+            tags=list(sections.tags or []),
+            publisher=publisher,
+        )
+        previous = self._featured_image_state(session)
+        state = {
+            'prompt': brief.prompt,
+            'previous_prompt': previous.get('previous_prompt')
+            or previous.get('prompt')
+            or '',
+            'explanation': brief.explanation,
+            'image_url': previous.get('image_url') or '',
+            'revised_prompt': previous.get('revised_prompt') or '',
+            'provider': previous.get('provider') or '',
+            'aspect_ratio': brief.aspect_ratio,
+            'status': 'prompt_ready',
+            'error': '',
+            'metadata': dict(previous.get('metadata') or {}),
+        }
+        session.metadata['featured_image'] = state
+        seo = dict(session.metadata.get('seo') or {})
+        if seo:
+            seo['image_prompt'] = brief.prompt
+            session.metadata['seo'] = seo
+        session.last_explanations = [
+            'Featured image prompt prepared from the Persian article.',
+            'Edit the prompt before generating. Regeneration does not '
+            'rewrite the article.',
+            brief.explanation,
+        ]
+        session.touch()
+        return state
+
+    def generate_featured_image(
+        self,
+        session: WorkspaceSession,
+        *,
+        prompt: str | None = None,
+        provider_name: str | None = None,
+        regenerate: bool = False,
+    ) -> dict:
+        """
+        Generate a featured image from the (editable) prompt.
+
+        Regeneration updates the image only — never regenerates the article.
+        """
+        current = self._featured_image_state(session)
+        cleaned = (
+            prompt if prompt is not None else current.get('prompt') or ''
+        ).strip()
+        if not cleaned:
+            self.prepare_featured_image_prompt(session)
+            current = self._featured_image_state(session)
+            cleaned = (current.get('prompt') or '').strip()
+        if not cleaned:
+            raise ValueError('Image prompt is empty.')
+
+        previous_prompt = (current.get('previous_prompt') or '').strip()
+        if regenerate:
+            prior_current = (current.get('prompt') or '').strip()
+            if cleaned != prior_current and prior_current:
+                previous_prompt = prior_current
+            elif prior_current:
+                previous_prompt = prior_current
+
+        outcome = self.featured_image.generate(
+            cleaned,
+            previous_prompt=previous_prompt,
+            explanation=current.get('explanation') or '',
+            provider_name=provider_name,
+        )
+        state = outcome.to_dict()
+        if regenerate and not state.get('previous_prompt'):
+            state['previous_prompt'] = previous_prompt
+        session.metadata['featured_image'] = state
+        seo = dict(session.metadata.get('seo') or {})
+        seo['image_prompt'] = cleaned
+        session.metadata['seo'] = seo
+        session.mark_pipeline('image_ready')
+        session.last_explanations = [
+            (
+                'Featured image regenerated (article unchanged).'
+                if regenerate
+                else 'Featured image generated.'
+            ),
+            state.get('explanation') or '',
+            f'Provider: {state.get("provider") or "—"}.',
+        ]
+        session.last_explanations = [
+            item for item in session.last_explanations if item
+        ]
+        session.touch()
+        return state
+
+    def use_previous_image_prompt(self, session: WorkspaceSession) -> dict:
+        """Restore the previous featured-image prompt into the editable field."""
+        current = self._featured_image_state(session)
+        previous = (current.get('previous_prompt') or '').strip()
+        if not previous:
+            raise ValueError('No previous image prompt is available.')
+        state = dict(current)
+        state['previous_prompt'] = (current.get('prompt') or '').strip()
+        state['prompt'] = previous
+        state['status'] = 'prompt_ready'
+        state['error'] = ''
+        session.metadata['featured_image'] = state
+        session.last_explanations = [
+            'Restored the previous featured image prompt. Article unchanged.',
+        ]
+        session.touch()
+        return state
 
     def import_existing_article(
         self,

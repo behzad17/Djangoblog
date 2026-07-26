@@ -18,7 +18,7 @@ from content_ai.providers.exceptions import (
 from content_ai.providers.factory import ProviderFactory
 from content_ai.providers.manager import ProviderManager
 from content_ai.providers.mock import MockProvider
-from content_ai.providers.models import ModelMetadata, UsageReport
+from content_ai.providers.models import ImageGenerationResult, ModelMetadata, UsageReport
 from content_ai.providers.openai import OpenAIProvider
 from content_ai.providers.registry import (
     ProviderRegistry,
@@ -34,6 +34,7 @@ __all__ = [
     'CapabilityError',
     'ConfigurationError',
     'GenerationError',
+    'ImageGenerationResult',
     'InvalidResponseError',
     'MockProvider',
     'ModelMetadata',

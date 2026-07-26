@@ -163,6 +163,30 @@
         </div>
       </section>
       <label>Tags <input type="text" id="ai-ws-tags" placeholder="comma,separated"></label>
+
+      <section class="ai-workspace__featured-image" id="ai-ws-featured-image" aria-label="Featured image">
+        <h3>Featured image</h3>
+        <p class="ai-workspace__hint">
+          Professional editorial hero image (16:9). Prompt is built from the
+          Persian article — not from the URL alone. Regenerating the image
+          never regenerates the article.
+        </p>
+        <label>Image prompt
+          <textarea id="ai-ws-image-prompt" rows="8" placeholder="Prepare prompt after generating the article…"></textarea>
+        </label>
+        <p class="ai-workspace__hint" id="ai-ws-image-explanation"></p>
+        <div class="ai-workspace__toolbar">
+          <button type="button" class="button" id="ai-ws-prepare-image">Prepare prompt</button>
+          <button type="button" class="button default" id="ai-ws-generate-image">Generate</button>
+          <button type="button" class="button" id="ai-ws-regenerate-image">Regenerate</button>
+          <button type="button" class="button" id="ai-ws-use-previous-image-prompt">Use Previous Prompt</button>
+        </div>
+        <div class="ai-workspace__image-preview" id="ai-ws-image-preview-wrap" hidden>
+          <img id="ai-ws-image-preview" alt="Generated featured image preview" width="640" height="360">
+        </div>
+        <p class="ai-workspace__hint" id="ai-ws-image-status"></p>
+      </section>
+
       <div class="ai-workspace__toolbar">
         <button type="button" class="button default" id="ai-ws-save-blog-draft">Save draft to Blog</button>
         <button type="button" class="button" id="ai-ws-publish-blog" hidden>
@@ -224,5 +248,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-article-length"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-featured-image"></script>
 {% endblock %}

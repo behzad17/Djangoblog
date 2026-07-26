@@ -47,3 +47,17 @@ class UsageReport:
     timestamp: datetime = field(default_factory=utc_now)
     warnings: tuple[str, ...] = ()
     metadata: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True, slots=True)
+class ImageGenerationResult:
+    """Provider-independent image generation payload."""
+
+    success: bool
+    image_url: str = ''
+    b64_data_url: str = ''
+    revised_prompt: str = ''
+    provider: str = ''
+    model: str = ''
+    metadata: dict[str, Any] = field(default_factory=dict)
+    warnings: tuple[str, ...] = ()

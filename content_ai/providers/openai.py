@@ -22,6 +22,19 @@ from content_ai.telemetry import AIExecutionTelemetry
 
 logger = logging.getLogger(__name__)
 
+# DALL·E 3 landscape size closest to 16:9 hero images.
+_DEFAULT_IMAGE_SIZE = '1792x1024'
+_DEFAULT_IMAGE_MODEL = 'dall-e-3'
+
+
+def _aspect_to_openai_size(aspect_ratio: str | None) -> str:
+    ratio = (aspect_ratio or '16:9').strip()
+    if ratio in ('1:1', 'square'):
+        return '1024x1024'
+    if ratio in ('9:16', 'portrait'):
+        return '1024x1792'
+    return _DEFAULT_IMAGE_SIZE
+
 
 def _extract_token_usage(response):
     """Map SDK usage fields into a plain dict. Never return the SDK object."""
@@ -99,6 +112,12 @@ class OpenAIProvider(BaseAIProvider):
     def __init__(self, client=None):
         self.api_key = getattr(settings, 'OPENAI_API_KEY', '') or ''
         self.model = getattr(settings, 'OPENAI_MODEL', '') or ''
+        self.image_model = (
+            getattr(settings, 'OPENAI_IMAGE_MODEL', '') or _DEFAULT_IMAGE_MODEL
+        )
+        self.image_size = (
+            getattr(settings, 'OPENAI_IMAGE_SIZE', '') or _DEFAULT_IMAGE_SIZE
+        )
         # Short timeout avoids Heroku H12 (~30s); no retries so errors surface fast.
         self.timeout = 20
 
@@ -135,6 +154,77 @@ class OpenAIProvider(BaseAIProvider):
             streaming=False,
             structured_output=False,
             long_context=True,
+            image_generation=True,
+        )
+
+    def generate_image(self, prompt='', *, aspect_ratio='16:9', **kwargs):
+        from content_ai.providers.models import ImageGenerationResult
+
+        prompt_text = (prompt or '').strip()
+        if not prompt_text:
+            raise GenerationError('Image prompt is required.')
+
+        size = kwargs.get('size') or _aspect_to_openai_size(aspect_ratio)
+        if not size:
+            size = self.image_size or _DEFAULT_IMAGE_SIZE
+        model = kwargs.get('model') or self.image_model or _DEFAULT_IMAGE_MODEL
+
+        logger.info(
+            'OpenAI image request starting: model=%s size=%s prompt_chars=%d',
+            model,
+            size,
+            len(prompt_text),
+        )
+        started = time.monotonic()
+        try:
+            response = self._client.images.generate(
+                model=model,
+                prompt=prompt_text,
+                size=size,
+                quality=kwargs.get('quality') or 'standard',
+                n=1,
+            )
+        except Exception as exc:
+            elapsed = time.monotonic() - started
+            details = _openai_error_details(exc)
+            logger.exception(
+                'OpenAI image generation failed after %.2fs: details=%s',
+                elapsed,
+                details,
+            )
+            raise GenerationError(
+                f'OpenAI image generation failed: {exc}'
+            ) from exc
+
+        elapsed = time.monotonic() - started
+        data = list(getattr(response, 'data', None) or [])
+        if not data:
+            raise GenerationError('OpenAI image generation returned no images.')
+        first = data[0]
+        image_url = getattr(first, 'url', None) or ''
+        b64 = getattr(first, 'b64_json', None) or ''
+        b64_data_url = f'data:image/png;base64,{b64}' if b64 else ''
+        revised = getattr(first, 'revised_prompt', None) or ''
+        if not image_url and not b64_data_url:
+            raise GenerationError('OpenAI image generation returned empty payload.')
+
+        logger.info(
+            'OpenAI image response received: model=%s elapsed=%.2fs',
+            model,
+            elapsed,
+        )
+        return ImageGenerationResult(
+            success=True,
+            image_url=image_url or b64_data_url,
+            b64_data_url=b64_data_url,
+            revised_prompt=str(revised),
+            provider=self.name,
+            model=model,
+            metadata={
+                'size': size,
+                'aspect_ratio': aspect_ratio or '16:9',
+                'duration_ms': round(elapsed * 1000, 3),
+            },
         )
 
     def discover_models(self) -> list[ModelMetadata]:

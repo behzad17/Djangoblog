@@ -49,6 +49,11 @@ class BaseAIProvider:
             f'{type(self).__name__} does not implement translate()'
         )
 
+    def generate_image(self, prompt='', *, aspect_ratio='16:9', **kwargs):
+        raise NotImplementedError(
+            f'{type(self).__name__} does not implement generate_image()'
+        )
+
     # --- RFC-005 platform surface (optional; safe defaults) ---
 
     def generate(self, prompt='', *, task='post_generation'):

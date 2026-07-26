@@ -23,6 +23,7 @@ from content_ai.editorial.content_types import (
     list_styles_for_ui,
 )
 from content_ai.providers.exceptions import (
+    CapabilityError,
     GenerationError,
     ProviderConfigurationError,
     ProviderNotFound,
@@ -278,6 +279,64 @@ def workspace_api(request, action: str):
                 {'ok': True, 'seo': report, 'session': _session_payload(service, session)}
             )
 
+        if action in ('prepare_image_prompt', 'prepare_featured_image'):
+            _apply_sections_payload(session, payload)
+            report = service.prepare_featured_image_prompt(session)
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('generate_image', 'generate_featured_image'):
+            _apply_sections_payload(session, payload)
+            report = service.generate_featured_image(
+                session,
+                prompt=payload.get('prompt'),
+                provider_name=payload.get('provider') or None,
+                regenerate=False,
+            )
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('regenerate_image', 'regenerate_featured_image'):
+            _apply_sections_payload(session, payload)
+            report = service.generate_featured_image(
+                session,
+                prompt=payload.get('prompt'),
+                provider_name=payload.get('provider') or None,
+                regenerate=True,
+            )
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('use_previous_image_prompt', 'restore_image_prompt'):
+            _apply_sections_payload(session, payload)
+            report = service.use_previous_image_prompt(session)
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
         if action in ('set_workflow', 'workflow'):
             target = WorkflowState(payload.get('state') or 'reviewing')
             service.advance_workflow(session, target)
@@ -372,7 +431,12 @@ def workspace_api(request, action: str):
             serialize_error('extraction_failed', str(exc)),
             status=400,
         )
-    except (ProviderNotFound, ProviderConfigurationError, GenerationError) as exc:
+    except (
+        ProviderNotFound,
+        ProviderConfigurationError,
+        GenerationError,
+        CapabilityError,
+    ) as exc:
         logger.exception('workspace_api generation_failed action=%r', action)
         return JsonResponse(
             serialize_error('generation_failed', str(exc)),
