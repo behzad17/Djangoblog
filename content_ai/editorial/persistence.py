@@ -16,8 +16,8 @@ from content_ai.editorial.drafts import EditorialDraft
 
 logger = logging.getLogger(__name__)
 
-# Legacy collision stamps formerly appended by ``_unique_title``, e.g.
-# ``Title (20260726184315)`` or ``Title (20260726184315-2)``. Never re-add these.
+# Legacy collision stamps formerly appended when Post.title was unique, e.g.
+# ``Title (20260726184315)``. Strip on write so editorial titles stay clean.
 _LEGACY_TITLE_STAMP_RE = re.compile(r'\s*\((\d{14})(?:-\d+)?\)\s*$')
 
 
@@ -27,10 +27,10 @@ class BlogDraftPersistenceError(Exception):
 
 def clean_blog_title(title: str) -> str:
     """
-    Return the visible Blog title only.
+    Return the visible Blog title exactly as editorial text.
 
-    Strips legacy workspace/timestamp collision suffixes. Never invents a new
-    prefix or suffix — uniqueness belongs on slug / post id / metadata.
+    Strips only legacy uniqueness stamps. Never invents a new prefix/suffix.
+    Uniqueness for URLs belongs on ``Post.slug``.
     """
     cleaned = ' '.join((title or '').split()).strip()
     while True:
@@ -64,7 +64,8 @@ class BlogDraftPersistenceService:
         """
         Create an unpublished Blog ``Post`` from ``editorial_draft``.
 
-        Slug generation is delegated to ``Post.save()``.
+        Slug generation / uniqueness is delegated to ``Post.save()``.
+        Titles are stored exactly (no uniqueness rewriting).
         """
         if not isinstance(editorial_draft, EditorialDraft):
             raise BlogDraftPersistenceError(
@@ -81,22 +82,6 @@ class BlogDraftPersistenceService:
         title = self._editorial_title(editorial_draft.title)
         content = self._compose_content(editorial_draft)
         excerpt = self._excerpt_for(editorial_draft)
-
-        # Prefer updating the author's existing draft with the same visible title
-        # instead of inventing a timestamped title for uniqueness.
-        existing = self._find_reusable_author_draft(title, author)
-        if existing is not None:
-            logger.info(
-                'create_blog_draft reusing existing draft pk=%s title=%r',
-                existing.pk,
-                title,
-            )
-            return self.update_blog_draft(
-                existing,
-                editorial_draft,
-                category=category,
-                source_url=source_url,
-            )
 
         logger.info(
             'create_blog_draft instantiating Post title=%r author=%s category=%s',
@@ -126,20 +111,8 @@ class BlogDraftPersistenceService:
                 )
         except IntegrityError as exc:
             logger.exception('create_blog_draft IntegrityError')
-            # Title is globally unique on Post. If another draft by this author
-            # won the race, reuse it. Never stamp the visible title.
-            raced = self._find_reusable_author_draft(title, author)
-            if raced is not None:
-                return self.update_blog_draft(
-                    raced,
-                    editorial_draft,
-                    category=category,
-                    source_url=source_url,
-                )
             raise BlogDraftPersistenceError(
-                'A Blog post with this exact title already exists. '
-                'Change the headline slightly, or open the existing draft '
-                'instead of creating a stamped title.'
+                f'Could not create Blog draft: {exc}'
             ) from exc
         except Exception:
             logger.exception('create_blog_draft unexpected error during post.save()')
@@ -175,23 +148,9 @@ class BlogDraftPersistenceService:
                 'Cannot update a deleted Blog draft.'
             )
 
-        title = self._editorial_title(
+        post.title = self._editorial_title(
             editorial_draft.title or post.title or 'Untitled AI draft'
         )
-        # If the cleaned title belongs to another post, keep this post's current
-        # title only when it already matches; otherwise require a free title.
-        conflict = (
-            Post.objects.filter(title=title)
-            .exclude(pk=post.pk)
-            .first()
-        )
-        if conflict is not None:
-            raise BlogDraftPersistenceError(
-                'A Blog post with this exact title already exists. '
-                'Change the headline slightly — titles are never stamped with '
-                'workspace or timestamp identifiers.'
-            )
-        post.title = title
         post.content = self._compose_content(editorial_draft)
         post.excerpt = self._excerpt_for(editorial_draft)
         post.status = self.DRAFT_STATUS
@@ -252,52 +211,16 @@ class BlogDraftPersistenceService:
         return lead[:500]
 
     def _editorial_title(self, title: str) -> str:
-        """Visible Blog title only — no workspace/timestamp stamps."""
+        """Preserve editorial title; strip legacy stamps only."""
         cleaned = clean_blog_title(title)
         return cleaned or 'Untitled AI draft'
-
-    def _find_reusable_author_draft(self, title: str, author):
-        """
-        Find this author's draft whose visible title matches ``title``.
-
-        Also matches legacy stamped titles like ``Title (20260726184315)``.
-        """
-        exact = (
-            Post.objects.filter(
-                title=title,
-                author=author,
-                status=self.DRAFT_STATUS,
-                is_deleted=False,
-            )
-            .order_by('-updated_on')
-            .first()
-        )
-        if exact is not None:
-            return exact
-
-        prefix = title[:80]
-        if not prefix:
-            return None
-        candidates = (
-            Post.objects.filter(
-                author=author,
-                status=self.DRAFT_STATUS,
-                is_deleted=False,
-                title__startswith=prefix,
-            )
-            .order_by('-updated_on')[:25]
-        )
-        for post in candidates:
-            if clean_blog_title(post.title) == title:
-                return post
-        return None
 
     def _unique_title(self, base_title: str, *, exclude_pk=None) -> str:
         """
         Compatibility wrapper.
 
-        Historically appended ``(YYYYMMDDHHMMSS)`` on collisions. That leaked into
-        Admin titles (especially under RTL). Uniqueness is handled by reusing
-        the author's draft or raising — never by mutating the visible title.
+        Historically appended ``(YYYYMMDDHHMMSS)`` when ``Post.title`` was unique.
+        Titles are no longer unique; this never mutates editorial text for
+        uniqueness. Slug uniqueness is handled by ``Post.save()``.
         """
         return self._editorial_title(base_title)

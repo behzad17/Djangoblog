@@ -92,7 +92,7 @@ class BlogDraftPersistenceServiceTests(TestCase):
         self.assertEqual(self.draft.language, 'sv')
         self.assertEqual(self.draft.metadata.get('provider'), 'mock')
 
-    def test_unique_title_collision_reuses_author_draft(self):
+    def test_duplicate_titles_allowed_slugs_stay_unique(self):
         existing = Post.objects.create(
             title='AI Housing Draft',
             slug='existing-ai-housing-draft',
@@ -106,10 +106,11 @@ class BlogDraftPersistenceServiceTests(TestCase):
             author=self.author,
             category=self.category,
         )
-        self.assertEqual(post.pk, existing.pk)
+        self.assertNotEqual(post.pk, existing.pk)
         self.assertEqual(post.title, 'AI Housing Draft')
-        self.assertNotIn('(', post.title)
-        self.assertEqual(post.status, 0)
+        self.assertEqual(existing.title, 'AI Housing Draft')
+        self.assertNotEqual(post.slug, existing.slug)
+        self.assertFalse(re.search(r'\(\d{14}', post.title))
 
     def test_save_draft_title_matches_workspace_exactly(self):
         persian = 'نگاهی جامع به قانون اساسی...'
@@ -127,38 +128,15 @@ class BlogDraftPersistenceServiceTests(TestCase):
         self.assertEqual(post.title, persian)
         self.assertFalse(re.search(r'\(\d{14}', post.title))
 
-        # Second Save Draft with the same workspace title must not stamp.
+        # Same title on a second draft is allowed; title stays exact.
         again = self.service.create_blog_draft(
             draft,
             author=self.author,
             category=self.category,
         )
-        self.assertEqual(again.pk, post.pk)
         self.assertEqual(again.title, persian)
-
-    def test_create_reuses_legacy_stamped_draft_and_cleans_title(self):
-        persian = 'نگاهی جامع به قانون اساسی...'
-        stamped = Post.objects.create(
-            title=f'{persian} (20260726184315)',
-            slug='legacy-stamped-reuse',
-            author=self.author,
-            category=self.category,
-            content='old',
-            status=0,
-        )
-        draft = EditorialDraft(
-            title=persian,
-            body='بدنه',
-            summary='خلاصه',
-            language='fa',
-        )
-        post = self.service.create_blog_draft(
-            draft,
-            author=self.author,
-            category=self.category,
-        )
-        self.assertEqual(post.pk, stamped.pk)
-        self.assertEqual(post.title, persian)
+        self.assertNotEqual(again.slug, post.slug)
+        self.assertEqual(Post.objects.filter(title=persian).count(), 2)
 
     def test_legacy_timestamp_suffix_stripped_on_update(self):
         stamped = Post.objects.create(

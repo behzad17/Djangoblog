@@ -103,7 +103,8 @@ class Post(models.Model):
     content, author, and publication status. It also handles the featured image
     using Cloudinary for image storage.
     """
-    title = models.CharField(max_length=200, unique=True)
+    # Titles are display text and may repeat. Public URLs use ``slug`` (unique).
+    title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="blog_posts"
@@ -207,18 +208,40 @@ class Post(models.Model):
                         from django.utils.text import slugify
                         base_slug = slugify(self.title, allow_unicode=True) or f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
                     
-                    self.slug = base_slug
+                    self.slug = self._allocate_unique_slug(base_slug)
                 except Exception:
                     # If slug generation fails, use timestamp-based fallback
                     if not self.slug:
-                        self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                        self.slug = self._allocate_unique_slug(
+                            f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                        )
         except Exception:
             # If anything fails, ensure we have a slug before saving
             if not self.slug:
-                self.slug = f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                self.slug = self._allocate_unique_slug(
+                    f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+                )
         
         # Save the object - let Django handle any errors naturally
         super().save(*args, **kwargs)
+
+    def _allocate_unique_slug(self, base_slug: str) -> str:
+        """Keep slug unique when titles are allowed to repeat."""
+        candidate = (base_slug or '').strip('-')[:200] or (
+            f"post-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+        )
+        qs = Post.objects.all()
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        if not qs.filter(slug=candidate).exists():
+            return candidate
+        for index in range(2, 1000):
+            suffix = f'-{index}'
+            trimmed = candidate[: max(1, 200 - len(suffix))].rstrip('-')
+            next_slug = f'{trimmed}{suffix}'
+            if not qs.filter(slug=next_slug).exists():
+                return next_slug
+        return f"{candidate[:180]}-{timezone.now().strftime('%Y%m%d%H%M%S')}"
 
     def favorite_count(self):
         """Returns the number of users who have favorited this post."""
