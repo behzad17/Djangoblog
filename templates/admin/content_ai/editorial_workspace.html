@@ -17,6 +17,7 @@
   id="ai-editorial-workspace"
   class="ai-workspace"
   data-api-base="{{ api_base }}"
+  data-debug="{% if debug_mode %}1{% else %}0{% endif %}"
 >
   <header class="ai-workspace__header">
     <div>
@@ -245,6 +246,7 @@
           <img id="ai-ws-image-preview" alt="Generated featured image preview" width="960" height="540">
         </div>
         <p class="ai-workspace__hint" id="ai-ws-image-status"></p>
+        <pre class="ai-workspace__hint" id="ai-ws-image-timing" hidden></pre>
       </section>
 
       <div class="ai-workspace__toolbar">
@@ -308,5 +310,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-image-debug"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-image-perf"></script>
 {% endblock %}

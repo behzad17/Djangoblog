@@ -6,6 +6,7 @@ import json
 import logging
 import traceback
 
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -121,6 +122,7 @@ def editorial_workspace(request):
             'api_base': reverse(
                 'content_ai:workspace_api', kwargs={'action': 'reset'}
             ).rsplit('reset', 1)[0],
+            'debug_mode': bool(settings.DEBUG),
         },
     )
     # Prevent BFCache from resurrecting a stale pre-reset workspace DOM.

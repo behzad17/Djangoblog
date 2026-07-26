@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from content_ai.editorial.image.planner import plan_featured_image
 from content_ai.editorial.image.prompt import build_featured_image_brief
+from content_ai.editorial.image.prompt_compact import compact_image_prompt_for_api
 from content_ai.editorial.image.style import (
     DEFAULT_IMAGE_STYLE,
     category_visual_hint,
@@ -88,6 +89,35 @@ class ImagePlannerTests(SimpleTestCase):
         self.assertNotIn('fantasy', plan.main_subject.lower())
 
 
+class PromptCompactTests(SimpleTestCase):
+    def test_compact_preserves_visual_plan_under_limit(self):
+        brief = build_featured_image_brief(
+            headline='افزایش مالیات برای مستاجران',
+            lead='سازمان مالیاتی قوانین جدیدی اعلام کرد.',
+            body=('جزئیات قانون شامل مهلت و مبلغ است. ' * 80),
+            content_type='news',
+            goal='inform',
+            category='Tax',
+            tags=['skatt', 'housing'],
+            image_style='editorial_photo',
+        )
+        # Force over-limit input.
+        fat = brief.prompt + '\n\n' + ('Extra padding. ' * 400)
+        self.assertGreater(len(fat), 2500)
+        compact, stats = compact_image_prompt_for_api(fat, max_chars=2500)
+        self.assertTrue(stats['truncated'])
+        self.assertLessEqual(len(compact), 2500)
+        self.assertIn('Internal visual plan', compact)
+        self.assertIn('Article headline', compact)
+        self.assertNotIn('Extra padding.', compact)
+
+    def test_short_prompt_unchanged(self):
+        text = 'Short visual prompt with a clear subject.'
+        out, stats = compact_image_prompt_for_api(text)
+        self.assertEqual(out, text)
+        self.assertFalse(stats['truncated'])
+
+
 @override_settings(CONTENT_AI_PROVIDER='mock')
 class FeaturedImageWorkspaceTests(SimpleTestCase):
     def test_generate_draft_auto_prepares_image_prompt(self):
@@ -155,6 +185,10 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
         )
         self.assertEqual(generated['status'], 'generated')
         self.assertEqual(generated['image_url'], MOCK_IMAGE_DATA_URL)
+        self.assertIn('timing', generated)
+        self.assertIn('openai_seconds', generated['timing'])
+        self.assertIn('cloudinary_seconds', generated['timing'])
+        self.assertIn('total_seconds', generated['timing'])
         self.assertEqual(session.sections.body, original_body)
         self.assertEqual(session.sections.summary, original_summary)
         self.assertEqual(session.sections.category, original_category)
@@ -244,8 +278,8 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
             result['cloudinary_public_id'],
             'peyvand/editorial/featured/test',
         )
-        # Preview upload on generate + final upload on Accept.
-        self.assertEqual(mock_upload.call_count, 2)
+        # Preview CDN is skipped for tiny mock data-URLs; Accept still uploads.
+        mock_upload.assert_called_once()
         mock_attach.assert_called_once()
 
 

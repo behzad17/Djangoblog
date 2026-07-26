@@ -67,10 +67,6 @@ def _normalize_image_quality(model: str | None, quality: str | None) -> str | No
     return 'standard'
 
 
-# GPT Image prompts: keep API payloads short; long Persian excerpts add latency.
-_MAX_IMAGE_PROMPT_CHARS = 2500
-
-
 def _extract_token_usage(response):
     """Map SDK usage fields into a plain dict. Never return the SDK object."""
     usage = getattr(response, 'usage', None)
@@ -216,14 +212,23 @@ class OpenAIProvider(BaseAIProvider):
         if not prompt_text:
             raise GenerationError('Image prompt is required.')
 
-        full_prompt_chars = len(prompt_text)
-        if full_prompt_chars > _MAX_IMAGE_PROMPT_CHARS:
+        from content_ai.editorial.image.prompt_compact import (
+            compact_image_prompt_for_api,
+        )
+
+        max_chars = int(
+            getattr(settings, 'OPENAI_IMAGE_PROMPT_MAX_CHARS', None) or 2500
+        )
+        prompt_text, compact_stats = compact_image_prompt_for_api(
+            prompt_text,
+            max_chars=max_chars,
+        )
+        full_prompt_chars = int(compact_stats.get('original_chars') or len(prompt_text))
+        if compact_stats.get('truncated'):
             logger.warning(
-                'Truncating image prompt for OpenAI API: %d → %d chars',
-                full_prompt_chars,
-                _MAX_IMAGE_PROMPT_CHARS,
+                'Compacted image prompt for OpenAI API: %s',
+                compact_stats,
             )
-            prompt_text = prompt_text[:_MAX_IMAGE_PROMPT_CHARS].rstrip() + '…'
 
         size = kwargs.get('size') or _aspect_to_openai_size(aspect_ratio)
         if not size:
@@ -262,6 +267,7 @@ class OpenAIProvider(BaseAIProvider):
             'prompt': prompt_text,
             'prompt_chars': len(prompt_text),
             'prompt_chars_before_truncate': full_prompt_chars,
+            'prompt_compact': compact_stats,
             'style': kwargs.get('style') or kwargs.get('image_style') or '',
             'size': size,
             'aspect_ratio': aspect_ratio or '16:9',
@@ -356,7 +362,12 @@ class OpenAIProvider(BaseAIProvider):
             metadata={
                 'size': size,
                 'aspect_ratio': aspect_ratio or '16:9',
+                'quality': quality,
                 'duration_ms': round(elapsed * 1000, 3),
+                'openai_seconds': round(elapsed, 3),
+                'prompt_chars': len(prompt_text),
+                'prompt_chars_original': full_prompt_chars,
+                'prompt_compact': compact_stats,
             },
         )
 

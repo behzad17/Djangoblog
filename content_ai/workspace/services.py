@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 
 from content_ai.editorial.content_types import (
     PROMPT_ENGINE_VERSION,
@@ -37,6 +38,7 @@ from content_ai.editorial.image.attach import (
 from content_ai.evaluation.evaluator import Evaluator
 from content_ai.evaluation.snapshot import create_snapshot
 from content_ai.fact_check import FactChecker
+from content_ai.providers.exceptions import GenerationError
 from content_ai.source import SourceInspector
 from content_ai.workflow import WorkflowOrchestrator, WorkflowState
 from content_ai.workspace.actions import get_action, list_actions_for_ui
@@ -927,6 +929,7 @@ class WorkspaceService:
             if prior_current:
                 previous_prompt = prior_current
 
+        wall_started = time.monotonic()
         try:
             outcome = self.featured_image.generate(
                 cleaned,
@@ -961,6 +964,23 @@ class WorkspaceService:
             session.touch()
             raise
 
+        openai_seconds = float(
+            (getattr(outcome, 'metadata', None) or {}).get('openai_seconds')
+            or (
+                ((getattr(outcome, 'metadata', None) or {}).get('duration_ms') or 0)
+                / 1000.0
+            )
+            or 0.0
+        )
+        prompt_chars_api = int(
+            (getattr(outcome, 'metadata', None) or {}).get('prompt_chars')
+            or len(cleaned)
+        )
+        prompt_chars_original = int(
+            (getattr(outcome, 'metadata', None) or {}).get('prompt_chars_original')
+            or len(cleaned)
+        )
+
         state = outcome.to_dict()
         state['planner'] = current.get('planner') or {}
         state['original_prompt'] = (
@@ -981,45 +1001,91 @@ class WorkspaceService:
         state['attached_url'] = current.get('attached_url') or ''
         state['error'] = ''
 
-        # GPT Image returns large b64 data-URLs. Persist a CDN preview URL so
-        # session JSON / Heroku responses stay small after OpenAI returns.
+        # GPT Image returns large b64 data-URLs. Persist a CDN URL and never
+        # keep multi-MB base64 blobs in the Django session.
         preview_url = (state.get('image_url') or '').strip()
-        if preview_url.startswith('data:image/'):
+        cloudinary_seconds = 0.0
+        tiny_data_url = (
+            preview_url.startswith('data:image/') and len(preview_url) < 8192
+        )
+        if preview_url.startswith('data:image/') and not tiny_data_url:
             logger.info(
-                'workspace image decode: data-url chars=%d session=%s',
+                'workspace image decode/upload start: source_chars=%d session=%s',
                 len(preview_url),
                 getattr(session, 'session_id', ''),
             )
+            upload_started = time.monotonic()
             try:
                 upload = upload_featured_image_asset(
                     preview_url,
                     public_id_prefix='peyvand/editorial/featured-preview',
-                    session_id=f'{getattr(session, "session_id", "") or "preview"}-gen',
+                    session_id=(
+                        f'{getattr(session, "session_id", "") or "preview"}-gen'
+                    ),
                 )
-                state['image_url'] = upload.get('secure_url') or preview_url
+                cloudinary_seconds = round(time.monotonic() - upload_started, 3)
+                state['image_url'] = upload.get('secure_url') or ''
                 state['preview_cloudinary_public_id'] = upload.get('public_id') or ''
+                meta_clean = dict(state.get('metadata') or {})
+                meta_clean.pop('b64_data_url', None)
+                state['metadata'] = meta_clean
+                if not state['image_url']:
+                    raise FeaturedImageAttachError(
+                        'Cloudinary upload returned no secure_url.'
+                    )
                 logger.info(
-                    'workspace image save (preview CDN): public_id=%s url=%s',
+                    'workspace image Cloudinary upload: public_id=%s '
+                    'seconds=%.3f url=%s',
                     state.get('preview_cloudinary_public_id'),
+                    cloudinary_seconds,
                     str(state.get('image_url') or '')[:160],
                 )
             except FeaturedImageAttachError as exc:
-                logger.exception(
-                    'workspace image preview upload failed; keeping data-url'
-                )
-                state['error'] = (
-                    'Preview CDN upload failed; image may be too large to keep: '
-                    f'{exc}'
-                )
+                logger.exception('workspace image Cloudinary upload failed')
+                # Never persist multi-MB data URLs in session.
+                state['image_url'] = current.get('image_url') or ''
+                state['status'] = 'error'
+                state['error'] = f'Cloudinary upload failed: {exc}'
+                state['pending_accept'] = False
+                session.metadata['featured_image'] = state
+                session.touch()
+                raise GenerationError(str(exc)) from exc
+        elif tiny_data_url:
+            logger.info(
+                'workspace image skip CDN for tiny placeholder data-url '
+                '(%d chars)',
+                len(preview_url),
+            )
+
+        total_seconds = round(time.monotonic() - wall_started, 3)
+        timing = {
+            'prompt_chars': prompt_chars_api,
+            'prompt_chars_original': prompt_chars_original,
+            'openai_seconds': round(openai_seconds, 3),
+            'cloudinary_seconds': round(cloudinary_seconds, 3),
+            'total_seconds': total_seconds,
+        }
+        state['timing'] = timing
+        logger.info(
+            'workspace image timing: prompt_chars=%s openai=%.3fs '
+            'cloudinary=%.3fs total=%.3fs session=%s',
+            timing['prompt_chars'],
+            timing['openai_seconds'],
+            timing['cloudinary_seconds'],
+            timing['total_seconds'],
+            getattr(session, 'session_id', ''),
+        )
+
         if regenerate and not state.get('previous_prompt'):
             state['previous_prompt'] = previous_prompt
         meta = dict(state.get('metadata') or {})
         if current.get('planner'):
             meta['planner'] = current.get('planner')
+        meta['timing'] = timing
         state['metadata'] = meta
         session.metadata['featured_image'] = state
         logger.info(
-            'workspace image database/session save: status=%s image_url_chars=%d',
+            'workspace image session save: status=%s image_url_chars=%d',
             state.get('status'),
             len(str(state.get('image_url') or '')),
         )
@@ -1037,6 +1103,11 @@ class WorkspaceService:
             state.get('explanation') or '',
             f'Style: {IMAGE_STYLE_LABELS.get(style, style)}.',
             f'Provider: {state.get("provider") or "—"}.',
+            (
+                f'Timing — OpenAI: {timing["openai_seconds"]} s · '
+                f'Cloudinary: {timing["cloudinary_seconds"]} s · '
+                f'Total: {timing["total_seconds"]} s'
+            ),
         ]
         session.last_explanations = [
             item for item in session.last_explanations if item

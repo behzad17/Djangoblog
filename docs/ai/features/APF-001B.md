@@ -85,4 +85,6 @@ On failure: keep article + prompt; allow retry.
 | Workspace | `prepare_featured_image_prompt`, `set_featured_image_style`, `generate_featured_image`, `restore_original_image_prompt`, `accept_featured_image` |
 | API | `prepare_image_prompt`, `set_image_style`, `generate_image`, `regenerate_image`, `restore_original_image_prompt`, `accept_image` |
 
-Config: `OPENAI_IMAGE_MODEL` (default `gpt-image-2`), `OPENAI_IMAGE_SIZE` (default `1536x1024`), `OPENAI_IMAGE_QUALITY` (default `low` — stays under Heroku’s 30s H12 limit).
+Config: `OPENAI_IMAGE_MODEL` (default `gpt-image-2`), `OPENAI_IMAGE_SIZE` (default `1536x1024`), `OPENAI_IMAGE_QUALITY` (default `low` — stays under Heroku’s 30s H12 limit), `OPENAI_IMAGE_PROMPT_MAX_CHARS` (default `2500`; API prompts are compacted to preserve the visual plan).
+
+Sync performance: OpenAI + Cloudinary timings are logged server-side and returned on `featured_image.timing` (shown in the workspace when `DEBUG=True`).

@@ -91,28 +91,25 @@ def build_featured_image_brief(
         )
 
     subject_lines = [
-        f'Article headline (Persian): {_clip(headline, 220)}' if headline else '',
-        f'Lead (Persian): {_clip(lead, 400)}' if lead else '',
-        f'Article excerpt (Persian): {_clip(body, 900)}' if body else '',
+        f'Article headline (Persian): {_clip(headline, 180)}' if headline else '',
+        f'Lead (Persian): {_clip(lead, 220)}' if lead else '',
+        f'Article excerpt (Persian): {_clip(body, 320)}' if body else '',
         f'Content type: {content_type}.',
         f'Editorial goal: {goal}.' if goal else '',
         f'Category: {category}.' if category else '',
-        f'Tags: {", ".join(tags)}.' if tags else '',
-        f'Publisher context: {publisher}.' if publisher else '',
+        f'Tags: {", ".join(tags[:8])}.' if tags else '',
         f'Selected image style: {style_label}.',
         style_guidance,
     ]
     subject_block = '\n'.join(line for line in subject_lines if line)
 
+    # Keep the editable session prompt lean so OpenAI compaction rarely truncates.
     prompt = (
         'Create a professional featured image for a Persian news / community '
-        'website article.\n'
-        'Communicate the article\'s main idea clearly and professionally. '
-        'Do NOT create artistic, fantasy, or cinematic spectacle imagery.\n\n'
+        'website article. One clear visual idea. No text, logos, or watermarks.\n\n'
         f'{PEYVAND_STYLE_BLOCK}\n\n'
-        f'{PEOPLE_RULES}\n\n'
+        f'{PEOPLE_RULES}\n'
         f'{SWEDEN_RULES}\n\n'
-        f'{style_guidance}\n\n'
         'Internal visual plan (follow closely; do not render as text):\n'
         f'{plan.to_prompt_block()}\n\n'
         'Article context (use for meaning only; do not render any of this as '
