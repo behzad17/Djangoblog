@@ -54,7 +54,10 @@ class FeaturedImagePromptTests(SimpleTestCase):
         self.assertIn('tax', brief.prompt.lower())
         self.assertTrue(brief.explanation)
         # Planner is internal — plan exists but UI must not show it.
-        self.assertIn('main_subject', brief.plan_dict())
+        plan_dict = brief.plan_dict()
+        self.assertIn('primary_visual_subject', plan_dict)
+        self.assertIn('main_subject', plan_dict)  # compatibility alias
+        self.assertIn('tax', plan_dict['primary_subject'].lower())
 
     def test_illustration_style(self):
         brief = build_featured_image_brief(
@@ -73,8 +76,65 @@ class FeaturedImagePromptTests(SimpleTestCase):
         self.assertEqual(resolve_image_style(None), DEFAULT_IMAGE_STYLE)
 
 
-class ImagePlannerTests(SimpleTestCase):
-    def test_planner_runs_before_prompt(self):
+class ImagePlannerV2Tests(SimpleTestCase):
+    def test_constitution_article_plans_parliament_not_lifestyle(self):
+        plan = plan_featured_image(
+            headline='بررسی قوانین اساسی و آیین‌نامه پارلمان سوئد',
+            lead=(
+                'قوانین اساسی و آیین‌نامه پارلمان سوئد نقش بنیادینی در نظام '
+                'حکمرانی این کشور ایفا می‌کنند.'
+            ),
+            body=(
+                'چهار ستون قانون اساسی سوئد شامل قانون حکومت، آزادی مطبوعات، '
+                'آزادی بیان و قانون جانشینی سلطنت است. ریکسداگ عالی‌ترین مظهر '
+                'اراده مردم است.'
+            ),
+            content_type='report',
+            category='سوئد امروز',
+            tags=['قانون اساسی', 'سوئد', 'ریکسداگ', 'دموکراسی'],
+        )
+        visual = plan.primary_visual_subject.lower()
+        self.assertIn('parliament', visual)
+        self.assertIn('riksdag', plan.location.lower())
+        self.assertNotIn('grocer', visual)
+        self.assertNotIn('elderly', visual)
+        self.assertNotIn('conversation', visual)
+        self.assertNotIn('helping', visual)
+        avoid_blob = ' '.join(plan.avoid).lower()
+        self.assertIn('lifestyle', avoid_blob)
+        self.assertIn('elderly', avoid_blob)
+        self.assertIn('shopping', avoid_blob)
+
+        brief = build_featured_image_brief(
+            headline='بررسی قوانین اساسی و آیین‌نامه پارلمان سوئد',
+            lead='قوانین اساسی و آیین‌نامه پارلمان سوئد نقش بنیادینی دارند.',
+            body='ریکسداگ و قانون اساسی سوئد.',
+            content_type='report',
+            category='سوئد امروز',
+            tags=['قانون اساسی', 'ریکسداگ'],
+            plan=plan,
+        )
+        prompt_l = brief.prompt.lower()
+        self.assertIn('primary visual subject', prompt_l)
+        self.assertIn('parliament', prompt_l)
+        self.assertIn('front-page', prompt_l)
+        self.assertNotIn('friendly conversation', prompt_l)
+        self.assertNotIn('helping each other', prompt_l)
+
+    def test_tax_article_plans_authority_not_coffee_lifestyle(self):
+        plan = plan_featured_image(
+            headline='افزایش مالیات برای مستاجران',
+            lead='سازمان مالیاتی قوانین جدیدی اعلام کرد.',
+            body='جزئیات قانون شامل مهلت و مبلغ است.',
+            content_type='news',
+            category='Tax',
+            tags=['skatt'],
+        )
+        self.assertIn('tax', plan.primary_subject.lower())
+        self.assertNotIn('coffee', plan.primary_visual_subject.lower())
+        self.assertTrue(plan.avoid)
+
+    def test_housing_article_plans_building(self):
         plan = plan_featured_image(
             headline='مسکن در استکهلم',
             lead='اجاره افزایش یافته است.',
@@ -83,9 +143,31 @@ class ImagePlannerTests(SimpleTestCase):
             category='Housing',
             tags=['bostad'],
         )
-        self.assertTrue(plan.main_subject)
-        self.assertIn('Low', plan.visual_complexity)
-        self.assertNotIn('fantasy', plan.main_subject.lower())
+        self.assertIn('residential', plan.primary_visual_subject.lower())
+        self.assertEqual(plan.primary_subject, 'Housing')
+        self.assertNotIn('fantasy', plan.primary_visual_subject.lower())
+
+    def test_planner_json_shape(self):
+        plan = plan_featured_image(
+            headline='پلیس استکهلم گزارش داد',
+            lead='نیروی پلیس عملیات آرامی انجام داد.',
+            body='جزئیات در ایستگاه پلیس اعلام شد.',
+            content_type='news',
+        )
+        data = plan.to_dict()
+        for key in (
+            'primary_subject',
+            'primary_visual_subject',
+            'location',
+            'secondary_elements',
+            'visual_style',
+            'mood',
+            'avoid',
+        ):
+            self.assertIn(key, data)
+        self.assertIsInstance(data['secondary_elements'], list)
+        self.assertIsInstance(data['avoid'], list)
+        self.assertLessEqual(len(data['secondary_elements']), 2)
 
 
 @override_settings(CONTENT_AI_PROVIDER='mock')

@@ -1,69 +1,334 @@
-"""Internal image planner — understand the article before prompting.
+"""Internal image planner v2 — primary visual subject before prompting.
 
 Planner output is INTERNAL ONLY and must not be shown to editors.
+
+Core question the planner must answer:
+"If this article were printed on the front page of a newspaper,
+what should the photograph show?"
+— not "what is this article generally related to?"
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 
+
 from content_ai.editorial.image.style import (
-    category_visual_hint,
-    content_type_visual,
     resolve_image_style,
 )
 
 
 @dataclass(frozen=True, slots=True)
 class ImagePlan:
-    """Structured visual plan derived from the article (internal)."""
+    """Structured visual plan (v2) derived from the article (internal)."""
 
-    main_subject: str
-    secondary_subject: str
-    environment: str
-    visual_focus: str
-    camera_angle: str
-    composition: str
-    mood: str
-    lighting: str
-    visual_complexity: str
-    image_style: str
-    things_to_avoid: str
-    content_type_cue: str
-    category_cue: str
+    primary_subject: str
+    primary_visual_subject: str
+    location: str
+    secondary_elements: tuple[str, ...] = ()
+    visual_style: str = 'Editorial photography'
+    mood: str = 'Professional, trustworthy, institutional, calm, clean'
+    avoid: tuple[str, ...] = ()
+
+    # Legacy aliases kept for older session metadata / tests.
+    @property
+    def main_subject(self) -> str:
+        return self.primary_visual_subject
+
+    @property
+    def secondary_subject(self) -> str:
+        return ', '.join(self.secondary_elements) if self.secondary_elements else ''
+
+    @property
+    def environment(self) -> str:
+        return self.location
+
+    @property
+    def things_to_avoid(self) -> str:
+        return ', '.join(self.avoid)
 
     def to_dict(self) -> dict:
-        return asdict(self)
+        payload = asdict(self)
+        payload['secondary_elements'] = list(self.secondary_elements)
+        payload['avoid'] = list(self.avoid)
+        # Compatibility keys used by older UI/tests.
+        payload['main_subject'] = self.primary_visual_subject
+        payload['secondary_subject'] = self.secondary_subject
+        payload['environment'] = self.location
+        payload['things_to_avoid'] = self.things_to_avoid
+        return payload
 
     def to_prompt_block(self) -> str:
+        secondary = (
+            ', '.join(self.secondary_elements)
+            if self.secondary_elements
+            else 'none'
+        )
+        avoid = ', '.join(self.avoid) if self.avoid else 'none'
         lines = [
-            f'Main visual subject: {self.main_subject}',
+            f'Primary subject (what the article is about): {self.primary_subject}',
             (
-                f'Secondary subject (optional): {self.secondary_subject}'
-                if self.secondary_subject
-                else 'Secondary subject: none'
+                'Primary visual subject (front-page photograph): '
+                f'{self.primary_visual_subject}'
             ),
-            f'Environment: {self.environment}',
-            f'Visual focus: {self.visual_focus}',
-            f'Camera angle: {self.camera_angle}',
-            f'Composition: {self.composition}',
+            f'Location: {self.location}',
+            f'Secondary elements (optional, max two): {secondary}',
+            f'Visual style: {self.visual_style}',
             f'Mood: {self.mood}',
-            f'Lighting: {self.lighting}',
-            f'Visual complexity: {self.visual_complexity}',
-            f'Image style: {self.image_style}',
-            f'Things to avoid: {self.things_to_avoid}',
-            f'Content-type cue: {self.content_type_cue}',
-            f'Category cue: {self.category_cue}',
+            f'Avoid: {avoid}',
+            'Visual complexity: exactly one primary subject; max two supporting '
+            'elements; no collage, no infographic, no text in the image.',
         ]
         return '\n'.join(lines)
 
 
-_AVOID = (
-    'crowded scenes, large groups, fantasy, sci-fi, surrealism, abstract '
-    'symbolism, overly artistic compositions, heavy cinematic effects, '
-    'extreme HDR, heavy contrast, lens flares, fire, explosions, action '
-    'scenes, visual clutter, unnecessary objects, readable text, logos, '
-    'watermarks, captions, screens, UI, typography'
+# Baseline avoid list — always applied unless the article is specifically
+# about those subjects.
+_BASE_AVOID: tuple[str, ...] = (
+    'generic smiling people',
+    'shopping',
+    'children',
+    'elderly people',
+    'medical scenes unrelated to the topic',
+    'food',
+    'family moments',
+    'random city streets',
+    'tourism',
+    'lifestyle photography',
+    'coffee shops',
+    'grocery delivery',
+    'crowded scenes',
+    'large groups',
+    'fantasy',
+    'sci-fi',
+    'surrealism',
+    'readable text',
+    'logos',
+    'watermarks',
+    'typography',
+    'collage',
+    'infographic',
+)
+
+
+@dataclass(frozen=True, slots=True)
+class _TopicRule:
+    """Keyword → institutional visual mapping."""
+
+    id: str
+    keywords: tuple[str, ...]
+    primary_subject: str
+    primary_visual_subject: str
+    location: str
+    secondary_elements: tuple[str, ...]
+    visual_style_photo: str
+    mood: str
+    extra_avoid: tuple[str, ...] = ()
+
+
+# Ordered by specificity — first match wins.
+_TOPIC_RULES: tuple[_TopicRule, ...] = (
+    _TopicRule(
+        id='constitution_parliament',
+        keywords=(
+            'constitution', 'grundlag', 'قانون اساسی', 'قوانین اساسی',
+            'riksdag', 'riksdagen', 'parliament', 'پارلمان', 'مجلس',
+            'ریکسداگ', 'ریکسداگ‌اوردنینگ', 'ریکسداگاوردنینگ',
+            'regeringsformen', 'successionsordningen',
+            'tryckfrihetsförordningen', 'yttrandefrihetsgrundlagen',
+        ),
+        primary_subject='Swedish Constitution and Parliament',
+        primary_visual_subject=(
+            'The Swedish Parliament building (Riksdagen) exterior or '
+            'parliament chamber interior'
+        ),
+        location='Riksdagen, Stockholm, Sweden',
+        secondary_elements=('official legal documents', 'subtle Swedish flag'),
+        visual_style_photo='Architectural / documentary editorial photography',
+        mood='Institutional, trustworthy, serious, calm, clean',
+        extra_avoid=(
+            'elderly receiving groceries',
+            'community volunteering',
+            'home interiors',
+            'shopping bags',
+        ),
+    ),
+    _TopicRule(
+        id='government_politics',
+        keywords=(
+            'government', 'regering', 'دولت', 'وزیر', 'minister',
+            'politik', 'politics', 'سیاست', 'cabinet', 'rosenbad',
+            'government offices', 'statsminister',
+        ),
+        primary_subject='Swedish government / politics',
+        primary_visual_subject=(
+            'Swedish Government Offices exterior or formal government building'
+        ),
+        location='Government Offices, Stockholm, Sweden',
+        secondary_elements=('official documents', 'microphones at a press podium'),
+        visual_style_photo='Editorial / architectural photography',
+        mood='Institutional, professional, trustworthy, calm',
+        extra_avoid=('lifestyle scenes', 'casual street portraits'),
+    ),
+    _TopicRule(
+        id='law_courts',
+        keywords=(
+            'court', 'domstol', 'دادگاه', 'supreme court', 'högsta domstolen',
+            'law books', 'legal', 'حقوقی', 'قاضی', 'judge', 'آیین‌نامه',
+        ),
+        primary_subject='Law and courts',
+        primary_visual_subject='Courtroom or official legal documents and law books',
+        location='Swedish court building or formal legal office',
+        secondary_elements=('law books', 'official papers'),
+        visual_style_photo='Documentary editorial photography',
+        mood='Serious, institutional, trustworthy, clean',
+    ),
+    _TopicRule(
+        id='tax',
+        keywords=(
+            'tax', 'skatt', 'مالیات', 'skatteverket', 'skatte',
+        ),
+        primary_subject='Tax / Skatteverket',
+        primary_visual_subject=(
+            'Official tax authority office exterior or desk with unmarked '
+            'official documents and calculator'
+        ),
+        location='Swedish tax authority / government office',
+        secondary_elements=('official documents', 'calculator'),
+        visual_style_photo='Editorial photography',
+        mood='Professional, trustworthy, clean, calm',
+        extra_avoid=('coffee lifestyle', 'home kitchen', 'shopping'),
+    ),
+    _TopicRule(
+        id='immigration',
+        keywords=(
+            'migration', 'مهاجرت', 'migrationsverket', 'asyl', 'uppehåll',
+            'immigration', 'passport', 'گذرنامه', 'پناه', 'border',
+        ),
+        primary_subject='Immigration / migration',
+        primary_visual_subject=(
+            'Migration office waiting area or passport and official documents '
+            'on a counter'
+        ),
+        location='Migrationsverket / Swedish migration office',
+        secondary_elements=('passport', 'official documents'),
+        visual_style_photo='Documentary editorial photography',
+        mood='Respectful, institutional, calm, clean',
+        extra_avoid=('tourist photos', 'family picnic', 'airport shopping'),
+    ),
+    _TopicRule(
+        id='police',
+        keywords=('police', 'polis', 'پلیس', 'brott', 'جرم'),
+        primary_subject='Police',
+        primary_visual_subject=(
+            'Swedish police officers or a police vehicle outside a station'
+        ),
+        location='Swedish police station exterior or quiet street',
+        secondary_elements=('police vehicle',),
+        visual_style_photo='Documentary editorial photography',
+        mood='Calm, professional, trustworthy',
+        extra_avoid=('action chase', 'violence', 'weapons close-up'),
+    ),
+    _TopicRule(
+        id='healthcare',
+        keywords=(
+            'health', 'vård', 'سلامت', 'sjuk', 'healthcare', 'clinic',
+            'hospital', 'بیمارستان', 'پزشک', 'doctor', 'nurse',
+        ),
+        primary_subject='Healthcare',
+        primary_visual_subject='Hospital corridor or doctor with medical equipment',
+        location='Swedish hospital / clinic interior',
+        secondary_elements=('medical equipment',),
+        visual_style_photo='Documentary editorial photography',
+        mood='Calm, professional, trustworthy, clean',
+        # Healthcare IS the topic — do not avoid medical scenes.
+        extra_avoid=('shopping', 'tourism'),
+    ),
+    _TopicRule(
+        id='education',
+        keywords=(
+            'education', 'utbildning', 'آموزش', 'school', 'skolan',
+            'university', 'دانشگاه', 'student', 'دانشجو', 'teacher', 'معلم',
+        ),
+        primary_subject='Education',
+        primary_visual_subject='University campus or classroom with students and teacher',
+        location='Swedish school or university',
+        secondary_elements=('books', 'desks'),
+        visual_style_photo='Documentary editorial photography',
+        mood='Bright, professional, calm, clean',
+    ),
+    _TopicRule(
+        id='economy',
+        keywords=(
+            'economy', 'ekonomi', 'اقتصاد', 'finance', 'currency', 'krona',
+            'industry', 'شرکت', 'company', 'börs', 'bank', 'بانک',
+        ),
+        primary_subject='Economy / finance',
+        primary_visual_subject=(
+            'Modern business district, finance office, or industrial facility'
+        ),
+        location='Swedish business district or company office',
+        secondary_elements=('office documents', 'city skyline through a window'),
+        visual_style_photo='Editorial photography',
+        mood='Modern, professional, trustworthy, clean',
+        extra_avoid=('graphs with readable numbers', 'stock ticker text'),
+    ),
+    _TopicRule(
+        id='housing',
+        keywords=(
+            'housing', 'bostad', 'مسکن', 'apartment', 'hyra', 'اجاره',
+            'مستاجر', 'landlord',
+        ),
+        primary_subject='Housing',
+        primary_visual_subject='Swedish residential building exterior or apartment entrance',
+        location='Swedish residential neighbourhood',
+        secondary_elements=('house keys',),
+        visual_style_photo='Architectural / editorial photography',
+        mood='Calm, clean, trustworthy',
+        extra_avoid=('furniture showroom lifestyle', 'family dinner'),
+    ),
+    _TopicRule(
+        id='technology',
+        keywords=(
+            'technology', 'teknik', 'فناوری', 'digital', 'ai', 'هوش مصنوعی',
+            'software', 'server', 'data', 'developer',
+        ),
+        primary_subject='Technology / digital infrastructure',
+        primary_visual_subject=(
+            'Server room, data centre aisle, or clean modern tech workspace'
+        ),
+        location='Modern tech office or data centre',
+        secondary_elements=('servers', 'laptop without readable screen text'),
+        visual_style_photo='Editorial photography',
+        mood='Modern, clean, professional',
+        extra_avoid=('readable UI', 'screens with text'),
+    ),
+    _TopicRule(
+        id='culture',
+        keywords=(
+            'culture', 'kultur', 'فرهنگ', 'museum', 'موزه', 'concert',
+            'کنسرت', 'artist', 'هنرمند', 'performance', 'theatre', 'تئاتر',
+        ),
+        primary_subject='Culture / arts',
+        primary_visual_subject='Museum gallery, concert hall, or performance stage',
+        location='Swedish cultural venue',
+        secondary_elements=('stage lighting',),
+        visual_style_photo='Editorial photography',
+        mood='Creative yet professional, calm, clean',
+    ),
+    _TopicRule(
+        id='transport',
+        keywords=(
+            'transport', 'trafik', 'حمل', 'train', 'bus', 'bil', 'körkort',
+            'قطار', 'اتوبوس',
+        ),
+        primary_subject='Transport',
+        primary_visual_subject='Swedish train station, bus, or clear road scene',
+        location='Swedish public transport setting',
+        secondary_elements=('platform',),
+        visual_style_photo='Documentary editorial photography',
+        mood='Calm, clean, modern',
+    ),
 )
 
 
@@ -74,17 +339,40 @@ def _clip(text: str, limit: int) -> str:
     return cleaned[: max(0, limit - 1)].rstrip() + '…'
 
 
-def _people_needed(blob: str, content_type: str) -> bool:
-    lowered = blob.lower()
-    type_key = (content_type or '').lower()
-    if type_key in {'interview', 'community_story', 'community', 'guide', 'howto'}:
-        return True
-    people_markers = (
-        'interview', 'مصاحبه', 'teacher', 'student', 'doctor', 'nurse',
-        'police', 'polis', 'پلیس', 'family', 'خانواده', 'migrant', 'مهاجر',
-        'entrepreneur', 'meeting', 'community', 'انجمن', 'کمک',
-    )
-    return any(marker in lowered for marker in people_markers)
+def _normalize_blob(*parts: str) -> str:
+    return ' '.join(p for p in parts if p).lower()
+
+
+def _match_topic(blob: str) -> _TopicRule | None:
+    for rule in _TOPIC_RULES:
+        if any(keyword.lower() in blob for keyword in rule.keywords):
+            return rule
+    return None
+
+
+def _build_avoid(
+    rule: _TopicRule | None,
+    *,
+    topic_allows_people: bool,
+    topic_is_healthcare: bool,
+) -> tuple[str, ...]:
+    avoid: list[str] = list(_BASE_AVOID)
+    if rule:
+        avoid.extend(rule.extra_avoid)
+    if topic_is_healthcare:
+        avoid = [a for a in avoid if 'medical' not in a.lower()]
+    if topic_allows_people:
+        # Keep generic lifestyle people banned; institutional people OK.
+        pass
+    # Deduplicate while preserving order.
+    seen: set[str] = set()
+    out: list[str] = []
+    for item in avoid:
+        key = item.lower()
+        if key not in seen:
+            seen.add(key)
+            out.append(item)
+    return tuple(out)
 
 
 def plan_featured_image(
@@ -99,7 +387,7 @@ def plan_featured_image(
     image_style: str | None = None,
 ) -> ImagePlan:
     """
-    Derive an internal visual plan from article understanding.
+    Derive an internal v2 visual plan from article understanding.
 
     Requires article substance (not URL / title alone).
     """
@@ -117,99 +405,81 @@ def plan_featured_image(
     content_type = (content_type or 'news').strip() or 'news'
     category = (category or '').strip()
     style = resolve_image_style(image_style)
-    blob = f'{headline}\n{lead}\n{body}\n{category}\n{" ".join(tags)}'
-    type_cue = content_type_visual(content_type)
-    cat_cue = category_visual_hint(
-        category=category,
-        tags=tags,
-        text_blob=blob,
+
+    # Prefer headline + lead for subject extraction; body is secondary signal.
+    blob = _normalize_blob(
+        headline,
+        lead,
+        body[:1200],
+        category,
+        ' '.join(tags),
+        content_type,
+        goal or '',
     )
+    rule = _match_topic(blob)
 
-    topic = _clip(headline or lead, 120) or 'the article topic'
-    needs_people = _people_needed(blob, content_type)
-
-    if 'tax' in cat_cue.lower() or 'desk' in cat_cue.lower():
-        main = 'A calm desk with tax papers, laptop, calculator and coffee'
-        environment = 'Quiet Scandinavian home-office or desk'
-        secondary = 'Soft window light in the background'
-    elif 'police' in cat_cue.lower():
-        main = 'A Swedish-style police officer or police vehicle on a calm street'
-        environment = 'Quiet Swedish street or police-station exterior'
-        secondary = ''
-    elif 'classroom' in cat_cue.lower() or 'education' in cat_cue.lower():
-        main = 'Teacher and student with books in a simple classroom'
-        environment = 'Bright Swedish classroom'
-        secondary = 'Books on a desk'
-    elif 'clinic' in cat_cue.lower() or 'healthcare' in cat_cue.lower():
-        main = 'Doctor in a calm medical consultation'
-        environment = 'Clean Swedish clinic interior'
-        secondary = ''
-    elif 'office' in cat_cue.lower() or 'meeting' in cat_cue.lower():
-        main = 'Small-company meeting or entrepreneur at a clean desk'
-        environment = 'Modern Scandinavian office'
-        secondary = ''
-    elif 'technology' in cat_cue.lower() or 'laptop' in cat_cue.lower() and 'tax' not in cat_cue.lower():
-        main = 'Developer or clean laptop workspace'
-        environment = 'Modern office with natural light'
-        secondary = ''
-    elif 'apartment' in cat_cue.lower() or 'housing' in cat_cue.lower() or 'keys' in cat_cue.lower():
-        main = 'Residential building, apartment entrance, or house keys'
-        environment = 'Swedish residential exterior or hallway'
-        secondary = 'Moving boxes optional, uncluttered'
-    elif 'government' in cat_cue.lower() or 'migration' in cat_cue.lower():
-        main = 'Calm government waiting area with documents'
-        environment = 'Scandinavian public office interior'
-        secondary = 'One or two people waiting respectfully' if needs_people else ''
-    elif 'community' in cat_cue.lower() or 'conversation' in cat_cue.lower():
-        main = 'Friendly conversation / people helping each other'
-        environment = 'Everyday community setting in Sweden'
-        secondary = 'Small group, maximum two people in focus'
+    if rule is not None:
+        primary_subject = rule.primary_subject
+        primary_visual = rule.primary_visual_subject
+        location = rule.location
+        secondary = rule.secondary_elements[:2]
+        mood = rule.mood
+        photo_style = rule.visual_style_photo
+        topic_is_healthcare = rule.id == 'healthcare'
+        topic_allows_people = rule.id in {
+            'police',
+            'healthcare',
+            'education',
+            'immigration',
+        }
     else:
-        main = f'One clear real-world subject representing: {topic}'
-        environment = 'Authentic Swedish / Scandinavian everyday setting when relevant'
-        secondary = 'One supporting detail only if needed'
-
-    if content_type in {'interview'}:
-        main = 'Interview subject in a calm interview setting'
-        camera = 'Eye-level medium shot'
-        mood = 'Attentive, respectful, calm'
-    elif content_type in {'guide', 'howto', 'explainer', 'faq'}:
-        camera = 'Slightly elevated or eye-level, clear instructional framing'
-        mood = 'Bright, friendly, educational'
-    elif content_type in {'analysis', 'opinion', 'editorial'}:
-        camera = 'Clean wide or medium shot with strong negative space'
-        mood = 'Thoughtful, minimal, serious'
-    elif content_type in {'report', 'reportage'}:
-        camera = 'Documentary eye-level'
-        mood = 'Observational, grounded'
-    else:
-        camera = 'Natural eye-level editorial framing'
-        mood = 'Calm, professional, trustworthy'
-
-    style_label = (
-        'Highly realistic professional editorial photography, magazine quality'
-        if style == 'editorial_photo'
-        else (
-            'Clean modern editorial magazine illustration, minimal, flat or '
-            'softly rendered — not cartoon, not fantasy'
+        topic = _clip(headline or lead, 100) or 'the article topic'
+        primary_subject = topic
+        primary_visual = (
+            f'One clear institutional or real-world subject that would appear '
+            f'on a newspaper front page about: {topic}'
         )
+        location = 'Sweden — authentic setting matching the article subject'
+        secondary = ()
+        mood = 'Professional, trustworthy, institutional, calm, clean'
+        photo_style = 'Editorial photography'
+        topic_is_healthcare = False
+        topic_allows_people = content_type in {
+            'interview',
+            'community_story',
+            'community',
+        }
+
+    if style == 'editorial_illustration':
+        visual_style = (
+            'Clean modern editorial magazine illustration — minimal, '
+            'professional, not cartoon, not fantasy'
+        )
+    else:
+        visual_style = photo_style
+
+    # Content-type mood nudges without changing the primary visual subject.
+    if content_type in {'analysis', 'opinion', 'editorial'}:
+        mood = f'{mood}; thoughtful, minimal'
+    elif content_type in {'guide', 'howto', 'explainer', 'faq'}:
+        mood = f'{mood}; clear and educational'
+    elif content_type == 'interview' and rule is None:
+        primary_visual = 'Interview subject in a calm professional setting'
+        secondary = ('microphone',)
+        topic_allows_people = True
+
+    avoid = _build_avoid(
+        rule,
+        topic_allows_people=topic_allows_people,
+        topic_is_healthcare=topic_is_healthcare,
     )
 
     return ImagePlan(
-        main_subject=main,
-        secondary_subject=secondary,
-        environment=environment,
-        visual_focus='Large clear primary subject; readable as a thumbnail',
-        camera_angle=camera,
-        composition=(
-            'Simple balanced 16:9 layout, one visual idea, clean background, '
-            'natural perspective'
-        ),
+        primary_subject=primary_subject,
+        primary_visual_subject=primary_visual,
+        location=location,
+        secondary_elements=secondary,
+        visual_style=visual_style,
         mood=mood,
-        lighting='Natural daylight, soft and even — no dramatic cinematic lighting',
-        visual_complexity='Low — prefer simplicity over detail',
-        image_style=style_label,
-        things_to_avoid=_AVOID,
-        content_type_cue=type_cue,
-        category_cue=cat_cue,
+        avoid=avoid,
     )

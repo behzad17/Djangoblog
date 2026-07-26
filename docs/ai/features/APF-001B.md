@@ -34,12 +34,30 @@ Never from URL alone. Never from title alone.
 
 ---
 
-## Image Planner (internal)
+## Image Planner v2 (internal)
 
-Determines main/secondary subject, environment, focus, camera, composition,
-mood, lighting, complexity, style, and things to avoid.
+Answers: *"If this article were on a newspaper front page, what should the
+photograph show?"* — not a generic Swedish lifestyle scene.
 
-**Not shown to editors** (stripped from API session payloads).
+Structured plan JSON (never shown to editors):
+
+```json
+{
+  "primary_subject": "...",
+  "primary_visual_subject": "...",
+  "location": "...",
+  "secondary_elements": [],
+  "visual_style": "...",
+  "mood": "...",
+  "avoid": []
+}
+```
+
+Category-specific institutional visuals (parliament, tax office, hospital,
+university, migration office, etc.). Explicit avoid list bans shopping,
+elderly lifestyle scenes, tourism, and similar unless the article is about them.
+
+The prompt generator builds the OpenAI prompt from this plan.
 
 ---
 

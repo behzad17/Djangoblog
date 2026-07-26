@@ -74,10 +74,10 @@ CONTENT_TYPE_VISUALS: dict[str, str] = {
     'reportage': 'Documentary-style realistic imagery.',
     'feature': 'Editorial photography with a clear human or place focus.',
     'community_story': (
-        'Friendly conversation / helping each other — authentic interaction.'
+        'Concrete community institution or place — not generic lifestyle.'
     ),
     'community': (
-        'Friendly conversation / helping each other — authentic interaction.'
+        'Concrete community institution or place — not generic lifestyle.'
     ),
     'press_release': 'Professional institutional or workplace setting.',
     'announcement': 'Clear institutional or community setting without clutter.',
@@ -89,46 +89,62 @@ CONTENT_TYPE_VISUALS: dict[str, str] = {
 }
 
 # Category keyword → visual cue (matched against category / tags / body).
+# Prefer institutions and front-page subjects — never generic lifestyle.
 CATEGORY_VISUAL_HINTS: tuple[tuple[tuple[str, ...], str], ...] = (
     (
+        (
+            'constitution', 'grundlag', 'قانون اساسی', 'riksdag', 'parliament',
+            'پارلمان', 'مجلس',
+        ),
+        'Riksdagen / Parliament building or official constitutional documents.',
+    ),
+    (
+        ('government', 'regering', 'دولت', 'politics', 'سیاست'),
+        'Government offices, official buildings, formal press setting.',
+    ),
+    (
         ('tax', 'skatt', 'مالیات', 'skatteverket'),
-        'Desk, tax papers, laptop, calculator, coffee — no readable text.',
+        'Tax authority office or desk with unmarked official documents.',
     ),
     (
         ('police', 'polis', 'پلیس'),
-        'Police officer, police vehicle, street or police station — no action.',
+        'Police officer, police vehicle, or police station — no action.',
     ),
     (
-        ('education', 'utbildning', 'آموزش', 'school', 'skolan'),
-        'Teacher, student, books, classroom.',
+        ('education', 'utbildning', 'آموزش', 'school', 'skolan', 'university'),
+        'School, university, classroom, students, teachers.',
     ),
     (
-        ('health', 'vård', 'سلامت', 'sjuk', 'healthcare', 'clinic'),
-        'Doctor, clinic, medical consultation — calm and respectful.',
+        ('health', 'vård', 'سلامت', 'sjuk', 'healthcare', 'clinic', 'hospital'),
+        'Hospital, doctor, medical equipment — calm and respectful.',
+    ),
+    (
+        ('economy', 'ekonomi', 'اقتصاد', 'finance', 'bank', 'industry'),
+        'Business district, finance office, industry — no readable charts.',
     ),
     (
         ('business', 'företag', 'کسب', 'company', 'office', 'entrepreneur'),
-        'Meeting, office, small company, entrepreneur.',
+        'Company office or professional workplace.',
     ),
     (
-        ('technology', 'teknik', 'فناوری', 'digital', 'developer'),
-        'Laptop, developer, modern office, clean workspace — no UI text.',
+        ('technology', 'teknik', 'فناوری', 'digital', 'developer', 'ai'),
+        'Servers, data centre, or clean tech workspace — no UI text.',
     ),
     (
         ('housing', 'bostad', 'مسکن', 'apartment', 'hyra'),
-        'Apartment, residential building, house keys, moving boxes.',
+        'Residential building exterior or apartment entrance.',
     ),
     (
         ('migration', 'مهاجرت', 'migrationsverket', 'asyl', 'uppehåll'),
-        'Government office, waiting area, documents, family — respectful.',
+        'Migration office, passport, border desk, official documents.',
     ),
     (
-        ('community', 'انجمن', 'community', 'volunteer'),
-        'Friendly conversation, helping each other, small group.',
+        ('culture', 'kultur', 'فرهنگ', 'museum', 'concert', 'artist'),
+        'Museum, concert hall, performance, or artist at work.',
     ),
     (
         ('transport', 'trafik', 'حمل', 'train', 'bus', 'bil', 'körkort'),
-        'Train, bus, road, or driving context — clear and uncluttered.',
+        'Train station, bus, or clear road context — uncluttered.',
     ),
 )
 
