@@ -503,3 +503,73 @@ class FeaturedImagePersistIntegrationTests(TestCase):
         )
         self.assertNotEqual(stored_after, 'placeholder')
         self.assertEqual(stored_after, public_id)
+
+    @patch('content_ai.workspace.services.upload_featured_image_asset')
+    def test_save_draft_syncs_workspace_fields_to_blog_post(self, mock_upload):
+        """
+        Save Draft must copy workspace editorial fields onto the Blog draft.
+
+        Tags/SEO are stored on the draft payload (Blog Post has no tag/SEO
+        columns); Post fields must match workspace exactly.
+        """
+        from blog.models import Post
+
+        public_id = 'peyvand/editorial/featured/sync-checklist'
+        secure_url = (
+            f'https://res.cloudinary.com/demo/image/upload/v1/{public_id}.png'
+        )
+        mock_upload.return_value = {
+            'public_id': public_id,
+            'secure_url': secure_url,
+        }
+
+        headline = 'نگاهی جامع به قانون اساسی'
+        lead = 'لید خبر هم‌زمان'
+        body = 'متن اصلی مقاله بدون تغییر.'
+        summary = 'خلاصه دقیق برای excerpt'
+        tags = ['قانون اساسی', 'سوئد', 'حقوق']
+        source_url = 'https://example.se/source-article'
+
+        service = WorkspaceService()
+        session = service.new_session()
+        session.source_url = source_url
+        session.sections = ArticleSections(
+            headline=headline,
+            lead=lead,
+            body=body,
+            summary=summary,
+            category='News',
+            tags=tags,
+        )
+        service.seo_placeholders(session)
+        service.prepare_featured_image_prompt(session)
+        service.generate_featured_image(session)
+        service.accept_featured_image(session, user=self.user)
+
+        saved = service.save_blog_draft(session, user=self.user)
+        post = Post.objects.get(pk=saved['post_id'])
+
+        self.assertEqual(post.title, headline)
+        self.assertNotRegex(post.title, r'\(\d{14}')
+        self.assertNotIn(session.session_id, post.title)
+        self.assertEqual(post.excerpt, summary)
+        self.assertIn(lead, post.content)
+        self.assertIn(body, post.content)
+        self.assertEqual(post.category.name, 'News')
+        self.assertEqual(post.external_url, source_url)
+        self.assertEqual(saved['tags'], tags)
+        self.assertEqual(saved['seo']['keywords'], tags)
+        self.assertEqual(saved['seo']['seo_title'], headline[:60])
+        self.assertEqual(saved['source_url'], source_url)
+
+        stored = (
+            getattr(post.featured_image, 'public_id', None)
+            or str(post.featured_image)
+        )
+        self.assertNotEqual(stored, 'placeholder')
+        self.assertEqual(stored, public_id)
+        self.assertTrue(saved['featured_image']['accepted'])
+        self.assertEqual(
+            session.metadata['blog_sync']['title'],
+            headline,
+        )

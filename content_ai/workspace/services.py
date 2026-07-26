@@ -1448,6 +1448,15 @@ class WorkspaceService:
                 ) from exc
 
         admin_url = reverse('admin:blog_post_change', args=[post.pk])
+        # Always refresh SEO snapshot from the current workspace sections so
+        # Save Draft stays synchronized (SEO is not a Blog Post column).
+        existing_seo = dict(session.metadata.get('seo') or {})
+        seo_state = {
+            **existing_seo,
+            'seo_title': (headline or post.title or '')[:60],
+            'meta_description': (post.excerpt or '')[:155],
+            'keywords': list(session.sections.tags),
+        }
         blog_draft = {
             'post_id': post.pk,
             'title': post.title,
@@ -1457,11 +1466,31 @@ class WorkspaceService:
             'category': post.category.name if post.category_id else '',
             'tags': list(session.sections.tags),
             'source_url': session.source_url or post.external_url or '',
+            'excerpt': post.excerpt or '',
+            'seo': {
+                'seo_title': seo_state.get('seo_title') or '',
+                'meta_description': seo_state.get('meta_description') or '',
+                'keywords': list(seo_state.get('keywords') or []),
+            },
             'featured_image': featured_meta,
         }
         session.metadata['linked_post_id'] = post.pk
         session.metadata['blog_draft'] = blog_draft
+        session.metadata['blog_sync'] = {
+            'title': post.title,
+            'excerpt': post.excerpt or '',
+            'category': blog_draft['category'],
+            'tags': list(session.sections.tags),
+            'external_url': post.external_url or '',
+            'seo': blog_draft['seo'],
+            'featured_image_public_id': featured_meta.get('cloudinary_public_id') or '',
+            'featured_image_accepted': bool(featured_meta.get('accepted')),
+        }
         session.metadata['featured_image_saved'] = featured_meta
+        session.metadata['seo'] = {
+            **seo_state,
+            **blog_draft['seo'],
+        }
         session.mark_pipeline('draft_generated', 'ready_for_publication')
         session.workflow_state = WorkflowState.READY_FOR_APPROVAL
         session.last_explanations = [
