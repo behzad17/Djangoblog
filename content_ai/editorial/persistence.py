@@ -30,8 +30,8 @@ class BlogDraftPersistenceService:
     """
 
     DRAFT_STATUS = 0
-    DEFAULT_CATEGORY_SLUG = 'news'
-    DEFAULT_CATEGORY_NAME = 'News'
+    DEFAULT_CATEGORY_SLUG = 'platform-updates'
+    DEFAULT_CATEGORY_NAME = 'تازه‌های روز'
 
     def create_blog_draft(
         self,
@@ -165,6 +165,8 @@ class BlogDraftPersistenceService:
         category = (
             Category.objects.filter(slug=self.DEFAULT_CATEGORY_SLUG).first()
             or Category.objects.filter(name__iexact=self.DEFAULT_CATEGORY_NAME).first()
+            or Category.objects.filter(slug='news').first()
+            or Category.objects.filter(name__iexact='News').first()
             or Category.objects.order_by('id').first()
         )
         if category is not None:

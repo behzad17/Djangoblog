@@ -15,6 +15,7 @@ from django.views.decorators.http import require_GET, require_POST
 logger = logging.getLogger(__name__)
 
 from content_ai.config.ai_engine import ENABLE_AI_EDITORIAL_WORKSPACE
+from content_ai.editorial.category_recommender import list_blog_categories_for_ui
 from content_ai.editorial.content_types import (
     list_content_types_for_ui,
     list_goals_for_ui,
@@ -91,6 +92,7 @@ def editorial_workspace(request):
             'content_types': list_content_types_for_ui(),
             'editorial_goals': list_goals_for_ui(),
             'writing_styles': list_styles_for_ui(),
+            'blog_categories': list_blog_categories_for_ui(),
             'workflow_states': [
                 {'id': s.value, 'label': s.value.replace('_', ' ').title()}
                 for s in (

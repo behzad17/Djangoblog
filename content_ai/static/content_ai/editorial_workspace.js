@@ -41,6 +41,7 @@
     document.getElementById('ai-ws-excerpt').value = s.excerpt || '';
     document.getElementById('ai-ws-category').value = s.category || '';
     document.getElementById('ai-ws-tags').value = (s.tags || []).join(', ');
+    renderCategoryRecommendation(session.category_recommendation || (session.metadata || {}).category_recommendation || {});
     document.getElementById('ai-ws-source-text').value = session.source_material || '';
     document.getElementById('ai-ws-source-url').value = session.source_url || '';
     document.getElementById('ai-ws-research').value = session.research_notes || '';
@@ -327,11 +328,55 @@
 
   var lastKnownSourceUrl = '';
 
+  function renderCategoryRecommendation(rec) {
+    var el = document.getElementById('ai-ws-category-rec-body');
+    if (!el) return;
+    if (!rec || !rec.selected) {
+      el.textContent = 'Import a source to recommend a Blog category from the full article.';
+      return;
+    }
+    var candidates = rec.candidates || [];
+    var list = candidates.map(function (item) {
+      return (
+        '<div class="ai-workspace__category-rec-item">' +
+        '<strong>' + item.name + '</strong> — ' +
+        (item.confidence_pct != null ? item.confidence_pct : Math.round((item.confidence || 0) * 100)) +
+        '%' +
+        '</div>'
+      );
+    }).join('');
+    var reasons = (rec.reasons || []).map(function (line) {
+      return '<div>' + line + '</div>';
+    }).join('');
+    el.innerHTML =
+      '<div class="ai-workspace__category-rec-message">' + (rec.message || '') + '</div>' +
+      '<div class="ai-workspace__category-rec-list">' + list + '</div>' +
+      '<div class="ai-workspace__category-rec-reasons">' + reasons + '</div>';
+    var categoryEl = document.getElementById('ai-ws-category');
+    if (categoryEl && rec.selected && rec.selected.name) {
+      var exists = Array.prototype.some.call(categoryEl.options, function (opt) {
+        return opt.value === rec.selected.name;
+      });
+      if (!exists) {
+        var opt = document.createElement('option');
+        opt.value = rec.selected.name;
+        opt.textContent = rec.selected.name;
+        categoryEl.appendChild(opt);
+      }
+      if (rec.auto_selected || !categoryEl.value) {
+        categoryEl.value = rec.selected.name;
+      }
+    }
+  }
+
   function clearArticleFields() {
-    ['ai-ws-headline', 'ai-ws-lead', 'ai-ws-body', 'ai-ws-summary', 'ai-ws-excerpt', 'ai-ws-category', 'ai-ws-tags'].forEach(function (id) {
+    ['ai-ws-headline', 'ai-ws-lead', 'ai-ws-body', 'ai-ws-summary', 'ai-ws-excerpt', 'ai-ws-tags'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.value = '';
     });
+    var categoryEl = document.getElementById('ai-ws-category');
+    if (categoryEl) categoryEl.value = '';
+    renderCategoryRecommendation(null);
   }
 
   function onSourceUrlEdited() {

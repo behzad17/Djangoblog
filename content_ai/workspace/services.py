@@ -14,6 +14,10 @@ from content_ai.editorial.content_types import (
     resolve_goal,
     resolve_style,
 )
+from content_ai.editorial.category_recommender import (
+    list_blog_categories_for_ui,
+    recommend_category,
+)
 from content_ai.editorial.service import EditorialAIService
 from content_ai.evaluation.evaluator import Evaluator
 from content_ai.evaluation.snapshot import create_snapshot
@@ -249,6 +253,43 @@ class WorkspaceService:
             *(style.reasons[:1]),
             'Editors can override type, goal, and style before generating.',
         ]
+        self._recommend_category(
+            session,
+            headline=title or session.sections.headline,
+            body=text or session.source_material,
+            publisher=publisher
+            or (session.metadata.get('source') or {}).get('publisher')
+            or '',
+        )
+
+    def _recommend_category(
+        self,
+        session: WorkspaceSession,
+        *,
+        headline: str = '',
+        body: str = '',
+        publisher: str = '',
+        apply_to_section: bool = True,
+    ) -> None:
+        source_meta = session.metadata.get('source') or {}
+        recommendation = recommend_category(
+            headline=headline or session.sections.headline,
+            source_title=source_meta.get('title') or '',
+            body=body or session.source_material or session.sections.body,
+            content_type=session.resolved_content_type(),
+            goal=session.resolved_goal(),
+            style=session.resolved_writing_style(),
+            publisher=publisher or source_meta.get('publisher') or '',
+        )
+        session.metadata['category_recommendation'] = recommendation.to_dict()
+        if apply_to_section and recommendation.selected:
+            # Always propose; auto-select fills empty or updates when confident.
+            if recommendation.auto_selected or not (session.sections.category or '').strip():
+                session.sections.category = recommendation.selected.name
+        explanations = list(session.last_explanations or [])
+        explanations.extend(recommendation.reasons[:3])
+        explanations.append(recommendation.message)
+        session.last_explanations = explanations
 
     def set_classification(
         self,
@@ -436,15 +477,37 @@ class WorkspaceService:
             ),
             excerpt=(draft.summary or lead)[:300],
         )
+        self._recommend_category(
+            session,
+            headline=session.sections.headline,
+            body='\n\n'.join(
+                part
+                for part in (
+                    session.source_material,
+                    session.sections.lead,
+                    session.sections.body,
+                )
+                if part
+            ),
+            publisher=(session.metadata.get('source') or {}).get('publisher')
+            or '',
+        )
         session.workflow_state = WorkflowState.DRAFTING
         session.mark_pipeline('draft_generated')
+        category_rec = session.metadata.get('category_recommendation') or {}
+        selected_cat = (category_rec.get('selected') or {}).get('name') or session.sections.category
         session.last_explanations = [
             f'Draft generated with template {session.template_id}.',
             f'Content type: {profile.label}; goal: {goal}; '
             f'style: {writing_style}.',
             f'Prompt version: {PROMPT_ENGINE_VERSION}.',
             f'{profile.lead_label} and body follow the content-type structure.',
+            f'Category recommendation: {selected_cat or "—"}.',
+            category_rec.get('message') or '',
             'Sections are independently editable; regenerate one section at a time.',
+        ]
+        session.last_explanations = [
+            item for item in session.last_explanations if item
         ]
         from dataclasses import asdict
 

@@ -200,6 +200,40 @@
   line-height: 1.45;
 }
 
+.ai-workspace__category-rec {
+  margin: 0.5rem 0 1rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--ai-ws-line, #d0d5dd);
+  border-radius: 4px;
+  background: #f8fafc;
+}
+
+.ai-workspace__category-rec h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.ai-workspace__category-rec-list {
+  margin: 0.4rem 0;
+}
+
+.ai-workspace__category-rec-item {
+  font-size: 0.85rem;
+  margin: 0.15rem 0;
+}
+
+.ai-workspace__category-rec-message {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ai-workspace__category-rec-reasons {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ai-ws-muted, #445);
+  line-height: 1.4;
+}
+
 @media (min-width: 900px) {
   .ai-workspace__intelligence-grid {
     grid-template-columns: 1fr 1fr 1fr;

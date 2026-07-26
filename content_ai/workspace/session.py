@@ -238,6 +238,9 @@ class WorkspaceSession:
             'publish_success': dict(
                 (self.metadata or {}).get('publish_success') or {}
             ),
+            'category_recommendation': dict(
+                (self.metadata or {}).get('category_recommendation') or {}
+            ),
             'updated_at': self.updated_at.isoformat(),
             'auto_publish_allowed': False,
         }

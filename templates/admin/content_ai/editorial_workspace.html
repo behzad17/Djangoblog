@@ -138,7 +138,20 @@
       <label>Body <textarea id="ai-ws-body" rows="16"></textarea></label>
       <label>Summary <textarea id="ai-ws-summary" rows="3"></textarea></label>
       <label>Excerpt <textarea id="ai-ws-excerpt" rows="2"></textarea></label>
-      <label>Category <input type="text" id="ai-ws-category"></label>
+      <label>Category
+        <select id="ai-ws-category">
+          <option value="">— Select category —</option>
+          {% for item in blog_categories %}
+            <option value="{{ item.name }}">{{ item.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <section class="ai-workspace__category-rec" id="ai-ws-category-rec" aria-label="Category recommendation">
+        <h3>Category recommendation</h3>
+        <div id="ai-ws-category-rec-body" class="ai-workspace__hint">
+          Import a source to recommend a Blog category from the full article.
+        </div>
+      </section>
       <label>Tags <input type="text" id="ai-ws-tags" placeholder="comma,separated"></label>
       <div class="ai-workspace__toolbar">
         <button type="button" class="button default" id="ai-ws-save-blog-draft">Save draft to Blog</button>
@@ -201,5 +214,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-url-ingest"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-category-rec"></script>
 {% endblock %}
