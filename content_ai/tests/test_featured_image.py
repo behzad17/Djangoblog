@@ -1,11 +1,19 @@
-"""Tests for Editorial Workspace featured-image generation."""
+"""Tests for Editorial Workspace featured-image pipeline v1."""
+
+from unittest.mock import MagicMock, patch
 
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from content_ai.editorial.image.planner import plan_featured_image
 from content_ai.editorial.image.prompt import build_featured_image_brief
-from content_ai.editorial.image.style import category_visual_hint, content_type_visual
+from content_ai.editorial.image.style import (
+    DEFAULT_IMAGE_STYLE,
+    category_visual_hint,
+    content_type_visual,
+    resolve_image_style,
+)
 from content_ai.providers.mock import MOCK_IMAGE_DATA_URL
 from content_ai.workspace.services import WorkspaceService
 from content_ai.workspace.session import ArticleSections
@@ -15,6 +23,14 @@ class FeaturedImagePromptTests(SimpleTestCase):
     def test_requires_article_content(self):
         with self.assertRaises(ValueError):
             build_featured_image_brief(headline='', lead='', body='')
+
+    def test_rejects_title_alone(self):
+        with self.assertRaises(ValueError):
+            build_featured_image_brief(
+                headline='فقط عنوان',
+                lead='',
+                body='',
+            )
 
     def test_builds_from_persian_article_not_url(self):
         brief = build_featured_image_brief(
@@ -26,17 +42,50 @@ class FeaturedImagePromptTests(SimpleTestCase):
             category='Tax',
             tags=['skatt', 'housing'],
             publisher='SVT',
+            image_style='editorial_photo',
         )
+        self.assertEqual(brief.image_style, 'editorial_photo')
+        self.assertIsNotNone(brief.plan)
         self.assertIn('16:9', brief.prompt)
-        self.assertIn('NO readable text', brief.prompt)
+        self.assertIn('never include', brief.prompt.lower())
+        self.assertIn('typography', brief.prompt.lower())
         self.assertIn('افزایش مالیات', brief.prompt)
         self.assertNotIn('http://', brief.prompt)
-        self.assertIn('tax documents', brief.prompt.lower())
+        self.assertIn('tax', brief.prompt.lower())
         self.assertTrue(brief.explanation)
+        # Planner is internal — plan exists but UI must not show it.
+        self.assertIn('main_subject', brief.plan_dict())
+
+    def test_illustration_style(self):
+        brief = build_featured_image_brief(
+            headline='راهنمای ثبت‌نام',
+            lead='مراحل ساده برای شروع.',
+            body='گام اول و دوم را دنبال کنید.',
+            content_type='guide',
+            image_style='editorial_illustration',
+        )
+        self.assertEqual(brief.image_style, 'editorial_illustration')
+        self.assertIn('illustration', brief.prompt.lower())
 
     def test_content_type_and_category_adaptation(self):
-        self.assertIn('instructional', content_type_visual('guide').lower())
+        self.assertIn('educational', content_type_visual('guide').lower())
         self.assertIn('police', category_visual_hint(category='Police').lower())
+        self.assertEqual(resolve_image_style(None), DEFAULT_IMAGE_STYLE)
+
+
+class ImagePlannerTests(SimpleTestCase):
+    def test_planner_runs_before_prompt(self):
+        plan = plan_featured_image(
+            headline='مسکن در استکهلم',
+            lead='اجاره افزایش یافته است.',
+            body='خانواده‌ها به دنبال آپارتمان هستند.',
+            content_type='news',
+            category='Housing',
+            tags=['bostad'],
+        )
+        self.assertTrue(plan.main_subject)
+        self.assertIn('Low', plan.visual_complexity)
+        self.assertNotIn('fantasy', plan.main_subject.lower())
 
 
 @override_settings(CONTENT_AI_PROVIDER='mock')
@@ -50,11 +99,20 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
             body='بدنه کامل مقاله درباره مسکن در سوئد.',
             category='Housing',
             tags=['bostad'],
+            summary='خلاصه',
         )
         original_body = session.sections.body
+        original_summary = session.sections.summary
+        original_category = session.sections.category
         state = service.prepare_featured_image_prompt(session)
         self.assertEqual(state['status'], 'prompt_ready')
+        self.assertEqual(state['image_style'], 'editorial_photo')
+        self.assertNotIn('planner', state)
         self.assertIn('Peyvand', state['prompt'])
+        self.assertTrue(state['original_prompt'])
+        # Internal planner stored on session but stripped from public state
+        self.assertIn('planner', session.metadata['featured_image'])
+
         edited = state['prompt'] + '\nExtra editor note: soft morning light.'
         generated = service.generate_featured_image(
             session,
@@ -64,6 +122,8 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
         self.assertEqual(generated['status'], 'generated')
         self.assertEqual(generated['image_url'], MOCK_IMAGE_DATA_URL)
         self.assertEqual(session.sections.body, original_body)
+        self.assertEqual(session.sections.summary, original_summary)
+        self.assertEqual(session.sections.category, original_category)
 
         regenerated = service.generate_featured_image(
             session,
@@ -75,7 +135,7 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
         self.assertEqual(session.sections.body, original_body)
         self.assertTrue(session.pipeline.get('image_ready'))
 
-    def test_use_previous_prompt(self):
+    def test_restore_original_prompt(self):
         service = WorkspaceService()
         session = service.new_session()
         session.sections = ArticleSections(
@@ -84,16 +144,71 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
             body='متن مصاحبه',
         )
         service.prepare_featured_image_prompt(session)
-        first = session.metadata['featured_image']['prompt']
-        service.generate_featured_image(session, prompt=first, regenerate=False)
-        service.generate_featured_image(
-            session,
-            prompt=first + ' v2',
-            regenerate=True,
+        original = session.metadata['featured_image']['original_prompt']
+        session.metadata['featured_image']['prompt'] = original + ' edited'
+        restored = service.restore_original_image_prompt(session)
+        self.assertEqual(restored['prompt'], original)
+
+    def test_change_style_rebuilds_prompt(self):
+        service = WorkspaceService()
+        session = service.new_session()
+        session.sections = ArticleSections(
+            headline='فناوری',
+            lead='ابزارهای جدید',
+            body='توضیح کامل درباره فناوری.',
+            category='Technology',
         )
-        restored = service.use_previous_image_prompt(session)
-        self.assertEqual(restored['prompt'], first)
-        self.assertEqual(restored['previous_prompt'], first + ' v2')
+        service.prepare_featured_image_prompt(session)
+        photo_prompt = session.metadata['featured_image']['prompt']
+        updated = service.set_featured_image_style(
+            session,
+            image_style='editorial_illustration',
+        )
+        self.assertEqual(updated['image_style'], 'editorial_illustration')
+        self.assertNotEqual(updated['prompt'], photo_prompt)
+        self.assertIn('illustration', updated['prompt'].lower())
+
+    @patch('content_ai.workspace.services.upload_featured_image_asset')
+    @patch('content_ai.workspace.services.attach_featured_image_to_post')
+    def test_accept_attaches_to_draft(self, mock_attach, mock_upload):
+        mock_upload.return_value = {
+            'public_id': 'peyvand/editorial/featured/test',
+            'secure_url': 'https://res.cloudinary.com/demo/image/upload/test.png',
+        }
+        mock_attach.return_value = MagicMock(pk=42)
+
+        service = WorkspaceService()
+        session = service.new_session()
+        session.sections = ArticleSections(
+            headline='عنوان',
+            lead='لید',
+            body='بدنه مقاله',
+            category='News',
+        )
+        service.prepare_featured_image_prompt(session)
+        service.generate_featured_image(session)
+
+        user = MagicMock()
+        user.is_authenticated = True
+        user.username = 'editor'
+        user.pk = 1
+
+        with patch.object(
+            service,
+            'save_blog_draft',
+            return_value={'post_id': 42, 'title': 'عنوان', 'created': True},
+        ), patch('blog.models.Post.objects.get') as mock_get:
+            mock_get.return_value = MagicMock(pk=42)
+            result = service.accept_featured_image(session, user=user)
+
+        self.assertTrue(result['accepted'])
+        self.assertEqual(result['status'], 'accepted')
+        self.assertEqual(
+            result['cloudinary_public_id'],
+            'peyvand/editorial/featured/test',
+        )
+        mock_upload.assert_called_once()
+        mock_attach.assert_called_once()
 
 
 @override_settings(
@@ -111,7 +226,6 @@ class FeaturedImageApiTests(TestCase):
         self.client.force_login(self.user)
 
     def test_prepare_image_prompt_api(self):
-        # Seed session via reset + update_sections
         self.client.post(reverse('content_ai:workspace_api', kwargs={'action': 'reset'}))
         resp = self.client.post(
             reverse('content_ai:workspace_api', kwargs={'action': 'update_sections'}),
@@ -124,13 +238,22 @@ class FeaturedImageApiTests(TestCase):
                 'content_ai:workspace_api',
                 kwargs={'action': 'prepare_image_prompt'},
             ),
-            data='{"sections":{"headline":"عنوان","lead":"لید","body":"بدنه مقاله"}}',
+            data=(
+                '{"sections":{"headline":"عنوان","lead":"لید","body":"بدنه مقاله"},'
+                '"image_style":"editorial_photo"}'
+            ),
             content_type='application/json',
         )
         self.assertEqual(resp.status_code, 200)
         payload = resp.json()
         self.assertTrue(payload['ok'])
         self.assertIn('prompt', payload['featured_image'])
+        self.assertNotIn('planner', payload['featured_image'])
+        self.assertNotIn(
+            'planner',
+            (payload['session'].get('metadata') or {})
+            .get('featured_image', {}),
+        )
 
     def test_generate_image_api_with_mock(self):
         self.client.post(reverse('content_ai:workspace_api', kwargs={'action': 'reset'}))
@@ -154,7 +277,6 @@ class FeaturedImageApiTests(TestCase):
             payload['featured_image']['image_url'],
             MOCK_IMAGE_DATA_URL,
         )
-        # Article body unchanged in session payload
         self.assertEqual(
             payload['session']['sections']['body'],
             'بدنه',

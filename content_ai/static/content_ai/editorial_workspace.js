@@ -134,10 +134,13 @@
     var statusEl = document.getElementById('ai-ws-image-status');
     var wrap = document.getElementById('ai-ws-image-preview-wrap');
     var img = document.getElementById('ai-ws-image-preview');
+    var styleEl = document.getElementById('ai-ws-image-style');
     if (!promptEl) return;
-    // Do not clobber an in-progress editor edit unless session has content.
     if (state && (state.prompt || state.status)) {
       promptEl.value = state.prompt || '';
+    }
+    if (styleEl && state && state.image_style) {
+      styleEl.value = state.image_style;
     }
     if (explainEl) {
       explainEl.textContent = (state && state.explanation) || '';
@@ -145,15 +148,19 @@
     if (statusEl) {
       var bits = [];
       if (state && state.status) bits.push('Status: ' + state.status);
+      if (state && state.image_style_label) bits.push(state.image_style_label);
+      else if (state && state.image_style) bits.push(state.image_style);
       if (state && state.provider) bits.push('Provider: ' + state.provider);
       if (state && state.aspect_ratio) bits.push(state.aspect_ratio);
+      if (state && state.accepted) bits.push('Accepted & attached to draft');
+      if (state && state.cloudinary_public_id) bits.push(state.cloudinary_public_id);
       if (state && state.error) bits.push('Error: ' + state.error);
-      if (state && state.previous_prompt) bits.push('Previous prompt available');
+      if (state && state.original_prompt) bits.push('Original prompt available');
       statusEl.textContent = bits.join(' · ');
     }
     if (wrap && img) {
       if (state && state.image_url) {
-        img.src = state.image_url;
+        img.src = state.attached_url || state.image_url;
         wrap.hidden = false;
       } else {
         img.removeAttribute('src');
@@ -163,9 +170,11 @@
   }
 
   function featuredImagePayload() {
+    var styleEl = document.getElementById('ai-ws-image-style');
     return {
       sections: readSections(),
       prompt: document.getElementById('ai-ws-image-prompt').value,
+      image_style: styleEl ? styleEl.value : 'editorial_photo',
     };
   }
 
@@ -323,6 +332,9 @@
       return res.json().then(function (data) {
         if (!res.ok || data.ok === false) {
           var msg = (data.error && data.error.message) || data.error || 'Request failed';
+          if (data.session) {
+            applySession(data.session);
+          }
           throw new Error(typeof msg === 'string' ? msg : JSON.stringify(msg));
         }
         return data;
@@ -611,6 +623,16 @@
     generateImageBtn.addEventListener('click', function () {
       post('generate_image', featuredImagePayload()).then(function (data) {
         if (data.ok) applySession(data.session);
+        else if (data.session) applySession(data.session);
+      });
+    });
+  }
+  var generateImageAgainBtn = document.getElementById('ai-ws-generate-image-again');
+  if (generateImageAgainBtn) {
+    generateImageAgainBtn.addEventListener('click', function () {
+      post('generate_image', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+        else if (data.session) applySession(data.session);
       });
     });
   }
@@ -619,13 +641,55 @@
     regenerateImageBtn.addEventListener('click', function () {
       post('regenerate_image', featuredImagePayload()).then(function (data) {
         if (data.ok) applySession(data.session);
+        else if (data.session) applySession(data.session);
       });
     });
   }
-  var previousImagePromptBtn = document.getElementById('ai-ws-use-previous-image-prompt');
-  if (previousImagePromptBtn) {
-    previousImagePromptBtn.addEventListener('click', function () {
-      post('use_previous_image_prompt', featuredImagePayload()).then(function (data) {
+  var restoreOriginalPromptBtn = document.getElementById('ai-ws-restore-original-image-prompt');
+  if (restoreOriginalPromptBtn) {
+    restoreOriginalPromptBtn.addEventListener('click', function () {
+      post('restore_original_image_prompt', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+      });
+    });
+  }
+  var acceptImageBtn = document.getElementById('ai-ws-accept-image');
+  if (acceptImageBtn) {
+    acceptImageBtn.addEventListener('click', function () {
+      post('accept_image', featuredImagePayload()).then(function (data) {
+        if (data.ok) applySession(data.session);
+      });
+    });
+  }
+  var editImagePromptBtn = document.getElementById('ai-ws-edit-image-prompt');
+  if (editImagePromptBtn) {
+    editImagePromptBtn.addEventListener('click', function () {
+      var promptEl = document.getElementById('ai-ws-image-prompt');
+      if (promptEl) {
+        promptEl.focus();
+        promptEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+  var changeImageStyleBtn = document.getElementById('ai-ws-change-image-style');
+  if (changeImageStyleBtn) {
+    changeImageStyleBtn.addEventListener('click', function () {
+      var styleEl = document.getElementById('ai-ws-image-style');
+      if (styleEl) {
+        styleEl.focus();
+        styleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+  var imageStyleSelect = document.getElementById('ai-ws-image-style');
+  if (imageStyleSelect) {
+    imageStyleSelect.addEventListener('change', function () {
+      post('set_image_style', {
+        sections: readSections(),
+        image_style: imageStyleSelect.value,
+        rebuild_prompt: true,
+        prompt: document.getElementById('ai-ws-image-prompt').value,
+      }).then(function (data) {
         if (data.ok) applySession(data.session);
       });
     });

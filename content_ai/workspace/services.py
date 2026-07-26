@@ -24,6 +24,15 @@ from content_ai.editorial.category_recommender import (
 )
 from content_ai.editorial.service import EditorialAIService
 from content_ai.editorial.image import FeaturedImageService
+from content_ai.editorial.image.style import (
+    DEFAULT_IMAGE_STYLE,
+    IMAGE_STYLE_LABELS,
+    resolve_image_style,
+)
+from content_ai.editorial.image.attach import (
+    attach_featured_image_to_post,
+    upload_featured_image_asset,
+)
 from content_ai.evaluation.evaluator import Evaluator
 from content_ai.evaluation.snapshot import create_snapshot
 from content_ai.fact_check import FactChecker
@@ -744,15 +753,25 @@ class WorkspaceService:
     def _featured_image_state(self, session: WorkspaceSession) -> dict:
         return dict(session.metadata.get('featured_image') or {})
 
+    def _public_featured_image_state(self, state: dict) -> dict:
+        """Strip internal planner fields before returning to editors."""
+        public = dict(state or {})
+        public.pop('planner', None)
+        meta = dict(public.get('metadata') or {})
+        meta.pop('planner', None)
+        public['metadata'] = meta
+        return public
+
     def prepare_featured_image_prompt(
         self,
         session: WorkspaceSession,
+        *,
+        image_style: str | None = None,
     ) -> dict:
         """
-        Build an editable image prompt from the generated Persian article.
+        Plan (internal) then build an editable image prompt.
 
-        Never builds from URL alone — requires headline/lead/body content.
-        Does not call the image provider.
+        Never builds from URL or title alone. Does not call the image provider.
         """
         sections = session.sections
         if not (
@@ -763,6 +782,17 @@ class WorkspaceService:
             raise ValueError(
                 'Generate an article first, then prepare a featured image prompt.'
             )
+        if not (sections.lead or '').strip() and not (sections.body or '').strip():
+            raise ValueError(
+                'Need a lead or body before preparing an image prompt '
+                '(title alone is not enough).'
+            )
+        previous = self._featured_image_state(session)
+        style = resolve_image_style(
+            image_style
+            if image_style is not None
+            else previous.get('image_style')
+        )
         publisher = (session.metadata.get('source') or {}).get('publisher') or ''
         brief = self.featured_image.prepare_brief(
             headline=sections.headline,
@@ -773,10 +803,11 @@ class WorkspaceService:
             category=sections.category,
             tags=list(sections.tags or []),
             publisher=publisher,
+            image_style=style,
         )
-        previous = self._featured_image_state(session)
         state = {
             'prompt': brief.prompt,
+            'original_prompt': brief.prompt,
             'previous_prompt': previous.get('previous_prompt')
             or previous.get('prompt')
             or '',
@@ -785,9 +816,18 @@ class WorkspaceService:
             'revised_prompt': previous.get('revised_prompt') or '',
             'provider': previous.get('provider') or '',
             'aspect_ratio': brief.aspect_ratio,
+            'image_style': style,
+            'image_style_label': IMAGE_STYLE_LABELS.get(style, style),
             'status': 'prompt_ready',
+            'accepted': False,
+            'cloudinary_public_id': previous.get('cloudinary_public_id') or '',
             'error': '',
-            'metadata': dict(previous.get('metadata') or {}),
+            # Internal only — stripped from API responses.
+            'planner': brief.plan_dict(),
+            'metadata': {
+                **dict(previous.get('metadata') or {}),
+                'planner': brief.plan_dict(),
+            },
         }
         session.metadata['featured_image'] = state
         seo = dict(session.metadata.get('seo') or {})
@@ -795,33 +835,63 @@ class WorkspaceService:
             seo['image_prompt'] = brief.prompt
             session.metadata['seo'] = seo
         session.last_explanations = [
-            'Featured image prompt prepared from the Persian article.',
+            'Featured image planned and prompt prepared from the Persian article.',
+            f'Style: {IMAGE_STYLE_LABELS.get(style, style)} (default Editorial Photo).',
             'Edit the prompt before generating. Regeneration does not '
-            'rewrite the article.',
+            'rewrite the article, SEO, tags, category, or summary.',
             brief.explanation,
         ]
         session.touch()
-        return state
+        return self._public_featured_image_state(state)
+
+    def set_featured_image_style(
+        self,
+        session: WorkspaceSession,
+        *,
+        image_style: str,
+        rebuild_prompt: bool = True,
+    ) -> dict:
+        """Change Editorial Photo / Illustration and optionally rebuild prompt."""
+        style = resolve_image_style(image_style)
+        current = self._featured_image_state(session)
+        current['image_style'] = style
+        current['image_style_label'] = IMAGE_STYLE_LABELS.get(style, style)
+        session.metadata['featured_image'] = current
+        if rebuild_prompt and (
+            (session.sections.lead or '').strip()
+            or (session.sections.body or '').strip()
+        ):
+            return self.prepare_featured_image_prompt(
+                session,
+                image_style=style,
+            )
+        session.touch()
+        return self._public_featured_image_state(current)
 
     def generate_featured_image(
         self,
         session: WorkspaceSession,
         *,
         prompt: str | None = None,
+        image_style: str | None = None,
         provider_name: str | None = None,
         regenerate: bool = False,
     ) -> dict:
         """
         Generate a featured image from the (editable) prompt.
 
-        Regeneration updates the image only — never regenerates the article.
+        Regeneration updates the image only — never regenerates the article,
+        SEO, tags, category, or summary. On failure, keep article + prompt.
         """
         current = self._featured_image_state(session)
+        style = resolve_image_style(
+            image_style if image_style is not None else current.get('image_style')
+        )
         cleaned = (
             prompt if prompt is not None else current.get('prompt') or ''
         ).strip()
         if not cleaned:
-            self.prepare_featured_image_prompt(session)
+            self.prepare_featured_image_prompt(session, image_style=style)
             current = self._featured_image_state(session)
             cleaned = (current.get('prompt') or '').strip()
         if not cleaned:
@@ -830,20 +900,52 @@ class WorkspaceService:
         previous_prompt = (current.get('previous_prompt') or '').strip()
         if regenerate:
             prior_current = (current.get('prompt') or '').strip()
-            if cleaned != prior_current and prior_current:
-                previous_prompt = prior_current
-            elif prior_current:
+            if prior_current:
                 previous_prompt = prior_current
 
-        outcome = self.featured_image.generate(
-            cleaned,
-            previous_prompt=previous_prompt,
-            explanation=current.get('explanation') or '',
-            provider_name=provider_name,
-        )
+        try:
+            outcome = self.featured_image.generate(
+                cleaned,
+                previous_prompt=previous_prompt,
+                original_prompt=current.get('original_prompt') or cleaned,
+                explanation=current.get('explanation') or '',
+                image_style=style,
+                provider_name=provider_name,
+            )
+        except Exception as exc:  # noqa: BLE001
+            # Keep article + prompt; surface error for retry.
+            failed = dict(current)
+            failed['prompt'] = cleaned
+            failed['image_style'] = style
+            failed['image_style_label'] = IMAGE_STYLE_LABELS.get(style, style)
+            failed['status'] = 'error'
+            failed['error'] = str(exc)
+            failed['accepted'] = False
+            session.metadata['featured_image'] = failed
+            session.last_explanations = [
+                'Featured image generation failed — article and prompt kept.',
+                str(exc),
+                'Edit the prompt or retry Generate.',
+            ]
+            session.touch()
+            raise
+
         state = outcome.to_dict()
+        state['planner'] = current.get('planner') or {}
+        state['original_prompt'] = (
+            current.get('original_prompt') or state.get('original_prompt') or cleaned
+        )
+        state['image_style'] = style
+        state['image_style_label'] = IMAGE_STYLE_LABELS.get(style, style)
+        state['accepted'] = False
+        state['cloudinary_public_id'] = ''
+        state['error'] = ''
         if regenerate and not state.get('previous_prompt'):
             state['previous_prompt'] = previous_prompt
+        meta = dict(state.get('metadata') or {})
+        if current.get('planner'):
+            meta['planner'] = current.get('planner')
+        state['metadata'] = meta
         session.metadata['featured_image'] = state
         seo = dict(session.metadata.get('seo') or {})
         seo['image_prompt'] = cleaned
@@ -851,18 +953,38 @@ class WorkspaceService:
         session.mark_pipeline('image_ready')
         session.last_explanations = [
             (
-                'Featured image regenerated (article unchanged).'
+                'Featured image regenerated (article, SEO, tags, category, '
+                'summary unchanged).'
                 if regenerate
-                else 'Featured image generated.'
+                else 'Featured image generated — review, then Accept to attach.'
             ),
             state.get('explanation') or '',
+            f'Style: {IMAGE_STYLE_LABELS.get(style, style)}.',
             f'Provider: {state.get("provider") or "—"}.',
         ]
         session.last_explanations = [
             item for item in session.last_explanations if item
         ]
         session.touch()
-        return state
+        return self._public_featured_image_state(state)
+
+    def restore_original_image_prompt(self, session: WorkspaceSession) -> dict:
+        """Restore the originally generated prompt (before editor edits)."""
+        current = self._featured_image_state(session)
+        original = (current.get('original_prompt') or '').strip()
+        if not original:
+            raise ValueError('No original image prompt is available.')
+        state = dict(current)
+        state['previous_prompt'] = (current.get('prompt') or '').strip()
+        state['prompt'] = original
+        state['status'] = 'prompt_ready'
+        state['error'] = ''
+        session.metadata['featured_image'] = state
+        session.last_explanations = [
+            'Restored the original featured image prompt. Article unchanged.',
+        ]
+        session.touch()
+        return self._public_featured_image_state(state)
 
     def use_previous_image_prompt(self, session: WorkspaceSession) -> dict:
         """Restore the previous featured-image prompt into the editable field."""
@@ -880,7 +1002,57 @@ class WorkspaceService:
             'Restored the previous featured image prompt. Article unchanged.',
         ]
         session.touch()
-        return state
+        return self._public_featured_image_state(state)
+
+    def accept_featured_image(
+        self,
+        session: WorkspaceSession,
+        *,
+        user,
+    ) -> dict:
+        """
+        Accept the generated image: upload to Cloudinary and attach to the
+        Blog draft as featured_image. Creates/updates the draft if needed.
+        """
+        current = self._featured_image_state(session)
+        image_url = (current.get('image_url') or '').strip()
+        if not image_url:
+            raise ValueError('Generate an image before accepting it.')
+        if current.get('status') == 'error':
+            raise ValueError('Cannot accept a failed image — regenerate first.')
+
+        blog_draft = self.save_blog_draft(session, user=user)
+        post_id = blog_draft.get('post_id')
+        if not post_id:
+            raise ValueError('Could not link a Blog draft for the featured image.')
+
+        from blog.models import Post
+
+        post = Post.objects.get(pk=post_id)
+        upload = upload_featured_image_asset(
+            image_url,
+            session_id=session.session_id or str(post_id),
+        )
+        attach_featured_image_to_post(post, public_id=upload['public_id'])
+
+        state = dict(current)
+        state['accepted'] = True
+        state['status'] = 'accepted'
+        state['cloudinary_public_id'] = upload['public_id']
+        state['attached_url'] = upload.get('secure_url') or image_url
+        state['error'] = ''
+        state['attached_post_id'] = post.pk
+        session.metadata['featured_image'] = state
+        session.mark_pipeline('image_ready')
+        session.last_explanations = [
+            'Featured image accepted and attached to the Blog draft.',
+            f'Cloudinary: {upload["public_id"]}.',
+            'Article, SEO, tags, category and summary were not regenerated.',
+        ]
+        session.touch()
+        public = self._public_featured_image_state(state)
+        public['blog_draft'] = blog_draft
+        return public
 
     def import_existing_article(
         self,

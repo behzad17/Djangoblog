@@ -1,15 +1,18 @@
-"""Build featured-image prompts from Editorial Workspace article fields."""
+"""Build featured-image prompts from article understanding + image plan."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
+from content_ai.editorial.image.planner import ImagePlan, plan_featured_image
 from content_ai.editorial.image.style import (
+    IMAGE_STYLE_GUIDANCE,
+    IMAGE_STYLE_LABELS,
     PEYVAND_STYLE_BLOCK,
     PEOPLE_RULES,
     SWEDEN_RULES,
-    category_visual_hint,
-    content_type_visual,
+    resolve_image_style,
 )
 
 
@@ -20,6 +23,11 @@ class FeaturedImageBrief:
     prompt: str
     explanation: str
     aspect_ratio: str = '16:9'
+    image_style: str = 'editorial_photo'
+    plan: ImagePlan | None = None
+
+    def plan_dict(self) -> dict[str, Any]:
+        return self.plan.to_dict() if self.plan else {}
 
 
 def _clip(text: str, limit: int) -> str:
@@ -39,18 +47,26 @@ def build_featured_image_brief(
     category: str = '',
     tags: list[str] | None = None,
     publisher: str = '',
+    image_style: str | None = None,
+    plan: ImagePlan | None = None,
 ) -> FeaturedImageBrief:
     """
     Build an English image-generation prompt from Persian article fields.
 
+    Always plans the image first (unless an ImagePlan is supplied).
     Never uses a source URL alone — requires editorial article content.
+    Never uses title alone.
     """
     headline = (headline or '').strip()
     lead = (lead or '').strip()
     body = (body or '').strip()
-    if not (headline or lead or body):
+    if not headline and not lead and not body:
         raise ValueError(
             'Cannot build an image prompt without headline, lead, or article body.'
+        )
+    if not lead and not body:
+        raise ValueError(
+            'Cannot build an image prompt from title alone — need lead or body.'
         )
 
     tags = [str(t).strip() for t in (tags or []) if str(t).strip()]
@@ -58,13 +74,21 @@ def build_featured_image_brief(
     goal = (goal or '').strip()
     category = (category or '').strip()
     publisher = (publisher or '').strip()
+    style = resolve_image_style(image_style)
+    style_label = IMAGE_STYLE_LABELS.get(style, style)
+    style_guidance = IMAGE_STYLE_GUIDANCE.get(style, '')
 
-    type_visual = content_type_visual(content_type)
-    cat_hint = category_visual_hint(
-        category=category,
-        tags=tags,
-        text_blob=f'{headline}\n{lead}\n{body}',
-    )
+    if plan is None:
+        plan = plan_featured_image(
+            headline=headline,
+            lead=lead,
+            body=body,
+            content_type=content_type,
+            goal=goal,
+            category=category,
+            tags=tags,
+            image_style=style,
+        )
 
     subject_lines = [
         f'Article headline (Persian): {_clip(headline, 220)}' if headline else '',
@@ -75,8 +99,8 @@ def build_featured_image_brief(
         f'Category: {category}.' if category else '',
         f'Tags: {", ".join(tags)}.' if tags else '',
         f'Publisher context: {publisher}.' if publisher else '',
-        f'Visual approach for content type: {type_visual}',
-        f'Category visual cue: {cat_hint}',
+        f'Selected image style: {style_label}.',
+        style_guidance,
     ]
     subject_block = '\n'.join(line for line in subject_lines if line)
 
@@ -88,24 +112,27 @@ def build_featured_image_brief(
         f'{PEYVAND_STYLE_BLOCK}\n\n'
         f'{PEOPLE_RULES}\n\n'
         f'{SWEDEN_RULES}\n\n'
+        f'{style_guidance}\n\n'
+        'Internal visual plan (follow closely; do not render as text):\n'
+        f'{plan.to_prompt_block()}\n\n'
         'Article context (use for meaning only; do not render any of this as '
         'text in the image):\n'
         f'{subject_block}\n\n'
         'Final instruction: produce one clean 16:9 editorial image that a '
-        'reader immediately understands from a thumbnail.'
+        'reader understands within two seconds from a thumbnail.'
     )
 
     explanation = (
-        f'This image concept centres on one clear subject matching '
-        f'{category or content_type or "the article topic"}, using Peyvand\'s '
-        f'minimal editorial style so the story remains readable as a hero '
-        f'image and as a thumbnail. '
-        f'Content-type cue: {type_visual} '
-        f'Category cue: {cat_hint}'
+        f'{style_label} concept focused on “{plan.main_subject}” in '
+        f'{plan.environment}, matching '
+        f'{category or content_type or "the article topic"}. '
+        f'Peyvand minimal editorial identity — clear as a hero and thumbnail.'
     )
 
     return FeaturedImageBrief(
         prompt=prompt.strip(),
         explanation=explanation.strip(),
         aspect_ratio='16:9',
+        image_style=style,
+        plan=plan,
     )

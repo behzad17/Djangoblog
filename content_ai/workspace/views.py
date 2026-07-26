@@ -17,6 +17,8 @@ logger = logging.getLogger(__name__)
 from content_ai.config.ai_engine import ENABLE_AI_EDITORIAL_WORKSPACE
 from content_ai.editorial.article_length import list_article_lengths_for_ui
 from content_ai.editorial.category_recommender import list_blog_categories_for_ui
+from content_ai.editorial.image.style import list_image_styles_for_ui
+from content_ai.editorial.image.attach import FeaturedImageAttachError
 from content_ai.editorial.content_types import (
     list_content_types_for_ui,
     list_goals_for_ui,
@@ -41,6 +43,14 @@ from content_ai.workspace.store import load_session, save_session
 def _session_payload(service: WorkspaceService, session) -> dict:
     payload = session.to_dict()
     payload['actions'] = service.assistant_actions(session)
+    # Never expose internal image planner output to editors.
+    featured = dict((payload.get('metadata') or {}).get('featured_image') or {})
+    if featured:
+        featured.pop('planner', None)
+        meta = dict(featured.get('metadata') or {})
+        meta.pop('planner', None)
+        featured['metadata'] = meta
+        payload.setdefault('metadata', {})['featured_image'] = featured
     return payload
 
 
@@ -95,6 +105,7 @@ def editorial_workspace(request):
             'editorial_goals': list_goals_for_ui(),
             'writing_styles': list_styles_for_ui(),
             'article_lengths': list_article_lengths_for_ui(),
+            'image_styles': list_image_styles_for_ui(),
             'blog_categories': list_blog_categories_for_ui(),
             'workflow_states': [
                 {'id': s.value, 'label': s.value.replace('_', ' ').title()}
@@ -281,7 +292,26 @@ def workspace_api(request, action: str):
 
         if action in ('prepare_image_prompt', 'prepare_featured_image'):
             _apply_sections_payload(session, payload)
-            report = service.prepare_featured_image_prompt(session)
+            report = service.prepare_featured_image_prompt(
+                session,
+                image_style=payload.get('image_style'),
+            )
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('set_image_style', 'change_image_style'):
+            _apply_sections_payload(session, payload)
+            report = service.set_featured_image_style(
+                session,
+                image_style=payload.get('image_style') or 'editorial_photo',
+                rebuild_prompt=bool(payload.get('rebuild_prompt', True)),
+            )
             save_session(request, session)
             return JsonResponse(
                 {
@@ -293,12 +323,31 @@ def workspace_api(request, action: str):
 
         if action in ('generate_image', 'generate_featured_image'):
             _apply_sections_payload(session, payload)
-            report = service.generate_featured_image(
-                session,
-                prompt=payload.get('prompt'),
-                provider_name=payload.get('provider') or None,
-                regenerate=False,
-            )
+            try:
+                report = service.generate_featured_image(
+                    session,
+                    prompt=payload.get('prompt'),
+                    image_style=payload.get('image_style'),
+                    provider_name=payload.get('provider') or None,
+                    regenerate=False,
+                )
+            except (
+                ProviderNotFound,
+                ProviderConfigurationError,
+                GenerationError,
+                CapabilityError,
+            ) as exc:
+                save_session(request, session)
+                return JsonResponse(
+                    {
+                        **serialize_error('generation_failed', str(exc)),
+                        'session': _session_payload(service, session),
+                        'featured_image': service._public_featured_image_state(
+                            service._featured_image_state(session)
+                        ),
+                    },
+                    status=502,
+                )
             save_session(request, session)
             return JsonResponse(
                 {
@@ -310,12 +359,43 @@ def workspace_api(request, action: str):
 
         if action in ('regenerate_image', 'regenerate_featured_image'):
             _apply_sections_payload(session, payload)
-            report = service.generate_featured_image(
-                session,
-                prompt=payload.get('prompt'),
-                provider_name=payload.get('provider') or None,
-                regenerate=True,
+            try:
+                report = service.generate_featured_image(
+                    session,
+                    prompt=payload.get('prompt'),
+                    image_style=payload.get('image_style'),
+                    provider_name=payload.get('provider') or None,
+                    regenerate=True,
+                )
+            except (
+                ProviderNotFound,
+                ProviderConfigurationError,
+                GenerationError,
+                CapabilityError,
+            ) as exc:
+                save_session(request, session)
+                return JsonResponse(
+                    {
+                        **serialize_error('generation_failed', str(exc)),
+                        'session': _session_payload(service, session),
+                        'featured_image': service._public_featured_image_state(
+                            service._featured_image_state(session)
+                        ),
+                    },
+                    status=502,
+                )
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
             )
+
+        if action in ('restore_original_image_prompt',):
+            _apply_sections_payload(session, payload)
+            report = service.restore_original_image_prompt(session)
             save_session(request, session)
             return JsonResponse(
                 {
@@ -333,6 +413,29 @@ def workspace_api(request, action: str):
                 {
                     'ok': True,
                     'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('accept_image', 'accept_featured_image'):
+            _apply_sections_payload(session, payload)
+            try:
+                report = service.accept_featured_image(
+                    session,
+                    user=request.user,
+                )
+            except FeaturedImageAttachError as exc:
+                save_session(request, session)
+                return JsonResponse(
+                    serialize_error('attach_failed', str(exc)),
+                    status=502,
+                )
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'blog_draft': report.get('blog_draft'),
                     'session': _session_payload(service, session),
                 }
             )

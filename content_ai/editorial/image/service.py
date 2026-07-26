@@ -9,6 +9,10 @@ from content_ai.editorial.image.prompt import (
     FeaturedImageBrief,
     build_featured_image_brief,
 )
+from content_ai.editorial.image.style import (
+    DEFAULT_IMAGE_STYLE,
+    resolve_image_style,
+)
 from content_ai.providers.exceptions import (
     CapabilityError,
     GenerationError,
@@ -21,11 +25,13 @@ from content_ai.providers.registry import get_provider
 class ImageGenerationOutcome:
     prompt: str
     previous_prompt: str
+    original_prompt: str
     explanation: str
     image_url: str
     revised_prompt: str
     provider: str
     aspect_ratio: str
+    image_style: str
     status: str
     error: str = ''
     metadata: dict[str, Any] | None = None
@@ -38,7 +44,7 @@ class ImageGenerationOutcome:
 
 class FeaturedImageService:
     """
-    Prepare editable image prompts and generate featured images.
+    Plan → prompt → generate featured images.
 
     Regeneration only re-runs image generation — never regenerates the article.
     """
@@ -56,6 +62,7 @@ class FeaturedImageService:
         category: str = '',
         tags: list[str] | None = None,
         publisher: str = '',
+        image_style: str | None = None,
     ) -> FeaturedImageBrief:
         return build_featured_image_brief(
             headline=headline,
@@ -66,6 +73,7 @@ class FeaturedImageService:
             category=category,
             tags=tags,
             publisher=publisher,
+            image_style=image_style,
         )
 
     def generate(
@@ -73,20 +81,17 @@ class FeaturedImageService:
         prompt: str,
         *,
         previous_prompt: str = '',
+        original_prompt: str = '',
         explanation: str = '',
+        image_style: str | None = None,
         provider_name: str | None = None,
-        keep_previous: bool = True,
     ) -> ImageGenerationOutcome:
         cleaned = (prompt or '').strip()
         if not cleaned:
             raise ValueError('Image prompt is required before generation.')
 
         prior = (previous_prompt or '').strip()
-        if keep_previous and cleaned and cleaned != prior:
-            # On regenerate, stash the prompt that was used before this call's
-            # current edit only when caller already passed previous; Workspace
-            # owns history. Here we keep provided previous_prompt as-is.
-            pass
+        style = resolve_image_style(image_style)
 
         try:
             provider = get_provider(provider_name)
@@ -118,11 +123,13 @@ class FeaturedImageService:
         return ImageGenerationOutcome(
             prompt=cleaned,
             previous_prompt=prior,
+            original_prompt=(original_prompt or '').strip(),
             explanation=(explanation or '').strip(),
             image_url=image_url,
             revised_prompt=(getattr(result, 'revised_prompt', None) or '').strip(),
             provider=getattr(result, 'provider', None) or provider.name,
             aspect_ratio=self.ASPECT_RATIO,
+            image_style=style or DEFAULT_IMAGE_STYLE,
             status='generated',
             metadata=dict(getattr(result, 'metadata', None) or {}),
         )

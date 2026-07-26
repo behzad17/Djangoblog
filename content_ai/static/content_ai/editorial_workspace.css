@@ -261,12 +261,16 @@
 .ai-workspace__image-preview img {
   display: block;
   width: 100%;
-  max-width: 640px;
+  max-width: 960px;
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border: 1px solid var(--ai-ws-line);
   background: #fff;
+}
+
+.ai-workspace__featured-image select {
+  max-width: 20rem;
 }
 
 @media (min-width: 900px) {

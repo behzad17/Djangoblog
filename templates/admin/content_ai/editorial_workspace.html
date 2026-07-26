@@ -167,22 +167,35 @@
       <section class="ai-workspace__featured-image" id="ai-ws-featured-image" aria-label="Featured image">
         <h3>Featured image</h3>
         <p class="ai-workspace__hint">
-          Professional editorial hero image (16:9). Prompt is built from the
-          Persian article — not from the URL alone. Regenerating the image
-          never regenerates the article.
+          16:9 editorial hero. Planner runs first (internal), then an editable
+          prompt. Regenerating never rewrites the article, SEO, tags, category
+          or summary.
         </p>
+        <label>Image style
+          <select id="ai-ws-image-style">
+            {% for item in image_styles %}
+              <option value="{{ item.id }}"{% if item.id == 'editorial_photo' %} selected{% endif %}>{{ item.label }}</option>
+            {% endfor %}
+          </select>
+        </label>
         <label>Image prompt
           <textarea id="ai-ws-image-prompt" rows="8" placeholder="Prepare prompt after generating the article…"></textarea>
         </label>
         <p class="ai-workspace__hint" id="ai-ws-image-explanation"></p>
-        <div class="ai-workspace__toolbar">
+        <div class="ai-workspace__toolbar" id="ai-ws-image-prompt-actions">
           <button type="button" class="button" id="ai-ws-prepare-image">Prepare prompt</button>
+          <button type="button" class="button" id="ai-ws-restore-original-image-prompt">Restore Original</button>
           <button type="button" class="button default" id="ai-ws-generate-image">Generate</button>
-          <button type="button" class="button" id="ai-ws-regenerate-image">Regenerate</button>
-          <button type="button" class="button" id="ai-ws-use-previous-image-prompt">Use Previous Prompt</button>
         </div>
         <div class="ai-workspace__image-preview" id="ai-ws-image-preview-wrap" hidden>
-          <img id="ai-ws-image-preview" alt="Generated featured image preview" width="640" height="360">
+          <img id="ai-ws-image-preview" alt="Generated featured image preview" width="960" height="540">
+          <div class="ai-workspace__toolbar" id="ai-ws-image-review-actions">
+            <button type="button" class="button default" id="ai-ws-accept-image">Accept Image</button>
+            <button type="button" class="button" id="ai-ws-regenerate-image">Regenerate</button>
+            <button type="button" class="button" id="ai-ws-edit-image-prompt">Edit Prompt</button>
+            <button type="button" class="button" id="ai-ws-change-image-style">Change Style</button>
+            <button type="button" class="button" id="ai-ws-generate-image-again">Generate Again</button>
+          </div>
         </div>
         <p class="ai-workspace__hint" id="ai-ws-image-status"></p>
       </section>
@@ -248,5 +261,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-featured-image"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-image-pipeline-v1"></script>
 {% endblock %}
