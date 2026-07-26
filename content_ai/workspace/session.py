@@ -208,6 +208,9 @@ class WorkspaceSession:
                 or (self.metadata or {}).get('imported_post_id')
             ),
             'blog_draft': dict((self.metadata or {}).get('blog_draft') or {}),
+            'publish_success': dict(
+                (self.metadata or {}).get('publish_success') or {}
+            ),
             'updated_at': self.updated_at.isoformat(),
             'auto_publish_allowed': False,
         }

@@ -230,7 +230,7 @@ class WorkspaceViewPermissionTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-@override_settings(CONTENT_AI_PROVIDER='mock')
+@override_settings(CONTENT_AI_PROVIDER='mock', ADMIN_NOTIFICATION_ENABLED=False)
 class WorkspaceAPIIntegrationTests(TestCase):
     def setUp(self):
         self.client = Client()
@@ -366,3 +366,52 @@ class WorkspaceAPIIntegrationTests(TestCase):
         post.refresh_from_db()
         self.assertEqual(post.title, 'Workspace Save Draft Updated')
         self.assertIn('Updated body text', post.content)
+
+    def test_publish_draft_then_reset_starts_clean_session(self):
+        from blog.models import Category, Post
+
+        Category.objects.create(name='News', slug='news')
+        create = self._post(
+            'save_draft',
+            {
+                'sections': {
+                    'headline': 'Workspace Publish Me',
+                    'lead': 'Lead text',
+                    'body': 'Body text for publish.',
+                    'summary': 'Summary text',
+                    'category': 'News',
+                },
+            },
+        )
+        self.assertEqual(create.status_code, 200, create.content.decode()[:500])
+        post_id = create.json()['blog_draft']['post_id']
+
+        publish = self._post('publish_draft', {})
+        self.assertEqual(publish.status_code, 200, publish.content.decode()[:500])
+        published = publish.json()
+        self.assertTrue(published['ok'])
+        self.assertEqual(published['published']['status'], 'published')
+        self.assertEqual(published['published']['post_id'], post_id)
+        self.assertTrue(published['published']['public_url'])
+        self.assertEqual(
+            published['session']['publish_success']['post_id'],
+            post_id,
+        )
+        self.assertEqual(published['session']['workflow_state'], 'published')
+
+        post = Post.objects.get(pk=post_id)
+        self.assertEqual(post.status, 1)
+
+        reset = self._post('reset', {})
+        self.assertEqual(reset.status_code, 200)
+        session = reset.json()['session']
+        self.assertNotEqual(session['session_id'], published['session']['session_id'])
+        self.assertEqual(session['sections']['headline'], '')
+        self.assertEqual(session['sections']['body'], '')
+        self.assertEqual(session['source_url'], '')
+        self.assertEqual(session['source_material'], '')
+        self.assertFalse(session.get('linked_post_id'))
+        self.assertEqual(session.get('blog_draft') or {}, {})
+        self.assertEqual(session.get('publish_success') or {}, {})
+        self.assertEqual(session.get('last_explanations') or [], [])
+        self.assertEqual(session.get('history') or [], [])

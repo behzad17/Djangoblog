@@ -39,6 +39,26 @@
     </div>
   </header>
 
+  <section
+    class="ai-workspace__publish-success"
+    id="ai-ws-publish-success"
+    hidden
+    role="status"
+    aria-live="polite"
+  >
+    <p class="ai-workspace__publish-success-message" id="ai-ws-publish-success-msg">
+      ✓ Article published successfully.
+    </p>
+    <div class="ai-workspace__toolbar">
+      <a class="button default" id="ai-ws-open-published" href="#" target="_blank" rel="noopener">
+        Open published article
+      </a>
+      <button type="button" class="button" id="ai-ws-create-another">
+        Create another article
+      </button>
+    </div>
+  </section>
+
   <section class="ai-workspace__pipeline" id="ai-ws-pipeline" aria-label="Editorial pipeline"></section>
 
   <div class="ai-workspace__grid">
@@ -102,6 +122,9 @@
       <label>Tags <input type="text" id="ai-ws-tags" placeholder="comma,separated"></label>
       <div class="ai-workspace__toolbar">
         <button type="button" class="button default" id="ai-ws-save-blog-draft">Save draft to Blog</button>
+        <button type="button" class="button" id="ai-ws-publish-blog" hidden>
+          Publish article
+        </button>
       </div>
       <p class="ai-workspace__hint" id="ai-ws-blog-draft-status"></p>
     </section>
@@ -148,7 +171,7 @@
       </div>
     </div>
     <p class="ai-workspace__footnote">
-      Publishing always requires human approval in Blog Admin. This workspace never auto-publishes.
+      Publish is an explicit editor action. This workspace never auto-publishes.
     </p>
   </section>
 </div>
@@ -158,5 +181,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-save-draft"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-bfcache-reset"></script>
 {% endblock %}

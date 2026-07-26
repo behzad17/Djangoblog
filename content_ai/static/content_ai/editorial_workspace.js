@@ -44,7 +44,16 @@
     document.getElementById('ai-ws-source-text').value = session.source_material || '';
     document.getElementById('ai-ws-source-url').value = session.source_url || '';
     document.getElementById('ai-ws-research').value = session.research_notes || '';
-    document.getElementById('ai-ws-workflow').value = session.workflow_state || 'idea';
+    document.getElementById('ai-ws-import-post-id').value = '';
+
+    var wf = document.getElementById('ai-ws-workflow');
+    if (wf) {
+      var desired = session.workflow_state || 'researching';
+      wf.value = desired;
+      if (wf.value !== desired) {
+        wf.selectedIndex = 0;
+      }
+    }
 
     var typeEl = document.getElementById('ai-ws-content-type');
     var goalEl = document.getElementById('ai-ws-goal');
@@ -74,39 +83,91 @@
     var src = meta.source || {};
     var titleEl = document.getElementById('ai-ws-source-title');
     var pubEl = document.getElementById('ai-ws-source-publisher');
-    if (titleEl && src.title) titleEl.value = src.title;
-    if (pubEl && src.publisher) pubEl.value = src.publisher;
+    if (titleEl) titleEl.value = src.title || '';
+    if (pubEl) pubEl.value = src.publisher || '';
     renderSourceMeta(src);
     renderPipeline(session.pipeline_steps || []);
     renderActions(session.actions || []);
     renderExplanations(session.last_explanations || []);
     renderHistory(session.history || []);
-    if (meta.seo) {
-      document.getElementById('ai-ws-seo-out').textContent = JSON.stringify(meta.seo, null, 2);
-    }
-    if (meta.evaluation) {
-      document.getElementById('ai-ws-eval-out').textContent = JSON.stringify(meta.evaluation, null, 2);
-    }
-    if (meta.fact_check) {
-      document.getElementById('ai-ws-factcheck-out').textContent = JSON.stringify(meta.fact_check, null, 2);
-    }
+    document.getElementById('ai-ws-seo-out').textContent = meta.seo
+      ? JSON.stringify(meta.seo, null, 2)
+      : '';
+    document.getElementById('ai-ws-eval-out').textContent = meta.evaluation
+      ? JSON.stringify(meta.evaluation, null, 2)
+      : '';
+    document.getElementById('ai-ws-factcheck-out').textContent = meta.fact_check
+      ? JSON.stringify(meta.fact_check, null, 2)
+      : '';
     renderBlogDraft(session.blog_draft || meta.blog_draft || {});
-    applyingClassification = false;
+    renderPublishSuccess(
+      session.publish_success || meta.publish_success || null
+    );
+    // Defer clearing the guard so programmatic <select> updates do not
+    // fire a competing set_classification request that races later UI updates.
+    setTimeout(function () {
+      applyingClassification = false;
+    }, 0);
   }
 
   function renderBlogDraft(draft) {
     var el = document.getElementById('ai-ws-blog-draft-status');
+    var publishBtn = document.getElementById('ai-ws-publish-blog');
     if (!el) return;
     if (!draft || !draft.post_id) {
       el.innerHTML = 'Not linked to a Blog draft yet. Save to create one under Draft Posts.';
+      if (publishBtn) publishBtn.hidden = true;
       return;
     }
-    var label = draft.created ? 'Created' : 'Linked';
+    var isPublished = draft.status === 'published';
+    var label = isPublished ? 'Published' : (draft.created ? 'Created' : 'Linked');
     var url = draft.admin_url || ('/admin/blog/post/' + draft.post_id + '/change/');
     el.innerHTML =
-      label + ' Blog draft <strong>#' + draft.post_id + '</strong>: ' +
+      label + ' Blog post <strong>#' + draft.post_id + '</strong>: ' +
       (draft.title || 'Untitled') +
       ' — <a href="' + url + '">Open in Blog Admin</a>';
+    if (publishBtn) {
+      publishBtn.hidden = isPublished;
+    }
+  }
+
+  function renderPublishSuccess(published) {
+    var banner = document.getElementById('ai-ws-publish-success');
+    var openLink = document.getElementById('ai-ws-open-published');
+    if (!banner) return;
+    if (!published || !published.post_id) {
+      banner.hidden = true;
+      if (openLink) openLink.removeAttribute('href');
+      return;
+    }
+    banner.hidden = false;
+    if (openLink) {
+      openLink.href = published.public_url || published.admin_url || '#';
+    }
+  }
+
+  function focusSourceUrl() {
+    var urlEl = document.getElementById('ai-ws-source-url');
+    if (!urlEl) return;
+    urlEl.focus();
+    if (typeof urlEl.select === 'function') urlEl.select();
+  }
+
+  function startFreshSession() {
+    return post('reset', {}).then(function (data) {
+      if (!data.ok) return data;
+      applySession(data.session);
+      renderPublishSuccess(null);
+      try {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      } catch (e) {
+        /* ignore */
+      }
+      focusSourceUrl();
+      return data;
+    });
   }
 
   function renderPipeline(steps) {
@@ -123,9 +184,9 @@
 
   function renderActions(actions) {
     var wrap = document.getElementById('ai-ws-actions');
-    if (!wrap || !actions || !actions.length) return;
+    if (!wrap) return;
     wrap.innerHTML = '';
-    actions.forEach(function (action) {
+    (actions || []).forEach(function (action) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'button';
@@ -141,9 +202,11 @@
 
   function renderSourceMeta(src) {
     var el = document.getElementById('ai-ws-source-meta');
+    var intel = document.getElementById('ai-ws-source-intel');
     if (!el) return;
     if (!src || !Object.keys(src).length) {
       el.textContent = '';
+      if (intel) intel.textContent = '';
       return;
     }
     el.innerHTML =
@@ -152,7 +215,7 @@
       '<div><strong>Type:</strong> ' + (src.source_type || '—') + '</div>' +
       '<div><strong>Trust:</strong> ' + (src.trust_score != null ? src.trust_score : '—') + '</div>' +
       '<div><strong>Warnings:</strong> ' + ((src.warnings || []).join('; ') || 'none') + '</div>';
-    document.getElementById('ai-ws-source-intel').textContent = JSON.stringify(src, null, 2);
+    if (intel) intel.textContent = JSON.stringify(src, null, 2);
   }
 
   function renderExplanations(items) {
@@ -302,15 +365,31 @@
           return;
         }
         applySession(data.session);
-        if (data.blog_draft && data.blog_draft.admin_url) {
-          var msg = data.blog_draft.created
-            ? 'Draft created. Open it in Blog Admin?'
-            : 'Draft updated. Open it in Blog Admin?';
-          if (window.confirm(msg)) {
-            window.location.href = data.blog_draft.admin_url;
-          }
-        }
       });
+    });
+  }
+
+  var publishBlogBtn = document.getElementById('ai-ws-publish-blog');
+  if (publishBlogBtn) {
+    publishBlogBtn.addEventListener('click', function () {
+      if (!window.confirm('Publish this article now? It will become public.')) {
+        return;
+      }
+      post('publish_draft', {
+        sections: readSections(),
+        research_notes: document.getElementById('ai-ws-research').value,
+      }).then(function (data) {
+        if (!data.ok) return;
+        applySession(data.session);
+        renderPublishSuccess(data.published || data.session.publish_success);
+      });
+    });
+  }
+
+  var createAnotherBtn = document.getElementById('ai-ws-create-another');
+  if (createAnotherBtn) {
+    createAnotherBtn.addEventListener('click', function () {
+      startFreshSession();
     });
   }
 
@@ -351,8 +430,14 @@
 
   document.getElementById('ai-ws-reset').addEventListener('click', function () {
     if (!window.confirm('Start a new workspace session?')) return;
-    post('reset', {}).then(function (data) {
-      if (data.ok) applySession(data.session);
-    });
+    startFreshSession();
+  });
+
+  // BFCache / Back-Forward cache can resurrect a stale DOM after Create another.
+  // Force a real reload so the page rehydrates from the current Django session only.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
   });
 })();

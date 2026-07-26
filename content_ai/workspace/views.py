@@ -78,7 +78,7 @@ def editorial_workspace(request):
             {'title': 'AI Editorial Workspace'},
         )
     service, session = _ensure_session(request)
-    return render(
+    response = render(
         request,
         'admin/content_ai/editorial_workspace.html',
         {
@@ -103,6 +103,9 @@ def editorial_workspace(request):
             ).rsplit('reset', 1)[0],
         },
     )
+    # Prevent BFCache from resurrecting a stale pre-reset workspace DOM.
+    response['Cache-Control'] = 'no-store'
+    return response
 
 
 @staff_member_required
@@ -274,6 +277,18 @@ def workspace_api(request, action: str):
                 {
                     'ok': True,
                     'blog_draft': blog_draft,
+                    'session': _session_payload(service, session),
+                }
+            )
+
+        if action in ('publish_draft', 'publish_blog_draft', 'publish'):
+            _apply_sections_payload(session, payload)
+            published = service.publish_blog_draft(session, user=request.user)
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'published': published,
                     'session': _session_payload(service, session),
                 }
             )

@@ -121,6 +121,24 @@
   white-space: pre-wrap;
 }
 
+.ai-workspace__publish-success {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #a7f3d0;
+  background: #ecfdf5;
+  border-radius: 4px;
+}
+
+.ai-workspace__publish-success[hidden] {
+  display: none !important;
+}
+
+.ai-workspace__publish-success-message {
+  margin: 0 0 0.65rem;
+  color: #065f46;
+  font-weight: 600;
+}
+
 .ai-workspace__footnote {
   margin: 1rem 0 0;
   color: var(--ai-ws-muted);

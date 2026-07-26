@@ -36,7 +36,7 @@ class WorkspaceService:
     """
     Orchestrates the AI Editorial Workspace by composing existing packages.
 
-    Does not publish. Does not replace Blog Admin article creation.
+    Does not auto-publish. Explicit staff Publish action may publish a linked draft.
     """
 
     def __init__(
@@ -680,6 +680,78 @@ class WorkspaceService:
         )
         session.touch()
         return blog_draft
+
+    def publish_blog_draft(self, session: WorkspaceSession, *, user) -> dict:
+        """
+        Publish the linked Blog Draft Post (explicit staff action).
+
+        Never auto-publishes: requires a linked draft and an authenticated
+        staff-triggered API call. Syncs latest workspace sections before publish.
+        """
+        from django.urls import reverse
+
+        from blog.models import Post
+        from content_ai.editorial.persistence import BlogDraftPersistenceService
+
+        if user is None or not getattr(user, 'is_authenticated', False):
+            raise ValueError('Authentication required to publish a Blog draft.')
+
+        linked_id = (
+            session.metadata.get('linked_post_id')
+            or session.metadata.get('imported_post_id')
+        )
+        post = None
+        if linked_id:
+            try:
+                post = Post.objects.get(pk=linked_id)
+            except Post.DoesNotExist:
+                post = None
+
+        # Sync latest editor text only while the linked post is still a draft.
+        if post is None or (
+            post.status == BlogDraftPersistenceService.DRAFT_STATUS
+            and not post.is_deleted
+        ):
+            blog_draft = self.save_blog_draft(session, user=user)
+            post_id = blog_draft.get('post_id')
+            if not post_id:
+                raise ValueError('No Blog draft is linked to this workspace session.')
+            post = Post.objects.get(pk=post_id)
+        elif post.is_deleted:
+            raise ValueError('Cannot publish a deleted Blog draft.')
+
+        if post.status != 1:
+            post.status = 1
+            post.save(update_fields=['status', 'updated_on'])
+
+        public_url = reverse('post_detail', kwargs={'slug': post.slug})
+        admin_url = reverse('admin:blog_post_change', args=[post.pk])
+        published = {
+            'post_id': post.pk,
+            'title': post.title,
+            'status': 'published',
+            'slug': post.slug,
+            'public_url': public_url,
+            'admin_url': admin_url,
+            'category': post.category.name if post.category_id else '',
+        }
+        session.metadata['linked_post_id'] = post.pk
+        session.metadata['blog_draft'] = {
+            **dict(session.metadata.get('blog_draft') or {}),
+            **published,
+            'created': False,
+        }
+        session.metadata['publish_success'] = published
+        session.workflow_state = WorkflowState.PUBLISHED
+        session.mark_pipeline('ready_for_publication')
+        session.last_explanations = [
+            f'Published Blog article #{post.pk}.',
+            f'Public URL: {public_url}',
+            'Use “Create another article” to start a clean workspace session.',
+        ]
+        session.push_history('Published Blog article', session.last_explanations[0])
+        session.touch()
+        return published
 
     def advance_workflow(
         self,
