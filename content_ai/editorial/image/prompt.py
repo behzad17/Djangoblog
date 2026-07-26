@@ -1,4 +1,8 @@
-"""Build featured-image prompts from article understanding + image plan."""
+"""Build featured-image prompts from the structured Image Plan (v2).
+
+The OpenAI prompt is built from planner JSON fields — not from long
+article dumps that drift into generic lifestyle scenes.
+"""
 
 from __future__ import annotations
 
@@ -7,11 +11,8 @@ from typing import Any
 
 from content_ai.editorial.image.planner import ImagePlan, plan_featured_image
 from content_ai.editorial.image.style import (
-    IMAGE_STYLE_GUIDANCE,
     IMAGE_STYLE_LABELS,
     PEYVAND_STYLE_BLOCK,
-    PEOPLE_RULES,
-    SWEDEN_RULES,
     resolve_image_style,
 )
 
@@ -51,9 +52,8 @@ def build_featured_image_brief(
     plan: ImagePlan | None = None,
 ) -> FeaturedImageBrief:
     """
-    Build an English image-generation prompt from Persian article fields.
+    Plan first, then build an English image prompt from the structured plan.
 
-    Always plans the image first (unless an ImagePlan is supplied).
     Never uses a source URL alone — requires editorial article content.
     Never uses title alone.
     """
@@ -73,10 +73,8 @@ def build_featured_image_brief(
     content_type = (content_type or 'news').strip() or 'news'
     goal = (goal or '').strip()
     category = (category or '').strip()
-    publisher = (publisher or '').strip()
     style = resolve_image_style(image_style)
     style_label = IMAGE_STYLE_LABELS.get(style, style)
-    style_guidance = IMAGE_STYLE_GUIDANCE.get(style, '')
 
     if plan is None:
         plan = plan_featured_image(
@@ -90,43 +88,47 @@ def build_featured_image_brief(
             image_style=style,
         )
 
-    subject_lines = [
-        f'Article headline (Persian): {_clip(headline, 220)}' if headline else '',
-        f'Lead (Persian): {_clip(lead, 400)}' if lead else '',
-        f'Article excerpt (Persian): {_clip(body, 900)}' if body else '',
-        f'Content type: {content_type}.',
-        f'Editorial goal: {goal}.' if goal else '',
-        f'Category: {category}.' if category else '',
-        f'Tags: {", ".join(tags)}.' if tags else '',
-        f'Publisher context: {publisher}.' if publisher else '',
-        f'Selected image style: {style_label}.',
-        style_guidance,
-    ]
-    subject_block = '\n'.join(line for line in subject_lines if line)
+    secondary = (
+        ', '.join(plan.secondary_elements)
+        if plan.secondary_elements
+        else 'none'
+    )
+    avoid = ', '.join(plan.avoid) if plan.avoid else 'generic lifestyle scenes'
 
+    # Prompt is driven by the structured plan (front-page photograph rule).
     prompt = (
-        'Create a professional featured image for a Persian news / community '
-        'website article.\n'
-        'Communicate the article\'s main idea clearly and professionally. '
-        'Do NOT create artistic, fantasy, or cinematic spectacle imagery.\n\n'
+        'Create one professional 16:9 featured image for a Persian news / '
+        'community website.\n'
+        'Answer this brief as a newspaper front-page photograph would: show '
+        'the article\'s primary institutional or real-world subject — not a '
+        'generic Swedish lifestyle scene.\n\n'
         f'{PEYVAND_STYLE_BLOCK}\n\n'
-        f'{PEOPLE_RULES}\n\n'
-        f'{SWEDEN_RULES}\n\n'
-        f'{style_guidance}\n\n'
-        'Internal visual plan (follow closely; do not render as text):\n'
+        'STRUCTURED IMAGE PLAN (follow exactly; do not render as text):\n'
         f'{plan.to_prompt_block()}\n\n'
-        'Article context (use for meaning only; do not render any of this as '
-        'text in the image):\n'
-        f'{subject_block}\n\n'
-        'Final instruction: produce one clean 16:9 editorial image that a '
-        'reader understands within two seconds from a thumbnail.'
+        'Render instructions:\n'
+        f'- Show primarily: {plan.primary_visual_subject}\n'
+        f'- Location: {plan.location}\n'
+        f'- Supporting elements only if needed (max two): {secondary}\n'
+        f'- Style: {plan.visual_style}\n'
+        f'- Mood: {plan.mood}\n'
+        f'- Hard avoid: {avoid}\n'
+        '- Exactly one primary subject. No collage. No infographic. '
+        'No readable text, logos, or watermarks.\n\n'
+        'Article topic anchor (meaning only; never render as text):\n'
+        f'- Headline: {_clip(headline, 160)}\n'
+        f'- Lead: {_clip(lead, 180)}\n'
+        f'- Category: {category or content_type or "news"}\n'
+        f'- Editor style: {style_label}\n\n'
+        'Final instruction: produce one clean editorial image that a reader '
+        'understands within two seconds from a thumbnail, matching the '
+        'primary visual subject above.'
     )
 
     explanation = (
-        f'{style_label} concept focused on “{plan.main_subject}” in '
-        f'{plan.environment}, matching '
-        f'{category or content_type or "the article topic"}. '
-        f'Peyvand minimal editorial identity — clear as a hero and thumbnail.'
+        f'{style_label} front-page concept: “{plan.primary_visual_subject}” '
+        f'for “{plan.primary_subject}”'
+        f'{f" at {plan.location}" if plan.location else ""}. '
+        f'Peyvand minimal editorial identity — institutional relevance over lifestyle.'
     )
 
     return FeaturedImageBrief(

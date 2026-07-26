@@ -581,6 +581,39 @@ class WorkspaceAPIIntegrationTests(TestCase):
         self.assertEqual(post.title, 'Workspace Save Draft Updated')
         self.assertIn('Updated body text', post.content)
 
+    def test_save_draft_blog_title_never_gets_workspace_timestamp_prefix(self):
+        from blog.models import Category, Post
+
+        Category.objects.create(name='News', slug='news')
+        headline = 'نگاهی جامع به قانون اساسی...'
+        # Seed a colliding draft so the old uniqueness path would have stamped.
+        Post.objects.create(
+            title=headline,
+            slug='existing-persian-headline',
+            author=self.staff,
+            category=Category.objects.get(slug='news'),
+            content='seed',
+            status=0,
+        )
+        response = self._post(
+            'save_draft',
+            {
+                'sections': {
+                    'headline': headline,
+                    'lead': 'مقدمه',
+                    'body': 'متن اصلی مقاله',
+                    'summary': 'خلاصه',
+                    'category': 'News',
+                },
+            },
+        )
+        self.assertEqual(response.status_code, 200, response.content.decode()[:500])
+        data = response.json()
+        self.assertTrue(data['ok'])
+        post = Post.objects.get(pk=data['blog_draft']['post_id'])
+        self.assertEqual(post.title, headline)
+        self.assertNotRegex(post.title, r'\(\d{14}')
+
     def test_publish_draft_then_reset_starts_clean_session(self):
         from blog.models import Category, Post
 

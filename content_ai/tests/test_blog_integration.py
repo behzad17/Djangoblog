@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 
@@ -90,8 +92,8 @@ class BlogDraftPersistenceServiceTests(TestCase):
         self.assertEqual(self.draft.language, 'sv')
         self.assertEqual(self.draft.metadata.get('provider'), 'mock')
 
-    def test_unique_title_collision_gets_suffix(self):
-        Post.objects.create(
+    def test_duplicate_titles_allowed_slugs_stay_unique(self):
+        existing = Post.objects.create(
             title='AI Housing Draft',
             slug='existing-ai-housing-draft',
             author=self.author,
@@ -104,9 +106,56 @@ class BlogDraftPersistenceServiceTests(TestCase):
             author=self.author,
             category=self.category,
         )
-        self.assertNotEqual(post.title, 'AI Housing Draft')
-        self.assertTrue(post.title.startswith('AI Housing Draft'))
-        self.assertEqual(post.status, 0)
+        self.assertNotEqual(post.pk, existing.pk)
+        self.assertEqual(post.title, 'AI Housing Draft')
+        self.assertEqual(existing.title, 'AI Housing Draft')
+        self.assertNotEqual(post.slug, existing.slug)
+        self.assertFalse(re.search(r'\(\d{14}', post.title))
+
+    def test_save_draft_title_matches_workspace_exactly(self):
+        persian = 'نگاهی جامع به قانون اساسی...'
+        draft = EditorialDraft(
+            title=persian,
+            body='بدنه',
+            summary='خلاصه',
+            language='fa',
+        )
+        post = self.service.create_blog_draft(
+            draft,
+            author=self.author,
+            category=self.category,
+        )
+        self.assertEqual(post.title, persian)
+        self.assertFalse(re.search(r'\(\d{14}', post.title))
+
+        # Same title on a second draft is allowed; title stays exact.
+        again = self.service.create_blog_draft(
+            draft,
+            author=self.author,
+            category=self.category,
+        )
+        self.assertEqual(again.title, persian)
+        self.assertNotEqual(again.slug, post.slug)
+        self.assertEqual(Post.objects.filter(title=persian).count(), 2)
+
+    def test_legacy_timestamp_suffix_stripped_on_update(self):
+        stamped = Post.objects.create(
+            title='نگاهی جامع به قانون اساسی... (20260726184315)',
+            slug='legacy-stamped-title',
+            author=self.author,
+            category=self.category,
+            content='old',
+            status=0,
+        )
+        draft = EditorialDraft(
+            title='نگاهی جامع به قانون اساسی...',
+            body='بدنه جدید',
+            summary='خلاصه',
+            language='fa',
+        )
+        result = self.service.update_blog_draft(stamped, draft)
+        self.assertEqual(result.title, 'نگاهی جامع به قانون اساسی...')
+        self.assertNotIn('20260726184315', result.title)
 
     def test_requires_author_and_category(self):
         with self.assertRaises(BlogDraftPersistenceError):

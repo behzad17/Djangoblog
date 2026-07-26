@@ -6,9 +6,9 @@ AI must never publish. This layer only creates/updates Draft status Posts.
 from __future__ import annotations
 
 import logging
+import re
 
 from django.db import IntegrityError, transaction
-from django.utils import timezone
 from django.utils.text import slugify
 
 from blog.models import Category, Post
@@ -16,9 +16,29 @@ from content_ai.editorial.drafts import EditorialDraft
 
 logger = logging.getLogger(__name__)
 
+# Legacy collision stamps formerly appended when Post.title was unique, e.g.
+# ``Title (20260726184315)``. Strip on write so editorial titles stay clean.
+_LEGACY_TITLE_STAMP_RE = re.compile(r'\s*\((\d{14})(?:-\d+)?\)\s*$')
+
 
 class BlogDraftPersistenceError(Exception):
     """Raised when an EditorialDraft cannot be stored as a Blog draft."""
+
+
+def clean_blog_title(title: str) -> str:
+    """
+    Return the visible Blog title exactly as editorial text.
+
+    Strips only legacy uniqueness stamps. Never invents a new prefix/suffix.
+    Uniqueness for URLs belongs on ``Post.slug``.
+    """
+    cleaned = ' '.join((title or '').split()).strip()
+    while True:
+        nxt = _LEGACY_TITLE_STAMP_RE.sub('', cleaned).strip()
+        if nxt == cleaned:
+            break
+        cleaned = nxt
+    return cleaned[:200]
 
 
 class BlogDraftPersistenceService:
@@ -44,7 +64,8 @@ class BlogDraftPersistenceService:
         """
         Create an unpublished Blog ``Post`` from ``editorial_draft``.
 
-        Slug generation is delegated to ``Post.save()``.
+        Slug generation / uniqueness is delegated to ``Post.save()``.
+        Titles are stored exactly (no uniqueness rewriting).
         """
         if not isinstance(editorial_draft, EditorialDraft):
             raise BlogDraftPersistenceError(
@@ -58,9 +79,7 @@ class BlogDraftPersistenceService:
         if category is None:
             raise BlogDraftPersistenceError('category is required.')
 
-        title = self._unique_title(
-            (editorial_draft.title or '').strip() or 'Untitled AI draft'
-        )
+        title = self._editorial_title(editorial_draft.title)
         content = self._compose_content(editorial_draft)
         excerpt = self._excerpt_for(editorial_draft)
 
@@ -129,11 +148,9 @@ class BlogDraftPersistenceService:
                 'Cannot update a deleted Blog draft.'
             )
 
-        title = self._unique_title(
-            (editorial_draft.title or '').strip() or post.title or 'Untitled AI draft',
-            exclude_pk=post.pk,
+        post.title = self._editorial_title(
+            editorial_draft.title or post.title or 'Untitled AI draft'
         )
-        post.title = title
         post.content = self._compose_content(editorial_draft)
         post.excerpt = self._excerpt_for(editorial_draft)
         post.status = self.DRAFT_STATUS
@@ -193,28 +210,17 @@ class BlogDraftPersistenceService:
         lead = (getattr(editorial_draft, 'lead', '') or '').strip()
         return lead[:500]
 
+    def _editorial_title(self, title: str) -> str:
+        """Preserve editorial title; strip legacy stamps only."""
+        cleaned = clean_blog_title(title)
+        return cleaned or 'Untitled AI draft'
+
     def _unique_title(self, base_title: str, *, exclude_pk=None) -> str:
-        """Ensure title uniqueness required by the Blog Post model."""
-        candidate = base_title[:200]
-        qs = Post.objects.all()
-        if exclude_pk is not None:
-            qs = qs.exclude(pk=exclude_pk)
-        if not qs.filter(title=candidate).exists():
-            return candidate
+        """
+        Compatibility wrapper.
 
-        stamp = timezone.now().strftime('%Y%m%d%H%M%S')
-        suffix = f' ({stamp})'
-        max_base = 200 - len(suffix)
-        candidate = f'{base_title[:max_base]}{suffix}'
-        if not qs.filter(title=candidate).exists():
-            return candidate
-
-        for index in range(2, 50):
-            suffix = f' ({stamp}-{index})'
-            max_base = 200 - len(suffix)
-            candidate = f'{base_title[:max_base]}{suffix}'
-            if not qs.filter(title=candidate).exists():
-                return candidate
-        raise BlogDraftPersistenceError(
-            'Could not allocate a unique Blog draft title.'
-        )
+        Historically appended ``(YYYYMMDDHHMMSS)`` when ``Post.title`` was unique.
+        Titles are no longer unique; this never mutates editorial text for
+        uniqueness. Slug uniqueness is handled by ``Post.save()``.
+        """
+        return self._editorial_title(base_title)

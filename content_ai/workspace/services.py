@@ -32,6 +32,8 @@ from content_ai.editorial.image.style import (
 from content_ai.editorial.image.attach import (
     FeaturedImageAttachError,
     attach_featured_image_to_post,
+    extract_cloudinary_public_id,
+    resolve_featured_image_public_id,
     upload_featured_image_asset,
 )
 from content_ai.evaluation.evaluator import Evaluator
@@ -998,6 +1000,13 @@ class WorkspaceService:
                 )
                 state['image_url'] = upload.get('secure_url') or preview_url
                 state['preview_cloudinary_public_id'] = upload.get('public_id') or ''
+                # Persist public_id so Save Draft / Accept can attach without
+                # relying only on the accepted flag.
+                state['cloudinary_public_id'] = (
+                    upload.get('public_id')
+                    or state.get('cloudinary_public_id')
+                    or ''
+                )
                 logger.info(
                     'workspace image save (preview CDN): public_id=%s url=%s',
                     state.get('preview_cloudinary_public_id'),
@@ -1125,6 +1134,51 @@ class WorkspaceService:
         if current.get('status') == 'error':
             raise ValueError('Cannot accept a failed image — regenerate first.')
 
+        # Resolve / upload Cloudinary asset BEFORE save_blog_draft so the draft
+        # save path can attach using accepted + cloudinary_public_id.
+        existing_pid = resolve_featured_image_public_id(current)
+        if existing_pid and image_url.startswith('http'):
+            upload = {
+                'public_id': existing_pid,
+                'secure_url': (
+                    current.get('attached_url')
+                    or image_url
+                ),
+                'reused': True,
+            }
+            logger.info(
+                'accept_featured_image reusing Cloudinary public_id=%s',
+                existing_pid,
+            )
+        else:
+            upload = upload_featured_image_asset(
+                image_url,
+                public_id_prefix='peyvand/editorial/featured',
+                session_id=session.session_id or 'accept',
+            )
+
+        public_id = (upload.get('public_id') or '').strip()
+        secure_url = (upload.get('secure_url') or image_url).strip()
+        if not public_id:
+            raise FeaturedImageAttachError(
+                'Accept failed: Cloudinary public_id missing.'
+            )
+
+        state = dict(current)
+        state['accepted'] = True
+        state['pending_accept'] = False
+        state['status'] = 'accepted'
+        state['cloudinary_public_id'] = public_id
+        state['preview_cloudinary_public_id'] = (
+            current.get('preview_cloudinary_public_id') or public_id
+        )
+        state['attached_url'] = secure_url
+        state['image_url'] = secure_url
+        state['previous_image_url'] = current.get('previous_image_url') or ''
+        state['error'] = ''
+        session.metadata['featured_image'] = state
+
+        # save_blog_draft re-attaches when accepted + cloudinary_public_id set.
         blog_draft = self.save_blog_draft(session, user=user)
         post_id = blog_draft.get('post_id')
         if not post_id:
@@ -1133,26 +1187,26 @@ class WorkspaceService:
         from blog.models import Post
 
         post = Post.objects.get(pk=post_id)
-        upload = upload_featured_image_asset(
-            image_url,
-            session_id=session.session_id or str(post_id),
+        attach_featured_image_to_post(post, public_id=public_id)
+        post.refresh_from_db(fields=['featured_image'])
+        stored = (
+            getattr(post.featured_image, 'public_id', None)
+            or extract_cloudinary_public_id(str(post.featured_image))
+            or str(post.featured_image)
         )
-        attach_featured_image_to_post(post, public_id=upload['public_id'])
+        if not stored or stored == 'placeholder':
+            raise FeaturedImageAttachError(
+                f'Accept did not persist Post.featured_image '
+                f'(still {stored!r}).'
+            )
 
-        state = dict(current)
-        state['accepted'] = True
-        state['pending_accept'] = False
-        state['status'] = 'accepted'
-        state['cloudinary_public_id'] = upload['public_id']
-        state['attached_url'] = upload.get('secure_url') or image_url
-        state['previous_image_url'] = current.get('previous_image_url') or ''
-        state['error'] = ''
         state['attached_post_id'] = post.pk
         session.metadata['featured_image'] = state
         session.mark_pipeline('image_ready')
         session.last_explanations = [
             'Featured image accepted and attached to the Blog draft.',
-            f'Cloudinary: {upload["public_id"]}.',
+            f'Cloudinary: {public_id}.',
+            f'Post.featured_image={stored}.',
             'Article, SEO, tags, category and summary were not regenerated.',
         ]
         session.touch()
@@ -1261,6 +1315,7 @@ class WorkspaceService:
         session.sections.category = category.name
 
         featured = self._featured_image_state(session)
+        resolved_public_id = resolve_featured_image_public_id(featured)
         featured_meta = {
             'prompt': featured.get('prompt') or '',
             'original_prompt': featured.get('original_prompt') or '',
@@ -1268,11 +1323,18 @@ class WorkspaceService:
             'image_style_label': featured.get('image_style_label') or '',
             'aspect_ratio': featured.get('aspect_ratio') or '16:9',
             'status': featured.get('status') or '',
-            'cloudinary_public_id': featured.get('cloudinary_public_id') or '',
+            'cloudinary_public_id': (
+                featured.get('cloudinary_public_id')
+                or featured.get('preview_cloudinary_public_id')
+                or resolved_public_id
+                or ''
+            ),
             'accepted': bool(featured.get('accepted')),
             'image_url': featured.get('image_url') or '',
             'attached_url': featured.get('attached_url') or '',
         }
+        if resolved_public_id and not featured_meta['cloudinary_public_id']:
+            featured_meta['cloudinary_public_id'] = resolved_public_id
 
         draft = EditorialDraft(
             title=headline or 'Untitled AI draft',
@@ -1347,19 +1409,54 @@ class WorkspaceService:
                 raise ValueError(str(exc)) from exc
 
         # Keep an already-accepted featured image attached on Save Draft.
-        if featured_meta.get('accepted') and featured_meta.get('cloudinary_public_id'):
+        # Also recover when Accept set a Cloudinary URL but public_id was blank.
+        attach_pid = (
+            featured_meta.get('cloudinary_public_id')
+            or resolve_featured_image_public_id(featured_meta)
+            or ''
+        )
+        should_attach = bool(attach_pid) and (
+            featured_meta.get('accepted')
+            or featured_meta.get('status') == 'accepted'
+        )
+        if should_attach:
             try:
-                attach_featured_image_to_post(
-                    post,
-                    public_id=featured_meta['cloudinary_public_id'],
+                logger.info(
+                    'save_blog_draft attaching featured image post_id=%s '
+                    'public_id=%s',
+                    post.pk,
+                    attach_pid,
                 )
+                attach_featured_image_to_post(post, public_id=attach_pid)
+                post.refresh_from_db(fields=['featured_image'])
+                stored = (
+                    getattr(post.featured_image, 'public_id', None)
+                    or str(post.featured_image)
+                )
+                if not stored or stored == 'placeholder':
+                    raise FeaturedImageAttachError(
+                        f'Save Draft left featured_image as {stored!r}'
+                    )
+                featured_meta['cloudinary_public_id'] = attach_pid
+                featured_meta['accepted'] = True
             except FeaturedImageAttachError as exc:
-                logger.warning(
-                    'save_blog_draft could not re-attach featured image: %s',
-                    exc,
+                logger.exception(
+                    'save_blog_draft could not re-attach featured image'
                 )
+                raise ValueError(
+                    f'Could not attach featured image to Blog draft: {exc}'
+                ) from exc
 
         admin_url = reverse('admin:blog_post_change', args=[post.pk])
+        # Always refresh SEO snapshot from the current workspace sections so
+        # Save Draft stays synchronized (SEO is not a Blog Post column).
+        existing_seo = dict(session.metadata.get('seo') or {})
+        seo_state = {
+            **existing_seo,
+            'seo_title': (headline or post.title or '')[:60],
+            'meta_description': (post.excerpt or '')[:155],
+            'keywords': list(session.sections.tags),
+        }
         blog_draft = {
             'post_id': post.pk,
             'title': post.title,
@@ -1369,11 +1466,31 @@ class WorkspaceService:
             'category': post.category.name if post.category_id else '',
             'tags': list(session.sections.tags),
             'source_url': session.source_url or post.external_url or '',
+            'excerpt': post.excerpt or '',
+            'seo': {
+                'seo_title': seo_state.get('seo_title') or '',
+                'meta_description': seo_state.get('meta_description') or '',
+                'keywords': list(seo_state.get('keywords') or []),
+            },
             'featured_image': featured_meta,
         }
         session.metadata['linked_post_id'] = post.pk
         session.metadata['blog_draft'] = blog_draft
+        session.metadata['blog_sync'] = {
+            'title': post.title,
+            'excerpt': post.excerpt or '',
+            'category': blog_draft['category'],
+            'tags': list(session.sections.tags),
+            'external_url': post.external_url or '',
+            'seo': blog_draft['seo'],
+            'featured_image_public_id': featured_meta.get('cloudinary_public_id') or '',
+            'featured_image_accepted': bool(featured_meta.get('accepted')),
+        }
         session.metadata['featured_image_saved'] = featured_meta
+        session.metadata['seo'] = {
+            **seo_state,
+            **blog_draft['seo'],
+        }
         session.mark_pipeline('draft_generated', 'ready_for_publication')
         session.workflow_state = WorkflowState.READY_FOR_APPROVAL
         session.last_explanations = [

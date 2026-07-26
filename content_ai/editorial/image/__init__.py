@@ -3,6 +3,8 @@
 from content_ai.editorial.image.attach import (
     FeaturedImageAttachError,
     attach_featured_image_to_post,
+    extract_cloudinary_public_id,
+    resolve_featured_image_public_id,
     upload_featured_image_asset,
 )
 from content_ai.editorial.image.planner import ImagePlan, plan_featured_image
@@ -25,8 +27,10 @@ __all__ = [
     'ImagePlan',
     'attach_featured_image_to_post',
     'build_featured_image_brief',
+    'extract_cloudinary_public_id',
     'list_image_styles_for_ui',
     'plan_featured_image',
+    'resolve_featured_image_public_id',
     'resolve_image_style',
     'upload_featured_image_asset',
 ]
