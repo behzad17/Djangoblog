@@ -323,6 +323,17 @@ def workspace_api(request, action: str):
 
         if action in ('generate_image', 'generate_featured_image'):
             _apply_sections_payload(session, payload)
+            logger.info(
+                'workspace generate_image request: session=%s provider=%s '
+                'image_style=%s prompt_chars=%d prompt_preview=%r '
+                'aspect_ratio=16:9 payload_keys=%s',
+                getattr(session, 'session_id', None),
+                payload.get('provider') or None,
+                payload.get('image_style'),
+                len(str(payload.get('prompt') or '')),
+                str(payload.get('prompt') or '')[:240],
+                sorted(payload.keys()),
+            )
             try:
                 report = service.generate_featured_image(
                     session,
@@ -337,6 +348,11 @@ def workspace_api(request, action: str):
                 GenerationError,
                 CapabilityError,
             ) as exc:
+                logger.exception(
+                    'workspace generate_image failed: session=%s error=%s',
+                    getattr(session, 'session_id', None),
+                    exc,
+                )
                 save_session(request, session)
                 return JsonResponse(
                     {
@@ -348,7 +364,33 @@ def workspace_api(request, action: str):
                     },
                     status=502,
                 )
+            except Exception as exc:  # noqa: BLE001
+                logger.exception(
+                    'workspace generate_image unexpected error: session=%s '
+                    'traceback=%s',
+                    getattr(session, 'session_id', None),
+                    traceback.format_exc(),
+                )
+                save_session(request, session)
+                return JsonResponse(
+                    {
+                        **serialize_error('generation_failed', str(exc)),
+                        'session': _session_payload(service, session),
+                        'featured_image': service._public_featured_image_state(
+                            service._featured_image_state(session)
+                        ),
+                    },
+                    status=500,
+                )
             save_session(request, session)
+            logger.info(
+                'workspace generate_image success: session=%s status=%s '
+                'provider=%s image_url_preview=%s',
+                getattr(session, 'session_id', None),
+                (report or {}).get('status'),
+                (report or {}).get('provider'),
+                str((report or {}).get('image_url') or '')[:160],
+            )
             return JsonResponse(
                 {
                     'ok': True,
@@ -359,6 +401,14 @@ def workspace_api(request, action: str):
 
         if action in ('regenerate_image', 'regenerate_featured_image'):
             _apply_sections_payload(session, payload)
+            logger.info(
+                'workspace regenerate_image request: session=%s provider=%s '
+                'image_style=%s prompt_chars=%d',
+                getattr(session, 'session_id', None),
+                payload.get('provider') or None,
+                payload.get('image_style'),
+                len(str(payload.get('prompt') or '')),
+            )
             try:
                 report = service.generate_featured_image(
                     session,
@@ -373,6 +423,11 @@ def workspace_api(request, action: str):
                 GenerationError,
                 CapabilityError,
             ) as exc:
+                logger.exception(
+                    'workspace regenerate_image failed: session=%s error=%s',
+                    getattr(session, 'session_id', None),
+                    exc,
+                )
                 save_session(request, session)
                 return JsonResponse(
                     {

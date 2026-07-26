@@ -22,9 +22,9 @@ from content_ai.telemetry import AIExecutionTelemetry
 
 logger = logging.getLogger(__name__)
 
-# DALL·E 3 landscape size closest to 16:9 hero images.
-_DEFAULT_IMAGE_SIZE = '1792x1024'
-_DEFAULT_IMAGE_MODEL = 'dall-e-3'
+# GPT Image landscape closest to 16:9 hero images (DALL·E sizes retired May 2026).
+_DEFAULT_IMAGE_SIZE = '1536x1024'
+_DEFAULT_IMAGE_MODEL = 'gpt-image-2'
 
 
 def _aspect_to_openai_size(aspect_ratio: str | None) -> str:
@@ -32,8 +32,36 @@ def _aspect_to_openai_size(aspect_ratio: str | None) -> str:
     if ratio in ('1:1', 'square'):
         return '1024x1024'
     if ratio in ('9:16', 'portrait'):
-        return '1024x1792'
+        return '1024x1536'
     return _DEFAULT_IMAGE_SIZE
+
+
+def _is_gpt_image_model(model: str | None) -> bool:
+    name = (model or '').strip().lower()
+    return name.startswith('gpt-image')
+
+
+def _normalize_image_quality(model: str | None, quality: str | None) -> str | None:
+    """
+    Map quality to the enum accepted by the target model.
+
+    DALL·E 3: standard | hd
+    GPT Image: low | medium | high | auto
+    """
+    raw = (quality or '').strip().lower()
+    if _is_gpt_image_model(model):
+        if raw in ('', 'standard', 'auto'):
+            return 'medium'
+        if raw in ('hd', 'high'):
+            return 'high'
+        if raw in ('low', 'medium', 'high'):
+            return raw
+        return 'medium'
+    if raw in ('', 'standard', 'hd'):
+        return raw or 'standard'
+    if raw == 'high':
+        return 'hd'
+    return 'standard'
 
 
 def _extract_token_usage(response):
@@ -98,6 +126,23 @@ def _openai_error_details(exc):
                 details['status_code'] = response_status
 
     return details
+
+
+def _sanitize_image_response_for_log(payload):
+    """Return a deep copy safe for logs (truncate huge b64 fields)."""
+    if isinstance(payload, dict):
+        out = {}
+        for key, value in payload.items():
+            if key in ('b64_json', 'b64_data_url') and isinstance(value, str):
+                out[key] = f'<omitted {len(value)} chars>'
+            else:
+                out[key] = _sanitize_image_response_for_log(value)
+        return out
+    if isinstance(payload, list):
+        return [_sanitize_image_response_for_log(item) for item in payload]
+    if isinstance(payload, str) and len(payload) > 2000:
+        return payload[:500] + f'… <truncated {len(payload)} chars>'
+    return payload
 
 
 class OpenAIProvider(BaseAIProvider):
@@ -167,29 +212,73 @@ class OpenAIProvider(BaseAIProvider):
         size = kwargs.get('size') or _aspect_to_openai_size(aspect_ratio)
         if not size:
             size = self.image_size or _DEFAULT_IMAGE_SIZE
+        # Migrate retired DALL·E sizes if still configured in env.
+        if size in ('1792x1024', '1024x1792'):
+            size = _aspect_to_openai_size(
+                '16:9' if size == '1792x1024' else '9:16'
+            )
         model = kwargs.get('model') or self.image_model or _DEFAULT_IMAGE_MODEL
+        if str(model).startswith('dall-e'):
+            # DALL·E was retired May 2026; fall forward to current default.
+            logger.warning(
+                'OpenAI image model %r is retired; using %s instead',
+                model,
+                _DEFAULT_IMAGE_MODEL,
+            )
+            model = _DEFAULT_IMAGE_MODEL
+        quality = _normalize_image_quality(
+            model, kwargs.get('quality') or 'standard'
+        )
+        response_format = kwargs.get('response_format')  # optional; SDK default
+        # Images routinely exceed the 20s text timeout; avoid client abort →
+        # empty/HTML upstream responses that Safari reports as pattern errors.
+        image_timeout = float(
+            getattr(settings, 'OPENAI_IMAGE_TIMEOUT', None) or 90
+        )
 
+        request_payload = {
+            'provider': self.name,
+            'endpoint': 'https://api.openai.com/v1/images/generations',
+            'model': model,
+            'prompt': prompt_text,
+            'prompt_chars': len(prompt_text),
+            'style': kwargs.get('style') or kwargs.get('image_style') or '',
+            'size': size,
+            'aspect_ratio': aspect_ratio or '16:9',
+            'quality': quality,
+            'response_format': response_format or '(sdk default)',
+            'n': 1,
+            'timeout_seconds': image_timeout,
+        }
         logger.info(
-            'OpenAI image request starting: model=%s size=%s prompt_chars=%d',
-            model,
-            size,
-            len(prompt_text),
+            'OpenAI image request payload: %s',
+            {**request_payload, 'prompt': prompt_text[:500]},
         )
         started = time.monotonic()
         try:
-            response = self._client.images.generate(
-                model=model,
-                prompt=prompt_text,
-                size=size,
-                quality=kwargs.get('quality') or 'standard',
-                n=1,
+            client = self._client.with_options(
+                timeout=image_timeout,
+                max_retries=0,
             )
+            generate_kwargs = {
+                'model': model,
+                'prompt': prompt_text,
+                'size': size,
+                'n': 1,
+            }
+            if quality:
+                generate_kwargs['quality'] = quality
+            if response_format:
+                generate_kwargs['response_format'] = response_format
+            response = client.images.generate(**generate_kwargs)
         except Exception as exc:
             elapsed = time.monotonic() - started
             details = _openai_error_details(exc)
             logger.exception(
-                'OpenAI image generation failed after %.2fs: details=%s',
+                'OpenAI image generation failed after %.2fs: '
+                'request=%s details=%s',
                 elapsed,
+                {**request_payload, 'prompt': prompt_text[:200]},
                 details,
             )
             raise GenerationError(
@@ -198,6 +287,24 @@ class OpenAIProvider(BaseAIProvider):
 
         elapsed = time.monotonic() - started
         data = list(getattr(response, 'data', None) or [])
+        # Log the full provider response body (without megabyte base64 dumps).
+        try:
+            if hasattr(response, 'model_dump'):
+                raw_body = response.model_dump()
+            elif hasattr(response, 'to_dict'):
+                raw_body = response.to_dict()
+            else:
+                raw_body = {'repr': repr(response)[:4000]}
+            safe_body = _sanitize_image_response_for_log(raw_body)
+            logger.info(
+                'OpenAI image provider response body (sanitized): %s',
+                safe_body,
+            )
+        except Exception:  # noqa: BLE001
+            logger.exception(
+                'Failed to serialize OpenAI image response for logging'
+            )
+
         if not data:
             raise GenerationError('OpenAI image generation returned no images.')
         first = data[0]
@@ -209,9 +316,15 @@ class OpenAIProvider(BaseAIProvider):
             raise GenerationError('OpenAI image generation returned empty payload.')
 
         logger.info(
-            'OpenAI image response received: model=%s elapsed=%.2fs',
+            'OpenAI image response received: model=%s size=%s quality=%s '
+            'elapsed=%.2fs has_url=%s has_b64=%s url_preview=%s',
             model,
+            size,
+            quality,
             elapsed,
+            bool(image_url),
+            bool(b64),
+            (image_url or '')[:160],
         )
         return ImageGenerationResult(
             success=True,

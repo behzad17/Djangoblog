@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -19,6 +20,8 @@ from content_ai.providers.exceptions import (
     ProviderConfigurationError,
 )
 from content_ai.providers.registry import get_provider
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,6 +95,15 @@ class FeaturedImageService:
 
         prior = (previous_prompt or '').strip()
         style = resolve_image_style(image_style)
+        logger.info(
+            'FeaturedImageService.generate: provider=%s style=%s '
+            'aspect_ratio=%s prompt_chars=%d prompt_preview=%r',
+            provider_name or '(default)',
+            style,
+            self.ASPECT_RATIO,
+            len(cleaned),
+            cleaned[:240],
+        )
 
         try:
             provider = get_provider(provider_name)
@@ -108,6 +120,7 @@ class FeaturedImageService:
             result = provider.generate_image(
                 cleaned,
                 aspect_ratio=self.ASPECT_RATIO,
+                image_style=style,
             )
         except (GenerationError, ProviderConfigurationError, CapabilityError):
             raise
@@ -119,6 +132,14 @@ class FeaturedImageService:
             image_url = (getattr(result, 'b64_data_url', None) or '').strip()
         if not image_url:
             raise GenerationError('Image provider returned no image URL.')
+
+        logger.info(
+            'FeaturedImageService.generate ok: provider=%s model=%s '
+            'url_preview=%s',
+            getattr(result, 'provider', None) or provider.name,
+            getattr(result, 'model', None),
+            image_url[:160],
+        )
 
         return ImageGenerationOutcome(
             prompt=cleaned,

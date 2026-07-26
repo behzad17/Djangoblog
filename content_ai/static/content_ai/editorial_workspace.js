@@ -30,6 +30,39 @@
     };
   }
 
+  function safeSetSelect(el, value) {
+    if (!el) return;
+    var next = value == null ? '' : String(value);
+    try {
+      var options = el.options || [];
+      var found = false;
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].value === next) {
+          found = true;
+          break;
+        }
+      }
+      if (!found && next !== '') {
+        console.error('[ai-ws] select value rejected (pattern risk)', {
+          id: el.id,
+          value: next,
+          allowed: Array.prototype.map.call(options, function (o) {
+            return o.value;
+          }),
+        });
+        return;
+      }
+      el.value = next;
+    } catch (err) {
+      console.error('[ai-ws] select.value threw', {
+        id: el.id,
+        value: next,
+        message: err && err.message,
+        stack: err && err.stack,
+      });
+    }
+  }
+
   function applySession(session) {
     if (!session) return;
     applyingClassification = true;
@@ -39,7 +72,7 @@
     document.getElementById('ai-ws-body').value = s.body || '';
     document.getElementById('ai-ws-summary').value = s.summary || '';
     document.getElementById('ai-ws-excerpt').value = s.excerpt || '';
-    document.getElementById('ai-ws-category').value = s.category || '';
+    safeSetSelect(document.getElementById('ai-ws-category'), s.category || '');
     document.getElementById('ai-ws-tags').value = (s.tags || []).join(', ');
     renderCategoryRecommendation(session.category_recommendation || (session.metadata || {}).category_recommendation || {});
     document.getElementById('ai-ws-source-text').value = session.source_material || '';
@@ -51,7 +84,7 @@
     var wf = document.getElementById('ai-ws-workflow');
     if (wf) {
       var desired = session.workflow_state || 'researching';
-      wf.value = desired;
+      safeSetSelect(wf, desired);
       if (wf.value !== desired) {
         wf.selectedIndex = 0;
       }
@@ -60,11 +93,11 @@
     var typeEl = document.getElementById('ai-ws-content-type');
     var goalEl = document.getElementById('ai-ws-goal');
     var styleEl = document.getElementById('ai-ws-writing-style');
-    if (typeEl) typeEl.value = session.content_type || 'news';
-    if (goalEl) goalEl.value = session.goal || 'inform';
-    if (styleEl) styleEl.value = session.writing_style || 'journalistic';
+    safeSetSelect(typeEl, session.content_type || 'news');
+    safeSetSelect(goalEl, session.goal || 'inform');
+    safeSetSelect(styleEl, session.writing_style || 'journalistic');
     var lengthEl = document.getElementById('ai-ws-article-length');
-    if (lengthEl) lengthEl.value = session.article_length || 'full';
+    safeSetSelect(lengthEl, session.article_length || 'full');
     var lengthMeta = document.getElementById('ai-ws-length-meta');
     if (lengthMeta) {
       lengthMeta.textContent =
@@ -164,9 +197,33 @@
       errorEl.hidden = true;
       errorEl.textContent = '';
     }
-    return post(action, featuredImagePayload()).then(function (data) {
+    var payload = featuredImagePayload();
+    console.log('[ai-ws] IMAGE ACTION', {
+      action: action,
+      image_style: payload.image_style,
+      promptChars: (payload.prompt || '').length,
+      aspect_ratio: '16:9',
+      endpoint: apiBase.replace(/\/$/, '') + '/' + action + '/',
+    });
+    return post(action, payload).then(function (data) {
       setImageGenerating(false);
-      if (data && data.ok) applySession(data.session);
+      if (data && data.ok) {
+        try {
+          applySession(data.session);
+        } catch (applyErr) {
+          console.error(
+            '[ai-ws] applySession after image action failed',
+            applyErr,
+            applyErr && applyErr.stack
+          );
+          window.alert(
+            'Image response received but UI update failed:\n' +
+              (applyErr && applyErr.message) +
+              '\n\n' +
+              (applyErr && applyErr.stack)
+          );
+        }
+      }
       return data;
     });
   }
@@ -192,7 +249,7 @@
       promptEl.value = state.prompt || '';
     }
     if (styleEl && state && state.image_style) {
-      styleEl.value = state.image_style;
+      safeSetSelect(styleEl, state.image_style);
     }
     if (styleLabel) {
       styleLabel.textContent =
@@ -243,8 +300,30 @@
     }
     if (wrap && img) {
       if (state && state.image_url) {
-        img.src = state.image_url;
-        wrap.hidden = false;
+        var candidate = String(state.image_url);
+        var okSrc =
+          /^https?:\/\//i.test(candidate) ||
+          /^data:image\//i.test(candidate);
+        if (!okSrc) {
+          console.error('[ai-ws] Rejected image_url (pattern)', {
+            preview: candidate.slice(0, 200),
+            length: candidate.length,
+          });
+          statusEl.textContent =
+            (statusEl.textContent ? statusEl.textContent + ' · ' : '') +
+            'Invalid image URL from server (see console)';
+        } else {
+          try {
+            img.src = candidate;
+            wrap.hidden = false;
+          } catch (srcErr) {
+            console.error('[ai-ws] img.src assignment failed', srcErr, srcErr && srcErr.stack);
+            if (statusEl) {
+              statusEl.textContent =
+                'img.src failed: ' + (srcErr && srcErr.message);
+            }
+          }
+        }
       } else {
         img.removeAttribute('src');
         wrap.hidden = true;
@@ -405,28 +484,131 @@
   }
 
   function post(action, payload) {
-    return fetch(apiBase.replace(/\/$/, '') + '/' + action + '/', {
+    var url = apiBase.replace(/\/$/, '') + '/' + action + '/';
+    var bodyObj = payload || {};
+    var bodyText = JSON.stringify(bodyObj);
+    console.log('[ai-ws] REQUEST', {
+      action: action,
+      url: url,
+      apiBase: apiBase,
+      method: 'POST',
+      payloadKeys: Object.keys(bodyObj),
+      provider: bodyObj.provider || null,
+      image_style: bodyObj.image_style || null,
+      promptChars: bodyObj.prompt ? String(bodyObj.prompt).length : 0,
+      promptPreview: bodyObj.prompt
+        ? String(bodyObj.prompt).slice(0, 180)
+        : '',
+      bodyBytes: bodyText.length,
+      csrfPresent: !!csrf,
+    });
+    return fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrf,
       },
-      body: JSON.stringify(payload || {}),
+      body: bodyText,
     }).then(function (res) {
-      return res.json().then(function (data) {
+      return res.text().then(function (text) {
+        var contentType = res.headers.get('content-type') || '';
+        console.log('[ai-ws] RESPONSE raw', {
+          action: action,
+          url: url,
+          status: res.status,
+          ok: res.ok,
+          contentType: contentType,
+          bodyChars: (text || '').length,
+          bodyPreview: (text || '').slice(0, 800),
+        });
+        var data;
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch (parseErr) {
+          console.error('[ai-ws] JSON PARSE FAILED', {
+            action: action,
+            status: res.status,
+            contentType: contentType,
+            parseError: parseErr,
+            parseStack: parseErr && parseErr.stack,
+            bodyPreview: (text || '').slice(0, 2000),
+          });
+          var masked =
+            'Non-JSON response from ' +
+            url +
+            ' (HTTP ' +
+            res.status +
+            ', content-type=' +
+            contentType +
+            '). ' +
+            'Safari often reports this as "The string did not match the expected pattern." ' +
+            'Parse error: ' +
+            (parseErr && parseErr.message) +
+            '\n\nBody preview:\n' +
+            (text || '').slice(0, 600);
+          var enriched = new Error(masked);
+          enriched.stack =
+            (parseErr && parseErr.stack) || enriched.stack;
+          throw enriched;
+        }
+        console.log('[ai-ws] RESPONSE json', {
+          action: action,
+          status: res.status,
+          okFlag: data && data.ok,
+          error: data && data.error,
+          featuredStatus:
+            data &&
+            data.featured_image &&
+            data.featured_image.status,
+          imageUrlPreview:
+            data &&
+            data.featured_image &&
+            data.featured_image.image_url
+              ? String(data.featured_image.image_url).slice(0, 120)
+              : '',
+        });
         if (!res.ok || data.ok === false) {
-          var msg = (data.error && data.error.message) || data.error || 'Request failed';
+          var msg =
+            (data.error && data.error.message) ||
+            data.error ||
+            'Request failed';
           if (data.session) {
-            applySession(data.session);
+            try {
+              applySession(data.session);
+            } catch (applyErr) {
+              console.error(
+                '[ai-ws] applySession failed on error response',
+                applyErr,
+                applyErr && applyErr.stack
+              );
+            }
           }
-          throw new Error(typeof msg === 'string' ? msg : JSON.stringify(msg));
+          var fail = new Error(
+            typeof msg === 'string' ? msg : JSON.stringify(msg)
+          );
+          fail.stack =
+            (fail.stack || '') +
+            '\n--- server error ---\n' +
+            JSON.stringify(data.error || data, null, 2);
+          throw fail;
         }
         return data;
       });
     }).catch(function (err) {
-      window.alert(err.message || String(err));
-      return { ok: false };
+      console.error('[ai-ws] FAIL', {
+        action: action,
+        url: url,
+        message: err && err.message,
+        name: err && err.name,
+        stack: err && err.stack,
+        err: err,
+      });
+      var alertText =
+        (err && err.message ? err.message : String(err)) +
+        (err && err.stack ? '\n\n' + err.stack : '');
+      window.alert(alertText.slice(0, 4000));
+      return { ok: false, error: err && err.message };
     });
   }
 
