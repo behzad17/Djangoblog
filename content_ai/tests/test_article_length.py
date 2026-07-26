@@ -26,7 +26,21 @@ class ArticleLengthUnitTests(SimpleTestCase):
 
     def test_full_prompt_does_not_ask_to_summarise(self):
         block = article_length_prompt_block('full')
-        self.assertIn('complete Persian editorial article', block)
+        self.assertIn('complete Persian editorial article, not a summary', block)
+        self.assertIn('professional Persian journalist', block)
+        self.assertIn('Multiple well-developed body sections', block)
+        self.assertIn(
+            'Preserve all important facts, explanations, timelines, numbers',
+            block,
+        )
+        self.assertIn(
+            'If the source contains multiple themes or sections',
+            block,
+        )
+        self.assertIn(
+            'never invent facts or add unsupported information',
+            block,
+        )
         self.assertIn('Preserve all important sections of the source', block)
         self.assertIn(
             'Omit only repetition, boilerplate, advertisements, navigation',
@@ -36,7 +50,6 @@ class ArticleLengthUnitTests(SimpleTestCase):
             'Do not omit facts simply to make the article shorter',
             block,
         )
-        self.assertIn('Do NOT intentionally shorten', block)
         self.assertNotIn('Write a concise Persian summary', block)
 
     def test_brief_prompt_is_concise(self):
@@ -57,7 +70,8 @@ class ArticleLengthUnitTests(SimpleTestCase):
             article_length='brief',
         )
         self.assertIn('Full Article', full)
-        self.assertIn('preserving all important information', full)
+        self.assertIn('not a summary', full)
+        self.assertIn('professional Persian journalist', full)
         self.assertIn('Brief', brief)
         self.assertNotEqual(full, brief)
 
