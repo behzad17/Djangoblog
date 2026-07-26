@@ -544,6 +544,8 @@ class WorkspaceService:
         Creates a new Draft when none is linked; updates the linked Draft when
         present. Never publishes. Blog Draft is the canonical editable content.
         """
+        import logging
+
         from django.urls import reverse
 
         from blog.models import Post
@@ -553,6 +555,13 @@ class WorkspaceService:
             BlogDraftPersistenceService,
         )
 
+        logger = logging.getLogger(__name__)
+        logger.info(
+            'save_blog_draft ENTER session=%s user=%s',
+            getattr(session, 'session_id', None),
+            getattr(user, 'username', None),
+        )
+
         if user is None or not getattr(user, 'is_authenticated', False):
             raise ValueError('Authentication required to save a Blog draft.')
 
@@ -560,6 +569,7 @@ class WorkspaceService:
         body = (session.sections.body or '').strip()
         lead = (session.sections.lead or '').strip()
         if not headline and not body and not lead:
+            logger.warning('save_blog_draft SKIP empty sections')
             raise ValueError(
                 'Add a headline, lead, or body before saving a Blog draft.'
             )
@@ -606,6 +616,10 @@ class WorkspaceService:
                 and not candidate.is_deleted
             ):
                 try:
+                    logger.info(
+                        'save_blog_draft calling update_blog_draft post_id=%s',
+                        candidate.pk,
+                    )
                     post = persistence.update_blog_draft(
                         candidate,
                         draft,
@@ -613,9 +627,11 @@ class WorkspaceService:
                         source_url=session.source_url or '',
                     )
                 except BlogDraftPersistenceError as exc:
+                    logger.exception('save_blog_draft update_blog_draft FAILED')
                     raise ValueError(str(exc)) from exc
 
         if post is None:
+            logger.info('save_blog_draft calling create_blog_draft')
             try:
                 post = persistence.create_blog_draft(
                     draft,
@@ -624,7 +640,13 @@ class WorkspaceService:
                     source_url=session.source_url or '',
                 )
                 created = True
+                logger.info(
+                    'save_blog_draft create_blog_draft OK post_id=%s status=%s',
+                    post.pk,
+                    post.status,
+                )
             except BlogDraftPersistenceError as exc:
+                logger.exception('save_blog_draft create_blog_draft FAILED')
                 raise ValueError(str(exc)) from exc
 
         admin_url = reverse('admin:blog_post_change', args=[post.pk])

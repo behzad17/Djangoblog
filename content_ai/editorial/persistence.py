@@ -5,12 +5,16 @@ AI must never publish. This layer only creates/updates Draft status Posts.
 
 from __future__ import annotations
 
+import logging
+
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 from django.utils.text import slugify
 
 from blog.models import Category, Post
 from content_ai.editorial.drafts import EditorialDraft
+
+logger = logging.getLogger(__name__)
 
 
 class BlogDraftPersistenceError(Exception):
@@ -60,6 +64,12 @@ class BlogDraftPersistenceService:
         content = self._compose_content(editorial_draft)
         excerpt = self._excerpt_for(editorial_draft)
 
+        logger.info(
+            'create_blog_draft instantiating Post title=%r author=%s category=%s',
+            title,
+            getattr(author, 'pk', None),
+            getattr(category, 'pk', None),
+        )
         post = Post(
             title=title,
             content=content,
@@ -72,11 +82,22 @@ class BlogDraftPersistenceService:
 
         try:
             with transaction.atomic():
+                logger.info('create_blog_draft calling post.save()')
                 post.save()
+                logger.info(
+                    'create_blog_draft post.save() OK pk=%s status=%s slug=%r',
+                    post.pk,
+                    post.status,
+                    post.slug,
+                )
         except IntegrityError as exc:
+            logger.exception('create_blog_draft IntegrityError')
             raise BlogDraftPersistenceError(
                 f'Could not create Blog draft: {exc}'
             ) from exc
+        except Exception:
+            logger.exception('create_blog_draft unexpected error during post.save()')
+            raise
 
         if post.status != self.DRAFT_STATUS:
             raise BlogDraftPersistenceError(

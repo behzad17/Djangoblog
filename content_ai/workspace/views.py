@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import json
+import logging
+import traceback
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
+
+logger = logging.getLogger(__name__)
 
 from content_ai.config.ai_engine import ENABLE_AI_EDITORIAL_WORKSPACE
 from content_ai.editorial.content_types import (
@@ -105,7 +109,15 @@ def editorial_workspace(request):
 @require_POST
 def workspace_api(request, action: str):
     """JSON API for workspace panel actions."""
+    logger.info(
+        'workspace_api ENTER method=%s action=%r path=%s user=%s',
+        request.method,
+        action,
+        request.path,
+        getattr(request.user, 'username', None),
+    )
     if not ENABLE_AI_EDITORIAL_WORKSPACE:
+        logger.warning('workspace_api blocked: workspace disabled')
         return JsonResponse(
             serialize_error(
                 'workspace_disabled',
@@ -115,6 +127,11 @@ def workspace_api(request, action: str):
         )
     service, session = _ensure_session(request)
     payload = _json_body(request)
+    logger.info(
+        'workspace_api session=%s payload_keys=%s',
+        getattr(session, 'session_id', None),
+        sorted(payload.keys()) if isinstance(payload, dict) else type(payload),
+    )
 
     try:
         if action == 'ingest_source':
@@ -238,8 +255,20 @@ def workspace_api(request, action: str):
             return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
         if action in ('save_draft', 'save_blog_draft', 'save'):
+            logger.info('workspace_api SAVE_DRAFT step=apply_sections')
             _apply_sections_payload(session, payload)
+            logger.info(
+                'workspace_api SAVE_DRAFT step=call_save_blog_draft '
+                'headline=%r lead_len=%s body_len=%s',
+                (session.sections.headline or '')[:80],
+                len(session.sections.lead or ''),
+                len(session.sections.body or ''),
+            )
             blog_draft = service.save_blog_draft(session, user=request.user)
+            logger.info(
+                'workspace_api SAVE_DRAFT step=save_ok blog_draft=%s',
+                blog_draft,
+            )
             save_session(request, session)
             return JsonResponse(
                 {
@@ -275,16 +304,24 @@ def workspace_api(request, action: str):
         )
 
     except (ProviderNotFound, ProviderConfigurationError, GenerationError) as exc:
+        logger.exception('workspace_api generation_failed action=%r', action)
         return JsonResponse(
             serialize_error('generation_failed', str(exc)),
             status=502,
         )
     except ValueError as exc:
+        logger.warning('workspace_api validation_error action=%r: %s', action, exc)
         return JsonResponse(
             serialize_error('validation_error', str(exc)),
             status=400,
         )
     except Exception as exc:
+        logger.error(
+            'workspace_api internal_error action=%r: %s\n%s',
+            action,
+            exc,
+            traceback.format_exc(),
+        )
         return JsonResponse(
             serialize_error('internal_error', str(exc)),
             status=500,

@@ -284,12 +284,23 @@
     });
   });
 
-  document.getElementById('ai-ws-save-sections').addEventListener('click', function () {
-    post('save_draft', {
-      sections: readSections(),
-      research_notes: document.getElementById('ai-ws-research').value,
-    }).then(function (data) {
-      if (data.ok) {
+  var saveBlogBtn = document.getElementById('ai-ws-save-blog-draft');
+  if (saveBlogBtn) {
+    saveBlogBtn.addEventListener('click', function () {
+      var statusEl = document.getElementById('ai-ws-blog-draft-status');
+      if (statusEl) {
+        statusEl.textContent = 'Saving Blog draft…';
+      }
+      post('save_draft', {
+        sections: readSections(),
+        research_notes: document.getElementById('ai-ws-research').value,
+      }).then(function (data) {
+        if (!data.ok) {
+          if (statusEl) {
+            statusEl.textContent = 'Save failed. See the error alert for details.';
+          }
+          return;
+        }
         applySession(data.session);
         if (data.blog_draft && data.blog_draft.admin_url) {
           var msg = data.blog_draft.created
@@ -299,9 +310,9 @@
             window.location.href = data.blog_draft.admin_url;
           }
         }
-      }
+      });
     });
-  });
+  }
 
   document.getElementById('ai-ws-actions').addEventListener('click', function (ev) {
     var btn = ev.target.closest('[data-action-id]');
