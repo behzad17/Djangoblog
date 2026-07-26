@@ -167,35 +167,82 @@
       <section class="ai-workspace__featured-image" id="ai-ws-featured-image" aria-label="Featured image">
         <h3>Featured image</h3>
         <p class="ai-workspace__hint">
-          16:9 editorial hero. Planner runs first (internal), then an editable
-          prompt. Regenerating never rewrites the article, SEO, tags, category
-          or summary.
+          Prompt is prepared automatically after you generate an article.
+          Typical flow: Generate Image → Accept → Save Draft.
         </p>
-        <label>Image style
-          <select id="ai-ws-image-style">
-            {% for item in image_styles %}
-              <option value="{{ item.id }}"{% if item.id == 'editorial_photo' %} selected{% endif %}>{{ item.label }}</option>
-            {% endfor %}
-          </select>
-        </label>
-        <label>Image prompt
-          <textarea id="ai-ws-image-prompt" rows="8" placeholder="Prepare prompt after generating the article…"></textarea>
-        </label>
-        <p class="ai-workspace__hint" id="ai-ws-image-explanation"></p>
-        <div class="ai-workspace__toolbar" id="ai-ws-image-prompt-actions">
-          <button type="button" class="button" id="ai-ws-prepare-image">Prepare prompt</button>
-          <button type="button" class="button" id="ai-ws-restore-original-image-prompt">Restore Original</button>
-          <button type="button" class="button default" id="ai-ws-generate-image">Generate</button>
+
+        <div class="ai-workspace__image-summary" id="ai-ws-image-summary">
+          <p class="ai-workspace__image-ready" id="ai-ws-image-ready" hidden>
+            ✓ AI Prompt Ready
+          </p>
+          <p class="ai-workspace__hint" id="ai-ws-image-ready-missing">
+            Generate an article to prepare the image prompt automatically.
+          </p>
+          <dl class="ai-workspace__image-meta" id="ai-ws-image-meta">
+            <div>
+              <dt>Style</dt>
+              <dd id="ai-ws-image-style-label">Editorial Photo</dd>
+            </div>
+            <div>
+              <dt>Aspect Ratio</dt>
+              <dd>16:9</dd>
+            </div>
+            <div>
+              <dt>Prompt</dt>
+              <dd id="ai-ws-image-prompt-visibility">Hidden</dd>
+            </div>
+          </dl>
+          <label class="ai-workspace__image-style-inline">Style
+            <select id="ai-ws-image-style" aria-label="Featured image style">
+              {% for item in image_styles %}
+                <option value="{{ item.id }}"{% if item.id == 'editorial_photo' %} selected{% endif %}>{{ item.label }}</option>
+              {% endfor %}
+            </select>
+          </label>
         </div>
+
+        <div class="ai-workspace__toolbar" id="ai-ws-image-primary-actions">
+          <button type="button" class="button" id="ai-ws-prepare-image" hidden>
+            Prepare Prompt
+          </button>
+          <button type="button" class="button default" id="ai-ws-generate-image">
+            Generate Image
+          </button>
+          <button type="button" class="button" id="ai-ws-regenerate-image" hidden>
+            Regenerate
+          </button>
+          <button type="button" class="button default" id="ai-ws-accept-image" hidden>
+            Accept Image
+          </button>
+          <button type="button" class="button" id="ai-ws-toggle-image-prompt">
+            Edit Prompt
+          </button>
+        </div>
+        <p class="ai-workspace__image-loading" id="ai-ws-image-loading" hidden aria-live="polite">
+          Generating featured image…
+        </p>
+        <p class="ai-workspace__image-error" id="ai-ws-image-error" hidden role="alert"></p>
+
+        <div class="ai-workspace__image-advanced" id="ai-ws-image-advanced" hidden>
+          <p class="ai-workspace__hint" id="ai-ws-image-explanation"></p>
+          <label>Image prompt
+            <textarea id="ai-ws-image-prompt" rows="8" placeholder="AI prompt appears here after article generation…"></textarea>
+          </label>
+          <div class="ai-workspace__toolbar">
+            <button type="button" class="button" id="ai-ws-restore-original-image-prompt">
+              Restore AI Prompt
+            </button>
+            <button type="button" class="button" id="ai-ws-save-image-prompt-edits">
+              Save edits
+            </button>
+            <button type="button" class="button" id="ai-ws-collapse-image-prompt">
+              Hide prompt
+            </button>
+          </div>
+        </div>
+
         <div class="ai-workspace__image-preview" id="ai-ws-image-preview-wrap" hidden>
           <img id="ai-ws-image-preview" alt="Generated featured image preview" width="960" height="540">
-          <div class="ai-workspace__toolbar" id="ai-ws-image-review-actions">
-            <button type="button" class="button default" id="ai-ws-accept-image">Accept Image</button>
-            <button type="button" class="button" id="ai-ws-regenerate-image">Regenerate</button>
-            <button type="button" class="button" id="ai-ws-edit-image-prompt">Edit Prompt</button>
-            <button type="button" class="button" id="ai-ws-change-image-style">Change Style</button>
-            <button type="button" class="button" id="ai-ws-generate-image-again">Generate Again</button>
-          </div>
         </div>
         <p class="ai-workspace__hint" id="ai-ws-image-status"></p>
       </section>
@@ -261,5 +308,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-image-pipeline-v1"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-auto-image-qa"></script>
 {% endblock %}

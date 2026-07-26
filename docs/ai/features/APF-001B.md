@@ -54,12 +54,22 @@ mood, lighting, complexity, style, and things to avoid.
 
 ## Editor controls
 
-- Prepare prompt / Edit prompt / Restore Original
-- Style selector (Change Style rebuilds prompt)
-- Generate / Regenerate / Generate Again
-- Accept Image → attaches to Blog draft featured image
-- Regeneration never rewrites article, SEO, tags, category, or summary
-- On failure: keep article + prompt; allow retry
+Primary flow (prompt hidden by default):
+
+- **Generate Image** / **Regenerate** / **Accept Image**
+- **Prepare Prompt** only if auto-prepare did not run
+
+Advanced (optional):
+
+- **Edit Prompt** expands the prompt editor
+- Restore AI Prompt / Save edits / Hide prompt
+- Style selector (Editorial Photo default)
+
+After **Generate Article**, the image prompt is prepared automatically.
+Editors never write prompts from scratch.
+
+Regeneration never rewrites article, SEO, tags, category, or summary.
+On failure: keep article + prompt; allow retry.
 
 ---
 

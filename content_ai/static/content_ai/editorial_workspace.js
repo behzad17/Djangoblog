@@ -128,6 +128,49 @@
     }, 0);
   }
 
+  var imagePromptExpanded = false;
+  var imageGenerating = false;
+
+  function setImagePromptExpanded(expanded) {
+    imagePromptExpanded = !!expanded;
+    var advanced = document.getElementById('ai-ws-image-advanced');
+    var toggleBtn = document.getElementById('ai-ws-toggle-image-prompt');
+    var visibility = document.getElementById('ai-ws-image-prompt-visibility');
+    if (advanced) advanced.hidden = !imagePromptExpanded;
+    if (toggleBtn) {
+      toggleBtn.textContent = imagePromptExpanded ? 'Hide Prompt' : 'Edit Prompt';
+    }
+    if (visibility) {
+      visibility.textContent = imagePromptExpanded ? 'Visible (editing)' : 'Hidden';
+    }
+  }
+
+  function setImageGenerating(busy) {
+    imageGenerating = !!busy;
+    var gen = document.getElementById('ai-ws-generate-image');
+    var regen = document.getElementById('ai-ws-regenerate-image');
+    var accept = document.getElementById('ai-ws-accept-image');
+    var loading = document.getElementById('ai-ws-image-loading');
+    if (gen) gen.disabled = imageGenerating;
+    if (regen) regen.disabled = imageGenerating;
+    if (accept) accept.disabled = imageGenerating;
+    if (loading) loading.hidden = !imageGenerating;
+  }
+
+  function runImageAction(action) {
+    setImageGenerating(true);
+    var errorEl = document.getElementById('ai-ws-image-error');
+    if (errorEl) {
+      errorEl.hidden = true;
+      errorEl.textContent = '';
+    }
+    return post(action, featuredImagePayload()).then(function (data) {
+      setImageGenerating(false);
+      if (data && data.ok) applySession(data.session);
+      return data;
+    });
+  }
+
   function renderFeaturedImage(state) {
     var promptEl = document.getElementById('ai-ws-image-prompt');
     var explainEl = document.getElementById('ai-ws-image-explanation');
@@ -135,38 +178,80 @@
     var wrap = document.getElementById('ai-ws-image-preview-wrap');
     var img = document.getElementById('ai-ws-image-preview');
     var styleEl = document.getElementById('ai-ws-image-style');
+    var styleLabel = document.getElementById('ai-ws-image-style-label');
+    var readyEl = document.getElementById('ai-ws-image-ready');
+    var missingEl = document.getElementById('ai-ws-image-ready-missing');
+    var prepareBtn = document.getElementById('ai-ws-prepare-image');
+    var regenBtn = document.getElementById('ai-ws-regenerate-image');
+    var acceptBtn = document.getElementById('ai-ws-accept-image');
+    var errorEl = document.getElementById('ai-ws-image-error');
     if (!promptEl) return;
+
+    var hasPrompt = !!(state && String(state.prompt || '').trim());
     if (state && (state.prompt || state.status)) {
       promptEl.value = state.prompt || '';
     }
     if (styleEl && state && state.image_style) {
       styleEl.value = state.image_style;
     }
+    if (styleLabel) {
+      styleLabel.textContent =
+        (state && (state.image_style_label || state.image_style)) || 'Editorial Photo';
+    }
     if (explainEl) {
       explainEl.textContent = (state && state.explanation) || '';
     }
+    if (readyEl) readyEl.hidden = !hasPrompt;
+    if (missingEl) missingEl.hidden = hasPrompt;
+    if (prepareBtn) prepareBtn.hidden = hasPrompt;
+    if (regenBtn) regenBtn.hidden = !(state && state.image_url);
+    if (acceptBtn) {
+      var needsAccept = !!(
+        state &&
+        state.image_url &&
+        (!state.accepted || state.pending_accept)
+      );
+      acceptBtn.hidden = !needsAccept;
+    }
+
+    if (errorEl) {
+      if (state && state.error) {
+        errorEl.hidden = false;
+        errorEl.textContent = 'Image generation failed: ' + state.error;
+      } else {
+        errorEl.hidden = true;
+        errorEl.textContent = '';
+      }
+    }
+
     if (statusEl) {
       var bits = [];
+      if (hasPrompt) bits.push('AI prompt ready');
       if (state && state.status) bits.push('Status: ' + state.status);
-      if (state && state.image_style_label) bits.push(state.image_style_label);
-      else if (state && state.image_style) bits.push(state.image_style);
       if (state && state.provider) bits.push('Provider: ' + state.provider);
-      if (state && state.aspect_ratio) bits.push(state.aspect_ratio);
-      if (state && state.accepted) bits.push('Accepted & attached to draft');
+      if (state && state.accepted && !state.pending_accept) {
+        bits.push('Accepted & attached to draft');
+      }
+      if (state && state.pending_accept) {
+        bits.push('New image ready — Accept to attach');
+      }
+      if (state && state.previous_image_url && state.pending_accept) {
+        bits.push('Previous image kept on draft until Accept');
+      }
       if (state && state.cloudinary_public_id) bits.push(state.cloudinary_public_id);
-      if (state && state.error) bits.push('Error: ' + state.error);
-      if (state && state.original_prompt) bits.push('Original prompt available');
       statusEl.textContent = bits.join(' · ');
     }
     if (wrap && img) {
       if (state && state.image_url) {
-        img.src = state.attached_url || state.image_url;
+        img.src = state.image_url;
         wrap.hidden = false;
       } else {
         img.removeAttribute('src');
         wrap.hidden = true;
       }
     }
+    setImagePromptExpanded(imagePromptExpanded);
+    if (!imageGenerating) setImageGenerating(false);
   }
 
   function featuredImagePayload() {
@@ -621,64 +706,63 @@
   var generateImageBtn = document.getElementById('ai-ws-generate-image');
   if (generateImageBtn) {
     generateImageBtn.addEventListener('click', function () {
-      post('generate_image', featuredImagePayload()).then(function (data) {
-        if (data.ok) applySession(data.session);
-        else if (data.session) applySession(data.session);
-      });
-    });
-  }
-  var generateImageAgainBtn = document.getElementById('ai-ws-generate-image-again');
-  if (generateImageAgainBtn) {
-    generateImageAgainBtn.addEventListener('click', function () {
-      post('generate_image', featuredImagePayload()).then(function (data) {
-        if (data.ok) applySession(data.session);
-        else if (data.session) applySession(data.session);
-      });
+      if (imageGenerating) return;
+      runImageAction('generate_image');
     });
   }
   var regenerateImageBtn = document.getElementById('ai-ws-regenerate-image');
   if (regenerateImageBtn) {
     regenerateImageBtn.addEventListener('click', function () {
-      post('regenerate_image', featuredImagePayload()).then(function (data) {
-        if (data.ok) applySession(data.session);
-        else if (data.session) applySession(data.session);
-      });
+      if (imageGenerating) return;
+      runImageAction('regenerate_image');
     });
   }
   var restoreOriginalPromptBtn = document.getElementById('ai-ws-restore-original-image-prompt');
   if (restoreOriginalPromptBtn) {
     restoreOriginalPromptBtn.addEventListener('click', function () {
       post('restore_original_image_prompt', featuredImagePayload()).then(function (data) {
-        if (data.ok) applySession(data.session);
+        if (data.ok) {
+          applySession(data.session);
+          setImagePromptExpanded(true);
+        }
+      });
+    });
+  }
+  var saveImagePromptBtn = document.getElementById('ai-ws-save-image-prompt-edits');
+  if (saveImagePromptBtn) {
+    saveImagePromptBtn.addEventListener('click', function () {
+      post('save_image_prompt_edits', featuredImagePayload()).then(function (data) {
+        if (data.ok) {
+          applySession(data.session);
+          setImagePromptExpanded(true);
+        }
       });
     });
   }
   var acceptImageBtn = document.getElementById('ai-ws-accept-image');
   if (acceptImageBtn) {
     acceptImageBtn.addEventListener('click', function () {
-      post('accept_image', featuredImagePayload()).then(function (data) {
-        if (data.ok) applySession(data.session);
-      });
+      if (imageGenerating) return;
+      runImageAction('accept_image');
     });
   }
-  var editImagePromptBtn = document.getElementById('ai-ws-edit-image-prompt');
-  if (editImagePromptBtn) {
-    editImagePromptBtn.addEventListener('click', function () {
-      var promptEl = document.getElementById('ai-ws-image-prompt');
-      if (promptEl) {
-        promptEl.focus();
-        promptEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var toggleImagePromptBtn = document.getElementById('ai-ws-toggle-image-prompt');
+  if (toggleImagePromptBtn) {
+    toggleImagePromptBtn.addEventListener('click', function () {
+      setImagePromptExpanded(!imagePromptExpanded);
+      if (imagePromptExpanded) {
+        var promptEl = document.getElementById('ai-ws-image-prompt');
+        if (promptEl) {
+          promptEl.focus();
+          promptEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
     });
   }
-  var changeImageStyleBtn = document.getElementById('ai-ws-change-image-style');
-  if (changeImageStyleBtn) {
-    changeImageStyleBtn.addEventListener('click', function () {
-      var styleEl = document.getElementById('ai-ws-image-style');
-      if (styleEl) {
-        styleEl.focus();
-        styleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+  var collapseImagePromptBtn = document.getElementById('ai-ws-collapse-image-prompt');
+  if (collapseImagePromptBtn) {
+    collapseImagePromptBtn.addEventListener('click', function () {
+      setImagePromptExpanded(false);
     });
   }
   var imageStyleSelect = document.getElementById('ai-ws-image-style');

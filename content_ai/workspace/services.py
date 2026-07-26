@@ -30,6 +30,7 @@ from content_ai.editorial.image.style import (
     resolve_image_style,
 )
 from content_ai.editorial.image.attach import (
+    FeaturedImageAttachError,
     attach_featured_image_to_post,
     upload_featured_image_asset,
 )
@@ -559,6 +560,21 @@ class WorkspaceService:
                 (session.metadata or {}).get('source_binding') or {}
             ),
         }
+        # Auto-build featured image prompt from the new article (editors
+        # review optionally — they never write prompts from scratch).
+        draft_explanations = list(session.last_explanations)
+        try:
+            self.prepare_featured_image_prompt(
+                session,
+                reset_generated_image=True,
+            )
+            session.last_explanations = draft_explanations + [
+                'Featured image prompt prepared automatically — '
+                'Generate Image when ready.',
+            ]
+        except ValueError:
+            # Incomplete sections; Prepare Prompt remains available in UI.
+            session.last_explanations = draft_explanations
         session.touch()
         return session
 
@@ -767,11 +783,13 @@ class WorkspaceService:
         session: WorkspaceSession,
         *,
         image_style: str | None = None,
+        reset_generated_image: bool = False,
     ) -> dict:
         """
         Plan (internal) then build an editable image prompt.
 
         Never builds from URL or title alone. Does not call the image provider.
+        Called automatically after article generation; editors may optionally edit.
         """
         sections = session.sections
         if not (
@@ -805,6 +823,7 @@ class WorkspaceService:
             publisher=publisher,
             image_style=style,
         )
+        keep_image = not reset_generated_image
         state = {
             'prompt': brief.prompt,
             'original_prompt': brief.prompt,
@@ -812,16 +831,21 @@ class WorkspaceService:
             or previous.get('prompt')
             or '',
             'explanation': brief.explanation,
-            'image_url': previous.get('image_url') or '',
-            'revised_prompt': previous.get('revised_prompt') or '',
-            'provider': previous.get('provider') or '',
+            'image_url': (previous.get('image_url') or '') if keep_image else '',
+            'revised_prompt': (
+                (previous.get('revised_prompt') or '') if keep_image else ''
+            ),
+            'provider': (previous.get('provider') or '') if keep_image else '',
             'aspect_ratio': brief.aspect_ratio,
             'image_style': style,
             'image_style_label': IMAGE_STYLE_LABELS.get(style, style),
             'status': 'prompt_ready',
-            'accepted': False,
-            'cloudinary_public_id': previous.get('cloudinary_public_id') or '',
+            'accepted': bool(previous.get('accepted')) if keep_image else False,
+            'cloudinary_public_id': (
+                (previous.get('cloudinary_public_id') or '') if keep_image else ''
+            ),
             'error': '',
+            'auto_prepared': True,
             # Internal only — stripped from API responses.
             'planner': brief.plan_dict(),
             'metadata': {
@@ -835,9 +859,9 @@ class WorkspaceService:
             seo['image_prompt'] = brief.prompt
             session.metadata['seo'] = seo
         session.last_explanations = [
-            'Featured image planned and prompt prepared from the Persian article.',
+            'Featured image prompt prepared automatically from the Persian article.',
             f'Style: {IMAGE_STYLE_LABELS.get(style, style)} (default Editorial Photo).',
-            'Edit the prompt before generating. Regeneration does not '
+            'Edit the prompt only if needed. Regeneration does not '
             'rewrite the article, SEO, tags, category, or summary.',
             brief.explanation,
         ]
@@ -913,14 +937,21 @@ class WorkspaceService:
                 provider_name=provider_name,
             )
         except Exception as exc:  # noqa: BLE001
-            # Keep article + prompt; surface error for retry.
+            # Keep article + prompt + previous image; surface error for retry.
             failed = dict(current)
             failed['prompt'] = cleaned
             failed['image_style'] = style
             failed['image_style_label'] = IMAGE_STYLE_LABELS.get(style, style)
             failed['status'] = 'error'
             failed['error'] = str(exc)
-            failed['accepted'] = False
+            # Do not drop a previously accepted / previewed image on failure.
+            failed['accepted'] = bool(current.get('accepted'))
+            failed['image_url'] = current.get('image_url') or ''
+            failed['cloudinary_public_id'] = (
+                current.get('cloudinary_public_id') or ''
+            )
+            failed['attached_url'] = current.get('attached_url') or ''
+            failed['previous_image_url'] = current.get('previous_image_url') or ''
             session.metadata['featured_image'] = failed
             session.last_explanations = [
                 'Featured image generation failed — article and prompt kept.',
@@ -937,8 +968,17 @@ class WorkspaceService:
         )
         state['image_style'] = style
         state['image_style_label'] = IMAGE_STYLE_LABELS.get(style, style)
+        # Candidate preview; draft attachment is only replaced on Accept.
+        state['previous_image_url'] = (current.get('image_url') or '').strip()
+        state['previous_cloudinary_public_id'] = (
+            current.get('cloudinary_public_id') or ''
+        )
+        state['previous_attached_url'] = current.get('attached_url') or ''
         state['accepted'] = False
-        state['cloudinary_public_id'] = ''
+        state['pending_accept'] = True
+        # Keep prior Cloudinary id for reference until Accept replaces it.
+        state['cloudinary_public_id'] = current.get('cloudinary_public_id') or ''
+        state['attached_url'] = current.get('attached_url') or ''
         state['error'] = ''
         if regenerate and not state.get('previous_prompt'):
             state['previous_prompt'] = previous_prompt
@@ -954,7 +994,7 @@ class WorkspaceService:
         session.last_explanations = [
             (
                 'Featured image regenerated (article, SEO, tags, category, '
-                'summary unchanged).'
+                'summary unchanged). Accept to replace the draft featured image.'
                 if regenerate
                 else 'Featured image generated — review, then Accept to attach.'
             ),
@@ -981,7 +1021,35 @@ class WorkspaceService:
         state['error'] = ''
         session.metadata['featured_image'] = state
         session.last_explanations = [
-            'Restored the original featured image prompt. Article unchanged.',
+            'Restored the original AI featured image prompt. Article unchanged.',
+        ]
+        session.touch()
+        return self._public_featured_image_state(state)
+
+    def save_image_prompt_edits(
+        self,
+        session: WorkspaceSession,
+        *,
+        prompt: str,
+    ) -> dict:
+        """Persist optional editor edits to the image prompt (not the article)."""
+        current = self._featured_image_state(session)
+        cleaned = (prompt or '').strip()
+        if not cleaned:
+            raise ValueError('Image prompt cannot be empty.')
+        if not (current.get('original_prompt') or '').strip():
+            current['original_prompt'] = cleaned
+        state = dict(current)
+        state['previous_prompt'] = (current.get('prompt') or '').strip()
+        state['prompt'] = cleaned
+        state['status'] = current.get('status') or 'prompt_ready'
+        state['error'] = ''
+        session.metadata['featured_image'] = state
+        seo = dict(session.metadata.get('seo') or {})
+        seo['image_prompt'] = cleaned
+        session.metadata['seo'] = seo
+        session.last_explanations = [
+            'Saved image prompt edits. Article unchanged.',
         ]
         session.touch()
         return self._public_featured_image_state(state)
@@ -1037,9 +1105,11 @@ class WorkspaceService:
 
         state = dict(current)
         state['accepted'] = True
+        state['pending_accept'] = False
         state['status'] = 'accepted'
         state['cloudinary_public_id'] = upload['public_id']
         state['attached_url'] = upload.get('secure_url') or image_url
+        state['previous_image_url'] = current.get('previous_image_url') or ''
         state['error'] = ''
         state['attached_post_id'] = post.pk
         session.metadata['featured_image'] = state
@@ -1154,6 +1224,20 @@ class WorkspaceService:
         category = persistence.resolve_category(session.sections.category)
         session.sections.category = category.name
 
+        featured = self._featured_image_state(session)
+        featured_meta = {
+            'prompt': featured.get('prompt') or '',
+            'original_prompt': featured.get('original_prompt') or '',
+            'image_style': featured.get('image_style') or '',
+            'image_style_label': featured.get('image_style_label') or '',
+            'aspect_ratio': featured.get('aspect_ratio') or '16:9',
+            'status': featured.get('status') or '',
+            'cloudinary_public_id': featured.get('cloudinary_public_id') or '',
+            'accepted': bool(featured.get('accepted')),
+            'image_url': featured.get('image_url') or '',
+            'attached_url': featured.get('attached_url') or '',
+        }
+
         draft = EditorialDraft(
             title=headline or 'Untitled AI draft',
             lead=lead,
@@ -1172,6 +1256,7 @@ class WorkspaceService:
                 'goal': session.resolved_goal(),
                 'template_id': session.template_id,
                 'workspace_session_id': session.session_id,
+                'featured_image': featured_meta,
             },
         )
 
@@ -1225,6 +1310,19 @@ class WorkspaceService:
                 logger.exception('save_blog_draft create_blog_draft FAILED')
                 raise ValueError(str(exc)) from exc
 
+        # Keep an already-accepted featured image attached on Save Draft.
+        if featured_meta.get('accepted') and featured_meta.get('cloudinary_public_id'):
+            try:
+                attach_featured_image_to_post(
+                    post,
+                    public_id=featured_meta['cloudinary_public_id'],
+                )
+            except FeaturedImageAttachError as exc:
+                logger.warning(
+                    'save_blog_draft could not re-attach featured image: %s',
+                    exc,
+                )
+
         admin_url = reverse('admin:blog_post_change', args=[post.pk])
         blog_draft = {
             'post_id': post.pk,
@@ -1235,9 +1333,11 @@ class WorkspaceService:
             'category': post.category.name if post.category_id else '',
             'tags': list(session.sections.tags),
             'source_url': session.source_url or post.external_url or '',
+            'featured_image': featured_meta,
         }
         session.metadata['linked_post_id'] = post.pk
         session.metadata['blog_draft'] = blog_draft
+        session.metadata['featured_image_saved'] = featured_meta
         session.mark_pipeline('draft_generated', 'ready_for_publication')
         session.workflow_state = WorkflowState.READY_FOR_APPROVAL
         session.last_explanations = [
@@ -1250,6 +1350,10 @@ class WorkspaceService:
             f'Open draft: {admin_url}',
             'Continue editing in Blog Admin or return here to revise.',
         ]
+        if featured_meta.get('accepted') and featured_meta.get('cloudinary_public_id'):
+            session.last_explanations.append(
+                'Featured image, prompt, and style metadata saved with the draft.'
+            )
         session.push_history(
             'Saved Blog draft',
             session.last_explanations[0],

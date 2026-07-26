@@ -90,6 +90,40 @@ class ImagePlannerTests(SimpleTestCase):
 
 @override_settings(CONTENT_AI_PROVIDER='mock')
 class FeaturedImageWorkspaceTests(SimpleTestCase):
+    def test_generate_draft_auto_prepares_image_prompt(self):
+        editorial = MagicMock()
+        from content_ai.editorial.drafts import EditorialDraft
+
+        editorial.generate_draft.return_value = EditorialDraft(
+            title='عنوان فارسی',
+            lead='لید خبر درباره مسکن',
+            body='بدنه کامل مقاله درباره مسکن در سوئد و جزئیات بیشتر.',
+            summary='خلاصه',
+            language='fa',
+            metadata={},
+        )
+        service = WorkspaceService(editorial=editorial)
+        session = service.new_session()
+        session.source_material = 'Source article with enough text for generation.'
+        session.metadata['source_binding'] = {
+            'session_id': session.session_id,
+            'source_url': '',
+            'source_text_sha256': __import__('hashlib')
+            .sha256(session.source_material.encode())
+            .hexdigest(),
+            'source_text_chars': len(session.source_material),
+            'retrieval': 'manual_paste',
+        }
+        service.generate_draft(session, title='عنوان')
+        featured = session.metadata.get('featured_image') or {}
+        self.assertTrue((featured.get('prompt') or '').strip())
+        self.assertEqual(featured.get('status'), 'prompt_ready')
+        self.assertTrue(featured.get('auto_prepared'))
+        self.assertIn(
+            'Featured image prompt prepared automatically',
+            ' '.join(session.last_explanations),
+        )
+
     def test_prepare_and_generate_does_not_touch_article(self):
         service = WorkspaceService()
         session = service.new_session()
@@ -132,7 +166,10 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
         )
         self.assertEqual(regenerated['status'], 'generated')
         self.assertTrue(regenerated['previous_prompt'])
+        self.assertTrue(regenerated.get('pending_accept'))
         self.assertEqual(session.sections.body, original_body)
+        self.assertEqual(session.sections.summary, original_summary)
+        self.assertEqual(session.sections.category, original_category)
         self.assertTrue(session.pipeline.get('image_ready'))
 
     def test_restore_original_prompt(self):

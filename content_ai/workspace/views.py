@@ -405,6 +405,21 @@ def workspace_api(request, action: str):
                 }
             )
 
+        if action in ('save_image_prompt', 'save_image_prompt_edits'):
+            _apply_sections_payload(session, payload)
+            report = service.save_image_prompt_edits(
+                session,
+                prompt=payload.get('prompt') or '',
+            )
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'featured_image': report,
+                    'session': _session_payload(service, session),
+                }
+            )
+
         if action in ('use_previous_image_prompt', 'restore_image_prompt'):
             _apply_sections_payload(session, payload)
             report = service.use_previous_image_prompt(session)
