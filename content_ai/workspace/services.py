@@ -980,6 +980,37 @@ class WorkspaceService:
         state['cloudinary_public_id'] = current.get('cloudinary_public_id') or ''
         state['attached_url'] = current.get('attached_url') or ''
         state['error'] = ''
+
+        # GPT Image returns large b64 data-URLs. Persist a CDN preview URL so
+        # session JSON / Heroku responses stay small after OpenAI returns.
+        preview_url = (state.get('image_url') or '').strip()
+        if preview_url.startswith('data:image/'):
+            logger.info(
+                'workspace image decode: data-url chars=%d session=%s',
+                len(preview_url),
+                getattr(session, 'session_id', ''),
+            )
+            try:
+                upload = upload_featured_image_asset(
+                    preview_url,
+                    public_id_prefix='peyvand/editorial/featured-preview',
+                    session_id=f'{getattr(session, "session_id", "") or "preview"}-gen',
+                )
+                state['image_url'] = upload.get('secure_url') or preview_url
+                state['preview_cloudinary_public_id'] = upload.get('public_id') or ''
+                logger.info(
+                    'workspace image save (preview CDN): public_id=%s url=%s',
+                    state.get('preview_cloudinary_public_id'),
+                    str(state.get('image_url') or '')[:160],
+                )
+            except FeaturedImageAttachError as exc:
+                logger.exception(
+                    'workspace image preview upload failed; keeping data-url'
+                )
+                state['error'] = (
+                    'Preview CDN upload failed; image may be too large to keep: '
+                    f'{exc}'
+                )
         if regenerate and not state.get('previous_prompt'):
             state['previous_prompt'] = previous_prompt
         meta = dict(state.get('metadata') or {})
@@ -987,6 +1018,11 @@ class WorkspaceService:
             meta['planner'] = current.get('planner')
         state['metadata'] = meta
         session.metadata['featured_image'] = state
+        logger.info(
+            'workspace image database/session save: status=%s image_url_chars=%d',
+            state.get('status'),
+            len(str(state.get('image_url') or '')),
+        )
         seo = dict(session.metadata.get('seo') or {})
         seo['image_prompt'] = cleaned
         session.metadata['seo'] = seo

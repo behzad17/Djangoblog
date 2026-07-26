@@ -115,6 +115,8 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 OPENAI_MODEL = os.environ.get('OPENAI_MODEL', '')
 OPENAI_IMAGE_MODEL = os.environ.get('OPENAI_IMAGE_MODEL', 'gpt-image-2')
 OPENAI_IMAGE_SIZE = os.environ.get('OPENAI_IMAGE_SIZE', '1536x1024')
+# low = fastest GPT Image tier — required to stay under Heroku's 30s H12 limit.
+OPENAI_IMAGE_QUALITY = os.environ.get('OPENAI_IMAGE_QUALITY', 'low')
 OPENAI_IMAGE_TIMEOUT = float(os.environ.get('OPENAI_IMAGE_TIMEOUT', '90'))
 OPENAI_TIMEOUT = float(os.environ.get('OPENAI_TIMEOUT', '60'))
 

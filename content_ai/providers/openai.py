@@ -47,21 +47,28 @@ def _normalize_image_quality(model: str | None, quality: str | None) -> str | No
 
     DALL·E 3: standard | hd
     GPT Image: low | medium | high | auto
+
+    Default GPT Image quality is ``low`` so Heroku's hard 30s router
+    limit (H12) is less likely to kill the request mid-generation.
     """
     raw = (quality or '').strip().lower()
     if _is_gpt_image_model(model):
         if raw in ('', 'standard', 'auto'):
-            return 'medium'
+            return 'low'
         if raw in ('hd', 'high'):
             return 'high'
         if raw in ('low', 'medium', 'high'):
             return raw
-        return 'medium'
+        return 'low'
     if raw in ('', 'standard', 'hd'):
         return raw or 'standard'
     if raw == 'high':
         return 'hd'
     return 'standard'
+
+
+# GPT Image prompts: keep API payloads short; long Persian excerpts add latency.
+_MAX_IMAGE_PROMPT_CHARS = 2500
 
 
 def _extract_token_usage(response):
@@ -209,6 +216,15 @@ class OpenAIProvider(BaseAIProvider):
         if not prompt_text:
             raise GenerationError('Image prompt is required.')
 
+        full_prompt_chars = len(prompt_text)
+        if full_prompt_chars > _MAX_IMAGE_PROMPT_CHARS:
+            logger.warning(
+                'Truncating image prompt for OpenAI API: %d → %d chars',
+                full_prompt_chars,
+                _MAX_IMAGE_PROMPT_CHARS,
+            )
+            prompt_text = prompt_text[:_MAX_IMAGE_PROMPT_CHARS].rstrip() + '…'
+
         size = kwargs.get('size') or _aspect_to_openai_size(aspect_ratio)
         if not size:
             size = self.image_size or _DEFAULT_IMAGE_SIZE
@@ -226,9 +242,12 @@ class OpenAIProvider(BaseAIProvider):
                 _DEFAULT_IMAGE_MODEL,
             )
             model = _DEFAULT_IMAGE_MODEL
-        quality = _normalize_image_quality(
-            model, kwargs.get('quality') or 'standard'
+        configured_quality = (
+            kwargs.get('quality')
+            or getattr(settings, 'OPENAI_IMAGE_QUALITY', None)
+            or 'low'
         )
+        quality = _normalize_image_quality(model, configured_quality)
         response_format = kwargs.get('response_format')  # optional; SDK default
         # Images routinely exceed the 20s text timeout; avoid client abort →
         # empty/HTML upstream responses that Safari reports as pattern errors.
@@ -242,6 +261,7 @@ class OpenAIProvider(BaseAIProvider):
             'model': model,
             'prompt': prompt_text,
             'prompt_chars': len(prompt_text),
+            'prompt_chars_before_truncate': full_prompt_chars,
             'style': kwargs.get('style') or kwargs.get('image_style') or '',
             'size': size,
             'aspect_ratio': aspect_ratio or '16:9',

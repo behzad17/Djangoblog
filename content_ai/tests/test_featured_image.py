@@ -244,7 +244,8 @@ class FeaturedImageWorkspaceTests(SimpleTestCase):
             result['cloudinary_public_id'],
             'peyvand/editorial/featured/test',
         )
-        mock_upload.assert_called_once()
+        # Preview upload on generate + final upload on Accept.
+        self.assertEqual(mock_upload.call_count, 2)
         mock_attach.assert_called_once()
 
 

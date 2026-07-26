@@ -85,4 +85,4 @@ On failure: keep article + prompt; allow retry.
 | Workspace | `prepare_featured_image_prompt`, `set_featured_image_style`, `generate_featured_image`, `restore_original_image_prompt`, `accept_featured_image` |
 | API | `prepare_image_prompt`, `set_image_style`, `generate_image`, `regenerate_image`, `restore_original_image_prompt`, `accept_image` |
 
-Config: `OPENAI_IMAGE_MODEL` (default `gpt-image-2`), `OPENAI_IMAGE_SIZE` (default `1536x1024`).
+Config: `OPENAI_IMAGE_MODEL` (default `gpt-image-2`), `OPENAI_IMAGE_SIZE` (default `1536x1024`), `OPENAI_IMAGE_QUALITY` (default `low` — stays under Heroku’s 30s H12 limit).
