@@ -18,7 +18,7 @@ Master catalogue of Peyvand AI RFCs. Future RFCs should be registered here when 
 | **RFC-003** | Editorial Workflow | 2 Platform | Done (architecture) | Lifecycle orchestrator; inactive (`ENABLE_EDITORIAL_WORKFLOW=False`) |
 | **RFC-004** | Prompt Evaluation | 2 Platform | Done (architecture) | Passive metrics/snapshots/reports (`ENABLE_AI_EVALUATION_FRAMEWORK=False`) |
 | **RFC-005** | AI Provider Abstraction | 2 Platform | Done (architecture) | Manager/factory/capabilities; OpenAI path unchanged |
-| **RFC-006** | Source Intelligence | 3 Intelligence | Stub (APF-001) | Minimal inspector; full RFC planned |
+| **RFC-006** | Source Intelligence | 3 Intelligence | Partial (APF-001) | URL fetch + readable extract; trust ranking still stubbed |
 | **RFC-007** | Fact Checking | 3 Intelligence | Done (architecture) | Passive claim/evidence pipeline (`ENABLE_FACT_CHECKING_FRAMEWORK=False`) |
 | **RFC-008** | SEO Intelligence | 3 Intelligence | Planned | SEO assists |
 | **RFC-009** | Feedback Learning | 4 Learning | Planned | Learn from editor feedback |

@@ -52,6 +52,7 @@ class SourceIntelligenceService(WorkflowStageService):
                 text=inspect_text,
                 title=title,
                 language=language,
+                fetch=False,
             )
             context.extension_data['source_intelligence'] = {
                 'status': 'completed',

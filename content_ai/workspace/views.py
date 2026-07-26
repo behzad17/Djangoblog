@@ -27,6 +27,7 @@ from content_ai.providers.exceptions import (
 )
 from content_ai.serializers import serialize_error
 from content_ai.workflow.states import WorkflowState
+from content_ai.source.extract import ArticleExtractionError
 from content_ai.workspace.actions import list_actions_for_ui
 from content_ai.workspace.integrity import SourceIntegrityError
 from content_ai.workspace.services import WorkspaceService
@@ -350,6 +351,17 @@ def workspace_api(request, action: str):
         )
         return JsonResponse(
             serialize_error('source_not_ready', str(exc)),
+            status=400,
+        )
+    except ArticleExtractionError as exc:
+        logger.warning(
+            'workspace_api extraction_failed action=%r session=%s: %s',
+            action,
+            getattr(session, 'session_id', None),
+            exc,
+        )
+        return JsonResponse(
+            serialize_error('extraction_failed', str(exc)),
             status=400,
         )
     except (ProviderNotFound, ProviderConfigurationError, GenerationError) as exc:

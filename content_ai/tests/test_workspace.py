@@ -14,6 +14,8 @@ from content_ai.config.ai_engine import (
     FEATURE_FLAGS,
 )
 from content_ai.editorial.drafts import EditorialDraft
+from content_ai.source.extract import ArticleExtractionError, ExtractedArticle
+from content_ai.source.inspector import SourceInspector
 from content_ai.workflow.states import WorkflowState
 from content_ai.workspace.actions import get_action, list_actions_for_ui
 from content_ai.workspace.integrity import SourceIntegrityError
@@ -92,6 +94,59 @@ class WorkspaceServiceTests(SimpleTestCase):
         self.assertTrue(session.writing_style)
         self.assertIn('style', session.metadata['classification'])
 
+    def test_ingest_url_fetches_and_fills_source_text(self):
+        article = ExtractedArticle(
+            url='https://www.example.se/nyheter/bostad',
+            title='Bostadsnyheter i Stockholm',
+            text=(
+                'Det är viktigt att förstå bostadsmarknaden och att följa '
+                'utvecklingen. Kommunen planerar nya lägenheter för familjer.'
+            ),
+            domain='www.example.se',
+            detected_language='sv',
+            publisher='Example',
+            publication_date=__import__('datetime').date(2026, 7, 1),
+            detected_country='SE',
+            metadata={'extractor': 'test'},
+        )
+        inspector = SourceInspector(extractor=lambda url: article)
+        service = WorkspaceService(source_inspector=inspector)
+        session = service.new_session()
+        source = service.ingest_source(
+            session,
+            url='https://www.example.se/nyheter/bostad',
+            text='',
+        )
+        self.assertEqual(source['retrieval'], 'url_fetch')
+        self.assertIn('bostadsmarknaden', session.source_material)
+        self.assertEqual(session.source_url, article.url)
+        self.assertEqual(source['title'], article.title)
+        self.assertEqual(source['publisher'], 'Example')
+        self.assertEqual(source['publication_date'], '2026-07-01')
+        self.assertEqual(source['detected_country'], 'SE')
+        self.assertIn('Bostadsnyheter', session.research_notes)
+        self.assertIn('Fetched and extracted', session.last_explanations[0])
+
+    def test_ingest_url_extraction_failure_raises(self):
+        def boom(url):
+            raise ArticleExtractionError(
+                'Unable to extract article content from this URL.\n'
+                'Paste the article text manually.'
+            )
+
+        service = WorkspaceService(
+            source_inspector=SourceInspector(extractor=boom)
+        )
+        session = service.new_session()
+        with self.assertRaises(ArticleExtractionError) as ctx:
+            service.ingest_source(
+                session,
+                url='https://www.example.se/empty',
+                text='',
+            )
+        self.assertIn('Unable to extract article content', str(ctx.exception))
+        self.assertEqual(session.source_material, '')
+
     def test_set_classification_override(self):
         service = WorkspaceService()
         session = service.new_session()
@@ -155,7 +210,17 @@ class WorkspaceServiceTests(SimpleTestCase):
         service.editorial.generate_draft.assert_not_called()
 
     def test_generate_draft_rejects_url_only_ingest(self):
-        service = WorkspaceService(editorial=MagicMock())
+        service = WorkspaceService(
+            editorial=MagicMock(),
+            source_inspector=SourceInspector(
+                extractor=lambda url: (_ for _ in ()).throw(
+                    ArticleExtractionError(
+                        'Unable to extract article content from this URL.\n'
+                        'Paste the article text manually.'
+                    )
+                )
+            ),
+        )
         session = service.new_session()
         session.sections = ArticleSections(
             headline='Old article',
@@ -164,18 +229,16 @@ class WorkspaceServiceTests(SimpleTestCase):
         )
         session.source_material = 'Article A full text about housing.'
         session.source_url = 'https://example.se/article-a'
-        service.ingest_source(
-            session,
-            url='https://example.se/article-b',
-            text='',
-            title='',
-        )
-        self.assertEqual(session.source_material, '')
-        self.assertEqual(session.sections.headline, '')
-        self.assertEqual(session.sections.body, '')
-        with self.assertRaises(SourceIntegrityError):
-            service.generate_draft(session)
-        service.editorial.generate_draft.assert_not_called()
+        with self.assertRaises(ArticleExtractionError):
+            service.ingest_source(
+                session,
+                url='https://example.se/article-b',
+                text='',
+                title='',
+            )
+        # Failed fetch must not silently continue with old material under new URL.
+        self.assertEqual(session.source_url, 'https://example.se/article-a')
+        self.assertIn('housing', session.source_material.lower())
 
     def test_generate_does_not_reuse_previous_material_for_new_url(self):
         editorial = MagicMock()
@@ -187,7 +250,17 @@ class WorkspaceServiceTests(SimpleTestCase):
             language='fa',
             metadata={},
         )
-        service = WorkspaceService(editorial=editorial)
+
+        def extractor(url):
+            raise ArticleExtractionError(
+                'Unable to extract article content from this URL.\n'
+                'Paste the article text manually.'
+            )
+
+        service = WorkspaceService(
+            editorial=editorial,
+            source_inspector=SourceInspector(extractor=extractor),
+        )
         session = service.new_session()
         service.ingest_source(
             session,
@@ -195,18 +268,16 @@ class WorkspaceServiceTests(SimpleTestCase):
             text='Source article A about taxes.',
             title='Taxes',
         )
-        # Simulate Generate Draft with a new URL and empty text (bug path).
-        service.ingest_source(
-            session,
-            url='https://example.se/b',
-            text='',
-            title='',
-        )
-        with self.assertRaises(SourceIntegrityError):
-            service.generate_draft(session, title='')
+        with self.assertRaises(ArticleExtractionError):
+            service.ingest_source(
+                session,
+                url='https://example.se/b',
+                text='',
+                title='',
+            )
         editorial.generate_draft.assert_not_called()
-        self.assertNotIn('taxes', (session.source_material or '').lower())
-        self.assertEqual(session.sections.body, '')
+        self.assertIn('taxes', session.source_material.lower())
+        self.assertEqual(session.source_url, 'https://example.se/a')
 
     def test_seo_placeholders(self):
         service = WorkspaceService()
@@ -380,18 +451,56 @@ class WorkspaceAPIIntegrationTests(TestCase):
                 'title': 'Old',
             },
         )
-        response = self._post(
-            'generate_draft',
-            {
-                'source_text': '',
-                'source_url': 'https://example.se/new',
-                'title': '',
-            },
-        )
+        with patch(
+            'content_ai.source.inspector.extract_article_from_url',
+            side_effect=ArticleExtractionError(
+                'Unable to extract article content from this URL.\n'
+                'Paste the article text manually.'
+            ),
+        ):
+            response = self._post(
+                'generate_draft',
+                {
+                    'source_text': '',
+                    'source_url': 'https://example.se/new',
+                    'title': '',
+                },
+            )
         self.assertEqual(response.status_code, 400)
         data = response.json()
-        self.assertEqual(data['error']['code'], 'source_not_ready')
-        self.assertIn('not been imported', data['error']['message'])
+        self.assertEqual(data['error']['code'], 'extraction_failed')
+        self.assertIn('Unable to extract article content', data['error']['message'])
+
+    def test_ingest_source_api_fills_text_from_url(self):
+        article = ExtractedArticle(
+            url='https://www.example.se/nyheter/x',
+            title='Fetched title',
+            text=(
+                'Det är viktigt att förstå bostadsmarknaden och att följa '
+                'utvecklingen i hela regionen under året.'
+            ),
+            domain='www.example.se',
+            detected_language='sv',
+            publisher='Example',
+            detected_country='SE',
+        )
+        with patch(
+            'content_ai.source.inspector.extract_article_from_url',
+            return_value=article,
+        ):
+            response = self._post(
+                'ingest_source',
+                {
+                    'source_url': 'https://www.example.se/nyheter/x',
+                    'source_text': '',
+                },
+            )
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data['ok'])
+        self.assertIn('bostadsmarknaden', data['session']['source_material'])
+        self.assertEqual(data['session']['metadata']['source']['retrieval'], 'url_fetch')
+        self.assertEqual(data['session']['metadata']['source']['title'], 'Fetched title')
 
     def test_set_workflow_rejects_published(self):
         self._post('set_workflow', {'state': 'approved'})

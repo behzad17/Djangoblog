@@ -1,4 +1,4 @@
-"""Source Intelligence stub models (RFC-006 placeholder for APF-001)."""
+"""Source Intelligence models (RFC-006 / APF-001)."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ class SourceRecord:
     """
     Provider-independent source descriptor.
 
-    External retrieval is not implemented — editors supply material manually.
+    May contain fetched article text (URL ingest) or manually pasted material.
     """
 
     source_id: str

@@ -125,6 +125,39 @@ class ExtractorTests(SimpleTestCase):
                 url='https://example.se/x',
             )
 
+    def test_extract_uses_main_and_json_ld_metadata(self):
+        html = """
+        <html><head>
+          <title>Noise | Site</title>
+          <meta property="og:site_name" content="Example News" />
+          <meta property="article:published_time" content="2026-07-01T09:00:00+02:00" />
+          <script type="application/ld+json">
+          {
+            "@type": "NewsArticle",
+            "headline": "JSON-LD headline about housing",
+            "datePublished": "2026-07-01",
+            "publisher": {"@type": "Organization", "name": "Example News"},
+            "articleBody": "Det är viktigt att förstå bostadsmarknaden och att följa utvecklingen i hela regionen under året."
+          }
+          </script>
+        </head>
+        <body>
+          <main>
+            <p>Det är viktigt att förstå bostadsmarknaden och att följa utvecklingen.</p>
+            <p>Kommunen planerar nya lägenheter för familjer under nästa år.</p>
+          </main>
+        </body></html>
+        """
+        article = extract_readable_content(
+            html,
+            url='https://www.example.se/nyheter/bostad',
+        )
+        self.assertEqual(article.title, 'JSON-LD headline about housing')
+        self.assertEqual(article.publisher, 'Example News')
+        self.assertEqual(str(article.publication_date), '2026-07-01')
+        self.assertEqual(article.detected_country, 'SE')
+        self.assertIn('bostadsmarknaden', article.text)
+
 
 class SmartImportHelperTests(SimpleTestCase):
     def test_parse_structured_draft(self):

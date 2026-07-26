@@ -201,5 +201,5 @@
   {{ block.super }}
   {% csrf_token %}
   {# Cache-bust: CompressedStaticFilesStorage has no content hash; stale Safari JS posted update_sections. #}
-  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-source-integrity"></script>
+  <script src="{% static 'content_ai/editorial_workspace.js' %}?v=20260726-url-ingest"></script>
 {% endblock %}

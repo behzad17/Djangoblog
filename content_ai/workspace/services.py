@@ -94,6 +94,7 @@ class WorkspaceService:
             title=title,
             publisher=publisher,
             language=session.language,
+            fetch=True,
         )
         new_url = (record.url or incoming_url or '').strip()
         new_text = (record.raw_text or incoming_text or '').strip()
@@ -121,12 +122,19 @@ class WorkspaceService:
         session.source_material = new_text
         session.research_notes = self._research_notes(record)
         session.workflow_state = WorkflowState.RESEARCHING
-        retrieval = 'manual_paste' if new_text else 'url_only_no_fetch'
+        retrieval = (
+            (record.metadata or {}).get('retrieval')
+            or ('manual_paste' if new_text else 'url_only_no_fetch')
+        )
+        publication_date = ''
+        if record.publication_date is not None:
+            publication_date = record.publication_date.isoformat()
         session.metadata['source'] = {
             'source_id': record.source_id,
             'title': record.title,
             'publisher': record.publisher,
             'url': record.url,
+            'publication_date': publication_date,
             'detected_language': record.detected_language,
             'detected_country': record.detected_country,
             'source_type': record.source_type,
@@ -135,6 +143,7 @@ class WorkspaceService:
             'classification': record.classification,
             'warnings': list(record.warnings),
             'retrieval': retrieval,
+            'extraction': dict((record.metadata or {}).get('extraction') or {}),
         }
         session.metadata['source_binding'] = build_source_binding(
             session_id=session.session_id,
@@ -150,6 +159,14 @@ class WorkspaceService:
             url=session.source_url,
             publisher=publisher or record.publisher,
         )
+        if retrieval == 'url_fetch':
+            session.last_explanations = [
+                (
+                    f'Fetched and extracted article from {session.source_url} '
+                    f'({len(session.source_material)} characters).'
+                ),
+                *list(session.last_explanations or []),
+            ]
         session.touch()
         logger.info(
             'workspace_ingest session_id=%s source_url=%r source_chars=%s '
@@ -339,14 +356,25 @@ class WorkspaceService:
         return list_actions_for_ui(session.resolved_content_type())
 
     def _research_notes(self, record) -> str:
+        publication = (
+            record.publication_date.isoformat()
+            if record.publication_date is not None
+            else 'unknown'
+        )
+        retrieval = (record.metadata or {}).get('retrieval') or 'manual'
         lines = [
             f'Source: {record.title or "(untitled)"}',
+            f'URL: {record.url or "—"}',
+            f'Publisher: {record.publisher or "unknown"}',
+            f'Publication date: {publication}',
             f'Type: {record.source_type}',
             f'Language: {record.detected_language or "unknown"}',
+            f'Country: {record.detected_country or "unknown"}',
+            f'Retrieval: {retrieval}',
+            f'Extracted characters: {len((record.raw_text or "").strip())}',
             'Entities: (manual review — auto NER not implemented)',
             'Topics: (manual review)',
             'Possible missing information: verify dates, agency names, numbers.',
-            'Related sources: (future RFC-006)',
         ]
         return '\n'.join(lines)
 

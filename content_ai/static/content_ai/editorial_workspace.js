@@ -218,9 +218,13 @@
       return;
     }
     el.innerHTML =
+      '<div><strong>Title:</strong> ' + (src.title || '—') + '</div>' +
+      '<div><strong>Publisher:</strong> ' + (src.publisher || '—') + '</div>' +
+      '<div><strong>Published:</strong> ' + (src.publication_date || '—') + '</div>' +
       '<div><strong>Language:</strong> ' + (src.detected_language || '—') + '</div>' +
       '<div><strong>Country:</strong> ' + (src.detected_country || '—') + '</div>' +
       '<div><strong>Type:</strong> ' + (src.source_type || '—') + '</div>' +
+      '<div><strong>Retrieval:</strong> ' + (src.retrieval || '—') + '</div>' +
       '<div><strong>Trust:</strong> ' + (src.trust_score != null ? src.trust_score : '—') + '</div>' +
       '<div><strong>Warnings:</strong> ' + ((src.warnings || []).join('; ') || 'none') + '</div>';
     if (intel) intel.textContent = JSON.stringify(src, null, 2);
