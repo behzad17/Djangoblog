@@ -16,6 +16,7 @@ from content_ai.config.ai_engine import (
 from content_ai.editorial.drafts import EditorialDraft
 from content_ai.workflow.states import WorkflowState
 from content_ai.workspace.actions import get_action, list_actions_for_ui
+from content_ai.workspace.integrity import SourceIntegrityError
 from content_ai.workspace.services import WorkspaceService
 from content_ai.workspace.session import ArticleSections, WorkspaceSession
 
@@ -142,6 +143,70 @@ class WorkspaceServiceTests(SimpleTestCase):
         self.assertTrue(session.pipeline.get('draft_generated'))
         self.assertEqual(session.sections.headline, 'Guide title')
         self.assertEqual(session.sections.lead, 'Intro')
+
+    def test_generate_draft_rejects_empty_source(self):
+        service = WorkspaceService(editorial=MagicMock())
+        session = service.new_session()
+        session.sections.headline = 'Stale headline from previous article'
+        session.source_url = 'https://example.se/new-url'
+        with self.assertRaises(SourceIntegrityError) as ctx:
+            service.generate_draft(session, title='')
+        self.assertIn('not been imported', str(ctx.exception))
+        service.editorial.generate_draft.assert_not_called()
+
+    def test_generate_draft_rejects_url_only_ingest(self):
+        service = WorkspaceService(editorial=MagicMock())
+        session = service.new_session()
+        session.sections = ArticleSections(
+            headline='Old article',
+            lead='Old lead',
+            body='Old body about topic A',
+        )
+        session.source_material = 'Article A full text about housing.'
+        session.source_url = 'https://example.se/article-a'
+        service.ingest_source(
+            session,
+            url='https://example.se/article-b',
+            text='',
+            title='',
+        )
+        self.assertEqual(session.source_material, '')
+        self.assertEqual(session.sections.headline, '')
+        self.assertEqual(session.sections.body, '')
+        with self.assertRaises(SourceIntegrityError):
+            service.generate_draft(session)
+        service.editorial.generate_draft.assert_not_called()
+
+    def test_generate_does_not_reuse_previous_material_for_new_url(self):
+        editorial = MagicMock()
+        editorial.generate_draft.return_value = EditorialDraft(
+            title='Should not run',
+            lead='',
+            body='',
+            summary='',
+            language='fa',
+            metadata={},
+        )
+        service = WorkspaceService(editorial=editorial)
+        session = service.new_session()
+        service.ingest_source(
+            session,
+            url='https://example.se/a',
+            text='Source article A about taxes.',
+            title='Taxes',
+        )
+        # Simulate Generate Draft with a new URL and empty text (bug path).
+        service.ingest_source(
+            session,
+            url='https://example.se/b',
+            text='',
+            title='',
+        )
+        with self.assertRaises(SourceIntegrityError):
+            service.generate_draft(session, title='')
+        editorial.generate_draft.assert_not_called()
+        self.assertNotIn('taxes', (session.source_material or '').lower())
+        self.assertEqual(session.sections.body, '')
 
     def test_seo_placeholders(self):
         service = WorkspaceService()
@@ -300,6 +365,33 @@ class WorkspaceAPIIntegrationTests(TestCase):
         self.assertTrue(data['ok'])
         self.assertTrue(data['session']['sections']['body'] or data['session']['sections']['headline'])
         self.assertFalse(data['session']['auto_publish_allowed'])
+        self.assertEqual(
+            data['session']['metadata']['generation']['source_binding']['source_text_chars'],
+            len('Context about housing in Sweden.'),
+        )
+
+    def test_generate_draft_url_only_returns_source_not_ready(self):
+        # Seed previous article into the session.
+        self._post(
+            'ingest_source',
+            {
+                'source_text': 'Previous article about immigration rules.',
+                'source_url': 'https://example.se/old',
+                'title': 'Old',
+            },
+        )
+        response = self._post(
+            'generate_draft',
+            {
+                'source_text': '',
+                'source_url': 'https://example.se/new',
+                'title': '',
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        data = response.json()
+        self.assertEqual(data['error']['code'], 'source_not_ready')
+        self.assertIn('not been imported', data['error']['message'])
 
     def test_set_workflow_rejects_published(self):
         self._post('set_workflow', {'state': 'approved'})

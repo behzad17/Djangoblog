@@ -45,6 +45,7 @@
     document.getElementById('ai-ws-source-url').value = session.source_url || '';
     document.getElementById('ai-ws-research').value = session.research_notes || '';
     document.getElementById('ai-ws-import-post-id').value = '';
+    lastKnownSourceUrl = (session.source_url || '').trim();
 
     var wf = document.getElementById('ai-ws-workflow');
     if (wf) {
@@ -320,6 +321,26 @@
     };
   }
 
+  var lastKnownSourceUrl = '';
+
+  function clearArticleFields() {
+    ['ai-ws-headline', 'ai-ws-lead', 'ai-ws-body', 'ai-ws-summary', 'ai-ws-excerpt', 'ai-ws-category', 'ai-ws-tags'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+  }
+
+  function onSourceUrlEdited() {
+    var urlEl = document.getElementById('ai-ws-source-url');
+    if (!urlEl) return;
+    var next = (urlEl.value || '').trim();
+    if (lastKnownSourceUrl && next && next !== lastKnownSourceUrl) {
+      document.getElementById('ai-ws-source-text').value = '';
+      clearArticleFields();
+    }
+    lastKnownSourceUrl = next;
+  }
+
   try {
     var boot = document.getElementById('ai-ws-session-data');
     if (boot) applySession(JSON.parse(boot.textContent || '{}'));
@@ -337,6 +358,12 @@
       if (data.ok) applySession(data.session);
     });
   });
+
+  var sourceUrlEl = document.getElementById('ai-ws-source-url');
+  if (sourceUrlEl) {
+    sourceUrlEl.addEventListener('change', onSourceUrlEdited);
+    sourceUrlEl.addEventListener('blur', onSourceUrlEdited);
+  }
 
   document.getElementById('ai-ws-import').addEventListener('click', function () {
     post('import_article', {

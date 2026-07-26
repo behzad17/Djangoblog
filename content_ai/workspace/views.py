@@ -28,6 +28,7 @@ from content_ai.providers.exceptions import (
 from content_ai.serializers import serialize_error
 from content_ai.workflow.states import WorkflowState
 from content_ai.workspace.actions import list_actions_for_ui
+from content_ai.workspace.integrity import SourceIntegrityError
 from content_ai.workspace.services import WorkspaceService
 from content_ai.workspace.session import ArticleSections
 from content_ai.workspace.store import load_session, save_session
@@ -189,17 +190,31 @@ def workspace_api(request, action: str):
                     writing_style=payload.get('writing_style')
                     or payload.get('style'),
                 )
-            if payload.get('source_text') or payload.get('source_url'):
+            # Never silently reuse previous session text for a new URL.
+            # Use exactly what the client sent for URL/text; empty stays empty.
+            if 'source_text' in payload or 'source_url' in payload:
+                incoming_url = (
+                    payload['source_url']
+                    if 'source_url' in payload
+                    else (session.source_url or '')
+                )
+                if 'source_text' in payload:
+                    incoming_text = payload.get('source_text') or ''
+                elif (incoming_url or '').strip() != (session.source_url or '').strip():
+                    # URL changed without a text field — do not keep old article body.
+                    incoming_text = ''
+                else:
+                    incoming_text = session.source_material or ''
                 service.ingest_source(
                     session,
-                    url=payload.get('source_url') or '',
-                    text=payload.get('source_text') or session.source_material,
+                    url=incoming_url or '',
+                    text=incoming_text,
                     title=payload.get('title') or '',
                     publisher=payload.get('publisher') or '',
                 )
             service.generate_draft(
                 session,
-                title=payload.get('title') or session.sections.headline,
+                title=payload.get('title') or '',
                 category=payload.get('category') or '',
                 instructions=payload.get('instructions') or '',
                 provider_name=payload.get('provider') or None,
@@ -326,6 +341,17 @@ def workspace_api(request, action: str):
             status=400,
         )
 
+    except SourceIntegrityError as exc:
+        logger.warning(
+            'workspace_api source_integrity action=%r session=%s: %s',
+            action,
+            getattr(session, 'session_id', None),
+            exc,
+        )
+        return JsonResponse(
+            serialize_error('source_not_ready', str(exc)),
+            status=400,
+        )
     except (ProviderNotFound, ProviderConfigurationError, GenerationError) as exc:
         logger.exception('workspace_api generation_failed action=%r', action)
         return JsonResponse(

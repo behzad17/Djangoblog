@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from content_ai.editorial.content_types import (
     PROMPT_ENGINE_VERSION,
     classify_content,
@@ -19,7 +21,15 @@ from content_ai.fact_check import FactChecker
 from content_ai.source import SourceInspector
 from content_ai.workflow import WorkflowOrchestrator, WorkflowState
 from content_ai.workspace.actions import get_action, list_actions_for_ui
+from content_ai.workspace.integrity import (
+    SOURCE_NOT_READY_MESSAGE,
+    SourceIntegrityError,
+    assert_generation_integrity,
+    build_source_binding,
+)
 from content_ai.workspace.session import ArticleSections, WorkspaceSession
+
+logger = logging.getLogger(__name__)
 
 
 def _split_draft_body(body: str) -> tuple[str, str]:
@@ -73,17 +83,45 @@ class WorkspaceService:
         title: str = '',
         publisher: str = '',
     ) -> dict:
+        previous_url = (session.source_url or '').strip()
+        previous_material = (session.source_material or '').strip()
+        incoming_url = (url or '').strip()
+        incoming_text = (text or '').strip()
+
         record = self.source_inspector.inspect(
-            url=url,
-            text=text,
+            url=incoming_url,
+            text=incoming_text,
             title=title,
             publisher=publisher,
             language=session.language,
         )
-        session.source_url = record.url
-        session.source_material = record.raw_text or text
+        new_url = (record.url or incoming_url or '').strip()
+        new_text = (record.raw_text or incoming_text or '').strip()
+        url_changed = bool(previous_url and new_url and previous_url != new_url)
+        # A new URL or cleared text must never keep a previous article draft.
+        if url_changed or (previous_material and not new_text) or (
+            previous_material and new_text and previous_material != new_text
+        ):
+            session.sections = ArticleSections()
+            session.history = []
+            session.metadata.pop('generation', None)
+            session.metadata.pop('blog_draft', None)
+            session.metadata.pop('publish_success', None)
+            logger.info(
+                'workspace_ingest cleared_stale_draft session_id=%s '
+                'previous_url=%r new_url=%r previous_chars=%s new_chars=%s',
+                session.session_id,
+                previous_url,
+                new_url,
+                len(previous_material),
+                len(new_text),
+            )
+
+        session.source_url = new_url
+        session.source_material = new_text
         session.research_notes = self._research_notes(record)
         session.workflow_state = WorkflowState.RESEARCHING
+        retrieval = 'manual_paste' if new_text else 'url_only_no_fetch'
         session.metadata['source'] = {
             'source_id': record.source_id,
             'title': record.title,
@@ -96,7 +134,14 @@ class WorkspaceService:
             'freshness': record.freshness,
             'classification': record.classification,
             'warnings': list(record.warnings),
+            'retrieval': retrieval,
         }
+        session.metadata['source_binding'] = build_source_binding(
+            session_id=session.session_id,
+            source_url=session.source_url,
+            source_text=session.source_material,
+            retrieval=retrieval,
+        )
         session.mark_pipeline('source_imported', 'metadata_extracted')
         self._classify_session(
             session,
@@ -106,6 +151,15 @@ class WorkspaceService:
             publisher=publisher or record.publisher,
         )
         session.touch()
+        logger.info(
+            'workspace_ingest session_id=%s source_url=%r source_chars=%s '
+            'retrieval=%s warnings=%s',
+            session.session_id,
+            session.source_url,
+            len(session.source_material),
+            retrieval,
+            list(record.warnings),
+        )
         return session.metadata['source']
 
     def _classify_session(
@@ -305,6 +359,7 @@ class WorkspaceService:
         instructions: str = '',
         provider_name: str | None = None,
     ) -> WorkspaceSession:
+        assert_generation_integrity(session)
         if not session.content_type and not session.content_type_override:
             self._classify_session(
                 session,
@@ -318,14 +373,11 @@ class WorkspaceService:
         writing_style = session.resolved_writing_style()
         profile = get_profile(content_type)
         session.template_id = profile.resolved_template_id()
-        context = '\n\n'.join(
-            part
-            for part in (
-                session.source_material,
-                session.research_notes,
-            )
-            if part
-        )
+        # Generation context is ONLY current imported source text.
+        # Never append research notes as substitute article body.
+        context = (session.source_material or '').strip()
+        if not context:
+            raise SourceIntegrityError(SOURCE_NOT_READY_MESSAGE)
         draft = self.editorial.generate_draft(
             title=working_title,
             language=session.language,
@@ -384,6 +436,11 @@ class WorkspaceService:
             'writing_style': writing_style,
             'template_id': session.template_id,
             'prompt_version': PROMPT_ENGINE_VERSION,
+            'session_id': session.session_id,
+            'source_url': session.source_url,
+            'source_binding': dict(
+                (session.metadata or {}).get('source_binding') or {}
+            ),
         }
         session.touch()
         return session
@@ -586,14 +643,37 @@ class WorkspaceService:
         except Post.DoesNotExist as exc:
             raise ValueError(f'Post {post_id!r} was not found.') from exc
         body = post.content or ''
-        session.source_material = str(body)
-        session.sections.headline = post.title or session.sections.headline
+        session.source_url = ''
+        session.source_material = str(body).strip()
+        session.sections = ArticleSections(
+            headline=post.title or '',
+            lead='',
+            body='',
+            summary='',
+            category=session.sections.category,
+            tags=list(session.sections.tags),
+        )
         session.research_notes = (
             f'Imported from existing article #{post.pk}: {post.title}\n'
             'Edit research notes before generating a new draft.'
         )
         session.metadata['imported_post_id'] = post.pk
         session.metadata['linked_post_id'] = post.pk
+        session.metadata['source'] = {
+            'source_id': f'blog-post-{post.pk}',
+            'title': post.title or '',
+            'publisher': '',
+            'url': '',
+            'source_type': 'blog_post',
+            'warnings': [],
+            'retrieval': 'blog_import',
+        }
+        session.metadata['source_binding'] = build_source_binding(
+            session_id=session.session_id,
+            source_url='',
+            source_text=session.source_material,
+            retrieval='blog_import',
+        )
         session.workflow_state = WorkflowState.RESEARCHING
         session.mark_pipeline('source_imported', 'metadata_extracted')
         self._classify_session(
