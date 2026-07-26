@@ -92,18 +92,12 @@ class EditorialDraftPublisherTests(TestCase):
         self.assertEqual(self.draft.language, 'fa')
         self.assertEqual(self.draft.metadata.get('provider'), 'mock')
 
-    def test_requires_author_and_category(self):
+    def test_requires_author(self):
         with self.assertRaises(EditorialDraftPublisherError):
             self.publisher.publish_to_blog(
                 self.draft,
                 author=None,
                 category=self.category,
-            )
-        with self.assertRaises(EditorialDraftPublisherError):
-            self.publisher.publish_to_blog(
-                self.draft,
-                author=self.author,
-                category=None,
             )
 
     def test_rejects_non_editorial_draft(self):
@@ -138,6 +132,7 @@ class EditorialDraftPublisherTests(TestCase):
             self.draft,
             author=self.author,
             category=self.category,
+            source_url='https://example.se/a',
         )
 
         self.assertIs(result, expected)
@@ -145,4 +140,5 @@ class EditorialDraftPublisherTests(TestCase):
             self.draft,
             author=self.author,
             category=self.category,
+            source_url='https://example.se/a',
         )

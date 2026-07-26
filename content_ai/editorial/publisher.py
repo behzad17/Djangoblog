@@ -28,7 +28,7 @@ class EditorialDraftPublisher:
     def __init__(self, persistence_service=None):
         self._persistence = persistence_service or BlogDraftPersistenceService()
 
-    def publish_to_blog(self, draft, *, author, category):
+    def publish_to_blog(self, draft, *, author, category=None, source_url=''):
         """
         Convert ``draft`` into an unpublished Blog ``Post``.
 
@@ -41,14 +41,13 @@ class EditorialDraftPublisher:
             )
         if author is None:
             raise EditorialDraftPublisherError('author is required.')
-        if category is None:
-            raise EditorialDraftPublisherError('category is required.')
 
         try:
             return self._persistence.create_blog_draft(
                 draft,
                 author=author,
                 category=category,
+                source_url=source_url,
             )
         except BlogDraftPersistenceError as exc:
             raise EditorialDraftPublisherError(str(exc)) from exc

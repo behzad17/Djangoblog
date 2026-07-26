@@ -237,6 +237,18 @@ def workspace_api(request, action: str):
             save_session(request, session)
             return JsonResponse({'ok': True, 'session': _session_payload(service, session)})
 
+        if action in ('save_draft', 'save_blog_draft', 'save'):
+            _apply_sections_payload(session, payload)
+            blog_draft = service.save_blog_draft(session, user=request.user)
+            save_session(request, session)
+            return JsonResponse(
+                {
+                    'ok': True,
+                    'blog_draft': blog_draft,
+                    'session': _session_payload(service, session),
+                }
+            )
+
         if action == 'import_article':
             service.import_existing_article(
                 session,

@@ -115,9 +115,51 @@ class BlogDraftPersistenceServiceTests(TestCase):
                 author=None,
                 category=self.category,
             )
+        # Empty category falls back to default News category.
+        post = self.service.create_blog_draft(
+            self.draft,
+            author=self.author,
+            category=None,
+        )
+        self.assertEqual(post.status, 0)
+        self.assertIsNotNone(post.category_id)
+
+    def test_update_blog_draft_preserves_id(self):
+        post = self.service.create_blog_draft(
+            self.draft,
+            author=self.author,
+            category=self.category,
+        )
+        updated_draft = EditorialDraft(
+            title='AI Housing Draft Updated',
+            lead='Lead paragraph',
+            body='Updated body',
+            summary='Updated summary',
+            language='sv',
+        )
+        result = self.service.update_blog_draft(
+            post,
+            updated_draft,
+            category=self.category,
+            source_url='https://example.se/source',
+        )
+        self.assertEqual(result.pk, post.pk)
+        self.assertEqual(Post.objects.filter(title__startswith='AI Housing Draft').count(), 1)
+        result.refresh_from_db()
+        self.assertEqual(result.title, 'AI Housing Draft Updated')
+        self.assertIn('Lead paragraph', result.content)
+        self.assertIn('Updated body', result.content)
+        self.assertEqual(result.excerpt, 'Updated summary')
+        self.assertEqual(result.status, 0)
+        self.assertEqual(result.external_url, 'https://example.se/source')
+
+    def test_update_rejects_published_post(self):
+        post = self.service.create_blog_draft(
+            self.draft,
+            author=self.author,
+            category=self.category,
+        )
+        post.status = 1
+        post.save(update_fields=['status'])
         with self.assertRaises(BlogDraftPersistenceError):
-            self.service.create_blog_draft(
-                self.draft,
-                author=self.author,
-                category=None,
-            )
+            self.service.update_blog_draft(post, self.draft)

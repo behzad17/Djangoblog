@@ -312,3 +312,57 @@ class WorkspaceAPIIntegrationTests(TestCase):
         response = self._post('import_article', {'post_id': 1})
         self.assertEqual(response.status_code, 200)
         mocked.assert_called_once()
+
+    def test_save_draft_creates_and_updates_blog_post(self):
+        from blog.models import Category, Post
+
+        Category.objects.create(name='News', slug='news')
+        create = self._post(
+            'save_draft',
+            {
+                'sections': {
+                    'headline': 'Workspace Save Draft',
+                    'lead': 'Lead text',
+                    'body': 'Body text for the draft.',
+                    'summary': 'Summary text',
+                    'category': 'News',
+                    'tags': ['housing', 'sweden'],
+                },
+            },
+        )
+        self.assertEqual(create.status_code, 200, create.content.decode()[:500])
+        data = create.json()
+        self.assertTrue(data['ok'])
+        self.assertTrue(data['blog_draft']['created'])
+        post_id = data['blog_draft']['post_id']
+        post = Post.objects.get(pk=post_id)
+        self.assertEqual(post.status, 0)
+        self.assertEqual(post.title, 'Workspace Save Draft')
+        self.assertIn('Lead text', post.content)
+        self.assertIn('Body text', post.content)
+        self.assertEqual(post.excerpt, 'Summary text')
+        self.assertEqual(data['session']['linked_post_id'], post_id)
+
+        update = self._post(
+            'save_draft',
+            {
+                'sections': {
+                    'headline': 'Workspace Save Draft Updated',
+                    'lead': 'New lead',
+                    'body': 'Updated body text.',
+                    'summary': 'Updated summary',
+                    'category': 'News',
+                },
+            },
+        )
+        self.assertEqual(update.status_code, 200)
+        updated = update.json()
+        self.assertFalse(updated['blog_draft']['created'])
+        self.assertEqual(updated['blog_draft']['post_id'], post_id)
+        self.assertEqual(
+            Post.objects.filter(title__startswith='Workspace Save Draft').count(),
+            1,
+        )
+        post.refresh_from_db()
+        self.assertEqual(post.title, 'Workspace Save Draft Updated')
+        self.assertIn('Updated body text', post.content)

@@ -203,6 +203,11 @@ class WorkspaceSession:
                 }
                 for key, label in PIPELINE_STEPS
             ],
+            'linked_post_id': (
+                (self.metadata or {}).get('linked_post_id')
+                or (self.metadata or {}).get('imported_post_id')
+            ),
+            'blog_draft': dict((self.metadata or {}).get('blog_draft') or {}),
             'updated_at': self.updated_at.isoformat(),
             'auto_publish_allowed': False,
         }

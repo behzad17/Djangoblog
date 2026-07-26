@@ -100,7 +100,10 @@
       <label>Excerpt <textarea id="ai-ws-excerpt" rows="2"></textarea></label>
       <label>Category <input type="text" id="ai-ws-category"></label>
       <label>Tags <input type="text" id="ai-ws-tags" placeholder="comma,separated"></label>
-      <button type="button" class="button" id="ai-ws-save-sections">Save edits</button>
+      <div class="ai-workspace__toolbar">
+        <button type="button" class="button default" id="ai-ws-save-sections">Save draft to Blog</button>
+      </div>
+      <p class="ai-workspace__hint" id="ai-ws-blog-draft-status"></p>
     </section>
 
     <section class="ai-workspace__panel" id="panel-assistant">

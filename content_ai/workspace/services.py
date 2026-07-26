@@ -524,6 +524,7 @@ class WorkspaceService:
             'Edit research notes before generating a new draft.'
         )
         session.metadata['imported_post_id'] = post.pk
+        session.metadata['linked_post_id'] = post.pk
         session.workflow_state = WorkflowState.RESEARCHING
         session.mark_pipeline('source_imported', 'metadata_extracted')
         self._classify_session(
@@ -535,6 +536,128 @@ class WorkspaceService:
         )
         session.touch()
         return session
+
+    def save_blog_draft(self, session: WorkspaceSession, *, user) -> dict:
+        """
+        Persist workspace sections as a Blog Draft Post.
+
+        Creates a new Draft when none is linked; updates the linked Draft when
+        present. Never publishes. Blog Draft is the canonical editable content.
+        """
+        from django.urls import reverse
+
+        from blog.models import Post
+        from content_ai.editorial.drafts import EditorialDraft
+        from content_ai.editorial.persistence import (
+            BlogDraftPersistenceError,
+            BlogDraftPersistenceService,
+        )
+
+        if user is None or not getattr(user, 'is_authenticated', False):
+            raise ValueError('Authentication required to save a Blog draft.')
+
+        headline = (session.sections.headline or '').strip()
+        body = (session.sections.body or '').strip()
+        lead = (session.sections.lead or '').strip()
+        if not headline and not body and not lead:
+            raise ValueError(
+                'Add a headline, lead, or body before saving a Blog draft.'
+            )
+
+        persistence = BlogDraftPersistenceService()
+        category = persistence.resolve_category(session.sections.category)
+        session.sections.category = category.name
+
+        draft = EditorialDraft(
+            title=headline or 'Untitled AI draft',
+            lead=lead,
+            body=body,
+            summary=(
+                session.sections.summary
+                or session.sections.excerpt
+                or lead
+            ),
+            language=session.language,
+            metadata={
+                'category': category.name,
+                'tags': list(session.sections.tags),
+                'source_url': session.source_url,
+                'content_type': session.resolved_content_type(),
+                'goal': session.resolved_goal(),
+                'template_id': session.template_id,
+                'workspace_session_id': session.session_id,
+            },
+        )
+
+        linked_id = (
+            session.metadata.get('linked_post_id')
+            or session.metadata.get('imported_post_id')
+        )
+        created = False
+        post = None
+        if linked_id:
+            try:
+                candidate = Post.objects.get(pk=linked_id)
+            except Post.DoesNotExist:
+                candidate = None
+            if (
+                candidate is not None
+                and candidate.status == BlogDraftPersistenceService.DRAFT_STATUS
+                and not candidate.is_deleted
+            ):
+                try:
+                    post = persistence.update_blog_draft(
+                        candidate,
+                        draft,
+                        category=category,
+                        source_url=session.source_url or '',
+                    )
+                except BlogDraftPersistenceError as exc:
+                    raise ValueError(str(exc)) from exc
+
+        if post is None:
+            try:
+                post = persistence.create_blog_draft(
+                    draft,
+                    author=user,
+                    category=category,
+                    source_url=session.source_url or '',
+                )
+                created = True
+            except BlogDraftPersistenceError as exc:
+                raise ValueError(str(exc)) from exc
+
+        admin_url = reverse('admin:blog_post_change', args=[post.pk])
+        blog_draft = {
+            'post_id': post.pk,
+            'title': post.title,
+            'status': 'draft',
+            'created': created,
+            'admin_url': admin_url,
+            'category': post.category.name if post.category_id else '',
+            'tags': list(session.sections.tags),
+            'source_url': session.source_url or post.external_url or '',
+        }
+        session.metadata['linked_post_id'] = post.pk
+        session.metadata['blog_draft'] = blog_draft
+        session.mark_pipeline('draft_generated', 'ready_for_publication')
+        session.workflow_state = WorkflowState.READY_FOR_APPROVAL
+        session.last_explanations = [
+            (
+                'Created Blog draft #{}.'.format(post.pk)
+                if created
+                else 'Updated Blog draft #{}.'.format(post.pk)
+            ),
+            'Draft is now visible under Admin → Posts → Draft Posts.',
+            f'Open draft: {admin_url}',
+            'Continue editing in Blog Admin or return here to revise.',
+        ]
+        session.push_history(
+            'Saved Blog draft',
+            session.last_explanations[0],
+        )
+        session.touch()
+        return blog_draft
 
     def advance_workflow(
         self,

@@ -90,7 +90,23 @@
     if (meta.fact_check) {
       document.getElementById('ai-ws-factcheck-out').textContent = JSON.stringify(meta.fact_check, null, 2);
     }
+    renderBlogDraft(session.blog_draft || meta.blog_draft || {});
     applyingClassification = false;
+  }
+
+  function renderBlogDraft(draft) {
+    var el = document.getElementById('ai-ws-blog-draft-status');
+    if (!el) return;
+    if (!draft || !draft.post_id) {
+      el.innerHTML = 'Not linked to a Blog draft yet. Save to create one under Draft Posts.';
+      return;
+    }
+    var label = draft.created ? 'Created' : 'Linked';
+    var url = draft.admin_url || ('/admin/blog/post/' + draft.post_id + '/change/');
+    el.innerHTML =
+      label + ' Blog draft <strong>#' + draft.post_id + '</strong>: ' +
+      (draft.title || 'Untitled') +
+      ' — <a href="' + url + '">Open in Blog Admin</a>';
   }
 
   function renderPipeline(steps) {
@@ -269,11 +285,21 @@
   });
 
   document.getElementById('ai-ws-save-sections').addEventListener('click', function () {
-    post('update_sections', {
+    post('save_draft', {
       sections: readSections(),
       research_notes: document.getElementById('ai-ws-research').value,
     }).then(function (data) {
-      if (data.ok) applySession(data.session);
+      if (data.ok) {
+        applySession(data.session);
+        if (data.blog_draft && data.blog_draft.admin_url) {
+          var msg = data.blog_draft.created
+            ? 'Draft created. Open it in Blog Admin?'
+            : 'Draft updated. Open it in Blog Admin?';
+          if (window.confirm(msg)) {
+            window.location.href = data.blog_draft.admin_url;
+          }
+        }
+      }
     });
   });
 
