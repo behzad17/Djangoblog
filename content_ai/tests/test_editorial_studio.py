@@ -82,6 +82,42 @@ class ExtractorTests(SimpleTestCase):
         self.assertIn('bostadsmarknaden', article.text)
         self.assertEqual(article.detected_language, 'sv')
 
+    def test_extract_prefers_og_title_and_header_h1(self):
+        html = """
+        <html><head>
+          <title>Noise | Example News</title>
+          <meta property="og:title" content="Rätt bostadsnyhet" />
+        </head>
+        <body>
+          <header><h1>Rätt bostadsnyhet</h1></header>
+          <article>
+            <p>Det är viktigt att förstå bostadsmarknaden och att följa utvecklingen.</p>
+            <p>Kommunen planerar nya lägenheter för familjer under nästa år.</p>
+          </article>
+        </body></html>
+        """
+        article = extract_readable_content(
+            html,
+            url='https://www.example.se/nyheter/bostad',
+        )
+        self.assertEqual(article.title, 'Rätt bostadsnyhet')
+
+    def test_extract_cleans_document_title_suffix(self):
+        html = """
+        <html><head><title>Housing update in Stockholm | Example News</title></head>
+        <body>
+          <article>
+            <p>Det är viktigt att förstå bostadsmarknaden och att följa utvecklingen.</p>
+            <p>Experter säger att efterfrågan fortsätter att öka i regionen.</p>
+          </article>
+        </body></html>
+        """
+        article = extract_readable_content(
+            html,
+            url='https://www.example.se/nyheter/bostad',
+        )
+        self.assertEqual(article.title, 'Housing update in Stockholm')
+
     def test_extract_fails_without_readable_body(self):
         with self.assertRaises(ArticleExtractionError):
             extract_readable_content(
@@ -98,6 +134,15 @@ class SmartImportHelperTests(SimpleTestCase):
         self.assertIn('شهرداری', parsed['body'])
         self.assertEqual(parsed['suggested_category'], 'news')
         self.assertEqual(parsed['suggested_tags'], ['مسکن', 'استکهلم', 'سوئد'])
+
+    def test_parse_structured_draft_missing_body_does_not_dump_raw(self):
+        parsed = parse_structured_draft(
+            'TITLE:\nPersian title\nLEAD:\nPersian lead\n',
+            fallback_title='Source',
+        )
+        self.assertEqual(parsed['title'], 'Persian title')
+        self.assertEqual(parsed['lead'], 'Persian lead')
+        self.assertEqual(parsed['body'], '')
 
     def test_detect_government_content_type(self):
         article = ExtractedArticle(
@@ -152,8 +197,10 @@ class NewsImportServiceTests(SimpleTestCase):
         )
         editorial = MagicMock()
         editorial.generate_draft.return_value = EditorialDraft(
-            title='Bostadsnyheter i Stockholm',
-            body=STRUCTURED_BODY,
+            title='مسکن در استکهلم',
+            lead='بازار مسکن در استکهلم همچنان پرتقاضا است.',
+            body='شهرداری برنامه‌های جدیدی برای ساخت مسکن اعلام کرده است.',
+            summary='تقاضای مسکن در استکهلم ادامه دارد.',
             language='fa',
             metadata={
                 'provider': 'mock',
@@ -167,6 +214,9 @@ class NewsImportServiceTests(SimpleTestCase):
                 'workflow_state': 'drafting',
                 'prompt_version': 'v1',
                 'warnings': [],
+                'suggested_category': 'news',
+                'suggested_tags': ['مسکن', 'استکهلم', 'سوئد'],
+                'generation_passes': ['headline_lead', 'body'],
             },
             telemetry=AIExecutionTelemetry(
                 provider='mock',
@@ -189,7 +239,8 @@ class NewsImportServiceTests(SimpleTestCase):
         self.assertEqual(kwargs['language'], 'fa')
         self.assertEqual(kwargs['source'], extracted.url)
         self.assertEqual(kwargs['context'], extracted.text)
-        self.assertIn('TITLE:', kwargs['instructions'])
+        self.assertEqual(kwargs['title'], extracted.title)
+        self.assertIn('publish-ready Persian news draft', kwargs['instructions'])
         self.assertEqual(result['title'], 'مسکن در استکهلم')
         self.assertIn('پرتقاضا', result['lead'])
         self.assertIn('شهرداری', result['body'])
@@ -197,6 +248,7 @@ class NewsImportServiceTests(SimpleTestCase):
         self.assertEqual(result['suggested_tags'], ['مسکن', 'استکهلم', 'سوئد'])
         self.assertEqual(result['source_url'], extracted.url)
         self.assertEqual(result['source_name'], 'Example')
+        self.assertEqual(result['source_title'], extracted.title)
         self.assertEqual(result['language'], 'fa')
         self.assertEqual(result['source_language'], 'sv')
         self.assertEqual(result['content_type'], 'news')

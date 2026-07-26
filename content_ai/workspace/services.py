@@ -132,14 +132,23 @@ class WorkspaceService:
             instructions=instructions,
             provider_name=provider_name,
         )
-        lead, body = _split_draft_body(draft.body)
+        lead = (draft.lead or '').strip()
+        body = (draft.body or '').strip()
+        if not lead and not body:
+            lead, body = _split_draft_body(draft.body)
+        elif not lead:
+            lead, remainder = _split_draft_body(body)
+            if remainder:
+                body = remainder
         session.sections = ArticleSections(
             headline=draft.title or working_title,
             lead=lead,
             body=body or draft.body,
             summary=draft.summary or '',
             category=category or session.sections.category,
-            tags=list(session.sections.tags),
+            tags=list(
+                draft.metadata.get('suggested_tags') or session.sections.tags
+            ),
             excerpt=(draft.summary or lead)[:300],
         )
         session.workflow_state = WorkflowState.DRAFTING
@@ -187,19 +196,38 @@ class WorkspaceService:
         )
         explanation = f'{section} regenerated independently.'
         if section == 'headline':
-            session.sections.headline = focused.title or focused.body.strip().split('\n')[0]
+            parsed = None
+            try:
+                from content_ai.editorial.structured import parse_structured_draft
+
+                parsed = parse_structured_draft(focused.body, fallback_title='')
+            except Exception:  # noqa: BLE001
+                parsed = None
+            session.sections.headline = (
+                (parsed or {}).get('title')
+                or focused.title
+                or focused.body.strip().split('\n')[0]
+            )
         elif section == 'lead':
-            lead, _ = _split_draft_body(focused.body)
+            lead = focused.lead
+            if not lead:
+                lead, _ = _split_draft_body(focused.body)
             session.sections.lead = lead or focused.body
         elif section == 'body':
-            _, body = _split_draft_body(focused.body)
+            body = focused.body
+            if focused.lead and body == focused.lead:
+                _, body = _split_draft_body(focused.body)
             session.sections.body = body or focused.body
         elif section == 'summary':
             session.sections.summary = focused.summary or focused.body[:400]
         elif section == 'excerpt':
             session.sections.excerpt = (focused.summary or focused.body)[:300]
         elif section == 'category':
-            session.sections.category = focused.metadata.get('category') or session.sections.category
+            session.sections.category = (
+                focused.metadata.get('suggested_category')
+                or focused.metadata.get('category')
+                or session.sections.category
+            )
         session.last_explanations = [
             explanation,
             'Other sections were left unchanged.',

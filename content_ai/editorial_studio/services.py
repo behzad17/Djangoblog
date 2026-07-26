@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 from content_ai.editorial.service import EditorialAIService
+from content_ai.editorial.structured import parse_structured_draft
 from content_ai.providers.exceptions import GenerationError
 from content_ai.source.extract import (
     ArticleExtractionError,
@@ -55,18 +56,6 @@ OUTPUT_MODE_INSTRUCTIONS = {
         'Keep only the most important facts from the source.'
     ),
 }
-
-STRUCTURED_OUTPUT_RULES = (
-    'Return the draft in exactly this labelled structure (Persian text):\n'
-    'TITLE:\n...\n'
-    'LEAD:\n...\n'
-    'BODY:\n...\n'
-    'SUMMARY:\n...\n'
-    'CATEGORY:\n...\n'
-    'TAGS:\ncomma, separated, tags\n'
-    'Base the draft only on the provided source. Do not invent facts, names, '
-    'dates, or figures. Use clear community-facing Persian.'
-)
 
 
 def _utc_now_iso() -> str:
@@ -129,74 +118,6 @@ def source_name_from_domain(domain: str) -> str:
     return first.upper() if len(first) <= 5 else first.capitalize()
 
 
-def parse_structured_draft(raw: str, *, fallback_title: str = '') -> dict:
-    """Parse labelled AI output into title/lead/body/summary/category/tags."""
-    text = (raw or '').strip()
-    if not text:
-        return {
-            'title': fallback_title or '',
-            'lead': '',
-            'body': '',
-            'summary': '',
-            'suggested_category': 'news',
-            'suggested_tags': [],
-        }
-
-    markers = (
-        'TITLE',
-        'LEAD',
-        'BODY',
-        'SUMMARY',
-        'CATEGORY',
-        'TAGS',
-    )
-    pattern = re.compile(
-        r'^(TITLE|LEAD|BODY|SUMMARY|CATEGORY|TAGS)\s*:\s*',
-        re.IGNORECASE | re.MULTILINE,
-    )
-    matches = list(pattern.finditer(text))
-    sections: dict[str, str] = {}
-    if matches:
-        for index, match in enumerate(matches):
-            key = match.group(1).upper()
-            start = match.end()
-            end = (
-                matches[index + 1].start()
-                if index + 1 < len(matches)
-                else len(text)
-            )
-            sections[key] = text[start:end].strip()
-    else:
-        paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
-        lead = paragraphs[0] if paragraphs else text
-        body = '\n\n'.join(paragraphs[1:]) if len(paragraphs) > 1 else text
-        sections = {
-            'TITLE': fallback_title,
-            'LEAD': lead,
-            'BODY': body,
-            'SUMMARY': lead,
-            'CATEGORY': 'news',
-            'TAGS': '',
-        }
-
-    tags_raw = sections.get('TAGS', '')
-    tags = [
-        part.strip()
-        for part in re.split(r'[,،\n]+', tags_raw)
-        if part.strip()
-    ]
-    return {
-        'title': sections.get('TITLE') or fallback_title or '',
-        'lead': sections.get('LEAD') or '',
-        'body': sections.get('BODY') or text,
-        'summary': sections.get('SUMMARY') or sections.get('LEAD') or '',
-        'suggested_category': (
-            sections.get('CATEGORY') or 'news'
-        ).strip().lower() or 'news',
-        'suggested_tags': tags,
-    }
-
-
 def build_instructions(
     *,
     content_type: str,
@@ -209,7 +130,7 @@ def build_instructions(
     )
     return (
         f'The source is a {type_label}. {mode_instruction} '
-        f'{STRUCTURED_OUTPUT_RULES}'
+        'Keep facts grounded in the source; do not invent details.'
     )
 
 
@@ -278,10 +199,6 @@ class NewsImportService:
             provider_name=provider_name,
         )
 
-        parsed = parse_structured_draft(
-            draft.body,
-            fallback_title=article.title,
-        )
         metadata = dict(draft.metadata or {})
         telemetry = draft.telemetry
         provider = (
@@ -296,15 +213,20 @@ class NewsImportService:
             or 'sv'
         )
         output_language = draft.language or 'fa'
+        suggested_category = (
+            metadata.get('suggested_category') or category_hint or 'news'
+        )
+        suggested_tags = list(metadata.get('suggested_tags') or [])
+        summary = draft.summary or draft.lead or ''
 
         return {
-            'title': parsed['title'],
-            'lead': parsed['lead'],
-            'body': parsed['body'],
-            'summary': parsed['summary'],
-            'short_summary': parsed['summary'],
-            'suggested_category': parsed['suggested_category'],
-            'suggested_tags': parsed['suggested_tags'],
+            'title': draft.title,
+            'lead': draft.lead,
+            'body': draft.body,
+            'summary': summary,
+            'short_summary': summary,
+            'suggested_category': suggested_category,
+            'suggested_tags': suggested_tags,
             'source_url': article.url,
             'source_name': source_meta.get('name') or '',
             'language': output_language,
@@ -316,6 +238,7 @@ class NewsImportService:
             # Back-compat for earlier ES-001 clients/tests.
             'draft': draft.body,
             'source': source_meta,
+            'source_title': article.title,
             'workflow_stages': metadata.get('workflow_stages') or [],
             'provider': provider,
             'duration_ms': duration_ms,
@@ -324,6 +247,7 @@ class NewsImportService:
                 'source_url': article.url,
                 'source_name': source_meta.get('name') or '',
                 'source_domain': source_meta.get('domain', ''),
+                'source_title': article.title,
                 'language': output_language,
                 'detected_language': source_language,
                 'content_type': resolved_type,
@@ -331,6 +255,7 @@ class NewsImportService:
                 'workflow_stages': metadata.get('workflow_stages') or [],
                 'provider': provider,
                 'duration_ms': duration_ms,
+                'generation_passes': metadata.get('generation_passes') or [],
             },
         }
 

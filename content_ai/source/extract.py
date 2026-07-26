@@ -31,7 +31,11 @@ class ExtractedArticle:
 
 
 class _ReadableHTMLParser(HTMLParser):
-    """Collect title and visible text; skip script/style/nav chrome."""
+    """Collect title and visible text; skip script/style/nav chrome.
+
+    ``header`` is not skipped so article ``h1`` headlines inside ``<header>``
+    are still captured. Meta ``og:title`` / ``twitter:title`` are preferred.
+    """
 
     _SKIP_TAGS = frozenset(
         {
@@ -42,28 +46,41 @@ class _ReadableHTMLParser(HTMLParser):
             'iframe',
             'nav',
             'footer',
-            'header',
             'aside',
             'form',
             'button',
         }
     )
+    _META_TITLE_KEYS = frozenset({'og:title', 'twitter:title'})
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.title_parts: list[str] = []
-        self.h1_parts: list[str] = []
+        self.h1_candidates: list[str] = []
+        self.og_title: str = ''
         self.article_parts: list[str] = []
         self.body_parts: list[str] = []
         self._skip_depth = 0
         self._in_title = False
         self._in_h1 = False
+        self._current_h1: list[str] = []
         self._in_article = False
         self._in_p = False
         self._capture_p = False
 
     def handle_starttag(self, tag, attrs):
         tag = tag.lower()
+        attrs_dict = {
+            (k or '').lower(): (v or '')
+            for k, v in attrs
+        }
+        if tag == 'meta':
+            key = (attrs_dict.get('property') or attrs_dict.get('name') or '').lower()
+            if key in self._META_TITLE_KEYS and not self.og_title:
+                content = _normalise_whitespace(attrs_dict.get('content', ''))
+                if content:
+                    self.og_title = content
+            return
         if tag in self._SKIP_TAGS:
             self._skip_depth += 1
             return
@@ -73,6 +90,7 @@ class _ReadableHTMLParser(HTMLParser):
             self._in_title = True
         elif tag == 'h1':
             self._in_h1 = True
+            self._current_h1 = []
         elif tag == 'article':
             self._in_article = True
         elif tag in {'p', 'li', 'h2', 'h3'}:
@@ -89,7 +107,11 @@ class _ReadableHTMLParser(HTMLParser):
         if tag == 'title':
             self._in_title = False
         elif tag == 'h1':
+            candidate = _normalise_whitespace(' '.join(self._current_h1))
+            if candidate:
+                self.h1_candidates.append(candidate)
             self._in_h1 = False
+            self._current_h1 = []
         elif tag == 'article':
             self._in_article = False
         elif tag in {'p', 'li', 'h2', 'h3'}:
@@ -111,7 +133,7 @@ class _ReadableHTMLParser(HTMLParser):
         if self._in_title:
             self.title_parts.append(text)
         if self._in_h1:
-            self.h1_parts.append(text)
+            self._current_h1.append(text)
         if self._capture_p or self._in_p:
             bucket = self.article_parts if self._in_article else self.body_parts
             bucket.append(text)
@@ -122,6 +144,36 @@ def _normalise_whitespace(text: str) -> str:
     text = re.sub(r'[ \t]+', ' ', text or '')
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text.strip()
+
+
+def _clean_document_title(title: str) -> str:
+    """Strip common site-name suffixes from ``<title>`` text."""
+    cleaned = _normalise_whitespace(title)
+    if not cleaned:
+        return ''
+    for sep in (' | ', ' — ', ' – ', ' - ', ' :: ', ' • '):
+        if sep in cleaned:
+            parts = [p.strip() for p in cleaned.split(sep) if p.strip()]
+            if parts:
+                # Prefer the longest segment that is not a short brand label.
+                ranked = sorted(parts, key=len, reverse=True)
+                for part in ranked:
+                    if len(part) >= 12:
+                        return part
+                return parts[0]
+    return cleaned
+
+
+def _title_from_body(body: str) -> str:
+    """Last-resort short title from the first sentence of the body."""
+    sample = _normalise_whitespace(body)
+    if not sample:
+        return ''
+    sentence = re.split(r'(?<=[.!?])\s+', sample, maxsplit=1)[0]
+    sentence = sentence.strip()
+    if len(sentence) > 120:
+        sentence = sentence[:117].rstrip() + '…'
+    return sentence
 
 
 def _detect_language_hint(text: str) -> str:
@@ -197,9 +249,6 @@ def extract_readable_content(html: str, *, url: str = '') -> ExtractedArticle:
             'Could not parse the article HTML.'
         ) from exc
 
-    title = _normalise_whitespace(' '.join(parser.h1_parts)) or (
-        _normalise_whitespace(' '.join(parser.title_parts))
-    )
     body = _normalise_whitespace(''.join(parser.article_parts))
     if len(body) < 120:
         body = _normalise_whitespace(''.join(parser.body_parts))
@@ -207,8 +256,17 @@ def extract_readable_content(html: str, *, url: str = '') -> ExtractedArticle:
         raise ArticleExtractionError(
             'Could not extract readable article content from this page.'
         )
-    if not title:
-        title = 'Untitled article'
+
+    document_title = _clean_document_title(' '.join(parser.title_parts))
+    h1_title = parser.h1_candidates[0] if parser.h1_candidates else ''
+    title = (
+        _normalise_whitespace(parser.og_title)
+        or h1_title
+        or document_title
+        or _title_from_body(body)
+        or 'Untitled article'
+    )
+
     domain = urlparse(url).netloc if url else ''
     return ExtractedArticle(
         url=url or '',

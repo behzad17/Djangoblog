@@ -4,18 +4,48 @@ from __future__ import annotations
 
 from content_ai.constants import AIGenerationTask
 from content_ai.editorial.drafts import EditorialDraft
+from content_ai.editorial.structured import parse_structured_draft
 from content_ai.schemas.requests import PostGenerationRequest
 from content_ai.schemas.responses import GenerationResult
 from content_ai.services.generation import ContentGenerationService
+from content_ai.telemetry import AIExecutionTelemetry, merge_telemetry
+
+# Pass 1: headline + lead only (before body).
+_HEADLINE_LEAD_RULES = (
+    'Generate ONLY the Persian headline and lead first.\n'
+    'Do NOT write the article body yet.\n'
+    'TITLE must be a fresh Persian headline. Do not copy the source-language '
+    'title into TITLE.\n'
+    'LEAD must be one or two clear Persian lead paragraphs grounded in the '
+    'source.\n'
+    'Return exactly this labelled structure:\n'
+    'TITLE:\n...\n'
+    'LEAD:\n...\n'
+)
+
+# Pass 2: body (and metadata) with locked title/lead.
+_BODY_RULES = (
+    'TITLE and LEAD are already decided and locked below.\n'
+    'Do NOT rewrite TITLE or LEAD.\n'
+    'Generate only the remaining sections.\n'
+    'Return exactly this labelled structure:\n'
+    'BODY:\n...\n'
+    'SUMMARY:\n...\n'
+    'CATEGORY:\n...\n'
+    'TAGS:\ncomma, separated, tags\n'
+    'Base BODY only on the provided source. Do not invent facts, names, '
+    'dates, or figures. Use clear community-facing Persian.\n'
+)
 
 
 class EditorialAIService:
     """
     Domain orchestration for editorial content generation.
 
-    Creates a ``PostGenerationRequest``, runs the generation pipeline, and
-    maps ``GenerationResult`` to an in-memory ``EditorialDraft``.
-    Does not persist, parse Markdown, create slugs, or assign authors.
+    Creates a ``PostGenerationRequest``, runs the generation pipeline in two
+    passes (headline/lead, then body), and maps results to an in-memory
+    ``EditorialDraft``. Does not persist, parse Markdown, create slugs, or
+    assign authors.
     """
 
     def __init__(self, generation_service=None):
@@ -34,36 +64,178 @@ class EditorialAIService:
         instructions='',
         provider_name=None,
     ) -> EditorialDraft:
-        request = PostGenerationRequest(
-            title=title,
-            source=source,
-            language=language,
-            category=category,
-            context=context,
-            instructions=instructions,
-        )
-        result = self._generation_service.generate(
+        source_title = (title or '').strip()
+        language = (language or '').strip() or 'fa'
+
+        head_result = self._generation_service.generate(
             AIGenerationTask.POST_GENERATION,
-            request,
+            PostGenerationRequest(
+                title=source_title,
+                source=source,
+                language=language,
+                category=category,
+                context=context,
+                instructions=self._pass_instructions(
+                    _HEADLINE_LEAD_RULES,
+                    instructions,
+                    source_title=source_title,
+                ),
+            ),
             provider_name=provider_name,
         )
-        return self._to_draft(request, result)
+        head = parse_structured_draft(head_result.content, fallback_title='')
+        persian_title = (head.get('title') or '').strip()
+        lead = (head.get('lead') or '').strip()
+        if not persian_title and lead:
+            # Prefer first line of generated lead over echoing source title.
+            persian_title = lead.split('\n', 1)[0].strip()[:160]
+
+        body_result = self._generation_service.generate(
+            AIGenerationTask.POST_GENERATION,
+            PostGenerationRequest(
+                title=persian_title or source_title,
+                source=source,
+                language=language,
+                category=category,
+                context=context,
+                instructions=self._pass_instructions(
+                    _BODY_RULES,
+                    instructions,
+                    source_title=source_title,
+                    locked_title=persian_title,
+                    locked_lead=lead,
+                ),
+            ),
+            provider_name=provider_name,
+        )
+        return self._to_draft(
+            source_title=source_title,
+            language=language,
+            category=category,
+            persian_title=persian_title,
+            lead=lead,
+            head_result=head_result,
+            body_result=body_result,
+        )
+
+    def _pass_instructions(
+        self,
+        pass_rules: str,
+        user_instructions: str,
+        *,
+        source_title: str = '',
+        locked_title: str = '',
+        locked_lead: str = '',
+    ) -> str:
+        parts = [pass_rules.strip()]
+        if source_title:
+            parts.append(
+                'Source title (for context only; do not copy as TITLE):\n'
+                f'{source_title}'
+            )
+        if locked_title or locked_lead:
+            parts.append(
+                'Locked TITLE:\n'
+                f'{locked_title}\n'
+                'Locked LEAD:\n'
+                f'{locked_lead}'
+            )
+        extra = (user_instructions or '').strip()
+        if extra:
+            parts.append(extra)
+        return '\n\n'.join(parts)
 
     def _to_draft(
         self,
-        request: PostGenerationRequest,
-        result: GenerationResult,
+        *,
+        source_title: str,
+        language: str,
+        category: str,
+        persian_title: str,
+        lead: str,
+        head_result: GenerationResult,
+        body_result: GenerationResult,
     ) -> EditorialDraft:
-        body = '' if result.content is None else str(result.content)
-        metadata = dict(result.metadata)
-        metadata.setdefault('provider', result.provider)
-        metadata.setdefault('success', result.success)
-        metadata.setdefault('warnings', list(result.warnings))
+        body_text = (
+            '' if body_result.content is None else str(body_result.content)
+        )
+        parsed = parse_structured_draft(
+            body_text,
+            fallback_title=persian_title,
+        )
+        title = persian_title or parsed['title'] or source_title
+        final_lead = lead or parsed['lead']
+        body = (parsed['body'] or '').strip()
+        if not body and body_text:
+            body = body_text.strip()
+
+        metadata = dict(body_result.metadata or {})
+        metadata.setdefault('provider', body_result.provider)
+        metadata.setdefault('success', body_result.success)
+        warnings = list(head_result.warnings or []) + list(
+            body_result.warnings or []
+        )
+        metadata['warnings'] = warnings
+        metadata['generation_passes'] = ['headline_lead', 'body']
+        metadata['source_title'] = source_title
+        metadata['suggested_category'] = (
+            parsed.get('suggested_category') or category or 'news'
+        )
+        metadata['suggested_tags'] = list(parsed.get('suggested_tags') or [])
+
+        # Merge workflow stages from both passes when present.
+        stages: list[str] = []
+        for result in (head_result, body_result):
+            for stage in (result.metadata or {}).get('workflow_stages') or []:
+                if stage not in stages:
+                    stages.append(stage)
+        if stages:
+            metadata['workflow_stages'] = stages
+
+        telemetry = self._merge_pass_telemetry(head_result, body_result)
         return EditorialDraft(
-            title=request.title,
+            title=title,
+            lead=final_lead,
             body=body,
-            summary='',
-            language=request.language,
+            summary=parsed.get('summary') or final_lead,
+            language=language,
             metadata=metadata,
-            telemetry=result.telemetry,
+            telemetry=telemetry,
+        )
+
+    def _merge_pass_telemetry(
+        self,
+        head_result: GenerationResult,
+        body_result: GenerationResult,
+    ) -> AIExecutionTelemetry | None:
+        head_tel = head_result.telemetry
+        body_tel = body_result.telemetry
+        if head_tel is None and body_tel is None:
+            return None
+        if head_tel is None:
+            return body_tel
+        if body_tel is None:
+            return head_tel
+        duration = None
+        if head_tel.duration_ms is not None or body_tel.duration_ms is not None:
+            duration = round(
+                (head_tel.duration_ms or 0) + (body_tel.duration_ms or 0),
+                3,
+            )
+        return merge_telemetry(
+            body_tel,
+            provider=body_tel.provider or head_tel.provider,
+            started_at=head_tel.started_at or body_tel.started_at,
+            finished_at=body_tel.finished_at or head_tel.finished_at,
+            duration_ms=duration,
+            success=bool(head_tel.success and body_tel.success),
+            prompt_length=(
+                (head_tel.prompt_length or 0) + (body_tel.prompt_length or 0)
+            )
+            or None,
+            response_length=(
+                (head_tel.response_length or 0)
+                + (body_tel.response_length or 0)
+            )
+            or None,
         )

@@ -109,6 +109,7 @@ def serialize_editorial_draft(draft):
     """Serialize an ``EditorialDraft`` to a plain JSON-safe dict."""
     return {
         'title': draft.title,
+        'lead': getattr(draft, 'lead', '') or '',
         'body': draft.body,
         'summary': draft.summary,
         'language': draft.language,

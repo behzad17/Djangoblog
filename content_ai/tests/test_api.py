@@ -100,11 +100,17 @@ class InternalEditorialDraftAPITests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         payload = response.json()
-        self.assertEqual(payload['title'], 'API draft')
+        # Mock provider returns unlabelled text; two-pass uses it as title/lead/body.
+        self.assertEqual(payload['title'], MOCK_RESPONSE)
+        self.assertEqual(payload['lead'], MOCK_RESPONSE)
         self.assertEqual(payload['body'], MOCK_RESPONSE)
-        self.assertEqual(payload['summary'], '')
+        self.assertEqual(payload['summary'], MOCK_RESPONSE)
         self.assertEqual(payload['language'], 'sv')
         self.assertIn('metadata', payload)
+        self.assertEqual(
+            payload['metadata'].get('generation_passes'),
+            ['headline_lead', 'body'],
+        )
         self.assertIn('telemetry', payload)
         self.assertIsNotNone(payload['telemetry'])
         self.assertEqual(payload['telemetry']['provider'], 'mock')
@@ -210,4 +216,4 @@ class InternalEditorialDraftAPITests(TestCase):
             content_type='application/json',
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['title'], 'Legacy')
+        self.assertEqual(response.json()['title'], MOCK_RESPONSE)

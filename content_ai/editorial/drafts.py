@@ -16,6 +16,7 @@ class EditorialDraft:
     """
 
     title: str = ''
+    lead: str = ''
     body: str = ''
     summary: str = ''
     language: str = ''
