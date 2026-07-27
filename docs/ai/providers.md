@@ -150,7 +150,7 @@ provider = get_provider('openai')  # OpenAI Responses API
 | `CONTENT_AI_PROVIDER` | `"mock"` | Active provider name |
 | `OPENAI_API_KEY` | `""` | Required when provider is `openai` |
 | `OPENAI_MODEL` | `""` | Required when provider is `openai` (set via env; not hardcoded) |
-| `OPENAI_TIMEOUT` | `60` | Optional request timeout (seconds) |
+| `OPENAI_TEXT_TIMEOUT` | `27` | Text generation request timeout (seconds) |
 
 Supported today: **`mock`**, **`openai`**.
 

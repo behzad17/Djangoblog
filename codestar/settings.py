@@ -118,7 +118,8 @@ OPENAI_IMAGE_SIZE = os.environ.get('OPENAI_IMAGE_SIZE', '1536x1024')
 # low = fastest GPT Image tier — required to stay under Heroku's 30s H12 limit.
 OPENAI_IMAGE_QUALITY = os.environ.get('OPENAI_IMAGE_QUALITY', 'low')
 OPENAI_IMAGE_TIMEOUT = float(os.environ.get('OPENAI_IMAGE_TIMEOUT', '90'))
-OPENAI_TIMEOUT = float(os.environ.get('OPENAI_TIMEOUT', '60'))
+# Text Responses API timeout (seconds). Kept below Heroku's ~30s router limit.
+OPENAI_TEXT_TIMEOUT = int(os.environ.get('OPENAI_TEXT_TIMEOUT', '27'))
 
 # django-simple-captcha (signup CAPTCHA) tuning:
 # Make the captcha clearer by using only numbers, fewer characters, bigger font,

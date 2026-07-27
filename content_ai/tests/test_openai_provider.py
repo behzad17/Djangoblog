@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from django.test import SimpleTestCase, override_settings
 
@@ -18,7 +18,7 @@ class OpenAIProviderRegistryTests(SimpleTestCase):
     @override_settings(
         OPENAI_API_KEY='sk-test',
         OPENAI_MODEL='gpt-test',
-        OPENAI_TIMEOUT=30,
+        OPENAI_TEXT_TIMEOUT=30,
     )
     def test_get_provider_openai_returns_openai_provider(self):
         client = MagicMock()
@@ -47,7 +47,7 @@ class OpenAIProviderConfigTests(SimpleTestCase):
 @override_settings(
     OPENAI_API_KEY='sk-test',
     OPENAI_MODEL='gpt-test-model',
-    OPENAI_TIMEOUT=45,
+    OPENAI_TEXT_TIMEOUT=45,
 )
 class OpenAIProviderGenerationTests(SimpleTestCase):
     def setUp(self):
@@ -135,7 +135,8 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
                 self.provider.generate_post('prompt')
 
         joined = '\n'.join(logs.output)
-        self.assertIn('OpenAI generation failed after', joined)
+        self.assertIn('OpenAI text request:', joined)
+        self.assertIn('status=error', joined)
         self.assertIn('exception_type=FakeAPIError', joined)
         self.assertIn('status_code=400', joined)
         self.assertIn('model_not_found', joined)
@@ -186,3 +187,60 @@ class OpenAIProviderGenerationTests(SimpleTestCase):
 
         self.client.responses.create.assert_called_once()
         self.client.chat.completions.create.assert_not_called()
+
+
+class OpenAITextTimeoutTests(SimpleTestCase):
+    @override_settings(
+        OPENAI_API_KEY='sk-test',
+        OPENAI_MODEL='gpt-test-model',
+    )
+    def test_default_text_timeout_is_27(self):
+        with patch('openai.OpenAI') as mock_openai_cls:
+            provider = OpenAIProvider()
+        mock_openai_cls.assert_called_once_with(
+            api_key='sk-test',
+            timeout=27,
+            max_retries=0,
+        )
+        self.assertEqual(provider.timeout, 27)
+
+    @override_settings(
+        OPENAI_API_KEY='sk-test',
+        OPENAI_MODEL='gpt-test-model',
+        OPENAI_TEXT_TIMEOUT=33,
+    )
+    def test_openai_client_uses_openai_text_timeout_setting(self):
+        with patch('openai.OpenAI') as mock_openai_cls:
+            provider = OpenAIProvider()
+        mock_openai_cls.assert_called_once_with(
+            api_key='sk-test',
+            timeout=33,
+            max_retries=0,
+        )
+        self.assertEqual(provider.timeout, 33)
+
+    @override_settings(
+        OPENAI_API_KEY='sk-test',
+        OPENAI_MODEL='gpt-test-model',
+        OPENAI_TEXT_TIMEOUT=27,
+    )
+    def test_timeout_includes_configured_timeout_in_telemetry(self):
+        class APITimeoutError(Exception):
+            pass
+
+        client = MagicMock()
+        client.responses.create.side_effect = APITimeoutError('Request timed out.')
+        provider = OpenAIProvider(client=client)
+
+        with self.assertLogs('content_ai.providers.openai', level='ERROR') as logs:
+            with self.assertRaises(GenerationError) as ctx:
+                provider.generate_post('prompt')
+
+        self.assertEqual(
+            ctx.exception.telemetry.metadata['openai_text_timeout'],
+            27,
+        )
+        self.assertEqual(ctx.exception.telemetry.metadata['status'], 'timeout')
+        joined = '\n'.join(logs.output)
+        self.assertIn('OpenAI text request: timeout=27', joined)
+        self.assertIn('status=timeout', joined)

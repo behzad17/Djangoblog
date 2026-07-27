@@ -107,7 +107,7 @@ Default provider is **`mock`** (no network). To use OpenAI (Responses API), set:
 - `CONTENT_AI_PROVIDER=openai`
 - `OPENAI_API_KEY=...`
 - `OPENAI_MODEL=...`
-- Optional: `OPENAI_TIMEOUT=60`
+- Optional: `OPENAI_TEXT_TIMEOUT=27`
 
 Developer sandbox (login + DEBUG or superuser): `/content-ai/sandbox/`
 
@@ -425,6 +425,7 @@ This project was deployed to Heroku using GitHub integration.
 - `CLOUDINARY_URL=your_cloudinary_url`
 - (Optional) `GOOGLE_CLIENT_ID=...`
 - (Optional) `GOOGLE_CLIENT_SECRET=...`
+- (Optional) `OPENAI_TEXT_TIMEOUT=27` (text generation timeout in seconds)
 - (Only if needed temporarily) `DISABLE_COLLECTSTATIC=1`
 
 Note: Do not set `PORT` on Heroku. It’s provided automatically.

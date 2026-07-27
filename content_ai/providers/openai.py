@@ -170,8 +170,10 @@ class OpenAIProvider(BaseAIProvider):
         self.image_size = (
             getattr(settings, 'OPENAI_IMAGE_SIZE', '') or _DEFAULT_IMAGE_SIZE
         )
-        # Short timeout avoids Heroku H12 (~30s); no retries so errors surface fast.
-        self.timeout = 20
+        # Text timeout stays below Heroku H12 (~30s); no retries so errors surface fast.
+        self.timeout = float(
+            getattr(settings, 'OPENAI_TEXT_TIMEOUT', None) or 27
+        )
 
         if not self.api_key:
             raise ProviderConfigurationError(
@@ -189,7 +191,7 @@ class OpenAIProvider(BaseAIProvider):
 
             self._client = OpenAI(
                 api_key=self.api_key,
-                timeout=20,
+                timeout=self.timeout,
                 max_retries=0,
             )
 
@@ -249,7 +251,7 @@ class OpenAIProvider(BaseAIProvider):
         )
         quality = _normalize_image_quality(model, configured_quality)
         response_format = kwargs.get('response_format')  # optional; SDK default
-        # Images routinely exceed the 20s text timeout; avoid client abort →
+        # Images routinely exceed the text timeout; avoid client abort →
         # empty/HTML upstream responses that Safari reports as pattern errors.
         image_timeout = float(
             getattr(settings, 'OPENAI_IMAGE_TIMEOUT', None) or 90
@@ -373,12 +375,12 @@ class OpenAIProvider(BaseAIProvider):
 
     def _generate(self, prompt, task):
         prompt_text = prompt or ''
+        configured_timeout = self.timeout
         logger.info(
-            'OpenAI request starting: model=%s timeout=%s prompt_chars=%d preview=%r',
+            'OpenAI text request starting: model=%s timeout=%s prompt_chars=%d',
             self.model,
-            self.timeout,
+            configured_timeout,
             len(prompt_text),
-            prompt_text[:300],
         )
         started = time.monotonic()
         try:
@@ -389,30 +391,36 @@ class OpenAIProvider(BaseAIProvider):
         except Exception as exc:
             elapsed = time.monotonic() - started
             details = _openai_error_details(exc)
+            exception_type = details.get('exception_type') or type(exc).__name__
+            is_timeout = exception_type == 'APITimeoutError' or exception_type.endswith(
+                'TimeoutError'
+            )
+            status = 'timeout' if is_timeout else 'error'
             logger.exception(
-                'OpenAI generation failed after %.2fs: '
+                'OpenAI text request: timeout=%s elapsed=%.1fs status=%s '
                 'exception_type=%s message=%s status_code=%s error_code=%s '
-                'error_message=%s request_id=%s body=%s response_text=%s details=%s',
+                'error_message=%s request_id=%s',
+                configured_timeout,
                 elapsed,
-                details.get('exception_type'),
+                status,
+                exception_type,
                 details.get('message'),
                 details.get('status_code'),
                 details.get('error_code'),
                 details.get('error_message'),
                 details.get('request_id'),
-                details.get('body'),
-                details.get('response_text'),
-                details,
             )
             telemetry = AIExecutionTelemetry(
                 provider=self.name,
                 model=self.model,
                 success=False,
-                error_type=type(exc).__name__,
+                error_type=exception_type,
                 prompt_length=len(prompt_text),
                 response_length=0,
                 duration_ms=round(elapsed * 1000, 3),
                 metadata={
+                    'openai_text_timeout': configured_timeout,
+                    'status': status,
                     'openai_status_code': details.get('status_code'),
                     'openai_error_code': details.get('error_code'),
                     'openai_error_message': details.get('error_message'),
@@ -426,8 +434,8 @@ class OpenAIProvider(BaseAIProvider):
 
         elapsed = time.monotonic() - started
         logger.info(
-            'OpenAI response received successfully: model=%s elapsed=%.2fs',
-            self.model,
+            'OpenAI text request: timeout=%s elapsed=%.1fs status=success',
+            configured_timeout,
             elapsed,
         )
 
