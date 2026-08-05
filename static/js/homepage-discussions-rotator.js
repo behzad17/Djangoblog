@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   rotators.forEach((rotator) => {
     const titles = Array.from(rotator.querySelectorAll('[data-discussion-title]'));
+    const shell = rotator.closest('.hero-discussions-rotator-shell');
+    const indicators = shell
+      ? Array.from(shell.querySelectorAll('[data-discussion-indicator]'))
+      : [];
+
     if (titles.length < 2 || reduceMotion) return;
 
     let currentIndex = 0;
@@ -12,10 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const showTitle = (nextIndex) => {
       titles[currentIndex].classList.remove('is-active');
       titles[currentIndex].setAttribute('aria-hidden', 'true');
+      indicators[currentIndex]?.classList.remove('is-active');
 
       currentIndex = nextIndex;
       titles[currentIndex].classList.add('is-active');
       titles[currentIndex].removeAttribute('aria-hidden');
+      indicators[currentIndex]?.classList.add('is-active');
     };
 
     const start = () => {
