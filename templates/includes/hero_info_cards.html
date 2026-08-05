@@ -2,7 +2,7 @@
 <a
   href="{% url 'community:discussion_list' %}"
   class="hero-discussions-cta"
-  aria-label="مشاهده صفحه گفتگوها"
+  aria-label="مشاهده تازه‌ترین گفتگوها"
 >
   <span class="hero-discussions-cta__accent">
     <span class="hero-discussions-cta__icon" aria-hidden="true">
@@ -12,20 +12,41 @@
   </span>
   <span class="hero-discussions-cta__body hero-discussions-cta__body--rotator">
     {% if latest_discussions %}
-      <span class="hero-discussions-rotator" data-discussions-rotator>
-        {% for discussion in latest_discussions %}
-          <span
-            class="hero-discussions-rotator__item{% if forloop.first %} is-active{% endif %}"
-            data-discussion-title
-            {% if not forloop.first %}aria-hidden="true"{% endif %}
-          >
-            {{ discussion.title }}
-          </span>
-        {% endfor %}
+      <span class="hero-discussions-rotator-shell">
+        <span class="hero-discussions-rotator__eyebrow">
+          <span class="hero-discussions-rotator__eyebrow-mark" aria-hidden="true"></span>
+          <span>تازه‌ترین گفتگوها</span>
+          <i class="fas fa-arrow-left hero-discussions-rotator__arrow" aria-hidden="true"></i>
+        </span>
+        <span class="hero-discussions-rotator" data-discussions-rotator>
+          {% for discussion in latest_discussions %}
+            <span
+              class="hero-discussions-rotator__item{% if forloop.first %} is-active{% endif %}"
+              data-discussion-title
+              {% if not forloop.first %}aria-hidden="true"{% endif %}
+            >
+              {{ discussion.title }}
+            </span>
+          {% endfor %}
+        </span>
+        <span class="hero-discussions-rotator__indicators" aria-hidden="true">
+          {% for discussion in latest_discussions %}
+            <span
+              class="hero-discussions-rotator__indicator{% if forloop.first %} is-active{% endif %}"
+              data-discussion-indicator
+            ></span>
+          {% endfor %}
+        </span>
       </span>
     {% else %}
-      <span class="hero-discussions-cta__description">
-        فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده
+      <span class="hero-discussions-empty">
+        <span class="hero-discussions-rotator__eyebrow">
+          <span class="hero-discussions-rotator__eyebrow-mark" aria-hidden="true"></span>
+          <span>گفتگوها</span>
+        </span>
+        <span class="hero-discussions-cta__description">
+          فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده
+        </span>
       </span>
     {% endif %}
   </span>
