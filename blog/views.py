@@ -18,6 +18,7 @@ import json
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
 from related_links.selectors.related import get_related_links
+from community.selectors.discussions import list_latest_discussions
 from .utils import (
     track_page_view,
     determine_comment_approval,
@@ -98,6 +99,7 @@ class PostList(generic.ListView):
                 'featured_post': None,
                 'upcoming_events': [],
                 'homepage_pro_ads': [],
+                'latest_discussions': [],
             }
             return context
 
@@ -216,6 +218,11 @@ class PostList(generic.ListView):
             context['homepage_pro_ads'] = get_homepage_pro_ads()
         except Exception:
             context['homepage_pro_ads'] = []
+
+        try:
+            context['latest_discussions'] = list(list_latest_discussions()[:5])
+        except Exception:
+            context['latest_discussions'] = []
 
         try:
             expert_posts_qs = get_specialist_posts_queryset()

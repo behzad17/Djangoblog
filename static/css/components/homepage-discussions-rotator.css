@@ -1,0 +1,57 @@
+.hero-discussions-cta__body--rotator {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-discussions-rotator {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  place-items: center;
+}
+
+.hero-discussions-rotator__item {
+  grid-area: 1 / 1;
+  width: 100%;
+  margin: 0;
+  padding-inline: 0.15rem;
+  color: #4b5563;
+  font-size: clamp(0.74rem, 0.98vw, 0.94rem);
+  font-weight: 600;
+  line-height: 1.55;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hero-discussions-rotator__item.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+@media (max-width: 767.98px) {
+  .hero-discussions-rotator__item {
+    font-size: clamp(0.68rem, 3.2vw, 0.78rem);
+    line-height: 1.45;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-discussions-rotator__item {
+    font-size: clamp(0.79rem, 0.91vw, 0.98rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-discussions-rotator__item {
+    transform: none;
+    transition: none;
+  }
+}

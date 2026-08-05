@@ -2,7 +2,7 @@
 <a
   href="{% url 'community:discussion_list' %}"
   class="hero-discussions-cta"
-  aria-label="گفتگوها — فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده"
+  aria-label="مشاهده صفحه گفتگوها"
 >
   <span class="hero-discussions-cta__accent">
     <span class="hero-discussions-cta__icon" aria-hidden="true">
@@ -10,9 +10,23 @@
     </span>
     <span class="hero-discussions-cta__title">گفتگوها</span>
   </span>
-  <span class="hero-discussions-cta__body">
-    <span class="hero-discussions-cta__description">
-      فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده
-    </span>
+  <span class="hero-discussions-cta__body hero-discussions-cta__body--rotator">
+    {% if latest_discussions %}
+      <span class="hero-discussions-rotator" data-discussions-rotator>
+        {% for discussion in latest_discussions %}
+          <span
+            class="hero-discussions-rotator__item{% if forloop.first %} is-active{% endif %}"
+            data-discussion-title
+            {% if not forloop.first %}aria-hidden="true"{% endif %}
+          >
+            {{ discussion.title }}
+          </span>
+        {% endfor %}
+      </span>
+    {% else %}
+      <span class="hero-discussions-cta__description">
+        فضایی برای طرح موضوعات، تبادل تجربه و گفتگوهای سازنده
+      </span>
+    {% endif %}
   </span>
 </a>
