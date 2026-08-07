@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   const rotators = document.querySelectorAll('[data-discussions-rotator]');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   rotators.forEach((rotator) => {
     const titles = Array.from(rotator.querySelectorAll('[data-discussion-title]'));
     const shell = rotator.closest('.hero-discussions-rotator-shell');
@@ -9,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ? Array.from(shell.querySelectorAll('[data-discussion-indicator]'))
       : [];
 
-    if (titles.length < 2 || reduceMotion) return;
+    if (titles.length < 2) return;
 
     let currentIndex = 0;
     let intervalId = null;
