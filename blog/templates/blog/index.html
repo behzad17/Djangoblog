@@ -237,5 +237,5 @@
 {% endblock %}
 
 {% block extras %}
-<script src="{% static 'js/homepage-discussions-rotator.js' %}" defer></script>
+<script src="{% static 'js/homepage-discussions-rotator.js' %}?v={% now 'U' %}" defer></script>
 {% endblock extras %}
