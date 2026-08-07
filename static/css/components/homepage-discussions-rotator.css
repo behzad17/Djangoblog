@@ -139,6 +139,19 @@
 }
 
 @media (max-width: 767.98px) {
+  main .hero-section--homepage .hero-section__info {
+    display: flex !important;
+    align-items: stretch;
+    justify-content: center;
+    visibility: visible;
+  }
+
+  main .hero-section--homepage .hero-discussions-cta {
+    display: flex !important;
+    visibility: visible;
+    opacity: 1;
+  }
+
   .hero-discussions-cta__body--rotator {
     padding-block: 0.42rem;
   }
