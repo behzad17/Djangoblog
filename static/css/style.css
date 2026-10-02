@@ -38,6 +38,11 @@ body {
   white-space: nowrap;
 }
 
+.brand-tagline__name {
+  color: #ffffff;
+  font-size: calc(1em + 4px);
+}
+
 /* Navbar Background - Dark Blue */
 .navbar {
   background-color: #1B5583 !important;
