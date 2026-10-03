@@ -1,8 +1,7 @@
 <div class="category-overview-section">
-  <h3 class="category-section-title mb-2 mb-lg-3">
-    <i class="fas fa-tags ms-2 d-md-none" aria-hidden="true"></i>
-    <span class="d-md-none">صدای جامعه(مطالب شما)</span>
-    <span class="d-none d-md-inline category-section-title__tablet-desktop">صدای جامعه (مطالب شما)</span>
+  <h3 class="category-section-title mb-2 d-md-none">
+    <i class="fas fa-tags ms-2" aria-hidden="true"></i>
+    <span>صدای جامعه(مطالب شما)</span>
   </h3>
 
   {% if category_overview_rows %}
@@ -15,10 +14,13 @@
     </div>
 
     <div class="category-overview-desktop-tablet d-none d-md-block">
-      <div class="category-overview-category-grid">
-        {% for category, latest_post in category_overview_rows %}
-          {% include 'includes/category_icon_card.html' with category=category %}
-        {% endfor %}
+      <div class="category-overview-shortcuts">
+        <h3 class="category-section-title">صدای جامعه (مطالب شما)</h3>
+        <div class="category-overview-category-grid">
+          {% for category, latest_post in category_overview_rows %}
+            {% include 'includes/category_icon_card.html' with category=category %}
+          {% endfor %}
+        </div>
       </div>
 
       <h3 class="category-overview-latest-posts-title">آخرین پست از هر دسته</h3>
