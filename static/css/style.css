@@ -11515,7 +11515,7 @@ body .ad-banner + .flash-messages-container:has(.alert) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: min(100%, 850px);
+    width: min(850px, calc(100% - 100px));
     max-width: 850px;
   }
 
