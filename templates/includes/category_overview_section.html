@@ -2,9 +2,8 @@
   <h3 class="category-section-title mb-2 mb-lg-3">
     <i class="fas fa-tags ms-2 d-md-none" aria-hidden="true"></i>
     <span class="d-md-none">صدای جامعه(مطالب شما)</span>
-    <span class="d-none d-md-inline category-section-title__tablet-desktop">صدای جامعه<br>(مطالب شما)</span>
+    <span class="d-none d-md-inline category-section-title__tablet-desktop">صدای جامعه (مطالب شما)</span>
   </h3>
-  <h3 class="category-overview-latest-posts-title d-none d-lg-block">جدیدترین پستها</h3>
 
   {% if category_overview_rows %}
     <div class="category-overview-mobile-grid d-md-none">
@@ -15,17 +14,34 @@
       {% endfor %}
     </div>
 
-    <div class="category-overview-rows d-none d-md-block">
-      {% for category, latest_post in category_overview_rows %}
-        {% include 'includes/category_overview_row.html' with category=category latest_post=latest_post %}
-        {% if forloop.counter == 6 %}
-          {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
-        {% endif %}
-        {% if forloop.counter == 13 %}
-          {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
-          {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
-        {% endif %}
-      {% endfor %}
+    <div class="category-overview-desktop-tablet d-none d-md-block">
+      <div class="category-overview-category-grid">
+        {% for category, latest_post in category_overview_rows %}
+          {% include 'includes/category_icon_card.html' with category=category %}
+        {% endfor %}
+      </div>
+
+      <h3 class="category-overview-latest-posts-title">آخرین پست از هر دسته</h3>
+      <div class="category-overview-posts">
+        {% for category, latest_post in category_overview_rows %}
+          <div class="category-overview-post-item">
+            {% if latest_post %}
+              {% include 'includes/category_latest_post_card.html' with post=latest_post %}
+            {% else %}
+              <p class="category-overview-empty text-muted small mb-0">
+                هنوز مطلبی در دستهٔ {{ category.name }} منتشر نشده است.
+              </p>
+            {% endif %}
+          </div>
+          {% if forloop.counter == 6 %}
+            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
+          {% endif %}
+          {% if forloop.counter == 13 %}
+            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
+            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   {% else %}
     <p class="text-muted text-center mb-0">هنوز دسته‌بندی‌ای در دسترس نیست.</p>
