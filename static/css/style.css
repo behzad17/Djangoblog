@@ -11511,11 +11511,16 @@ body .ad-banner + .flash-messages-container:has(.alert) {
     padding-right: 170px;
   }
 
+  .homepage .category-overview-section .category-section-title {
+    width: min(850px, calc(100% - 170px));
+    text-align: center !important;
+  }
+
   .homepage .category-overview-category-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: min(850px, calc(100% - 100px));
+    width: min(850px, calc(100% - 170px));
     max-width: 850px;
   }
 
