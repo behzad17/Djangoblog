@@ -11515,12 +11515,14 @@ body .ad-banner + .flash-messages-container:has(.alert) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 1100px;
+    width: min(100%, 850px);
+    max-width: 850px;
   }
 
   .homepage .category-overview-category-grid .category-overview-card {
     flex: 0 0 calc((100% - 3rem) / 5);
     width: calc((100% - 3rem) / 5);
+    min-width: 0;
   }
 
   .homepage .category-overview-posts {
