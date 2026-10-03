@@ -11511,8 +11511,12 @@ body .ad-banner + .flash-messages-container:has(.alert) {
     padding-right: 170px;
   }
 
-  .homepage .category-overview-section .category-section-title {
+  .homepage .category-overview-shortcuts {
     width: min(850px, calc(100% - 170px));
+  }
+
+  .homepage .category-overview-shortcuts .category-section-title {
+    width: 100%;
     text-align: center !important;
   }
 
@@ -11520,8 +11524,8 @@ body .ad-banner + .flash-messages-container:has(.alert) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: min(850px, calc(100% - 170px));
-    max-width: 850px;
+    width: 100%;
+    max-width: none;
   }
 
   .homepage .category-overview-category-grid .category-overview-card {
