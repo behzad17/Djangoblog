@@ -36,11 +36,9 @@
           {% if forloop.counter == 6 %}
             {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
           {% endif %}
-          {% if forloop.counter == 13 %}
-            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
-            {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
-          {% endif %}
         {% endfor %}
+        {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
+        {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
       </div>
     </div>
   {% else %}
