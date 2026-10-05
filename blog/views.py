@@ -670,7 +670,7 @@ def like_post(request, post_id):
 
 
 @ratelimit(key='user', rate='5/h', method='POST', block=True)
-@ratelimit(key='ip', rate='10/h', method='POST', block=True)
+@ratelimit(key='ip', rate='20/h', method='POST', block=True)
 @site_verified_required
 @login_required
 def create_post(request):
