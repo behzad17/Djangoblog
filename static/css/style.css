@@ -11506,16 +11506,53 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   }
 }
 
+/* Keep the desktop homepage sections on one centered content axis. */
 @media (min-width: 992px) {
+  .homepage-main-grid {
+    --hp-section-width: 850px;
+  }
+
+  .homepage .homepage-sidebar {
+    left: 0;
+  }
+
+  .homepage .upcoming-events-section,
   .homepage .category-overview-section {
-    padding-right: 170px;
+    width: calc(100% - 2rem);
+    max-width: var(--hp-section-width);
+    margin-inline: auto;
+    padding-inline: 0;
   }
 
-  .homepage .category-overview-shortcuts {
-    width: min(850px, calc(100% - 170px));
+  .homepage .upcoming-events-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
   }
 
-  .homepage .category-overview-shortcuts .category-section-title {
+  .homepage .upcoming-events-title {
+    grid-column: 2;
+    text-align: center;
+  }
+
+  .homepage .upcoming-events-view-all {
+    grid-column: 3;
+    justify-self: end;
+    white-space: normal;
+    text-align: end;
+  }
+
+  .homepage .upcoming-events-header,
+  .homepage .upcoming-events-scroll-wrap,
+  .homepage .category-overview-shortcuts,
+  .homepage .category-overview-posts {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .homepage .category-overview-shortcuts .category-section-title,
+  .homepage .category-overview-latest-posts-title {
     width: 100%;
     text-align: center !important;
   }
@@ -11532,9 +11569,5 @@ body .ad-banner + .flash-messages-container:has(.alert) {
     flex: 0 0 calc((100% - 3rem) / 5);
     width: calc((100% - 3rem) / 5);
     min-width: 0;
-  }
-
-  .homepage .category-overview-posts {
-    max-width: 656px;
   }
 }
