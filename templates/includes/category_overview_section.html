@@ -36,6 +36,7 @@
             {% endfor %}
           </ul>
         </section>
+        {% include 'includes/homepage_useful_links.html' with heading_id='homepage-useful-links-desktop-heading' %}
         {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-1' %}
         {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-2' %}
         {% include 'includes/category_overview_section_ad.html' with ad_stem='ad-3' %}
@@ -43,5 +44,8 @@
     </div>
   {% else %}
     <p class="text-muted text-center mb-0">هنوز دسته‌بندی‌ای در دسترس نیست.</p>
+    <div class="d-none d-md-block">
+      {% include 'includes/homepage_useful_links.html' with heading_id='homepage-useful-links-desktop-heading' %}
+    </div>
   {% endif %}
 </div>

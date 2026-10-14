@@ -18,6 +18,7 @@ import json
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
 from related_links.selectors.related import get_related_links
+from related_links.models import UsefulLinkCategory
 from community.selectors.discussions import list_latest_discussions
 from .utils import (
     track_page_view,
@@ -100,6 +101,7 @@ class PostList(generic.ListView):
                 'upcoming_events': [],
                 'homepage_pro_ads': [],
                 'latest_discussions': [],
+                'homepage_useful_link_categories': [],
             }
             return context
 
@@ -192,6 +194,13 @@ class PostList(generic.ListView):
         context['post_list'] = merged
         # page_obj and is_paginated are already set correctly by Django's ListView
         # They reference the full queryset, not our reordered list
+
+        try:
+            context['homepage_useful_link_categories'] = list(
+                UsefulLinkCategory.objects.filter(is_active=True)
+            )
+        except Exception:
+            context['homepage_useful_link_categories'] = []
 
         # Category overview rows and expert posts
         try:
