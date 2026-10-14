@@ -197,3 +197,67 @@
     transition: none;
   }
 }
+
+/* Square discussions card above the left sidebar ad; mobile keeps the hero CTA. */
+@media (min-width: 768px) {
+  .homepage-sidebar-discussions {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-cta {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    margin: 0;
+    flex-direction: column;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-cta__accent {
+    flex: 0 0 32%;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    gap: 0.4rem;
+    padding: 0.5rem;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-cta__icon {
+    font-size: clamp(1.15rem, 2vw, 1.65rem);
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-cta__title {
+    font-size: clamp(0.85rem, 1.3vw, 1.1rem);
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-cta__body {
+    min-height: 0;
+    padding: 0.6rem;
+    border-inline-start: 0;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-rotator-shell {
+    gap: 0.55rem;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-rotator__eyebrow {
+    font-size: 0.65rem;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-rotator__item {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: clamp(0.78rem, 1.05vw, 0.98rem);
+    line-height: 1.5;
+  }
+
+  .homepage-sidebar-discussions .hero-discussions-cta__description {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+}
