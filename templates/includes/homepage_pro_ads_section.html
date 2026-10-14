@@ -19,6 +19,12 @@
         {% include 'ads/includes/_homepage_pro_card.html' with ad=ad %}
       {% endfor %}
     </div>
+    {% if homepage_pro_ads|length > 4 %}
+    <p class="homepage-pro-ads-scroll-hint">
+      <span class="homepage-pro-ads-scroll-hint__arrow" aria-hidden="true">↔</span>
+      <span>{{ homepage_pro_ads|length }} آگهی؛ برای دیدن آگهی‌های بیشتر، به چپ یا راست بکشید.</span>
+    </p>
+    {% endif %}
   </div>
 </section>
 {% endif %}
