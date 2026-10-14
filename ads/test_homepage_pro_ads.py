@@ -19,16 +19,16 @@ class GetHomepageProAdsTests(AdsTestMixin, TestCase):
     def test_returns_empty_when_no_visible_pro_ads(self):
         self.assertEqual(get_homepage_pro_ads(), [])
 
-    def test_returns_all_pro_ads_when_six_or_fewer(self):
+    def test_returns_all_pro_ads_when_twelve_or_fewer(self):
         ads = [
             self._create_pro_ad(f"pro-{index}", title=f"Pro {index}")
-            for index in range(6)
+            for index in range(12)
         ]
         result = get_homepage_pro_ads()
-        self.assertEqual(len(result), 6)
+        self.assertEqual(len(result), 12)
         self.assertEqual([ad.id for ad in result], [ad.id for ad in reversed(ads)])
 
-    def test_returns_all_when_fewer_than_six(self):
+    def test_returns_all_when_fewer_than_twelve(self):
         ad = self._create_pro_ad("only-pro", title="Only Pro")
         result = get_homepage_pro_ads()
         self.assertEqual(len(result), 1)
@@ -42,10 +42,10 @@ class GetHomepageProAdsTests(AdsTestMixin, TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].slug, "visible-pro")
 
-    def test_more_than_six_returns_three_newest_plus_three_rotating(self):
+    def test_more_than_twelve_returns_six_newest_plus_six_rotating(self):
         created = []
         base_time = timezone.now()
-        for index in range(8):
+        for index in range(16):
             ad = self._create_pro_ad(f"pro-{index}", title=f"Pro {index}")
             Ad = ad.__class__
             Ad.objects.filter(pk=ad.pk).update(
@@ -56,18 +56,19 @@ class GetHomepageProAdsTests(AdsTestMixin, TestCase):
 
         ordered = sorted(created, key=lambda item: item.created_on, reverse=True)
         result = get_homepage_pro_ads()
-        self.assertEqual(len(result), 6)
+        self.assertEqual(len(result), 12)
+        self.assertEqual(len({ad.id for ad in result}), 12)
         self.assertEqual(
-            [ad.id for ad in result[:3]],
-            [ad.id for ad in ordered[:3]],
+            [ad.id for ad in result[:6]],
+            [ad.id for ad in ordered[:6]],
         )
-        rotating_ids = {ad.id for ad in result[3:]}
-        remaining_ids = {ad.id for ad in ordered[3:]}
-        self.assertEqual(len(rotating_ids), 3)
+        rotating_ids = {ad.id for ad in result[6:]}
+        remaining_ids = {ad.id for ad in ordered[6:]}
+        self.assertEqual(len(rotating_ids), 6)
         self.assertTrue(rotating_ids.issubset(remaining_ids))
 
     def test_rotation_is_stable_within_bucket(self):
-        for index in range(7):
+        for index in range(16):
             self._create_pro_ad(f"pro-{index}")
 
         first = [ad.id for ad in get_homepage_pro_ads()]
@@ -75,7 +76,7 @@ class GetHomepageProAdsTests(AdsTestMixin, TestCase):
         self.assertEqual(first, second)
 
     def test_rotation_changes_after_bucket(self):
-        for index in range(7):
+        for index in range(16):
             self._create_pro_ad(f"pro-{index}")
 
         base_time = timezone.now()
@@ -88,13 +89,21 @@ class GetHomepageProAdsTests(AdsTestMixin, TestCase):
             )
             second = [ad.id for ad in get_homepage_pro_ads()]
 
-        self.assertEqual(len(first), 6)
-        self.assertEqual(len(second), 6)
-        self.assertEqual(first[:3], second[:3])
-        self.assertNotEqual(first[3:], second[3:])
+        self.assertEqual(len(first), 12)
+        self.assertEqual(len(second), 12)
+        self.assertEqual(first[:6], second[:6])
+        self.assertNotEqual(first[6:], second[6:])
 
 
 class HomepageProAdsTemplateTests(AdsTestMixin, TestCase):
+    def test_homepage_renders_twelve_ads_in_each_placement(self):
+        for index in range(16):
+            self._create_ad(f"homepage-pro-{index}", plan="pro")
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["homepage_pro_ads"]), 12)
+        self.assertContains(response, 'class="homepage-pro-card"', count=24)
+
     def test_homepage_renders_section_when_pro_ads_exist(self):
         self._create_ad("homepage-pro", plan="pro", title="Homepage Pro Ad")
         response = self.client.get(reverse("home"))

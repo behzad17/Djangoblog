@@ -7,9 +7,9 @@ from django.utils import timezone
 
 from ads.models import Ad
 
-HOMEPAGE_PRO_ADS_LIMIT = 6
-HOMEPAGE_PRO_NEWEST_COUNT = 3
-HOMEPAGE_PRO_ROTATING_COUNT = 3
+HOMEPAGE_PRO_ADS_LIMIT = 12
+HOMEPAGE_PRO_NEWEST_COUNT = 6
+HOMEPAGE_PRO_ROTATING_COUNT = 6
 HOMEPAGE_PRO_ROTATION_SECONDS = 12 * 3600
 
 
@@ -38,10 +38,10 @@ def _rotation_score(ad_id, bucket):
 
 def get_homepage_pro_ads():
     """
-    Return up to six visible Pro ads for the homepage.
+    Return up to twelve visible Pro ads for the homepage.
 
-    - Six or fewer active Pro ads: return all, newest first.
-    - More than six: three newest plus three rotating picks from the rest.
+    - Twelve or fewer active Pro ads: return all, newest first.
+    - More than twelve: six newest plus six rotating picks from the rest.
       Rotation bucket changes every 12 hours (stable across requests/dynos).
     """
     base_qs = _visible_pro_ads_queryset()

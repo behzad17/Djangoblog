@@ -1,4 +1,4 @@
-/* Homepage Pro ads — lightweight card grid (mobile 2×3, tablet/desktop 1×6) */
+/* Homepage Pro ads — lightweight card grid (two rows: mobile scrolls horizontally, tablet/desktop 2×6) */
 
 .homepage-pro-ads-section {
   margin-top: 1.25rem;
@@ -46,14 +46,22 @@
 
 .homepage-pro-ads-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 0.85rem) / 2);
   gap: 0.85rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
 }
 
 .homepage-pro-card {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
+  scroll-snap-align: start;
   border-radius: 14px;
   overflow: hidden;
   text-decoration: none;
@@ -149,6 +157,12 @@
 
   .homepage-pro-ads-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow-x: visible;
+    padding-bottom: 0;
+    scroll-snap-type: none;
     gap: 1rem;
   }
 
