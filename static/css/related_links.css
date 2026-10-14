@@ -409,6 +409,65 @@
   }
 }
 
+/* Essential apps: recognisable icons and complete names at every breakpoint. */
+.resource-link-grid.resource-link-grid--apps {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.resource-link-grid--apps .resource-link-card {
+  height: auto;
+  min-height: 18rem;
+  padding: 20px 16px;
+}
+
+.resource-link-grid--apps .resource-link-card__thumb {
+  width: 96px;
+  max-width: 100%;
+  background: #fff;
+}
+
+.resource-link-grid--apps .resource-link-card__image {
+  object-fit: contain;
+}
+
+.resource-link-grid--apps .resource-link-card__body {
+  overflow: visible;
+  min-height: auto;
+}
+
+.resource-link-grid--apps .resource-link-card__title {
+  display: block;
+  overflow: visible;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  unicode-bidi: plaintext;
+}
+
+.resource-link-grid--apps .resource-link-card__description {
+  font-size: 0.8125rem;
+  -webkit-line-clamp: 3;
+}
+
+.resource-link-grid--apps .resource-link-card__source {
+  white-space: normal;
+  overflow: visible;
+  unicode-bidi: plaintext;
+}
+
+@media (min-width: 768px) {
+  .resource-link-grid.resource-link-grid--apps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 992px) {
+  .resource-link-grid.resource-link-grid--apps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* Filter Tabs */
 .related-links-filters {
   display: flex;
