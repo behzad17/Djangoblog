@@ -3,6 +3,7 @@
 {% block title %}پیوند؛ شبکه اجتماعی ایرانیانِ سوئد{% endblock title %}
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/components/homepage-expert-cta.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-latest-posts.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/premium-cta-card.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-pro-ads.css' %}?v={% now 'U' %}" />
@@ -168,7 +169,9 @@
         {% include 'includes/hero_info_cards.html' %}
       </div>
 
-      <!-- Sidebar ad follows discussions on tablet and desktop. -->
+      {% include 'includes/homepage_expert_cta.html' %}
+
+      <!-- Sidebar ad follows the discussions and expert cards. -->
       {% include 'includes/static_banner.html' with slot_id='ad-top' extra_class='ad-placeholder-top' visibility_class='d-none d-md-block' loading='lazy' %}
 
       <div class="popular-posts-sidebar d-none d-lg-block">
