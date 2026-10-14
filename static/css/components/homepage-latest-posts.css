@@ -1,0 +1,49 @@
+/* Latest category posts: one shared box with linked, single-line titles. */
+.homepage .category-overview-latest-posts-box {
+  min-width: 0;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem 1.1rem;
+  background: var(--pv-bg-card, #fff);
+  border: 1px solid #e3e9ef;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(11, 45, 74, 0.06);
+}
+
+.homepage .category-overview-latest-posts-box .category-overview-latest-posts-title {
+  margin: 0 0 0.65rem;
+  color: #173552;
+}
+
+.category-overview-title-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-overview-title-list__item + .category-overview-title-list__item {
+  border-top: 1px solid #edf0f4;
+}
+
+.category-overview-title-list__link {
+  display: block;
+  min-width: 0;
+  padding: 0.7rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #173552;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.category-overview-title-list__link:hover {
+  color: #1b5583;
+  text-decoration: underline;
+}
+
+.category-overview-title-list__link:focus-visible {
+  outline: 2px solid #1b5583;
+  outline-offset: 2px;
+}
