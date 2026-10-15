@@ -5,6 +5,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/components/homepage-useful-links.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-expert-cta.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/components/homepage-entry-cards.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-latest-posts.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/premium-cta-card.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-pro-ads.css' %}?v={% now 'U' %}" />
@@ -34,7 +35,7 @@
   </div>
 </div>
 
-<!-- Hero: discussions remain here on mobile; tablet/desktop use the sidebar. -->
+<!-- Mobile entry cards stay in the hero; larger screens use the row above events. -->
 <section class="hero-section hero-section--homepage text-white">
   <div class="container">
     <div class="row align-items-center g-2">
@@ -64,6 +65,11 @@
   <div class="row">
     <!-- Main content beside the left sidebar on tablet and desktop. -->
     <div class="col-lg-9 col-md-9 mt-md-2 mt-1 order-md-1">
+      <div class="homepage-entry-cards">
+        {% include 'includes/hero_info_cards.html' %}
+        {% include 'includes/homepage_expert_cta.html' %}
+      </div>
+
       {% include 'includes/upcoming_events_section.html' %}
 
       <div class="row mt-md-2 mb-md-2 mt-1 mb-1" id="category-filter-section">
@@ -166,15 +172,9 @@
 
     {% endcomment %}
 
-    <!-- Left sidebar on tablet/desktop: discussions, expert Q&A, and ad. -->
+    <!-- Left sidebar on tablet/desktop: ad. -->
     <div class="col-lg-3 col-md-3 mt-3 d-none d-md-block order-md-2 sidebar-wrapper homepage-sidebar">
-      <div class="homepage-sidebar-discussions">
-        {% include 'includes/hero_info_cards.html' %}
-      </div>
-
-      {% include 'includes/homepage_expert_cta.html' %}
-
-      <!-- Sidebar ad follows the discussions and expert cards. -->
+      <!-- Sidebar ad. -->
       {% include 'includes/static_banner.html' with slot_id='ad-top' extra_class='ad-placeholder-top' visibility_class='d-none d-md-block' loading='lazy' %}
 
       {% comment "Specialist posts hidden on homepage; remove this comment block to restore desktop display." %}
