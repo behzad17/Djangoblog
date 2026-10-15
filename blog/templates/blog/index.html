@@ -172,12 +172,8 @@
 
     {% endcomment %}
 
-    <!-- Left sidebar on tablet/desktop: ad. -->
+    {% comment "Specialist posts and their sidebar wrapper are retained for future restoration." %}
     <div class="col-lg-3 col-md-3 mt-3 d-none d-md-block order-md-2 sidebar-wrapper homepage-sidebar">
-      <!-- Sidebar ad. -->
-      {% include 'includes/static_banner.html' with slot_id='ad-top' extra_class='ad-placeholder-top' visibility_class='d-none d-md-block' loading='lazy' %}
-
-      {% comment "Specialist posts hidden on homepage; remove this comment block to restore desktop display." %}
       <div class="popular-posts-sidebar d-none d-lg-block">
         <h4 class="sidebar-title">
           <i class="fas fa-star ms-2"></i>مطالب تخصصی
@@ -237,8 +233,8 @@
         <p class="text-muted small">هنوز مطالب تخصصی در دسترس نیست.</p>
         {% endif %}
       </div>
-      {% endcomment %}
     </div>
+    {% endcomment %}
   </div>
 </div>
 
