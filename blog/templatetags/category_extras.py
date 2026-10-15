@@ -163,9 +163,9 @@ def static_banner_url(slot_id):
 
 
 @register.simple_tag
-def static_banner_src(slot_id):
+def static_banner_src(slot_id, image_stem=None):
     """Return image src for a static banner slot."""
-    ad_stem = get_static_banner_image_stem(slot_id)
+    ad_stem = image_stem or get_static_banner_image_stem(slot_id)
     return _static_banner_src_for_stem(ad_stem)
 
 

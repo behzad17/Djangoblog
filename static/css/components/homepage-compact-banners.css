@@ -1,0 +1,10 @@
+/* Redesigned 1500 x 425 banners: 15% less height at the same display width. */
+.homepage .category-overview-posts .ad-placeholder-category-section,
+.homepage .mobile-homepage-banners .ad-placeholder-category-section {
+  aspect-ratio: 60 / 17;
+}
+
+.homepage .category-overview-posts .ad-placeholder-category-section .ad-image,
+.homepage .mobile-homepage-banners .ad-placeholder-category-section .ad-image {
+  object-fit: contain;
+}
