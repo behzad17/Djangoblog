@@ -1,7 +1,7 @@
 <div class="category-overview-section">
   <h3 class="category-section-title mb-2 d-md-none">
     <i class="fas fa-tags ms-2" aria-hidden="true"></i>
-    <span>صدای جامعه(مطالب شما)</span>
+    <span>مطالب کاربران</span>
   </h3>
 
   {% if category_overview_rows %}
@@ -15,7 +15,7 @@
 
     <div class="category-overview-desktop-tablet d-none d-md-block">
       <div class="category-overview-shortcuts">
-        <h3 class="category-section-title">صدای جامعه (مطالب شما)</h3>
+        <h3 class="category-section-title">مطالب کاربران</h3>
         <div class="category-overview-category-grid">
           {% for category, latest_post in category_overview_rows %}
             {% include 'includes/category_icon_card.html' with category=category %}
@@ -25,7 +25,7 @@
 
       <div class="category-overview-posts">
         <section class="category-overview-latest-posts-box" aria-labelledby="category-latest-posts-heading">
-          <h3 class="category-overview-latest-posts-title" id="category-latest-posts-heading">آخرین پست از هر دسته</h3>
+          <h3 class="category-overview-latest-posts-title" id="category-latest-posts-heading">آخرین پستها</h3>
           <ul class="category-overview-title-list">
             {% for category, latest_post in category_overview_rows %}
               {% if latest_post %}
