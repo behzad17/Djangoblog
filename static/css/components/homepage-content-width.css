@@ -1,0 +1,31 @@
+/* Expand the centered content through Useful Links by 15% on larger screens. */
+@media (min-width: 768px) {
+  .homepage-main-grid > .row > .homepage-main-content {
+    width: 86.25%; /* Previous Bootstrap column: 75% x 1.15. */
+    padding-inline: calc(var(--bs-gutter-x, 1.5rem) * 0.575);
+  }
+
+  .homepage-entry-cards {
+    gap: 1.15rem;
+  }
+
+  /* The advertising banners below Useful Links retain their existing width. */
+  .homepage .category-overview-posts .category-overview-row--ad {
+    width: calc(100% / 1.15);
+    margin-inline: auto !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .homepage-main-grid {
+    --hp-section-width: 977.5px; /* Previous maximum: 850px x 1.15. */
+  }
+
+  .homepage .homepage-entry-cards,
+  .homepage .upcoming-events-section,
+  .homepage .category-overview-section {
+    width: calc(100% - 2.3rem);
+    max-width: var(--hp-section-width);
+    margin-inline: auto;
+  }
+}
