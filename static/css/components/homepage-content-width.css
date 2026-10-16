@@ -1,6 +1,11 @@
-/* Separate the event heading from the preceding entry cards. */
+/* Give the homepage sections clearly visible separation. */
 .homepage .upcoming-events-section {
-  margin-top: 2rem;
+  margin-top: 3.5rem;
+}
+
+/* Padding avoids collapsing with the existing category-row margins. */
+.homepage #category-filter-section {
+  padding-top: 3rem;
 }
 
 /* Expand the centered content through Useful Links by 15% on larger screens. */
