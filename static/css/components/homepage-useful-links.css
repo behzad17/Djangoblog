@@ -110,10 +110,10 @@
 
 /* Business directory categories share the existing category-card vocabulary. */
 .homepage-business-categories .homepage-useful-links__card {
-  --useful-bg: #fff5e5;
-  --useful-ink: #8a622c;
-  --useful-border: #c7a574;
-  background: linear-gradient(135deg, var(--useful-bg), #fffdf8);
+  --useful-bg: #fff0df;
+  --useful-ink: #b95315;
+  --useful-border: #e6a367;
+  background: linear-gradient(135deg, var(--useful-bg), #fff8f1);
 }
 
 @media (min-width: 768px) {
