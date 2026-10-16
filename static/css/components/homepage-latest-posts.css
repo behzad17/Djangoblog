@@ -1,4 +1,4 @@
-/* Latest category posts: one shared box with linked, single-line titles. */
+/* Latest category posts: one shared box with responsive linked titles. */
 .homepage .category-overview-latest-posts-box {
   min-width: 0;
   width: 100%;
@@ -46,4 +46,41 @@
 .category-overview-title-list__link:focus-visible {
   outline: 2px solid #1b5583;
   outline-offset: 2px;
+}
+
+
+@media (min-width: 768px) {
+  .category-overview-title-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    direction: rtl;
+  }
+
+  .category-overview-title-list__item {
+    min-width: 0;
+    padding-block: 0.7rem;
+  }
+
+  .category-overview-title-list__item + .category-overview-title-list__item {
+    border-top: 0;
+  }
+
+  .category-overview-title-list__item:nth-child(n + 3) {
+    border-top: 1px solid #edf0f4;
+  }
+
+  .category-overview-title-list__link {
+    height: 3.2em; /* Reserve two lines even when the title uses only one. */
+    padding: 0;
+    white-space: normal;
+  }
+
+  .category-overview-title-list__text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+  }
 }

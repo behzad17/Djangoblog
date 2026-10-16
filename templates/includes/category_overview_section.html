@@ -30,7 +30,7 @@
             {% for category, latest_post in category_overview_rows %}
               {% if latest_post %}
                 <li class="category-overview-title-list__item">
-                  <a href="{% url 'post_detail' latest_post.slug %}" class="category-overview-title-list__link" title="{{ latest_post.title }}">{{ latest_post.title }}</a>
+                  <a href="{% url 'post_detail' latest_post.slug %}" class="category-overview-title-list__link" title="{{ latest_post.title }}"><span class="category-overview-title-list__text">{{ latest_post.title }}</span></a>
                 </li>
               {% endif %}
             {% endfor %}
