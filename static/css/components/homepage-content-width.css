@@ -5,6 +5,10 @@
 
 /* Expand the centered content through Useful Links by 15% on larger screens. */
 @media (min-width: 768px) {
+  .homepage-main-grid {
+    --hp-columns-gap: 0.75rem;
+  }
+
   .homepage-main-grid > .row > .homepage-main-content {
     width: 86.25%; /* Previous Bootstrap column: 75% x 1.15. */
     padding-inline: calc(var(--bs-gutter-x, 1.5rem) * 0.575);
@@ -28,6 +32,23 @@
 
   .homepage .upcoming-events-scroll {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--hp-columns-gap);
+  }
+
+  /* Every adjacent pair spans exactly one event column, including its inner gap. */
+  .homepage .category-overview-category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    gap: var(--hp-columns-gap);
+  }
+
+  .homepage .category-overview-category-grid .category-overview-card {
+    flex: 0 0 calc((100% - 5 * var(--hp-columns-gap)) / 6);
+    width: calc((100% - 5 * var(--hp-columns-gap)) / 6);
+    min-width: 0;
   }
 
   /* The advertising banners below Useful Links retain their existing width. */
@@ -48,5 +69,11 @@
     width: calc(100% - 2.3rem);
     max-width: var(--hp-section-width);
     margin-inline: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .homepage-main-grid {
+    --hp-columns-gap: 0.85rem;
   }
 }
