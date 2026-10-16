@@ -1,3 +1,8 @@
+/* Separate the event heading from the preceding entry cards. */
+.homepage .upcoming-events-section {
+  margin-top: 2rem;
+}
+
 /* Expand the centered content through Useful Links by 15% on larger screens. */
 @media (min-width: 768px) {
   .homepage-main-grid > .row > .homepage-main-content {
@@ -7,6 +12,22 @@
 
   .homepage-entry-cards {
     gap: 1.15rem;
+  }
+
+  .homepage .upcoming-events-section {
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .homepage .upcoming-events-header,
+  .homepage .upcoming-events-scroll-wrap {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .homepage .upcoming-events-scroll {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   /* The advertising banners below Useful Links retain their existing width. */
