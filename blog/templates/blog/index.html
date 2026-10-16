@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="{% static 'css/components/homepage-pro-ads.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-discussions-rotator.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-compact-banners.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/components/homepage-content-width.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 {% block content %}
 <!-- Mobile Hero Banner (< 768px only) -->
@@ -66,7 +67,7 @@
 <div class="container-fluid homepage-main-grid">
   <div class="row">
     <!-- Center all main sections between the hero and Pro ads after removing the sidebar. -->
-    <div class="col-lg-9 col-md-9 mx-auto mt-md-2 mt-1 order-md-1">
+    <div class="col-lg-9 col-md-9 mx-auto mt-md-2 mt-1 order-md-1 homepage-main-content">
       <div class="homepage-entry-cards">
         {% include 'includes/hero_info_cards.html' %}
         {% include 'includes/homepage_expert_cta.html' %}
