@@ -3,10 +3,42 @@
   display: none;
 }
 
+/* Stronger outlines for each entry, including the mobile hero copies. */
+.homepage-entry-cards .hero-discussions-cta,
+.hero-section__info .hero-discussions-cta {
+  border: 2px solid #759bb9;
+}
+
+.homepage-entry-cards .homepage-expert-cta,
+.hero-section__info .homepage-expert-cta {
+  border: 2px solid #6eaaa8;
+}
+
+.homepage-entry-cards .homepage-jobs-cta,
+.hero-section__info .homepage-jobs-cta {
+  border-color: #b9915b;
+}
+
+.homepage-jobs-cta .homepage-expert-cta__accent {
+  background: linear-gradient(135deg, #86602c, #a47a3d);
+}
+
+.homepage-jobs-cta .homepage-expert-cta__body {
+  background: radial-gradient(circle at 90% 10%, rgba(164, 122, 61, 0.1), transparent 55%), #fffcf7;
+}
+
+.homepage-jobs-cta .homepage-expert-cta__action {
+  color: #805b28;
+}
+
+.homepage-jobs-cta:focus-visible {
+  outline-color: #805b28;
+}
+
 @media (min-width: 768px) {
   .homepage-entry-cards {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: stretch;
     gap: 1rem;
     direction: rtl;
