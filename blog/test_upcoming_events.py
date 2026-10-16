@@ -64,7 +64,7 @@ class GetUpcomingEventsTests(TestCase):
 
         self.assertEqual(get_upcoming_events(), [])
 
-    def test_limits_to_eight_events(self):
+    def test_limits_to_nine_events(self):
         for index in range(10):
             self._create_event(
                 f"Event {index}",
@@ -72,7 +72,7 @@ class GetUpcomingEventsTests(TestCase):
                 f"event-{index}",
             )
 
-        self.assertEqual(len(get_upcoming_events()), 8)
+        self.assertEqual(len(get_upcoming_events()), 9)
 
 
 class UpcomingEventsHomepageTests(TestCase):
