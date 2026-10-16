@@ -68,14 +68,15 @@
 }
 
 .homepage-useful-links__icon {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.8);
+  /* Match the plain Bootstrap icon treatment in Community Voice categories. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 0.3rem;
   color: var(--useful-ink);
-  font-size: 1.2rem;
+  font-size: 1.35rem;
+  line-height: 1;
 }
 .homepage-useful-links__name {
   font-size: 0.8rem;
