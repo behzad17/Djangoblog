@@ -1,0 +1,16 @@
+{% load ads_extras %}
+{% if homepage_business_categories %}
+<section class="homepage-useful-links homepage-business-categories" aria-labelledby="{{ heading_id }}">
+  <h3 class="homepage-useful-links__title" id="{{ heading_id }}">
+    <a href="{% url 'ads:ads_home' %}">مشاغل و خدمات</a>
+  </h3>
+  <div class="homepage-useful-links__grid" role="list">
+    {% for category in homepage_business_categories %}
+    <a href="{% url 'ads:ads_by_category' category.slug %}" class="homepage-useful-links__card homepage-business-categories__card" role="listitem">
+      <span class="homepage-useful-links__icon" aria-hidden="true"><i class="{{ category|homepage_business_icon }}"></i></span>
+      <span class="homepage-useful-links__name">{{ category.name }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

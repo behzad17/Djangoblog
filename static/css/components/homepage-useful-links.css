@@ -106,3 +106,22 @@
   .homepage-useful-links__card { transition: none; }
   .homepage-useful-links__card:hover { transform: none; }
 }
+
+
+/* Business directory categories share the existing category-card vocabulary. */
+.homepage-business-categories .homepage-useful-links__card {
+  --useful-bg: #fff5e5;
+  --useful-ink: #8a622c;
+  --useful-border: #c7a574;
+  background: linear-gradient(135deg, var(--useful-bg), #fffdf8);
+}
+
+@media (min-width: 768px) {
+  .homepage-business-categories .homepage-useful-links__grid {
+    gap: var(--hp-columns-gap, 0.75rem);
+  }
+
+  .homepage-business-categories .homepage-useful-links__card {
+    flex-basis: calc((100% - 5 * var(--hp-columns-gap, 0.75rem)) / 6);
+  }
+}

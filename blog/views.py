@@ -29,7 +29,7 @@ from .utils import (
     get_specialist_posts_queryset,
 )
 from .decorators import site_verified_required
-from ads.models import FavoriteAd
+from ads.models import AdCategory, FavoriteAd
 from ads.homepage_pro_ads import get_homepage_pro_ads
 from django.utils import timezone
 from notifications.weekly_digest import (
@@ -102,6 +102,7 @@ class PostList(generic.ListView):
                 'homepage_pro_ads': [],
                 'latest_discussions': [],
                 'homepage_useful_link_categories': [],
+                'homepage_business_categories': [],
             }
             return context
 
@@ -201,6 +202,10 @@ class PostList(generic.ListView):
             )
         except Exception:
             context['homepage_useful_link_categories'] = []
+
+        context['homepage_business_categories'] = list(
+            AdCategory.objects.all().order_by('display_order', 'name')
+        )
 
         # Category overview rows and expert posts
         try:

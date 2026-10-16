@@ -218,3 +218,21 @@ def category_image(category):
         return 'car-naghlie.jpg'
     except Exception:
         return None
+
+
+@register.filter
+def homepage_business_icon(category):
+    """Bootstrap glyphs consistent with the other homepage category sections."""
+    icons = {
+        'economi': 'bi-bank',
+        'social-zendegi': 'bi-people',
+        'work-services': 'bi-briefcase',
+        'leisure': 'bi-controller',
+        'food-restaurant': 'bi-cup-hot',
+        'health-welfare': 'bi-heart-pulse',
+        'beauty-appliances': 'bi-flower1',
+        'legal-financial': 'bi-shield-check',
+        'mozsh-zbn-o-dr': 'bi-mortarboard',
+        'fnor-o-khdmt-dgtl': 'bi-laptop',
+    }
+    return 'bi ' + icons.get(category.slug, 'bi-briefcase')
