@@ -227,7 +227,7 @@ def homepage_business_icon(category):
         'economi': 'bi-bank',
         'social-zendegi': 'bi-people',
         'work-services': 'bi-briefcase',
-        'leisure': 'bi-controller',
+        'leisure': 'bi-building',
         'food-restaurant': 'bi-cup-hot',
         'health-welfare': 'bi-heart-pulse',
         'beauty-appliances': 'bi-flower1',
