@@ -29,6 +29,7 @@ from .utils import (
     get_specialist_posts_queryset,
 )
 from .decorators import site_verified_required
+from .rate_limits import post_creation_ip_rate, post_creation_user_rate
 from ads.models import AdCategory, FavoriteAd
 from ads.homepage_pro_ads import get_homepage_pro_ads
 from django.utils import timezone
@@ -683,8 +684,8 @@ def like_post(request, post_id):
     return redirect('post_detail', slug=post.slug)
 
 
-@ratelimit(key='user', rate='5/h', method='POST', block=True)
-@ratelimit(key='ip', rate='20/h', method='POST', block=True)
+@ratelimit(key='user', rate=post_creation_user_rate, method='POST', block=True)
+@ratelimit(key='ip', rate=post_creation_ip_rate, method='POST', block=True)
 @site_verified_required
 @login_required
 def create_post(request):
