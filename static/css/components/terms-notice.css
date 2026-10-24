@@ -1,0 +1,81 @@
+/* Informational only: no backdrop, focus trap, or scroll lock. */
+.terms-notice[hidden], .terms-return[hidden], #adBanner[hidden] { display: none !important; }
+.terms-notice {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  width: min(28rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  z-index: 1030; /* Below Bootstrap's offcanvas and modal layers. */
+  padding: 1.3rem;
+  border: 1px solid #c8dce9;
+  border-radius: 14px;
+  background: #fff;
+  color: #263746;
+  box-shadow: 0 6px 26px rgb(22 54 78 / 18%);
+  font-family: inherit;
+}
+.terms-notice__title {
+  margin: 0 0 .75rem;
+  padding-left: 2rem;
+  color: #1b5583;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.terms-notice p { margin: 0 0 .75rem; font-size: .95rem; line-height: 1.7; }
+.terms-notice__close {
+  position: absolute;
+  top: .5rem;
+  left: .5rem;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #375065;
+  font-size: 1.7rem;
+  cursor: pointer;
+}
+.terms-notice__actions { display: flex; gap: .65rem; }
+.terms-notice__button {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .2rem;
+  min-height: 48px;
+  padding: .65rem .8rem;
+  border: 1px solid #1b5583;
+  border-radius: 9px;
+  background: #fff;
+  color: #1b5583;
+  font: inherit;
+  font-size: .9rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.terms-notice__button--primary { background: #1b5583; color: #fff; }
+.terms-notice__button:hover { background: #eef5fa; color: #17466b; text-decoration: none; }
+.terms-notice__button--primary:hover { background: #17466b; color: #fff; }
+.terms-notice__button:focus-visible, .terms-notice__close:focus-visible {
+  outline: 3px solid #b96b00;
+  outline-offset: 3px;
+}
+.terms-return { margin: 1.5rem auto; max-width: 32rem; }
+.terms-return .terms-notice__button { width: 100%; }
+@media (max-width: 575.98px) {
+  .terms-notice {
+    right: max(.75rem, env(safe-area-inset-right));
+    left: max(.75rem, env(safe-area-inset-left));
+    bottom: max(.75rem, env(safe-area-inset-bottom));
+    width: auto;
+    padding: 1rem;
+    max-height: calc(100dvh - 1.5rem);
+  }
+  .terms-notice__actions { flex-direction: column; }
+  .terms-notice__button { flex-direction: row; flex-wrap: wrap; column-gap: .75rem; }
+}

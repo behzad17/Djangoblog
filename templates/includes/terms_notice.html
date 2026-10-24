@@ -1,0 +1,18 @@
+{% if request.resolver_match.url_name != 'terms' and request.resolver_match.url_name != 'integritetspolicy' %}
+<aside id="terms-notice" class="terms-notice" aria-labelledby="terms-notice-title" hidden>
+  <button type="button" class="terms-notice__close" data-terms-dismiss="dismissed" aria-label="بستن پیام / Stäng meddelandet">×</button>
+  <h2 id="terms-notice-title" class="terms-notice__title" lang="fa" dir="rtl">با قوانین پیوند آشنا شوید</h2>
+  <p lang="fa" dir="rtl">لطفاً پیش از استفاده از امکانات پیوند، قوانین و مقررات سایت را مطالعه کنید.</p>
+  <p lang="sv" dir="ltr">Ta del av Peyvands användarvillkor innan du använder webbplatsens funktioner.</p>
+  <div class="terms-notice__actions">
+    <a class="terms-notice__button terms-notice__button--primary" href="{{ terms_url }}" data-terms-read>
+      <span lang="fa" dir="rtl">مطالعهٔ قوانین</span>
+      <span lang="sv" dir="ltr">Läs villkoren</span>
+    </a>
+    <button type="button" class="terms-notice__button" data-terms-dismiss="acknowledged">
+      <span lang="fa" dir="rtl">متوجه شدم</span>
+      <span lang="sv" dir="ltr">Jag förstår</span>
+    </button>
+  </div>
+</aside>
+{% endif %}

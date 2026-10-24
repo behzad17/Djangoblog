@@ -107,6 +107,8 @@
     <!-- Bidi (RTL/LTR) CSS - Directional support -->
     <link rel="stylesheet" href="{% static 'css/bidi.css' %}?v={% now 'U' %}" />
     
+    <link rel="stylesheet" href="{% static 'css/components/terms-notice.css' %}?v=20261024" />
+
     <!-- Extra CSS - Page-specific styles -->
     {% block extra_css %}{% endblock extra_css %}
     
@@ -517,6 +519,8 @@
       </div>
     </footer>
 
+    {% include 'includes/terms_notice.html' %}
+
     <!-- JavaScript Dependencies -->
     <!-- Bootstrap Bundle with Popper -->
     <script
@@ -530,6 +534,7 @@
     {% if user.is_authenticated %}
     <script src="{% static 'js/notifications.js' %}?v={% now 'U' %}" defer></script>
     {% endif %}
+    <script src="{% static 'js/terms-notice.js' %}?v=20261024" defer></script>
     <!-- Additional JavaScript Block - For child templates -->
     {% block extras %} {% endblock %}
   </body>
