@@ -84,3 +84,32 @@
     overflow-wrap: anywhere;
   }
 }
+
+/* Desktop/tablet markers separate titles while preserving the two-line layout. */
+@media (min-width: 768px) {
+  .homepage .category-overview-title-list__link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-weight: 600;
+  }
+
+  .homepage .category-overview-title-list__icon {
+    flex: 0 0 1.65rem;
+    width: 1.65rem;
+    height: 1.65rem;
+    margin-top: 0.05em;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: var(--pv-bg-soft, #edf3f8);
+    color: #1b5583;
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
+  .homepage .category-overview-title-list__text {
+    flex: 1;
+    min-width: 0;
+  }
+}
