@@ -81,9 +81,9 @@
      ============================================ */
   --pv-border-soft: rgba(193,232,255, 0.5); /* Subtle border with alpha */
   --pv-border-soft-rgb: 193, 232, 255; /* RGB for border-soft */
-  --pv-shadow-soft: rgba(2,16,36, 0.1);
-  --pv-shadow-medium: rgba(2,16,36, 0.15);
-  --pv-shadow-strong: rgba(2,16,36, 0.25);
+  --pv-shadow-soft: rgba(5,38,89, 0.1);
+  --pv-shadow-medium: rgba(5,38,89, 0.15);
+  --pv-shadow-strong: rgba(5,38,89, 0.25);
 
   /* ============================================
      HOVER STATES (derived from base colors)
@@ -117,7 +117,7 @@
    ============================================ */
 [data-theme="dark"] {
   /* Dark theme tokens - to be implemented in future */
-  --pv-bg-main: #021024;
+  --pv-bg-main: #052659;
   --pv-bg-card: #052659;
   --pv-text-main: #c1e8ff;
   --pv-text-muted: #052659;
