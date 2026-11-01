@@ -93,14 +93,14 @@
   color: inherit;
   background: #c1e8ff;
   border: 1px solid rgba(5,38,89, 0.13);
-  box-shadow: 0 4px 14px rgba(2,16,36, 0.08);
+  box-shadow: 0 4px 14px rgba(5,38,89, 0.08);
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .homepage-pro-card:hover,
 .homepage-pro-card:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 8px 22px rgba(2,16,36, 0.14);
+  box-shadow: 0 8px 22px rgba(5,38,89, 0.14);
   text-decoration: none;
   color: inherit;
 }
@@ -129,9 +129,9 @@
   font-size: 0.68rem;
   font-weight: 700;
   line-height: 1.2;
-  color: #021024;
+  color: #052659;
   background: rgba(125,160,202, 0.95);
-  box-shadow: 0 2px 8px rgba(2,16,36, 0.35);
+  box-shadow: 0 2px 8px rgba(5,38,89, 0.35);
 }
 
 .homepage-pro-card__body {

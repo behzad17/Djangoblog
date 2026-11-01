@@ -6,13 +6,13 @@
   border-radius: 12px;
   padding: 1rem 1.15rem;
   text-align: right;
-  box-shadow: 0 2px 12px rgba(2,16,36, 0.06);
+  box-shadow: 0 2px 12px rgba(5,38,89, 0.06);
 }
 
 .ad-contact-card--pro {
   border-color: rgba(193,232,255, 0.5);
   background: linear-gradient(160deg, #eff8ff 0%, #eff8ff 55%, #eff8ff 100%);
-  box-shadow: 0 4px 16px rgba(2,16,36, 0.08);
+  box-shadow: 0 4px 16px rgba(5,38,89, 0.08);
 }
 
 .ad-contact-card__title {

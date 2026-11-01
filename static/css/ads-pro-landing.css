@@ -17,7 +17,7 @@
   color: #052659;
   border-color: rgba(5,38,89, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(2,16,36, 0.12);
+  box-shadow: 0 4px 12px rgba(5,38,89, 0.12);
 }
 
 /* Section headings and body copy */
@@ -173,7 +173,7 @@
 }
 
 .ads-pro-faq .accordion-button:focus {
-  box-shadow: 0 0 0 0.2rem rgba(2,16,36, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(5,38,89, 0.25);
   border-color: rgba(5,38,89, 0.35);
 }
 

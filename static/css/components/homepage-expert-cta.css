@@ -15,7 +15,7 @@
   color: #052659;
   text-align: center;
   text-decoration: none;
-  box-shadow: 0 2px 7px rgba(2,16,36, 0.06);
+  box-shadow: 0 2px 7px rgba(5,38,89, 0.06);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
@@ -84,7 +84,7 @@
   color: #052659;
   text-decoration: none;
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(2,16,36, 0.15);
+  box-shadow: 0 6px 18px rgba(5,38,89, 0.15);
 }
 
 .homepage-expert-cta:focus-visible {

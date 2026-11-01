@@ -68,7 +68,7 @@
 .pv-btn-create:focus {
   background-color: var(--pv-cta-create-hover);
   color: #c1e8ff;
-  box-shadow: 0 0 0 3px rgba(2,16,36, 0.25);
+  box-shadow: 0 0 0 3px rgba(5,38,89, 0.25);
 }
 
 .pv-btn-create:active {
@@ -92,7 +92,7 @@
 .pv-btn-ask:focus {
   background-color: var(--pv-cta-ask-hover);
   color: #c1e8ff;
-  box-shadow: 0 0 0 3px rgba(2,16,36, 0.25);
+  box-shadow: 0 0 0 3px rgba(5,38,89, 0.25);
 }
 
 .pv-btn-ask:active {
@@ -116,7 +116,7 @@
 .pv-btn-services:focus {
   background-color: var(--pv-cta-services-hover);
   color: #052659;
-  box-shadow: 0 0 0 3px rgba(2,16,36, 0.25);
+  box-shadow: 0 0 0 3px rgba(5,38,89, 0.25);
 }
 
 .pv-btn-services:active {
@@ -206,12 +206,12 @@
   
   .pv-btn-create {
     background-color: #7da0ca;
-    color: #021024;
+    color: #052659;
   }
   
   .pv-btn-ask {
     background-color: #5483b3;
-    color: #021024;
+    color: #052659;
   }
   
   .pv-btn-services {

@@ -13,7 +13,7 @@
    border: 1px solid rgba(239,248,255,.65);
    border-right: 0;
    border-radius: 18px 0 0 18px;
-   box-shadow: -8px 0 32px rgba(2,16,36,.18),inset 0 1px 0 rgba(2,16,36,.7);
+   box-shadow: -8px 0 32px rgba(5,38,89,.18),inset 0 1px 0 rgba(5,38,89,.7);
    /* A deliberate menu action uses the same one-second easing as BJcode. */
    transition: transform 1000ms cubic-bezier(.4,0,.2,1) !important;
  }
