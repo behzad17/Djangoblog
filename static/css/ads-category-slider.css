@@ -15,7 +15,7 @@
   --speed: 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --closed: 4.4rem;
   --open: 19.2rem;
-  --accent: #00A693;
+  --accent: #5483b3;
 }
 
 /* ========================================
@@ -49,8 +49,8 @@
   height: 2.5rem;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(239,248,255, 0.12);
+  color: #c1e8ff;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -62,7 +62,7 @@
 }
 
 .ads-category-slider .ads-nav-btn:hover:not(:disabled) {
-  background: var(--accent, #00A693);
+  background: var(--accent, #5483b3);
   transform: scale(1.1);
 }
 
@@ -72,7 +72,7 @@
 }
 
 .ads-category-slider .ads-nav-btn:focus-visible {
-  outline: 3px solid var(--accent, #00A693);
+  outline: 3px solid var(--accent, #5483b3);
   outline-offset: 2px;
 }
 
@@ -129,7 +129,7 @@
 .ads-category-slider .ads-project-card[active] {
   flex-basis: var(--open);
   transform: translateY(-6px);
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 18px 55px rgba(2,16,36, 0.45);
   z-index: 10;
 }
 
@@ -169,20 +169,20 @@
   align-items: center;
   gap: 0.7rem;
   padding: 0;
-  background: linear-gradient(transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  background: linear-gradient(transparent 40%, rgba(2,16,36, 0.85) 100%);
   z-index: 2;
 }
 
 /* Collapsed state: Vertical text */
 .ads-category-slider .ads-project-card__title {
-  color: #fff;
+  color: #c1e8ff;
   font-weight: 700;
   font-size: 1.35rem;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   text-align: center;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 8px rgba(2,16,36, 0.5);
   white-space: nowrap;
   display: block;
   position: absolute;
@@ -213,7 +213,7 @@
   justify-content: center;
   padding: 1.5rem 2rem;
   gap: 1rem;
-  background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.9) 100%);
+  background: linear-gradient(transparent 20%, rgba(2,16,36, 0.9) 100%);
   overflow: visible;
 }
 
@@ -261,7 +261,7 @@
 }
 
 .ads-category-slider .ads-project-card__desc {
-  color: #ddd;
+  color: #c1e8ff;
   font-size: 1rem;
   line-height: 1.4;
   max-width: 16rem;
@@ -269,7 +269,7 @@
 }
 
 .ads-category-slider .ads-project-card__meta {
-  color: #bbb;
+  color: #052659;
   font-size: 0.9rem;
   margin: 0.25rem 0;
 }
@@ -277,7 +277,7 @@
 .ads-category-slider .ads-project-card__count {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(239,248,255, 0.2);
   border-radius: 12px;
   font-weight: 600;
 }
@@ -286,8 +286,8 @@
   padding: 0.55rem 1.3rem;
   border: none;
   border-radius: 9999px;
-  background: #FFA500;
-  color: #fff;
+  background: #7da0ca;
+  color: #021024;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -299,9 +299,9 @@
 }
 
 .ads-category-slider .ads-project-card__btn:hover {
-  background: #ff8c00;
+  background: #5483b3;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(2,16,36, 0.4);
 }
 
 /* ========================================
@@ -319,7 +319,7 @@
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(2,16,36, 0.25);
   cursor: pointer;
   transition: 0.3s;
   border: none;
@@ -327,12 +327,12 @@
 }
 
 .ads-category-slider .ads-slider-dot.active {
-  background: var(--accent, #00A693);
+  background: var(--accent, #5483b3);
   transform: scale(1.2);
 }
 
 .ads-category-slider .ads-slider-dot:hover {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(2,16,36, 0.4);
 }
 
 /* ========================================
@@ -340,7 +340,7 @@
    ======================================== */
 
 .ads-category-slider .ads-project-card:focus-visible {
-  outline: 3px solid var(--accent, #00A693);
+  outline: 3px solid var(--accent, #5483b3);
   outline-offset: 4px;
   border-radius: 1rem;
 }
@@ -422,7 +422,7 @@
   .ads-category-slider .ads-project-card[active] {
     min-height: 300px;
     transform: none;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(2,16,36, 0.3);
   }
 
   .ads-category-slider .ads-project-card__content {

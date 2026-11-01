@@ -1,0 +1,118 @@
+/* Peyvand — navy/blue palette. Loaded last; behavior and typography are unchanged. */
+:root {
+  --pv-navy: #021024;
+  --pv-blue: #052659;
+  --pv-steel: #5483b3;
+  --pv-soft-blue: #7da0ca;
+  --pv-ice: #c1e8ff;
+  --pv-color-primary: #c1e8ff;
+  --pv-color-primary-rgb: 193, 232, 255;
+  --pv-color-secondary: #052659;
+  --pv-color-secondary-rgb: 5, 38, 89;
+  --pv-cta-create: #052659;
+  --pv-cta-ask: #052659;
+  --pv-cta-services: #052659;
+  --pv-cta-create-rgb: 5, 38, 89;
+  --pv-cta-ask-rgb: 5, 38, 89;
+  --pv-cta-services-rgb: 5, 38, 89;
+  --pv-cta-create-hover: #021024;
+  --pv-cta-ask-hover: #021024;
+  --pv-cta-services-hover: #021024;
+  --pv-bg-main: #eff8ff;
+  --pv-bg-main-rgb: 239, 248, 255;
+  --pv-bg-card: #f7fbff;
+  --pv-bg-card-rgb: 247, 251, 255;
+  --pv-bg-highlight: #c1e8ff;
+  --pv-bg-highlight-rgb: 193, 232, 255;
+  --pv-text-main: #021024;
+  --pv-text-main-rgb: 2, 16, 36;
+  --pv-text-muted: #052659;
+  --pv-text-muted-rgb: 5, 38, 89;
+  --pv-border-soft: rgba(84,131,179,.36);
+  --pv-border-soft-rgb: 84, 131, 179;
+  --post-card-accent: #7da0ca;
+  --bs-primary: #052659;
+  --bs-secondary: #5483b3;
+  --bs-info: #c1e8ff;
+  --bs-light: #eff8ff;
+  --bs-dark: #021024;
+}
+body { color: var(--pv-text-main); }
+body.main-bg,main.main-bg { background-color: var(--pv-bg-main); }
+a { color: #052659; }
+a:hover { color: #021024; }
+.text-muted,.text-secondary { color: #052659 !important; }
+.text-primary { color: #052659 !important; }
+.bg-light { background-color: #eff8ff !important; }
+.bg-primary,.bg-secondary { background-color: #052659 !important; color: #c1e8ff; }
+.bg-info { background-color: #c1e8ff !important; color: #052659; }
+.border-primary,.border-secondary { border-color: #5483b3 !important; }
+
+/* Navigation/footer use the darkest surface with pale, readable labels. */
+nav.navbar { background-color: #052659 !important; }
+nav.navbar :is(.brand-tagline,.brand-persian,.brand-english,.navbar-nav .nav-link) { color: #c1e8ff !important; }
+nav.navbar .brand-tagline__name { color: #eff8ff; }
+.footer.dark-bg { background-color: #021024; }
+.footer :is(p,a,h2,h3,h4,li,span,i) { color: #c1e8ff; }
+.footer .text-muted { color: #c1e8ff !important; }
+.footer a:hover { color: #eff8ff; }
+
+/* Common controls: keep primary actions readable in every page section. */
+.btn-primary,.btn-signup,.btn-edit,
+.hero-buttons .btn-ask-me-hero {
+  background: #052659; border-color: #052659; color: #c1e8ff;
+}
+.btn-primary:hover,.btn-primary:focus,.btn-signup:hover,.btn-edit:hover,
+.hero-buttons .btn-ask-me-hero:hover {
+  background: #021024; border-color: #021024; color: #c1e8ff;
+}
+.btn-outline-primary,.btn-outline-secondary { background: transparent; color: #052659; border-color: #5483b3; }
+.btn-outline-primary:hover,.btn-outline-secondary:hover { background: #052659; color: #c1e8ff; border-color: #052659; }
+.btn-light { background: #c1e8ff; border-color: #7da0ca; color: #052659; }
+.btn :is(i,.bi,.fas,.far) { color: inherit !important; }
+.form-control,.form-select { background-color: #f7fbff; color: #021024; border-color: #7da0ca; }
+.form-control:focus,.form-select:focus { background-color: #f7fbff; color: #021024; border-color: #052659; box-shadow: 0 0 0 .2rem rgba(84,131,179,.24); }
+.form-control::placeholder { color: #052659; opacity: .8; }
+.form-check-input:checked { background-color: #052659; border-color: #052659; }
+.page-link { background: #f7fbff; color: #052659; border-color: #7da0ca; }
+.page-item.active .page-link { background: #052659; border-color: #052659; color: #c1e8ff; }
+.page-link:hover { background: #c1e8ff; color: #021024; }
+.dropdown-menu { background: #f7fbff; border-color: #7da0ca; }
+.dropdown-item { color: #021024; }
+.dropdown-item:hover,.dropdown-item:focus { background: #c1e8ff; color: #052659; }
+.dropdown-item.active,.dropdown-item:active { background: #052659; color: #c1e8ff; }
+.modal-content { background: #f7fbff; color: #021024; border-color: #7da0ca; }
+
+/* Override dynamic category colors at the UI boundary, without changing stored data. */
+.category-overview-card,.category-icon-card,.category-carousel-card {
+  --cat-bg: #c1e8ff !important;
+  --cat-accent: #052659 !important;
+  color: #052659;
+}
+.category-overview-card:nth-child(even) { --cat-bg: #e0f2ff !important; }
+.category-overview-card :is(i,.category-overview-card-name) { color: #052659; }
+.category-badge { background-color: #c1e8ff; color: #052659; border-color: #7da0ca; }
+.homepage-useful-links__card { --useful-ink: #052659; }
+.community-home { --community-ink: #021024; --community-ink-muted: #052659; --community-accent: #052659; --community-surface: #f7fbff; --community-surface-muted: #eff8ff; }
+
+/* Preserve the accepted glass transparency, dimensions and slide timing. */
+@media(max-width:991.98px) {
+  #mobileNavDrawer.mobile-nav-drawer { background: #c1e8ff; color: #052659; }
+  @supports (backdrop-filter: blur(18px)) or (-webkit-backdrop-filter: blur(18px)) {
+    #mobileNavDrawer.mobile-nav-drawer { background: linear-gradient(160deg,rgba(193,232,255,.56),rgba(125,160,202,.38)); }
+  }
+  #mobileNavDrawer :is(.mobile-nav-drawer__title,.mobile-nav-drawer-cta__btn) { color: #052659; }
+  #mobileNavDrawer .mobile-nav-drawer-cta__btn--primary { background: #052659; color: #c1e8ff; border-color: #052659; }
+  #mobileNavDrawer .mobile-nav-drawer-cta__btn--primary:hover,
+  #mobileNavDrawer .mobile-nav-drawer-cta__btn--primary:focus { background: #021024; color: #c1e8ff; }
+}
+::selection { color: #c1e8ff; background: #052659; }
+a:focus-visible,button:focus-visible { outline-color: #052659; }
+nav.navbar :is(a,button):focus-visible,.footer a:focus-visible { outline-color: #c1e8ff; }
+
+.premium-cta-card__icon { --pv-cta-icon-accent: #052659 !important; }
+#mobileNavDrawer .nav-link i { color: inherit !important; }
+.footer { --pv-cta-services: #c1e8ff; --pv-cta-ask: #c1e8ff; --pv-color-primary: #c1e8ff; }
+.category-badge-large,.category-badge-large:hover { background: linear-gradient(135deg,#021024,#052659); color: #c1e8ff; }
+.popular-post-category:hover { color: #021024; }
+.ads-category-item { --accent: #052659 !important; }

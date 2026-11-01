@@ -6,33 +6,33 @@
 /* Stronger outlines for each entry, including the mobile hero copies. */
 .homepage-entry-cards .hero-discussions-cta,
 .hero-section__info .hero-discussions-cta {
-  border: 2px solid #759bb9;
+  border: 2px solid #5483b3;
 }
 
 .homepage-entry-cards .homepage-expert-cta,
 .hero-section__info .homepage-expert-cta {
-  border: 2px solid #6eaaa8;
+  border: 2px solid #5483b3;
 }
 
 .homepage-entry-cards .homepage-jobs-cta,
 .hero-section__info .homepage-jobs-cta {
-  border-color: #b9915b;
+  border-color: #5483b3;
 }
 
 .homepage-jobs-cta .homepage-expert-cta__accent {
-  background: linear-gradient(135deg, #86602c, #a47a3d);
+  background: linear-gradient(135deg, #052659, #052659);
 }
 
 .homepage-jobs-cta .homepage-expert-cta__body {
-  background: radial-gradient(circle at 90% 10%, rgba(164, 122, 61, 0.1), transparent 55%), #fffcf7;
+  background: radial-gradient(circle at 90% 10%, rgba(5,38,89, 0.1), transparent 55%), #eff8ff;
 }
 
 .homepage-jobs-cta .homepage-expert-cta__action {
-  color: #805b28;
+  color: #052659;
 }
 
 .homepage-jobs-cta:focus-visible {
-  outline-color: #805b28;
+  outline-color: #052659;
 }
 
 @media (min-width: 768px) {

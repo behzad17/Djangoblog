@@ -1,15 +1,15 @@
 .ad-form-section {
-  border: 1px solid rgba(27, 85, 131, 0.12);
+  border: 1px solid rgba(5,38,89, 0.12);
   border-radius: 12px;
   padding: 1rem 1.1rem;
-  background: #fafcff;
+  background: #eff8ff;
 }
 
 .ad-form-section__title {
   margin: 0 0 0.35rem;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #173552;
+  color: #052659;
 }
 
 .ad-form-section__description {
@@ -29,9 +29,9 @@
   gap: 1rem;
   margin-top: 0.75rem;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(27, 85, 131, 0.12);
+  border: 1px solid rgba(5,38,89, 0.12);
   border-radius: 10px;
-  background: #f8fafc;
+  background: #eff8ff;
 }
 
 .ad-image-upload-guidelines__content {
@@ -41,14 +41,14 @@
 
 .ad-image-upload-guidelines__lead {
   font-size: 0.9rem;
-  color: #173552;
+  color: #052659;
 }
 
 .ad-image-upload-guidelines__list {
   padding-right: 1.1rem;
   font-size: 0.85rem;
   line-height: 1.55;
-  color: #495057;
+  color: #052659;
 }
 
 .ad-image-upload-guidelines__visual {
@@ -64,13 +64,13 @@
   justify-content: center;
   width: 88px;
   height: 88px;
-  border: 2px dashed rgba(27, 85, 131, 0.45);
+  border: 2px dashed rgba(5,38,89, 0.45);
   border-radius: 8px;
   background:
-    linear-gradient(to right, rgba(27, 85, 131, 0.08) 1px, transparent 1px) 0 0 / 14px 14px,
-    linear-gradient(to bottom, rgba(27, 85, 131, 0.08) 1px, transparent 1px) 0 0 / 14px 14px,
-    #fff;
-  color: #173552;
+    linear-gradient(to right, rgba(5,38,89, 0.08) 1px, transparent 1px) 0 0 / 14px 14px,
+    linear-gradient(to bottom, rgba(5,38,89, 0.08) 1px, transparent 1px) 0 0 / 14px 14px,
+    #eff8ff;
+  color: #052659;
 }
 
 .ad-image-upload-guidelines__ratio {
@@ -82,13 +82,13 @@
 .ad-image-upload-guidelines__dims {
   margin-top: 0.15rem;
   font-size: 0.68rem;
-  color: #6c757d;
+  color: #052659;
 }
 
 .ad-image-upload-guidelines__caption {
   margin: 0.35rem 0 0;
   font-size: 0.72rem;
-  color: #6c757d;
+  color: #052659;
 }
 
 .ad-image-aspect-warning {
@@ -113,15 +113,15 @@
 .ad-gallery-preview-count {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #173552;
+  color: #052659;
 }
 
 .ad-gallery-preview-panel {
   margin-bottom: 1rem;
   padding: 0.85rem;
-  border: 1px solid rgba(27, 85, 131, 0.12);
+  border: 1px solid rgba(5,38,89, 0.12);
   border-radius: 12px;
-  background: #fff;
+  background: #eff8ff;
 }
 
 .ad-gallery-preview-panel.has-items {
@@ -131,12 +131,12 @@
 .ad-gallery-preview-empty {
   margin: 0;
   padding: 1.5rem 0.75rem;
-  border: 1px dashed rgba(27, 85, 131, 0.2);
+  border: 1px dashed rgba(5,38,89, 0.2);
   border-radius: 10px;
-  color: #6c757d;
+  color: #052659;
   font-size: 0.9rem;
   text-align: center;
-  background: #f8fafc;
+  background: #eff8ff;
 }
 
 .ad-gallery-preview-panel.has-items .ad-gallery-preview-empty {
@@ -164,9 +164,9 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border: 1px solid rgba(27, 85, 131, 0.14);
+  border: 1px solid rgba(5,38,89, 0.14);
   border-radius: 10px;
-  background: #f1f4f7;
+  background: #eff8ff;
 }
 
 .ad-gallery-card__media {
@@ -189,8 +189,8 @@
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.72);
-  color: #fff;
+  background: rgba(2,16,36, 0.72);
+  color: #c1e8ff;
   font-size: 0.7rem;
   line-height: 1;
   cursor: pointer;
@@ -198,7 +198,7 @@
 }
 
 .ad-gallery-card__remove:hover {
-  background: rgba(220, 53, 69, 0.92);
+  background: rgba(5,38,89, 0.92);
 }
 
 .ad-gallery-card__toolbar {
@@ -210,7 +210,7 @@
   justify-content: center;
   gap: 0.35rem;
   padding: 0.35rem;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.62), transparent);
+  background: linear-gradient(to top, rgba(2,16,36, 0.62), transparent);
 }
 
 .ad-gallery-card__tool {
@@ -222,21 +222,21 @@
   padding: 0;
   border: 0;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #173552;
+  background: rgba(239,248,255, 0.92);
+  color: #052659;
   font-size: 0.7rem;
   cursor: pointer;
 }
 
 .ad-gallery-card__tool:hover {
-  background: #fff;
+  background: #eff8ff;
 }
 
 .ad-gallery-new-card .ad-gallery-card__frame::after {
   content: "";
   position: absolute;
   inset: 0;
-  border: 2px solid rgba(27, 85, 131, 0.35);
+  border: 2px solid rgba(5,38,89, 0.35);
   border-radius: 10px;
   pointer-events: none;
 }
@@ -263,9 +263,9 @@
 
 .ad-gallery-upload-row.is-drag-over {
   border-radius: 10px;
-  outline: 2px dashed rgba(27, 85, 131, 0.45);
+  outline: 2px dashed rgba(5,38,89, 0.45);
   outline-offset: 4px;
-  background: rgba(27, 85, 131, 0.04);
+  background: rgba(5,38,89, 0.04);
 }
 
 @media (min-width: 768px) {
@@ -318,10 +318,10 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.94);
-  color: #334155;
+  background: rgba(239,248,255, 0.94);
+  color: #052659;
   font-size: 0.7rem;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 1px 4px rgba(2,16,36, 0.12);
   pointer-events: none;
 }
 
@@ -337,17 +337,17 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.96);
-  color: #1e293b;
-  box-shadow: 0 1px 5px rgba(15, 23, 42, 0.14);
+  background: rgba(239,248,255, 0.96);
+  color: #021024;
+  box-shadow: 0 1px 5px rgba(2,16,36, 0.14);
   transform: translateY(-50%);
   cursor: pointer;
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .ad-detail-gallery__inline-nav:hover {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+  background: #eff8ff;
+  box-shadow: 0 2px 8px rgba(2,16,36, 0.18);
 }
 
 .ad-detail-gallery__inline-nav--prev {
@@ -365,8 +365,8 @@
   z-index: 1;
   padding: 0.12rem 0.45rem;
   border-radius: 4px;
-  background: rgba(15, 23, 42, 0.58);
-  color: #f8fafc;
+  background: rgba(2,16,36, 0.58);
+  color: #c1e8ff;
   font-size: 0.72rem;
   font-weight: 500;
   line-height: 1.35;
@@ -396,14 +396,14 @@
   border: 2px solid transparent;
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: #eff8ff;
   cursor: pointer;
   scroll-snap-align: start;
   transition: border-color 0.15s ease;
 }
 
 .ad-detail-gallery__thumb.is-active {
-  border-color: #1b5583;
+  border-color: #052659;
 }
 
 .ad-detail-gallery__thumb-image {
@@ -430,7 +430,7 @@ body.ad-gallery-lightbox-open {
 .ad-gallery-lightbox__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(8, 20, 34, 0.88);
+  background: rgba(2,16,36, 0.88);
 }
 
 .ad-gallery-lightbox__dialog {
@@ -458,7 +458,7 @@ body.ad-gallery-lightbox-open {
   height: 100%;
   overflow: hidden;
   border-radius: 10px;
-  background: #0b1c2d;
+  background: #021024;
 }
 
 .ad-gallery-lightbox__image {
@@ -486,7 +486,7 @@ body.ad-gallery-lightbox-open {
   right: 0;
   left: 0;
   margin: 0;
-  color: #f8fafc;
+  color: #c1e8ff;
   font-size: 0.92rem;
   line-height: 1.4;
   text-align: center;
@@ -499,7 +499,7 @@ body.ad-gallery-lightbox-open {
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(193,232,255, 0.88);
   font-size: 0.9rem;
 }
 
@@ -512,8 +512,8 @@ body.ad-gallery-lightbox-open {
   justify-content: center;
   border: 0;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: rgba(239,248,255, 0.14);
+  color: #c1e8ff;
   cursor: pointer;
 }
 

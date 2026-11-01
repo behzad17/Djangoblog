@@ -9,17 +9,17 @@
   overflow-y: auto;
   z-index: 1030; /* Below Bootstrap's offcanvas and modal layers. */
   padding: 1.3rem;
-  border: 1px solid #c8dce9;
+  border: 1px solid #c1e8ff;
   border-radius: 14px;
-  background: #fff;
-  color: #263746;
+  background: #eff8ff;
+  color: #052659;
   box-shadow: 0 6px 26px rgb(22 54 78 / 18%);
   font-family: inherit;
 }
 .terms-notice__title {
   margin: 0 0 .75rem;
   padding-left: 2rem;
-  color: #1b5583;
+  color: #052659;
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.6;
@@ -34,7 +34,7 @@
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: #375065;
+  color: #052659;
   font-size: 1.7rem;
   cursor: pointer;
 }
@@ -48,21 +48,21 @@
   gap: .2rem;
   min-height: 48px;
   padding: .65rem .8rem;
-  border: 1px solid #1b5583;
+  border: 1px solid #052659;
   border-radius: 9px;
-  background: #fff;
-  color: #1b5583;
+  background: #eff8ff;
+  color: #052659;
   font: inherit;
   font-size: .9rem;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
 }
-.terms-notice__button--primary { background: #1b5583; color: #fff; }
-.terms-notice__button:hover { background: #eef5fa; color: #17466b; text-decoration: none; }
-.terms-notice__button--primary:hover { background: #17466b; color: #fff; }
+.terms-notice__button--primary { background: #052659; color: #c1e8ff; }
+.terms-notice__button:hover { background: #eff8ff; color: #052659; text-decoration: none; }
+.terms-notice__button--primary:hover { background: #052659; color: #c1e8ff; }
 .terms-notice__button:focus-visible, .terms-notice__close:focus-visible {
-  outline: 3px solid #b96b00;
+  outline: 3px solid #052659;
   outline-offset: 3px;
 }
 .terms-return { margin: 1.5rem auto; max-width: 32rem; }

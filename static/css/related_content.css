@@ -2,8 +2,8 @@
 
 .related-content {
   margin-bottom: 1rem;
-  border: 1px solid rgba(229, 231, 235, 0.8);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid rgba(193,232,255, 0.8);
+  box-shadow: 0 2px 8px rgba(2,16,36, 0.04) !important;
 }
 
 .related-content .card-body {
@@ -14,7 +14,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.625rem;
-  color: #1a1a1a;
+  color: #021024;
 }
 
 .related-content__heading i {
@@ -36,10 +36,10 @@
   min-height: 0;
   height: 100%;
   padding: 0.625rem 0.75rem;
-  background: #fff;
-  border: 1px solid #eef1f5;
+  background: #eff8ff;
+  border: 1px solid #c1e8ff;
   border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 4px rgba(2,16,36, 0.04);
   text-decoration: none;
   color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -50,11 +50,11 @@ a.related-rec:focus-visible {
   text-decoration: none;
   color: inherit;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(2,16,36, 0.08);
 }
 
 a.related-rec:focus-visible {
-  outline: 2px solid #1f8a70;
+  outline: 2px solid #052659;
   outline-offset: 2px;
 }
 
@@ -65,12 +65,12 @@ a.related-rec:focus-visible {
   height: 76px;
   border-radius: 10px;
   overflow: hidden;
-  background: #f0f0f0;
+  background: #c1e8ff;
 }
 
 .related-rec__media--round {
   border-radius: 50%;
-  border: 2px solid #00a693;
+  border: 2px solid #5483b3;
 }
 
 .related-rec__image {
@@ -86,8 +86,8 @@ a.related-rec:focus-visible {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: #1a4a58;
-  color: #fff;
+  background: #052659;
+  color: #c1e8ff;
   font-size: 1.35rem;
 }
 
@@ -105,7 +105,7 @@ a.related-rec:focus-visible {
   font-size: 0.875rem;
   font-weight: 700;
   line-height: 1.35;
-  color: #1a1a1a;
+  color: #021024;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -117,7 +117,7 @@ a.related-rec:focus-visible {
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: #6e6e73;
+  color: #052659;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -130,14 +130,14 @@ a.related-rec:focus-visible {
 }
 
 .related-rec__meta--primary {
-  color: #00a693;
+  color: #052659;
   font-weight: 500;
   word-break: normal;
 }
 
 .related-rec__source {
   font-size: 0.75rem;
-  color: #aeaeb2;
+  color: #052659;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -146,7 +146,7 @@ a.related-rec:focus-visible {
 .related-rec__external {
   flex: 0 0 auto;
   align-self: center;
-  color: #1f8a70;
+  color: #052659;
   font-size: 0.875rem;
   opacity: 0.75;
 }
@@ -173,35 +173,35 @@ a.related-rec:focus-visible {
 }
 
 .related-rec__badge--pro {
-  background: rgba(255, 193, 7, 0.95);
-  color: #000;
+  background: rgba(125,160,202, 0.95);
+  color: #021024;
 }
 
 .related-rec__badge--featured {
-  background: rgba(255, 193, 7, 0.95);
-  color: #000;
+  background: rgba(125,160,202, 0.95);
+  color: #021024;
 }
 
 .related-rec__badge--active {
-  background: rgba(0, 123, 255, 0.9);
-  color: #fff;
+  background: rgba(5,38,89, 0.9);
+  color: #c1e8ff;
 }
 
 .related-rec__badge--owner {
-  background: rgba(23, 162, 184, 0.9);
-  color: #fff;
+  background: rgba(84,131,179, 0.9);
+  color: #c1e8ff;
 }
 
 /* ── Ad variant ── */
 
 .related-rec--ad {
-  background: #fffbeb;
-  border-color: rgba(244, 180, 0, 0.35);
+  background: #eff8ff;
+  border-color: rgba(125,160,202, 0.35);
 }
 
 .related-rec--ad.ad-featured {
-  border-color: #ffc107;
-  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+  border-color: #7da0ca;
+  box-shadow: 0 2px 8px rgba(2,16,36, 0.2);
 }
 
 /* ── Expert variant (stacked: row + action) ── */
@@ -212,16 +212,16 @@ a.related-rec:focus-visible {
   gap: 0.5rem;
   height: 100%;
   padding: 0.625rem 0.75rem;
-  background: #fff;
-  border: 1px solid #eef1f5;
+  background: #eff8ff;
+  border: 1px solid #c1e8ff;
   border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 4px rgba(2,16,36, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .related-rec-expert:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(2,16,36, 0.08);
 }
 
 .related-rec-expert__main {
@@ -238,7 +238,7 @@ a.related-rec:focus-visible {
 }
 
 .related-rec-expert__main:focus-visible {
-  outline: 2px solid #1f8a70;
+  outline: 2px solid #052659;
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -246,7 +246,7 @@ a.related-rec:focus-visible {
 .related-rec-expert__stats {
   margin: 0;
   font-size: 0.75rem;
-  color: #6e6e73;
+  color: #052659;
   -webkit-line-clamp: 1;
   display: -webkit-box;
   -webkit-box-orient: vertical;
