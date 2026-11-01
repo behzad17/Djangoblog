@@ -7,12 +7,12 @@
   background: var(--pv-bg-card, #eff8ff);
   border: 1px solid #c1e8ff;
   border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(5,38,89, 0.06);
+  box-shadow: 0 3px 12px rgba(43, 71, 114, 0.06);
 }
 
 .homepage .category-overview-latest-posts-box .category-overview-latest-posts-title {
   margin: 0 0 0.65rem;
-  color: #052659;
+  color: #2b4772;
 }
 
 .category-overview-title-list {
@@ -32,19 +32,19 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #052659;
+  color: #2b4772;
   font-size: 0.95rem;
   line-height: 1.6;
   text-decoration: none;
 }
 
 .category-overview-title-list__link:hover {
-  color: #052659;
+  color: #2b4772;
   text-decoration: underline;
 }
 
 .category-overview-title-list__link:focus-visible {
-  outline: 2px solid #052659;
+  outline: 2px solid #2b4772;
   outline-offset: 2px;
 }
 
@@ -103,7 +103,7 @@
     justify-content: center;
     border-radius: 7px;
     background: var(--pv-bg-soft, #c1e8ff);
-    color: #052659;
+    color: #2b4772;
     font-size: 0.85rem;
     line-height: 1;
   }

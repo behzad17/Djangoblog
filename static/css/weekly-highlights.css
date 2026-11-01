@@ -1,5 +1,5 @@
 .weekly-highlights-hero {
-  background: linear-gradient(135deg, #5483b3 0%, #052659 100%);
+  background: linear-gradient(135deg, #5483b3 0%, #2b4772 100%);
 }
 
 .weekly-highlights-page {
@@ -17,7 +17,7 @@
 .weekly-highlights-summary__line {
   margin: 0 0 0.45rem;
   font-size: 1rem;
-  color: #052659;
+  color: #2b4772;
 }
 
 .weekly-highlights-summary__line:last-child {
@@ -32,7 +32,7 @@
   margin: 0 0 0.85rem;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #052659;
+  color: #2b4772;
 }
 
 .weekly-highlights-featured-list,
@@ -58,7 +58,7 @@
 .weekly-highlights-card:hover,
 .weekly-highlights-card:focus-visible {
   border-color: #5483b3;
-  box-shadow: 0 2px 8px rgba(5,38,89, 0.06);
+  box-shadow: 0 2px 8px rgba(43, 71, 114, 0.06);
   color: inherit;
   text-decoration: none;
 }
@@ -83,7 +83,7 @@
   margin-bottom: 0.25rem;
   font-size: 0.98rem;
   font-weight: 700;
-  color: #052659;
+  color: #2b4772;
   line-height: 1.45;
 }
 
@@ -91,7 +91,7 @@
   display: block;
   font-size: 0.88rem;
   line-height: 1.5;
-  color: #052659;
+  color: #2b4772;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -20,19 +20,19 @@
 }
 
 .homepage-jobs-cta .homepage-expert-cta__accent {
-  background: linear-gradient(135deg, #052659, #052659);
+  background: linear-gradient(135deg, #2b4772, #2b4772);
 }
 
 .homepage-jobs-cta .homepage-expert-cta__body {
-  background: radial-gradient(circle at 90% 10%, rgba(5,38,89, 0.1), transparent 55%), #eff8ff;
+  background: radial-gradient(circle at 90% 10%, rgba(43, 71, 114, 0.1), transparent 55%), #eff8ff;
 }
 
 .homepage-jobs-cta .homepage-expert-cta__action {
-  color: #052659;
+  color: #2b4772;
 }
 
 .homepage-jobs-cta:focus-visible {
-  outline-color: #052659;
+  outline-color: #2b4772;
 }
 
 @media (min-width: 768px) {
