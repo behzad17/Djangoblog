@@ -12,14 +12,14 @@
   border: 1px solid #c1e8ff;
   border-radius: 14px;
   background: #eff8ff;
-  color: #052659;
+  color: #2b4772;
   box-shadow: 0 6px 26px rgb(22 54 78 / 18%);
   font-family: inherit;
 }
 .terms-notice__title {
   margin: 0 0 .75rem;
   padding-left: 2rem;
-  color: #052659;
+  color: #2b4772;
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.6;
@@ -34,7 +34,7 @@
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: #052659;
+  color: #2b4772;
   font-size: 1.7rem;
   cursor: pointer;
 }
@@ -48,21 +48,21 @@
   gap: .2rem;
   min-height: 48px;
   padding: .65rem .8rem;
-  border: 1px solid #052659;
+  border: 1px solid #2b4772;
   border-radius: 9px;
   background: #eff8ff;
-  color: #052659;
+  color: #2b4772;
   font: inherit;
   font-size: .9rem;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
 }
-.terms-notice__button--primary { background: #052659; color: #c1e8ff; }
-.terms-notice__button:hover { background: #eff8ff; color: #052659; text-decoration: none; }
-.terms-notice__button--primary:hover { background: #052659; color: #c1e8ff; }
+.terms-notice__button--primary { background: #2b4772; color: #c1e8ff; }
+.terms-notice__button:hover { background: #eff8ff; color: #2b4772; text-decoration: none; }
+.terms-notice__button--primary:hover { background: #2b4772; color: #c1e8ff; }
 .terms-notice__button:focus-visible, .terms-notice__close:focus-visible {
-  outline: 3px solid #052659;
+  outline: 3px solid #2b4772;
   outline-offset: 3px;
 }
 .terms-return { margin: 1.5rem auto; max-width: 32rem; }

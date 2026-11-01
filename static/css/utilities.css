@@ -68,7 +68,7 @@
 .pv-btn-create:focus {
   background-color: var(--pv-cta-create-hover);
   color: #c1e8ff;
-  box-shadow: 0 0 0 3px rgba(5,38,89, 0.25);
+  box-shadow: 0 0 0 3px rgba(43, 71, 114, 0.25);
 }
 
 .pv-btn-create:active {
@@ -92,7 +92,7 @@
 .pv-btn-ask:focus {
   background-color: var(--pv-cta-ask-hover);
   color: #c1e8ff;
-  box-shadow: 0 0 0 3px rgba(5,38,89, 0.25);
+  box-shadow: 0 0 0 3px rgba(43, 71, 114, 0.25);
 }
 
 .pv-btn-ask:active {
@@ -103,25 +103,25 @@
 
 .pv-btn-services {
   background-color: var(--pv-cta-services);
-  color: #052659; /* Dark text for better contrast on yellow */
+  color: #2b4772; /* Dark text for better contrast on yellow */
   border: none;
   transition: all 0.2s ease;
 }
 
 .pv-btn-services:hover {
   background-color: var(--pv-cta-services-hover);
-  color: #052659;
+  color: #2b4772;
 }
 
 .pv-btn-services:focus {
   background-color: var(--pv-cta-services-hover);
-  color: #052659;
-  box-shadow: 0 0 0 3px rgba(5,38,89, 0.25);
+  color: #2b4772;
+  box-shadow: 0 0 0 3px rgba(43, 71, 114, 0.25);
 }
 
 .pv-btn-services:active {
   background-color: var(--pv-cta-services-hover);
-  color: #052659;
+  color: #2b4772;
   transform: translateY(1px);
 }
 
@@ -197,26 +197,26 @@
   }
   
   .pv-text-main {
-    color: #052659;
+    color: #2b4772;
   }
   
   .pv-text-muted {
-    color: #052659;
+    color: #2b4772;
   }
   
   .pv-btn-create {
     background-color: #7da0ca;
-    color: #052659;
+    color: #2b4772;
   }
   
   .pv-btn-ask {
     background-color: #5483b3;
-    color: #052659;
+    color: #2b4772;
   }
   
   .pv-btn-services {
     background-color: #7da0ca;
-    color: #052659;
+    color: #2b4772;
   }
 }
 

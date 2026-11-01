@@ -3,7 +3,7 @@
 .related-content {
   margin-bottom: 1rem;
   border: 1px solid rgba(193,232,255, 0.8);
-  box-shadow: 0 2px 8px rgba(5,38,89, 0.04) !important;
+  box-shadow: 0 2px 8px rgba(43, 71, 114, 0.04) !important;
 }
 
 .related-content .card-body {
@@ -14,7 +14,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.625rem;
-  color: #052659;
+  color: #2b4772;
 }
 
 .related-content__heading i {
@@ -39,7 +39,7 @@
   background: #eff8ff;
   border: 1px solid #c1e8ff;
   border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(5,38,89, 0.04);
+  box-shadow: 0 1px 4px rgba(43, 71, 114, 0.04);
   text-decoration: none;
   color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -50,11 +50,11 @@ a.related-rec:focus-visible {
   text-decoration: none;
   color: inherit;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(5,38,89, 0.08);
+  box-shadow: 0 4px 12px rgba(43, 71, 114, 0.08);
 }
 
 a.related-rec:focus-visible {
-  outline: 2px solid #052659;
+  outline: 2px solid #2b4772;
   outline-offset: 2px;
 }
 
@@ -86,7 +86,7 @@ a.related-rec:focus-visible {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: #052659;
+  background: #2b4772;
   color: #c1e8ff;
   font-size: 1.35rem;
 }
@@ -105,7 +105,7 @@ a.related-rec:focus-visible {
   font-size: 0.875rem;
   font-weight: 700;
   line-height: 1.35;
-  color: #052659;
+  color: #2b4772;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -117,7 +117,7 @@ a.related-rec:focus-visible {
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: #052659;
+  color: #2b4772;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -130,14 +130,14 @@ a.related-rec:focus-visible {
 }
 
 .related-rec__meta--primary {
-  color: #052659;
+  color: #2b4772;
   font-weight: 500;
   word-break: normal;
 }
 
 .related-rec__source {
   font-size: 0.75rem;
-  color: #052659;
+  color: #2b4772;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -146,7 +146,7 @@ a.related-rec:focus-visible {
 .related-rec__external {
   flex: 0 0 auto;
   align-self: center;
-  color: #052659;
+  color: #2b4772;
   font-size: 0.875rem;
   opacity: 0.75;
 }
@@ -174,16 +174,16 @@ a.related-rec:focus-visible {
 
 .related-rec__badge--pro {
   background: rgba(125,160,202, 0.95);
-  color: #052659;
+  color: #2b4772;
 }
 
 .related-rec__badge--featured {
   background: rgba(125,160,202, 0.95);
-  color: #052659;
+  color: #2b4772;
 }
 
 .related-rec__badge--active {
-  background: rgba(5,38,89, 0.9);
+  background: rgba(43, 71, 114, 0.9);
   color: #c1e8ff;
 }
 
@@ -201,7 +201,7 @@ a.related-rec:focus-visible {
 
 .related-rec--ad.ad-featured {
   border-color: #7da0ca;
-  box-shadow: 0 2px 8px rgba(5,38,89, 0.2);
+  box-shadow: 0 2px 8px rgba(43, 71, 114, 0.2);
 }
 
 /* ── Expert variant (stacked: row + action) ── */
@@ -215,13 +215,13 @@ a.related-rec:focus-visible {
   background: #eff8ff;
   border: 1px solid #c1e8ff;
   border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(5,38,89, 0.04);
+  box-shadow: 0 1px 4px rgba(43, 71, 114, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .related-rec-expert:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(5,38,89, 0.08);
+  box-shadow: 0 4px 12px rgba(43, 71, 114, 0.08);
 }
 
 .related-rec-expert__main {
@@ -238,7 +238,7 @@ a.related-rec:focus-visible {
 }
 
 .related-rec-expert__main:focus-visible {
-  outline: 2px solid #052659;
+  outline: 2px solid #2b4772;
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -246,7 +246,7 @@ a.related-rec:focus-visible {
 .related-rec-expert__stats {
   margin: 0;
   font-size: 0.75rem;
-  color: #052659;
+  color: #2b4772;
   -webkit-line-clamp: 1;
   display: -webkit-box;
   -webkit-box-orient: vertical;

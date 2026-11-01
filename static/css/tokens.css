@@ -14,11 +14,11 @@
      PRIMARY & SECONDARY COLORS
      ============================================ */
   --pv-color-primary: #7da0ca;
-  --pv-color-secondary: #052659;
+  --pv-color-secondary: #2b4772;
   
   /* RGB values for use in rgba() functions */
   --pv-color-primary-rgb: 125, 160, 202;
-  --pv-color-secondary-rgb: 5, 38, 89;
+  --pv-color-secondary-rgb: 43, 71, 114;
 
   /* ============================================
      CTA BUTTON COLORS
@@ -35,24 +35,24 @@
   /* ============================================
      SEMANTIC CATEGORY COLORS
      ============================================ */
-  --pv-semantic-legal: #052659;
-  --pv-semantic-economy: #052659;
+  --pv-semantic-legal: #2b4772;
+  --pv-semantic-economy: #2b4772;
   --pv-semantic-life: #7da0ca;
-  --pv-semantic-experiences: #052659;
+  --pv-semantic-experiences: #2b4772;
   --pv-semantic-events: #5483b3;
   --pv-semantic-education: #5483b3;
   --pv-semantic-public: #7da0ca;
-  --pv-semantic-people: #052659;
+  --pv-semantic-people: #2b4772;
   
   /* RGB values for semantic colors (for rgba() usage) */
-  --pv-semantic-legal-rgb: 5, 38, 89;
-  --pv-semantic-economy-rgb: 5, 38, 89;
+  --pv-semantic-legal-rgb: 43, 71, 114;
+  --pv-semantic-economy-rgb: 43, 71, 114;
   --pv-semantic-life-rgb: 125, 160, 202;
-  --pv-semantic-experiences-rgb: 5, 38, 89;
+  --pv-semantic-experiences-rgb: 43, 71, 114;
   --pv-semantic-events-rgb: 84, 131, 179;
   --pv-semantic-education-rgb: 84, 131, 179;
   --pv-semantic-public-rgb: 125, 160, 202;
-  --pv-semantic-people-rgb: 5, 38, 89;
+  --pv-semantic-people-rgb: 43, 71, 114;
 
   /* ============================================
      BACKGROUND COLORS
@@ -69,27 +69,27 @@
   /* ============================================
      TEXT COLORS
      ============================================ */
-  --pv-text-main: #052659;
-  --pv-text-muted: #052659;
+  --pv-text-main: #2b4772;
+  --pv-text-muted: #2b4772;
   
   /* RGB values for text colors */
-  --pv-text-main-rgb: 5, 38, 89;
-  --pv-text-muted-rgb: 5, 38, 89;
+  --pv-text-main-rgb: 43, 71, 114;
+  --pv-text-muted-rgb: 43, 71, 114;
 
   /* ============================================
      UTILITY COLORS
      ============================================ */
   --pv-border-soft: rgba(193,232,255, 0.5); /* Subtle border with alpha */
   --pv-border-soft-rgb: 193, 232, 255; /* RGB for border-soft */
-  --pv-shadow-soft: rgba(5,38,89, 0.1);
-  --pv-shadow-medium: rgba(5,38,89, 0.15);
-  --pv-shadow-strong: rgba(5,38,89, 0.25);
+  --pv-shadow-soft: rgba(43, 71, 114, 0.1);
+  --pv-shadow-medium: rgba(43, 71, 114, 0.15);
+  --pv-shadow-strong: rgba(43, 71, 114, 0.25);
 
   /* ============================================
      HOVER STATES (derived from base colors)
      ============================================ */
   --pv-cta-create-hover: #5483b3;
-  --pv-cta-ask-hover: #052659;
+  --pv-cta-ask-hover: #2b4772;
   --pv-cta-services-hover: #5483b3;
 
   /* ============================================
@@ -117,9 +117,9 @@
    ============================================ */
 [data-theme="dark"] {
   /* Dark theme tokens - to be implemented in future */
-  --pv-bg-main: #052659;
-  --pv-bg-card: #052659;
+  --pv-bg-main: #2b4772;
+  --pv-bg-card: #2b4772;
   --pv-text-main: #c1e8ff;
-  --pv-text-muted: #052659;
+  --pv-text-muted: #2b4772;
 }
 

@@ -3,9 +3,9 @@
   overflow: hidden;
   flex-direction: column;
   background:
-    radial-gradient(circle at 88% 12%, rgba(5,38,89, 0.09), transparent 38%),
+    radial-gradient(circle at 88% 12%, rgba(43, 71, 114, 0.09), transparent 38%),
     linear-gradient(135deg, #eff8ff 0%, #eff8ff 100%);
-  border-inline-start: 1px solid rgba(5,38,89, 0.08);
+  border-inline-start: 1px solid rgba(43, 71, 114, 0.08);
 }
 
 .hero-discussions-cta__body--rotator::after {
@@ -14,7 +14,7 @@
   bottom: -3.5rem;
   width: 7rem;
   height: 7rem;
-  border: 1px solid rgba(5,38,89, 0.08);
+  border: 1px solid rgba(43, 71, 114, 0.08);
   border-radius: 50%;
   content: "";
   pointer-events: none;
@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  color: #052659;
+  color: #2b4772;
   font-size: clamp(0.58rem, 0.72vw, 0.68rem);
   font-weight: 800;
   line-height: 1.2;
@@ -50,8 +50,8 @@
   height: 0.36rem;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #052659;
-  box-shadow: 0 0 0 3px rgba(5,38,89, 0.12);
+  background: #2b4772;
+  box-shadow: 0 0 0 3px rgba(43, 71, 114, 0.12);
 }
 
 .hero-discussions-rotator__arrow {
@@ -74,7 +74,7 @@
   width: 100%;
   margin: 0;
   padding-inline: 0.15rem;
-  color: #052659;
+  color: #2b4772;
   font-size: clamp(0.76rem, 1vw, 0.96rem);
   font-weight: 750;
   line-height: 1.5;
@@ -107,13 +107,13 @@
   width: 0.28rem;
   height: 0.28rem;
   border-radius: 999px;
-  background: rgba(5,38,89, 0.2);
+  background: rgba(43, 71, 114, 0.2);
   transition: width 220ms ease, background-color 220ms ease;
 }
 
 .hero-discussions-rotator__indicator.is-active {
   width: 0.82rem;
-  background: #052659;
+  background: #2b4772;
 }
 
 .hero-discussions-empty {
@@ -121,7 +121,7 @@
 }
 
 .hero-discussions-empty .hero-discussions-cta__description {
-  color: #052659;
+  color: #2b4772;
   font-weight: 600;
 }
 
@@ -133,7 +133,7 @@
 
   .hero-discussions-cta:hover .hero-discussions-cta__body--rotator {
     background:
-      radial-gradient(circle at 88% 12%, rgba(5,38,89, 0.13), transparent 40%),
+      radial-gradient(circle at 88% 12%, rgba(43, 71, 114, 0.13), transparent 40%),
       linear-gradient(135deg, #eff8ff 0%, #eff8ff 100%);
   }
 }
