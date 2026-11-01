@@ -116,3 +116,8 @@ nav.navbar :is(a,button):focus-visible,.footer a:focus-visible { outline-color: 
 .category-badge-large,.category-badge-large:hover { background: linear-gradient(135deg,#021024,#052659); color: #c1e8ff; }
 .popular-post-category:hover { color: #021024; }
 .ads-category-item { --accent: #052659 !important; }
+
+/* Center user-post category labels on mobile only. */
+@media (max-width: 767.98px) {
+  .category-overview-mobile-grid .category-overview-card-name { text-align: center; }
+}
