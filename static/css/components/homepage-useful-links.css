@@ -14,7 +14,7 @@
   text-align: center;
 }
 .homepage-useful-links__title a {
-  color: #173552;
+  color: #052659;
   text-decoration: none;
 }
 .homepage-useful-links__title a:hover { text-decoration: underline; }
@@ -29,9 +29,9 @@
 }
 
 .homepage-useful-links__card {
-  --useful-bg: #edf4fc;
-  --useful-ink: #24578e;
-  --useful-border: #97b0d0;
+  --useful-bg: #c1e8ff;
+  --useful-ink: #052659;
+  --useful-border: #5483b3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,26 +45,26 @@
   background: var(--useful-bg);
   border: 1.5px solid var(--useful-border);
   border-radius: 12px;
-  color: #173552;
+  color: #052659;
   text-align: center;
   text-decoration: none;
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .homepage-useful-links__card:nth-child(4n + 2) {
-  --useful-bg: #edf7f2;
-  --useful-ink: #24674f;
-  --useful-border: #8db8a3;
+  --useful-bg: #eff8ff;
+  --useful-ink: #052659;
+  --useful-border: #5483b3;
 }
 .homepage-useful-links__card:nth-child(4n + 3) {
-  --useful-bg: #f3effa;
-  --useful-ink: #66508c;
-  --useful-border: #b09acb;
+  --useful-bg: #c1e8ff;
+  --useful-ink: #052659;
+  --useful-border: #5483b3;
 }
 .homepage-useful-links__card:nth-child(4n + 4) {
-  --useful-bg: #fcf5e8;
-  --useful-ink: #80601e;
-  --useful-border: #c7ae76;
+  --useful-bg: #eff8ff;
+  --useful-ink: #052659;
+  --useful-border: #5483b3;
 }
 
 .homepage-useful-links__icon {
@@ -85,14 +85,14 @@
   overflow-wrap: anywhere;
 }
 .homepage-useful-links__card:hover {
-  color: #173552;
+  color: #052659;
   text-decoration: none;
   transform: translateY(-2px);
-  box-shadow: 0 5px 12px rgba(23, 53, 82, 0.1);
+  box-shadow: 0 5px 12px rgba(2,16,36, 0.1);
 }
 .homepage-useful-links__card:focus-visible,
 .homepage-useful-links__title a:focus-visible {
-  outline: 2px solid #1b5583;
+  outline: 2px solid #052659;
   outline-offset: 3px;
 }
 
@@ -110,10 +110,10 @@
 
 /* Business directory categories share the existing category-card vocabulary. */
 .homepage-business-categories .homepage-useful-links__card {
-  --useful-bg: #fff0df;
-  --useful-ink: #b95315;
-  --useful-border: #e6a367;
-  background: linear-gradient(135deg, var(--useful-bg), #fff8f1);
+  --useful-bg: #c1e8ff;
+  --useful-ink: #052659;
+  --useful-border: #5483b3;
+  background: linear-gradient(135deg, var(--useful-bg), #eff8ff);
 }
 
 @media (min-width: 768px) {

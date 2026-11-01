@@ -1,7 +1,7 @@
 /* Internal page heroes — shared background (homepage excluded via modifier) */
 
 .hero-section--internal:not(.hero-section--homepage) {
-  background-color: #a4d2e0 !important;
+  background-color: #7da0ca !important;
   background-repeat: no-repeat !important;
   background-position: center top !important;
   background-size: cover !important;

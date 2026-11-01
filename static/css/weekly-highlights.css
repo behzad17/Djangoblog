@@ -1,5 +1,5 @@
 .weekly-highlights-hero {
-  background: linear-gradient(135deg, #00a693 0%, #058073 100%);
+  background: linear-gradient(135deg, #5483b3 0%, #052659 100%);
 }
 
 .weekly-highlights-page {
@@ -9,15 +9,15 @@
 .weekly-highlights-summary {
   margin-bottom: 1.75rem;
   padding: 1rem 1.1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #c1e8ff;
   border-radius: 12px;
-  background: #f8fafc;
+  background: #eff8ff;
 }
 
 .weekly-highlights-summary__line {
   margin: 0 0 0.45rem;
   font-size: 1rem;
-  color: #1e293b;
+  color: #021024;
 }
 
 .weekly-highlights-summary__line:last-child {
@@ -32,7 +32,7 @@
   margin: 0 0 0.85rem;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #021024;
 }
 
 .weekly-highlights-featured-list,
@@ -47,9 +47,9 @@
   align-items: flex-start;
   gap: 0.85rem;
   padding: 0.85rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #c1e8ff;
   border-radius: 12px;
-  background: #fff;
+  background: #eff8ff;
   color: inherit;
   text-decoration: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -57,8 +57,8 @@
 
 .weekly-highlights-card:hover,
 .weekly-highlights-card:focus-visible {
-  border-color: #94a3b8;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  border-color: #5483b3;
+  box-shadow: 0 2px 8px rgba(2,16,36, 0.06);
   color: inherit;
   text-decoration: none;
 }
@@ -69,7 +69,7 @@
   height: 68px;
   border-radius: 8px;
   object-fit: cover;
-  background: #f1f5f9;
+  background: #eff8ff;
 }
 
 .weekly-highlights-card__body {
@@ -83,7 +83,7 @@
   margin-bottom: 0.25rem;
   font-size: 0.98rem;
   font-weight: 700;
-  color: #1b5583;
+  color: #052659;
   line-height: 1.45;
 }
 
@@ -91,7 +91,7 @@
   display: block;
   font-size: 0.88rem;
   line-height: 1.5;
-  color: #64748b;
+  color: #052659;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

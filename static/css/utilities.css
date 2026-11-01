@@ -55,73 +55,73 @@
    ============================================ */
 .pv-btn-create {
   background-color: var(--pv-cta-create);
-  color: #ffffff;
+  color: #c1e8ff;
   border: none;
   transition: all 0.2s ease;
 }
 
 .pv-btn-create:hover {
   background-color: var(--pv-cta-create-hover);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-btn-create:focus {
   background-color: var(--pv-cta-create-hover);
-  color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25);
+  color: #c1e8ff;
+  box-shadow: 0 0 0 3px rgba(2,16,36, 0.25);
 }
 
 .pv-btn-create:active {
   background-color: var(--pv-cta-create-hover);
-  color: #ffffff;
+  color: #c1e8ff;
   transform: translateY(1px);
 }
 
 .pv-btn-ask {
   background-color: var(--pv-cta-ask);
-  color: #ffffff;
+  color: #c1e8ff;
   border: none;
   transition: all 0.2s ease;
 }
 
 .pv-btn-ask:hover {
   background-color: var(--pv-cta-ask-hover);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-btn-ask:focus {
   background-color: var(--pv-cta-ask-hover);
-  color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+  color: #c1e8ff;
+  box-shadow: 0 0 0 3px rgba(2,16,36, 0.25);
 }
 
 .pv-btn-ask:active {
   background-color: var(--pv-cta-ask-hover);
-  color: #ffffff;
+  color: #c1e8ff;
   transform: translateY(1px);
 }
 
 .pv-btn-services {
   background-color: var(--pv-cta-services);
-  color: #2C2C2C; /* Dark text for better contrast on yellow */
+  color: #052659; /* Dark text for better contrast on yellow */
   border: none;
   transition: all 0.2s ease;
 }
 
 .pv-btn-services:hover {
   background-color: var(--pv-cta-services-hover);
-  color: #2C2C2C;
+  color: #052659;
 }
 
 .pv-btn-services:focus {
   background-color: var(--pv-cta-services-hover);
-  color: #2C2C2C;
-  box-shadow: 0 0 0 3px rgba(244, 180, 0, 0.25);
+  color: #052659;
+  box-shadow: 0 0 0 3px rgba(2,16,36, 0.25);
 }
 
 .pv-btn-services:active {
   background-color: var(--pv-cta-services-hover);
-  color: #2C2C2C;
+  color: #052659;
   transform: translateY(1px);
 }
 
@@ -130,42 +130,42 @@
    ============================================ */
 .pv-badge-legal {
   background-color: var(--pv-semantic-legal);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-economy {
   background-color: var(--pv-semantic-economy);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-life {
   background-color: var(--pv-semantic-life);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-experiences {
   background-color: var(--pv-semantic-experiences);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-events {
   background-color: var(--pv-semantic-events);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-education {
   background-color: var(--pv-semantic-education);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-public {
   background-color: var(--pv-semantic-public);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 .pv-badge-people {
   background-color: var(--pv-semantic-people);
-  color: #ffffff;
+  color: #c1e8ff;
 }
 
 /* ============================================
@@ -189,34 +189,34 @@
 /* If CSS variables fail to load, provide safe fallbacks */
 @supports not (--css: variables) {
   .pv-bg-main {
-    background-color: #F5F7F6;
+    background-color: #eff8ff;
   }
   
   .pv-bg-card {
-    background-color: #FFFFFF;
+    background-color: #eff8ff;
   }
   
   .pv-text-main {
-    color: #2C2C2C;
+    color: #052659;
   }
   
   .pv-text-muted {
-    color: #6B7280;
+    color: #052659;
   }
   
   .pv-btn-create {
-    background-color: #2ECC71;
-    color: #ffffff;
+    background-color: #7da0ca;
+    color: #021024;
   }
   
   .pv-btn-ask {
-    background-color: #3498DB;
-    color: #ffffff;
+    background-color: #5483b3;
+    color: #021024;
   }
   
   .pv-btn-services {
-    background-color: #F4B400;
-    color: #2C2C2C;
+    background-color: #7da0ca;
+    color: #052659;
   }
 }
 

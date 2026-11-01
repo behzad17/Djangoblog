@@ -6,31 +6,31 @@
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   transition: all 0.3s ease;
-  background-color: rgba(255, 255, 255, 0.35);
-  color: #415a77;
-  border: 2px solid rgba(65, 90, 119, 0.35);
+  background-color: rgba(239,248,255, 0.35);
+  color: #052659;
+  border: 2px solid rgba(5,38,89, 0.35);
 }
 
 .ads-hero-section .hero-buttons .btn-ads-pro-secondary:hover,
 .ads-hero-section .hero-buttons .btn-ads-pro-secondary:focus {
-  background-color: rgba(255, 255, 255, 0.65);
-  color: #415a77;
-  border-color: rgba(65, 90, 119, 0.5);
+  background-color: rgba(239,248,255, 0.65);
+  color: #052659;
+  border-color: rgba(5,38,89, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(27, 85, 131, 0.12);
+  box-shadow: 0 4px 12px rgba(2,16,36, 0.12);
 }
 
 /* Section headings and body copy */
 .ads-pro-section__title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--pv-text-main, #2c2c2c);
+  color: var(--pv-text-main, #052659);
   margin-bottom: 1rem;
   line-height: 1.4;
 }
 
 .ads-pro-section__lead {
-  color: var(--pv-text-muted, #6b7280);
+  color: var(--pv-text-muted, #052659);
   line-height: 1.75;
   font-size: 1rem;
   font-weight: 400;
@@ -56,15 +56,15 @@
 .ads-pro-compare-table caption {
   caption-side: bottom;
   padding: 1rem 1.25rem;
-  color: var(--pv-text-muted, #6b7280);
+  color: var(--pv-text-muted, #052659);
   font-size: 0.875rem;
   line-height: 1.6;
   text-align: center;
 }
 
 .ads-pro-compare-table thead th {
-  background: #1b5583;
-  color: #fff;
+  background: #052659;
+  color: #c1e8ff;
   font-weight: 600;
   padding: 0.85rem 1rem;
   border: none;
@@ -77,18 +77,18 @@
 
 .ads-pro-compare-table tbody th {
   font-weight: 500;
-  color: var(--pv-text-main, #2c2c2c);
+  color: var(--pv-text-main, #052659);
   padding: 0.8rem 1rem;
-  background: var(--pv-bg-card, #fff);
-  border-bottom: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+  background: var(--pv-bg-card, #eff8ff);
+  border-bottom: 1px solid var(--pv-border-soft, rgba(193,232,255, 0.5));
 }
 
 .ads-pro-compare-table tbody td {
   text-align: center;
   padding: 0.8rem 1rem;
-  border-bottom: 1px solid var(--pv-border-soft, rgba(229, 231, 235, 0.5));
+  border-bottom: 1px solid var(--pv-border-soft, rgba(193,232,255, 0.5));
   font-size: 1.05rem;
-  background: var(--pv-bg-card, #fff);
+  background: var(--pv-bg-card, #eff8ff);
 }
 
 .ads-pro-compare-table tbody tr:last-child th,
@@ -98,7 +98,7 @@
 
 .ads-pro-compare-table tbody tr:nth-child(even) th,
 .ads-pro-compare-table tbody tr:nth-child(even) td {
-  background: var(--pv-bg-main, #f5f7f6);
+  background: var(--pv-bg-main, #eff8ff);
 }
 
 /* Benefit cards — Bootstrap card + shadow-sm base */
@@ -117,8 +117,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(27, 85, 131, 0.1);
-  color: #1b5583;
+  background: rgba(5,38,89, 0.1);
+  color: #052659;
   margin-bottom: 0.75rem;
   font-size: 1.05rem;
 }
@@ -126,31 +126,31 @@
 .ads-pro-benefit-card__title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--pv-text-main, #2c2c2c);
+  color: var(--pv-text-main, #052659);
   margin-bottom: 0.5rem;
 }
 
 .ads-pro-benefit-card__text {
-  color: var(--pv-text-muted, #6b7280);
+  color: var(--pv-text-muted, #052659);
   font-size: 0.95rem;
   line-height: 1.65;
 }
 
 /* Featured callout — matches glass-card-badge-featured gold */
 .ads-pro-featured {
-  background: rgba(255, 193, 7, 0.12);
-  border: 1px dashed rgba(255, 193, 7, 0.65);
+  background: rgba(125,160,202, 0.12);
+  border: 1px dashed rgba(125,160,202, 0.65);
 }
 
 .ads-pro-featured__title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #415a77;
+  color: #052659;
   margin-bottom: 0.75rem;
 }
 
 .ads-pro-featured__text {
-  color: var(--pv-text-muted, #6b7280);
+  color: var(--pv-text-muted, #052659);
   line-height: 1.75;
   max-width: 40rem;
   margin-left: auto;
@@ -160,44 +160,44 @@
 /* FAQ accordion */
 .ads-pro-faq .accordion-button {
   font-weight: 600;
-  color: var(--pv-text-main, #2c2c2c);
+  color: var(--pv-text-main, #052659);
   text-align: right;
   padding: 1rem 1.25rem;
   line-height: 1.5;
 }
 
 .ads-pro-faq .accordion-button:not(.collapsed) {
-  background: rgba(27, 85, 131, 0.06);
-  color: #1b5583;
+  background: rgba(5,38,89, 0.06);
+  color: #052659;
   box-shadow: none;
 }
 
 .ads-pro-faq .accordion-button:focus {
-  box-shadow: 0 0 0 0.2rem rgba(27, 85, 131, 0.25);
-  border-color: rgba(27, 85, 131, 0.35);
+  box-shadow: 0 0 0 0.2rem rgba(2,16,36, 0.25);
+  border-color: rgba(5,38,89, 0.35);
 }
 
 .ads-pro-faq .accordion-body {
-  color: var(--pv-text-muted, #6b7280);
+  color: var(--pv-text-muted, #052659);
   line-height: 1.75;
   padding: 0 1.25rem 1rem;
 }
 
 /* Final CTA — navbar/footer navy */
 .ads-pro-cta {
-  background: #1b5583;
-  color: #fff;
+  background: #052659;
+  color: #c1e8ff;
 }
 
 .ads-pro-cta__title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #c1e8ff;
   line-height: 1.4;
 }
 
 .ads-pro-cta__text {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(193,232,255, 0.9);
   max-width: 36rem;
   margin-left: auto;
   margin-right: auto;
@@ -206,18 +206,18 @@
 }
 
 .ads-pro-cta .hero-buttons .btn-light {
-  color: #1b5583;
+  color: #052659;
 }
 
 /* Ads home promotional card */
 .ads-pro-promo-card__title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--pv-text-main, #2c2c2c);
+  color: var(--pv-text-main, #052659);
 }
 
 .ads-pro-promo-card__text {
-  color: var(--pv-text-muted, #6b7280);
+  color: var(--pv-text-muted, #052659);
   font-size: 0.95rem;
   line-height: 1.65;
 }
