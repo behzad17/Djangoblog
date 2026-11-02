@@ -3,9 +3,9 @@
   <h3 class="homepage-useful-links__title" id="{{ heading_id }}">
     <a href="{% url 'related_links:links_list' %}">لینک‌های مفید</a>
   </h3>
-  <div class="homepage-useful-links__grid" role="list">
+  <div class="homepage-useful-links__grid" data-category-marquee data-category-marquee-label="دسته‌بندی لینک‌های مفید؛ نوار افقی">
     {% for category in homepage_useful_link_categories %}
-    <a href="{% url 'related_links:links_list' %}?category={{ category.slug|urlencode }}" class="homepage-useful-links__card" role="listitem">
+    <a href="{% url 'related_links:links_list' %}?category={{ category.slug|urlencode }}" class="homepage-useful-links__card">
       <span class="homepage-useful-links__icon" aria-hidden="true"><i class="{{ category.icon_class }}"></i></span>
       <span class="homepage-useful-links__name">{{ category.name_fa }}</span>
     </a>
