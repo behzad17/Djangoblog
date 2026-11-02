@@ -15,7 +15,7 @@
   const group=document.createElement('div');group.className='pv-marquee-group';
   items.forEach(item=>group.append(item));track.append(group);viewport.append(track);root.append(controls,viewport);
   root.classList.add('pv-category-marquee');
-  let copy=null,period=0,raf=0,last=0,position=0,visible=false,paused=false,hover=false,focus=false,pressed=false,drag=null,suppressClick=false,manualUntil=0;
+  let copy=null,period=0,raf=0,last=0,position=0,visible=false,paused=false,hover=false,focus=false,touchInteraction=false,pressed=false,drag=null,suppressClick=false,manualUntil=0;
   const mod=(n,d)=>((n%d)+d)%d;
   const stop=()=>{cancelAnimationFrame(raf);raf=0;last=0;};
   const mayRun=()=>visible&&!document.hidden&&!reduced.matches&&!paused&&!hover&&!focus&&!pressed&&period>viewport.clientWidth;
@@ -60,14 +60,18 @@
   prev.addEventListener('click',()=>step(-1));next.addEventListener('click',()=>step(1));
   viewport.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hover=true;wake();}});
   viewport.addEventListener('pointerleave',()=>{hover=false;wake();});
-  viewport.addEventListener('focusin',()=>{focus=true;wake();});
-  viewport.addEventListener('focusout',()=>{queueMicrotask(()=>{focus=viewport.contains(document.activeElement);wake();});});
+  viewport.addEventListener('focusin',()=>{focus=!touchInteraction;wake();});
+  viewport.addEventListener('focusout',()=>{queueMicrotask(()=>{focus=!touchInteraction&&viewport.contains(document.activeElement);wake();});});
   viewport.addEventListener('keydown',e=>{
+   touchInteraction=false;focus=true;wake();
    if(e.target!==viewport)return;
    if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();step(e.key==='ArrowRight'?1:-1);}
   });
   viewport.addEventListener('pointerdown',e=>{
    suppressClick=false;if(e.button!==0)return;
+   // Touch focus can persist after a swipe; only keyboard/mouse focus pauses.
+   touchInteraction=e.pointerType==='touch';
+   if(touchInteraction){focus=false;hover=false;}
    pressed=true;stop();
    if(e.pointerType!=='touch')drag={id:e.pointerId,x:e.clientX,y:e.clientY,start:viewport.scrollLeft,moving:false};
   });
