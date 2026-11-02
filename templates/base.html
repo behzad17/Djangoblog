@@ -116,6 +116,8 @@
 
     <link rel="stylesheet" href="{% static 'css/blue-theme.css' %}?v=20261101-light1" />
 
+    <link rel="stylesheet" href="{% static 'css/components/desktop-glow-menu.css' %}?v=20261102-1" media="(min-width: 992px)" />
+
     <!-- Structured Data - Organization Schema -->
     <script type="application/ld+json">
     {
@@ -167,54 +169,54 @@
         <!-- Desktop Navigation Menu (lg and up only) -->
         <div class="navbar-collapse d-none d-lg-flex" id="navbarText">
           <!-- Center Navigation Links -->
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 desktop-glow-menu">
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == home_url %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path == home_url %}active{% endif %}"
                 href="{{ home_url }}"
-                >خانه</a
+                ><span class="desktop-glow-face"><i class="fas fa-home" aria-hidden="true"></i><span>خانه</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-home" aria-hidden="true"></i><span>خانه</span></span></a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == events_url %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path == events_url %}active{% endif %}"
                 href="{{ events_url }}"
-                >رویدادها</a
+                ><span class="desktop-glow-face"><i class="fas fa-calendar-alt" aria-hidden="true"></i><span>رویدادها</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-calendar-alt" aria-hidden="true"></i><span>رویدادها</span></span></a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path|slice:':5' == '/ads/' %}active{% endif %}"
                 href="{{ ads_home_url }}"
-                >بانک مشاغل</a
+                ><span class="desktop-glow-face"><i class="fas fa-briefcase" aria-hidden="true"></i><span>بانک مشاغل</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-briefcase" aria-hidden="true"></i><span>بانک مشاغل</span></span></a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path == ask_me_url or request.path|slice:':7' == '/ask-me' %}active{% endif %}"
                 href="{{ ask_me_url|default:'/ask-me/' }}"
-                >سؤال از متخصص</a
+                ><span class="desktop-glow-face"><i class="fas fa-question-circle" aria-hidden="true"></i><span>سؤال از متخصص</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-question-circle" aria-hidden="true"></i><span>سؤال از متخصص</span></span></a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path|slice:':11' == '/community/' %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path|slice:':11' == '/community/' %}active{% endif %}"
                 href="{% url 'community:discussion_list' %}"
-                >گفتگوها</a
+                ><span class="desktop-glow-face"><i class="fas fa-comments" aria-hidden="true"></i><span>گفتگوها</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-comments" aria-hidden="true"></i><span>گفتگوها</span></span></a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path|slice:':14' == '/related-links' %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path|slice:':14' == '/related-links' %}active{% endif %}"
                 href="{{ related_links_url }}"
-                >لینک‌های مفید</a
+                ><span class="desktop-glow-face"><i class="fas fa-link" aria-hidden="true"></i><span>لینک‌های مفید</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-link" aria-hidden="true"></i><span>لینک‌های مفید</span></span></a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == search_url %}active{% endif %}"
+                class="nav-link desktop-glow-link {% if request.path == search_url %}active{% endif %}"
                 href="{{ search_url }}"
-                ><i class="fas fa-search ms-1"></i>جستجو</a
+                ><span class="desktop-glow-face"><i class="fas fa-search" aria-hidden="true"></i><span>جستجو</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-search" aria-hidden="true"></i><span>جستجو</span></span></a
               >
             </li>
           </ul>

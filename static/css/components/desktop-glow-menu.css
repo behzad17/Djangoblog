@@ -1,0 +1,60 @@
+/* Glow Menu by spoonyvu / 21st.dev, adapted to Django links and Peyvand's blue palette.
+   Desktop only: the mobile drawer and toggle keep their existing presentation. */
+@media (min-width:992px) {
+ nav.navbar > .container-fluid { gap:12px; }
+ nav.navbar #navbarText { min-width:0; gap:12px; }
+ nav.navbar .desktop-glow-menu {
+  display:flex; flex-wrap:nowrap; flex-shrink:0; align-items:center;
+  gap:3px; padding:5px; border:1px solid rgba(193,232,255,.38);
+  border-radius:18px; background:linear-gradient(180deg,rgba(193,232,255,.17),rgba(84,131,179,.08));
+  -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  box-shadow:0 6px 22px rgba(5,38,89,.18),inset 0 1px rgba(239,248,255,.16);
+ }
+ nav.navbar .desktop-glow-menu > .nav-item { margin:0; }
+ nav.navbar .desktop-glow-menu .desktop-glow-link {
+  display:block; position:relative; isolation:isolate; perspective:600px;
+  padding:0; min-height:44px; border-radius:12px;
+  color:#eff8ff !important; font-size:clamp(.78rem,.9vw,.91rem);
+  font-weight:600; white-space:nowrap; transform:none; transition:none;
+ }
+ nav.navbar .desktop-glow-link::before {
+  content:""; position:absolute; inset:-4px; z-index:-1; pointer-events:none;
+  border-radius:16px; opacity:0; transform:scale(.85);
+  background:radial-gradient(ellipse,rgba(193,232,255,.35),rgba(125,160,202,.15) 55%,transparent 75%);
+  transition:opacity .45s ease,transform .55s ease;
+ }
+ nav.navbar .desktop-glow-face {
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  min-height:44px; padding:8px 10px; border-radius:12px; color:#eff8ff;
+  transform-origin:center bottom; backface-visibility:hidden;
+  transition:transform .5s cubic-bezier(.22,.68,.2,1),opacity .35s ease;
+ }
+ nav.navbar .desktop-glow-menu .desktop-glow-face i { color:#c1e8ff !important; width:17px; text-align:center; }
+ nav.navbar .desktop-glow-face--back {
+  position:absolute; inset:0; transform-origin:center top;
+  transform:rotateX(90deg); opacity:0; pointer-events:none;
+  background:rgba(193,232,255,.12);
+ }
+ nav.navbar .desktop-glow-link:is(:hover,:focus-visible)::before,
+ nav.navbar .desktop-glow-link.active::before { opacity:1; transform:scale(1.15); }
+ nav.navbar .desktop-glow-link:is(:hover,:focus-visible) > .desktop-glow-face:not(.desktop-glow-face--back) { transform:rotateX(-90deg); opacity:0; }
+ nav.navbar .desktop-glow-link:is(:hover,:focus-visible) > .desktop-glow-face--back { transform:rotateX(0); opacity:1; }
+ nav.navbar .desktop-glow-link.active { background:rgba(193,232,255,.13); box-shadow:inset 0 -2px #c1e8ff; }
+ nav.navbar .desktop-glow-link:focus-visible { outline:2px solid #c1e8ff; outline-offset:3px; }
+ nav.navbar .navbar-brand { flex-shrink:1; min-width:0; max-width:300px; white-space:normal; }
+ nav.navbar .navbar-brand .brand-tagline { white-space:normal; }
+ nav.navbar #navbarText > .navbar-nav:not(.desktop-glow-menu) { flex-shrink:0; margin-inline:0 !important; }
+ nav.navbar #navbarText > .navbar-nav:not(.desktop-glow-menu) > .nav-item { margin-inline:4px; }
+ nav.navbar #userDropdown { max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+}
+@media (min-width:992px) and (max-width:1399.98px) {
+ nav.navbar > .container-fluid { flex-wrap:wrap; }
+ nav.navbar .navbar-brand { flex-basis:100%; max-width:none; margin-inline:0; text-align:center; }
+ nav.navbar #navbarText { flex-basis:100%; width:100%; }
+ nav.navbar .desktop-glow-face { padding-inline:7px; gap:5px; }
+}
+@media (min-width:992px) and (prefers-reduced-motion:reduce) {
+ nav.navbar .desktop-glow-face,nav.navbar .desktop-glow-link::before { transition:none; }
+ nav.navbar .desktop-glow-link:is(:hover,:focus-visible) > .desktop-glow-face:not(.desktop-glow-face--back) { transform:none; opacity:1; background:rgba(193,232,255,.12); }
+ nav.navbar .desktop-glow-link > .desktop-glow-face--back { display:none; }
+}
