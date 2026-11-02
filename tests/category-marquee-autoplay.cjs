@@ -5,6 +5,7 @@ class Node {
  set scrollLeft(value){this._scrollLeft=Math.round(value);}
  append(...nodes){for(const n of nodes){if(n.parent)n.remove();this.children.push(n);n.parent=this;}}
  remove(){if(this.parent)this.parent.children=this.parent.children.filter(n=>n!==this);this.parent=null;}
+ getAttribute(k){return this.attrs[k]??null;}
  setAttribute(k,v){this.attrs[k]=v;} removeAttribute(k){delete this.attrs[k];}
  addEventListener(k,fn){(this.events[k]??=[]).push(fn);}
  emit(k,e={}){for(const fn of this.events[k]||[])fn({target:this,button:0,pointerId:1,pointerType:'mouse',clientX:100,clientY:0,preventDefault(){this.prevented=true;},stopPropagation(){},...e});}
@@ -16,11 +17,13 @@ class Node {
  blur(){doc.activeElement=null;}
 }
 const root=new Node();for(let i=0;i<14;i++){const a=new Node('a');a.attrs.href='/category/'+i;root.append(a);}
-const doc=new Node();doc.querySelectorAll=()=>[root];doc.createElement=t=>new Node(t);doc.hidden=false;
+if(process.env.USEFUL_LINKS)root.attrs['data-category-marquee-label']='دسته‌بندی لینک‌های مفید؛ نوار افقی';
+const doc=new Node();doc.querySelectorAll=selector=>{assert.equal(selector,'[data-category-marquee]');return [root];};doc.createElement=t=>new Node(t);doc.hidden=false;
 const win=new Node();win.IntersectionObserver=true;const reduced=new Node();reduced.matches=process.env.REDUCED_MOTION==='1';
 let callback,now=0,visibleCallback;const frames=new Map();let frameId=0;
 vm.runInNewContext(fs.readFileSync(require('path').join(__dirname,'../static/js/category-marquee.js'),'utf8'),{document:doc,window:win,matchMedia:()=>reduced,getComputedStyle:()=>({getPropertyValue:k=>k==='--pv-card-count'?'5':'12'}),requestAnimationFrame:fn=>{frames.set(++frameId,fn);return frameId;},cancelAnimationFrame:id=>frames.delete(id),performance:{now:()=>now},queueMicrotask:fn=>fn(),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){}},IntersectionObserver:class{constructor(fn){visibleCallback=fn;}observe(){} }});
 const controls=root.children[0],view=root.children[1],track=view.children[0],group=track.children[0];
+assert.equal(view.attrs['aria-label'],process.env.USEFUL_LINKS?'دسته‌بندی لینک‌های مفید؛ نوار افقی':'دسته‌بندی مطالب کاربران؛ نوار افقی');
 assert.equal(group.children.length,14);assert.equal(track.children.length,2);
 assert.equal(track.children[1].attrs['aria-hidden'],'true');
 assert.equal(track.children[1].children[0].tabIndex,-1);

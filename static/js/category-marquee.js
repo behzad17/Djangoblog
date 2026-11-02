@@ -1,7 +1,7 @@
 /* Adapted interaction model from kevingirelli's 21st.dev Marquee.
    Native scroll positions keep links, touch inertia and keyboard focus usable in RTL. */
 (() => {
- document.querySelectorAll('.homepage [data-category-marquee]').forEach(root=>{
+ document.querySelectorAll('[data-category-marquee]').forEach(root=>{
   const items=[...root.children];
   if(items.length<2)return;
   const controls=document.createElement('div');controls.className='pv-marquee-controls';
@@ -9,7 +9,7 @@
   const prev=button('قبلی'),pause=button('توقف حرکت'),next=button('بعدی');
   pause.setAttribute('aria-pressed','false');controls.append(prev,pause,next);
   const viewport=document.createElement('div');viewport.className='pv-marquee-viewport';
-  viewport.setAttribute('role','region');viewport.setAttribute('aria-label','دسته‌بندی مطالب کاربران؛ نوار افقی');viewport.tabIndex=0;
+  viewport.setAttribute('role','region');viewport.setAttribute('aria-label',root.getAttribute('data-category-marquee-label')||'دسته‌بندی مطالب کاربران؛ نوار افقی');viewport.tabIndex=0;
   const track=document.createElement('div');track.className='pv-marquee-track';
   const group=document.createElement('div');group.className='pv-marquee-group';
   items.forEach(item=>group.append(item));track.append(group);viewport.append(track);root.append(controls,viewport);

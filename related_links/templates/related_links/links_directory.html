@@ -7,6 +7,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/components/category-marquee.css' %}?v=20261102-4" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -26,7 +27,7 @@
 </section>
 
 <div class="container related-links-page related-links-page--directory">
-  <div class="row g-4 useful-link-category-grid">
+  <div class="row g-4 useful-link-category-grid" data-category-marquee data-category-marquee-label="دسته‌بندی لینک‌های مفید؛ نوار افقی">
     {% for category in categories %}
     <div class="col-6 col-md-4 col-xl-3 useful-link-category-col">
       {% include "related_links/includes/useful_link_category_card.html" with category=category %}
@@ -40,3 +41,7 @@
   </div>
 </div>
 {% endblock content %}
+
+{% block extras %}
+<script src="{% static 'js/category-marquee.js' %}?v=20261102-6" defer></script>
+{% endblock extras %}
