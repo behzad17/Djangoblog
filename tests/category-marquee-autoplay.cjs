@@ -17,7 +17,7 @@ class Node {
 }
 const root=new Node();for(let i=0;i<14;i++){const a=new Node('a');a.attrs.href='/category/'+i;root.append(a);}
 const doc=new Node();doc.querySelectorAll=()=>[root];doc.createElement=t=>new Node(t);doc.hidden=false;
-const win=new Node();win.IntersectionObserver=true;const reduced=new Node();reduced.matches=false;
+const win=new Node();win.IntersectionObserver=true;const reduced=new Node();reduced.matches=process.env.REDUCED_MOTION==='1';
 let callback,now=0,visibleCallback;const frames=new Map();let frameId=0;
 vm.runInNewContext(fs.readFileSync(require('path').join(__dirname,'../static/js/category-marquee.js'),'utf8'),{document:doc,window:win,matchMedia:()=>reduced,getComputedStyle:()=>({getPropertyValue:k=>k==='--pv-card-count'?'5':'12'}),requestAnimationFrame:fn=>{frames.set(++frameId,fn);return frameId;},cancelAnimationFrame:id=>frames.delete(id),performance:{now:()=>now},queueMicrotask:fn=>fn(),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){}},IntersectionObserver:class{constructor(fn){visibleCallback=fn;}observe(){} }});
 const controls=root.children[0],view=root.children[1],track=view.children[0],group=track.children[0];
@@ -46,19 +46,13 @@ view.emit('keydown',{key:'Tab'});
 assert.equal(frames.size,0,'keyboard focus must still pause autoplay');
 doc.activeElement=null;view.emit('focusout');
 assert.equal(frames.size,1,'leaving keyboard focus must resume autoplay');
-reduced.matches=true;reduced.emit('change');assert.equal(track.children.length,1);assert.equal(frames.size,0);
-assert.equal(controls.children[1].disabled,false,'reduced motion must offer an explicit start');
-assert.equal(controls.children[1].textContent,'شروع حرکت');
-assert.equal(controls.children[1].attrs['aria-pressed'],'true');
+assert.equal(controls.children[1].textContent,'توقف حرکت','autoplay must be the initial mode');
+assert.equal(controls.children[1].attrs['aria-pressed'],'false');
+reduced.matches=!reduced.matches;reduced.emit('change');
+assert.equal(frames.size,1,'system motion preference must not override requested autoplay');
 controls.children[1].emit('click');
-assert.equal(track.children.length,2,'explicit start must restore the seamless loop');
-assert.equal(frames.size,1,'explicit start must allow motion with reduced motion enabled');
-frame(7000);const optedStart=view.scrollLeft;
-for(let i=1;i<=120;i++)frame(7000+i*1000/60);
-assert.ok(Math.abs(view.scrollLeft-optedStart-48)<=1,'explicitly enabled motion must advance at 60Hz');
-controls.children[1].emit('click');assert.equal(frames.size,0);
+assert.equal(frames.size,0);assert.equal(controls.children[1].textContent,'ادامهٔ حرکت');
+doc.hidden=true;doc.emit('visibilitychange');doc.hidden=false;doc.emit('visibilitychange');
+assert.equal(frames.size,0,'manual pause must survive visibility changes');
 controls.children[1].emit('click');assert.equal(frames.size,1);
-reduced.emit('change');
-assert.equal(frames.size,0,'system preference changes must reset the override');
-assert.equal(track.children.length,1);
-console.log('Passed: preserved links, accessible clones, leftward motion, hover/pause, drag threshold, touch focus recovery, keyboard focus, reduced motion');
+console.log('Passed: automatic start, pause/resume, touch focus, keyboard, links and rounded-scroll movement');
