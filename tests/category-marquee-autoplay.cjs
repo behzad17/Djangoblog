@@ -34,6 +34,18 @@ controls.children[1].emit('click');assert.equal(controls.children[1].attrs['aria
 controls.children[1].emit('click');assert.equal(frames.size,1);
 let prevented=false;view.emit('pointerdown');view.emit('pointermove',{clientX:102});win.emit('pointerup');view.emit('click',{preventDefault:()=>prevented=true});assert.equal(prevented,false,'small moves must preserve links');
 view.emit('pointerdown');view.emit('pointermove',{clientX:140});win.emit('pointerup');view.emit('click',{preventDefault:()=>prevented=true});assert.equal(prevented,true,'drag must suppress accidental navigation');
+// A touch focuses the scroll region in mobile browsers; it must not latch pause.
+view.emit('pointerleave');
+view.emit('pointerdown',{pointerType:'touch'});doc.activeElement=view;
+view.emit('focusin');win.emit('pointerup',{pointerType:'touch'});
+assert.equal(frames.size,1,'touch focus must resume autoplay after release');
+now=4000;frame(now);const touchStart=view.scrollLeft;
+for(let i=1;i<=120;i++)frame(now+i*1000/60);
+assert.ok(view.scrollLeft>touchStart,'autoplay must resume after touch focus');
+view.emit('keydown',{key:'Tab'});
+assert.equal(frames.size,0,'keyboard focus must still pause autoplay');
+doc.activeElement=null;view.emit('focusout');
+assert.equal(frames.size,1,'leaving keyboard focus must resume autoplay');
 reduced.matches=true;reduced.emit('change');assert.equal(track.children.length,1);assert.equal(frames.size,0);
 assert.equal(controls.children[1].disabled,true);
-console.log('Passed: preserved links, accessible clones, leftward motion, hover/pause, drag threshold, reduced motion');
+console.log('Passed: preserved links, accessible clones, leftward motion, hover/pause, drag threshold, touch focus recovery, keyboard focus, reduced motion');
