@@ -5,7 +5,7 @@
   </h3>
 
   {% if category_overview_rows %}
-    <div class="category-overview-mobile-grid d-md-none">
+    <div class="category-overview-mobile-grid d-md-none" data-category-marquee>
       {% for category, latest_post in category_overview_rows %}
         <div class="category-overview-mobile-item{% if forloop.last and forloop.counter|divisibleby:2 == False %} category-overview-mobile-item--solo{% endif %}">
           {% include 'includes/category_icon_card.html' with category=category %}
@@ -16,7 +16,7 @@
     <div class="category-overview-desktop-tablet d-none d-md-block">
       <div class="category-overview-shortcuts">
         <h3 class="category-section-title">مطالب کاربران</h3>
-        <div class="category-overview-category-grid">
+        <div class="category-overview-category-grid" data-category-marquee>
           {% for category, latest_post in category_overview_rows %}
             {% include 'includes/category_icon_card.html' with category=category %}
           {% endfor %}
