@@ -1,6 +1,6 @@
 /* Homepage category marquee — card presentation stays in existing stylesheets. */
 .homepage .pv-category-marquee { --pv-card-count:5; --pv-marquee-gap:12px; min-width:0; max-width:100%; }
-.homepage .pv-marquee-controls { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-bottom:8px; direction:rtl; }
+.homepage .pv-marquee-controls { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:8px; direction:rtl; }
 .homepage .pv-marquee-controls button { min-width:44px; min-height:44px; border:1px solid #7da0ca; border-radius:10px; padding:6px 12px; background:#eff8ff; color:#2b4772; font:inherit; font-size:.8rem; cursor:pointer; }
 .homepage .pv-marquee-controls button:focus-visible { outline:3px solid #2b4772; outline-offset:2px; }
 .homepage .pv-marquee-viewport { overflow-x:auto; overflow-y:hidden; direction:ltr; padding-block:8px 16px; scrollbar-width:thin; scrollbar-color:#7da0ca transparent; overscroll-behavior-x:contain; cursor:grab; }
