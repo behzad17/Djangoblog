@@ -15,7 +15,7 @@
   const group=document.createElement('div');group.className='pv-marquee-group';
   items.forEach(item=>group.append(item));track.append(group);viewport.append(track);root.append(controls,viewport);
   root.classList.add('pv-category-marquee');
-  let copy=null,period=0,raf=0,last=0,visible=false,paused=false,hover=false,focus=false,pressed=false,drag=null,suppressClick=false,manualUntil=0;
+  let copy=null,period=0,raf=0,last=0,position=0,visible=false,paused=false,hover=false,focus=false,pressed=false,drag=null,suppressClick=false,manualUntil=0;
   const mod=(n,d)=>((n%d)+d)%d;
   const stop=()=>{cancelAnimationFrame(raf);raf=0;last=0;};
   const mayRun=()=>visible&&!document.hidden&&!reduced.matches&&!paused&&!hover&&!focus&&!pressed&&period>viewport.clientWidth;
@@ -23,7 +23,11 @@
    raf=0;
    if(!mayRun()){last=0;return;}
    if(time>=manualUntil){
-    if(last)viewport.scrollLeft=mod(viewport.scrollLeft+Math.min(time-last,50)*.024,period);
+    // Preserve fractional pixels: some browsers round scrollLeft on every write.
+    if(last){
+     position=mod(position+Math.min(time-last,50)*.024,period);
+     viewport.scrollLeft=position;
+    }else position=viewport.scrollLeft;
     last=time;
    }else last=0;
    raf=requestAnimationFrame(tick);
@@ -41,6 +45,7 @@
    pause.disabled=reduced.matches;pause.textContent=reduced.matches?'حرکت خودکار خاموش است':paused?'ادامهٔ حرکت':'توقف حرکت';
   };
   const resize=()=>{
+   stop();
    if(!viewport.clientWidth){visible=false;stop();return;}
    const count=parseFloat(getComputedStyle(root).getPropertyValue('--pv-card-count'))||5;
    const gap=parseFloat(getComputedStyle(root).getPropertyValue('--pv-marquee-gap'))||12;
@@ -51,7 +56,7 @@
    wake();
   };
   pause.addEventListener('click',()=>{paused=!paused;pause.setAttribute('aria-pressed',String(paused));syncCopy();wake();});
-  const step=direction=>{manualUntil=performance.now()+2500;viewport.scrollLeft=reduced.matches?Math.max(0,viewport.scrollLeft+direction*viewport.clientWidth*.8):mod(viewport.scrollLeft+direction*viewport.clientWidth*.8,period);wake();};
+  const step=direction=>{stop();manualUntil=performance.now()+2500;viewport.scrollLeft=reduced.matches?Math.max(0,viewport.scrollLeft+direction*viewport.clientWidth*.8):mod(viewport.scrollLeft+direction*viewport.clientWidth*.8,period);wake();};
   prev.addEventListener('click',()=>step(-1));next.addEventListener('click',()=>step(1));
   viewport.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hover=true;wake();}});
   viewport.addEventListener('pointerleave',()=>{hover=false;wake();});
