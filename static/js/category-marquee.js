@@ -15,10 +15,11 @@
   const group=document.createElement('div');group.className='pv-marquee-group';
   items.forEach(item=>group.append(item));track.append(group);viewport.append(track);root.append(controls,viewport);
   root.classList.add('pv-category-marquee');
-  let copy=null,period=0,raf=0,last=0,position=0,visible=false,paused=false,hover=false,focus=false,touchInteraction=false,pressed=false,drag=null,suppressClick=false,manualUntil=0;
+  let copy=null,period=0,raf=0,last=0,position=0,visible=false,motionOptIn=false,paused=false,hover=false,focus=false,touchInteraction=false,pressed=false,drag=null,suppressClick=false,manualUntil=0;
   const mod=(n,d)=>((n%d)+d)%d;
   const stop=()=>{cancelAnimationFrame(raf);raf=0;last=0;};
-  const mayRun=()=>visible&&!document.hidden&&!reduced.matches&&!paused&&!hover&&!focus&&!pressed&&period>viewport.clientWidth;
+  const motionAllowed=()=>!reduced.matches||motionOptIn;
+  const mayRun=()=>visible&&!document.hidden&&motionAllowed()&&!paused&&!hover&&!focus&&!pressed&&period>viewport.clientWidth;
   const tick=time=>{
    raf=0;
    if(!mayRun()){last=0;return;}
@@ -34,7 +35,7 @@
   };
   const wake=()=>{if(mayRun()&&!raf)raf=requestAnimationFrame(tick);else if(!mayRun())stop();};
   const syncCopy=()=>{
-   if(reduced.matches){copy?.remove();copy=null;}
+   if(!motionAllowed()){copy?.remove();copy=null;}
    else if(!copy){
     copy=group.cloneNode(true);copy.setAttribute('aria-hidden','true');
     copy.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
@@ -42,7 +43,11 @@
     // Keep real hrefs on the visual copy: inert would disable mouse/touch visits.
     track.append(copy);
    }
-   pause.disabled=reduced.matches;pause.textContent=reduced.matches?'حرکت خودکار خاموش است':paused?'ادامهٔ حرکت':'توقف حرکت';
+   pause.disabled=false;
+   pause.setAttribute('aria-pressed',String(paused||!motionAllowed()));
+   pause.textContent=!motionAllowed()?'شروع حرکت':paused?'ادامهٔ حرکت':'توقف حرکت';
+   if(!motionAllowed())pause.setAttribute('title','کاهش حرکت فعال است؛ برای شروع نوار این دکمه را بزنید');
+   else pause.removeAttribute('title');
   };
   const resize=()=>{
    stop();
@@ -55,8 +60,13 @@
    viewport.scrollLeft=oldPeriod?progress*period:Math.max(0,period-viewport.clientWidth);
    wake();
   };
-  pause.addEventListener('click',()=>{paused=!paused;pause.setAttribute('aria-pressed',String(paused));syncCopy();wake();});
-  const step=direction=>{stop();manualUntil=performance.now()+2500;viewport.scrollLeft=reduced.matches?Math.max(0,viewport.scrollLeft+direction*viewport.clientWidth*.8):mod(viewport.scrollLeft+direction*viewport.clientWidth*.8,period);wake();};
+  pause.addEventListener('click',()=>{
+   // Respect the system default, but let the visitor explicitly request motion.
+   if(!motionAllowed()){motionOptIn=true;paused=false;}
+   else paused=!paused;
+   resize();
+  });
+  const step=direction=>{stop();manualUntil=performance.now()+2500;viewport.scrollLeft=!motionAllowed()?Math.max(0,viewport.scrollLeft+direction*viewport.clientWidth*.8):mod(viewport.scrollLeft+direction*viewport.clientWidth*.8,period);wake();};
   prev.addEventListener('click',()=>step(-1));next.addEventListener('click',()=>step(1));
   viewport.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hover=true;wake();}});
   viewport.addEventListener('pointerleave',()=>{hover=false;wake();});
@@ -94,7 +104,7 @@
   viewport.addEventListener('click',e=>{if(suppressClick){e.preventDefault();e.stopPropagation();suppressClick=false;}},true);
   viewport.addEventListener('dragstart',e=>e.preventDefault());
   document.addEventListener('visibilitychange',wake);
-  reduced.addEventListener('change',()=>{stop();resize();});
+  reduced.addEventListener('change',()=>{motionOptIn=false;stop();resize();});
   new ResizeObserver(resize).observe(viewport);
   if('IntersectionObserver' in window)new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;wake();},{rootMargin:'80px'}).observe(viewport);
   else visible=true;
