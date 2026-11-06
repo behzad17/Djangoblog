@@ -8,3 +8,31 @@
 .homepage .mobile-homepage-banners .ad-placeholder-category-section .ad-image {
   object-fit: contain;
 }
+
+/* Four banners before Pro ads: two rows of two, shared by both layouts. */
+.homepage .homepage-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.5rem, 1.5vw, 1rem);
+  width: 100%;
+  margin-block: 1.25rem;
+}
+.homepage .homepage-banner-grid__item { min-width: 0; }
+.homepage .homepage-banner-grid .ad-placeholder-category-section {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  aspect-ratio: 60 / 17;
+}
+.homepage .homepage-banner-grid .ad-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.homepage .homepage-banner-grid .ad-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
