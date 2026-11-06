@@ -1,3 +1,4 @@
+{% load static i18n event_display %}
 {% url 'category_posts' 'events-announcements' as events_category_url %}
 
 {% if upcoming_events %}
@@ -22,18 +23,29 @@
         role="listitem"
         title="{{ post.title }}"
       >
-        <div class="upcoming-event-card__date" aria-hidden="true">
-          <span class="upcoming-event-card__day">{{ post.event_start_date|date:"d" }}</span>
-          <span class="upcoming-event-card__month">{{ post.event_start_date|date:"M" }}</span>
+        <div class="upcoming-event-card__media">
+          {% if post.featured_image and 'placeholder' not in post.featured_image.url %}
+          <img class="upcoming-event-card__image" src="{{ post.featured_image.url }}" alt="" width="600" height="360" loading="lazy" decoding="async" data-fallback="{% static 'images/default.jpg' %}" onerror="this.onerror=null; this.src=this.dataset.fallback;" />
+          {% else %}
+          <img class="upcoming-event-card__image" src="{% static 'images/default.jpg' %}" alt="" width="600" height="360" loading="lazy" decoding="async" />
+          {% endif %}
+          {% language 'sv' %}
+          <time class="upcoming-event-card__date" datetime="{{ post.event_start_date|date:'Y-m-d' }}" lang="sv" dir="ltr" aria-label="{{ post.event_start_date|date:'j F Y' }}">
+            <span class="upcoming-event-card__day">{{ post.event_start_date|date:"d" }}</span>
+            <span class="upcoming-event-card__month">{{ post.event_start_date|date:"M" }}</span>
+          </time>
+          {% endlanguage %}
         </div>
         <div class="upcoming-event-card__body">
-          <h4 class="upcoming-event-card__title">{{ post.title }}</h4>
-          {% if post.event_location %}
+          <h4 class="upcoming-event-card__title"><bdi dir="auto">{{ post.title }}</bdi></h4>
+          {% with city=post|event_card_city %}
+          {% if city %}
           <p class="upcoming-event-card__location">
             <i class="fas fa-map-marker-alt ms-1" aria-hidden="true"></i>
-            {{ post.event_location }}
+            <bdi dir="auto">{{ city }}</bdi>
           </p>
           {% endif %}
+          {% endwith %}
         </div>
       </a>
       {% endfor %}

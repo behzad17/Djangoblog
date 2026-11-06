@@ -150,6 +150,11 @@ class Post(models.Model):
         blank=True,
         help_text="End date for Events category posts only"
     )
+    event_city = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="City only, shown on homepage event cards. Keep venue/address in location."
+    )
     event_location = models.CharField(
         max_length=200,
         blank=True,
