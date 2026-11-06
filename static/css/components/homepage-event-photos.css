@@ -71,3 +71,24 @@
   .homepage .upcoming-event-card:hover,
   .homepage .upcoming-event-card:focus-visible { transform: none; }
 }
+
+/* Compact desktop layout: two rows of four upcoming events. */
+@media (min-width: 992px) {
+  .homepage .upcoming-events-scroll {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .75rem;
+  }
+  .homepage .upcoming-event-card:nth-child(n + 9) { display: none; }
+  .homepage .upcoming-event-card__media { aspect-ratio: 16 / 9; }
+  .homepage .upcoming-event-card__body { padding: .65rem .75rem; gap: .4rem; }
+  .homepage .upcoming-event-card__title { font-size: .85rem; }
+  .homepage .upcoming-event-card__location { font-size: .75rem; }
+  .homepage .upcoming-event-card__date {
+    top: .5rem;
+    right: .5rem;
+    min-width: 2.5rem;
+    padding: .3rem .4rem;
+  }
+  .homepage .upcoming-event-card__day { font-size: 1.25rem; }
+  .homepage .upcoming-event-card__month { font-size: .65rem; }
+}
