@@ -1,0 +1,22 @@
+/* One Persian line followed by one Swedish line, including compact screens. */
+main .hero-section:has(.hero-cta-cards-container) .hero-title.hero-title--homepage {
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
+  font-size: clamp(.85rem, 3.7vw, 1.6rem);
+  line-height: 1.65;
+}
+
+main .hero-section:has(.hero-cta-cards-container) .hero-title--homepage .hero-title__line {
+  display: block;
+  white-space: nowrap;
+  letter-spacing: normal;
+}
+
+main .hero-section:has(.hero-cta-cards-container) .hero-title--homepage .hero-title__line--second {
+  margin-top: .35rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: clamp(.625rem, 2.6vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.6;
+}
