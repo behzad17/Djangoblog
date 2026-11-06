@@ -65,6 +65,22 @@
     color: #fff;
   }
 
+  /* Highlight the publish/signup action with one amber hue. */
+  .hero-cta-cards-container .premium-cta-card--primary .premium-cta-card__surface:has(.premium-cta-card__desktop-photo) {
+    background: #D97706;
+  }
+
+  .hero-cta-cards-container .premium-cta-card--primary .premium-cta-card__surface:has(.premium-cta-card__desktop-photo)::after {
+    background: linear-gradient(180deg, transparent 30%, rgba(217, 119, 6, .15) 46%, #D97706 76%, #D97706 100%);
+  }
+
+  /* Navy remains readable on amber at the existing compact text size. */
+  .hero-cta-cards-container .premium-cta-card--primary .premium-cta-card__surface:has(.premium-cta-card__desktop-photo) .premium-cta-card__title,
+  .hero-cta-cards-container .premium-cta-card--primary .premium-cta-card__surface:has(.premium-cta-card__desktop-photo) .premium-cta-card__action-chevron {
+    color: #052659;
+    text-shadow: none;
+  }
+
   .hero-cta-cards-container .premium-cta-card:focus-visible {
     outline: 3px solid #5483b3;
     outline-offset: 4px;
