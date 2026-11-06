@@ -94,7 +94,7 @@ class PostAdmin(admin.ModelAdmin):
             'description': 'Main post content (required). Excerpt is optional summary.'
         }),
         ('Event Details', {
-            'fields': ('event_start_date', 'event_end_date', 'event_location'),
+            'fields': ('event_start_date', 'event_end_date', 'event_city', 'event_location'),
             'description': 'Use these fields for posts in the Events category (رویدادها).',
             'classes': ('collapse',),
         }),

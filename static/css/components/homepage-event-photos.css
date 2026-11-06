@@ -1,0 +1,73 @@
+/* Editorial event photos; preserve the existing nine-event query and links. */
+.homepage .upcoming-event-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: min(17rem, 78vw);
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid rgba(84, 131, 179, .4);
+  border-radius: 16px;
+  background: #f7fbff;
+  box-shadow: 0 3px 10px rgba(43, 71, 114, .07);
+}
+.homepage .upcoming-event-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  overflow: hidden;
+  background: #c1e8ff;
+}
+.homepage .upcoming-event-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.homepage .upcoming-event-card__date {
+  position: absolute;
+  top: .65rem;
+  right: .65rem;
+  min-width: 3rem;
+  padding: .45rem .5rem;
+  background: #052659;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  font-family: system-ui, sans-serif;
+}
+.homepage .upcoming-event-card__day { color: #fff; font-size: 1.5rem; }
+.homepage .upcoming-event-card__month { color: #fff; font-size: .7rem; margin-top: .2rem; }
+.homepage .upcoming-event-card__body {
+  justify-content: flex-start;
+  padding: .85rem 1rem;
+  gap: .6rem;
+}
+.homepage .upcoming-event-card__title {
+  font-size: .95rem;
+  line-height: 1.6;
+  height: 3.2em;
+  -webkit-line-clamp: 2;
+}
+.homepage .upcoming-event-card__location { font-size: .82rem; line-height: 1.5; margin-top: auto; }
+.homepage .upcoming-event-card:hover,
+.homepage .upcoming-event-card:focus-visible {
+  box-shadow: 0 8px 20px rgba(43,71,114,.13);
+  border-color: #5483b3;
+}
+.homepage .upcoming-event-card:focus-visible { outline: 3px solid #5483b3; outline-offset: 3px; }
+@media (min-width: 768px) {
+  .homepage .upcoming-events-scroll { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .homepage .upcoming-event-card { width: auto; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .homepage .upcoming-event-card:hover .upcoming-event-card__image { transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .homepage .upcoming-event-card,
+  .homepage .upcoming-event-card__image { transition: none; }
+  .homepage .upcoming-event-card:hover,
+  .homepage .upcoming-event-card:focus-visible { transform: none; }
+}
