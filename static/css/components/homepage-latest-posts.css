@@ -113,3 +113,20 @@
     min-width: 0;
   }
 }
+
+/* Desktop: business categories take the former latest-posts position.
+   Useful links stay between the two sections; tablet/mobile keep DOM order. */
+@media (min-width: 992px) {
+  .homepage .category-overview-desktop-tablet > .category-overview-posts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .homepage .category-overview-desktop-tablet > .category-overview-posts > .homepage-business-categories {
+    order: -2;
+  }
+
+  .homepage .category-overview-desktop-tablet > .category-overview-posts > .homepage-useful-links:not(.homepage-business-categories) {
+    order: -1;
+  }
+}
