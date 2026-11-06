@@ -24,7 +24,7 @@
    if(time>=manualUntil){
     // Preserve fractional pixels: some browsers round scrollLeft on every write.
     if(last){
-     position=mod(position+Math.min(time-last,50)*.024,period);
+     position=mod(position+Math.min(time-last,50)*.0288,period);
      viewport.scrollLeft=position;
     }else position=viewport.scrollLeft;
     last=time;

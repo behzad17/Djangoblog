@@ -30,7 +30,7 @@ assert.equal(track.children[1].children[0].tabIndex,-1);
 assert.equal(track.children[1].children[0].attrs.href,'/category/0');
 visibleCallback([{isIntersecting:true}]);assert.equal(frames.size,1);
 function frame(t){const [id,fn]=frames.entries().next().value;frames.delete(id);fn(t);}
-frame(100);const before=view.scrollLeft;for(let i=1;i<=120;i++)frame(100+i*1000/60);assert.ok(Math.abs(view.scrollLeft-before-48)<=1,'60Hz autoplay must retain subpixel movement on integer scroll positions');
+frame(100);const before=view.scrollLeft;for(let i=1;i<=120;i++)frame(100+i*1000/60);assert.ok(Math.abs(view.scrollLeft-before-57.6)<=1,'60Hz autoplay must retain subpixel movement on integer scroll positions');
 view.emit('pointerenter');assert.equal(frames.size,0);
 view.emit('pointerleave');assert.equal(frames.size,1);
 controls.children[1].emit('click');assert.equal(controls.children[1].attrs['aria-pressed'],'true');assert.equal(frames.size,0);
