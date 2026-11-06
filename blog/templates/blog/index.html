@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{% static 'css/components/homepage-content-width.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/category-marquee.css' %}?v=20261102-4" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-service-photos.css' %}?v=20261106-amber1" />
+<link rel="stylesheet" href="{% static 'css/components/homepage-bilingual-title.css' %}?v=20261106-1" />
 {% endblock extra_css %}
 {% block content %}
 <!-- Mobile Hero Banner (< 768px only) -->
@@ -46,10 +47,8 @@
       <div class="col-12">
         <div class="hero-content text-center">
           <h1 class="hero-title hero-title--homepage mt-3">
-            <span class="hero-title__line hero-title__line--first">پیوند؛ شبکه اجتماعی</span>
-            <span class="hero-title__line hero-title__line--second">
-              <span class="hero-title-highlight">ایرانیانِ سوئد</span>
-            </span>
+            <span class="hero-title__line hero-title__line--first" lang="fa" dir="rtl">پیوند؛ شبکه اجتماعی ایرانیانِ سوئد</span>
+            <span class="hero-title__line hero-title__line--second" lang="sv" dir="ltr">Peyvand – ett socialt nätverk för iranier i Sverige</span>
           </h1>
           {% include 'includes/hero_cta_cards.html' %}
           <div class="hero-section__info d-md-none">
