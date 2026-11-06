@@ -1,7 +1,13 @@
 {% load static %}
-{# Configurable: href, title; icon OR illustration; optional description, icon_accent, extra_class #}
+{# Configurable: href, title; icon OR illustration; optional desktop_photo, description, icon_accent, extra_class #}
 <a href="{{ href }}" class="premium-cta-card{% if extra_class %} {{ extra_class }}{% endif %}">
   <span class="premium-cta-card__surface">
+    {% if desktop_photo %}
+    <picture class="premium-cta-card__desktop-photo" aria-hidden="true">
+      <source media="(min-width: 992px)" srcset="{% static desktop_photo %}" />
+      <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" width="322" height="288" decoding="async" />
+    </picture>
+    {% endif %}
     <span class="premium-cta-card__body">
       <span class="premium-cta-card__media">
         {% if icon %}
