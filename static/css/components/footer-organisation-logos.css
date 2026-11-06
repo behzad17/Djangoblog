@@ -1,0 +1,27 @@
+/* Same image boxes and gaps as the existing footer; 20 originals + 20 copies. */
+.footer-organisation-logos .footer-logo-img {
+  box-sizing: border-box;
+  padding: 7px;
+  background: #fff;
+  object-fit: contain;
+}
+.footer-organisation-logos .footer-logo-img--dark { background: #183d52; }
+.footer-organisation-logos .footer-logo-slide {
+  width: max-content;
+  flex-shrink: 0;
+  padding-inline-end: 20px;
+  animation-duration: 60s;
+}
+@media (max-width: 991px) {
+  .footer-organisation-logos .footer-logo-slide { padding-inline-end: 15px; animation-duration: 50s; }
+}
+@media (min-width: 768px) {
+  .footer-wide-logo-loop .footer-organisation-logos .footer-logo-slide { padding-inline-end: 14px; animation-duration: 48s; }
+}
+@media (max-width: 768px) {
+  .footer-mobile-logo-loop .footer-organisation-logos .footer-logo-slide { padding-inline-end: 12px; animation-duration: 44s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-organisation-logos .footer-logo-slide { animation: none; width: 100%; flex-wrap: wrap; padding-inline-end: 0; }
+  .footer-organisation-logos .footer-logo-img[aria-hidden="true"] { display: none; }
+}
