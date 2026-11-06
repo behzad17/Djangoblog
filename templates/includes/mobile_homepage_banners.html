@@ -1,11 +1,14 @@
-<div class="mobile-homepage-banners">
-  <div class="mobile-homepage-banner">
+<div class="mobile-homepage-banners homepage-banner-grid">
+  <div class="homepage-banner-grid__item">
     {% include 'includes/static_banner.html' with slot_id='ad-1' image_stem='ad-1-compact' extra_class='ad-placeholder-category-section' loading='eager' %}
   </div>
-  <div class="mobile-homepage-banner">
+  <div class="homepage-banner-grid__item">
     {% include 'includes/static_banner.html' with slot_id='ad-2' image_stem='ad-2-compact' extra_class='ad-placeholder-category-section' loading='eager' %}
   </div>
-  <div class="mobile-homepage-banner">
+  <div class="homepage-banner-grid__item">
     {% include 'includes/static_banner.html' with slot_id='ad-3' image_stem='ad-3-compact' extra_class='ad-placeholder-category-section' loading='eager' %}
+  </div>
+  <div class="homepage-banner-grid__item">
+    {% include 'includes/static_banner.html' with slot_id='ad-1' image_stem='ad-1-compact' extra_class='ad-placeholder-category-section' loading='eager' %}
   </div>
 </div>
