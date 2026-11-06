@@ -110,10 +110,10 @@
 
 /* Business directory categories share the existing category-card vocabulary. */
 .homepage-business-categories .homepage-useful-links__card {
-  --useful-bg: #c1e8ff;
+  --useful-bg: #FAEBD9; /* Soft tint of the publish card amber (#D97706). */
   --useful-ink: #2b4772;
   --useful-border: #5483b3;
-  background: linear-gradient(135deg, var(--useful-bg), #eff8ff);
+  background: var(--useful-bg);
 }
 
 @media (min-width: 768px) {
