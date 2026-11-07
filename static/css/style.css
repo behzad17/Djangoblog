@@ -1091,7 +1091,7 @@ body {
 
 /* Category feeds use one centered post per row on tablet and desktop. */
 @media (min-width: 768px) {
-  .category-post-feed {
+  .container-fluid.category-post-feed {
     max-width: 52rem;
   }
 
