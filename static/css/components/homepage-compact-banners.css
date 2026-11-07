@@ -9,14 +9,20 @@
   object-fit: contain;
 }
 
-/* Four banners before Pro ads: two rows of two, shared by both layouts. */
+/* Four banners before Pro ads: one column on mobile, two on wider screens. */
 .homepage .homepage-banner-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(.5rem, 1.5vw, 1rem);
   width: 100%;
   margin-block: 1.25rem;
 }
+@media (min-width: 768px) {
+  .homepage .homepage-banner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .homepage .homepage-banner-grid__item { min-width: 0; }
 .homepage .homepage-banner-grid .ad-placeholder-category-section {
   display: block;
