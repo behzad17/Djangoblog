@@ -17,6 +17,14 @@
   width: 100%;
   margin-block: 1.25rem;
 }
+/* Use the surrounding homepage column's gutters on phones. */
+@media (max-width: 767.98px) {
+  .homepage .homepage-banner-grid {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}
+
 @media (min-width: 768px) {
   .homepage .homepage-banner-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
