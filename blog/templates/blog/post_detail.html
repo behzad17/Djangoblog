@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load security_filters %}
 {% block title %}{{ post.title }} | Peyvand{% endblock title %}
@@ -25,6 +26,7 @@
 <meta name="twitter:image" content="{% if post.featured_image and 'placeholder' not in post.featured_image.url|default:'' %}{% if post.featured_image.url|slice:':4' == 'http' %}{{ post.featured_image.url }}{% else %}https://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}{% else %}https://{{ request.get_host }}{% static 'images/brand/peyvand-social-preview.png' %}{% endif %}" />
 {% endblock social_meta %}
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/components/post-reading.css' %}?v=1" />
 <link rel="stylesheet" href="{% static 'css/related_content.css' %}?v={% now 'U' %}" />
 {% endblock extra_css %}
 {% block structured_data %}
@@ -57,6 +59,7 @@
 </script>
 {% endblock structured_data %}
 {% block content %}
+<div class="d-md-none">
 <!-- Breadcrumbs -->
   <div class="container">
   <nav aria-label="breadcrumb" class="mb-3 pt-3">
@@ -210,14 +213,90 @@
   </div>
 </div>
 
-<div class="container-fluid mt-4 mb-5">
+</div>
+
+<div class="container-fluid mt-4 mb-5 post-reading">
   <div class="row g-4 post-detail-layout">
     <div class="col-lg-9 col-md-12 post-detail-main">
+    <header class="post-reading-header d-none d-md-block">
+        <nav aria-label="مسیر صفحه">
+          <ol class="breadcrumb small mb-3">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+            {% if post.category %}
+            <li class="breadcrumb-item"><a href="{% url 'category_posts' post.category.slug %}"><bdi>{{ post.category.name }}</bdi></a></li>
+            {% endif %}
+          </ol>
+        </nav>
+        <h1>{{ post.title }}</h1>
+        <div class="post-reading-meta">
+          <bdi>{{ post.author }}</bdi>
+          <time datetime="{{ post.created_on|date:'c' }}">{% language "fa" %}{{ post.created_on|date:"j F Y" }}{% endlanguage %}</time>
+          <span>{{ reading_time_minutes }} دقیقه مطالعه</span>
+          <span>{{ comment_count }} نظر</span>
+        </div>
+        {% if post.featured_image %}
+          {% if "placeholder" in post.featured_image.url|default:"" %}
+          <img
+            src="{% static 'images/default.jpg' %}"
+            class="post-reading-image"
+            alt="تصویر پیش‌فرض برای {{ post.title }}"
+          />
+          {% else %}
+          <img
+            src="{{ post.featured_image.url }}"
+            class="post-reading-image"
+            alt="{{ post.title }}"
+            onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+          />
+          {% endif %}
+        {% else %}
+        <img
+          src="{% static 'images/default.jpg' %}"
+          class="post-reading-image"
+          alt="تصویر پیش‌فرض برای {{ post.title }}"
+        />
+        {% endif %}
+
+        <div class="post-reading-actions">
+          {% if user.is_authenticated %}
+          <form action="{% url 'like_post' post.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary" aria-pressed="{{ is_liked|yesno:'true,false' }}">
+              <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart" aria-hidden="true"></i>
+              پسندیدن <span>{{ post.like_count }}</span>
+            </button>
+          </form>
+          <form action="{% url 'add_to_favorites' post.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary" {% if is_favorited %}disabled{% endif %}>
+              <i class="{% if is_favorited %}fas{% else %}far{% endif %} fa-bookmark" aria-hidden="true"></i>
+              {% if is_favorited %}ذخیره شده{% else %}ذخیره{% endif %} <span>{{ post.favorite_count }}</span>
+            </button>
+          </form>
+          {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-outline-primary">ورود برای پسندیدن <span>{{ post.like_count }}</span></a>
+          <a href="{% url 'account_login' %}" class="btn btn-outline-primary">ورود برای ذخیره</a>
+          {% endif %}
+          {% if user.is_authenticated and user == post.author or user.is_authenticated and user.is_staff %}
+          <div class="dropdown">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="dropdown" aria-expanded="false" aria-label="مدیریت مطلب">
+              <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end text-end">
+              <li><a class="dropdown-item" href="{% url 'edit_post' post.slug %}">ویرایش</a></li>
+              {% if not post.is_deleted %}
+              <li><a class="dropdown-item text-danger" href="{% url 'delete_post' post.slug %}">حذف</a></li>
+              {% endif %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+      </header>
       <div class="post-detail-article">
       <!-- Post Content Card -->
       <div class="card mb-4 shadow-sm border-0 post-detail-card">
         <div class="card-body">
-          <div class="d-flex align-items-center gap-3 flex-wrap mb-3">
+          <div class="d-flex align-items-center gap-3 flex-wrap mb-3 d-md-none">
             <span class="badge bg-light text-dark border">
               <i class="far fa-clock ms-1"></i>{{ post.created_on }}
             </span>

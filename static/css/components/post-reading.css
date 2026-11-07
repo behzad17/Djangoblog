@@ -1,0 +1,90 @@
+.post-reading-header h1 {
+  margin-block: 0 0.75rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.post-reading-meta,
+.post-reading-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.post-reading-meta {
+  font-size: 0.9rem;
+}
+
+.post-reading-image {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: min(26rem, 65vh);
+  inline-size: auto;
+  block-size: auto;
+  margin: 1.25rem auto;
+  border-radius: 1rem;
+}
+
+.post-reading-actions {
+  border-block-end: 1px solid rgba(5, 38, 89, 0.2);
+  padding-block-end: 1rem;
+}
+
+.post-reading-actions .btn {
+  min-block-size: 44px;
+  min-inline-size: 44px;
+}
+
+@media (min-width: 48rem) {
+  .container-fluid.post-reading {
+    max-width: 72rem;
+    padding-inline: clamp(1rem, 3vw, 2rem);
+  }
+
+  .post-reading .post-detail-layout {
+    justify-content: center;
+  }
+
+  .post-reading .post-detail-main {
+    min-width: 0;
+    width: 100%;
+    max-width: 49.5rem;
+  }
+
+  .post-reading .post-detail-card {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none !important;
+  }
+
+  .post-reading .post-detail-card > .card-body {
+    padding: 1.25rem 0;
+  }
+
+  .post-reading .post-detail-card .post-content-body {
+    font-size: 1.125rem;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+  }
+
+  .post-reading .post-content-body p {
+    line-height: inherit;
+  }
+
+  .post-reading .post-detail-sidebar {
+    width: 100%;
+    max-width: 20rem;
+  }
+}
+
+@media (min-width: 75rem) {
+  .post-reading .post-detail-main {
+    width: 73%;
+  }
+
+  .post-reading .post-detail-sidebar {
+    width: 27%;
+  }
+}
