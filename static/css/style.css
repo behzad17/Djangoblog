@@ -10420,11 +10420,13 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   }
 
   .event-card-image {
+    width: auto;
+    max-width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
     min-height: 0;
     max-height: 15rem;
-    object-fit: contain;
+    margin-inline: auto;
+    border-radius: 10px 10px 0 0;
   }
 
   .event-card-row:hover .event-card-image {
