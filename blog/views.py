@@ -31,7 +31,7 @@ from .utils import (
 from .decorators import site_verified_required
 from .rate_limits import post_creation_ip_rate, post_creation_user_rate
 from ads.models import AdCategory, FavoriteAd
-from ads.homepage_pro_ads import get_homepage_pro_ads
+from ads.homepage_pro_ads import get_homepage_pro_ad_groups
 from django.utils import timezone
 from notifications.weekly_digest import (
     build_weekly_digest_page_context,
@@ -230,9 +230,12 @@ class PostList(generic.ListView):
             context['upcoming_events'] = []
 
         try:
-            context['homepage_pro_ads'] = get_homepage_pro_ads()
+            newest_ads, rotating_ads = get_homepage_pro_ad_groups()
         except Exception:
-            context['homepage_pro_ads'] = []
+            newest_ads, rotating_ads = [], []
+        context['homepage_pro_ads'] = newest_ads + rotating_ads
+        context['homepage_newest_pro_ads'] = newest_ads
+        context['homepage_rotating_pro_ads'] = rotating_ads
 
         try:
             context['latest_discussions'] = list(list_latest_discussions()[:5])

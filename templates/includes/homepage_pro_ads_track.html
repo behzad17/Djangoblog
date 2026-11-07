@@ -1,0 +1,10 @@
+{% if ads %}
+<div class="homepage-pro-ads-track">
+  <h3 class="homepage-pro-ads-track__title">{{ label }}</h3>
+  <div class="homepage-pro-ads-grid" role="list" aria-label="{{ label }}">
+    {% for ad in ads %}
+      {% include 'ads/includes/_homepage_pro_card.html' with ad=ad %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

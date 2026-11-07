@@ -36,9 +36,9 @@ def _rotation_score(ad_id, bucket):
     return int(digest, 16)
 
 
-def get_homepage_pro_ads():
+def get_homepage_pro_ad_groups():
     """
-    Return up to twelve visible Pro ads for the homepage.
+    Return the newest and rotating groups for the homepage.
 
     - Twelve or fewer active Pro ads: return all, newest first.
     - More than twelve: six newest plus six rotating picks from the rest.
@@ -48,10 +48,10 @@ def get_homepage_pro_ads():
     ordered_ids = list(base_qs.values_list("id", flat=True))
 
     if not ordered_ids:
-        return []
+        return [], []
 
     if len(ordered_ids) <= HOMEPAGE_PRO_ADS_LIMIT:
-        return list(base_qs.filter(id__in=ordered_ids))
+        return list(base_qs.filter(id__in=ordered_ids)), []
 
     newest_ids = ordered_ids[:HOMEPAGE_PRO_NEWEST_COUNT]
     remaining_ids = ordered_ids[HOMEPAGE_PRO_NEWEST_COUNT:]
@@ -63,4 +63,13 @@ def get_homepage_pro_ads():
     selected_ids = newest_ids + rotating_ids
 
     ads_by_id = {ad.id: ad for ad in base_qs.filter(id__in=selected_ids)}
-    return [ads_by_id[ad_id] for ad_id in selected_ids if ad_id in ads_by_id]
+    return (
+        [ads_by_id[ad_id] for ad_id in newest_ids if ad_id in ads_by_id],
+        [ads_by_id[ad_id] for ad_id in rotating_ids if ad_id in ads_by_id],
+    )
+
+
+def get_homepage_pro_ads():
+    """Return the selected ads in homepage display order."""
+    newest, rotating = get_homepage_pro_ad_groups()
+    return newest + rotating
