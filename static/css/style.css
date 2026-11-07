@@ -10420,8 +10420,15 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   }
 
   .event-card-image {
-    height: clamp(7rem, 32vw, 10rem);
+    height: auto;
+    aspect-ratio: 3 / 2;
     min-height: 0;
+    max-height: 15rem;
+    object-fit: contain;
+  }
+
+  .event-card-row:hover .event-card-image {
+    transform: none;
   }
 
   .event-card-content {
