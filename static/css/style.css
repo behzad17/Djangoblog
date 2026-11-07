@@ -1089,6 +1089,40 @@ body {
   height: auto;
 }
 
+/* Category feeds use one centered post per row on tablet and desktop. */
+@media (min-width: 768px) {
+  .container-fluid.category-post-feed {
+    max-width: 52rem;
+  }
+
+  .category-post-feed .blog-post-row {
+    --bs-gutter-y: 0;
+  }
+
+  .category-post-feed .blog-post-row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .category-post-feed .post-card {
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .category-post-feed .post-card__image {
+    width: clamp(7rem, 20vw, 10rem);
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .category-post-feed .post-card__title {
+    font-size: 1.1rem;
+    overflow-wrap: anywhere;
+  }
+}
+
 .post-card .card-body {
   padding: 0;
   overflow: hidden; /* Prevent content overflow */
