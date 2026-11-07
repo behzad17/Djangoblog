@@ -1,0 +1,93 @@
+.post-reading {
+  max-inline-size: 72rem;
+  margin-inline: auto;
+  padding: 1.5rem clamp(1rem, 3vw, 2rem) 3rem;
+}
+
+.post-reading-layout {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.post-reading-main {
+  min-inline-size: 0;
+  inline-size: 100%;
+  max-inline-size: 48rem;
+  margin-inline: auto;
+}
+
+.post-reading-header h1 {
+  margin-block: 0 0.75rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.post-reading-meta,
+.post-reading-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.post-reading-meta {
+  font-size: 0.9rem;
+}
+
+.post-reading-image {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: min(26rem, 65vh);
+  inline-size: auto;
+  block-size: auto;
+  margin: 1.25rem auto;
+  border-radius: 1rem;
+}
+
+.post-reading-actions {
+  border-block-end: 1px solid rgba(5, 38, 89, 0.2);
+  padding-block-end: 1rem;
+}
+
+.post-reading-actions .btn {
+  min-block-size: 44px;
+  min-inline-size: 44px;
+}
+
+.post-reading-article {
+  padding-block: 1.25rem 2rem;
+}
+
+.post-reading .post-content-body {
+  font-size: clamp(1rem, 1.8vw, 1.125rem);
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.post-reading .post-content-body p {
+  line-height: inherit;
+}
+
+.post-reading-sidebar {
+  min-inline-size: 0;
+  max-inline-size: 20rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 75rem) {
+  .post-reading-layout {
+    grid-template-columns: minmax(0, 48rem) minmax(0, 1fr);
+    row-gap: 0;
+    align-items: start;
+  }
+
+  .post-reading-main {
+    grid-column: 1;
+  }
+
+  .post-reading-sidebar {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
