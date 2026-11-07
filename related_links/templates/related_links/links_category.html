@@ -66,7 +66,7 @@
   {% endif %}
 
   {% if links %}
-  <div class="resource-link-grid resource-link-grid--apps">
+  <div class="resource-link-grid resource-link-grid--apps{% if active_category.slug == 'movies-videos' %} resource-link-grid--videos{% endif %}">
     {% for link in links %}
     {% include "related_links/includes/resource_link_card.html" with link=link %}
     {% endfor %}
