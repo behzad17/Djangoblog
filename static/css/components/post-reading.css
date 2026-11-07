@@ -17,19 +17,27 @@
   font-size: 0.9rem;
 }
 
+.post-reading-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(7rem, 14vw, 11rem);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2rem);
+  border-block-end: 1px solid rgba(5, 38, 89, 0.2);
+  padding-block-end: 1rem;
+}
+
 .post-reading-image {
   display: block;
+  justify-self: center;
   max-inline-size: 100%;
-  max-block-size: min(26rem, 65vh);
+  max-block-size: 10rem;
   inline-size: auto;
   block-size: auto;
-  margin: 1.25rem auto;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
 }
 
 .post-reading-actions {
-  border-block-end: 1px solid rgba(5, 38, 89, 0.2);
-  padding-block-end: 1rem;
+  margin-block-start: 0.85rem;
 }
 
 .post-reading-actions .btn {
