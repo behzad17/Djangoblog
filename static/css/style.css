@@ -10343,6 +10343,13 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   min-height: 100%;
 }
 
+.event-date-range,
+.event-date-value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .event-location-badge {
   display: inline-flex;
   align-items: center;
@@ -10392,13 +10399,6 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   margin: 0.3rem 0;
 }
 
-/* Date Range - Second Date */
-.event-card-date-section .event-date-month:last-of-type,
-.event-card-date-section .event-date-day:last-of-type,
-.event-card-date-section .event-date-year:last-of-type {
-  margin-bottom: 0;
-}
-
 /* Responsive Adjustments for Events Grid */
 @media (max-width: 992px) {
   .event-card-content {
@@ -10414,81 +10414,109 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   }
 }
 
-@media (max-width: 768px) {
-  .event-card-row {
-    margin-bottom: 1.2rem;
+@media (max-width: 767.98px) {
+  .event-card-row.mb-4 {
+    margin-bottom: 1rem !important;
   }
-  
+
   .event-card-image {
-    min-height: 160px;
+    height: clamp(7rem, 32vw, 10rem);
+    min-height: 0;
   }
-  
+
   .event-card-content {
-    padding: 1rem;
+    height: auto;
+    padding: 0.85rem 1rem;
   }
-  
+
   .event-card-title {
     font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-    padding: 0.7rem 0.8rem;
+    line-height: 1.55;
+    margin: 0 0 0.35rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none !important;
+    overflow-wrap: anywhere;
   }
-  
-  .event-card-description {
-    font-size: 0.75rem;
-    padding: 0.8rem 1rem;
-  }
-  
-  .event-card-date-section {
-    padding: 1.2rem 0.8rem;
-  }
-  
-  .event-date-day {
-    font-size: 1.6rem;
-  }
-  
-  .event-date-month {
-    font-size: 0.65rem;
-  }
-  
-  .event-date-year {
-    font-size: 0.6rem;
-  }
-}
 
-@media (max-width: 576px) {
-  .event-card-image {
-    min-height: 144px;
+  .event-card-title-link:hover .event-card-title {
+    background: none;
+    transform: none;
+    box-shadow: none !important;
   }
-  
-  .event-card-content {
-    padding: 0.8rem;
+
+  .event-card-title-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
   }
-  
-  .event-card-title {
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
-    padding: 0.6rem 0.8rem;
-  }
-  
+
   .event-card-description {
-    font-size: 0.7rem;
-    padding: 0.8rem;
+    font-size: 0.875rem;
+    padding: 0;
+    border: 0;
+    overflow-wrap: anywhere;
   }
-  
+
+  .event-content-separator {
+    display: none;
+  }
+
+  .event-card-date-wrapper {
+    align-items: stretch;
+    border-left: 0;
+    border-top: 1px solid #c1e8ff;
+  }
+
   .event-card-date-section {
-    padding: 1rem 0.6rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.3rem 0.55rem;
+    min-height: 0;
+    padding: 0.55rem 1rem;
   }
-  
-  .event-date-day {
-    font-size: 1.4rem;
+
+  .event-date-range {
+    flex-direction: row;
+    gap: 0.35rem;
+    max-width: 100%;
+    flex-wrap: wrap;
   }
-  
-  .event-date-month {
-    font-size: 0.6rem;
+
+  .event-date-value {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    white-space: nowrap;
+    padding: 0.15rem 0.45rem;
+    border-radius: 6px;
+    background: #c1e8ff;
   }
-  
-  .event-date-year {
-    font-size: 0.56rem;
+
+  .event-date-value .event-date-day {
+    order: -1;
+  }
+
+  .event-date-value .event-date-day,
+  .event-date-value .event-date-month,
+  .event-date-value .event-date-year,
+  .event-date-separator,
+  .event-location-badge {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .event-date-value .event-date-month {
+    font-style: normal;
+    letter-spacing: normal;
+  }
+
+  .event-location-badge {
+    padding: 0;
+    text-align: start;
+    overflow-wrap: anywhere;
   }
 }
 
