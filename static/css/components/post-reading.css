@@ -1,21 +1,3 @@
-.post-reading {
-  max-inline-size: 72rem;
-  margin-inline: auto;
-  padding: 1.5rem clamp(1rem, 3vw, 2rem) 3rem;
-}
-
-.post-reading-layout {
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 3rem);
-}
-
-.post-reading-main {
-  min-inline-size: 0;
-  inline-size: 100%;
-  max-inline-size: 48rem;
-  margin-inline: auto;
-}
-
 .post-reading-header h1 {
   margin-block: 0 0.75rem;
   font-size: clamp(1.5rem, 3vw, 2.25rem);
@@ -55,39 +37,54 @@
   min-inline-size: 44px;
 }
 
-.post-reading-article {
-  padding-block: 1.25rem 2rem;
-}
+@media (min-width: 48rem) {
+  .container-fluid.post-reading {
+    max-width: 72rem;
+    padding-inline: clamp(1rem, 3vw, 2rem);
+  }
 
-.post-reading .post-content-body {
-  font-size: clamp(1rem, 1.8vw, 1.125rem);
-  line-height: 1.9;
-  overflow-wrap: anywhere;
-}
+  .post-reading .post-detail-layout {
+    justify-content: center;
+  }
 
-.post-reading .post-content-body p {
-  line-height: inherit;
-}
+  .post-reading .post-detail-main {
+    min-width: 0;
+    width: 100%;
+    max-width: 49.5rem;
+  }
 
-.post-reading-sidebar {
-  min-inline-size: 0;
-  max-inline-size: 20rem;
-  margin-inline: auto;
+  .post-reading .post-detail-card {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none !important;
+  }
+
+  .post-reading .post-detail-card > .card-body {
+    padding: 1.25rem 0;
+  }
+
+  .post-reading .post-detail-card .post-content-body {
+    font-size: 1.125rem;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+  }
+
+  .post-reading .post-content-body p {
+    line-height: inherit;
+  }
+
+  .post-reading .post-detail-sidebar {
+    width: 100%;
+    max-width: 20rem;
+  }
 }
 
 @media (min-width: 75rem) {
-  .post-reading-layout {
-    grid-template-columns: minmax(0, 48rem) minmax(0, 1fr);
-    row-gap: 0;
-    align-items: start;
+  .post-reading .post-detail-main {
+    width: 73%;
   }
 
-  .post-reading-main {
-    grid-column: 1;
-  }
-
-  .post-reading-sidebar {
-    grid-column: 2;
-    grid-row: 2;
+  .post-reading .post-detail-sidebar {
+    width: 27%;
   }
 }
