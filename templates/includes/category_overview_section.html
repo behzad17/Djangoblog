@@ -1,28 +1,6 @@
-<div class="category-overview-section">
-  <h3 class="category-section-title mb-2 d-md-none">
-    <i class="fas fa-tags ms-2" aria-hidden="true"></i>
-    <span>مطالب کاربران</span>
-  </h3>
-
-  {% if category_overview_rows %}
-    <div class="category-overview-mobile-grid d-md-none" data-category-marquee>
-      {% for category, latest_post in category_overview_rows %}
-        <div class="category-overview-mobile-item{% if forloop.last and forloop.counter|divisibleby:2 == False %} category-overview-mobile-item--solo{% endif %}">
-          {% include 'includes/category_icon_card.html' with category=category %}
-        </div>
-      {% endfor %}
-    </div>
-
-    <div class="category-overview-desktop-tablet d-none d-md-block">
-      <div class="category-overview-shortcuts">
-        <h3 class="category-section-title">مطالب کاربران</h3>
-        <div class="category-overview-category-grid" data-category-marquee>
-          {% for category, latest_post in category_overview_rows %}
-            {% include 'includes/category_icon_card.html' with category=category %}
-          {% endfor %}
-        </div>
-      </div>
-
+{% if category_overview_rows %}
+<div class="category-overview-section d-none d-md-block">
+  <div class="category-overview-desktop-tablet">
       <div class="category-overview-posts">
         <section class="category-overview-latest-posts-box" aria-labelledby="category-latest-posts-heading">
           <h3 class="category-overview-latest-posts-title" id="category-latest-posts-heading">آخرین پستها</h3>
@@ -36,16 +14,8 @@
             {% endfor %}
           </ul>
         </section>
-        {% include 'includes/homepage_useful_links.html' with heading_id='homepage-useful-links-desktop-heading' %}
-        {% include 'includes/homepage_business_categories.html' with heading_id='homepage-business-categories-desktop-heading' %}
         {% include 'includes/mobile_homepage_banners.html' %}
       </div>
-    </div>
-  {% else %}
-    <p class="text-muted text-center mb-0">هنوز دسته‌بندی‌ای در دسترس نیست.</p>
-    <div class="d-none d-md-block">
-      {% include 'includes/homepage_useful_links.html' with heading_id='homepage-useful-links-desktop-heading' %}
-        {% include 'includes/homepage_business_categories.html' with heading_id='homepage-business-categories-desktop-heading' %}
-    </div>
-  {% endif %}
+  </div>
 </div>
+{% endif %}
