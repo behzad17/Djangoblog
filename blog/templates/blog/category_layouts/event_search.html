@@ -1,0 +1,26 @@
+<form method="get" class="container mb-4" role="search" aria-label="جست‌وجوی رویدادها">
+  <label for="event-q" class="form-label">جست‌وجوی رویدادها</label>
+  <input type="search" name="q" id="event-q" value="{{ event_filters.q }}" maxlength="200"
+         class="form-control mb-2" placeholder="عنوان، شهر یا نام محل برگزاری">
+  <details class="mb-3"{% if event_filters.city or event_filters.when %} open{% endif %}>
+    <summary>فیلترها</summary>
+    <div class="row g-2 mt-1">
+      <div class="col-md-6">
+        <label for="event-city" class="form-label">شهر</label>
+        <input type="text" name="city" id="event-city" value="{{ event_filters.city }}" maxlength="120"
+               class="form-control" placeholder="مثلاً گوتنبرگ یا Göteborg">
+      </div>
+      <div class="col-md-6">
+        <label for="event-when" class="form-label">زمان</label>
+        <select name="when" id="event-when" class="form-select">
+          <option value="">رویدادهای پیش رو</option>
+          <option value="week"{% if event_filters.when == 'week' %} selected{% endif %}>این هفته</option>
+          <option value="month"{% if event_filters.when == 'month' %} selected{% endif %}>این ماه</option>
+          <option value="archive"{% if event_filters.when == 'archive' %} selected{% endif %}>آرشیو</option>
+        </select>
+      </div>
+    </div>
+  </details>
+  <button class="btn btn-primary" type="submit">جست‌وجو</button>
+  {% if event_query %}<a class="btn btn-outline-secondary" href="{% url 'category_posts' category.slug %}">پاک کردن فیلترها</a>{% endif %}
+</form>

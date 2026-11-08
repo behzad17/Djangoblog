@@ -14,9 +14,11 @@ from django.core.paginator import Paginator
 from ratelimit.decorators import ratelimit
 from django.utils.text import slugify
 import json
+from urllib.parse import urlencode
 
 from .models import Post, Comment, Favorite, Category, Like
 from .forms import CommentForm, PostForm
+from .event_search import filter_events
 from related_links.selectors.related import get_related_links
 from related_links.models import UsefulLinkCategory
 from community.selectors.discussions import list_latest_discussions
@@ -970,6 +972,11 @@ def category_posts(request, category_slug):
         comment_count=Count('comments', filter=Q(comments__approved=True))
     ).order_by('-created_on')
     
+    event_filters = {}
+    if category.slug == 'events-announcements':
+        posts, event_filters = filter_events(posts, request.GET)
+    event_query = urlencode({key: value for key, value in event_filters.items() if value})
+
     # Pagination: 24 posts per page
     paginator = Paginator(posts, 24)
     page_number = request.GET.get('page')
@@ -987,6 +994,8 @@ def category_posts(request, category_slug):
             'page_obj': page_obj,
             'categories': categories,
             'is_paginated': page_obj.has_other_pages(),
+            'event_filters': event_filters,
+            'event_query': event_query,
         }
     )
 

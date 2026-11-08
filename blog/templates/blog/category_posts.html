@@ -66,6 +66,7 @@
 
 <!-- Posts Section - Category-Specific Layout -->
 {% if category.slug == 'events-announcements' %}
+  {% include 'blog/category_layouts/event_search.html' %}
   {% include 'blog/category_layouts/events_grid.html' %}
 {% else %}
   {% include 'blog/category_layouts/default_grid.html' %}
