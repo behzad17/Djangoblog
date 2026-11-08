@@ -1,4 +1,4 @@
-{% url 'home' as home_url %}
+{% url 'user_post_categories' as user_post_categories_url %}
 {% url 'create_post' as create_post_url %}
 {% url 'ask_me' as ask_me_url %}
 {% url 'ads:ads_home' as ads_home_url %}
@@ -9,7 +9,7 @@
 <!-- Hero CTA Feature Cards -->
 <h2 class="hero-cta-mobile-title d-md-none">خدمات پیوند</h2>
 <div class="hero-cta-cards-container">
-  {% include "includes/components/premium_cta_card.html" with href=home_url|add:"#category-filter-section" title="مطالب کاربران" icon="bi bi-journals" desktop_photo="images/homepage-services/community.webp" icon_accent="#2b4772" %}
+  {% include "includes/components/premium_cta_card.html" with href=user_post_categories_url title="مطالب کاربران" icon="bi bi-journals" desktop_photo="images/homepage-services/community.webp" icon_accent="#2b4772" %}
 
   {% if user.is_authenticated %}
   {% include "includes/components/premium_cta_card.html" with href=create_post_url title="انتشار پست" icon="bi bi-file-earmark-plus" desktop_photo="images/homepage-services/publish.webp" icon_accent="#2b4772" extra_class="premium-cta-card--primary" %}
