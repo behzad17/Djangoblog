@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'css/components/homepage-useful-links.css' %}?v=20261106-soft-amber1" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-expert-cta.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-entry-cards.css' %}?v={% now 'U' %}" />
-<link rel="stylesheet" href="{% static 'css/components/homepage-latest-posts.css' %}?v=20261106-order1" />
+<link rel="stylesheet" href="{% static 'css/components/homepage-latest-posts.css' %}?v=20261108-mobile1" />
 <link rel="stylesheet" href="{% static 'css/components/premium-cta-card.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-pro-ads.css' %}?v=20261107-tracks" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-discussions-rotator.css' %}?v={% now 'U' %}" />
@@ -76,6 +76,7 @@
       </div>
 
       {% include 'includes/upcoming_events_section.html' %}
+      {% include "includes/mobile_latest_posts.html" %}
 
       <div class="row mt-md-2 mb-md-2 mt-1 mb-1" id="category-filter-section">
         <div class="col-12">

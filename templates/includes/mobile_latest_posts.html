@@ -1,0 +1,26 @@
+{% load static %}
+{% if category_overview_rows %}
+<section class="mobile-latest-posts d-md-none" dir="rtl" aria-labelledby="mobile-latest-posts-heading">
+  <h3 class="category-overview-latest-posts-title" id="mobile-latest-posts-heading">آخرین پست‌ها</h3>
+  <ul class="mobile-latest-posts__track" tabindex="0" aria-labelledby="mobile-latest-posts-heading">
+    {% for category, post in category_overview_rows %}
+      {% if post %}
+      <li>
+        <a class="mobile-latest-posts__card" href="{% url 'post_detail' post.slug %}">
+          {% if post.featured_image and 'placeholder' not in post.featured_image.url %}
+          <img src="{{ post.featured_image.url }}" alt="" width="64" height="64" loading="lazy" decoding="async"
+               data-fallback="{% static 'images/default.jpg' %}" onerror="this.onerror=null; this.src=this.dataset.fallback;" />
+          {% else %}
+          <img src="{% static 'images/default.jpg' %}" alt="" width="64" height="64" loading="lazy" />
+          {% endif %}
+          <div>
+            <h4><bdi>{{ post.title }}</bdi></h4>
+            <span><i class="fas fa-user ms-1" aria-hidden="true"></i><bdi>{{ post.author }}</bdi></span>
+          </div>
+        </a>
+      </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
