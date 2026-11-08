@@ -950,6 +950,11 @@ def complete_setup(request):
     return render(request, 'blog/complete_setup.html')
 
 
+def user_post_categories(request):
+    categories = Category.objects.order_by('display_order', 'name')
+    return render(request, 'blog/user_post_categories.html', {'categories': categories})
+
+
 def category_posts(request, category_slug):
     """
     View function for displaying posts filtered by category.
