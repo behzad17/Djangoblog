@@ -1,0 +1,61 @@
+.directory-category-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  height: 100%;
+  min-height: clamp(8.5rem, 17vw, 10rem);
+  padding: 1rem 0.85rem;
+  border: 1px solid #bfd2e7;
+  border-radius: 1.125rem;
+  background: linear-gradient(150deg, #fff 12%, #e7f2fc 100%);
+  box-shadow: 0 3px 10px rgba(43, 71, 114, 0.08);
+  color: #2b4772;
+  text-align: center;
+  text-decoration: none;
+}
+
+.directory-category-card__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid #c6dbef;
+  border-radius: 0.875rem;
+  background: #dcecfb;
+  font-size: 1.35rem;
+}
+
+.directory-category-card__title {
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.directory-category-card__count {
+  padding: 0.1rem 0.55rem;
+  border-radius: 1rem;
+  background: #dcecfb;
+  font-size: 0.8rem;
+}
+
+.directory-category-card__arrow {
+  position: absolute;
+  inset-inline-end: 0.75rem;
+  inset-block-start: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.directory-category-card:hover {
+  border-color: #7296bf;
+  box-shadow: 0 6px 16px rgba(43, 71, 114, 0.14);
+  color: #18385e;
+}
+
+.directory-category-card:focus-visible {
+  outline: 2px solid #305989;
+  outline-offset: 3px;
+}

@@ -1,0 +1,10 @@
+<a class="directory-category-card" href="{{ href }}">
+  <span class="directory-category-card__icon" aria-hidden="true">
+    <i class="{{ icon|default:'bi bi-grid' }}"></i>
+  </span>
+  <span class="directory-category-card__title"><bdi>{{ title }}</bdi></span>
+  {% if show_count %}
+    <span class="directory-category-card__count">{% if count %}{{ count }} لینک{% else %}به‌زودی{% endif %}</span>
+  {% endif %}
+  <i class="bi bi-chevron-left directory-category-card__arrow" aria-hidden="true"></i>
+</a>
