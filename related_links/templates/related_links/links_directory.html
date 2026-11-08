@@ -7,6 +7,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
+<link rel="stylesheet" href="{% static 'css/components/directory-cards.css' %}" />
 {% endblock extra_css %}
 
 {% block content %}
@@ -26,9 +27,9 @@
 </section>
 
 <div class="container related-links-page related-links-page--directory">
-  <div class="row g-4 useful-link-category-grid">
+  <div class="row g-3 g-lg-4 justify-content-center">
     {% for category in categories %}
-    <div class="col-6 col-md-4 col-xl-3 useful-link-category-col">
+    <div class="col-6 col-md-4 col-xl-3">
       {% include "related_links/includes/useful_link_category_card.html" with category=category %}
     </div>
     {% empty %}
