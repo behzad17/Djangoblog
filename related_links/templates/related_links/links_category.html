@@ -2,9 +2,9 @@
 {% load static %}
 {% load related_links_extras %}
 
-{% block title %}{{ active_category.name_fa }} | لینک‌های مفید | Peyvand{% endblock title %}
+{% block title %}{% if active_category %}{{ active_category.name_fa|default:"نتایج جست‌وجو" }} | {% endif %} لینک‌های مفید | Peyvand{% endblock title %}
 
-{% block meta_description %}{{ active_category|category_hero_subtitle }}{% endblock meta_description %}
+{% block meta_description %}{% if active_category %}{{ active_category|category_hero_subtitle }}{% endif %}{% endblock meta_description %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/related_links.css' %}?v={% now 'U' %}" />
@@ -24,16 +24,16 @@
               <a href="{% url 'related_links:links_list' %}">لینک‌های مفید</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              {{ active_category.name_fa }}
+              {{ active_category.name_fa|default:"نتایج جست‌وجو" }}
             </li>
           </ol>
         </nav>
         <div class="text-center">
           <h1 class="hero-title mb-3">
-            <i class="{{ active_category.icon_class }} ms-2" aria-hidden="true"></i>{{ active_category.name_fa }}
+            <i class="{{ active_category.icon_class }} ms-2" aria-hidden="true"></i>{{ active_category.name_fa|default:"نتایج جست‌وجو" }}
           </h1>
           <p class="hero-subtitle mb-0">
-            {{ active_category|category_hero_subtitle }}
+            {% if active_category %}{{ active_category|category_hero_subtitle }}{% endif %}
           </p>
         </div>
       </div>
@@ -42,19 +42,20 @@
 </section>
 
 <div class="container py-4 related-links-page">
+  {% include "related_links/includes/link_search.html" %}
   {% if category_has_links and show_type_filters %}
   <div class="row mb-4">
     <div class="col-12">
       <div class="related-links-filters">
         <a
-          href="{% url 'related_links:links_list' %}?category={{ active_category.slug }}"
+          href="{% url 'related_links:links_list' %}?category={{ active_category.slug }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}"
           class="related-link-filter-btn {% if not active_type %}active{% endif %}"
         >
           همه
         </a>
         {% for type_value, type_label in types %}
         <a
-          href="{% url 'related_links:links_list' %}?category={{ active_category.slug }}&type={{ type_value }}"
+          href="{% url 'related_links:links_list' %}?category={{ active_category.slug }}&amp;type={{ type_value }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}"
           class="related-link-filter-btn {% if active_type == type_value %}active{% endif %}"
         >
           {{ type_label }}
@@ -71,6 +72,14 @@
     {% include "related_links/includes/resource_link_card.html" with link=link %}
     {% endfor %}
   </div>
+  {% elif search_query %}
+  <p class="alert alert-info text-center">لینکی پیدا نشد.
+    {% if active_category %}
+    <a href="{% url 'related_links:links_list' %}?q={{ search_query|urlencode }}">جست‌وجو در همهٔ دسته‌ها</a>
+    {% else %}
+    <a href="{% url 'related_links:links_list' %}">پاک کردن جست‌وجو</a>
+    {% endif %}
+  </p>
   {% elif category_has_links %}
   <div class="row">
     <div class="col-12 text-center py-5">

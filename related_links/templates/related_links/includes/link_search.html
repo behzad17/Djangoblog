@@ -1,0 +1,19 @@
+<form action="{% url 'related_links:links_list' %}" method="get" class="mb-4" role="search" aria-label="جست‌وجوی لینک‌های مفید">
+  <label for="useful-link-q" class="form-label">جست‌وجوی لینک‌های مفید</label>
+  <input id="useful-link-q" type="search" name="q" value="{{ search_query }}" maxlength="200"
+         class="form-control mb-2" placeholder="نام سازمان، موضوع یا دامنه">
+  <details class="mb-3"{% if active_category %} open{% endif %}>
+    <summary>فیلترها</summary>
+    <label for="useful-link-category" class="form-label mt-2">دسته‌بندی</label>
+    <select id="useful-link-category" name="category" class="form-select">
+      <option value="">همهٔ دسته‌ها</option>
+      {% for category in categories %}
+      <option value="{{ category.slug }}"{% if category.pk == active_category.pk %} selected{% endif %}>{{ category.name_fa }}</option>
+      {% endfor %}
+    </select>
+  </details>
+  <button type="submit" class="btn btn-primary">جست‌وجو</button>
+  {% if search_query %}
+  <a class="btn btn-outline-secondary" href="{% url 'related_links:links_list' %}{% if active_category %}?category={{ active_category.slug }}{% endif %}">پاک کردن جست‌وجو</a>
+  {% endif %}
+</form>
