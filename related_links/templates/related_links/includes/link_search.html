@@ -2,15 +2,21 @@
   <label for="useful-link-q" class="form-label">جست‌وجوی لینک‌های مفید</label>
   <input id="useful-link-q" type="search" name="q" value="{{ search_query }}" maxlength="200"
          class="form-control mb-2" placeholder="نام سازمان، موضوع یا دامنه">
-  <details class="mb-3"{% if active_category %} open{% endif %}>
-    <summary>فیلترها</summary>
-    <label for="useful-link-category" class="form-label mt-2">دسته‌بندی</label>
-    <select id="useful-link-category" name="category" class="form-select">
-      <option value="">همهٔ دسته‌ها</option>
+  <details class="mb-3">
+    <summary>دسته‌بندی جست‌وجو — {{ active_category.name_fa|default:"همهٔ دسته‌ها" }}</summary>
+    <fieldset class="border rounded p-2 mt-2 overflow-auto" style="max-block-size: 14rem;">
+      <legend class="float-none w-auto px-2 mb-1 fs-6">دسته‌بندی</legend>
+      <label class="d-flex align-items-center gap-2 px-2 py-2">
+        <input type="radio" class="form-check-input flex-shrink-0 m-0" name="category" value=""{% if not active_category %} checked{% endif %}>
+        <span>همهٔ دسته‌ها</span>
+      </label>
       {% for category in categories %}
-      <option value="{{ category.slug }}"{% if category.pk == active_category.pk %} selected{% endif %}>{{ category.name_fa }}</option>
+      <label class="d-flex align-items-center gap-2 px-2 py-2">
+        <input type="radio" class="form-check-input flex-shrink-0 m-0" name="category" value="{{ category.slug }}"{% if category.pk == active_category.pk %} checked{% endif %}>
+        <span class="text-break">{{ category.name_fa }}</span>
+      </label>
       {% endfor %}
-    </select>
+    </fieldset>
   </details>
   <button type="submit" class="btn btn-primary">جست‌وجو</button>
   {% if search_query %}
