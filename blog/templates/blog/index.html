@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="{% static 'css/components/homepage-discussions-rotator.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-compact-banners.css' %}?v=20261107-mobile-gutters" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-content-width.css' %}?v=20261106-pro-width1" />
-<link rel="stylesheet" href="{% static 'css/components/category-marquee.css' %}?v=20261102-4" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-service-photos.css' %}?v=20261106-amber1" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-bilingual-title.css' %}?v=20261106-1" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-event-photos.css' %}?v=20261106-compact2x4" />
@@ -84,7 +83,7 @@
         </div>
       </div>
 
-      <!-- Mobile secondary banner immediately before useful links. -->
+      <!-- Mobile secondary banner -->
       <div class="d-md-none">
         <div class="hero-banner-mobile hero-banner-mobile--secondary">
           <img
@@ -97,11 +96,6 @@
             loading="lazy"
           />
         </div>
-      </div>
-
-      <div class="d-md-none homepage-useful-links-mobile">
-        {% include 'includes/homepage_useful_links.html' with heading_id='homepage-useful-links-mobile-heading' %}
-        {% include 'includes/homepage_business_categories.html' with heading_id='homepage-business-categories-mobile-heading' %}
       </div>
 
       <div class="d-md-none">
@@ -253,6 +247,5 @@
 {% endblock %}
 
 {% block extras %}
-<script src="{% static 'js/category-marquee.js' %}?v=20261107-ltr-speed" defer></script>
 <script src="{% static 'js/homepage-discussions-rotator.js' %}?v={% now 'U' %}" defer></script>
 {% endblock extras %}
