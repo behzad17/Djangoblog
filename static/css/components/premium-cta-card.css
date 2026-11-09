@@ -347,3 +347,33 @@
     aspect-ratio: 1 / 1.48;
   }
 }
+
+.homepage .hero-cta-cards-container .premium-cta-card {
+  box-shadow: 0 5px 15px rgba(43, 71, 114, 0.22);
+}
+
+.homepage .hero-cta-cards-container .premium-cta-card:focus-visible {
+  box-shadow: 0 8px 20px rgba(43, 71, 114, 0.28);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .homepage .hero-cta-cards-container .premium-cta-card:focus-visible {
+    transform: translateY(-4px);
+  }
+
+  .homepage .hero-cta-cards-container .premium-cta-card:active {
+    transform: translateY(2px);
+  }
+}
+
+@media (hover: hover) {
+  .homepage .hero-cta-cards-container .premium-cta-card:hover {
+    box-shadow: 0 8px 20px rgba(43, 71, 114, 0.28);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .homepage .hero-cta-cards-container .premium-cta-card:hover:not(:active) {
+    transform: translateY(-4px);
+  }
+}
