@@ -16,7 +16,7 @@
 
     {% if mobile %}
       {% include 'includes/homepage_pro_ads_track.html' with ads=homepage_newest_pro_ads label='جدیدترین آگهی‌ها' %}
-      {% include 'includes/homepage_pro_ads_track.html' with ads=homepage_rotating_pro_ads label='آگهی‌های چرخشی' %}
+      {% include 'includes/homepage_pro_ads_track.html' with ads=homepage_rotating_pro_ads label='آگهی‌های منتخب' %}
     {% else %}
       <div class="homepage-pro-ads-grid" role="list">
         {% for ad in homepage_pro_ads %}
