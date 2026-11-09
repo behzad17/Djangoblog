@@ -222,7 +222,7 @@ class PostList(generic.ListView):
             context['community_stats'] = {
                 'published_posts': 0,
                 'visible_businesses': 0,
-                'active_experts': 0,
+                'useful_links': 0,
                 'published_events': 0,
             }
 
