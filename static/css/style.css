@@ -10454,12 +10454,9 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   }
 
   .event-card-image {
-    width: auto;
-    max-width: 100%;
     height: auto;
     min-height: 0;
-    max-height: 15rem;
-    margin-inline: auto;
+    aspect-ratio: 5 / 3;
     border-radius: 10px 10px 0 0;
   }
 
