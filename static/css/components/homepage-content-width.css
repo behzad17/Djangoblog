@@ -115,3 +115,13 @@
     margin-inline: 0;
   }
 }
+
+@media (max-width: 767.98px) {
+  .homepage .hero-section--homepage .hero-cta-cards-container {
+    margin-bottom: 1.2rem;
+  }
+
+  .homepage .mobile-latest-posts + #category-filter-section {
+    padding-top: 2.5rem;
+  }
+}
