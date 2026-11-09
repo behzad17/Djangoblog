@@ -1,30 +1,30 @@
-<form action="{% url 'related_links:links_list' %}" method="get" class="mb-4 p-3 p-md-4 border rounded-3 bg-light" role="search" aria-label="جست‌وجوی لینک‌های مفید">
-  <label for="useful-link-q" class="form-label fw-semibold">جست‌وجوی لینک‌های مفید</label>
-  <div class="d-flex flex-column flex-sm-row gap-2 mb-3">
-    <input id="useful-link-q" type="search" name="q" value="{{ search_query }}" maxlength="200"
-           class="form-control py-2" placeholder="موضوع">
-    <button type="submit" class="btn btn-primary py-2 px-3 flex-shrink-0">
-      <i class="fas fa-search ms-1" aria-hidden="true"></i>
-      جست‌وجو
-    </button>
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <form action="{% url 'related_links:links_list' %}" method="get" role="search" aria-label="جست‌وجوی لینک‌های مفید">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="useful-link-q" class="form-label">جست‌وجوی لینک‌های مفید</label>
+          <input id="useful-link-q" type="search" name="q" value="{{ search_query }}" maxlength="200"
+          class="form-control" placeholder="موضوع">
+        </div>
+        <div class="col-md-4">
+          <label for="useful-link-category" class="form-label">دسته‌بندی</label>
+          <select id="useful-link-category" name="category" class="form-select">
+            <option value="">همهٔ دسته‌ها</option>
+            {% for category in categories %}
+            <option value="{{ category.slug }}"{% if category.pk == active_category.pk %} selected{% endif %}>{{ category.name_fa }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-search ms-2" aria-hidden="true"></i>جست‌وجو
+          </button>
+        </div>
+      </div>
+      {% if search_query %}
+      <a class="btn btn-outline-secondary mt-3" href="{% url 'related_links:links_list' %}{% if active_category %}?category={{ active_category.slug }}{% endif %}">پاک کردن جست‌وجو</a>
+      {% endif %}
+    </form>
   </div>
-  <details>
-    <summary class="fw-semibold py-2">دسته‌بندی جست‌وجو — {{ active_category.name_fa|default:"همهٔ دسته‌ها" }}</summary>
-    <fieldset class="border rounded p-2 mt-2 overflow-auto" style="max-block-size: 14rem;">
-      <legend class="float-none w-auto px-2 mb-1 fs-6">دسته‌بندی</legend>
-      <label class="d-flex align-items-center gap-2 px-2 py-2">
-        <input type="radio" class="form-check-input flex-shrink-0 m-0" name="category" value=""{% if not active_category %} checked{% endif %}>
-        <span>همهٔ دسته‌ها</span>
-      </label>
-      {% for category in categories %}
-      <label class="d-flex align-items-center gap-2 px-2 py-2">
-        <input type="radio" class="form-check-input flex-shrink-0 m-0" name="category" value="{{ category.slug }}"{% if category.pk == active_category.pk %} checked{% endif %}>
-        <span class="text-break">{{ category.name_fa }}</span>
-      </label>
-      {% endfor %}
-    </fieldset>
-  </details>
-  {% if search_query %}
-  <a class="btn btn-outline-secondary mt-2" href="{% url 'related_links:links_list' %}{% if active_category %}?category={{ active_category.slug }}{% endif %}">پاک کردن جست‌وجو</a>
-  {% endif %}
-</form>
+</div>
