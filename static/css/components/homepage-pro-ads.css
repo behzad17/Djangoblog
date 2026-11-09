@@ -194,6 +194,7 @@
 @media (min-width: 992px) {
   .homepage-pro-ads-grid {
     --homepage-pro-ads-gap: 1.15rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
   .homepage-pro-card__title {
