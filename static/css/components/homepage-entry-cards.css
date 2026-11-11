@@ -1,51 +1,24 @@
-/* Tablet/desktop entry cards above upcoming events; mobile uses the hero. */
+/* Tablet/desktop discussions card above upcoming events; mobile uses the hero. */
 .homepage-entry-cards {
   display: none;
 }
 
-/* Stronger outlines for each entry, including the mobile hero copies. */
+/* Use the same outline for both discussions card placements. */
 .homepage-entry-cards .hero-discussions-cta,
 .hero-section__info .hero-discussions-cta {
   border: 2px solid #5483b3;
 }
 
-.homepage-entry-cards .homepage-expert-cta,
-.hero-section__info .homepage-expert-cta {
-  border: 2px solid #5483b3;
-}
-
-.homepage-entry-cards .homepage-jobs-cta,
-.hero-section__info .homepage-jobs-cta {
-  border-color: #5483b3;
-}
-
-.homepage-jobs-cta .homepage-expert-cta__accent {
-  background: linear-gradient(135deg, #2b4772, #2b4772);
-}
-
-.homepage-jobs-cta .homepage-expert-cta__body {
-  background: radial-gradient(circle at 90% 10%, rgba(43, 71, 114, 0.1), transparent 55%), #eff8ff;
-}
-
-.homepage-jobs-cta .homepage-expert-cta__action {
-  color: #2b4772;
-}
-
-.homepage-jobs-cta:focus-visible {
-  outline-color: #2b4772;
-}
-
 @media (min-width: 768px) {
   .homepage-entry-cards {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: stretch;
-    gap: 1rem;
+    grid-template-columns: 65%;
+    justify-content: center;
     direction: rtl;
     margin: 1rem auto;
   }
 
-  .homepage-entry-cards > a {
+  .homepage-entry-cards > .hero-discussions-cta {
     display: flex;
     flex-direction: row;
     direction: rtl;
@@ -58,8 +31,7 @@
     margin: 0;
   }
 
-  .homepage-entry-cards .hero-discussions-cta__accent,
-  .homepage-entry-cards .homepage-expert-cta__accent {
+  .homepage-entry-cards .hero-discussions-cta__accent {
     flex: 0 0 30%;
     max-width: 30%;
     min-width: 0;
@@ -67,23 +39,9 @@
     gap: 0.35rem;
   }
 
-  .homepage-entry-cards .homepage-expert-cta__body {
-    min-width: 0;
-    gap: 0.3rem;
-  }
-
-  .homepage-entry-cards .hero-discussions-cta__title,
-  .homepage-entry-cards .homepage-expert-cta__title {
+  .homepage-entry-cards .hero-discussions-cta__title {
     font-size: clamp(0.78rem, 1.1vw, 1rem);
     line-height: 1.4;
-  }
-
-  .homepage-entry-cards .hero-discussions-rotator__item {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    white-space: normal;
-    overflow-wrap: anywhere;
   }
 }
 
