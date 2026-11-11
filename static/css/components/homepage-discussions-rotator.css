@@ -82,10 +82,8 @@
   visibility: hidden;
   transform: translateY(0.45rem);
   transition: opacity 260ms ease, transform 260ms ease, visibility 0s linear 260ms;
-  overflow: hidden;
   text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .hero-discussions-rotator__item.is-active {

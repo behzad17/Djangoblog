@@ -4,7 +4,6 @@
 {% block meta_description %}جامعه آنلاین ایرانیانِ مقیم سوئد - خواندن، نوشتن، مشارکت و تعلق. جدیدترین پست‌ها و مطالب تخصصی{% endblock meta_description %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/components/homepage-useful-links.css' %}?v=20261106-soft-amber1" />
-<link rel="stylesheet" href="{% static 'css/components/homepage-expert-cta.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-entry-cards.css' %}?v={% now 'U' %}" />
 <link rel="stylesheet" href="{% static 'css/components/homepage-latest-posts.css' %}?v=20261109-mobile-spacing" />
 <link rel="stylesheet" href="{% static 'css/components/premium-cta-card.css' %}?v={% now 'U' %}" />
@@ -53,8 +52,6 @@
           {% include 'includes/hero_cta_cards.html' %}
           <div class="hero-section__info d-md-none">
             {% include 'includes/hero_info_cards.html' %}
-            {% include 'includes/homepage_expert_cta.html' %}
-            {% include 'includes/homepage_jobs_cta.html' %}
           </div>
         </div>
       </div>
@@ -71,8 +68,6 @@
     <div class="col-lg-9 col-md-9 mx-auto mt-md-2 mt-1 order-md-1 homepage-main-content">
       <div class="homepage-entry-cards">
         {% include 'includes/hero_info_cards.html' %}
-        {% include 'includes/homepage_expert_cta.html' %}
-        {% include 'includes/homepage_jobs_cta.html' %}
       </div>
 
       {% include 'includes/upcoming_events_section.html' %}
