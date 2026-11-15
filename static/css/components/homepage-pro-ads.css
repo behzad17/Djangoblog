@@ -182,6 +182,15 @@
     justify-content: center;
   }
 
+  .homepage-pro-ads-grid .homepage-pro-card__body {
+    background: var(--homepage-hero-card-blue);
+  }
+
+  .homepage-pro-ads-grid .homepage-pro-card__title,
+  .homepage-pro-ads-grid .homepage-pro-card__city {
+    color: #fff;
+  }
+
   .homepage-pro-card__title {
     font-size: 0.74rem;
   }

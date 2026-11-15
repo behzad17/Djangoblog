@@ -61,6 +61,15 @@
 @media (min-width: 768px) {
   .homepage .upcoming-events-scroll { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .homepage .upcoming-event-card { width: auto; }
+
+  .homepage .upcoming-event-card__body {
+    background: var(--homepage-hero-card-blue);
+  }
+
+  .homepage .upcoming-event-card .upcoming-event-card__title,
+  .homepage .upcoming-event-card__location {
+    color: #fff;
+  }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .homepage .upcoming-event-card:hover .upcoming-event-card__image { transform: scale(1.04); }
