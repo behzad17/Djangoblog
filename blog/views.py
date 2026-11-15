@@ -2,12 +2,11 @@ from django.db.models import Count, Q, Case, When, IntegerField
 from django.shortcuts import (
     render,
     get_object_or_404,
-    reverse,
     redirect,
 )
 from django.views import generic
 from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponsePermanentRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
@@ -263,7 +262,7 @@ class PostList(generic.ListView):
 
 
 @ratelimit(key='ip', rate='20/m', method='POST', block=True)
-def post_detail(request, slug):
+def post_detail(request, pk=None, slug=None):
     """
     View function for displaying a single blog post and its comments.
     
@@ -274,7 +273,12 @@ def post_detail(request, slug):
     """
     # Allow access to soft-deleted posts for author and staff
     queryset = Post.objects.filter(status=1).select_related('category', 'author')
-    post = get_object_or_404(queryset, slug=slug)
+    lookup = {'pk': pk} if slug is None else {'slug': slug}
+    post = get_object_or_404(queryset, **lookup)
+    post_url = post.get_absolute_url()
+    if slug is not None and request.method in ('GET', 'HEAD'):
+        query = request.META.get('QUERY_STRING')
+        return HttpResponsePermanentRedirect(f'{post_url}?{query}' if query else post_url)
     
     # Check if post is soft-deleted
     is_owner_or_staff = (
@@ -406,7 +410,7 @@ def post_detail(request, slug):
                         'نظر شما ثبت شد و در انتظار بررسی است. '
                         'پس از تایید ۵ نظر، نظرات بعدی شما به صورت خودکار تایید می‌شوند.'
                     )
-            return redirect('post_detail', slug=post.slug)
+            return redirect(post)
 
     # Get related posts (3 max) from the same category, excluding current post
     related_posts = []
@@ -464,6 +468,7 @@ def post_detail(request, slug):
         template_name,
         {
             "post": post,
+            "post_url": request.build_absolute_uri(post_url),
             "comments": comments,
             "comment_count": comment_count,
             "comment_form": comment_form,
@@ -539,7 +544,7 @@ def comment_edit(request, slug, comment_id):
                             comment.reviewed_at = None
                     
                     comment.save()
-                    return redirect('post_detail', slug=slug)
+                    return redirect(comment.post)
         else:
             form = CommentForm(instance=comment)
         return render(request, 'blog/comment_edit.html', {
@@ -548,7 +553,7 @@ def comment_edit(request, slug, comment_id):
             'comment': comment
         })
     messages.error(request, 'You can only edit your own comments!')
-    return redirect('post_detail', slug=slug)
+    return redirect(comment.post)
 
 
 @site_verified_required
@@ -575,7 +580,7 @@ def comment_delete(request, slug, comment_id):
             'You can only delete your own comments!'
         )
 
-    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+    return redirect(comment.post)
 
 
 @login_required
@@ -686,7 +691,7 @@ def like_post(request, post_id):
     else:
         messages.success(request, 'Post liked')
     
-    return redirect('post_detail', slug=post.slug)
+    return redirect(post)
 
 
 @ratelimit(key='user', rate=post_creation_user_rate, method='POST', block=True)
@@ -793,7 +798,7 @@ def edit_post(request, slug):
             request, messages.ERROR,
             'You can only edit your own posts!'
         )
-        return redirect('post_detail', slug=slug)
+        return redirect(post)
     
     # Prevent editing soft-deleted posts (unless staff)
     if post.is_deleted and not request.user.is_staff:
@@ -801,7 +806,7 @@ def edit_post(request, slug):
             request, messages.ERROR,
             'Cannot edit a deleted post!'
         )
-        return redirect('post_detail', slug=slug)
+        return redirect(post)
     
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
@@ -851,7 +856,7 @@ def edit_post(request, slug):
             
             # Redirect based on status
             if post.status == 1:
-                return redirect('post_detail', slug=post.slug)
+                return redirect(post)
             else:
                 return redirect('home')
     else:
@@ -881,7 +886,7 @@ def delete_post(request, slug):
             request, messages.ERROR,
             'You can only delete your own posts!'
         )
-        return redirect('post_detail', slug=slug)
+        return redirect(post)
     
     if request.method == "POST":
         # Soft delete: set flags instead of actually deleting

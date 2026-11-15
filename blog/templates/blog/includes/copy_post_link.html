@@ -1,0 +1,6 @@
+{% if not post.is_deleted %}
+<button type="button" class="btn btn-outline-primary" data-copy-post-link="{{ post_url }}">
+  <i class="fas fa-link" aria-hidden="true"></i> کپی لینک
+</button>
+<span class="visually-hidden" role="status"></span>
+{% endif %}

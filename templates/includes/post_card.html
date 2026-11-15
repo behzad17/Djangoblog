@@ -1,7 +1,7 @@
 {% load static %}
 <article class="post-card{% if extra_class %} {{ extra_class }}{% endif %}">
   <a
-    href="{% url 'post_detail' post.slug %}"
+    href="{{ post.get_absolute_url }}"
     class="post-card__image"
     title="{{ post.title }}"
   >
@@ -25,7 +25,7 @@
   </a>
   <div class="post-card__content">
     <a
-      href="{% url 'post_detail' post.slug %}"
+      href="{{ post.get_absolute_url }}"
       class="post-card__title"
       title="{{ post.title }}"
     >

@@ -16,10 +16,6 @@ class PostSitemap(Sitemap):
         """Return the last modification date of the post."""
         return obj.updated_on
 
-    def location(self, obj):
-        """Return the URL of the post."""
-        return reverse('post_detail', args=[obj.slug])
-
 
 class CategorySitemap(Sitemap):
     """Sitemap for blog categories."""

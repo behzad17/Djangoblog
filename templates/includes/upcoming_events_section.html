@@ -18,7 +18,7 @@
     <div class="upcoming-events-scroll" role="list">
       {% for post in upcoming_events %}
       <a
-        href="{% url 'post_detail' post.slug %}"
+        href="{{ post.get_absolute_url }}"
         class="upcoming-event-card"
         role="listitem"
         title="{{ post.title }}"

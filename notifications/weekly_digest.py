@@ -146,7 +146,7 @@ def _post_featured_item(post):
     return {
         'title': post.title,
         'description': _post_description(post),
-        'url': build_site_url(reverse('post_detail', args=[post.slug])),
+        'url': build_site_url(post.get_absolute_url()),
         'thumbnail_url': thumbnail_url,
     }
 

@@ -1557,7 +1557,7 @@ class WorkspaceService:
             post.status = 1
             post.save(update_fields=['status', 'updated_on'])
 
-        public_url = reverse('post_detail', kwargs={'slug': post.slug})
+        public_url = post.get_absolute_url()
         admin_url = reverse('admin:blog_post_change', args=[post.pk])
         published = {
             'post_id': post.pk,

@@ -103,7 +103,7 @@ class Post(models.Model):
     content, author, and publication status. It also handles the featured image
     using Cloudinary for image storage.
     """
-    # Titles are display text and may repeat. Public URLs use ``slug`` (unique).
+    # Titles may repeat. Slugs are retained for older links and action URLs.
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     author = models.ForeignKey(
@@ -229,6 +229,11 @@ class Post(models.Model):
         
         # Save the object - let Django handle any errors naturally
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+
+        return reverse('post_detail', kwargs={'pk': self.pk})
 
     def _allocate_unique_slug(self, base_slug: str) -> str:
         """Keep slug unique when titles are allowed to repeat."""

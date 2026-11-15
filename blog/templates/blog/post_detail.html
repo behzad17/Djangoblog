@@ -5,12 +5,12 @@
 {% load security_filters %}
 {% block title %}{{ post.title }} | Peyvand{% endblock title %}
 {% block meta_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% else %}{{ post.content|striptags|truncatewords:25 }}{% endif %}{% endblock meta_description %}
-{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock canonical_url %}
+{% block canonical_url %}{{ post_url }}{% endblock canonical_url %}
 {% block social_meta %}
 <meta property="og:type" content="article" />
 <meta property="og:title" content="{{ post.title }} | Peyvand" />
 <meta property="og:description" content="{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% else %}{{ post.content|striptags|truncatewords:25 }}{% endif %}" />
-<meta property="og:url" content="https://{{ request.get_host }}{{ request.path }}" />
+<meta property="og:url" content="{{ post_url }}" />
 <meta property="og:locale" content="fa_IR" />
 <meta property="og:site_name" content="Peyvand" />
 {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
@@ -53,7 +53,7 @@
   {% if post.category %}"articleSection": "{{ post.category.name|escapejs }}",{% endif %}
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "{{ request.build_absolute_uri }}"
+    "@id": "{{ post_url }}"
   }
 }
 </script>
@@ -256,6 +256,7 @@
               <a href="{% url 'account_login' %}" class="btn btn-outline-primary">ورود برای پسندیدن <span>{{ post.like_count }}</span></a>
               <a href="{% url 'account_login' %}" class="btn btn-outline-primary">ورود برای ذخیره</a>
               {% endif %}
+              {% include "blog/includes/copy_post_link.html" %}
               {% if user.is_authenticated and user == post.author or user.is_authenticated and user.is_staff %}
               <div class="dropdown">
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="dropdown" aria-expanded="false" aria-label="مدیریت مطلب">
@@ -387,7 +388,7 @@
           <form
             id="commentForm"
             method="post"
-            action="{% url 'post_detail' post.slug %}"
+            action="{{ post.get_absolute_url }}"
             class="mt-2"
           >
             {{ comment_form | crispy }}

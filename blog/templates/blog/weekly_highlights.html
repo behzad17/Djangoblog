@@ -65,7 +65,7 @@
     <h2 class="weekly-highlights-section__title">📰 مقالات</h2>
     <div class="weekly-highlights-list">
       {% for post in articles %}
-      <a href="{% url 'post_detail' post.slug %}" class="weekly-highlights-card">
+      <a href="{{ post.get_absolute_url }}" class="weekly-highlights-card">
         {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
         <img
           src="{{ post.featured_image.url }}"
@@ -93,7 +93,7 @@
     <h2 class="weekly-highlights-section__title">📅 رویدادها</h2>
     <div class="weekly-highlights-list">
       {% for post in events %}
-      <a href="{% url 'post_detail' post.slug %}" class="weekly-highlights-card">
+      <a href="{{ post.get_absolute_url }}" class="weekly-highlights-card">
         {% if post.featured_image and "placeholder" not in post.featured_image.url|default:"" %}
         <img
           src="{{ post.featured_image.url }}"

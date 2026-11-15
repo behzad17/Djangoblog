@@ -6,7 +6,7 @@
     {% for category, post in category_overview_rows %}
       {% if post %}
       <li>
-        <a class="mobile-latest-posts__card" href="{% url 'post_detail' post.slug %}">
+        <a class="mobile-latest-posts__card" href="{{ post.get_absolute_url }}">
           {% if post.featured_image and 'placeholder' not in post.featured_image.url %}
           <img src="{{ post.featured_image.url }}" alt="" width="64" height="64" loading="lazy" decoding="async"
                data-fallback="{% static 'images/default.jpg' %}" onerror="this.onerror=null; this.src=this.dataset.fallback;" />

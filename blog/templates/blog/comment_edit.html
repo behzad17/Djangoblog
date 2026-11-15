@@ -11,7 +11,7 @@
           {{ form | crispy }} 
           {% csrf_token %}
           <button type="submit" class="btn btn-signup btn-lg">Update Comment</button>
-          <a href="{% url 'post_detail' comment.post.slug %}" class="btn btn-secondary btn-lg">Cancel</a>
+          <a href="{{ comment.post.get_absolute_url }}" class="btn btn-secondary btn-lg">Cancel</a>
         </form>
       </div>
     </div>

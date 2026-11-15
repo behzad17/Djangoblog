@@ -116,7 +116,7 @@
           <li class="popular-post-item">
             <div class="popular-post-content">
               <a
-                href="{% url 'post_detail' post.slug %}"
+                href="{{ post.get_absolute_url }}"
                 class="popular-post-thumbnail"
                 title="{{ post.title }}"
               >
@@ -147,7 +147,7 @@
               </a>
               <div class="popular-post-text">
                 <a
-                  href="{% url 'post_detail' post.slug %}"
+                  href="{{ post.get_absolute_url }}"
                   class="popular-post-link"
                   title="{{ post.title }}"
                 >
@@ -181,7 +181,7 @@
           <li class="popular-post-item">
             <div class="popular-post-content">
               <a
-                href="{% url 'post_detail' post.slug %}"
+                href="{{ post.get_absolute_url }}"
                 class="popular-post-thumbnail"
                 title="{{ post.title }}"
               >
@@ -212,7 +212,7 @@
               </a>
               <div class="popular-post-text">
                 <a
-                  href="{% url 'post_detail' post.slug %}"
+                  href="{{ post.get_absolute_url }}"
                   class="popular-post-link"
                   title="{{ post.title }}"
                 >
