@@ -63,7 +63,7 @@
   .homepage .upcoming-event-card { width: auto; }
 
   .homepage .upcoming-event-card__body {
-    background: var(--homepage-hero-card-blue);
+    background: var(--homepage-card-caption-background);
   }
 
   .homepage .upcoming-event-card .upcoming-event-card__title,

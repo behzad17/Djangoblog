@@ -183,7 +183,7 @@
   }
 
   .homepage-pro-ads-grid .homepage-pro-card__body {
-    background: var(--homepage-hero-card-blue);
+    background: var(--homepage-card-caption-background);
   }
 
   .homepage-pro-ads-grid .homepage-pro-card__title,
