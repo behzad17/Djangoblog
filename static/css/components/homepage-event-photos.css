@@ -41,6 +41,7 @@
 .homepage .upcoming-event-card__day { color: #fff; font-size: 1.5rem; }
 .homepage .upcoming-event-card__month { color: #fff; font-size: .7rem; margin-top: .2rem; }
 .homepage .upcoming-event-card__body {
+  background: var(--homepage-card-caption-background);
   justify-content: flex-start;
   padding: .85rem 1rem;
   gap: .6rem;
@@ -52,6 +53,10 @@
   -webkit-line-clamp: 2;
 }
 .homepage .upcoming-event-card__location { font-size: .82rem; line-height: 1.5; margin-top: auto; }
+.homepage .upcoming-event-card .upcoming-event-card__title,
+.homepage .upcoming-event-card__location {
+  color: #fff;
+}
 .homepage .upcoming-event-card:hover,
 .homepage .upcoming-event-card:focus-visible {
   box-shadow: 0 8px 20px rgba(43,71,114,.13);
@@ -61,15 +66,6 @@
 @media (min-width: 768px) {
   .homepage .upcoming-events-scroll { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .homepage .upcoming-event-card { width: auto; }
-
-  .homepage .upcoming-event-card__body {
-    background: var(--homepage-card-caption-background);
-  }
-
-  .homepage .upcoming-event-card .upcoming-event-card__title,
-  .homepage .upcoming-event-card__location {
-    color: #fff;
-  }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .homepage .upcoming-event-card:hover .upcoming-event-card__image { transform: scale(1.04); }
