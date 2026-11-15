@@ -123,7 +123,7 @@
 }
 
 .homepage-pro-card__body {
-  background: #FAEBD9;
+  background: var(--homepage-card-caption-background);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -140,7 +140,7 @@
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.35;
-  color: #2b4772;
+  color: #fff;
   text-align: center;
 }
 
@@ -149,7 +149,7 @@
   font-size: 0.68rem;
   font-weight: 500;
   line-height: 1.3;
-  color: #2b4772;
+  color: #fff;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -180,15 +180,6 @@
     padding-bottom: 0;
     scroll-snap-type: none;
     justify-content: center;
-  }
-
-  .homepage-pro-ads-grid .homepage-pro-card__body {
-    background: var(--homepage-card-caption-background);
-  }
-
-  .homepage-pro-ads-grid .homepage-pro-card__title,
-  .homepage-pro-ads-grid .homepage-pro-card__city {
-    color: #fff;
   }
 
   .homepage-pro-card__title {
