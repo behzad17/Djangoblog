@@ -32,14 +32,42 @@ class TestBlogViews(TestCase):
         self.post.save()
 
     def test_render_post_detail_page_with_comment_form(self):
-        response = self.client.get(reverse(
-            'post_detail', args=['blog-title']))
+        response = self.client.get(self.post.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Blog title", response.content)
         self.assertIn(b"Blog content", response.content)
         self.assertIsInstance(
             response.context['comment_form'], CommentForm)
         self.assertEqual(response.context['related_useful_links'], [])
+
+    def test_legacy_persian_link_redirects_to_same_post(self):
+        self.post.slug = "تماس-مشکوک-bankid"
+        self.post.save(update_fields=["slug"])
+        old_url = reverse("legacy_post_detail", kwargs={"slug": self.post.slug})
+        new_url = f"/p/{self.post.pk}/"
+
+        for method in (self.client.get, self.client.head):
+            with self.subTest(method=method.__name__):
+                response = method(f"{old_url}?utm_source=social")
+                self.assertRedirects(
+                    response, f"{new_url}?utm_source=social",
+                    status_code=301, fetch_redirect_response=False,
+                )
+        response = self.client.get(f"{new_url}?utm_source=social")
+        self.assertContains(response, f'rel="canonical" href="http://testserver{new_url}"')
+        self.assertContains(response, f'property="og:url" content="http://testserver{new_url}"')
+        self.assertContains(response, f'data-copy-post-link="http://testserver{new_url}"')
+
+    def test_numeric_and_legacy_links_hide_unpublished_posts(self):
+        self.post.status = 0
+        self.post.save(update_fields=["status"])
+
+        for url in (
+            self.post.get_absolute_url(),
+            reverse("legacy_post_detail", kwargs={"slug": self.post.slug}),
+        ):
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 404)
 
     def test_successful_comment_submission(self):
         """Test for posting a comment on a post"""
@@ -49,7 +77,7 @@ class TestBlogViews(TestCase):
             'body': 'This is a test comment.'
         }
         response = self.client.post(
-            reverse('post_detail', args=['blog-title']),
+            self.post.get_absolute_url(),
             post_data,
             follow=True,
         )
@@ -130,7 +158,7 @@ class PostDetailRelatedContentTests(TestCase):
 
     def test_post_detail_renders_no_related_sections(self):
         response = self.client.get(
-            reverse('post_detail', args=[self.post.slug]),
+            self.post.get_absolute_url(),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -160,7 +188,7 @@ class PostDetailRelatedContentTests(TestCase):
         )
 
         response = self.client.get(
-            reverse('post_detail', args=[self.post.slug]),
+            self.post.get_absolute_url(),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -184,7 +212,7 @@ class PostDetailRelatedContentTests(TestCase):
         )
 
         response = self.client.get(
-            reverse('post_detail', args=[self.post.slug]),
+            self.post.get_absolute_url(),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -208,7 +236,7 @@ class PostDetailRelatedContentTests(TestCase):
         )
 
         response = self.client.get(
-            reverse('post_detail', args=[self.post.slug]),
+            self.post.get_absolute_url(),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -275,7 +303,7 @@ class PostDetailRelatedContentTests(TestCase):
         )
 
         response = self.client.get(
-            reverse('post_detail', args=[self.post.slug]),
+            self.post.get_absolute_url(),
         )
 
         self.assertEqual(response.status_code, 200)

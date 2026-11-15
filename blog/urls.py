@@ -14,8 +14,9 @@ urlpatterns = [
     path('like-post/<int:post_id>/', views.like_post, name='like_post'),
     path('complete-setup/', views.complete_setup, name='complete_setup'),
     path('this-week/', views.weekly_highlights, name='weekly_highlights'),
+    path('p/<int:pk>/', views.post_detail, name='post_detail'),
     # Use str instead of slug to allow Unicode characters (Persian/Farsi)
-    path('<str:slug>/', views.post_detail, name='post_detail'),
+    path('<str:slug>/', views.post_detail, name='legacy_post_detail'),
     path('<str:slug>/edit/', views.edit_post, name='edit_post'),
     path('<str:slug>/delete/', views.delete_post, name='delete_post'),
     path('<str:slug>/edit_comment/<int:comment_id>/', views.comment_edit, name='comment_edit'),

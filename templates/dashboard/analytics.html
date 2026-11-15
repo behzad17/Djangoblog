@@ -67,7 +67,7 @@
                       <td><strong>{{ forloop.counter }}</strong></td>
                       <td>
                         {% if view_count.post %}
-                        <a href="{% url 'post_detail' view_count.post.slug %}" target="_blank">
+                        <a href="{{ view_count.post.get_absolute_url }}" target="_blank">
                           {{ view_count.post.title|truncatewords:10 }}
                         </a>
                         {% else %}

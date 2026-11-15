@@ -21,7 +21,7 @@
                 <i class="fas fa-trash"></i> بله، حذف پست
               </button>
               <a
-                href="{% url 'post_detail' post.slug %}"
+                href="{{ post.get_absolute_url }}"
                 class="btn btn-secondary btn-lg me-2"
               >
                 <i class="fas fa-arrow-right"></i> انصراف

@@ -377,3 +377,16 @@ if (document.readyState === 'loading') {
 
 // FAQ Accordion functionality moved to static/js/peyvand_faq.js
 // This keeps the code clean and scoped to the member-guide page only
+
+document.querySelectorAll("[data-copy-post-link]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const url = button.dataset.copyPostLink;
+    try {
+      await navigator.clipboard.writeText(url);
+      button.textContent = "لینک کپی شد";
+      button.nextElementSibling.textContent = "لینک کپی شد";
+    } catch {
+      window.prompt("لینک مطلب را کپی کنید", url);
+    }
+  });
+});
