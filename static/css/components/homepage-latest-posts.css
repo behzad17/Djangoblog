@@ -1,10 +1,15 @@
+/* Both homepage layouts use the same pale blue surface. */
+.homepage .category-overview-latest-posts-box,
+.homepage .mobile-latest-posts {
+  background-color: #e8f3fd;
+}
+
 /* Latest category posts: one shared box with responsive linked titles. */
 .homepage .category-overview-latest-posts-box {
   min-width: 0;
   width: 100%;
   margin-top: 1.5rem;
   padding: 1rem 1.1rem;
-  background: var(--pv-bg-card, #eff8ff);
   border: 1px solid #c1e8ff;
   border-radius: 14px;
   box-shadow: 0 3px 12px rgba(43, 71, 114, 0.06);
@@ -134,6 +139,7 @@
 @media (max-width: 767.98px) {
   .mobile-latest-posts {
     margin-block: 1.2475rem 1rem;
+    border-radius: 14px;
   }
 
   .mobile-latest-posts__track {
