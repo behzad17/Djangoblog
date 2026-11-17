@@ -2,6 +2,7 @@
 @media (max-width: 991.98px) {
  nav.navbar > .container-fluid { direction: rtl; flex-wrap: nowrap; gap: 12px; }
  nav.navbar .navbar-toggler { order: 0; flex: 0 0 auto; min-width: 44px; min-height: 44px; margin: 0; }
+ nav.navbar .mobile-nav-search { min-width: 44px; min-height: 44px; }
  nav.navbar .navbar-brand { order: 1; flex: 1 1 auto; min-width: 0; margin: 0; white-space: normal; text-align: left; }
  nav.navbar .brand-tagline { white-space: normal; overflow-wrap: break-word; }
  #mobileNavDrawer.mobile-nav-drawer {
