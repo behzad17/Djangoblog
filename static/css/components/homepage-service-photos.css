@@ -4,7 +4,7 @@
 
 .homepage {
   --homepage-hero-card-blue: #052659;
-  --homepage-card-caption-background: linear-gradient(135deg, #45638f, #37517a);
+  --homepage-card-caption-background: linear-gradient(to bottom, #4d6b96, var(--homepage-hero-card-blue));
 }
 
 @media (min-width: 992px) {
