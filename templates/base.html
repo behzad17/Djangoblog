@@ -112,7 +112,7 @@
     <!-- Extra CSS - Page-specific styles -->
     {% block extra_css %}{% endblock extra_css %}
     
-    <link rel="stylesheet" href="{% static 'css/components/mobile-nav-glass.css' %}?v=20261101-light1" />
+    <link rel="stylesheet" href="{% static 'css/components/mobile-nav-glass.css' %}?v=20261117-search" />
 
     <link rel="stylesheet" href="{% static 'css/blue-theme.css' %}?v=20261101-light1" />
 
@@ -155,17 +155,26 @@
         <a class="navbar-brand" href="{{ home_url }}">
           <span class="brand-tagline"><span class="brand-tagline__name">پیوند؛</span> شبکه اجتماعی ایرانیانِ سوئد</span>
         </a>
-        <!-- Mobile Navigation Toggle Button (offcanvas drawer below lg) -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#mobileNavDrawer"
-          aria-controls="mobileNavDrawer"
-          aria-label="نمایش منو"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-flex d-lg-none align-items-center gap-2">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#mobileNavDrawer"
+            aria-controls="mobileNavDrawer"
+            aria-label="نمایش منو"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a
+            class="btn btn-outline-light mobile-nav-search d-inline-flex align-items-center justify-content-center"
+            href="{{ search_url }}"
+            aria-label="جست‌وجو"
+            {% if request.path == search_url %}aria-current="page"{% endif %}
+          >
+            <i class="fas fa-search" aria-hidden="true"></i>
+          </a>
+        </div>
         <!-- Desktop Navigation Menu (lg and up only) -->
         <div class="navbar-collapse d-none d-lg-flex" id="navbarText">
           <!-- Center Navigation Links -->
