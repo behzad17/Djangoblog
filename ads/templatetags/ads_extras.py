@@ -119,6 +119,7 @@ def category_image(category):
             'transport-moving': 'car-naghlie.jpg',
             'shops-shopping': 'khane-vasayel.jpg',
             'travel-accommodation': 'oghate-feraghat.jpg',
+            'housing-real-estate': 'maskan-zendegi.jpg',
             'leisure': 'oghate-feraghat.jpg',
             'food-restaurant': 'ghaza-farhang.jpg',
             'health-welfare': 'salamat-refah.jpg',

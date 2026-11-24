@@ -1,15 +1,34 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from .config.subcategories import SUBCATEGORIES
 from .models import Ad, AdCategory, AdComment
+
+
+def ad_subcategory_field():
+    groups = [
+        (category.name, list(SUBCATEGORIES[category.slug].items()))
+        for category in AdCategory.objects.all()
+        if category.slug in SUBCATEGORIES
+    ]
+    return forms.ChoiceField(
+        required=False, label="زیردسته",
+        choices=[("", "انتخاب زیردسته (اختیاری)"), *groups],
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
 
 
 class AdForm(forms.ModelForm):
     """Form for creating/editing ads by users."""
     
+    subcategory = forms.ChoiceField(
+        required=False, label="زیردسته",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
     class Meta:
         model = Ad
         fields = [
-            'title', 'category', 'image', 'target_url', 'city', 'address', 'phone',
+            'title', 'category', 'subcategory', 'image', 'target_url', 'city', 'address', 'phone',
             'instagram_url', 'telegram_url', 'website_url',
             'start_date', 'end_date'
         ]
@@ -94,6 +113,7 @@ class AdForm(forms.ModelForm):
         self.fields['category'].queryset = AdCategory.objects.all().order_by(
             'display_order', 'name'
         )
+        self.fields["subcategory"] = ad_subcategory_field()
         # Make optional fields not required
         self.fields['start_date'].required = False
         self.fields['end_date'].required = False
@@ -240,6 +260,11 @@ class AdFilterForm(forms.Form):
         label='شهر',
     )
     
+    subcategory = forms.ChoiceField(
+        required=False, label="زیردسته",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
     sort = forms.ChoiceField(
         required=False,
         widget=forms.Select(attrs={
@@ -256,12 +281,14 @@ class AdFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         """Initialize form with dynamic city choices."""
         city_choices = kwargs.pop('city_choices', [])
+        subcategory_choices = kwargs.pop('subcategory_choices', [])
         super().__init__(*args, **kwargs)
         
         # Set city choices (empty option + available cities)
         city_field_choices = [('', 'همه شهرها')]
         city_field_choices.extend([(city, city) for city in city_choices])
         self.fields['city'].choices = city_field_choices
+        self.fields['subcategory'].choices = [('', 'همه زیردسته‌ها'), *subcategory_choices]
 
 
 class ProRequestForm(forms.Form):

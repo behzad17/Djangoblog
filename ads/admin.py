@@ -3,6 +3,7 @@ from django.utils.html import format_html
 
 from notifications.dispatchers import notify_ad_rejected
 
+from .forms import ad_subcategory_field
 from .models import AdCategory, Ad, AdComment, AdGalleryImage, AdsViewCount
 
 
@@ -83,6 +84,14 @@ class AdAdmin(admin.ModelAdmin):
 
     inlines = (AdGalleryImageInline,)
 
+    class Media:
+        js = ("js/ad-subcategory-field.js",)
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == "subcategory":
+            return ad_subcategory_field()
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
     list_display = (
         "title",
         "category",
@@ -127,6 +136,7 @@ class AdAdmin(admin.ModelAdmin):
                     "title",
                     "slug",
                     "category",
+                    "subcategory",
                     "owner",
                 )
             },

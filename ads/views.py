@@ -9,6 +9,7 @@ from ratelimit.decorators import ratelimit
 from blog.decorators import site_verified_required
 from notifications.dispatchers import notify_ad_favorited
 
+from .config.subcategories import SUBCATEGORIES
 from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 from .gallery import get_detail_image_context, process_gallery_submission
@@ -61,6 +62,17 @@ def ad_list_by_category(request, category_slug):
     category = get_object_or_404(AdCategory, slug=category_slug)
     all_ads = _visible_ads_queryset().filter(category=category)
     
+    populated = set(all_ads.exclude(subcategory="").order_by().values_list("subcategory", flat=True))
+    subcategory_choices = [
+        (slug, label) for slug, label in SUBCATEGORIES.get(category.slug, {}).items()
+        if slug in populated
+    ]
+    selected_subcategory = request.GET.get("subcategory", "")
+    if selected_subcategory in dict(subcategory_choices):
+        all_ads = all_ads.filter(subcategory=selected_subcategory)
+    else:
+        selected_subcategory = ""
+
     # Get filter parameters
     selected_city = request.GET.get('city', '')
     sort_order = request.GET.get('sort', 'newest')
@@ -80,9 +92,11 @@ def ad_list_by_category(request, category_slug):
     filter_form = AdFilterForm(
         initial={
             'city': selected_city,
+            'subcategory': selected_subcategory,
             'sort': sort_order,
         },
-        city_choices=list(available_cities)
+        city_choices=list(available_cities),
+        subcategory_choices=subcategory_choices,
     )
     
     # Note: Sort order is handled by _visible_ads_queryset() which orders by featured status first,
@@ -196,6 +210,10 @@ def ad_list_by_category(request, category_slug):
             "sort_order": sort_order,
         }
     
+    context.update({
+        "has_subcategories": bool(subcategory_choices),
+        "selected_subcategory": selected_subcategory,
+    })
     return render(request, "ads/ads_by_category.html", context)
 
 
