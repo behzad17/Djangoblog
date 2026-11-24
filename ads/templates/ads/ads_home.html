@@ -41,7 +41,7 @@
 {% endblock structured_data %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/ads-category-slider.css' %}?v={% now 'U' %}">
+<link rel="stylesheet" href="{% static 'css/ads-category-grid.css' %}?v={% now 'U' %}">
 <link rel="stylesheet" href="{% static 'css/ads-pro-landing.css' %}?v={% now 'U' %}">
 <link rel="stylesheet" href="{% static 'css/ads-directory-search.css' %}">
 {% endblock extra_css %}
@@ -82,8 +82,7 @@
 
 <div class="container pb-4">
   {% include 'ads/includes/_directory_search.html' %}
-  <!-- Category Slider - Center-Mode Navigation -->
-  {% include 'ads/includes/_category_slider.html' with categories=categories ad_counts=ad_counts active_category_slug=active_category_slug %}
+  {% include 'ads/includes/_category_grid.html' %}
 
   <!-- Pro Ads promotional card -->
   <aside class="card shadow-sm mt-4" aria-labelledby="ads-pro-promo-title">
@@ -107,7 +106,3 @@
   </aside>
 </div>
 {% endblock content %}
-
-{% block extras %}
-<script src="{% static 'js/ads-category-slider.js' %}" defer></script>
-{% endblock extras %}

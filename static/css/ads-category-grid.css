@@ -1,0 +1,105 @@
+.ads-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: clamp(.65rem, 1.6vw, 1.25rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.ads-category-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  overflow: hidden;
+  color: #17345a;
+  background: #fff;
+  border: 1px solid #cbdbea;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(21, 52, 86, .07);
+  text-decoration: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.ads-category-card__cover {
+  display: grid;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: #294b6e;
+}
+
+.ads-category-card__cover > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.ads-category-card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: clamp(.65rem, 1.4vw, 1rem);
+}
+
+.ads-category-card__title {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(.92rem, 1.3vw, 1.125rem);
+  font-weight: 700;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.ads-category-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .3rem;
+  color: #375777;
+  font-size: .82rem;
+}
+
+.ads-category-card__meta > span {
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  background: #eaf3fa;
+}
+
+.ads-category-card__meta > i {
+  color: #315e89;
+}
+
+.ads-category-card:hover,
+.ads-category-card:focus-visible,
+.ads-category-card--highlight {
+  color: #142f55;
+  background-color: #f5faff;
+  border-color: #4d78a0;
+  box-shadow: 0 8px 20px rgba(21, 52, 86, .15);
+  text-decoration: none;
+}
+
+.ads-category-card:focus-visible {
+  outline: 3px solid #225c8b;
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .ads-category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 992px) {
+  .ads-category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1200px) {
+  .ads-category-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-category-card { transition: none; }
+}
