@@ -4,20 +4,9 @@ from django.db.models import Q
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 
+from codestar.city_search import CITY_ALIASES, CITY_KEYS
 from codestar.search_text import normalize_search_text, search_matches
 from .templatetags.event_display import event_card_city
-
-
-CITY_ALIASES = {
-    'stockholm': ('Stockholm', 'استکهلم', 'استاکهلم'),
-    'göteborg': ('Göteborg', 'Goteborg', 'Gothenburg', 'گوتنبرگ', 'یوتبوری', 'گوتنبورگ'),
-    'malmö': ('Malmö', 'Malmo', 'مالمو', 'مالموئه'),
-}
-CITY_KEYS = {
-    normalize_search_text(name): key
-    for key, names in CITY_ALIASES.items()
-    for name in names
-}
 
 
 def filter_events(posts, params):

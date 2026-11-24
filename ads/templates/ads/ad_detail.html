@@ -42,9 +42,11 @@
           </span>
           {% endif %}
           
+          {% include 'ads/includes/_ad_contact_actions.html' %}
+
           {% include 'ads/includes/ad_detail_image_section.html' %}
           
-          {% if ad.target_url and ad.url_approved %}
+          {% if ad.target_url and ad.url_approved and ad.website_url and ad.social_urls_approved and ad.target_url != ad.website_url %}
           <div class="mt-4">
             <a
               href="{{ ad.target_url }}"
@@ -52,7 +54,7 @@
               rel="noopener noreferrer"
               class="btn btn-primary btn-lg ad-visit-btn"
             >
-              <i class="fas fa-external-link-alt ms-2"></i>برای بازدید اینجا را کلیک کنید
+              <i class="fas fa-external-link-alt ms-2"></i>مشاهده لینک آگهی
             </a>
             <p class="text-muted small mt-2 mb-0">{{ ad.target_url }}</p>
           </div>
