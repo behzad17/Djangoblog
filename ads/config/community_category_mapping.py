@@ -8,10 +8,10 @@ Matching logic in ``ads.selectors.related`` reads from this module only.
 COMMUNITY_TO_AD_CATEGORY_SLUGS: dict[str, list[str]] = {
     'immigration-residency': ['legal-financial', 'social-zendegi'],
     'work-education': ['work-services', 'mozsh-zbn-o-dr'],
-    'daily-life': ['social-zendegi', 'food-restaurant', 'leisure'],
+    'daily-life': ['social-zendegi', 'food-restaurant', 'leisure', 'shops-shopping', 'transport-moving'],
     'law-legal': ['legal-financial'],
     'health': ['health-welfare', 'beauty-appliances'],
-    'culture-events': ['leisure', 'food-restaurant'],
+    'culture-events': ['leisure', 'food-restaurant', 'travel-accommodation'],
     'buy-sell': [],
     'general': [],
 }
