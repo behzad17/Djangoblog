@@ -52,6 +52,13 @@ SUBCATEGORIES = {
         "web": "طراحی و توسعه وب", "device-repair": "تعمیر موبایل و رایانه",
         "marketing": "بازاریابی دیجیتال",
     },
+    "child-family-services": {
+        "childcare": "نگهداری کودک",
+        "homework-help": "کمک‌درسی و پشتیبانی آموزشی",
+        "after-school": "فعالیت‌های بعد از مدرسه",
+        "parent-support": "راهنمایی و حمایت از والدین",
+        "bilingual-playgroups": "گروه بازی و فعالیت دوزبانه",
+    },
     "housing-real-estate": {
         "agents": "مشاور املاک", "rentals-sales": "اجاره و خرید", "management": "مدیریت ملک",
     },
