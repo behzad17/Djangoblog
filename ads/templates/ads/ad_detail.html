@@ -61,14 +61,14 @@
           {% endif %}
           
           <!-- Contact/Location Information -->
-          {% if ad.city or display_address or ad.phone or ad.instagram_url or ad.telegram_url or ad.website_url %}
+          {% if ad.city or location.visiting or location.postal or location.note or ad.phone or ad.instagram_url or ad.telegram_url or ad.website_url %}
           <div class="ad-contact-card mt-4{% if ad.plan == 'pro' %} ad-contact-card--pro{% endif %}">
             <h2 class="ad-contact-card__title">
               <i class="fas fa-info-circle" aria-hidden="true"></i>
               اطلاعات تماس و موقعیت
             </h2>
             <div class="ad-contact-card__list">
-              {% if display_address %}
+              {% if location.visiting %}
               {% if map_destination %}
               <a
                 href="https://www.google.com/maps/search/?api=1&amp;query={{ map_destination|urlencode }}"
@@ -83,8 +83,8 @@
                   <i class="fas fa-map-marker-alt"></i>
                 </span>
                 <span class="ad-contact-row__body">
-                  <span class="ad-contact-row__label">آدرس</span>
-                  <span class="ad-contact-row__value ad-contact-row__value--ltr" dir="ltr">{{ display_address }}</span>
+                  <span class="ad-contact-row__label">نشانی مراجعه</span>
+                  <span class="ad-contact-row__value ad-contact-row__value--ltr" dir="ltr">{{ location.visiting }}</span>
                 </span>
               {% if map_destination %}
                 <span class="ad-contact-row__action" aria-hidden="true">
@@ -94,6 +94,26 @@
               {% else %}
               </div>
               {% endif %}
+              {% endif %}
+
+              {% if location.postal %}
+              <div class="ad-contact-row ad-contact-row--static">
+                <span class="ad-contact-row__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                <span class="ad-contact-row__body">
+                  <span class="ad-contact-row__label">نشانی پستی</span>
+                  <span class="ad-contact-row__value ad-contact-row__value--ltr" dir="ltr">{{ location.postal }}</span>
+                </span>
+              </div>
+              {% endif %}
+
+              {% if location.note %}
+              <div class="ad-contact-row ad-contact-row--static">
+                <span class="ad-contact-row__icon" aria-hidden="true"><i class="fas fa-info-circle"></i></span>
+                <span class="ad-contact-row__body">
+                  <span class="ad-contact-row__label">توضیح مراجعه</span>
+                  <span class="ad-contact-row__value" dir="auto">{{ location.note }}</span>
+                </span>
+              </div>
               {% endif %}
 
               {% if ad.phone %}

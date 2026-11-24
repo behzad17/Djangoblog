@@ -1,9 +1,10 @@
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 
 from notifications.dispatchers import notify_ad_rejected
 
-from .addresses import ADDRESS_HELP
+from .addresses import ADDRESS_HELP, NOTE_HELP, POSTAL_HELP, populate_address_initial
 from .forms import ad_subcategory_field
 from .models import AdCategory, Ad, AdComment, AdGalleryImage, AdsViewCount
 
@@ -79,10 +80,18 @@ class AdCategoryAdmin(admin.ModelAdmin):
     image_preview.short_description = "Image Preview"
 
 
+class AdAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk and "address" in self.fields:
+            populate_address_initial(self.initial)
+
+
 @admin.register(Ad)
 class AdAdmin(admin.ModelAdmin):
     """Admin interface for advertisements with moderation controls."""
 
+    form = AdAdminForm
     inlines = (AdGalleryImageInline,)
 
     class Media:
@@ -92,9 +101,13 @@ class AdAdmin(admin.ModelAdmin):
         if db_field.name == "subcategory":
             return ad_subcategory_field()
         field = super().formfield_for_dbfield(db_field, request, **kwargs)
-        if db_field.name == "address":
-            field.help_text = ADDRESS_HELP
-            field.widget.attrs["dir"] = "ltr"
+        address_fields = {
+            "address": ("نشانی مراجعه", ADDRESS_HELP, "ltr"),
+            "postal_address": ("نشانی پستی", POSTAL_HELP, "ltr"),
+            "address_note": ("توضیح مراجعه", NOTE_HELP, "auto"),
+        }
+        if db_field.name in address_fields:
+            field.label, field.help_text, field.widget.attrs["dir"] = address_fields[db_field.name]
         return field
 
     list_display = (
@@ -166,7 +179,7 @@ class AdAdmin(admin.ModelAdmin):
         (
             "Location & Contact Information",
             {
-                "fields": ("city", "address", "phone"),
+                "fields": ("city", "address", "postal_address", "address_note", "phone"),
                 "description": "Location and contact information displayed publicly on the ad detail page.",
             },
         ),
