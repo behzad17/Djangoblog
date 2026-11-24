@@ -121,6 +121,7 @@ def category_image(category):
             'travel-accommodation': 'oghate-feraghat.jpg',
             'housing-real-estate': 'maskan-zendegi.jpg',
             'child-family-services': 'salamat-refah.jpg',
+            'pet-services': 'salamat-refah.jpg',
             'leisure': 'oghate-feraghat.jpg',
             'food-restaurant': 'ghaza-farhang.jpg',
             'health-welfare': 'salamat-refah.jpg',

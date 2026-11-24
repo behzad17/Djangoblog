@@ -27,7 +27,7 @@ SUBCATEGORIES = {
     "health-welfare": {
         "clinics": "پزشک و درمانگاه", "dentistry": "دندان‌پزشکی",
         "mental-health": "روان‌شناسی", "physiotherapy": "فیزیوتراپی",
-        "home-care": "مراقبت در منزل", "veterinary": "دامپزشکی",
+        "home-care": "مراقبت در منزل",
     },
     "beauty-appliances": {
         "salons": "آرایشگاه", "skin-hair": "پوست و مو", "nails": "ناخن", "massage": "ماساژ",
@@ -51,6 +51,13 @@ SUBCATEGORIES = {
     "fnor-o-khdmt-dgtl": {
         "web": "طراحی و توسعه وب", "device-repair": "تعمیر موبایل و رایانه",
         "marketing": "بازاریابی دیجیتال",
+    },
+    "pet-services": {
+        "veterinary": "دامپزشکی",
+        "pet-boarding": "پانسیون و نگهداری در سفر",
+        "pet-grooming": "آرایش حیوانات",
+        "dog-training": "آموزش سگ",
+        "pet-supplies": "غذا و لوازم حیوانات",
     },
     "child-family-services": {
         "childcare": "نگهداری کودک",
