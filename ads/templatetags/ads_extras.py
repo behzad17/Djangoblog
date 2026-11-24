@@ -120,6 +120,7 @@ def category_image(category):
             'shops-shopping': 'khane-vasayel.jpg',
             'travel-accommodation': 'oghate-feraghat.jpg',
             'housing-real-estate': 'maskan-zendegi.jpg',
+            'child-family-services': 'salamat-refah.jpg',
             'leisure': 'oghate-feraghat.jpg',
             'food-restaurant': 'ghaza-farhang.jpg',
             'health-welfare': 'salamat-refah.jpg',
