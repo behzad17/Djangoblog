@@ -52,6 +52,15 @@ SUBCATEGORIES = {
         "web": "طراحی و توسعه وب", "device-repair": "تعمیر موبایل و رایانه",
         "marketing": "بازاریابی دیجیتال",
     },
+    "celebration-services": {
+        "venues": "سالن و محل برگزاری",
+        "event-photography": "عکاسی و فیلم‌برداری مراسم",
+        "music-dj": "موسیقی و دی‌جی",
+        "wedding-decor": "سفرهٔ عقد و تزیینات",
+        "florists": "گل‌آرایی",
+        "event-catering": "پذیرایی و تهیهٔ غذا",
+        "event-planning": "برنامه‌ریزی و خدمات مراسم",
+    },
     "pet-services": {
         "veterinary": "دامپزشکی",
         "pet-boarding": "پانسیون و نگهداری در سفر",
@@ -74,7 +83,7 @@ SUBCATEGORIES = {
     },
     "leisure": {
         "sports": "باشگاه و ورزش", "arts": "هنر و سرگرمی",
-        "photography": "عکاسی و فیلم‌برداری", "events": "خدمات مراسم",
+        "photography": "عکاسی و فیلم‌برداری",
     },
     "ngmnh-o-rohh": {
         "iranian-associations": "انجمن‌های ایرانی", "local-associations": "انجمن‌های محلی",
