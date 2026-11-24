@@ -1,0 +1,25 @@
+{% load ads_extras %}
+{% if ad.phone or ad.address or ad.website_url and ad.social_urls_approved or ad.target_url and ad.url_approved %}
+<div class="d-flex flex-wrap justify-content-center gap-2 mb-4" role="group" aria-label="راه‌های ارتباط با آگهی">
+  {% if ad.phone %}
+  <a class="btn btn-primary" href="tel:{{ ad.phone|phone_tel_href }}">
+    <i class="fas fa-phone ms-1" aria-hidden="true"></i>تماس
+  </a>
+  {% endif %}
+  {% if ad.address %}
+  <a class="btn btn-outline-primary" href="https://www.google.com/maps/dir/?api=1&amp;destination={{ ad.address|urlencode }}"
+     target="_blank" rel="noopener noreferrer">
+    <i class="fas fa-map-marker-alt ms-1" aria-hidden="true"></i>مسیریابی
+  </a>
+  {% endif %}
+  {% if ad.website_url and ad.social_urls_approved %}
+  <a class="btn btn-outline-primary" href="{{ ad.website_url }}" target="_blank" rel="noopener noreferrer">
+    <i class="fas fa-external-link-alt ms-1" aria-hidden="true"></i>وب‌سایت
+  </a>
+  {% elif ad.target_url and ad.url_approved %}
+  <a class="btn btn-outline-primary" href="{{ ad.target_url }}" target="_blank" rel="noopener noreferrer">
+    <i class="fas fa-external-link-alt ms-1" aria-hidden="true"></i>وب‌سایت
+  </a>
+  {% endif %}
+</div>
+{% endif %}

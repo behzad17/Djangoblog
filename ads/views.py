@@ -14,6 +14,7 @@ from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 from .gallery import get_detail_image_context, process_gallery_submission
 from .signals import notify_admin_pro_request
+from ads.selectors.directory_search import filter_directory
 from ads.selectors.visibility import list_visible_ads as _visible_ads_queryset
 
 SOCIAL_URL_FIELDS = ('instagram_url', 'telegram_url', 'website_url')
@@ -29,15 +30,18 @@ def ad_category_list(request):
     Dedicated advertisements landing page showing all ad categories and counts.
     """
     categories = AdCategory.objects.all().order_by("display_order", "name")
-    # Prefetch visible ads to show counts efficiently
     visible_ads = _visible_ads_queryset()
-    counts = {cat.id: 0 for cat in categories}
-    for ad in visible_ads:
-        if ad.category_id in counts:
-            counts[ad.category_id] += 1
-    
-    # Detect active category from query params
-    active_category_slug = request.GET.get('category') or request.GET.get('cat')
+    counts = dict(
+        visible_ads.order_by().values_list("category_id").annotate(total=models.Count("pk"))
+    )
+    query = request.GET.get("q", "").strip()[:200]
+    city = request.GET.get("city", "").strip()[:100]
+    results, city_choices = filter_directory(visible_ads, query, city)
+    active_category_slug = request.GET.get("category") or request.GET.get("cat")
+    page = None
+    if query or city:
+        ordered_results = results.order_by("-is_currently_featured", "priority_value", "-created_on", "-pk")
+        page = Paginator(ordered_results, 24).get_page(request.GET.get("page"))
 
     return render(
         request,
@@ -46,6 +50,10 @@ def ad_category_list(request):
             "categories": categories,
             "ad_counts": counts,
             "active_category_slug": active_category_slug,
+            "query": query,
+            "city": city,
+            "city_choices": city_choices,
+            "results_page": page,
         },
     )
 
@@ -235,7 +243,7 @@ def ad_detail(request, slug):
         slug=slug,
     )
 
-    is_owner = ad.owner_id == request.user.id
+    is_owner = request.user.is_authenticated and ad.owner_id == request.user.id
     if not is_owner:
         if ad.plan != 'pro':
             raise Http404(
