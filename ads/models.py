@@ -5,6 +5,7 @@ from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 from django.utils import timezone
 
+from .addresses import ADDRESS_HELP, is_swedish_address
 from .config.subcategories import SUBCATEGORIES
 
 
@@ -211,6 +212,8 @@ class Ad(models.Model):
 
     def clean(self):
         super().clean()
+        if self.address and not is_swedish_address(self.address):
+            raise ValidationError({"address": ADDRESS_HELP})
         if self.subcategory and not self.subcategory_label:
             raise ValidationError({"subcategory": "زیردسته با دسته‌بندی انتخاب‌شده هم‌خوانی ندارد."})
 

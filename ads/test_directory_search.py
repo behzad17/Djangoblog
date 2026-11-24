@@ -60,7 +60,8 @@ class DirectorySearchTests(TestCase):
             address="Box 92150, 120 08 Stockholm (آدرس پستی)",
         )
         response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
-        self.assertContains(response, "Box 92150, 120 08 Stockholm (آدرس پستی)")
+        self.assertContains(response, "Box 92150, 120 08 Stockholm")
+        self.assertNotContains(response, "آدرس پستی")
         self.assertNotContains(response, "www.google.com/maps/")
         self.assertContains(response, 'href="tel:031213700"')
 
@@ -72,3 +73,24 @@ class DirectorySearchTests(TestCase):
         self.assertContains(response, "destination=Testv%C3%A4gen%2012%2C%20411%2020%20G%C3%B6teborg")
         self.assertNotContains(response, "destination=Bes")
         self.assertNotContains(response, "Box%2092150")
+
+
+    def test_existing_swedish_address_has_no_foreign_note_in_page_or_map(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="Hammarby Fabriksväg 25, plan 6, 120 30 Stockholm (دفتر مرکزی)",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "Hammarby Fabriksväg 25, plan 6, 120 30 Stockholm")
+        self.assertNotContains(response, "دفتر مرکزی")
+        self.assertContains(response, "destination=Hammarby%20Fabriksv%C3%A4g%2025%2C%20plan%206%2C%20120%2030%20Stockholm")
+
+    def test_edit_form_rejects_annotations_and_accepts_swedish_address(self):
+        from .forms import AdForm
+
+        ad = Ad.objects.get(slug="directory-fix-clean")
+        fields = {"title": ad.title, "category": ad.category_id, "city": ad.city, "target_url": ad.target_url}
+        for invalid in ("Testvägen 12, Göteborg (دفتر مرکزی)", "Testvägen 12, Göteborg (huvudkontor)"):
+            form = AdForm(data={**fields, "address": invalid}, instance=ad)
+            self.assertIn("address", form.errors)
+        form = AdForm(data={**fields, "address": "Testvägen 12, plan 6, 411 20 Göteborg"}, instance=ad)
+        self.assertNotIn("address", form.errors)
