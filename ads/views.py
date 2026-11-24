@@ -10,7 +10,7 @@ from blog.decorators import site_verified_required
 from notifications.dispatchers import notify_ad_favorited
 
 from .config.subcategories import SUBCATEGORIES
-from .addresses import address_for_display, visiting_destination
+from .addresses import address_parts
 from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 from .gallery import get_detail_image_context, process_gallery_submission
@@ -354,10 +354,11 @@ def ad_detail(request, slug):
                 # Form has errors, will be displayed in template
                 messages.error(request, 'لطفاً خطاهای فرم را برطرف کنید.')
     
+    location = address_parts(ad.address, ad.postal_address, ad.address_note)
     context = {
         "ad": ad,
-        "display_address": address_for_display(ad.address),
-        "map_destination": visiting_destination(ad.address),
+        "location": location,
+        "map_destination": location.visiting,
         "is_favorited": is_favorited,
         "comments": comments,
         "comment_count": comment_count,

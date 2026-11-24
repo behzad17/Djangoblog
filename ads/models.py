@@ -5,7 +5,7 @@ from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 from django.utils import timezone
 
-from .addresses import ADDRESS_HELP, is_swedish_address
+from .addresses import ADDRESS_HELP, POSTAL_HELP, is_swedish_address, is_visiting_address
 from .config.subcategories import SUBCATEGORIES
 
 
@@ -110,6 +110,8 @@ class Ad(models.Model):
         blank=True,
         help_text="Full address of the service/business (optional).",
     )
+    postal_address = models.TextField(max_length=500, blank=True)
+    address_note = models.TextField(max_length=500, blank=True)
     phone = models.CharField(
         max_length=50,
         blank=True,
@@ -212,8 +214,10 @@ class Ad(models.Model):
 
     def clean(self):
         super().clean()
-        if self.address and not is_swedish_address(self.address):
+        if self.address and not is_visiting_address(self.address):
             raise ValidationError({"address": ADDRESS_HELP})
+        if self.postal_address and not is_swedish_address(self.postal_address):
+            raise ValidationError({"postal_address": POSTAL_HELP})
         if self.subcategory and not self.subcategory_label:
             raise ValidationError({"subcategory": "زیردسته با دسته‌بندی انتخاب‌شده هم‌خوانی ندارد."})
 

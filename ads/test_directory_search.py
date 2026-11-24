@@ -81,7 +81,8 @@ class DirectorySearchTests(TestCase):
         )
         response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
         self.assertContains(response, "Hammarby Fabriksväg 25, plan 6, 120 30 Stockholm")
-        self.assertNotContains(response, "دفتر مرکزی")
+        self.assertContains(response, 'dir="auto">دفتر مرکزی</span>')
+        self.assertNotContains(response, 'dir="ltr">Hammarby Fabriksväg 25, plan 6, 120 30 Stockholm (دفتر مرکزی)')
         self.assertContains(response, "destination=Hammarby%20Fabriksv%C3%A4g%2025%2C%20plan%206%2C%20120%2030%20Stockholm")
 
     def test_edit_form_rejects_annotations_and_accepts_swedish_address(self):
@@ -94,3 +95,43 @@ class DirectorySearchTests(TestCase):
             self.assertIn("address", form.errors)
         form = AdForm(data={**fields, "address": "Testvägen 12, plan 6, 411 20 Göteborg"}, instance=ad)
         self.assertNotIn("address", form.errors)
+
+
+    def test_legacy_note_about_separate_postal_address_keeps_directions(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="Hotellplatsen 2, Göta Källare, Göteborg — آدرس مراجعه؛ آدرس پستی مجموعه متفاوت است.",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "destination=Hotellplatsen%202%2C%20G%C3%B6ta%20K%C3%A4llare%2C%20G%C3%B6teborg")
+        self.assertContains(response, "توضیح مراجعه")
+
+    def test_legacy_directions_exclude_whole_note_and_its_phone_number(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="Mässans gata 24, 412 51 Göteborg — شماره عمومی 031-750 88 00.",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, 'destination=M%C3%A4ssans%20gata%2024%2C%20412%2051%20G%C3%B6teborg"')
+        self.assertContains(response, "031-750 88 00")
+
+    def test_service_area_is_displayed_as_note_without_directions(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(address="Hela Sverige")
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "Hela Sverige")
+        self.assertNotContains(response, "www.google.com/maps/")
+
+    def test_explicit_postal_address_never_becomes_map_destination(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="", postal_address="Box 92150, 120 08 Stockholm", address_note="مراجعه با هماهنگی",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "Box 92150, 120 08 Stockholm")
+        self.assertContains(response, "مراجعه با هماهنگی")
+        self.assertNotContains(response, "www.google.com/maps/")
+
+
+    def test_swedish_sankt_abbreviation_is_kept_in_destination(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="S:t Eriksgatan 46, ingång C, Stockholm (بازدید با هماهنگی قبلی)",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "destination=S%3At%20Eriksgatan%2046")

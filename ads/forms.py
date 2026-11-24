@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .addresses import ADDRESS_HELP, address_for_display
+from .addresses import ADDRESS_HELP, NOTE_HELP, POSTAL_HELP, populate_address_initial
 from .config.subcategories import SUBCATEGORIES
 from .models import Ad, AdCategory, AdComment
 
@@ -29,7 +29,7 @@ class AdForm(forms.ModelForm):
     class Meta:
         model = Ad
         fields = [
-            'title', 'category', 'subcategory', 'image', 'target_url', 'city', 'address', 'phone',
+            'title', 'category', 'subcategory', 'image', 'target_url', 'city', 'address', 'postal_address', 'address_note', 'phone',
             'instagram_url', 'telegram_url', 'website_url',
             'start_date', 'end_date'
         ]
@@ -59,6 +59,8 @@ class AdForm(forms.ModelForm):
                 'dir': 'ltr',
                 'rows': 3
             }),
+            'postal_address': forms.Textarea(attrs={'class': 'form-control', 'dir': 'ltr', 'rows': 2}),
+            'address_note': forms.Textarea(attrs={'class': 'form-control', 'dir': 'auto', 'rows': 2}),
             'phone': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'شماره تماس'
@@ -90,7 +92,9 @@ class AdForm(forms.ModelForm):
             'image': 'تصویر اصلی',
             'target_url': 'لینک مقصد',
             'city': 'شهر',
-            'address': 'آدرس کامل',
+            'address': 'نشانی مراجعه',
+            'postal_address': 'نشانی پستی',
+            'address_note': 'توضیح مراجعه',
             'phone': 'شماره تماس',
             'instagram_url': 'لینک اینستاگرام',
             'telegram_url': 'لینک تلگرام',
@@ -101,6 +105,8 @@ class AdForm(forms.ModelForm):
         help_texts = {
             'target_url': 'آدرس وب‌سایتی که با کلیک روی تبلیغ باز می‌شود',
             'address': ADDRESS_HELP,
+            'postal_address': POSTAL_HELP,
+            'address_note': NOTE_HELP,
             'phone': 'شماره تماس (اختیاری)',
             'instagram_url': 'لینک پروفایل یا صفحه اینستاگرام (اختیاری)',
             'telegram_url': 'لینک کانال یا گروه تلگرام (اختیاری)',
@@ -116,8 +122,8 @@ class AdForm(forms.ModelForm):
             'display_order', 'name'
         )
         self.fields["subcategory"] = ad_subcategory_field()
-        if self.instance.pk and self.initial.get("address"):
-            self.initial["address"] = address_for_display(self.initial["address"])
+        if self.instance.pk:
+            populate_address_initial(self.initial)
         # Make optional fields not required
         self.fields['start_date'].required = False
         self.fields['end_date'].required = False
