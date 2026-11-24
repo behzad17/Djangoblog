@@ -1,0 +1,27 @@
+{% load ads_extras %}
+<section class="ads-category-section" aria-labelledby="ads-categories-heading" dir="rtl">
+  <h2 id="ads-categories-heading" class="h4 mb-3">دسته‌بندی خدمات</h2>
+  {% if categories %}
+  <ul class="ads-category-grid" role="list">
+    {% for category in categories %}
+    <li>
+      <a class="ads-category-card{% if active_category_slug == category.slug %} ads-category-card--highlight{% endif %}"
+         href="{% url 'ads:ads_by_category' category.slug %}">
+        <div class="ads-category-card__cover">
+          <img src="{{ category|category_slider_image_src }}" alt="" loading="lazy" decoding="async">
+        </div>
+        <div class="ads-category-card__body">
+          <h3 class="ads-category-card__title">{{ category.name }}</h3>
+          <div class="ads-category-card__meta">
+            <span>{{ ad_counts|get_item:category.id|default:0 }} آگهی</span>
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          </div>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted mb-0">هنوز دسته‌بندی ثبت نشده است.</p>
+  {% endif %}
+</section>
