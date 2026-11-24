@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from .addresses import ADDRESS_HELP, address_for_display
 from .config.subcategories import SUBCATEGORIES
 from .models import Ad, AdCategory, AdComment
 
@@ -54,7 +55,8 @@ class AdForm(forms.ModelForm):
             }),
             'address': forms.Textarea(attrs={
                 'class': 'form-control',
-                'placeholder': 'آدرس کامل',
+                'placeholder': 'Hammarby Fabriksväg 25, 120 30 Stockholm',
+                'dir': 'ltr',
                 'rows': 3
             }),
             'phone': forms.TextInput(attrs={
@@ -98,7 +100,7 @@ class AdForm(forms.ModelForm):
         }
         help_texts = {
             'target_url': 'آدرس وب‌سایتی که با کلیک روی تبلیغ باز می‌شود',
-            'address': 'آدرس کامل محل کسب‌وکار یا ارائه خدمات',
+            'address': ADDRESS_HELP,
             'phone': 'شماره تماس (اختیاری)',
             'instagram_url': 'لینک پروفایل یا صفحه اینستاگرام (اختیاری)',
             'telegram_url': 'لینک کانال یا گروه تلگرام (اختیاری)',
@@ -114,6 +116,8 @@ class AdForm(forms.ModelForm):
             'display_order', 'name'
         )
         self.fields["subcategory"] = ad_subcategory_field()
+        if self.instance.pk and self.initial.get("address"):
+            self.initial["address"] = address_for_display(self.initial["address"])
         # Make optional fields not required
         self.fields['start_date'].required = False
         self.fields['end_date'].required = False

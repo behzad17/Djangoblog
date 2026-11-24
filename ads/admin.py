@@ -3,6 +3,7 @@ from django.utils.html import format_html
 
 from notifications.dispatchers import notify_ad_rejected
 
+from .addresses import ADDRESS_HELP
 from .forms import ad_subcategory_field
 from .models import AdCategory, Ad, AdComment, AdGalleryImage, AdsViewCount
 
@@ -90,7 +91,11 @@ class AdAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "subcategory":
             return ad_subcategory_field()
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
+        field = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if db_field.name == "address":
+            field.help_text = ADDRESS_HELP
+            field.widget.attrs["dir"] = "ltr"
+        return field
 
     list_display = (
         "title",
