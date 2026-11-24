@@ -24,7 +24,7 @@
           {{ ad.title }}
         </h1>
         <p class="hero-subtitle mb-0" style="font-size: 0.95rem;">
-          دسته‌بندی: {{ ad.category.name }}
+          دسته‌بندی: {{ ad.category.name }}{% if ad.subcategory_label %} / {{ ad.subcategory_label }}{% endif %}
         </p>
       </div>
     </div>

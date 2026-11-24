@@ -47,6 +47,7 @@
               {% endif %}
             </div>
 
+            {% include 'ads/includes/ad_subcategory_field.html' %}
             {% include 'ads/includes/ad_primary_image_section.html' %}
             {% include 'ads/includes/ad_gallery_form_section.html' %}
 
@@ -174,6 +175,7 @@
 {% endblock content %}
 
 {% block extras %}
+<script src="{% static 'js/ad-subcategory-field.js' %}" defer></script>
 <script src="{% static 'js/ad-form-image-guidance.js' %}?v={% now 'U' %}" defer></script>
 <script src="{% static 'js/ad-gallery-form.js' %}?v={% now 'U' %}" defer></script>
 {% endblock extras %}

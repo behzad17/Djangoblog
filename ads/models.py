@@ -1,8 +1,11 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 from django.utils import timezone
+
+from .config.subcategories import SUBCATEGORIES
 
 
 class AdCategory(models.Model):
@@ -58,6 +61,7 @@ class Ad(models.Model):
         on_delete=models.PROTECT,
         related_name="ads",
     )
+    subcategory = models.SlugField(max_length=40, blank=True)
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -198,6 +202,17 @@ class Ad(models.Model):
         blank=True,
         help_text="When the Pro upgrade was requested",
     )
+
+    @property
+    def subcategory_label(self):
+        if self.subcategory and (category := getattr(self, "category", None)):
+            return SUBCATEGORIES.get(category.slug, {}).get(self.subcategory, "")
+        return ""
+
+    def clean(self):
+        super().clean()
+        if self.subcategory and not self.subcategory_label:
+            raise ValidationError({"subcategory": "زیردسته با دسته‌بندی انتخاب‌شده هم‌خوانی ندارد."})
 
     class Meta:
         ordering = ["-created_on"]
