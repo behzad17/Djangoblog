@@ -54,3 +54,21 @@ class DirectorySearchTests(TestCase):
         self.assertContains(response, "مسیریابی")
         self.assertContains(response, "https://example.com/approved")
         self.assertNotContains(response, 'href="https://example.com/unapproved"')
+
+    def test_postal_box_remains_visible_without_map_links(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="Box 92150, 120 08 Stockholm (آدرس پستی)",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "Box 92150, 120 08 Stockholm (آدرس پستی)")
+        self.assertNotContains(response, "www.google.com/maps/")
+        self.assertContains(response, 'href="tel:031213700"')
+
+    def test_mixed_address_only_sends_visiting_address_to_maps(self):
+        Ad.objects.filter(slug="directory-fix-clean").update(
+            address="Besöksadress: Testvägen 12\n411 20 Göteborg\nPostadress: Box 92150",
+        )
+        response = self.client.get(reverse("ads:ad_detail", args=["directory-fix-clean"]))
+        self.assertContains(response, "destination=Testv%C3%A4gen%2012%2C%20411%2020%20G%C3%B6teborg")
+        self.assertNotContains(response, "destination=Bes")
+        self.assertNotContains(response, "Box%2092150")

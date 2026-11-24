@@ -10,6 +10,7 @@ from blog.decorators import site_verified_required
 from notifications.dispatchers import notify_ad_favorited
 
 from .config.subcategories import SUBCATEGORIES
+from .addresses import visiting_destination
 from .models import AdCategory, Ad, FavoriteAd, AdComment
 from .forms import AdForm, AdCommentForm, AdFilterForm, ProRequestForm
 from .gallery import get_detail_image_context, process_gallery_submission
@@ -355,6 +356,7 @@ def ad_detail(request, slug):
     
     context = {
         "ad": ad,
+        "map_destination": visiting_destination(ad.address),
         "is_favorited": is_favorited,
         "comments": comments,
         "comment_count": comment_count,

@@ -69,14 +69,16 @@
             </h2>
             <div class="ad-contact-card__list">
               {% if ad.address %}
+              {% if map_destination %}
               <a
-                href="https://www.google.com/maps/search/?api=1&query={{ ad.address|urlencode }}"
+                href="https://www.google.com/maps/search/?api=1&amp;query={{ map_destination|urlencode }}"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="ad-contact-row ad-contact-row--link"
-                title="{{ ad.address }}"
-                aria-label="آدرس: {{ ad.address }}"
               >
+              {% else %}
+              <div class="ad-contact-row ad-contact-row--static">
+              {% endif %}
                 <span class="ad-contact-row__icon" aria-hidden="true">
                   <i class="fas fa-map-marker-alt"></i>
                 </span>
@@ -84,10 +86,14 @@
                   <span class="ad-contact-row__label">آدرس</span>
                   <span class="ad-contact-row__value">{{ ad.address }}</span>
                 </span>
+              {% if map_destination %}
                 <span class="ad-contact-row__action" aria-hidden="true">
                   <i class="fas fa-external-link-alt"></i>
                 </span>
               </a>
+              {% else %}
+              </div>
+              {% endif %}
               {% endif %}
 
               {% if ad.phone %}
