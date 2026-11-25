@@ -6,7 +6,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/components/directory-cards.css' %}" />
-<link rel="stylesheet" href="{% static 'css/components/post-category-cards.css' %}" />
+<link rel="stylesheet" href="{% static 'css/components/useful-link-category-cards.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
     <p class="mb-0">برای دیدن نوشته‌ها، یک دسته‌بندی را انتخاب کنید.</p>
   </header>
 
-  <div class="post-category-grid row row-cols-2 row-cols-sm-3 row-cols-lg-5 g-2 g-md-3 justify-content-center">
+  <div class="useful-link-category-grid row row-cols-2 row-cols-sm-3 row-cols-lg-5 g-2 g-md-3 justify-content-center">
     {% for category in categories %}
       <div class="col">
         {% include 'includes/components/directory_category_card.html' with href=category.get_absolute_url title=category.name icon=category|category_icon only %}
