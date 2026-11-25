@@ -52,6 +52,11 @@ SUBCATEGORIES = {
         "web": "طراحی و توسعه وب", "device-repair": "تعمیر موبایل و رایانه",
         "marketing": "بازاریابی دیجیتال",
     },
+    "nightlife": {
+        "bars": "بار",
+        "nightclubs": "کلوب شبانه",
+        "discos": "دیسکو و سالن رقص",
+    },
     "celebration-services": {
         "venues": "سالن و محل برگزاری",
         "event-photography": "عکاسی و فیلم‌برداری مراسم",
