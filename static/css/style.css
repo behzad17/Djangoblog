@@ -11185,7 +11185,7 @@ body .ad-banner + .flash-messages-container:has(.alert) {
   padding: 0 0.25rem;
   border-radius: 999px;
   background: #2b4772;
-  color: #c1e8ff;
+  color: #ffabab;
   font-size: 0.62rem;
   font-weight: 700;
   line-height: 1.1rem;
