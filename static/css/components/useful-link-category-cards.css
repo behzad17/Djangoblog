@@ -1,0 +1,93 @@
+.useful-link-category-grid > .col {
+  --link-card-accent: #204caf;
+  --link-card-tint: #c3dfff;
+}
+
+.useful-link-category-grid > .col:nth-child(5n + 2) {
+  --link-card-accent: #006850;
+  --link-card-tint: #9ce8cf;
+}
+
+.useful-link-category-grid > .col:nth-child(5n + 3) {
+  --link-card-accent: #6740ad;
+  --link-card-tint: #dfc5ff;
+}
+
+.useful-link-category-grid > .col:nth-child(5n + 4) {
+  --link-card-accent: #8b4100;
+  --link-card-tint: #ffd592;
+}
+
+.useful-link-category-grid > .col:nth-child(5n + 5) {
+  --link-card-accent: #992e64;
+  --link-card-tint: #ffc4e0;
+}
+
+.useful-link-category-grid .directory-category-card {
+  min-height: 6.25rem;
+  gap: 0.3rem;
+  padding: 0.55rem 1rem;
+  border-color: var(--link-card-tint);
+  border-block-start: 3px solid var(--link-card-accent);
+  border-radius: 0.95rem;
+  background: linear-gradient(145deg, #fff 12%, var(--link-card-tint));
+  box-shadow: 0 4px 10px rgba(28, 44, 76, 0.13);
+  color: var(--link-card-accent);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.useful-link-category-grid .directory-category-card__icon {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: var(--link-card-accent);
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.useful-link-category-grid .directory-category-card__title {
+  font-size: clamp(1.0625rem, 0.98rem + 0.4vw, 1.25rem);
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.useful-link-category-grid .directory-category-card__count {
+  background: rgba(255, 255, 255, 0.72);
+  font-weight: 600;
+}
+
+.useful-link-category-grid .directory-category-card__arrow {
+  inset-inline-end: 0.5rem;
+  inset-block-start: 0.5rem;
+  font-size: 0.68rem;
+}
+
+.useful-link-category-grid .directory-category-card:focus-visible {
+  outline-color: var(--link-card-accent);
+  box-shadow: 0 8px 18px rgba(28, 44, 76, 0.19);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .useful-link-category-grid .directory-category-card:hover {
+    border-color: var(--link-card-accent);
+    box-shadow: 0 9px 18px rgba(28, 44, 76, 0.19);
+    transform: translateY(-3px);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .useful-link-category-grid .directory-category-card {
+    padding-inline: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .useful-link-category-grid .directory-category-card {
+    transition: none;
+  }
+
+  .useful-link-category-grid .directory-category-card:hover {
+    transform: none;
+  }
+}
