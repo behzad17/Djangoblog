@@ -1,72 +1,132 @@
-{% load static event_display %}
-<section class="container pb-4" aria-labelledby="event-results-heading">
-  <h2 id="event-results-heading" class="h4 mb-3">
-    {{ page_obj.paginator.count }}
-    {% if event_query %}رویداد پیدا شد{% else %}رویداد پیش رو{% endif %}
-  </h2>
-
-  {% if post_list %}
-  <ul class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled">
-    {% for post in post_list %}
-    {% with city=post|event_card_city %}
-    <li class="col">
-      <article class="card h-100 shadow-sm overflow-hidden">
-        <div class="ratio ratio-16x9">
-          {% if post.featured_image and "placeholder" not in post.featured_image.url %}
-          <img src="{{ post.featured_image.url }}" class="w-100" style="object-fit: cover;"
-               loading="lazy" alt="" onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';">
-          {% else %}
-          <img src="{% static 'images/default.jpg' %}" class="w-100" style="object-fit: cover;"
-               loading="lazy" alt="">
-          {% endif %}
-        </div>
-        <div class="card-body">
-          <p class="small fw-bold text-primary mb-2">
-            <i class="fas fa-calendar-alt ms-1" aria-hidden="true"></i>
-            <span dir="ltr" class="d-inline-block">
-              <time datetime="{{ post.event_start_date|date:'Y-m-d' }}">{{ post.event_start_date|date:"j M Y" }}</time>
-              {% if post.event_end_date and post.event_end_date != post.event_start_date %}
-                – <time datetime="{{ post.event_end_date|date:'Y-m-d' }}">{{ post.event_end_date|date:"j M Y" }}</time>
+<!-- Events Grid Layout - One Event Per Row, Centered -->
+{% load static %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-12">
+      <h2 class="h4 mb-3">
+        {{ page_obj.paginator.count }}
+        {% if event_query %}رویداد پیدا شد{% else %}رویداد پیش رو{% endif %}
+      </h2>
+      {% if post_list %}
+        {% for post in post_list %}
+        <div class="event-card-row mb-4">
+          <div class="row g-0">
+            <!-- Event Image -->
+            <div class="col-md-4 event-card-image-wrapper">
+              {% if post.featured_image %}
+                {% if "placeholder" in post.featured_image.url|default:"" %}
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  alt="{{ post.title }}"
+                  class="event-card-image"
+                />
+                {% else %}
+                <img
+                  src="{{ post.featured_image.url }}"
+                  alt="{{ post.title }}"
+                  class="event-card-image"
+                  onerror="this.onerror=null; this.src='{% static 'images/default.jpg' %}';"
+                />
+                {% endif %}
+              {% else %}
+              <img
+                src="{% static 'images/default.jpg' %}"
+                alt="{{ post.title }}"
+                class="event-card-image"
+              />
               {% endif %}
-            </span>
-          </p>
-          <h3 class="h5 card-title mb-3">
-            <a href="{{ post.get_absolute_url }}" class="stretched-link text-decoration-none text-reset">{{ post.title }}</a>
-          </h3>
-          {% if city or post.event_location %}
-          <div class="small text-muted">
-            {% if city %}
-            <p class="mb-1 fw-bold"><i class="fas fa-map-marker-alt ms-1" aria-hidden="true"></i><bdi>{{ city }}</bdi></p>
-            {% endif %}
-            {% if post.event_location and post.event_location != city %}
-            <p class="mb-0"><bdi>{{ post.event_location }}</bdi></p>
+            </div>
+
+            <!-- Event Content -->
+            <div class="{% if post.event_start_date %}col-md-6{% else %}col-md-8{% endif %} event-card-content-wrapper">
+              <div class="event-card-content">
+                {% if post.slug %}
+                <a href="{{ post.get_absolute_url }}" class="event-card-title-link">
+                  <h2 class="event-card-title">{{ post.title }}</h2>
+                </a>
+                {% else %}
+                <h2 class="event-card-title">{{ post.title }}</h2>
+                {% endif %}
+
+                <p class="event-card-description">
+                  {% if post.excerpt %}
+                    {{ post.excerpt|striptags|truncatewords:20 }}
+                  {% else %}
+                    {{ post.content|striptags|truncatewords:20 }}
+                  {% endif %}
+                </p>
+              </div>
+              {% if post.event_start_date %}
+              <div class="event-content-separator"></div>
+              {% endif %}
+            </div>
+
+            <!-- Event Date Section (Separate, Right Side) -->
+            {% if post.event_start_date %}
+            <div class="col-md-2 event-card-date-wrapper">
+              <div class="event-card-date-section">
+                <div class="event-date-range" dir="ltr">
+                  <time class="event-date-value" datetime="{{ post.event_start_date|date:"Y-m-d" }}">
+                    <span class="event-date-month">{{ post.event_start_date|date:"M" }}</span>
+                    <span class="event-date-day">{{ post.event_start_date|date:"d" }}</span>
+                    <span class="event-date-year">{{ post.event_start_date|date:"Y" }}</span>
+                  </time>
+                  {% if post.event_end_date and post.event_end_date != post.event_start_date %}
+                  <div class="event-date-separator">–</div>
+                  <time class="event-date-value" datetime="{{ post.event_end_date|date:"Y-m-d" }}">
+                    <span class="event-date-month">{{ post.event_end_date|date:"M" }}</span>
+                    <span class="event-date-day">{{ post.event_end_date|date:"d" }}</span>
+                    <span class="event-date-year">{{ post.event_end_date|date:"Y" }}</span>
+                  </time>
+                  {% endif %}
+                </div>
+                {% if post.event_location %}
+                <div class="event-location-badge">
+                  <i class="fas fa-map-marker-alt" aria-hidden="true"></i>{{ post.event_location }}
+                </div>
+                {% endif %}
+              </div>
+            </div>
             {% endif %}
           </div>
-          {% endif %}
         </div>
-      </article>
-    </li>
-    {% endwith %}
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p class="alert alert-info">رویدادی پیدا نشد.</p>
-  {% endif %}
+        {% endfor %}
+      {% else %}
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-info text-center" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            رویدادی پیدا نشد.
+            {% if event_query %}<a href="{% url 'category_posts' category.slug %}" class="alert-link">پاک کردن فیلترها</a>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
 
-  {% if is_paginated %}
-  <nav class="mt-4" aria-label="صفحه‌بندی رویدادها">
-    <ul class="pagination justify-content-center">
-      {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a href="?{% if event_query %}{{ event_query }}&amp;{% endif %}page={{ page_obj.previous_page_number }}" class="page-link">صفحهٔ قبل</a>
-      </li>
+      {% if is_paginated %}
+      <div class="pagination-container mt-4">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a href="?{% if event_query %}{{ event_query }}&amp;{% endif %}page={{ page_obj.previous_page_number }}" class="page-link"
+                ><i class="fas fa-chevron-left"></i> Previous</a
+              >
+            </li>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a href="?{% if event_query %}{{ event_query }}&amp;{% endif %}page={{ page_obj.next_page_number }}" class="page-link"
+                >Next <i class="fas fa-chevron-right"></i></a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
       {% endif %}
-      {% if page_obj.has_next %}
-      <li class="page-item">
-        <a href="?{% if event_query %}{{ event_query }}&amp;{% endif %}page={{ page_obj.next_page_number }}" class="page-link">صفحهٔ بعد</a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
-</section>
+    </div>
+  </div>
+</div>
+
