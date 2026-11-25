@@ -38,6 +38,7 @@
 }
 
 .ads-category-card__body {
+  background-color: #eff7ff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -66,7 +67,7 @@
 .ads-category-card__meta > span {
   padding: .15rem .55rem;
   border-radius: 999px;
-  background: #eaf3fa;
+  background: #e1edf9;
 }
 
 .ads-category-card__meta > i {
