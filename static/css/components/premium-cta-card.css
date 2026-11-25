@@ -259,7 +259,8 @@
 
 /* Tablet / desktop — content-first flex; illustration caps only */
 @media (min-width: 768px) {
-  .premium-cta-card {
+  .premium-cta-card,
+  .homepage-pro-ads-section__inner > .homepage-pro-ads-grid .homepage-pro-card {
     aspect-ratio: 1 / 1.56;
   }
 
@@ -343,7 +344,8 @@
 }
 
 @media (min-width: 1200px) {
-  .premium-cta-card {
+  .premium-cta-card,
+  .homepage-pro-ads-section__inner > .homepage-pro-ads-grid .homepage-pro-card {
     aspect-ratio: 1 / 1.48;
   }
 }
