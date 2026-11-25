@@ -50,8 +50,7 @@ a:hover { color: #2b4772; }
 
 /* Navigation/footer use the darkest surface with pale, readable labels. */
 nav.navbar { background-color: #2b4772 !important; }
-nav.navbar :is(.brand-tagline,.brand-persian,.brand-english,.navbar-nav .nav-link) { color: #c1e8ff !important; }
-nav.navbar .brand-tagline__name { color: #eff8ff; }
+nav.navbar :is(.brand-persian,.brand-english,.navbar-nav .nav-link) { color: #c1e8ff !important; }
 .footer.dark-bg { background-color: #2b4772; }
 .footer :is(p,a,h2,h3,h4,li,span,i) { color: #c1e8ff; }
 .footer .text-muted { color: #c1e8ff !important; }
