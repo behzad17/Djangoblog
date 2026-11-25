@@ -20,7 +20,7 @@
         </nav>
         <div class="category-hero-content text-center">
           <h1 class="category-hero-title mb-3">
-            <i class="fas fa-tag ms-2"></i>{{ category.name }}
+            <i class="fas {% if category.slug == 'events-announcements' %}fa-calendar-alt{% else %}fa-tag{% endif %} ms-2" aria-hidden="true"></i>{{ category.name }}
           </h1>
           {% if category.slug == "life-in-sweden" %}
           <p class="category-hero-description mb-3">
@@ -33,6 +33,7 @@
             {{ category.description }}
           </p>
           {% endif %}
+          {% if category.slug != 'events-announcements' %}
           <div class="category-hero-stats d-flex justify-content-center align-items-center gap-4 flex-wrap">
             <div class="stat-item">
               <i class="fas fa-file-alt ms-1"></i>
@@ -40,13 +41,18 @@
               <span class="stat-label">پست</span>
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Category Filter Section -->
+{% if category.slug == 'events-announcements' %}
+  {% include 'blog/category_layouts/event_search.html' %}
+  {% include 'blog/category_layouts/events_grid.html' %}
+{% else %}
+<!-- Post Category Navigation -->
 <div class="container-fluid mt-3 mb-4">
   <div class="row">
     <div class="col-12">
@@ -64,15 +70,12 @@
   </div>
 </div>
 
-<!-- Posts Section - Category-Specific Layout -->
-{% if category.slug == 'events-announcements' %}
-  {% include 'blog/category_layouts/event_search.html' %}
-  {% include 'blog/category_layouts/events_grid.html' %}
-{% else %}
   {% include 'blog/category_layouts/default_grid.html' %}
 {% endif %}
 {% endblock %}
 
 {% block extras %}
+{% if category.slug != 'events-announcements' %}
 <script src="{% static 'js/category-carousel.js' %}" defer></script>
+{% endif %}
 {% endblock %}
