@@ -31,7 +31,7 @@ body {
 /* Brand Tagline - Small text under logo */
 .brand-tagline {
   font-size: 0.9148rem; /* 10% smaller than 1.0164rem */
-  color: #c1e8ff !important;
+  color: #ffad5c !important;
   font-weight: 500;
   margin-top: -2px;
   line-height: 1;
@@ -39,7 +39,6 @@ body {
 }
 
 .brand-tagline__name {
-  color: #c1e8ff;
   font-size: calc(1em + 8px);
 }
 
