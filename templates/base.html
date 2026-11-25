@@ -14,6 +14,7 @@
 {% url 'create_post' as create_post_url %}
 {% url 'search' as search_url %}
 {% url 'category_posts' 'events-announcements' as events_url %}
+{% url 'user_post_categories' as post_categories_url %}
 
 <!DOCTYPE html>
 <html
@@ -184,6 +185,14 @@
                 class="nav-link desktop-glow-link {% if request.path == home_url %}active{% endif %}"
                 href="{{ home_url }}"
                 ><span class="desktop-glow-face"><i class="fas fa-home" aria-hidden="true"></i><span>خانه</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-home" aria-hidden="true"></i><span>خانه</span></span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link desktop-glow-link {% if request.path == post_categories_url %}active{% endif %}"
+                href="{{ post_categories_url }}"
+                {% if request.path == post_categories_url %}aria-current="page"{% endif %}
+                ><span class="desktop-glow-face"><i class="fas fa-file-alt" aria-hidden="true"></i><span>پُست ها</span></span><span class="desktop-glow-face desktop-glow-face--back" aria-hidden="true"><i class="fas fa-file-alt" aria-hidden="true"></i><span>پُست ها</span></span></a
               >
             </li>
             <li class="nav-item">
@@ -368,6 +377,15 @@
               href="{{ home_url }}"
               data-bs-dismiss="offcanvas"
               >خانه</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == post_categories_url %}active{% endif %}"
+              href="{{ post_categories_url }}"
+              {% if request.path == post_categories_url %}aria-current="page"{% endif %}
+              data-bs-dismiss="offcanvas"
+              >پُست ها</a
             >
           </li>
           <li class="nav-item">
