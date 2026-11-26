@@ -81,7 +81,8 @@
 @media (min-width: 992px) {
   .homepage .upcoming-events-scroll {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: .75rem;
+    row-gap: .75rem;
+    column-gap: clamp(1.25rem, 2vw, 1.75rem);
   }
   .homepage .upcoming-event-card:nth-child(n + 9) { display: none; }
   .homepage .upcoming-event-card__media { aspect-ratio: 16 / 9; }
